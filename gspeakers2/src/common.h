@@ -25,6 +25,7 @@
 #include <gtkmm/widget.h>
 #include <glibmm/ustring.h>
 #include <gdkmm/color.h>
+#include <gtkmm/tooltips.h>
 #include <vector>
 #include <iostream>
 #include <libintl.h>
@@ -46,6 +47,7 @@ namespace GSpeakers {
   int round(double d);
   Gtk::Widget& image_widget(string filename);
   Glib::ustring short_filename(const Glib::ustring& filename);
+  Gtk::Tooltips& tooltips();
 }   
 
 class Box;

@@ -29,6 +29,7 @@
 
 MainWindow::MainWindow()
 {
+  //GSpeakers::tooltips().enable();
   in_quit_phase = false;
   crossover_paned.select_first_crossover();
   /* set program icon and title */

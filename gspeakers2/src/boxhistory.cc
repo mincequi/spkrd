@@ -51,7 +51,6 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   m_box_list = BoxList(m_filename); 
   static_cast<Gtk::Label *>(get_label_widget())->set_markup(_("<b>Enclosure list [") + 
                                                               GSpeakers::short_filename(m_filename) + "]</b>");
-  
   create_model();
 
   /* create tree view */

@@ -109,4 +109,10 @@ namespace GSpeakers {
     }
     return shorted_filename;
   }
+  
+  Gtk::Tooltips& tooltips() 
+  {
+    static Gtk::Tooltips tooltips;
+    return tooltips;
+  }
 }

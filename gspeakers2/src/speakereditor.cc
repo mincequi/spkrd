@@ -154,6 +154,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_EditFreqRespButton.signal_clicked().connect( slot(*this, &Speaker_ListStore::on_edit_freq_resp) );
   m_BrowseFreqRespButton.signal_clicked().connect( slot(*this, &Speaker_ListStore::on_browse_freq_resp) );
 
+  GSpeakers::tooltips().set_tip(m_EditFreqRespButton, _("Edit frequency response for this driver"));
 
   set_entries_sensitive(false);
   
