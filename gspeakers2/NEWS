@@ -1,3 +1,13 @@
+GSpeakers-0.11
+
+* GSpeakers now requires gtkmm-2.4
+
+* Use new filechooser dialogs
+
+* GSpeakers can now use ngspice instead of Berkley SPICE
+
+* A couple of bugs were fixed
+
 GSpeakers-0.10.1
 
 * Lots of bugfixes: gettext compilation fix, a lot of potential segfaults 

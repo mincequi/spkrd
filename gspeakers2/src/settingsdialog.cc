@@ -29,6 +29,7 @@ using namespace sigc;
 SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true, true),
   m_main_notebook(),
   m_spice_browse_button(_("Browse...")),
+  m_spice_use_ngspice(_("SPICE executable is ngspice")),
   m_autoupdate_filter_plots(_("Automaticly update crossover plots when a parameter has changed")),
   m_draw_driver_imp_plot(_("Draw driver impedance plot")),
   m_draw_driver_freq_resp_plot(_("Draw driver frequency response plot")), 
@@ -91,6 +92,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
                       0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  spice_table->attach(m_spice_use_ngspice, 0, 3, 1, 2, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
   m_spice_browse_button.signal_clicked().connect(mem_fun(*this, &SettingsDialog::on_spice_browse));
   spice_frame->add(*spice_table);
   m_main_notebook.append_page(*spice_frame, _("SPICE"));
@@ -125,6 +127,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   show_all();
   
   m_spice_path_entry.set_text(g_settings.getValueString("SPICECmdLine"));
+  m_spice_use_ngspice.set_active(g_settings.getValueBool("SPICEUseNGSPICE"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
   m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
@@ -133,7 +136,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
   m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
   m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
-  
+    
   /* Setup configuration option change handlers */
   m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                  GSpeakers::SAVE_MAIN_WINDOW_SIZE));
@@ -152,6 +155,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
                                                                                      GSpeakers::SCALE_FILER_PARTS));
   m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SPICE_PATH));
+  m_spice_use_ngspice.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SPICE_USE_NGSPICE));
   m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::TOOLBAR_STYLE));
 
@@ -194,6 +199,9 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting)
       break;
     case GSpeakers::TOOLBAR_STYLE:
       g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
+      break;
+    case GSpeakers::SPICE_USE_NGSPICE:
+      g_settings.setValue("SPICEUseNGSPICE", m_spice_use_ngspice.get_active());
       break;
     default:
       // do nothing

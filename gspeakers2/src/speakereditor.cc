@@ -612,7 +612,13 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
       of << ".print ac i(vamp)" << endl;
       of << ".end" << endl;
       of.close();
-      string cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
+      string cmd;
+      if (g_settings.getValueBool("SPICEUseNGSPICE") == true) {
+	cmd = g_settings.getValueString("SPICECmdLine") + " -b " + tmp_file + "> " + tmp_file + ".out";
+      } else {
+	cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
+      }
+      //g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
 #ifdef OUTPUT_DEBUG
       cout << "Speaker_ListStore::draw_imp_plot: running SPICE with \"" + cmd + "\"" << endl;
 #endif

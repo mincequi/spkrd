@@ -631,7 +631,12 @@ void FilterLinkFrame::on_plot_crossover()
   }
   
   /* run spice with created file */
-  string cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " + spice_filename;
+  string cmd;
+  if (g_settings.getValueBool("SPICEUseNGSPICE") == true) {
+    cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + "> " + spice_filename + ".out";
+  } else {
+    cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " + spice_filename;
+  }
 #ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << endl;
 #endif

@@ -1,8 +1,12 @@
 GSpeakers ChangeLog
 
+2004-06-10
+
+* mainwindow.cc, settingsdialog.h/cc: added use ngspice checkbox
+	
 2004-05-10
 
-* speakereditor.h/cc: use FileChooserDialog
+* speakereditor.h/cc: started to use the FileChooserDialog
 
 * Ported to gtkmm-2.4 and libsigc++-2.0
 
