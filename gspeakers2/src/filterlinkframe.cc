@@ -205,7 +205,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_adv_imp_model_checkbutton.signal_toggled().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
   signal_net_modified_by_user.connect(mem_fun(*this, &FilterLinkFrame::on_net_updated));
   signal_plot_crossover.connect(mem_fun(*this, &FilterLinkFrame::on_clear_and_plot));
-  g_settings.defaultValueString("SPICECmdLine", "spice3");
+  g_settings.defaultValueString("SPICECmdLine", "gnucap");
   my_filter_plot_index = -1;
   signal_speakerlist_loaded.connect(mem_fun(*this, &FilterLinkFrame::on_speakerlist_loaded));
   g_settings.settings_changed.connect(mem_fun(*this, &FilterLinkFrame::on_settings_changed));

@@ -62,8 +62,7 @@ int main (int argc, char *argv[])
 #endif
     md.run();
 #ifdef TARGET_WIN32
-    // Is touch a valid windows command???
-    string s = "touch gspeakers2.conf";
+    string s = "echo "" > gspeakers2.conf";
     system(s.c_str());
     g_settings.load("gspeakers2.conf");
 #else
