@@ -16,7 +16,7 @@ the structure in the program, some are important due to the UI experience.
 * Icons on the buttons in various dialogs, maybe switch to toolbars...
 
 * Add "insert_column_with_data_func();" to various columns in treeviews, for 
-    example: enclosure types
+    example: enclosure types (important for the user experience)
      
     -Print less decimals in box- and speakereditor treeview, and everywhere else 
      we print decimal numbers
@@ -32,9 +32,9 @@ the structure in the program, some are important due to the UI experience.
 * Windows installer
 
 * Speakereditor and CrossoverHistory: ask if you want to save changes 
-    when open new xml
+    when open new xml (important)
 
-* Loudspeaker design with GSpeakers HOWTO (important)
+* Loudspeaker design with GSpeakers HOWTO (important, will increase user base)
 
 * Make id_string cell in CrossoverHistory editable
 
@@ -42,9 +42,10 @@ the structure in the program, some are important due to the UI experience.
 
 * Clear up and maybe rewrite BoxEditor
 
-* Box xml should save driver
+* Box xml should save driver (important)
 
-* Rewrite boxhistory, make it more intuitive to use
+* Rewrite boxhistory and boxplot history, make it more intuitive to 
+    use (important)
 
 * Internationalization, get_text support and more
 
@@ -82,4 +83,9 @@ the structure in the program, some are important due to the UI experience.
 
 * SpeakerEditor: code cleanup
 
-* SpeakerEditor: cache SPICE calculations and file reads
+* SpeakerEditor: cache SPICE calculations and file reads (may be important on 
+    slow systems)
+
+* Add "autoupdate SPICE calculations" on drivers tab too
+
+* UI should look the same on each tab

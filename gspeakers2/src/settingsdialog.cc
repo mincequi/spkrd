@@ -20,44 +20,54 @@
 SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, true),
   m_main_notebook(),
   m_spice_browse_button("Browse..."),
-  m_spice_path_entry(),
+  //m_spice_path_entry(),
   m_autoupdate_filter_plots("Automaticly update crossover plots"),
   m_use_advanced_speaker_model("Use advanced speaker SPICE model"),
-  m_vbox()
+  m_vbox(),
+  m_hbox()
 
 {
-  Gtk::Button *apply_button = manage(new Gtk::Button(Gtk::Stock::APPLY));
+  m_file_selection = NULL;
+  apply_button = manage(new Gtk::Button(Gtk::Stock::APPLY));
+  close_button = manage(new Gtk::Button(Gtk::Stock::CLOSE));
   get_action_area()->pack_start(*apply_button);
-  Gtk::Button *close_button = add_button(Gtk::Stock::CLOSE, 0);
+  get_action_area()->pack_start(*close_button);
+  
   apply_button->signal_clicked().connect(slot(*this, &SettingsDialog::on_apply));
   close_button->signal_clicked().connect(slot(*this, &SettingsDialog::on_close));
-  //apply_button->show();
-  set_default_response(0);
+  
   get_vbox()->pack_start(m_main_notebook);
   
   /* Only one page at the moment */
-  m_main_notebook.append_page(m_vbox, "General");
-  Gtk::HBox *hbox = manage(new Gtk::HBox());
-  m_vbox.pack_start(*hbox); 
-  hbox->pack_start(*(manage(new Gtk::Label("Full path to SPICE executable: "))));
-  hbox->pack_start(m_spice_path_entry);
-  hbox->pack_start(m_spice_browse_button);
+    
+  m_hbox.pack_start(*manage(new Gtk::Label("Full path to SPICE executable: ")));
+  m_spice_path_entry = manage(new Gtk::Entry());
+  m_hbox.pack_start(*m_spice_path_entry);
+  m_hbox.pack_start(m_spice_browse_button);
+  
+  m_vbox.pack_start(m_hbox); 
   m_vbox.pack_start(m_autoupdate_filter_plots);  
   m_vbox.pack_start(m_use_advanced_speaker_model);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
-  
+  m_main_notebook.append_page(m_vbox, "General");
   show_all();
   
-  //g_settings.defaultValueString("SPICECmdLine", "spice3");
+  g_settings.defaultValueString("SPICECmdLine", "spice3");
     
-  m_spice_path_entry.set_text(g_settings.getValueString("SPICECmdLine"));
+  m_spice_path_entry->set_text(g_settings.getValueString("SPICECmdLine"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_use_advanced_speaker_model.set_active(g_settings.getValueBool("UseAdvancedSpeakerModel"));
 }
 
 SettingsDialog::~SettingsDialog() 
 {
+#ifdef OUTPUT_DEBUG
+  cout << "SettingsDialog::~SettingsDialog" << endl;
+#endif
 
+//  if (m_file_selection != NULL) {
+//    delete m_file_selection;
+//  }
 }
 
 void SettingsDialog::on_apply()
@@ -65,7 +75,7 @@ void SettingsDialog::on_apply()
 #ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_apply" << endl;
 #endif
-  g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
+  g_settings.setValue("SPICECmdLine", m_spice_path_entry->get_text());
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("UseAdvancedSpeakerModel", m_use_advanced_speaker_model.get_active());
   g_settings.save();
@@ -76,6 +86,7 @@ void SettingsDialog::on_close()
 #ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_close" << endl;
 #endif
+  hide();
 }
 
 void SettingsDialog::on_spice_browse()
@@ -104,5 +115,5 @@ void SettingsDialog::on_file_ok(Gtk::FileSelection *f)
   cout << "SettingsDialog::on_file_ok" << endl;
 #endif
   m_filename = f->get_filename();
-  m_spice_path_entry.set_text(m_filename);
+  m_spice_path_entry->set_text(m_filename);
 }

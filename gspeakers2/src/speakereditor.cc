@@ -25,6 +25,7 @@ Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
   m_Table(20, 2, true), 
   m_NewButton("New Speaker"), 
+  //m_NewButton(), 
   m_NewXmlButton("New Xml"), 
   m_AppendXmlButton("Append xml..."), 
   m_OpenXmlButton("Open..."), 

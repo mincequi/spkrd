@@ -28,16 +28,19 @@ class SettingsDialog : public Gtk::Dialog
 {
 public:
   SettingsDialog();
-  ~SettingsDialog();
+  virtual ~SettingsDialog();
 private:
   Gtk::Notebook m_main_notebook;
   Gtk::Button m_spice_browse_button;
-  Gtk::Entry m_spice_path_entry;
+  Gtk::Entry *m_spice_path_entry;
   Gtk::CheckButton m_autoupdate_filter_plots, m_use_advanced_speaker_model;
   Gtk::VBox m_vbox;
+  Gtk::HBox m_hbox;
   
   Gtk::FileSelection *m_file_selection;
   
+  Gtk::Button *close_button, *apply_button;
+
   string m_filename;
   
   void on_close();

@@ -293,6 +293,9 @@ void MainWindow::on_edit_settings()
 #ifdef OUTPUT_DEBUG
   cout << "MainWindow::on_edit_settings" << endl;
 #endif
-  SettingsDialog d;
-  d.run();
+  SettingsDialog *d = new SettingsDialog();
+  d->run();
+  delete d;
+  
+  
 }
