@@ -22,6 +22,7 @@
 #define __GSPEAKERS_PLOT_H
 
 #include <gtkmm.h>
+#include <iostream>
 #include <vector>
 
 /* This is max and min y-axis-values */
@@ -33,6 +34,8 @@
 #define N_VERTICAL_LINES ( 2 * ( -MAX_NEG_VALUE + MAX_POS_VALUE ) / 10 ) - 1
 /* Upper frequency limit */
 #define UPPER_LIMIT 1000
+
+using namespace std;
 
 /*
  * Declare my own Point class which i can use to exchange 

@@ -19,6 +19,7 @@
  */
 
 #include <math.h>
+#include "sstream_fix.h"
 #include "gspeakersplot.h"
 #include "common.h"
 
@@ -427,34 +428,34 @@ void GSpeakersPlot::draw_log_grid()
   int quarter_space_x = round( total_space_x / 4 );
   int half_space_x = round( total_space_x / 2 );
   int xaxis_y_position = get_allocation().height - BOX_FRAME_SIZE;
-
+  
   /* Draw the logaritmic vertical x-lines */
   if (m_upper_x == 20000) {
     half_space_x = quarter_space_x;
   }
   for (int i = 0; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
+    int x = BOX_FRAME_SIZE + round( log10((double)i) * half_space_x );
     m_refPixmap->draw_line(m_refGC, x, BOX_FRAME_SIZE, x, xaxis_y_position + 3);
-
     /* Draw text below some vertical lines */
     if ( ( i == 2 ) || ( i == 5 ) ) {
       m_refLayout->set_text(int_to_ustring(10 * i));
       m_refPixmap->draw_layout(m_refGC, x - 4, xaxis_y_position + 5, m_refLayout);
     } 
   }
-
+  
   for (int i = 1; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
+    int x = BOX_FRAME_SIZE + round( log10((double)i) * half_space_x );
     m_refPixmap->draw_line(m_refGC, half_space_x + x, BOX_FRAME_SIZE, half_space_x + x, xaxis_y_position + 3);
     if ( ( i == 2 ) || ( i == 5 ) || (i == 1) || (i == 10)) {
       m_refLayout->set_text(int_to_ustring(100 * i));
       m_refPixmap->draw_layout(m_refGC, half_space_x + x - 8, xaxis_y_position + 5, m_refLayout);
     } 
   }
-  /* Draw some more vertical lines if upper limit is 20000 Hz */
+  
+/* Draw some more vertical lines if upper limit is 20000 Hz */
   if (m_upper_x == 20000) {
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
+      int x = BOX_FRAME_SIZE + round( log10((double)i) * half_space_x );
       m_refPixmap->draw_line(m_refGC, 2 * half_space_x + x, BOX_FRAME_SIZE, 2 * half_space_x + x, xaxis_y_position + 3);
   
       /* Draw text below some vertical lines */
@@ -465,7 +466,7 @@ void GSpeakersPlot::draw_log_grid()
     }
   
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
+      int x = BOX_FRAME_SIZE + round( log10((double)i) * half_space_x );
       m_refPixmap->draw_line(m_refGC, 3 * half_space_x + x, BOX_FRAME_SIZE, 3 * half_space_x + x, xaxis_y_position + 3);
       if ( ( i == 2 ) || (i == 5) || (i == 10)) {
         m_refLayout->set_text(int_to_ustring(10 * i) + "k");
@@ -512,10 +513,10 @@ void GSpeakersPlot::draw_horz_grid()
 {
 }
   
-void GSpeakersPlot::set_font( const string& font )
-{
+//void GSpeakersPlot::set_font( const string& font )
+//{
 
-}
+//}
 
 void GSpeakersPlot::set_line_style( Gdk::LineStyle &style )
 {

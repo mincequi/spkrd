@@ -13,7 +13,7 @@ plothistory.h plothistory.cc gspeakersplot.h gspeakersplot.cc \
 gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc \
 mainwindow.h mainwindow.cc crossoverwizard.h crossoverwizard.cc \
 filterlinkframe.h filterlinkframe.cc gspeakersfilterplot.h \
-gspeakersfilterplot.cc
+gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall
 LDADD = $(DEPS_LIBS)

@@ -26,13 +26,13 @@
 using namespace std;
 using namespace SigC;
 
-#define NET_BESSEL        1
-#define NET_BUTTERWORTH   2
-#define NET_LINKWITZRILEY 3
-#define NET_CHEBYCHEV     4
-#define NET_GAUSSIAN      5
-#define NET_LEGENDRE      6
-#define NET_LINEARPHASE   7
+//#define NET_BESSEL        1
+//#define NET_BUTTERWORTH   2
+//#define NET_LINKWITZRILEY 3
+//#define NET_CHEBYCHEV     4
+//#define NET_GAUSSIAN      5
+//#define NET_LEGENDRE      6
+//#define NET_LINEARPHASE   7
 
 class FilterLinkFrame : public Gtk::Frame
 {
@@ -46,7 +46,8 @@ private:
   void on_param_changed();
   void on_net_updated(Net *net);
   void on_plot_crossover();
-
+  void on_clear_and_plot();
+  
   Gtk::Adjustment    adj;
 
   Gtk::VBox          m_vbox;
@@ -80,6 +81,7 @@ private:
   vector<GSpeakers::Point> points;
   /* Helper function */
   int round( double x );
+  void set_family(Gtk::OptionMenu *option_menu, int order, int family);
 };
 
 #endif

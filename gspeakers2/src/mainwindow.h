@@ -52,6 +52,7 @@ private:
 
   Gtk::MenuBar m_menubar;
   Gtk::Menu m_file_menu;
+  Gtk::Menu m_edit_menu;
   Gtk::Menu m_crossover_menu;
   Gtk::Menu m_help_menu;
 
@@ -79,7 +80,7 @@ private:
   void on_plot_crossover();
   void on_on_plot_crossover();
   void on_update_crossover();
-
+  void on_edit_settings();
 };
 
 #endif

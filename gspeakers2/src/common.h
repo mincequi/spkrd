@@ -23,6 +23,7 @@
 #include <exception>
 #include <gtkmm.h>
 #include <vector>
+#include <iostream>
 #include "settings.h"
 
 using namespace SigC;

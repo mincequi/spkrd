@@ -20,6 +20,7 @@
 #include "../config.h"
 #include "mainwindow.h"
 #include "crossover.h"
+#include "settingsdialog.h"
 
 MainWindow::MainWindow() :
   m_main_vbox(),
@@ -75,6 +76,12 @@ MainWindow::MainWindow() :
       slot(Gtk::Main::quit) ) );
   }
   {
+  	Gtk::Menu::MenuList& menulist = m_edit_menu.items();
+
+  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES, slot(*this, &MainWindow::on_edit_settings) ) );
+  }
+
+  {
   	Gtk::Menu::MenuList& menulist = m_crossover_menu.items();
     menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS) ) );
@@ -100,6 +107,7 @@ MainWindow::MainWindow() :
   	menulist.push_back( Gtk::Menu_Helpers::MenuElem("About...", slot(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", m_file_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Edit", m_edit_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", m_crossover_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
@@ -233,4 +241,11 @@ void MainWindow::on_on_plot_crossover()
 void MainWindow::on_update_crossover()
 {
   cout << "MainWindow::on_update_crossover" << endl;
+}
+
+void MainWindow::on_edit_settings()
+{
+  cout << "MainWindow::on_edit_settings" << endl;
+  SettingsDialog d;
+  d.run();
 }

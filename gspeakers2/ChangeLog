@@ -1,5 +1,15 @@
 GSpeakers ChangeLog
 
+2002-09-07
+
+* mainwindow.h/cc, settingsdialog.h/cc: added settingsdialog to the menu
+
+* filterlinkfram.cc: fixed backword calculation of -3dB when a damping network 
+    is used
+
+* filterlinkfram.h/cc: set net family (butterworth, bessel, ..) on init (new 
+    crossover selected)
+
 2002-09-06
 
 * net.h/cc: added net family type, butterworth, bessel, ... class members for 

@@ -81,7 +81,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     on_order_selected(1, m_net->get_highpass_order());
 
     m_higher_type_optionmenu->set_menu(*m_higher_type_menu);
-  
+    
     /* menus ready */
 
     Gtk::HBox *hbox = manage(new Gtk::HBox());
@@ -99,6 +99,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     label->set_alignment(Gtk::ALIGN_LEFT);
     hbox->pack_start(*label);
     vbox->pack_start(*hbox);
+    set_family(m_higher_type_optionmenu, m_net->get_highpass_order(), m_net->get_highpass_family());
   }
 
 
@@ -126,8 +127,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     m_lower_order_optionmenu->set_history(m_net->get_lowpass_order() - 1);
     on_order_selected(0, m_net->get_lowpass_order());
        
-    /* Grey items in this menu */
-    
+
+        
     m_lower_type_optionmenu->set_menu(*m_lower_type_menu);
     /* menus ready */
     
@@ -143,6 +144,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     hbox->pack_start(*m_lower_co_freq_spinbutton);
     hbox->pack_start((*manage(new Gtk::Label("Hz"))));
     vbox->pack_start(*hbox);
+    set_family(m_lower_type_optionmenu, m_net->get_lowpass_order(), m_net->get_lowpass_family());
   } 
   
     
@@ -184,7 +186,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_imp_corr_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   m_damp_spinbutton.signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
-  signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
+  //signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
+  signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_clear_and_plot));
   g_settings.defaultValueString("SPICECmdLine", "spice3");
   my_filter_plot_index = -1;
   //on_plot_crossover();
@@ -257,20 +260,25 @@ void FilterLinkFrame::on_param_changed()
           num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_1ST, NET_TYPE_LOWPASS);
           (*m_net->parts())[index].set_value((speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
           (*m_net->parts())[index++].set_unit("m");
+          m_net->set_lowpass_family(NET_BUTTERWORTH);
           break;
         case NET_ORDER_2ND:
           switch (m_lower_type_optionmenu->get_history()) {
             case 0:  // bessel
               num_params = get_filter_params(NET_BESSEL,        NET_ORDER_2ND, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BESSEL);
               break;
             case 1:  // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH,   NET_ORDER_2ND, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BUTTERWORTH);
               break;
             case 2:  // chebychev
               num_params = get_filter_params(NET_CHEBYCHEV,     NET_ORDER_2ND, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_CHEBYCHEV);
               break;
             case 3:  // linkwitz-riley
               num_params = get_filter_params(NET_LINKWITZRILEY, NET_ORDER_2ND, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_LINKWITZRILEY);
               break;
           }
           /* inductor */
@@ -284,9 +292,11 @@ void FilterLinkFrame::on_param_changed()
           switch (m_lower_type_optionmenu->get_history()) {
             case 0:   // bessel
               num_params = get_filter_params(NET_BESSEL,        NET_ORDER_3RD, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BESSEL);
               break;
             case 1:   // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH,   NET_ORDER_3RD, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BUTTERWORTH);
               break;
           }
           /* inductor */
@@ -303,21 +313,27 @@ void FilterLinkFrame::on_param_changed()
           switch (m_lower_type_optionmenu->get_history()) {
             case 0:  // bessel
               num_params = get_filter_params(NET_BESSEL,        NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BESSEL);
               break;
             case 1:  // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH,   NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_BUTTERWORTH);
               break;
             case 2:  // gaussian
               num_params = get_filter_params(NET_GAUSSIAN,      NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_GAUSSIAN);
               break;
             case 3:  // legendre
               num_params = get_filter_params(NET_LEGENDRE,      NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_LEGENDRE);
               break;
             case 4:  // liner-phase
               num_params = get_filter_params(NET_LINEARPHASE,   NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_LINEARPHASE);
               break;
             case 5:  // linkwitz-riley
               num_params = get_filter_params(NET_LINKWITZRILEY, NET_ORDER_4TH, NET_TYPE_LOWPASS);
+              m_net->set_lowpass_family(NET_LINKWITZRILEY);
               break;
           }
           /* inductor */
@@ -344,20 +360,25 @@ void FilterLinkFrame::on_param_changed()
           num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_1ST, NET_TYPE_HIGHPASS);
           (*m_net->parts())[index].set_value(num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
           (*m_net->parts())[index++].set_unit("u");
+          m_net->set_highpass_family(NET_BUTTERWORTH);
           break;
         case NET_ORDER_2ND:
           switch (m_higher_type_optionmenu->get_history()) {
             case 0:  // bessel
               num_params = get_filter_params(NET_BESSEL,        NET_ORDER_2ND, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BESSEL);
               break;
             case 1:  // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH,   NET_ORDER_2ND, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BESSEL);
               break;
             case 2:  // chebychev
               num_params = get_filter_params(NET_CHEBYCHEV,     NET_ORDER_2ND, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_CHEBYCHEV);
               break;
             case 3:  // linkwitz-riley
               num_params = get_filter_params(NET_LINKWITZRILEY, NET_ORDER_2ND, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_LINKWITZRILEY);
               break;
           }
           /* capacitor */
@@ -371,9 +392,11 @@ void FilterLinkFrame::on_param_changed()
           switch (m_higher_type_optionmenu->get_history()) {
             case 0:   // bessel
               num_params = get_filter_params(NET_BESSEL, NET_ORDER_3RD, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BESSEL);
               break;
             case 1:   // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_3RD, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BUTTERWORTH);
               break;
           }
           /* capacitor */
@@ -390,21 +413,27 @@ void FilterLinkFrame::on_param_changed()
           switch (m_higher_type_optionmenu->get_history()) {
             case 0:  // bessel
               num_params = get_filter_params(NET_BESSEL, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BESSEL);
               break;
             case 1:  // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_BUTTERWORTH);
               break;
             case 2:  // gaussian
               num_params = get_filter_params(NET_GAUSSIAN, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_GAUSSIAN);
               break;
             case 3:  // legendre
               num_params = get_filter_params(NET_LEGENDRE, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_LEGENDRE);
               break;
             case 4:  // liner-phase
               num_params = get_filter_params(NET_LINEARPHASE, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_LINEARPHASE);
               break;
             case 5:  // linkwitz-riley
               num_params = get_filter_params(NET_LINKWITZRILEY, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
+              m_net->set_highpass_family(NET_LINKWITZRILEY);
               break;
           }
           /* capacitor */
@@ -449,7 +478,9 @@ void FilterLinkFrame::on_param_changed()
     signal_net_modified_by_wizard();
     enable_edit = true;  
   }
-  on_plot_crossover();
+  if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+    on_plot_crossover();
+  }
   
 }
 
@@ -458,21 +489,30 @@ void FilterLinkFrame::on_net_updated(Net *net)
   if (m_net->get_id() == net->get_id()) {
     cout << "FilterLinkFrame::on_net_updated" << endl;
     enable_edit = false;
-    on_plot_crossover();
-  //  on_plot_crossover();
+    
+    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+      on_plot_crossover();
+    }
+    
     int i = 0, index1 = 0, index2 = 0;
     if (m_net->get_type() == NET_TYPE_LOWPASS) {
       for (vector<GSpeakers::Point>::iterator iter = points.begin();
            iter != points.end();
            ++iter)
       {
-        if ((*iter).get_y() > -3) {
+        if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
           index1 = i;
         }
         i++;
       }
-  
+      cout << "FilterLinkFrame::on_net_updated: value = " << -3 - m_damp_spinbutton.get_value() << ", " 
+           << points[index1].get_y() << ", " << points[index1 + 1].get_y() <<endl;
+      points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
+      points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
+
+
       double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
+      //double ydiff = y_next - y;
       int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
       double ytodbdiff = points[index1].get_y() + 3;
       m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
@@ -483,22 +523,34 @@ void FilterLinkFrame::on_net_updated(Net *net)
            iter != points.end();
            ++iter)
       {
-        if ((*iter).get_y() < -3) {
+        if ((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) {
           index2 = i;
         }
         i++;
       }
+      index2++;
+      points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
+      points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
       
+      //double ydiff = y_prev - y;
+
       double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
       int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
       //cout << "innan deklarationerna" << endl;
       double ytodbdiff = points[index2].get_y() + 3;
+      //double ytodbdiff = y + 3;
       m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
       //cout << "efter" << endl;
     }
-    
+  
     enable_edit = true;
   }
+}
+
+void FilterLinkFrame::on_clear_and_plot()
+{
+  my_filter_plot_index = -1;
+  on_plot_crossover();
 }
 
 void FilterLinkFrame::on_plot_crossover()
@@ -554,7 +606,6 @@ void FilterLinkFrame::on_plot_crossover()
   int id2 = m_net->get_id();
   cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
   signal_add_crossover_plot(points, c, &my_filter_plot_index);
-  /* TODO: update filterwizard, co_freq_spinbutton here */
     
 }   
 
@@ -767,6 +818,64 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
       break;
   }
   return nums;
+}
+
+void FilterLinkFrame::set_family(Gtk::OptionMenu *option_menu, int order, int family)
+{
+  cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family << endl;
+  switch (order) {
+    case NET_ORDER_2ND:
+      switch (family) {
+        case NET_BESSEL:
+          option_menu->set_history(0);
+          break;
+        case NET_BUTTERWORTH:
+          option_menu->set_history(1);
+          break;
+        case NET_CHEBYCHEV:
+          option_menu->set_history(2);
+          break;
+        case NET_LINKWITZRILEY:
+          option_menu->set_history(3);
+          break;
+      }
+      break;
+    case NET_ORDER_3RD:
+      switch (family) {
+        case NET_BUTTERWORTH:
+          option_menu->set_history(1);
+          break;
+        case NET_BESSEL:
+          option_menu->set_history(0);
+          break;
+      }
+      break;
+    case NET_ORDER_4TH:
+      switch (family) {
+        case NET_BESSEL:
+          option_menu->set_history(0);
+          break;
+        case NET_BUTTERWORTH:
+          option_menu->set_history(1);
+          break;
+        case NET_GAUSSIAN:
+          option_menu->set_history(2);
+          break;
+        case NET_LEGENDRE:
+          option_menu->set_history(3);
+          break;
+        case NET_LINEARPHASE:
+          option_menu->set_history(4);
+          break;
+        case NET_LINKWITZRILEY:
+          option_menu->set_history(5);
+          break;
+          
+      }
+    
+      break;
+  }
+
 }
 
 /*

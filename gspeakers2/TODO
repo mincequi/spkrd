@@ -67,3 +67,6 @@ the structure in the program, some are important due to the UI experience.
 * Add try/catch on xml files loaded in ctors
 
 * FilterLinkFrame: only recalc affected part values
+
+* Check that the spice executable selected in setting dialog really is a 
+    valid spice-program
