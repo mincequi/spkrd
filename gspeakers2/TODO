@@ -70,3 +70,8 @@ the structure in the program, some are important due to the UI experience.
 
 * Check that the spice executable selected in setting dialog really is a 
     valid spice-program
+
+* Maybe we should remove the need for an external SPICE-interpreter...or call 
+    a SPICE-interpreter from a lib or something like that
+
+* Clean up temp dir after SPICE execution

@@ -1,6 +1,15 @@
 GSpeakers ChangeLog
 
+2002-09-08
+
+* Prepared for GSpeakers-0.5 release
+
+* net.h/cc, filterlinkframe.cc: save selected speaker for each net
+
 2002-09-07
+
+* settingsdialog.h/cc, filterlinkframe.h/cc: added config options for path 
+    to spice executable and wheter automaticly update the filter plots
 
 * mainwindow.h/cc, settingsdialog.h/cc: added settingsdialog to the menu
 

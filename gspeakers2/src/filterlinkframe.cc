@@ -38,16 +38,23 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_net = net;
   m_description = description;
   m_speaker_list = speaker_list;
+  string speaker_name = m_net->get_speaker();
   
+  /* Setup the speaker combo box */
   m_vbox.set_border_width(5);
   vector<string> popdown_strings;
+  if (speaker_name != "") {
+    popdown_strings.push_back(speaker_name);
+  }
   for (
     vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
     iter != m_speaker_list->speaker_list()->end();
     ++iter)
   {
     /* TODO: only insert speakers appropriate for this particular crossover */
-    popdown_strings.push_back((*iter).get_id_string());
+    if (speaker_name != (*iter).get_id_string()) {
+      popdown_strings.push_back((*iter).get_id_string());
+    }
   }
   m_speaker_combo.set_popdown_strings(popdown_strings);
   m_speaker_combo.get_entry()->set_editable(false);
@@ -248,7 +255,8 @@ void FilterLinkFrame::on_param_changed()
     cout << "FilterLinkFrame::on_param_changed: running" << endl;
     enable_edit = false;
     Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
-    
+    m_net->set_speaker(speaker.get_id_string());
+
     int index = 0;
     vector<double> num_params;
     

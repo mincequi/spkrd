@@ -33,7 +33,8 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr,
   m_has_res = has_res;
   m_lowpass_family = family;
   m_highpass_family = family;
-
+  m_speaker = "";
+  
   /* Init lowpass filter if present */
   if (m_type & NET_TYPE_LOWPASS) {
     //cout << "net #" << get_id() << ": adding lowpass filter" << endl;
@@ -329,10 +330,26 @@ void Net::parse_highpass_family(xmlNodePtr node)
   if ((node != NULL) && (g_strcasecmp( (char *)node->name, "highpass_family" ) == 0)) {  
     istringstream((char *)xmlNodeGetContent(node)) >> m_highpass_family;
     //m_family = 1;
+    try {
+      parse_speaker(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+    
   } else {
     throw GSpeakersException("Net::parse_highpass_family: highpass_family node expected");
   }
 
+}
+
+void Net::parse_speaker(xmlNodePtr node)
+{
+  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "speaker" ) == 0)) {  
+    m_speaker = string((char *)xmlNodeGetContent(node));
+    //m_family = 1;
+  } else {
+    throw GSpeakersException("Net::parse_highpass_family: speaker node expected");
+  }
 }
 
 
@@ -382,6 +399,8 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
   xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_lowpass_family));
   field = xmlNewChild( net, NULL, (xmlChar *)("highpass_family"), NULL );
   xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_highpass_family));
+  field = xmlNewChild( net, NULL, (xmlChar *)("speaker"), NULL );
+  xmlNodeSetContent( field, (xmlChar *)m_speaker.c_str());
   
   return net;
 }
@@ -547,6 +566,11 @@ vector<Part> *Net::parts()
   return &m_parts;
 }
 
+string Net::get_speaker() 
+{
+  return m_speaker;
+}   
+
 int Net::get_lowpass_family()
 {
   return m_lowpass_family;
@@ -669,6 +693,11 @@ void Net::set_has_damp(bool has_damp)
     m_damp_R2 = Part(PART_TYPE_RESISTOR, 1, "");
   }
 
+}
+
+void Net::set_speaker(string speaker)
+{
+  m_speaker = speaker;
 }
 
 void Net::set_lowpass_family(int family) 

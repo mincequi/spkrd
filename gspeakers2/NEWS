@@ -1,6 +1,9 @@
 GSpeakers-0.5
 
-* You can now plot the frequency response of a crossover network
+* You can now plot the frequency response of a crossover network (with the 
+    help from an external SPICE interpreter)
+
+* Lots of bugfixes, cleanups and extensions to existing code
 
 GSpeakers-0.4
 

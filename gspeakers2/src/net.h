@@ -91,7 +91,8 @@ public:
   bool get_has_res();
   int get_lowpass_family();
   int get_highpass_family();
-
+  string get_speaker();
+  
   /* 
    * We return parts by ref to so that we not copy these parts.
    * For example, if we have:
@@ -128,7 +129,8 @@ public:
   
   void set_lowpass_family(int family);
   void set_highpass_family(int family);
-
+  void set_speaker(string speaker);
+  
 protected:
   /* Member variables */
   // int m_id; /* from GSpeakersObject */
@@ -148,7 +150,7 @@ protected:
   vector<Part> m_parts;
   int m_lowpass_family;
   int m_highpass_family;
-
+  string m_speaker;
 private:
   
   /*
@@ -171,6 +173,7 @@ private:
   void parse_parts(xmlNodePtr node);
   void parse_lowpass_family(xmlNodePtr node);
   void parse_highpass_family(xmlNodePtr node);
+  void parse_speaker(xmlNodePtr node);
   
 };
 
