@@ -21,10 +21,10 @@
 
 #define MENU_INDEX_SAVE                 6
 #define MENU_INDEX_DELETE               8
-#define MENU_INDEX_DELETE_BOXPLOT       14
+#define MENU_INDEX_DELETE_BOXPLOT       13
 #define TOOLBAR_INDEX_SAVE              4
-#define TOOLBAR_INDEX_DELETE            13
-#define TOOLBAR_INDEX_DELETE_BOXPLOT    11
+#define TOOLBAR_INDEX_DELETE            5
+#define TOOLBAR_INDEX_DELETE_BOXPLOT    10
 
 EnclosurePaned::EnclosurePaned()
 {
@@ -95,7 +95,7 @@ Gtk::Menu& EnclosurePaned::get_menu()
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Optimize Enclosure"), GSpeakers::image_widget("opt_enclosure_16.png"), 
                         slot(box_editor, &BoxEditor::on_optimize_button_clicked) ) ); 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Append To _Xml"), slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) ); 
+//  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Append To _Xml"), slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_Plot"), slot(box_editor, &BoxEditor::on_append_to_plot_clicked) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Delete Enclosure"), GSpeakers::image_widget("delete_enclosure_16.png"),  
                       slot(box_history, &BoxHistory::on_remove) ) ); 
@@ -131,8 +131,8 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
                              slot(box_history, &BoxHistory::on_remove), _("Delete selected enclosure")) );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Optimize"), GSpeakers::image_widget("opt_enclosure_24.png"), 
                               slot(box_editor, &BoxEditor::on_optimize_button_clicked), _("Optimize enclosure volume")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append"), GSpeakers::image_widget("append_enclosure_24.png"), 
-                               slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append"), GSpeakers::image_widget("append_enclosure_24.png"), 
+//                               slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
 
 //    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append To Xml"), GSpeakers::image_widget("opt_enclosure_24.png"),
 //                                 slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );                                  

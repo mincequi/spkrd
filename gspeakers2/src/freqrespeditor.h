@@ -21,7 +21,9 @@
 #define __FREQ_RESPONSE_EDITOR_H
 
 #include "common.h"
-#include <gtkmm.h>
+#include <gtkmm/table.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/entry.h>
 
 using namespace std;
 using namespace SigC;

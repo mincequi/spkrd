@@ -380,7 +380,7 @@ void BoxHistory::on_remove()
 
 void BoxHistory::on_box_modified(Box *b)
 {
-  cout << "BoxHistory: box modified" << endl;
+  //cout << "BoxHistory: box modified: " << b << endl;
   // get the row from selection
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -415,8 +415,14 @@ void BoxHistory::on_box_modified(Box *b)
 
 void BoxHistory::on_add_to_boxlist(Box *b)
 {
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
   liststore_add_item(*b);
   m_box_list.box_list()->push_back(*b);
+  /* Select the last crossover in the list: the added crossover */ 
+  GtkTreePath *gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
+  Gtk::TreePath path(gpath);
+  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  refSelection->select(row);
 }
 
 void BoxHistory::on_add_plot(Box *b, Speaker *s) 

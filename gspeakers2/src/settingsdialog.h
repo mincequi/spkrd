@@ -20,11 +20,29 @@
 #ifndef __GSPEAKERS_SETTINGSDLG_H
 #define __GSPEAKERS_SETTINGSDLG_H
 
-#include <gtkmm.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/optionmenu.h>
+#include <gtkmm/fileselection.h>
 #include "common.h"
 
 using namespace std;
 using namespace SigC;
+
+namespace GSpeakers {
+  enum Settings { 
+    SAVE_MAIN_WINDOW_SIZE, 
+    SAVE_MAIN_WINDOW_POSITION, 
+    TOOLBAR_STYLE, 
+    SPICE_PATH, 
+    DRAW_DRIVER_IMP_PLOT, 
+    DRAW_DRIVER_FREQ_RESP_PLOT,
+    AUTO_UPDATE_CROSSOVER_PLOT,
+    DISABLE_FILTER_AMP,
+    SCALE_FILER_PARTS
+  }; 
+}
 
 class SettingsDialog : public Gtk::Dialog
 {
@@ -44,14 +62,14 @@ private:
 
   Gtk::FileSelection *m_file_selection;
   
-  Gtk::Button *close_button, *apply_button;
+  Gtk::Button *close_button;
 
   string m_filename;
   
   void on_close();
-  void on_apply();
   void on_spice_browse();
   void on_file_ok(Gtk::FileSelection *f);
+  void on_config_option_change(GSpeakers::Settings setting);
 };
 
 #endif

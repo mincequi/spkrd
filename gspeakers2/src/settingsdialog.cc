@@ -17,9 +17,12 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
+#include <gtkmm/stock.h>
+#include <gtkmm/table.h>
+#include <gtkmm/frame.h>
 #include "settingsdialog.h"
 
-#define NOF_TABLE_ROWS 8
+#define NOF_TABLE_ROWS 10
 
 SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true, true),
   m_main_notebook(),
@@ -34,22 +37,31 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_toolbar_style()
 {
   m_file_selection = NULL;
-  apply_button = manage(new Gtk::Button(Gtk::Stock::APPLY));
   close_button = manage(new Gtk::Button(Gtk::Stock::CLOSE));
-  get_action_area()->pack_start(*apply_button);
   get_action_area()->pack_start(*close_button);
-  apply_button->signal_clicked().connect(slot(*this, &SettingsDialog::on_apply));
   close_button->signal_clicked().connect(slot(*this, &SettingsDialog::on_close));
  
   get_vbox()->pack_start(m_main_notebook);
-  
+  m_main_notebook.set_border_width(5);
+
   /* General page */
-  Gtk::Table *general_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, true));
-  general_table->attach(m_save_mainwindow_size, 0, 3, 0, 1);
-  general_table->attach(m_save_mainwindow_position, 0, 3, 1, 2);
-  m_main_notebook.append_page(*general_table, _("General"));
+  Gtk::Frame *general_frame = manage(new Gtk::Frame(""));
+  general_frame->set_border_width(5);
+  general_frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(general_frame->get_label_widget())->set_markup(_("<b>General settings</b>"));
+  Gtk::Table *general_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
+  general_table->set_border_width(12);
+  general_table->set_spacings(5);
+  general_table->attach(m_save_mainwindow_size, 0, 3, 0, 1, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+  general_table->attach(m_save_mainwindow_position, 0, 3, 1, 2, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+  general_frame->add(*general_table);
+  m_main_notebook.append_page(*general_frame, _("General"));
   
   /* Toolbar page */
+  Gtk::Frame *toolbar_frame = manage(new Gtk::Frame(""));
+  toolbar_frame->set_border_width(5);
+  toolbar_frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(toolbar_frame->get_label_widget())->set_markup(_("<b>Toolbar settings</b>"));
   Gtk::Menu *menu = manage(new Gtk::Menu());
   Gtk::Menu_Helpers::MenuList& menulist = menu->items();
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Icons only")) );
@@ -57,32 +69,56 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Text and icons")) );
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Text and icons (horz)")) );
   m_toolbar_style.set_menu(*menu);
-  Gtk::Table *tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, true));
-  tbar_table->attach(*manage(new Gtk::Label(_("Toolbar style: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
-  tbar_table->attach(m_toolbar_style, 1, 2, 0, 1);
-  m_main_notebook.append_page(*tbar_table, _("Toolbars"));
+  Gtk::Table *tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, false));
+  tbar_table->set_border_width(12);
+  tbar_table->set_spacings(5);
+  tbar_table->attach(*manage(new Gtk::Label(_("Toolbar style: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  tbar_table->attach(m_toolbar_style, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  toolbar_frame->add(*tbar_table);
+  m_main_notebook.append_page(*toolbar_frame, _("Toolbars"));
 
   /* SPICE page */
-  Gtk::Table *spice_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, true));
-  spice_table->attach(*manage(new Gtk::Label(_("Full path to SPICE executable: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
-  //m_spice_path_entry = manage(new Gtk::Entry());
-  spice_table->attach(m_spice_path_entry, 1, 2, 0, 1);
-  spice_table->attach(m_spice_browse_button, 2, 3, 0, 1);
+  Gtk::Frame *spice_frame = manage(new Gtk::Frame(""));
+  spice_frame->set_border_width(5);
+  spice_frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(spice_frame->get_label_widget())->set_markup(_("<b>SPICE interpreter settings</b>"));
+  Gtk::Table *spice_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3 , false));
+  spice_table->set_border_width(12);
+  spice_table->set_spacings(5);
+  spice_table->attach(*manage(new Gtk::Label(_("Full path to SPICE executable: "), Gtk::ALIGN_LEFT)), 
+                      0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
-  m_main_notebook.append_page(*spice_table, _("SPICE"));
+  spice_frame->add(*spice_table);
+  m_main_notebook.append_page(*spice_frame, _("SPICE"));
 
   /* Driver page */
-  Gtk::Table *driver_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 1, true));
-  driver_table->attach(m_draw_driver_imp_plot, 0, 3, 0, 1);
-  driver_table->attach(m_draw_driver_freq_resp_plot, 0, 3, 1, 2);
-  m_main_notebook.append_page(*driver_table, _("Drivers"));
+  Gtk::Frame *driver_frame = manage(new Gtk::Frame(""));
+  driver_frame->set_border_width(5);
+  driver_frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(driver_frame->get_label_widget())->set_markup(_("<b>Driver tab settings</b>"));
+  Gtk::Table *driver_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
+  driver_table->set_border_width(12);
+  driver_table->set_spacings(5);
+  driver_table->attach(m_draw_driver_imp_plot      , 0, 3, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+  driver_table->attach(m_draw_driver_freq_resp_plot, 0, 3, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+  driver_frame->add(*driver_table);
+  m_main_notebook.append_page(*driver_frame, _("Drivers"));
   
   /* Crossover page */
-  Gtk::Table *crossover_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 1, true));
-  crossover_table->attach(m_autoupdate_filter_plots, 0, 3, 0, 1);  
-  crossover_table->attach(m_disable_filter_amp, 0, 3, 1, 2);
-  crossover_table->attach(m_scale_crossover_image_parts, 0, 3, 2, 3);
-  m_main_notebook.append_page(*crossover_table, _("Crossovers"));
+  Gtk::Frame *crossover_frame = manage(new Gtk::Frame(""));
+  crossover_frame->set_border_width(5);
+  crossover_frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(crossover_frame->get_label_widget())->set_markup(_("<b>Crossover network tab settings</b>"));
+  Gtk::Table *crossover_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
+  crossover_table->set_border_width(12);
+  crossover_table->set_spacings(5);
+  crossover_table->attach(m_autoupdate_filter_plots    , 0, 3, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);  
+  crossover_table->attach(m_disable_filter_amp         , 0, 3, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+  crossover_table->attach(m_scale_crossover_image_parts, 0, 3, 2, 3, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+  crossover_frame->add(*crossover_table);
+  m_main_notebook.append_page(*crossover_frame, _("Crossovers"));
       
   show_all();
   
@@ -95,6 +131,28 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
   m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
   m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
+  
+  /* Setup configuration option change handlers */
+  m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                 GSpeakers::SAVE_MAIN_WINDOW_SIZE));
+  m_save_mainwindow_position.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SAVE_MAIN_WINDOW_SIZE));
+  
+  m_autoupdate_filter_plots.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT));
+  m_draw_driver_imp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::DRAW_DRIVER_IMP_PLOT));
+  m_draw_driver_freq_resp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT));
+  m_disable_filter_amp.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::DISABLE_FILTER_AMP));
+  m_scale_crossover_image_parts.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SCALE_FILER_PARTS));
+  m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SPICE_PATH));
+  m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::TOOLBAR_STYLE));
+
 }
 
 SettingsDialog::~SettingsDialog() 
@@ -104,26 +162,48 @@ SettingsDialog::~SettingsDialog()
 #endif
 }
 
-void SettingsDialog::on_apply()
+void SettingsDialog::on_config_option_change(GSpeakers::Settings setting)
 {
-#ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::on_apply" << endl;
-#endif
-  g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
-  g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
-  g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
-  g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
-  g_settings.setValue("DrawDriverFreqRespPlot", m_draw_driver_freq_resp_plot.get_active());
-  g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
-  g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
-  g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
-  g_settings.setValue("ScaleCrossoverImageParts", m_scale_crossover_image_parts.get_active());
-  
+  cout << "SettingsDialog::on_config_option_chage: " << setting << endl;
+  switch (setting) {
+    case GSpeakers::SAVE_MAIN_WINDOW_SIZE:
+      g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
+      break;
+    case GSpeakers::SAVE_MAIN_WINDOW_POSITION:
+      g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
+      break;
+    case GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT:
+      g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
+      break;
+    case GSpeakers::DRAW_DRIVER_IMP_PLOT:
+      g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
+      break;
+    case GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT:
+      g_settings.setValue("DrawDriverFreqRespPlot", m_draw_driver_freq_resp_plot.get_active());
+      break;
+    case GSpeakers::DISABLE_FILTER_AMP:
+      g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
+      break;
+    case GSpeakers::SCALE_FILER_PARTS:
+      g_settings.setValue("ScaleCrossoverImageParts", m_scale_crossover_image_parts.get_active());
+      break;
+    case GSpeakers::SPICE_PATH:
+      g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
+      break;
+    case GSpeakers::TOOLBAR_STYLE:
+      g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
+      break;
+    default:
+      // do nothing
+      break;
+  }
   try {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "SettingsDialog::on_apply " << e.what() << endl;
+    cout << "SettingsDialog::on_config_option_change: " << e.what() << endl;
+//#else
+// Popup messagebox here ?
 #endif
   }
 }

@@ -1,5 +1,22 @@
 GSpeakers ChangeLog
 
+2003-02-11
+
+* freqrespeditor.h/cc: cleaned up from unused headers, adjusted the dialog to 
+    follow more of the Gnome HIG
+
+* settingsdialog.h/cc: cleaned up the files from unused headers, adjusted the 
+    settingsdialog ui to follow the gnome HIG a little bit better, implemended 
+    "instant apply" and removed the apply-button
+
+* enclosurepaned.cc: removed append toolbar button since you don't want to 
+    do this, you probably want to click new instead
+
+* boxeditor.cc: fixed on_activate functionality in vb1 entry
+
+* boxhistory.cc: select appended box in boxhistory, this fixed a segfault 
+    caused by an invalid pointer
+
 2003-02-10
 
 * speakereditor.cc, crossoverpaned.cc, enclosurepaned.cc: removed some toolbar 

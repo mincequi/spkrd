@@ -105,8 +105,8 @@ BoxEditor::BoxEditor() :
   signal_box_selected.connect(slot(*this, &BoxEditor::on_box_selected));
   
   /* On enter presses in vb entry we should move focus to fb entry */
-  m_vb1_entry.signal_activate().connect(slot(m_fb1_entry, &Gtk::Widget::grab_focus));
-  m_fb1_entry.signal_activate().connect(slot(*this, &BoxEditor::append_and_plot));
+  m_vb1_entry.signal_activate().connect(slot(*this, &BoxEditor::on_vb1_entry_activated));
+  m_fb1_entry.signal_activate().connect(slot(*this, &BoxEditor::on_append_to_boxlist_clicked));
   
   show_all();
 }
@@ -114,6 +114,18 @@ BoxEditor::BoxEditor() :
 BoxEditor::~BoxEditor()
 {
 
+}
+
+void BoxEditor::on_vb1_entry_activated()
+{
+  switch (m_box->get_type()) {
+    case BOX_TYPE_SEALED:
+      on_append_to_boxlist_clicked();
+      break;
+    case BOX_TYPE_PORTED:
+      m_fb1_entry.grab_focus();    
+      break;
+  }
 }
 
 void BoxEditor::append_and_plot()

@@ -48,6 +48,7 @@ public:
   void on_append_to_plot_clicked();
   void on_calc_port_clicked();
   void append_and_plot();
+  void on_vb1_entry_activated();
   
 protected:
 

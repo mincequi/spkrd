@@ -20,6 +20,10 @@
 #include "freqrespeditor.h"
 #include <fstream>
 #include <stdio.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/fileselection.h>
 
 FreqRespEditor::FreqRespEditor(string filename) :
   m_table(15, 4, false),
@@ -30,12 +34,24 @@ FreqRespEditor::FreqRespEditor(string filename) :
   m_filename = filename;
   set_modal();
   
-  get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is not intended to provide an "
-                                                  "exact estimation of the total frequency response."))));
-  get_vbox()->set_border_width(10);
-  get_vbox()->set_spacing(5);
+  Gtk::Frame *frame = manage(new Gtk::Frame(""));
+  Gtk::VBox *frame_vbox = manage(new Gtk::VBox());
+  frame->set_border_width(5);
+  frame->set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Frequency response for selected driver</b>"));
+  
+  //get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is not intended to provide an "
+  //                                                "exact estimation of the total frequency response."))));
+  //get_vbox()->set_border_width(10);
+  get_vbox()->pack_start(*frame);
   m_table.set_spacings(5);
-  get_vbox()->pack_start(m_table);
+  frame->add(*frame_vbox);
+  frame_vbox->set_border_width(12);
+  frame_vbox->pack_start(*manage(new Gtk::Label(Glib::ustring(_("Enter the freq response dB magnitude, this is not intended to provide an")) + "\n" +
+                                                Glib::ustring(_("exact estimation of the total frequency response.")))));
+  frame_vbox->set_spacing(12);
+  frame_vbox->pack_start(m_table);
+  //m_table.set_border_width(12);
   
   for (int i = 0; i < 30; i++) {
     dbmag_entries.push_back(manage(new Gtk::Entry()));
