@@ -151,9 +151,7 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
 void EnclosurePaned::on_settings_changed(const string& s)
 {
   if (s == "ToolbarStyle") {
-#ifndef TARGET_WIN32
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-#endif
   }
 }
 

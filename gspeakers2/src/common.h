@@ -109,5 +109,7 @@ extern Signal1<void, Net *> signal_net_modified_by_user;    // listan to this in
 extern Signal1<void, int> signal_new_crossover;
 extern Signal0<void> signal_plot_crossover;
 extern Signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
+extern Signal0<void> signal_clear_filter_plots;
+
 
 #endif //__GFILTER_COMMON_H

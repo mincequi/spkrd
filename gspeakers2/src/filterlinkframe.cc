@@ -193,6 +193,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   enable_edit = true;
 }
 
+FilterLinkFrame::~FilterLinkFrame() 
+{
+  cout << "FilterLinkFrame: dtor" << endl;
+}
+
 void FilterLinkFrame::on_order_selected(int which, int order)
 {
 #ifdef OUTPUT_DEBUG

@@ -1,3 +1,9 @@
+GSpeakers-0.8.3
+
+* Fixed a "first time startup" segfault (improved config handling)
+
+* Fixed problems that occured when compiling with gtkmm-1.3.24
+
 GSpeakers-0.8.2
 
 * GSpeakers wont segfault when you enter a driver parameter that affects the 

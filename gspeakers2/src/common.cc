@@ -37,6 +37,7 @@ Signal1<void, Net *> signal_net_modified_by_user;
 Signal1<void, int> signal_new_crossover;
 Signal0<void> signal_plot_crossover;
 Signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
+Signal0<void> signal_clear_filter_plots;
 
 namespace GSpeakers {
   Glib::ustring double_to_ustring(double d) 

@@ -32,6 +32,7 @@ class FilterLinkFrame : public Gtk::Frame
 {
 public:
   FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list);
+  virtual ~FilterLinkFrame();
   
 private:
   /* callbacks */

@@ -125,6 +125,7 @@ protected:
   //Glib::RefPtr<Gtk::TreeSelection> old_refSelection;
   void set_entries_sensitive(bool value);
   string m_filename;
+  bool m_modified;
 };
 
 #endif

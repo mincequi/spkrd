@@ -61,7 +61,7 @@ int main (int argc, char *argv[])
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
 #endif
   }
-
+  g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
   //BoxEditor be;
   //BoxHistory bh;

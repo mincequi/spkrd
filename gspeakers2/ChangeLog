@@ -1,5 +1,15 @@
 GSpeakers ChangeLog
 
+2002-10-14
+
+* Prepared for 0.8.3 bugfix release
+
+* main.cc/mainwindow.cc: fixed a segfault which appeared upon first startup 
+    since the toolbars wanted a config option not present at the time
+
+* crossoverwizard.cc: work around bug (or something?) in gtkmm-1.3.24 which 
+    cause a dtor not to be called when using erase on vbox.children()
+
 2002-10-12
 
 * speakereditor.cc: redraw freq plot on browse too, ungrey toolbar and menu save 

@@ -45,16 +45,25 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
 #ifdef OUTPUT_DEBUG
   cout << "CrossoverWizard::on_crossover_selected" << endl;
 #endif
-  m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
+  //  delete m_vbox.children()[0].get_widget();
+  
+  /* We want to make sure the content of m_vbox get deleted */
+  //m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
+  if (m_vbox.children().size() > 0) {
+    for (int i = m_vbox.children().size() - 1; i >= 0; i--) {
+      delete m_vbox.children()[i].get_widget();
+    }
+  }
+
   for (vector<Net>::iterator iter = crossover->networks()->begin();
        iter != crossover->networks()->end();
        ++iter)
   {
-    //cout << iter->get_type() << endl;
-    FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", m_speaker_list));
+    cout << "net_id: " << iter->get_id() << endl;
+    //FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", m_speaker_list));
+    FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "filter", m_speaker_list);
     m_vbox.pack_start(*link1);
   }
-  //signal_plot_crossover();
 }
 
 void CrossoverWizard::on_speaker_list_loaded(SpeakerList *speaker_list)

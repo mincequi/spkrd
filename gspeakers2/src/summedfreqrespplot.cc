@@ -39,6 +39,7 @@ SummedFreqRespPlot::SummedFreqRespPlot() :
   
   signal_speakerlist_loaded.connect(slot(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
   signal_add_crossover_plot.connect(slot(*this, &SummedFreqRespPlot::on_add_plot));
+  signal_crossover_selected.connect(slot(*this, &SummedFreqRespPlot::on_crossover_selected));
 }
 
 SummedFreqRespPlot::~SummedFreqRespPlot()
@@ -140,6 +141,7 @@ void SummedFreqRespPlot::clear()
 
 void SummedFreqRespPlot::on_crossover_selected(Crossover *)
 {
+  cout << "SummedFreqRespPlot::on_crossover_selected" << endl;
   clear();
 }
 

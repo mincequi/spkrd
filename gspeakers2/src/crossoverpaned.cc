@@ -167,9 +167,7 @@ void CrossoverPaned::on_plot_crossover()
 void CrossoverPaned::on_settings_changed(const string& s)
 {
   if (s == "ToolbarStyle") {
-#ifndef TARGET_WIN32  
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-#endif
   }
   if (s == "AutoUpdateFilterPlots") {
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {

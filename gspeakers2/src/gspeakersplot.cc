@@ -92,7 +92,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
 int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Color& ref_color)
 {
 #ifdef OUTPUT_DEBUG
-  cout << "GSpeakersPlot: on add plot" << endl;
+  //cout << "GSpeakersPlot: on add plot" << endl;
 #endif
   if (visible == true) {
     m_refGC->set_rgb_fg_color(ref_color);

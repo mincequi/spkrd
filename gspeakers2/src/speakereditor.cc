@@ -37,6 +37,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_MidrangeCheckButton("Midrange"), 
   m_TweeterCheckButton("Tweeter")
 {
+  m_modified = false;
   updating_entries = false;
   tbar = NULL;
 #ifdef TARGET_WIN32
@@ -172,6 +173,14 @@ Speaker_ListStore::Speaker_ListStore()
 
 Speaker_ListStore::~Speaker_ListStore()
 {
+  //cout << "Speaker_ListStore::~Speaker_ListStore " << m_modified << endl;
+  //cout << true << ", " << false << endl;
+  if (m_modified == true) {
+#ifdef OUTPUT_DEBUG
+    // Insert dialog here that asks if we want to save changes
+    cout << "Speaker_ListStore::~Speaker_ListStore: save changes?" << endl;
+#endif
+  }
 }
 
 Gtk::Widget& Speaker_ListStore::get_treeview_table()
@@ -243,9 +252,7 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
 void Speaker_ListStore::on_settings_changed(const string& s)
 {
   if (s == "ToolbarStyle") {
-  #ifndef TARGET_WIN32
     tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-  #endif
   }
   if ((s == "DrawDriverImpPlot") || (s == "DrawDriverFreqRespPlot")) {
     if (index != -1) {
@@ -316,6 +323,7 @@ void Speaker_ListStore::on_new()
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
   signal_speakerlist_loaded(m_speaker_list);
+  m_modified = true;
 }
 
 void Speaker_ListStore::on_new_xml()
@@ -365,6 +373,7 @@ void Speaker_ListStore::on_save()
       m_speaker_list->to_xml(m_filename);
       m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
       tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
+      m_modified = false;
     } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
@@ -580,6 +589,7 @@ void Speaker_ListStore::on_clear()
 {
   m_refListStore->clear();
   m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(), m_speaker_list->speaker_list()->end());
+  m_modified = true;
   //m_TreeView.signal_select_all();
 }
 
@@ -716,8 +726,9 @@ void Speaker_ListStore::on_entry_changed(int i)
     }
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+    m_modified = true;
   }
-  
+
 }
 
 void Speaker_ListStore::on_append_xml()
@@ -766,6 +777,7 @@ void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f)
     f->hide();
     m_speaker_list->speaker_list()->size();
     set_entries_sensitive(true);
+    m_modified = true;
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -819,6 +831,7 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
 
     signal_speakerlist_loaded(m_speaker_list);
+    m_modified = true;
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -839,6 +852,7 @@ void Speaker_ListStore::on_edit_freq_resp()
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  m_modified = true;
 }
 
 void Speaker_ListStore::on_browse_freq_resp()
@@ -858,6 +872,7 @@ void Speaker_ListStore::on_browse_freq_resp()
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  m_modified = true;
 }
 
 void Speaker_ListStore::create_model()

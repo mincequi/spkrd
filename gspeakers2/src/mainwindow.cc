@@ -60,7 +60,6 @@ MainWindow::MainWindow()
   g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
   g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
   g_settings.defaultValueBool("AutoUpdateFilterPlots", false);
-  g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
   g_settings.defaultValueString("SPICECmdLine", "spice3");  
   
   /* You should be able to specify this in the settings dialog, if the window manager can set the size of the window
