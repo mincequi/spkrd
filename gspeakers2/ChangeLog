@@ -1,5 +1,14 @@
 GSpeakers ChangeLog
 
+2003-02-10
+
+* speakereditor.cc, crossoverpaned.cc, enclosurepaned.cc: removed some toolbar 
+    buttons, changed some toolbar labels, made corresponding changes to the 
+    menus, thanks to Daniel Elstner for the discussion we had on this topic,
+    also some menus were reordered
+
+* enclosurepaned.cc: added a toolbar button
+
 2003-02-06
 
 * filterlinkfram.h/cc: Gnome HIG adjustments, reordered some widgets

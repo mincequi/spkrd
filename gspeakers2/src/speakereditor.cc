@@ -25,8 +25,8 @@
 
 #define MENU_INDEX_SAVE 5
 #define MENU_INDEX_DELETE 8
-#define TOOLBAR_INDEX_SAVE 4
-#define TOOLBAR_INDEX_DELETE 6
+#define TOOLBAR_INDEX_SAVE 3
+#define TOOLBAR_INDEX_DELETE 5
 
 Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
@@ -213,18 +213,18 @@ Gtk::Menu& Speaker_ListStore::get_menu()
     menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
                       slot(*this, &Speaker_ListStore::on_new) ) );
     menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew Xml"), GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew"), GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
                       slot(*this, &Speaker_ListStore::on_new_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Xml..."), 
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Driver Xml..."), 
                       slot(*this, &Speaker_ListStore::on_append_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open Xml"), GSpeakers::image_widget("open_xml_16.png"),  
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
                       slot(*this, &Speaker_ListStore::on_open_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save Xml"),  GSpeakers::image_widget("save_xml_16.png"),  
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"),  GSpeakers::image_widget("save_xml_16.png"),  
                       slot(*this, &Speaker_ListStore::on_save) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save Xml _As..."), GSpeakers::image_widget("save_as_xml_16.png"),  
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As..."), GSpeakers::image_widget("save_as_xml_16.png"),  
                       slot(*this, &Speaker_ListStore::on_save_as) ) );
     menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete Driver"), GSpeakers::image_widget("delete_driver_16.png"),  
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete"), GSpeakers::image_widget("delete_driver_16.png"),  
                       slot(*this, &Speaker_ListStore::on_remove) ) );
 
     menulist[MENU_INDEX_SAVE].set_sensitive(false);
@@ -239,14 +239,14 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
     tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New Driver"), GSpeakers::image_widget("stock_new_driver_24.png"), 
                              slot(*this, &Speaker_ListStore::on_new), _("Create new driver")) );
     tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New Xml"), GSpeakers::image_widget("stock_new_driver_xml_24.png"), 
-                             slot(*this, &Speaker_ListStore::on_new_xml), _("Create new driver xml (list)")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open Xml"),  GSpeakers::image_widget("open_xml_24.png"), 
+//    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_driver_xml_24.png"), 
+//                             slot(*this, &Speaker_ListStore::on_new_xml), _("Create new driver xml (list)")) );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open"),  GSpeakers::image_widget("open_xml_24.png"), 
                              slot(*this, &Speaker_ListStore::on_open_xml), _("Open driver xml (list)")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save Xml"),  GSpeakers::image_widget("save_xml_24.png"), 
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save"),  GSpeakers::image_widget("save_xml_24.png"), 
                              slot(*this, &Speaker_ListStore::on_save), _("Save driver xml (list)")) );
     tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete Driver"),  GSpeakers::image_widget("delete_driver_24.png"), 
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"),  GSpeakers::image_widget("delete_driver_24.png"), 
                              slot(*this, &Speaker_ListStore::on_remove), _("Delete selected driver")) );
   
     toolbar.add(*tbar);
