@@ -1,0 +1,197 @@
+<html>
+<head>
+<title>GnomeSpeakers - A Gnome Loudspeaker Design Program</title>
+</head>
+<body>
+<h2>GnomeSpeakers</h2><br>&nbsp;<br>
+
+<center>
+<a href="#about">About</a> | 
+<a href="#history">History</a> | 
+<a href="#screenshots">Screenshots</a> | 
+<a href="#download">Download</a> | 
+<a href="#support">Support</a> | 
+<a href="#faq">FAQ</a> | 
+<a href="#doc">Documentation</a> | 
+<a href="http://www.sf.net/projects/gspeakers">gspeakers@Sourceforge</a>
+<br>
+</center><br>&nbsp;<br>
+
+<b>News</b><br>
+<b>2002-01-07</b>: 
+Initial public release of gspeakers-0.1 today.
+<a href="http://www.sf.net/projects/gspeakers">Download</a>.<br>&nbsp;<br>
+
+<a name="about">
+<b>About</b><br>
+GnomeSpeakers (short name: gspeakers) is a Gnome-based loudspeaker design 
+program. It's built using the 
+Gtkmm and Gnomemm libraries (C++ wrappers for the Gtk+ and Gnome libraries 
+<a href="http://gtkmm.sf.net">http://gtkmm.sf.net</a>). The 
+reason I started to work on this program was that I could not find any other 
+Gtk/Gnome based loudspeaker design program. The question I had to ask myself was: 
+How can I make it easier to design loudspeakers? I decided that GnomeSpeakers 
+should implement features that makes it easy and quick to plot frequency responses 
+for a lot of different speakers in a lot of different boxes. However, in the first 
+version only a (pretty large) subset of these features are implemented. 
+The program is very 
+modular so it is very easy to add new features. I suppose it'll only take a few 
+0.x-releases before this is ready for the great version 1.0.<br>&nbsp;<br>
+
+<b>What about filters/crossover networks?</b><br>
+I have decided not to include a filter/crossover-designer in this program since I 
+consider the filterdesigners usually included in loudspeaker design program too 
+simple. I'm a fourth year electronics student who know some about filter design, 
+however, not as much as i would like to know. 
+I want a filter design program to be very powerful and still easy to use. 
+I'll probably create a filter 
+design program as a separate project. Anyone with ideas for such a program/project should 
+contact me. I really need some advice on this topic and I would like to discuss
+how to build GUI with someone.
+<br>&nbsp;<br>
+
+<a name="history">
+<b>History</b><br>
+Back in 1995 (at least i think it was 95) I started a programming course in school. The 
+programming language was Pascal and the operating system was MS Dos. I wanted my own 
+project to work on and since I was intrested in building loudspeakers a loudspeaker 
+design program was the obvious choice for a programming project. Later I got more 
+intrested in GUI-programming and switched to windows. I made one version of the 
+program (which I called BassCAD) for windows. The result was something that I 
+called a BETA-version but you should probably call it a pre-alpha...:-) However, 
+last time I touched BassCAD was almost four years ago. I would not like to see that
+piece of code today. Last november it 
+was time for a new project and a brand new name. GnomeSpeakers is the new project I'm 
+working on. Please try it and <a href="mailto:dss@home.se">tell me</a> what 
+you think about it.<br>&nbsp;<br>
+
+<a name="screenshots">
+<b>Screenshots</b><br>
+Screenshots: <br>
+<a href="gspeakers1.png">
+<img src="gspeakers1_small.png"></a><br>
+<a href="gspeakers1.png">Larger screenshot</a>
+
+<br>&nbsp;<br>
+
+<a name="download">
+<b>Download</b><br>
+<a href="http://telia.dl.sourceforge.net/gspeakers/gspeakers-0.1.tar.gz">gspeakers-0.1</a>
+<br>&nbsp;<br>
+Please mail me (<a href="mailto:dss@home.se">dss at home dot se</a>)what do you like
+and dislike about the program. Now is 
+the right time for me to make big changes to the program. If I don't get negative 
+feedback I'll suppose everyone like it.<br>&nbsp;<br>
+
+<a name="support">
+<b>Support</b><br>
+The best way to get quick support on gspeakers is to send a mail to me 
+(<a href="mailto:dss@home.se">dss at home dot se</a>). I'll try to answer 
+questions as soon as possible. If I get a lot of mail I'll set up a 
+mailinglist.<br>&nbsp;<br>
+
+<a name="faq">
+<b>FAQ</b><br>
+<i>Why does not gspeakers display any text in the plot? I also get a lot of error
+messages in the console.</i><br>
+You probably have gspeakers configured to use a font which does not exist on your
+system. Open preferences dialog and select a font.<br>
+<i>GSpeakers crashes upon startup, what is wrong?</i><br>
+There might be an error in the config-file. Try "mv ~/.gspeakers ~/.gspeakers.bak" and
+restart gspeakers. There might also be a problem if you specified a "pkgdatadir"
+different from "[prefix]/share/gspeakers" (where [prefix] is the prefix specified when
+you ran ./configure).<br>&nbsp;<br>
+
+<a name="doc">
+<b>Documentation</b><br>
+This is a short tutorial on how to use gspeakers. The idea of the user interface 
+(see screenshots) is that you store speakers and enclosures in xml-files. 
+Internally the data is stored in structures but you only have to care about the 
+xml-file. This is just a short walk through the toolbars. I'm not trying to teach you
+how to design loudspeakers. You have to learn that elsewhere.
+<br>&nbsp;<br>
+
+<img src="spktoolbar.png"><br><i>Figure 1: the speaker toolbar</i><br>&nbsp;<br>
+1: Create new speaker, press this button to clear the toolbar and prepare to 
+add a new speaker. Press this button if you want to add a speaker.<br>
+2: Create new xml-file. Press this button if you want to start on a new set of 
+speakers.<br>
+3: Open xml-file. Opens a file you've created earlier or a file downloaded from 
+somewhere (perhaps here later).<br>
+4: Save changes you made, for example if you add a speaker, press this button to 
+save that speaker to the xml-file.<br>
+5: Save xml-file as...save the xml-file with a new filename.<br>
+6: Remove current speaker from the toolbar.<br>
+7: This is the xml-file you're working with.<br>
+8: This is name of the currently selected speaker.<br>
+9: Vas is a parameter for the speaker you can find in its datasheet or in most 
+retailors catalouges.<br>
+10: Fs is the resonanse frequency of the speaker.<br>
+11: Qts is one damping-factor (i don't relly know exactely what this is)<br>
+<br>&nbsp;<br>
+
+<img src="boxtoolbar.png"><br><i>Figure 2: the enclosure toolbar</i><br>&nbsp;<br>
+
+1: Create new enclosure, press this button to clear the toolbar and prepare to 
+add a new enclosure.<br>
+2: Create new xml-file. Press this button if you want to start on a new set of 
+enclosures.<br>
+3: Open xml-file. Opens a file you've created earlier or a file downloaded from 
+somewhere (perhaps here later).<br>
+4: Save changes you made, for example if you add an enclosure, press this button to 
+save that enclosure to the xml-file.<br>
+5: Save xml-file as...save the xml-file with a new filename.<br>
+6: Remove current enclosure from the toolbar.<br>
+7: This is the xml-file you're working with.<br>
+8: This is the name of the currently selected enclosure.<br>
+9: Here you can select type of box, for now you can choose between two types of
+boxes, ported/vented and sealed/closed box. More types will be added later but i 
+want to improve the functionality of the program first.<br>
+10: This is the volume (in litres) of the encolsure.<br>
+11: This is the resonanse frequency of the enclosure.<br><br>&nbsp;<br>
+
+<img src="simtoolbar.png"><br><i>Figure 3: the simulation toolbar</i><br>&nbsp;<br>
+1: Create a plot of the frequncy response for the currently selected speaker in 
+the currently selected enclosure.<br>
+2: This will create a plot of the frequency response for the currently selected 
+speaker in each of the enclsures in the enclosure toolbar. This is a powerfull 
+feature that should be convenient when you want to simulate the performance for 
+a lot of different speakers in a lot of different enclsures.<br>
+3: The same as 2 but here you take each speaker and plot the frequency response 
+for each speaker in the currently selected enclosure.<br>
+4: Plot each speaker in the corresponding box. For example, if you got 3 speakers 
+in the currently opened speaker xml file and 3 enclosures in the currently opened 
+enclosure xml-file then this command will plot frequency response for speaker #1 in 
+enclosure #1, speaker #2 in enclosure #2...<br>
+5: Remove the plot you selected in the list of plots.<br>
+6: Remove all plots from the greaph.<br>
+7: Set enclosure volume (and for sealed enclosure the resonance frequency too) to 
+the optimized volume for the currently selected speaker. The optimized volume is 
+the volume that gives the speaker a flat frequency response.<br>
+8: Open the properties dialog.<br>&nbsp;<br>
+
+<center>
+<a href="#about">About</a> | 
+<a href="#history">History</a> | 
+<a href="#screenshots">Screenshots</a> | 
+<a href="#download">Download</a> | 
+<a href="#support">Support</a> |
+<a href="#faq">FAQ</a> | 
+<a href="#doc">Documentation</a> | 
+<a href="http://www.sf.net/projects/gspeakers">gspeakers@Sourceforge</a>
+</center><br>&nbsp;<br>
+
+<center>
+<i>
+&copy; Daniel Sundberg, <a href="mailto:dss@home.se">dss@home.se</a>
+</i>
+<br>&nbsp;<br>
+Site hosted by: 
+ <a href="http://sourceforge.net">
+<img src="http://sourceforge.net/sflogo.php?group_id=36654&type=1" hspace="30" width="88" height="31" border="0" alt="SourceForge Logo">
+</a>
+
+
+</center>
+</body>
+</html>
