@@ -29,6 +29,7 @@
 #include <gdkmm/colormap.h>
 #include <pangomm/layout.h>
 #include <gdkmm/color.h>
+#include <vector>
 #include "crossover.h"
 
 /*
@@ -64,11 +65,15 @@ private:
   
   void draw_t_cross(int x, int y, int width, int height, bool upper = true);
   void draw_corner(int x, int y, int width, int height, bool upper = true);
+  void draw_line(int x, int y, int width, int height, bool rotate = false);
 
   void draw_woofer(int x, int y, int width, int height, bool positive_up = true);
   void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
   void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
-  
+
+  void draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
+  void draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
+
 
   bool visible;
 

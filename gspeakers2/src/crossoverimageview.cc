@@ -21,6 +21,7 @@
  */
 
 #include <pangomm/context.h>
+#include <gdkmm/rectangle.h>
 #include "crossoverimageview.h"
 #include "common.h"
 
@@ -90,19 +91,75 @@ void CrossoverImageView::redraw()
       if (vert_space_per_net_devider == 0) return;
       
       int window_height = get_allocation().height;
+      int window_width  = get_allocation().width;
       int vert_space_per_net = GSpeakers::round(window_height / vert_space_per_net_devider);
       
       cout << "vert_space_per_net: " << vert_space_per_net << endl;
       
       /* Draw first net here */
-      
+      vector<Net>& net_vector = *crossover->networks();
+      for (unsigned i = 0; i < net_vector.size(); i++) {
+        
+        int net_vert_devider = 3; 
+        int part_height = GSpeakers::round(vert_space_per_net / net_vert_devider);
+        
+        int net_horz_devider = 2;
+        switch (net_vector[i].get_lowpass_order()) {
+          case NET_ORDER_1ST:
+            net_horz_devider++;
+            break;
+          case NET_ORDER_2ND:
+            net_horz_devider += 2;
+            break;
+          case NET_ORDER_3RD:
+            net_horz_devider += 3;
+            break;
+          case NET_ORDER_4TH:
+            net_horz_devider += 4;
+            break;
+        }
+        switch (net_vector[i].get_highpass_order()) {
+          case NET_ORDER_1ST:
+            net_horz_devider++;
+            break;
+          case NET_ORDER_2ND:
+            net_horz_devider += 2;
+            break;
+          case NET_ORDER_3RD:
+            net_horz_devider += 3;
+            break;
+          case NET_ORDER_4TH:
+            net_horz_devider += 4;
+            break;
+        }
+        if (net_vector[i].get_has_imp_corr() == true) net_horz_devider++;
+        if (net_vector[i].get_has_damp() == true)     net_horz_devider += 2;
+        int part_width = GSpeakers::round(window_width / net_horz_devider);
+        
+        cout << "part_height = " << part_height << ", part_width = " << part_width << endl;
+        draw_connector(0, i * vert_space_per_net, part_width, part_height, true);
+        draw_connector(0, (i + 1) * vert_space_per_net - part_height, part_width, part_height, false);
+        
+        int order = net_vector[i].get_lowpass_order();
+        vector<Part>& part_vector = *net_vector[i].parts();
+        if (order > 0) {
+          vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + order);
+          draw_lowpass_net(part_width, i * vert_space_per_net, part_width, part_height, lowpass_parts);
+        }
+        
+        
+        
+        
+        
+      }
       
     }
 
 
 
 //draw_capacitor(13, 10, 10, width, height, false);
-    //draw_capacitor(14, 10, 100, width, height, true);
+    draw_inductor(15, 200, 200, 49, 87, false);
+    draw_capacitor(14, 300, 200, 49, 87, true);
     //draw_inductor(15, 100, 10, width, height, false);
     //draw_inductor(16, 100, 100, width, height, true);
     //draw_connector(200, 10, width, height, true);
@@ -112,6 +169,7 @@ void CrossoverImageView::redraw()
     //draw_corner(300, 10, width, height, false);
     //draw_t_cross(300, 100, width, height, true);
     //draw_t_cross(300, 200, width, height, false);
+
   }
 }
 
@@ -119,7 +177,33 @@ void CrossoverImageView::on_crossover_selected(Crossover *selected_crossover)
 {
   cout << "CrossoverImageView::on_crossover_selected" << endl;
   crossover = selected_crossover;
-  redraw();
+  if (visible == true) {
+    cout << "invalidate rectangle" << endl;
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, true);
+  }
+
+//  redraw();
+}
+
+void CrossoverImageView::draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts)
+{
+  for (unsigned i = 0; i < parts.size(); i++) {
+    if (parts[i].get_type() == PART_TYPE_INDUCTOR) {
+      draw_inductor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
+      draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
+    } else {
+      draw_t_cross(x + part_width * i, y, part_width, part_height);
+      draw_capacitor(parts[i].get_id(), x + part_width * i, y + part_height, part_width, part_height, true);
+      draw_t_cross(x + part_width * i, y + 2 * part_height, part_width, part_height, false);
+    }
+  }
+}
+
+void CrossoverImageView::draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts)
+{
+
 }
 
 void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int height, bool rotate)
@@ -134,8 +218,8 @@ void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int hei
     
   if (rotate == true) {
     /* Horizontal line in capacitor */
-    m_refPixmap->draw_line(m_refGC, x + half_space_y, y, x + half_space_y, y + half_space_y - small_space_y);
-    m_refPixmap->draw_line(m_refGC, x + half_space_y, y + half_space_y + small_space_y, x + half_space_y, y + height);
+    m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + half_space_y - small_space_y);
+    m_refPixmap->draw_line(m_refGC, x + half_space_x, y + half_space_y + small_space_y, x + half_space_x, y + height);
     
     /* Vertical lines in capacitor */
     m_refPixmap->draw_line(m_refGC, x + 2 * small_space_x, y + half_space_y - small_space_y,
@@ -178,8 +262,8 @@ void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int heig
 
   } else {
     /* Horizontal line in inductor */
-    m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + (2 * small_space_x), y + half_space_y);
-    m_refPixmap->draw_line(m_refGC, x + width - (2 * small_space_x), y + half_space_y, x + width, y + half_space_y);
+    m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + 2 * small_space_x, y + half_space_y);
+    m_refPixmap->draw_line(m_refGC, x + width - 2 * small_space_x, y + half_space_y, x + width, y + half_space_y);
   
     /* Arcs in inductor */
     for (int i = 0; i <= 12; i += 4) {
@@ -266,6 +350,17 @@ void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool u
     m_refPixmap->draw_line(m_refGC, x + half_space_y, y + half_space_y, x + half_space_x, y + height);
   } else {
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + half_space_y);
+  }
+}
+
+void CrossoverImageView::draw_line(int x, int y, int width, int height, bool rotate)
+{
+  if (rotate == true) {
+    int half_space_x  = GSpeakers::round(width / 2);
+    m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + height);
+  } else {
+    int half_space_y  = GSpeakers::round(height / 2);
+    m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + width, y + half_space_y);
   }
 }
 
