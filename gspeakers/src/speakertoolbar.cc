@@ -435,21 +435,21 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
   case TEXT_AND_ICONS:
     gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_speaker.xpm" ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "New spk" ) );
+    l = manage( new Gtk::Label( "New\nspk" ) );
     new_spk_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
     
     gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_xml.xpm" ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "New xml" ) );
+    l = manage( new Gtk::Label( "New\nxml" ) );
     new_xml_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
 
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "Open xml" ) );
+    l = manage( new Gtk::Label( "Open\nxml" ) );
     open_button->add( *vbox );
     vbox->pack_start( *pixmap );
     vbox->pack_start( *l );
@@ -464,7 +464,7 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
 
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "Save as" ) );
+    l = manage( new Gtk::Label( "Save\nas" ) );
     save_as_button->add( *vbox );
     vbox->pack_start( *pixmap );
     vbox->pack_start( *l );

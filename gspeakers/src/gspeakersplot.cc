@@ -53,7 +53,7 @@ GSpeakersPlot::GSpeakersPlot() {
  * This is the function that does all the drawing on the window
  */
 gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
-  int x = 0, y = 0, old_x = 0, old_y = 0;
+  int x = 0, y = 0; //, old_x = 0, old_y = 0;
   int size_x, size_y;
   int box_x, box_y, box_size_x, box_size_y;
   int xaxis_y;
@@ -116,6 +116,7 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
 
   for ( int i = 0; i < n_plots; i++ ) {
     double *db_mag = dbmag[i];
+    vector<GdkPoint> points;
     gc.set_foreground( *colors[i] );
 
     gc.set_line_style( line_style );
@@ -149,13 +150,19 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
 		 ( box_size_y / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
       /* Don't draw anything if we got zeros */
       if ( db_mag[f] > MAX_NEG_VALUE ) {
-	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
-	window.draw_line( gc, old_x, old_y, x, y );
+	//	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
+	//	window.draw_line( gc, old_x, old_y, x, y );
+	GdkPoint p;
+	p.x = x;
+	p.y = y;
+	points.push_back( p );
 	//	window.draw_rectangle( gc, true, x, y, 1, 1 );
-      }
-      old_x = x; old_y = y;
+      } 
+      //      old_x = x; old_y = y;
     }
-    old_x = 0; old_y = 0;
+    /* Don't draw the line until we have it all done */
+    window.draw_lines( gc, Gdk_Points( points ) );
+    //    old_x = 0; old_y = 0;
   }
   gc.set_line_style( GDK_LINE_SOLID );
   gc.set_line_width( 1 );

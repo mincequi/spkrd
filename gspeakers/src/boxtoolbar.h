@@ -107,6 +107,7 @@ class BoxToolbar : public Gtk::HandleBox {
   void set_box_data(double vol1, double fb1 = 0, double vol2 = 0, double fb2 = 0);
   Box *get_box(void);
   void set_toolbar_style( int style );
+  vector<Box> get_all_boxes() { return box_list; }
 
  private:
   void open_action( Gtk::FileSelection *s );

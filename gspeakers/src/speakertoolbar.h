@@ -74,6 +74,7 @@ class SpeakerToolbar : public Gtk::HandleBox {
   void remove();
   void load_xml(string filename);
   void set_toolbar_style( int style );
+  vector<Speaker> get_all_speakers() { return spk_list; }
 
  private:
   void open_action( Gtk::FileSelection *s );

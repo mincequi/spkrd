@@ -1,7 +1,7 @@
 /* 
  * simtoolbar.cc
  *
- * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
+ * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * http://sumpan.campus.luth.se/software/gspeakers
  *
@@ -25,6 +25,9 @@
 #include <string>
 #include <math.h>
 #include <gnome--/about.h>
+#include <gnome--.h>
+#include <gtk--/imageloader.h>
+#include <gtk--/label.h>
 #include "simtoolbar.h"
 #include "../config.h"
 
@@ -51,29 +54,48 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   set_shadow_type( GTK_SHADOW_NONE );
 
   /* Toolbar buttons */
-  sim_button = manage( new Gtk::Button( "Plot" ) );
+  sim_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *sim_button, "Plot dbmag for current speaker in current enclosure" );
+  sim_button->set_relief( GTK_RELIEF_NONE );
   sim_button->clicked.connect( slot( this, &SimToolbar::sim_clicked ) );
-  rem_plot_button = manage( new Gtk::Button( "Remove Plot" ) );
+  all_boxes_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *all_boxes_button, "Make plots for current speaker in all boxes in boxtoolbar xml-file" );
+  all_boxes_button->set_relief( GTK_RELIEF_NONE );
+  all_boxes_button->clicked.connect( slot( this, &SimToolbar::sim_all_boxes_clicked ) );
+
+  rem_plot_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *rem_plot_button, "Remove selected plot" );
+  rem_plot_button->set_relief( GTK_RELIEF_NONE );
   rem_plot_button->clicked.connect( slot( this, &SimToolbar::rem_plot_clicked ) );
-  rem_all_button = manage( new Gtk::Button( "Remove All Plots" ) );
+  rem_all_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *rem_all_button, "Remove all plots" );
+  rem_all_button->set_relief( GTK_RELIEF_NONE );
   rem_all_button->clicked.connect( slot( this, &SimToolbar::rem_all_clicked ) );
 
-  opt_box_button = manage( new Gtk::Button( "Opt box" ) );
+  opt_box_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *opt_box_button, "Optimize box size for current speaker and boxtype" );
+  opt_box_button->set_relief( GTK_RELIEF_NONE );
   opt_box_button->clicked.connect( slot( this, &SimToolbar::opt_box_clicked ) );
-  cfg_button = manage( new Gtk::Button( "Config" ) );
+  cfg_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *cfg_button, "Open properties dialog" );
+  cfg_button->set_relief( GTK_RELIEF_NONE );
   cfg_button->clicked.connect( slot( this, &SimToolbar::cfg_clicked ) );
-  about_button = manage( new Gtk::Button( "About" ) );
+  about_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *about_button, "Open about dialog" );
+  about_button->set_relief( GTK_RELIEF_NONE );
   about_button->clicked.connect( slot( this, &SimToolbar::about_clicked ) );
 
   /* The horizontal box */
   hbox = manage( new Gtk::HBox() );
   add( *hbox );
   hbox->pack_start( *sim_button, false, true );
+  hbox->pack_start( *all_boxes_button, false, true );
   hbox->pack_start( *rem_plot_button, false, true );
   hbox->pack_start( *rem_all_button, false, true );
   hbox->pack_start( *opt_box_button, false, true );
   hbox->pack_start( *cfg_button, false, true );
   hbox->pack_start( *about_button, false, true );
+  set_toolbar_style( cfg->get_toolbar_style() );
 }
 
 SimToolbar::~SimToolbar() {
@@ -81,9 +103,7 @@ SimToolbar::~SimToolbar() {
 }
 
 void SimToolbar::cfg_clicked() {
-  //  cout << "config clicked" << endl;
-  //  cfgbox->run_and_close();
-  //  cout << "after close" << endl;
+  /* We have to just show the dialog or else we can't open child-dialogs */
   cfgbox->show();
 }
 
@@ -94,8 +114,26 @@ void SimToolbar::sim_clicked() {
 
   Box *b = bbar->get_box();
   Speaker *s = sbar->get_speaker();
-  set_new_color();
+  add_plot( b, s );
+}
 
+/*
+ * Plot frequency response for current speaker in all boxes in boxtoolbar
+ *
+ */
+void SimToolbar::sim_all_boxes_clicked() {
+  vector<Box> box_list = bbar->get_all_boxes();
+  Speaker *s = sbar->get_speaker();
+  int n_boxes = box_list.size();
+  
+  for ( int i = 0; i < n_boxes; i++ ) {
+    add_plot( &box_list[i], s );
+  }
+}
+
+void SimToolbar::add_plot( Box *b, Speaker *s ) {
+  set_new_color();
+  
   plot->add_plot( calc_dbmag( b, s ), color );
   
   /* Setup vector for clist-row */
@@ -269,4 +307,94 @@ double *SimToolbar::calc_dbmag( Box *b, Speaker *s ) {
 }
 
 void SimToolbar::set_toolbar_style( int style ) {
+  Gtk::ImageLoader *il1, *il2, *il3, *il4;
+  Gnome::Pixmap *pixmap;
+  Gtk::VBox *vbox;
+  Gtk::Label *l;
+  Gtk::Pixmap *gtk_pixmap;
+  
+  switch ( style ) {
+  case ICONS_ONLY:
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "plot_template.xpm" );
+    sim_button->add_pixmap( il1->pix(), il1->bit() );
+    delete il1;
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "multiple_boxes.xpm" );
+    all_boxes_button->add_pixmap( il1->pix(), il1->bit() );
+    delete il1;
+    il2 = new Gtk::ImageLoader( cfg->get_xpm_path() + "remove_plot.xpm" );
+    rem_plot_button->add_pixmap( il2->pix(), il2->bit() );
+    delete il2;
+    il3 = new Gtk::ImageLoader( cfg->get_xpm_path() + "remove_all_plots.xpm" );
+    rem_all_button->add_pixmap( il3->pix(), il3->bit() );
+    delete il3;
+    il4 = new Gtk::ImageLoader( cfg->get_xpm_path() + "opt_box.xpm" );
+    opt_box_button->add_pixmap( il4->pix(), il4->bit() );
+    delete il4;
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
+    cfg_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
+    about_button->add( *pixmap );
+    break;
+  case TEXT_ONLY:
+    sim_button->add_label( "Plot" );
+    all_boxes_button->add_label( "Plot all boxes" );
+    rem_plot_button->add_label( "Remove plot" );
+    rem_all_button->add_label( "Remove all plots" );
+    opt_box_button->add_label( "Optimize box" );
+    cfg_button->add_label( "Properties" );
+    about_button->add_label( "About" );
+    break;
+  case TEXT_AND_ICONS:
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "plot_template.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Plot" ) );
+    sim_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "multiple_boxes.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Plot all\nboxes" ) );
+    all_boxes_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "remove_plot.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Remove\nplot" ) );
+    rem_plot_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "remove_all_plots.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Remove\nall plots" ) );
+    rem_all_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "opt_box.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Optimize\nbox" ) );
+    opt_box_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Properties" ) );
+    cfg_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "About" ) );
+    about_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    break;
+  }
+
 }

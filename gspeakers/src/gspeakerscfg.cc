@@ -43,7 +43,7 @@ GSpeakersCFG::~GSpeakersCFG() {
 
 string GSpeakersCFG::get_font() {
   string s = string( getConfigKey( "plotfont" ) );
-  if ( s.size() > 0 ) {
+  if ( s.size() > 2 ) {
     return s;
   } else {
     /* Default font */

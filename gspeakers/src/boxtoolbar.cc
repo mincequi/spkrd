@@ -99,7 +99,7 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
   types_menu->items().push_back( Gtk::Menu_Helpers::MenuElem( "Sealed", bind<int>( slot( this, &BoxToolbar::option_menu_changed ), SEALED ) ) );
   box_type_option = manage( new Gtk::OptionMenu() );
   box_type_option->set_menu( *types_menu );
-  hbox->pack_start( *box_type_option, false, false );
+  hbox->pack_start( *box_type_option, false, true );
 
   label = manage( new Gtk::Label("   Vol1: ") );
   hbox->pack_start( *label, false, false );
@@ -501,21 +501,21 @@ void BoxToolbar::set_toolbar_style( int style ) {
   case TEXT_AND_ICONS:
     gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_box.xpm" ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "New Box" ) );
+    l = manage( new Gtk::Label( "New\nbox" ) );
     new_box_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
     
     gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_xml.xpm" ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "New xml" ) );
+    l = manage( new Gtk::Label( "New\nxml" ) );
     new_xml_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
 
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "Open xml" ) );
+    l = manage( new Gtk::Label( "Open\nxml" ) );
     open_button->add( *vbox );
     vbox->pack_start( *pixmap );
     vbox->pack_start( *l );
@@ -530,7 +530,7 @@ void BoxToolbar::set_toolbar_style( int style ) {
 
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
     vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "Save as" ) );
+    l = manage( new Gtk::Label( "Save\nas" ) );
     save_as_button->add( *vbox );
     vbox->pack_start( *pixmap );
     vbox->pack_start( *l );
