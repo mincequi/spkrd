@@ -2987,6 +2987,14 @@ fi
 
 
 
+myapp_save_prefix="${prefix}"
+test "x${prefix}" = "xNONE" && prefix="${ac_default_prefix}"
+cat >> confdefs.h <<EOF
+#define GSPEAKERS_PREFIX "${prefix}"
+EOF
+
+prefix="${myapp_save_prefix}"
+
 trap '' 1 2 15
 cat > confcache <<\EOF
 # This file is a shell script that caches the results of configure

@@ -97,8 +97,10 @@ public:
                 bool logx = true, 
                 int y_zero_freq = 0);
   void add_plot(vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
-  void remove_plot( int n );
+  void remove_plot(int n);
+  void hide_plot(int n);
   void remove_all_plots();
+  
   void redraw();
   
   void set_font( const string& font );
@@ -115,7 +117,7 @@ protected:
      the corresponding colors (colors) */
   vector< vector<GSpeakers::Point> > m_points;
   vector<Gdk::Color> m_colors;
-
+  vector<bool> m_visible_plots;
  private:
   int round( double );
   Glib::ustring int_to_ustring(int d);

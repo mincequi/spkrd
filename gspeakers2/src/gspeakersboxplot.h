@@ -36,10 +36,6 @@ class GSpeakersBoxPlot : public GSpeakersPlot
 public:
   GSpeakersBoxPlot();
   ~GSpeakersBoxPlot();
-
-private:
-  void on_add_box_plot(vector<Gdk::Point> &points, Gdk::Color &color);
-
 };
 
 #endif

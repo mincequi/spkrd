@@ -138,3 +138,6 @@
 /* always defined to indicate that i18n is enabled */
 #undef ENABLE_NLS
 
+/* package prefix */
+#undef GSPEAKERS_PREFIX
+

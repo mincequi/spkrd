@@ -82,7 +82,7 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
 {
   cout << "GSpeakersPlot: on add plot" << endl;
   m_refGC->set_rgb_fg_color(ref_color);
-  
+  m_visible_plots.push_back(true);
   m_colors.push_back(ref_color);
   m_points.push_back(ref_point_vector);
 
@@ -147,13 +147,55 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
 
 }
 
-void GSpeakersPlot::remove_plot( int n )
+void GSpeakersPlot::remove_plot(int n)
 {
+  int i = 0;
+  
+  for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
+       iter != m_points.end();
+       ++iter, i++)
+  {
+    if (n == i) {
+      m_points.erase(iter);
+    }
+  }
+  i = 0;
+  for (vector<Gdk::Color>::iterator iter = m_colors.begin();
+       iter != m_colors.end();
+       ++iter, i++)
+  {
+    if (n == i) {
+      m_colors.erase(iter);
+    }
+  }
+  i = 0;
+  for (vector<bool>::iterator iter = m_visible_plots.begin();
+       iter != m_visible_plots.end();
+       ++iter, i++)
+  {
+    if (n == i) {
+      m_visible_plots.erase(iter);
+    }
+  }
 
+  redraw();
+  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+  get_window()->invalidate_rect(update_rect, false);
 }
 
 void GSpeakersPlot::remove_all_plots()
 {
+  for (unsigned i = 0; i < m_points.size(); i++) {
+    remove_plot((int)i);
+  }
+}
+
+void GSpeakersPlot::hide_plot(int n)
+{
+  m_visible_plots[n] = !m_visible_plots[n];
+  redraw();
+  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+  get_window()->invalidate_rect(update_rect, false);
 
 }
 
@@ -197,52 +239,53 @@ void GSpeakersPlot::redraw()
   /* Map points in m_points to screen points */
   int n_plots = m_points.size();
   for (int i = 0; i < n_plots; i++) {
-    
-    m_refGC->set_rgb_fg_color(m_colors[i]);
-    
-    vector<Gdk::Point> points;
-    double f_div, f_mapped;
-    int x, y;
-    
-    vector<GSpeakers::Point>::iterator iter;
-    for ( iter = m_points[i].begin(); iter != m_points[i].end(); ++iter ) {
-
-      if ( (*iter).get_x() < 100 ) {
-        /* Devide by 10 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 10;
-        f_mapped = log10( f_div );
-        /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
-      } else if ((*iter).get_x() >= 100) {
-        /* Devide by 100 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 100;
-        f_mapped = log10( f_div );
-        /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+    if (m_visible_plots[i] == true) {
+      m_refGC->set_rgb_fg_color(m_colors[i]);
+      
+      vector<Gdk::Point> points;
+      double f_div, f_mapped;
+      int x, y;
+      
+      vector<GSpeakers::Point>::iterator iter;
+      for ( iter = m_points[i].begin(); iter != m_points[i].end(); ++iter ) {
+  
+        if ( (*iter).get_x() < 100 ) {
+          /* Devide by 10 to only log numbers 0 < number < 10 */
+          f_div = (double)((*iter).get_x()) / 10;
+          f_mapped = log10( f_div );
+          /* This is the x coordinate */
+          x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
+        } else if ((*iter).get_x() >= 100) {
+          /* Devide by 100 to only log numbers 0 < number < 10 */
+          f_div = (double)((*iter).get_x()) / 100;
+          f_mapped = log10( f_div );
+          /* This is the x coordinate */
+          x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+        }
+  
+        /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
+        if ( (*iter).get_y() < MAX_NEG_VALUE ) {
+          (*iter).set_y(MAX_NEG_VALUE);
+        } else if ((*iter).get_y() > MAX_POS_VALUE ) {
+          (*iter).set_y(MAX_POS_VALUE);
+        }
+        /* Calculate y-coordinate */
+        y = round( box_height + BOX_FRAME_SIZE - 
+                   ( (double)(-MAX_NEG_VALUE) + (*iter).get_y() ) * 
+                   ( box_height / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
+        /* Don't draw anything if we got zeros */
+        if ( (*iter).get_y() > MAX_NEG_VALUE ) {
+          //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
+          //	window.draw_line( gc, old_x, old_y, x, y );
+          Gdk::Point p;
+          p.set_x(x);
+          p.set_y(y);
+          points.push_back(p);
+        } 
       }
-
-      /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
-      if ( (*iter).get_y() < MAX_NEG_VALUE ) {
-        (*iter).set_y(MAX_NEG_VALUE);
-      } else if ((*iter).get_y() > MAX_POS_VALUE ) {
-        (*iter).set_y(MAX_POS_VALUE);
-      }
-      /* Calculate y-coordinate */
-      y = round( box_height + BOX_FRAME_SIZE - 
-                 ( (double)(-MAX_NEG_VALUE) + (*iter).get_y() ) * 
-                 ( box_height / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
-      /* Don't draw anything if we got zeros */
-      if ( (*iter).get_y() > MAX_NEG_VALUE ) {
-        //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
-        //	window.draw_line( gc, old_x, old_y, x, y );
-        Gdk::Point p;
-        p.set_x(x);
-        p.set_y(y);
-        points.push_back(p);
-	  } 
+      /* Don't draw the line until we have it all done */
+      m_refPixmap->draw_lines( m_refGC, points );
     }
-    /* Don't draw the line until we have it all done */
-    m_refPixmap->draw_lines( m_refGC, points );
   }
 
   /* Reset rgb fg color */

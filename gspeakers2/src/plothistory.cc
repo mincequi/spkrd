@@ -21,7 +21,7 @@
 #include "gspeakersplot.h"
 
 PlotHistory::PlotHistory() :
-  m_Table(10, 4, true), 
+  m_Table(9, 4, true), 
   m_RemoveButton("Remove")
 
 {
@@ -87,6 +87,7 @@ void PlotHistory::on_selection_changed()
 
 void PlotHistory::on_remove()
 {
+  cout << "PlotHistory: on_remove" << endl;
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   if(const Gtk::TreeIter iter = refSelection->get_selected())
@@ -99,6 +100,11 @@ void PlotHistory::on_remove()
       //Remove item from ListStore:
       m_refListStore->erase(iter);
 
+      /* Signal to the plot */
+      /* We got the plot index to remove in indices[0] */
+      cout << "PlotHistory: plot to remove = " << indices[0] << endl;
+      signal_remove_box_plot(indices[0]);
+      
       //if(index < (int)m_box_list.box_list()->size())
       //  m_box_list.box_list()->erase(m_box_list.box_list()->begin() + index);
     }
@@ -140,10 +146,12 @@ void PlotHistory::on_add_plot(Box *b, Speaker *s, Gdk::Color &color)
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)
 {
-  cout << "toggle plot" << endl;
+  cout << "PlotHistory: toggle plot" << endl;
   
   GtkTreePath *gpath = gtk_tree_path_new_from_string (path_string.c_str());
   Gtk::TreePath path(gpath);
+
+  
 
   /* get toggled iter */
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -152,7 +160,15 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)
 
   /* do something with the value */
   view_plot = !view_plot;
+  
+  path = m_refListStore->get_path(row);
 
+  std::vector<int> indices = path.get_indices();
+  if(indices.size() > 0)
+  {
+    cout << "PlotHistory: hide" << endl;
+    signal_hide_box_plot(indices[0]);
+  }  
   /* set new value */
   row[m_columns.view_plot] = view_plot;
 }

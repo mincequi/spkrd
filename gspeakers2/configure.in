@@ -38,6 +38,11 @@ ALL_LINGUAS="hu"
 AM_GLIB_GNU_GETTEXT
 AC_PROG_INTLTOOL
 
+myapp_save_prefix="${prefix}"
+test "x${prefix}" = "xNONE" && prefix="${ac_default_prefix}"
+AC_DEFINE_UNQUOTED([GSPEAKERS_PREFIX],["${prefix}"],[package prefix])
+prefix="${myapp_save_prefix}"
+
 dnl Create makefiles
 AC_OUTPUT(
 	Makefile

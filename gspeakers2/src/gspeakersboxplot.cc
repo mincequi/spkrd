@@ -23,13 +23,11 @@
 GSpeakersBoxPlot::GSpeakersBoxPlot() : GSpeakersPlot(1, 1000)
 {
   signal_add_box_plot.connect(slot(*this, &GSpeakersBoxPlot::add_plot));
+  signal_remove_box_plot.connect(slot(*this, &GSpeakersBoxPlot::remove_plot));
+  signal_hide_box_plot.connect(slot(*this, &GSpeakersBoxPlot::hide_plot));
 }
 
 GSpeakersBoxPlot::~GSpeakersBoxPlot()
 {
 
-}
-
-void GSpeakersBoxPlot::on_add_box_plot(vector<Gdk::Point> &points, Gdk::Color &color)
-{
 }
