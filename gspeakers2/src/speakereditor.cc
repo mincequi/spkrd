@@ -643,7 +643,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
           char *buffer = new char[100];
           fin.getline(buffer, 100, '\n');
 	  if (g_settings.getValueBool("SPICEUseGNUCAP") == true ) {
-	    if (isblank(buffer[0])) {
+	    if (buffer[0] == ' ') {
 	      output = true;
 	    }
 	  } else {
