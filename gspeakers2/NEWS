@@ -1,3 +1,11 @@
+GSpeakers-0.8.4
+
+* A couple of bugs were fixed
+
+* Lot of UI cleanup
+
+* First part of the tutorial is included in this release
+
 GSpeakers-0.8.3
 
 * Fixed a "first time startup" segfault (improved config handling)
