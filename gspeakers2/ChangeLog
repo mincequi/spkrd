@@ -1,5 +1,20 @@
 GSpeakers ChangeLog
+	
+2004-07-03
 
+* settingsdialog.h/cc: added config option "UseDriverImpedance", 
+	use GSpeakersFileChooser
+	
+2004-06-30
+
+* speakereditor.cc: use modified short_filename
+	
+* crossoverhistory.h/cc: tooltip on filename label
+	
+* crossoverwizard.h/cc: removed the outer frame
+	
+* crossoverpaned.h/cc: put crossover, wizard and history in notebook
+	
 2004-06-29
 
 * enclosurepaned.cc: UI cleanup + some tooltips
@@ -10,7 +25,7 @@ GSpeakers ChangeLog
 	
 * speakereditor.cc: use gtk stock pixmaps
 	
-* mainwindow.cc: some remove debug output
+* mainwindow.cc: remove some debug output
 
 2004-06-22
 

@@ -1,5 +1,7 @@
 GSpeakers-0.11.1
 
+* Relocated some UI on the crossover tab
+
 * UI cleanups in the Speaker editor
 
 * Use gtk+ icons

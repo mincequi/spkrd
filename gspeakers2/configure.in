@@ -100,5 +100,6 @@ AC_OUTPUT(
 	xml/Makefile
 	pixmaps/Makefile
 	gspeakers.desktop
+	gspeakers.spec
 )
 #	po/Makefile.in

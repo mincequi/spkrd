@@ -96,3 +96,11 @@ GSpeakers TODO-list
 * Ask if you want to continue when saving over a file
 
 * Maybe do something about "delete plot icon"?
+
+* Legends on graphs
+
+* Auto detect win32
+
+* Frd compatible freq resp files
+
+* Use plotmm

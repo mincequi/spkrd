@@ -1,0 +1,46 @@
+# Note that this is NOT a relocatable package
+# DON'T FORGET TO UPDATE THE MOZILLA DEPENDENCY
+
+Summary:   Gnome loudspeaker design program
+Name:      gspeakers
+Version:   @VERSION@
+Release:   1
+Copyright: GPL
+Group:     Applications/Electronics
+Source:    %{name}-%{version}.tar.bz2
+URL:       http://gspeakers.sourceforge.net
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+
+%description
+GSpeakers is a loudspeaker design program built for the Gnome desktop. 
+It aims to be a very powerful tool for the experienced loudspeaker 
+designer while also be a simple program to work with for the newbie 
+in speakerbuilding.
+
+%prep
+%setup
+
+%build
+%configure --prefix=/usr
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%defattr(-, root, root)
+%doc AUTHORS COPYING ChangeLog NEWS README TODO 
+%{_datadir}/pixmaps/*
+&{_datadir}/xml/*
+
+#%post
+#%{_bindir}/galeon-config-tool --fix-gconf-permissions
+#%{_bindir}/galeon-config-tool --pkg-install-schemas
+#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update; fi
+
+#%postun
+#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update; fi
+

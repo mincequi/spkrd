@@ -1,7 +1,7 @@
 SUBDIRS = src xml pixmaps #po
 
 # Desktop entry
-desktopdir		= $(datadir)/gnome/apps/Utilities
+desktopdir		= $(datadir)/applications
 desktop_in_files	= gspeakers.desktop.in
 desktop_DATA 		= $(desktop_in_files:.desktop.in=.desktop)
 # @INTLTOOL_DESKTOP_RULE@
