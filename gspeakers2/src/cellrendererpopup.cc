@@ -121,7 +121,7 @@ void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget,
                                        int* x_offset, int* y_offset,
                                        int* width,    int* height)
 {
-  cout << "CellRendererPopup::get_size_vfunc" << endl;
+  //cout << "CellRendererPopup::get_size_vfunc" << endl;
   Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
 
   // We cache this becuase it takes really long to get the width.

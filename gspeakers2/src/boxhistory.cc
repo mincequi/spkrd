@@ -441,10 +441,11 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Type", *pRenderer, slot(*this, &BoxHistory::on_insert_type));
+    col_cnt = m_TreeView.append_column("Type", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
+    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::type_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -481,6 +482,24 @@ void BoxHistory::add_columns()
     pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
   }
   */
+}
+
+void BoxHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  cout << "BoxHistory::type_cell_data_func" << endl;
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  switch ((*iter)[m_columns.type]) {
+    case BOX_TYPE_SEALED:
+      renderer.property_text() = "Sealed";
+      break;
+    case BOX_TYPE_PORTED:
+       renderer.property_text()= "Ported";
+      break;
+    default:
+      renderer.property_text() = "Unknown";
+      break;
+  }
+  
 }
 
 void BoxHistory::on_insert_type(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)

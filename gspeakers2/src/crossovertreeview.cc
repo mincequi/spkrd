@@ -171,6 +171,8 @@ CrossoverTreeView::ModelColumns::ModelColumns()
   add(unit);
   add(editable);
   add(visible);
+  add(value_str);
+  add(type_str);
 }
 
 void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
@@ -330,51 +332,59 @@ void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo)
 
 void CrossoverTreeView::add_columns()
 {
+  int col_cnt;
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    int cols_count = m_TreeView.append_column("Id_string", *pRenderer);
-    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    col_cnt = m_TreeView.append_column("Id_string", *pRenderer);
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
     }
   }
+  
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    int cols_count = m_TreeView.append_column("Id", *pRenderer);
-    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    col_cnt = m_TreeView.append_column("Id", *pRenderer);
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
     }
   }
+  
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    int cols_count = m_TreeView.append_column("Type", *pRenderer);
-    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    col_cnt = m_TreeView.append_column("Type", *pRenderer);
+//    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Type", *pRenderer, slot(*this, &CrossoverTreeView::on_insert_type));    
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
-      pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
+      pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
     }
   }
+  
   {
     //Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     CellRendererPopup* pRenderer = Gtk::manage( new CellRendererPopup() );
     pRenderer->property_xalign().set_value(0.0);
     pRenderer->signal_edited().connect(slot(*this, &CrossoverTreeView::on_cell_edited_value));
     
-    int cols_count = m_TreeView.append_column("Value", *pRenderer);
-    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    //col_cnt = m_TreeView.append_column("Value", *pRenderer);
+    col_cnt = m_TreeView.insert_column("Value", *pRenderer, -1);
+    //col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Value", *pRenderer, slot(*this, &CrossoverTreeView::on_insert_value));    
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
+      //column->set_cell_data_func(*cell_icon,     SigC::slot(*this, &FileTree::icon_cell_data_func));
       pColumn->add_attribute(pRenderer->property_text(), m_columns.value);
       pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
@@ -384,14 +394,19 @@ void CrossoverTreeView::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
     
-    int cols_count = m_TreeView.append_column("Unit", *pRenderer);
-    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    col_cnt = m_TreeView.append_column("Unit", *pRenderer);
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.unit);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
     }
   }
+}
+
+void CrossoverTreeView::on_insert_value(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
+{
+  //m_columns.value_str = GSpeakers::double_to_ustring((*iter)[m_columns.value], 4, 2);
 }
 
 void CrossoverTreeView::on_realize()

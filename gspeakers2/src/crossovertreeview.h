@@ -44,6 +44,7 @@ protected:
   /* callbacks */
   void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
   void on_net_modified_by_wizard();
+  void on_insert_value(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
 
   /* Helper functions */
   virtual void create_model();
@@ -69,6 +70,8 @@ protected:
     Gtk::TreeModelColumn<Glib::ustring>  unit;
     Gtk::TreeModelColumn<bool>           editable;
     Gtk::TreeModelColumn<bool>           visible;
+    Gtk::TreeModelColumn<Glib::ustring>  value_str;
+    Gtk::TreeModelColumn<Glib::ustring>  type_str;
     ModelColumns();
   };
 

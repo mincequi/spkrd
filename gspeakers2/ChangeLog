@@ -1,5 +1,9 @@
 GSpeakers ChangeLog
 
+2002-11-11
+
+* cellitemcrossover.h/cc: added members m_value_str and m_type_str
+
 2002-11-05
 
 * common.cc: added GSpeakers::double_to_ustring(double, int, int) which can 

@@ -70,7 +70,8 @@ protected:
   void on_insert_vb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
   void on_insert_type(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
   void on_insert_fb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
-  
+  void type_cell_data_func(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
+
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();

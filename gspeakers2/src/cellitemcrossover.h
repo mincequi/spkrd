@@ -53,6 +53,8 @@ public:
   int           m_type;
   double        m_value;
   Glib::ustring m_unit;
+  Glib::ustring m_type_str;
+  Glib::ustring m_value_str;
   std::vector<CellItem_Crossover> m_children;
 };
 

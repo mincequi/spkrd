@@ -26,6 +26,8 @@ CellItem_Crossover::CellItem_Crossover()
   m_value = 0.0;
   m_unit  = "";
   m_id    = 0;
+  m_value_str = "";
+  m_type_str = "";
 }
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id)
@@ -35,6 +37,8 @@ CellItem_Crossover::CellItem_Crossover(Glib::ustring label, int type, double val
   m_value = value;
   m_unit  = unit;
   m_id    = id;
+  m_value_str = "";
+  m_type_str = "";
 }
 
 CellItem_Crossover::CellItem_Crossover(Part part)
@@ -95,6 +99,8 @@ CellItem_Crossover& CellItem_Crossover::operator=(const CellItem_Crossover& src)
   m_unit     = src.m_unit;
   m_children = src.m_children;
   m_id       = src.m_id;
+  m_type_str = src.m_type_str;
+  m_value_str = src.m_value_str;
 
   return *this;
 }
