@@ -50,7 +50,7 @@ int main (int argc, char *argv[])
     cout << "Main: " << e.what() << endl;
 #endif
 #ifdef TARGET_WIN32
-    Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") _("gspeakers2.conf created in current directory"), 
+    Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") + _("gspeakers2.conf created in current directory"), 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
 #else
     Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n\n") + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 

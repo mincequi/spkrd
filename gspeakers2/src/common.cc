@@ -84,7 +84,7 @@ namespace GSpeakers {
     Gtk::Widget *im;
     try {
 #ifdef TARGET_WIN32
-      Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(filename);
+      Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(string("../pixmaps/") + filename);
 #else
       Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + string("/share/pixmaps/") + filename);
 #endif
