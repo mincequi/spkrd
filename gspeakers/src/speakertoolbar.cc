@@ -87,10 +87,12 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   hbox->pack_start( *remove_button, false, false ); 
   cfg->tooltips->set_tip( *remove_button, "Delete this speaker" );
 
+  evbox = manage( new Gtk::EventBox() );
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
   filename_entry->set_usize( 100, 20 );
-  hbox->pack_start( *filename_entry, false, false ); 
+  evbox->add( *filename_entry );
+  hbox->pack_start( *evbox, false, false ); 
 
   speaker_combo = manage( new Gtk::Combo() );
   speaker_combo->set_usize( 100, 20 );
@@ -117,10 +119,19 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   set_toolbar_style( cfg->get_toolbar_style() );
 
   /* Read default xml-file here */
-  current_file = infile;
+  if ( cfg->get_last_speaker_xml().length() > 3 ) {
+    current_file = cfg->get_last_speaker_xml();
+  } else {
+    current_file = infile;
+  }
+
   filename_entry->set_text( current_file );
-  cfg->tooltips->set_tip( *filename_entry, current_file );
+  cfg->tooltips->set_tip( *evbox, current_file );
   load_xml( current_file );
+  save_button->set_sensitive( false );
+  vas_entry->changed.connect( slot( this, &SpeakerToolbar::changed ) );
+  qts_entry->changed.connect( slot( this, &SpeakerToolbar::changed ) );
+  fs_entry->changed.connect( slot( this, &SpeakerToolbar::changed ) );
 }
 
 SpeakerToolbar::~SpeakerToolbar() {
@@ -164,7 +175,7 @@ void SpeakerToolbar::new_xml() {
   qts_entry->set_text("");
   fs_entry->set_text("");
   filename_entry->set_text("");
-  cfg->tooltips->set_tip( *filename_entry, current_file );
+  cfg->tooltips->set_tip( *evbox, "" );
   speaker_combo->get_entry()->set_text("");
   new_is_hit = true;
 }
@@ -194,11 +205,13 @@ void SpeakerToolbar::open_action( Gtk::FileSelection *s ) {
   s->hide(); 
   load_xml( s->get_filename() ); 
   current_file = s->get_filename();
+  cfg->set_last_speaker_xml( s->get_filename() );
   i = current_file.find_last_of("/");
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
-    cfg->tooltips->set_tip( *filename_entry, current_file.substr( i + 1 ) );
+
   }
+  cfg->tooltips->set_tip( *evbox, current_file );
 } 
 
 /*
@@ -247,13 +260,12 @@ void SpeakerToolbar::save_as_action( Gtk::FileSelection *s ) {
   s->hide(); 
 
   current_file = s->get_filename();
+  cfg->set_last_speaker_xml( s->get_filename() );  
   i = current_file.find_last_of("/");
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
-    cfg->tooltips->set_tip( *filename_entry, current_file.substr( i + 1 ) );
-    
   }
-  
+  cfg->tooltips->set_tip( *evbox, current_file ); 
   save();
 } 
 
@@ -302,6 +314,7 @@ void SpeakerToolbar::load_xml(string filename) {
   }
   //  set_speaker_data( speakers_list[0] );
   speaker_combo->set_popdown_strings( speakers_list );
+  save_button->set_sensitive( false );
 }
 
 /* 
@@ -339,6 +352,7 @@ void SpeakerToolbar::save_data_to_xml() {
   cout << current_file.c_str() << endl;
   /* Write the xml-tree to disk and output number of bytes written */
   cout << xmlSaveFile( current_file.c_str(), doc ) << endl;
+  save_button->set_sensitive( false );
 }
 
 /*
@@ -479,4 +493,8 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
     break;
   }
   
+}
+
+void SpeakerToolbar::changed() {
+  save_button->set_sensitive( true );
 }

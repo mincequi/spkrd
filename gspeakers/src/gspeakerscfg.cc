@@ -122,3 +122,23 @@ void GSpeakersCFG::set_show_tooltips( bool show ) {
 bool GSpeakersCFG::get_show_tooltips() {
   return (bool)atoi( getConfigKey( "showtooltips" ) );  
 }
+
+string GSpeakersCFG::get_last_speaker_xml() {
+  return string( getConfigKey( "lastspeakerxml" ) );
+}
+
+string  GSpeakersCFG::get_last_box_xml() {
+  return string( getConfigKey( "lastenclosurexml" ) );
+}
+
+void  GSpeakersCFG::set_last_speaker_xml( string ifile ) {
+  if ( ifile.length() > 0 ) {
+    writeConfigKey( (char *)("lastspeakerxml"), (char *)ifile.c_str() );  
+  }
+}
+
+void  GSpeakersCFG::set_last_box_xml( string ifile ) {
+  if ( ifile.length() > 0 ) {
+    writeConfigKey( (char *)("lastspeakerxml"), (char *)ifile.c_str() );  
+  }
+}

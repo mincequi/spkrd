@@ -1,6 +1,6 @@
 /* gspeakersplot.h
  *
- * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
+ * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * http://sumpan.campus.luth.se/software/gspeakers
  *

@@ -1,7 +1,7 @@
 /* 
  * boxtoolbar.h
  *
- * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
+ * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * http://sumpan.campus.luth.se/software/jags
  *
@@ -32,6 +32,7 @@
 #include <gtk--/menu.h>
 #include <gtk--/optionmenu.h>
 #include <gtk--/fileselection.h>
+#include <gtk--/eventbox.h>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <string>
@@ -108,6 +109,8 @@ class BoxToolbar : public Gtk::HandleBox {
   Box *get_box(void);
   void set_toolbar_style( int style );
   vector<Box> get_all_boxes() { return box_list; }
+  void vol1_entry_changed();
+  void changed();
 
  private:
   void open_action( Gtk::FileSelection *s );
@@ -141,6 +144,7 @@ class BoxToolbar : public Gtk::HandleBox {
   Gtk::Entry *fb1_entry;
   Gtk::Entry *vol2_entry;
   Gtk::Entry *fb2_entry;
+  Gtk::EventBox *evbox;
 
   GSpeakersCFG *cfg;
 }; 

@@ -28,7 +28,9 @@
 #include <gtk--/item.h>
 #include <gnome--.h>
 #include <gnome--/dialog.h>
+#include <math.h>
 #include "boxtoolbar.h"
+#include "speakertoolbar.h"
 
 using SigC::bind;
 BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() {
@@ -81,10 +83,12 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
   remove_button->set_relief( GTK_RELIEF_NONE );
   cfg->tooltips->set_tip( *remove_button, "Delete this speaker" );
 
+  evbox = manage( new Gtk::EventBox() );
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
   filename_entry->set_usize( 100, 20 );
-  hbox->pack_start( *filename_entry, false, false ); 
+  evbox->add( *filename_entry );
+  hbox->pack_start( *evbox, false, false ); 
 
   box_combo = manage( new Gtk::Combo() );
   /* combo action on entry changed */
@@ -129,9 +133,18 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
 //    fb2_entry->set_sensitive( false );
   
   /* Read default xml-file here */
-  current_file = infile;
+  if ( cfg->get_last_box_xml().length() > 3 ) {
+    current_file = cfg->get_last_box_xml();
+  } else {
+    current_file = infile;
+  }
+  cfg->tooltips->set_tip( *evbox, current_file );
   filename_entry->set_text( current_file );
   load_xml( current_file );
+  vol1_entry->changed.connect( slot( this, &BoxToolbar::vol1_entry_changed ) );
+  save_button->set_sensitive( false );
+  vol1_entry->changed.connect( slot( this, &BoxToolbar::changed ) );
+  fb1_entry->changed.connect( slot( this, &BoxToolbar::changed ) );
 }
 
 BoxToolbar::~BoxToolbar() {
@@ -170,6 +183,7 @@ void BoxToolbar::new_xml() {
   box_string_list = newpopdown;
   box_combo->set_popdown_strings( newpopdown );
   filename_entry->set_text("");
+  cfg->tooltips->set_tip( *evbox, "" );
   new_box();
 }
 
@@ -193,15 +207,17 @@ void BoxToolbar::open_action( Gtk::FileSelection *s ) {
   /* Ah, this is enabled by default in new_xml(), disable until user hits "new" */
   new_is_hit = false;
   
-  cout << "file open ok clicked: " << s->get_filename() << endl;  //debug
+  //  cout << "file open ok clicked: " << s->get_filename() << endl;  //debug
   /* Maybe we should destroy this instead, test test test this */
   s->hide(); 
   load_xml( s->get_filename() ); 
   current_file = s->get_filename();
+  cfg->set_last_box_xml( s->get_filename() );
   i = current_file.find_last_of("/");
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
   }
+  cfg->tooltips->set_tip( *filename_entry, current_file );
 }
 
 /*
@@ -237,7 +253,6 @@ void BoxToolbar::save_as() {
   s->get_cancel_button()->clicked.connect( bind<Gtk::FileSelection *>( slot( this, &BoxToolbar::cancel_action ), s ) ); 
  
   s->show(); 
-
 }
 
 void BoxToolbar::load_xml(string filename) {
@@ -310,7 +325,7 @@ void BoxToolbar::load_xml(string filename) {
   }
   set_box_data( box_string_list[0] );
   box_combo->set_popdown_strings( box_string_list );
-
+  save_button->set_sensitive( false );
 }
 
 void BoxToolbar::info() {
@@ -320,21 +335,35 @@ void BoxToolbar::option_menu_changed( int new_type ) {
   switch ( new_type ) {
   case PORTED:
     current_boxtype = PORTED;
-    cout << "ported" << endl;
+    //    cout << "ported" << endl;
+    fb1_entry->set_sensitive( true );
     break;
   case SEALED:
     current_boxtype = SEALED;
-    cout << "sealed" << endl;
+    //    cout << "sealed" << endl;
+    fb1_entry->set_sensitive( false );
+    vol1_entry_changed();
     break;
   default:
     cout << "could not determine type" << endl;
     break;
   }
+  changed();
 }
 
 
 void BoxToolbar::save_as_action( Gtk::FileSelection *s ) {
+  string::size_type i;
+  s->hide(); 
 
+  current_file = s->get_filename();
+  cfg->set_last_box_xml( s->get_filename() );  
+  i = current_file.find_last_of("/");
+  if ( i != string::npos ) {
+    filename_entry->set_text( current_file.substr( i + 1 ) );
+  }
+  cfg->tooltips->set_tip( *evbox, current_file );
+  save();
 }
 
 
@@ -371,7 +400,7 @@ void BoxToolbar::save_data_to_xml() {
   cout << current_file.c_str() << endl;
   /* Write the xml-tree to disk and output number of bytes written */
   cout << xmlSaveFile( current_file.c_str(), doc ) << endl;
-
+  save_button->set_sensitive( false );
 }
 
 int BoxToolbar::set_box_data( string enclosure ) {
@@ -402,7 +431,6 @@ int BoxToolbar::set_box_data( string enclosure ) {
       box_type_option->set_menu( *types_menu );  
     }
   }
-
 }
 
 /*
@@ -544,4 +572,22 @@ void BoxToolbar::set_toolbar_style( int style ) {
 
     break;
   }
+}
+
+void BoxToolbar::vol1_entry_changed() {
+  if ( current_boxtype == SEALED ) {
+    Speaker *s = ((SpeakerToolbar *)(cfg->speaker_toolbar))->get_speaker();
+    Box *b = get_box();
+    
+    double vr = s->vas / b->vol1;
+    double qr = sqrt( vr + 1 );
+    b->fb1 = qr * s->fs;
+    char *buf = new char[5];
+    sprintf( buf, "%4.1f", b->fb1 );
+    fb1_entry->set_text( string( buf ) );
+  }
+}
+
+void BoxToolbar::changed() {
+  save_button->set_sensitive( true );
 }

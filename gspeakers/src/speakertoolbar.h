@@ -1,7 +1,7 @@
 /* 
  * speakertoolbar.h
  *
- * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
+ * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * http://sumpan.campus.luth.se/software/jags
  *
@@ -33,6 +33,7 @@
 #include <gtk--/entry.h>
 #include <gtk--/box.h>
 #include <gtk--/fileselection.h>
+#include <gtk--/eventbox.h>
 #include <libxml/tree.h>
 #include "gspeakerscfg.h"
 
@@ -75,6 +76,7 @@ class SpeakerToolbar : public Gtk::HandleBox {
   void load_xml(string filename);
   void set_toolbar_style( int style );
   vector<Speaker> get_all_speakers() { return spk_list; }
+  void changed();
 
  private:
   void open_action( Gtk::FileSelection *s );
@@ -104,6 +106,7 @@ class SpeakerToolbar : public Gtk::HandleBox {
   Gtk::Entry *fs_entry;
   Gtk::Entry *qts_entry;
   Gtk::Entry *filename_entry;
+  Gtk::EventBox *evbox;
 
   GSpeakersCFG *cfg;
 }; 

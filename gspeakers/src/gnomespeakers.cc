@@ -1,6 +1,6 @@
 /* gnomespeakers.cc
  *
- * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
+ * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * http://sumpan.campus.luth.se/software/jags
  *
@@ -67,6 +67,7 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
   }
   cfg = new GSpeakersCFG();
   SpeakerToolbar *stoolbar = manage( new SpeakerToolbar( spk_file_name, cfg ) );
+  cfg->speaker_toolbar = stoolbar;
   BoxToolbar *btoolbar = manage( new BoxToolbar( box_file_name, cfg ) );
   /* Plot-widget should not have the config: if we want to put this in a separate 
      library it shouldn't have to depend on gspeakers config. We set the widgets 

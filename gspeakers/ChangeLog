@@ -1,3 +1,17 @@
+2002-01-04 16.15 sumpan
+	
+	* src/boxtoolbar.* src/speakertoolbar.*
+          Added tooltip to filename entry (also put it in an eventbox)
+
+	  Toolbars now open last open file on program startup
+
+	  Added some sensitivety to the save-button
+	
+	  Now boxtoolbar changes fb for you if you change 
+	  the sealed enclosure volume. This is correct because if 
+	  you change the volume fb also changes.
+
+	
 2002-01-03 19.00 sumpan
 	
 	* src/gspeakersmenu.h src/gspeakersmenu.cc

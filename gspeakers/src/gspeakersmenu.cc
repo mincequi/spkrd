@@ -66,13 +66,17 @@ GSpeakersMenu::GSpeakersMenu( SpeakerToolbar *isbar, BoxToolbar *ibbar,
 
     Menu *menu_simulate         = manage( new Menu());
     MenuList& list_simulate     = menu_simulate->items();
-    list_simulate.push_back( MenuElem( "_Plot current speaker in current enclsure", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT ) ) );
+    list_simulate.push_back( MenuElem( "_Plot current speaker in current enclsure", "<control>p", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT ) ) );
     list_simulate.push_back( MenuElem( "Plot speaker in all _boxes", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT_MBOXES ) ) );
     list_simulate.push_back( MenuElem( "Plot all _speakers in box", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT_MSPEAKERS ) ) );
     list_simulate.push_back( MenuElem( "Plot _each speaker in each box", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT_MBOXES_MSPEAKERS ) ) );
     list_simulate.push_back( SeparatorElem() );
     list_simulate.push_back( MenuElem( "_Remove selected plot", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT_REMOVE ) ) );
     list_simulate.push_back( MenuElem( "Remove _all plots", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT_REMOVE_ALL ) ) );
+
+    Menu *menu_optimize         = manage( new Menu());
+    MenuList& list_optimize     = menu_optimize->items();
+    list_optimize.push_back( MenuElem( "Calculate _optimized enclosure...", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), OPTIMIZE_VOLUME ) ) );
 
     Menu *menu_settings         = manage( new Menu());
     MenuList& list_settings     = menu_settings->items();
@@ -85,7 +89,8 @@ GSpeakersMenu::GSpeakersMenu( SpeakerToolbar *isbar, BoxToolbar *ibbar,
     //    MenuList& list_bar = items();
     items().push_front(MenuElem("_Help", "<alt>h", *menu_help ) );
     items().push_front(MenuElem("Se_ttings", "<alt>t", *menu_settings ) );
-    items().push_front(MenuElem("S_imulate", "<alt>i", *menu_simulate ) );
+    items().push_front(MenuElem("_Optimize", "<alt>o", *menu_optimize ) );
+    items().push_front(MenuElem("_Plot", "<alt>p", *menu_simulate ) );
     items().push_front(MenuElem("_Enclosure", "<alt>e", *menu_box ) );
     items().push_front(MenuElem("_Speaker", "<alt>s", *menu_speaker ) );
     items().push_front(MenuElem("_File", "<alt>f", *menu_file ) );

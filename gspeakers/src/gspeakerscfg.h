@@ -27,6 +27,7 @@
 #include <string>
 #include <gdk--/gc.h>
 #include <gtk--/tooltips.h>
+#include <gtk--/handlebox.h>
 #include "cconfig.h"
 #include "../config.h"
 
@@ -44,14 +45,20 @@ class GSpeakersCFG : public CConfig {
   int get_toolbar_style();
   string get_xpm_path();
   bool get_show_tooltips();
+  string get_last_speaker_xml();
+  string get_last_box_xml();
   
   void set_font( string newfont );
   void set_line_style( GdkLineStyle style );
   void set_line_size( int size );
   void set_toolbar_style( int style );
   void set_show_tooltips( bool show );
-  Gtk::Tooltips *tooltips;
+  void set_last_speaker_xml( string ifile );
+  void set_last_box_xml( string ifile );
 
+  Gtk::Tooltips *tooltips;
+  
+  Gtk::HandleBox *speaker_toolbar;
  private:
 };
 
