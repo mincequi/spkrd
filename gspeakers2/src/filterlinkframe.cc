@@ -190,7 +190,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   g_settings.settings_changed.connect(slot(*this, &FilterLinkFrame::on_settings_changed));
 //  on_net_updated(m_net);
   init = false;
-  enable_edit = false;
+  enable_edit = true;
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -479,11 +479,11 @@ void FilterLinkFrame::on_param_changed()
       m_net->set_has_damp(false);
     }
     signal_net_modified_by_wizard();
-    enable_edit = true;  
+    
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
       on_plot_crossover();
     }
-
+    enable_edit = true;  
   }
 }
 
@@ -493,7 +493,7 @@ void FilterLinkFrame::on_net_updated(Net *net)
 #ifdef OUPUTDEBUG
     cout << "FilterLinkFrame::on_net_updated" << endl;
 #endif
-    enable_edit = false;
+    //enable_edit = false;
     
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
       on_plot_crossover();
@@ -539,7 +539,7 @@ void FilterLinkFrame::on_net_updated(Net *net)
       m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
     }
 */
-    enable_edit = true;
+    //enable_edit = true;
   }
 }
 
@@ -641,8 +641,9 @@ void FilterLinkFrame::on_plot_crossover()
   }
   signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
   
-  enable_edit = false;
-      if (m_net->get_type() & NET_TYPE_LOWPASS) {
+  if (enable_edit == true) {
+    enable_edit = false;
+    if (m_net->get_type() & NET_TYPE_LOWPASS) {
       int i = 0, index1 = 0;
       for (vector<GSpeakers::Point>::iterator iter = points.begin();
            iter != points.end();
@@ -655,7 +656,7 @@ void FilterLinkFrame::on_plot_crossover()
       }
       points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
       points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
-
+  
       double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
       int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
       double ytodbdiff = points[index1].get_y() + 3;
@@ -684,8 +685,8 @@ void FilterLinkFrame::on_plot_crossover()
       double ytodbdiff = points[index2].get_y() + 3;
       m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
     }
-  enable_edit = true;
-  
+    enable_edit = true;
+  }
 }   
 
 /* 

@@ -1,0 +1,25 @@
+<html>
+<body>
+
+<h1>The woofer</h1>
+
+The first thing you have to decide is how much bass you want your loudspeaker to play. And maybe how much bass your neighbours want you to play. Anyway, a small driver cannot possibly play as loud as a large driver at 25 Hz. For a medium sized loudspeaker an 8 inches woofer is a suitable compromise. A good 8 inch woofer can play as deep as a 10 inch woofer in an enclosure just slightly larger than the enclosure you need for a 6.5 inch woofer. To illustrate how to design a good loudspeaker enclosure I have just picked up a few datasheets I had lying around my desk...<br>&nbsp;<br>
+
+When we design this particular enclosure we will evaluate two different woofers. I did not pick exactly these woofers for any particular reasons. I just had the datasheets printed on paper (:-))and one of them I actually used in a real loudspeaker and I know it sounds nice. The two woofers we will evaluate is Seas L21RN4X/P (datasheet), a good looking woofer with metal cone and Vifa P21WO-20-08, another nice driver sutable for slightly larger enclosures.<br>&nbsp;<br>
+
+Ok, now that we have a couple of woofer candidates we want to know how large enclosures we need for the them. There are many reasons why we not want to build a larger enclosure than absolutely neccesary: for example cost, size and different acoustic phenomens which are more difficult to handle with a larger enclosure. Still, you can not get a lot of bass from a very small enclosure even with an excellent woofer. At least not without active amplification and special filters. However, an 8 inch woofer in a ported enclosure between 20 and 30 litres might be a good compromise between size and sound. The cost factor also depends on how good enclosure you want to build. Double layers of 16mm or 22mm MDF is a more expensive solution but may be a good choice for a high end loudspeaker system. <br>&nbsp;<br>
+
+<img src="drivertab_newdriver.png"><br>
+<i>Figure 1: The driver tab</i><br>&nbsp;<br>
+
+Time to get some action. Open the driver tab in GSpeakers. Click on the "New Driver" toolbar button and fill in Name, fs (free air resonance), vas (equivalent volume) and qts (total Q, damping factor) from the datasheet for the two drivers. <br>&nbsp;<br>
+
+<img src="driver_parameters.png"><br>
+<i>Figure 2: Enter these four parameters for the two driver</i><br>&nbsp;<br>
+
+When you click on "New Driver" a new driver will appear in the list in the lower right corner of the driver notebook page. You can edit parameters for a driver by clicking on the appropriate row in this list. When you are done typing in these parameters click on the save button to make sure you save your new drivers. Now we are going to design some enclosures.<br>&nbsp;<br>
+
+You should also take a look at the frequency response graph in the datasheet. The frequency response presented in the datasheet may be a little bit smoother than in the real world but for woofers and midrage drivers it is pretty close to the real world. Both woofer we are considering has nice frequency response although a little bit different. The Seas woofer has a very straight frequency response up to 1000 Hz, then it falls off and finally breaks up around 4-5 kHz. At 4-5kHz this driver should not play any sound, therefore it is probably not possible to use this driver higher than 800-1000Hz. However, we will use an upper cutoff frequency of about 150 to 200 Hz and the frequnecy response will not cause any problem at all. The Vifa woofer has a slightly (in dB/W/m) increasing frequency response. However, it looks like this could be fixed with an inductor in series with the driver which will work as a lowpassfilter and will keep the frequency repsonse flat.<br>&nbsp;<br>
+
+</body>
+</html>

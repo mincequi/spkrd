@@ -1,3 +1,15 @@
+GSpeakers-0.8.2
+
+* GSpeakers wont segfault when you enter a driver parameter that affects the 
+    impedance response and freq resp plot is not present
+
+* Fixed infinite loop when changing cutoff frequency for a filter
+
+GSpeakers-0.8.1
+
+* Fixed some minor bugs, for example some buttons didn't have any callbacks 
+    connected to them
+
 GSpeakers-0.8
 
 * Improved the user interface a little bit more, a couple of new menu items 

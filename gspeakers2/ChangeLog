@@ -1,5 +1,15 @@
 GSpeakers ChangeLog
 
+2002-10-04
+
+* speakereditor.cc: draw frequency response plot when freq resp editor is closed
+
+* speakereditor.cc: fixed a bug which caused a segfault when you enter a new 
+    rdc, obvously we had hardcoded the index of the impedance plot
+
+* filterlinkframe.h/cc: fixed the infinite loop bug when co freq was changed, 
+    this was probably introduced in the bugfix release last week
+
 2002-10-03
 
 * Prepared for 0.8.1 bugfix release

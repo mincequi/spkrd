@@ -533,11 +533,11 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
       of.close();
       string cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
 #ifdef OUTPUT_DEBUG
-      cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << endl;
+      cout << "Speaker_ListStore::draw_imp_plot: running SPICE with \"" + cmd + "\"" << endl;
 #endif
       system(cmd.c_str());
 #ifdef OUTPUT_DEBUG
-      cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
+      cout << "Speaker_ListStore::draw_imp_plot: SPICE done" << endl;
 #endif
       string spice_output_file = tmp_file + ".out";
       ifstream fin(spice_output_file.c_str());
@@ -562,7 +562,13 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
       }
       Gdk::Color c2("red");
       if (update == true) {
-        plot.replace_plot(1, points, c2);
+        int i;
+        if ((s.get_freq_resp_filename() == "") || !(g_settings.getValueBool("DrawDriverFreqRespPlot"))) {
+          i = 0;
+        } else {
+          i = 1;
+        }
+        plot.replace_plot(i, points, c2);
       } else {
         plot.add_plot(points, c2);    
       }
@@ -590,6 +596,7 @@ void Speaker_ListStore::on_entry_changed(int i)
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
         
       /* Update the data container */
+      double d;
       switch (i) {
         case 0:
           row[m_columns.id_string] = m_IdStringEntry.get_text();                             // the treestore
@@ -608,13 +615,18 @@ void Speaker_ListStore::on_entry_changed(int i)
           (*(m_speaker_list->speaker_list()))[index].set_vas(atof(m_VasEntry.get_text().c_str())); // speaker_list
           break;
         case 4:
-          row[m_columns.rdc] = atof(m_RdcEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_rdc(atof(m_RdcEntry.get_text().c_str())); // speaker_list
+          d = atof(m_RdcEntry.get_text().c_str());
+          row[m_columns.rdc] = d;                                 // the treestore
+          cout << "d = " << d << endl;
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_rdc(d); // speaker_list
           update_imp_plot = true;
           break;
         case 5:
-          row[m_columns.lvc] = atof(m_LvcEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_lvc(atof(m_LvcEntry.get_text().c_str())); // speaker_list
+          d = atof(m_LvcEntry.get_text().c_str());
+          row[m_columns.lvc] = d;
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_lvc(d); // speaker_list
           break;
           update_imp_plot = true;
         case 6:
@@ -662,28 +674,38 @@ void Speaker_ListStore::on_entry_changed(int i)
           row[m_columns.type] = (*(m_speaker_list->speaker_list()))[index].get_type();
           break;
         case 13:
-          row[m_columns.mmd] = atof(m_MmdEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_mmd(atof(m_MmdEntry.get_text().c_str())); // speaker_list
+          d = atof(m_MmdEntry.get_text().c_str());
+          row[m_columns.mmd] = d;                             // the treestore
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_mmd(d); // speaker_list
           update_imp_plot = true;
           break;
         case 14:
-          row[m_columns.ad] = atof(m_AdEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_ad(atof(m_AdEntry.get_text().c_str())); // speaker_list
+          d = atof(m_AdEntry.get_text().c_str());
+          row[m_columns.ad] = d;                             // the treestore
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_ad(d); // speaker_list
           update_imp_plot = true;
           break;
         case 15:
-          row[m_columns.bl] = atof(m_BlEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_bl(atof(m_BlEntry.get_text().c_str())); // speaker_list
+          d = atof(m_BlEntry.get_text().c_str());
+          row[m_columns.bl] = d;                             // the treestore
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_bl(d); // speaker_list
           update_imp_plot = true;
           break;
         case 16:
-          row[m_columns.rms] = atof(m_RmsEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_rms(atof(m_RmsEntry.get_text().c_str())); // speaker_list
+          d = atof(m_RmsEntry.get_text().c_str());
+          row[m_columns.rms] = d;                             // the treestore
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_rms(d); // speaker_list
           update_imp_plot = true;
           break;
         case 17:
-          row[m_columns.cms] = atof(m_CmsEntry.get_text().c_str());                             // the treestore
-          (*(m_speaker_list->speaker_list()))[index].set_cms(atof(m_CmsEntry.get_text().c_str())); // speaker_list
+          d = atof(m_CmsEntry.get_text().c_str());
+          row[m_columns.cms] = d;                             // the treestore
+          if (d == 0.0) d = 1.0;
+          (*(m_speaker_list->speaker_list()))[index].set_cms(d); // speaker_list
           update_imp_plot = true;
           break;
       }
@@ -814,6 +836,7 @@ void Speaker_ListStore::on_edit_freq_resp()
   m_FreqRespFileEntry.set_text(f->get_filename());
   (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
   delete f;
+  on_selection_changed();
 }
 
 void Speaker_ListStore::on_browse_freq_resp()
