@@ -20,12 +20,19 @@
 #ifndef __GSPEAKERS_FILECHOOSER
 #define __GSPEAKERS_FILECHOOSER
 
-#include <gtkmm/filechooser.h>
+#include <gtkmm/filechooserdialog.h>
 
 class GSpeakersFileChooserDialog
 {
  public:
-  GSpeakersFileChooserDialog();
+  enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL};
+  GSpeakersFileChooserDialog(const Glib::ustring& title, 
+			     Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN, 
+			     const std::string& default_filename = "");
+  Glib::ustring& get_filename();
+ private:
+  Glib::ustring m_filename;
+  Gtk::FileChooserDialog *m_file_chooser;
 };
 
 #endif

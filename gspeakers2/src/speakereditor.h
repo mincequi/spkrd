@@ -48,8 +48,8 @@ protected:
   void on_cell_fixed_toggled(const Glib::ustring& path_string);
   void on_open_xml();
   void on_append_xml();
-  bool on_open_ok(Gtk::FileChooserDialog *f);
-  void on_append_ok(Gtk::FileChooserDialog *f);
+  bool open_xml(const std::string& filename);
+  void append_xml(const std::string& filename);
   void on_clear();
   void on_selection_changed();
   void on_new();
@@ -57,7 +57,7 @@ protected:
   void on_entry_changed(int i);
   void on_save();
   void on_save_as();
-  void on_save_as_ok(Gtk::FileChooserDialog *f);
+  void save_as(const std::string& filename);
   void on_remove();
   void on_close();
   void on_edit_freq_resp();

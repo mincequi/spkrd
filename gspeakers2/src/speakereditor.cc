@@ -22,6 +22,7 @@
 #include "speakereditor.h"
 #include "common.h"
 #include "freqrespeditor.h"
+#include "gspeakersfilechooser.h"
 
 #define MENU_INDEX_SAVE 5
 #define MENU_INDEX_DELETE 8
@@ -272,8 +273,8 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
     Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
     tbar->append( *s );
     
-    //    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
-    t = manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+    //    t = manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
     t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_open_xml));
     tbar->append( *t );    
 //    tbar->append( Gtk::ToolButton(_("Open"),  GSpeakers::image_widget("open_xml_24.png"), 
@@ -449,25 +450,20 @@ void Speaker_ListStore::on_save()
 
 void Speaker_ListStore::on_save_as()
 {
-  using namespace sigc;
-
-  if (f_save_as == NULL) {
-    f_save_as = new Gtk::FileChooserDialog(_("Save speaker xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE);
-    f_save_as->signal_file_activated().connect(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_save_as_ok), f_save_as));
-//    f_save_as->get_cancel_button()->signal_clicked().connect(mem_fun(*f_save_as, &Gtk::Widget::hide));
-  } else {
-    f_save_as->set_title(_("Save speaker xml as"));
-    f_save_as->show();
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Save speaker xml as"), 
+								  Gtk::FILE_CHOOSER_ACTION_SAVE, 
+								  m_filename);
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    save_as(filename);
   }
-  f_save_as->run();
 }
 
-void Speaker_ListStore::on_save_as_ok(Gtk::FileChooserDialog *f)
+void Speaker_ListStore::save_as(const std::string& filename)
 {
   try {
-    m_speaker_list->to_xml(f->get_filename());
-    f->hide();
-    m_filename = f->get_filename();
+    m_speaker_list->to_xml(filename);
+    m_filename = filename;
   } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
@@ -889,54 +885,27 @@ void Speaker_ListStore::on_entry_changed(int i)
 
 void Speaker_ListStore::on_append_xml()
 {
-  using namespace sigc;
-  
-  if (f_append == NULL) {
-    f_append = new Gtk::FileChooserDialog(_("Append speaker xml"));
-    f_append->signal_file_activated().connect(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_append_ok), f_append));
-//    f_append->get_cancel_button()->signal_clicked().connect(mem_fun(*f_append, &Gtk::Widget::hide));
-  } else {
-    f_append->set_title(_("Append speaker xml"));
-    f_append->show();
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Append speaker xml"));
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    append_xml(filename);
   }
-  f_append->run();
 }
 
 void Speaker_ListStore::on_open_xml()
 {
-  using namespace sigc;
-  bool flag = false;
-  
-  if (f_open == NULL) {
-    f_open = new Gtk::FileChooserDialog(_("Open speaker xml"), Gtk::FILE_CHOOSER_ACTION_OPEN);
-//    f_open->signal_file_activated(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_open_ok), f_open));
-    f_open->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
-    f_open->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
-  } else {
-    f_open->show();
-    f_open->set_title(_("Open speaker xml"));
-  }
-  int r; 
-  while (flag == false) {
-    r = f_open->run();
-    switch (r) {
-      case FILE_CHOOSER_OPEN:
-        flag = on_open_ok(f_open);
-        break;
-      default:
-        f_open->hide();
-        flag = true;
-        break;
-    }
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Open speaker xml"));
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    open_xml(filename);
   }
 }
 
-
-void Speaker_ListStore::on_append_ok(Gtk::FileChooserDialog *f) 
+void Speaker_ListStore::append_xml(const std::string& filename) 
 {
   SpeakerList temp_speaker_list;
   try {
-    temp_speaker_list = SpeakerList(f->get_filename());
+    temp_speaker_list = SpeakerList(filename);
 
     for_each(
       temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
@@ -948,7 +917,6 @@ void Speaker_ListStore::on_append_ok(Gtk::FileChooserDialog *f)
     {
       m_speaker_list->speaker_list()->push_back(*from);
     }
-    f->hide();
     m_speaker_list->speaker_list()->size();
     set_entries_sensitive(true);
     m_modified = true;
@@ -961,17 +929,16 @@ void Speaker_ListStore::on_append_ok(Gtk::FileChooserDialog *f)
   }
 }
 
-bool Speaker_ListStore::on_open_ok(Gtk::FileChooserDialog *f) 
+bool Speaker_ListStore::open_xml(const std::string& filename) 
 {
-  m_refListStore->clear();
-
   SpeakerList temp_speaker_list;
   
-  if (f->get_filename().length()>0) { 
+  if (filename.length()>0) { 
     try {
-      temp_speaker_list = SpeakerList(f->get_filename());
+      temp_speaker_list = SpeakerList(filename);
+      m_refListStore->clear();
 
-      m_filename = f->get_filename();
+      m_filename = filename;
       g_settings.setValue("SpeakerListXml", m_filename);
       static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver list [")) + 
                                 GSpeakers::short_filename(m_filename) + "]</b>");
@@ -990,7 +957,6 @@ bool Speaker_ListStore::on_open_ok(Gtk::FileChooserDialog *f)
       {
         m_speaker_list->speaker_list()->push_back(*from);
       }
-      f->hide();
     
       /* Select the first item in the list */
       //cout << m_speaker_list.speaker_list()->size() << endl;
@@ -1050,21 +1016,20 @@ void Speaker_ListStore::on_browse_freq_resp()
 #ifdef OUTPUT_DEBUG
   cout << "SpeakerEditor::on_browse_freq_resp" << endl;
 #endif
-  Gtk::FileChooserDialog *f = new Gtk::FileChooserDialog(_("Enter filename..."));
-  f->set_modal();
-  /* -5 == ok button clicked */
-  if (f->run() == -5) {
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Open frequency response file"));
+  std::string filename = fc->get_filename();
+
+  if (filename.length() > 0) {
     /* TODO: Check that selected file exists */
-    m_FreqRespFileEntry.set_text(f->get_filename());
-    (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
-  } 
-  f->hide();
-  delete f;
-  on_selection_changed();
-  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-  tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-  m_modified = true;
-  GSpeakers::driverlist_modified() = true;
+    m_FreqRespFileEntry.set_text(m_filename);
+    (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(filename);
+
+    on_selection_changed();
+    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+    m_modified = true;
+    GSpeakers::driverlist_modified() = true;
+  }
 }
 
 void Speaker_ListStore::create_model()

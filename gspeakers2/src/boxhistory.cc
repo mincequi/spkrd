@@ -21,6 +21,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/messagedialog.h>
 #include "boxhistory.h"
+#include "gspeakersfilechooser.h"
 #include "../config.h"
 
 using namespace sigc;
@@ -134,37 +135,30 @@ bool BoxHistory::on_delete_event(GdkEventAny *event)
 
 void BoxHistory::on_open_xml()
 {
-  if (f_open == NULL) {
-    f_open = new Gtk::FileSelection(_("Open box xml"));
-    f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_open_ok), f_open));
-    f_open->get_cancel_button()->signal_clicked().connect(mem_fun(*f_open, &Gtk::Widget::hide));
-  } else {
-    f_open->show();
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Open box xml"));
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    open_xml(filename);
   }
-  f_open->run();
 }
 
 void BoxHistory::on_append_xml()
 {
-  if (f_append == NULL) {
-    f_append = new Gtk::FileSelection(_("Append box xml"));
-    f_append->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_append_ok), f_append));
-    f_append->get_cancel_button()->signal_clicked().connect(mem_fun(*f_append, &Gtk::Widget::hide));
-  } else {
-    f_append->show();
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Append box xml"));
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    append_xml(filename);
   }
-  f_append->run();
 }
 
-void BoxHistory::on_open_ok(Gtk::FileSelection *f)
+void BoxHistory::open_xml(const std::string& filename)
 {
-  m_refListStore->clear();
-
   BoxList temp_box_list;
   try {
-    temp_box_list = BoxList(f->get_filename());
+    temp_box_list = BoxList(filename);
+    m_refListStore->clear();
 
-    m_filename = f->get_filename();
+    m_filename = filename;
     for_each(
       temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
       mem_fun(*this, &BoxHistory::liststore_add_item));
@@ -179,7 +173,6 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     {
       m_box_list.box_list()->push_back(*from);
     }
-    f->hide();
   
     /* Select the first item in the list */
     if (m_box_list.box_list()->size() > 0) {
@@ -200,11 +193,11 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
   }
 }
 
-void BoxHistory::on_append_ok(Gtk::FileSelection *f)
+void BoxHistory::append_xml(const std::string& filename)
 {
   BoxList temp_box_list;
   try {
-    temp_box_list = BoxList(f->get_filename());
+    temp_box_list = BoxList(filename);
     for_each(
       temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
       mem_fun(*this, &BoxHistory::liststore_add_item));
@@ -215,7 +208,6 @@ void BoxHistory::on_append_ok(Gtk::FileSelection *f)
     {
       m_box_list.box_list()->push_back(*from);
     }
-    f->hide();
     m_box_list.box_list()->size();
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -343,22 +335,21 @@ void BoxHistory::on_save()
 
 void BoxHistory::on_save_as()
 {
-  if (f_save_as == NULL) {
-    f_save_as = new Gtk::FileSelection(_("Save box xml as"));
-    f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_save_as_ok), f_save_as));
-    f_save_as->get_cancel_button()->signal_clicked().connect(mem_fun(*f_save_as, &Gtk::Widget::hide));
-  } else {
-    f_save_as->show();
+
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Save box xml as"), 
+								  Gtk::FILE_CHOOSER_ACTION_SAVE, 
+								  m_filename);
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
+    save_as_xml(filename);
   }
-  f_save_as->run();
 }
 
-void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
+void BoxHistory::save_as_xml(const std::string& filename)
 {
   try {
-    m_box_list.to_xml(f->get_filename());
-    f->hide();
-    m_filename = f->get_filename();
+    m_box_list.to_xml(filename);
+    m_filename = filename;
     static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);

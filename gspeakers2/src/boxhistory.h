@@ -64,10 +64,10 @@ public:
   
 protected:
   /* callbacks */
-  void on_open_ok(Gtk::FileSelection *f);
-  void on_append_ok(Gtk::FileSelection *f);
+  void open_xml(const std::string& filename);
+  void append_xml(const std::string& filename);
   void on_selection_changed();
-  void on_save_as_ok(Gtk::FileSelection *f);
+  void save_as_xml(const std::string& filename);
   void on_box_modified(Box *box);  
   void on_add_plot(Box *box, Speaker *speaker);
   void on_append_box(Box *box);
