@@ -4,18 +4,12 @@ GSpeakers TODO-list
 1) The tasks does not appear in any specific order. If you want more 
     information about the tasks, mail dss@home.se
 
-2) Some tasks may be more important than others, some are important due to 
-    the structure in the program, some are important due to the UI 
-    experience. Tasks that I consider important are marked with "important".
+2) Tasks that should be done before 1.0 is marked "pre 1.0"
 
-3) Tasks that should be done before 1.0 is marked "pre 1.0"
-
-4) Version 1.0 of GSpeakers is targeted to be released somewhere around 
-    2002-05
-
-5) For more information about the GSpeakers roadmap, visit
+3) For more information about the GSpeakers roadmap, visit
     http://gspeakers.sf.net/needhelp.html
 
+* Translations
 
 * Rpm, deb and tgz binary packages, i will need maintainer for different 
     packages too (pre-1.0)
@@ -79,8 +73,7 @@ GSpeakers TODO-list
 * Config option: view all toolbars, view toolbars independently 
     from each other
 
-* Maybe a configurable (on/off) splash screen, since loading the program takes 
-    a little while
+* Splash screen, since loading the program takes a little while
 
 * Make GSpeakers work on 640x480 (pre 1.0)
 
@@ -93,4 +86,6 @@ GSpeakers TODO-list
 
 * show/edit Q for a sealed enclosure (pre 1.0)
 
-* Meassurement tab (pre 1.0)
+* Meassurement tab (pre 1.0 if libmls problems get sorted out)
+
+* Calculate enclosure dimensions
