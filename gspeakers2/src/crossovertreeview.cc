@@ -340,9 +340,10 @@ void CrossoverTreeView::add_columns()
     if(pColumn)
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
+      pColumn->set_resizable();
     }
   }
-  
+  /*
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
@@ -353,6 +354,7 @@ void CrossoverTreeView::add_columns()
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
+      pColumn->set_resizable();
     }
   }
   
@@ -367,9 +369,10 @@ void CrossoverTreeView::add_columns()
     {
 //      pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
+      pColumn->set_resizable();
     }
   }
-  
+  */
   {
     //Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     CellRendererPopup* pRenderer = Gtk::manage( new CellRendererPopup() );
@@ -382,10 +385,13 @@ void CrossoverTreeView::add_columns()
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
-      //column->set_cell_data_func(*cell_icon,     SigC::slot(*this, &FileTree::icon_cell_data_func));
-      pColumn->add_attribute(pRenderer->property_text(), m_columns.value);
+      pColumn->set_cell_data_func(*pRenderer, slot(*this, &CrossoverTreeView::value_cell_data_func));
+      //pColumn->add_attribute(pRenderer->property_text(), m_columns.value);
       pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
+      /* Set width to 55 px, looks ok on my screen when we get the spinbutton widget */
+      pColumn->set_min_width(55);
+      pColumn->set_resizable();
     }
   }
   {
@@ -398,13 +404,15 @@ void CrossoverTreeView::add_columns()
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.unit);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
+      pColumn->set_resizable();
     }
   }
 }
 
-void CrossoverTreeView::on_insert_value(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
+void CrossoverTreeView::value_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
-  //m_columns.value_str = GSpeakers::double_to_ustring((*iter)[m_columns.value], 4, 2);
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.value], 3, 1);
 }
 
 void CrossoverTreeView::on_realize()

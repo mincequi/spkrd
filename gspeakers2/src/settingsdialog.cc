@@ -64,8 +64,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   /* SPICE page */
   Gtk::Table *spice_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, true));
   spice_table->attach(*manage(new Gtk::Label("Full path to SPICE executable: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
-  m_spice_path_entry = manage(new Gtk::Entry());
-  spice_table->attach(*m_spice_path_entry, 1, 2, 0, 1);
+  //m_spice_path_entry = manage(new Gtk::Entry());
+  spice_table->attach(m_spice_path_entry, 1, 2, 0, 1);
   spice_table->attach(m_spice_browse_button, 2, 3, 0, 1);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
   m_main_notebook.append_page(*spice_table, "SPICE");
@@ -84,7 +84,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
       
   show_all();
   
-  m_spice_path_entry->set_text(g_settings.getValueString("SPICECmdLine"));
+  m_spice_path_entry.set_text(g_settings.getValueString("SPICECmdLine"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
   m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
@@ -106,7 +106,7 @@ void SettingsDialog::on_apply()
 #ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_apply" << endl;
 #endif
-  g_settings.setValue("SPICECmdLine", m_spice_path_entry->get_text());
+  g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
   g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
@@ -158,5 +158,5 @@ void SettingsDialog::on_file_ok(Gtk::FileSelection *f)
   cout << "SettingsDialog::on_file_ok" << endl;
 #endif
   m_filename = f->get_filename();
-  m_spice_path_entry->set_text(m_filename);
+  m_spice_path_entry.set_text(m_filename);
 }

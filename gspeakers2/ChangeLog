@@ -1,5 +1,13 @@
 GSpeakers ChangeLog
 
+2002-11-14
+
+* crossovertreeview.h/cc: added set_cell_data_func
+
+2002-11-12
+
+* boxhistory.h/cc: made formatting numbers in cells work properly
+
 2002-11-11
 
 * cellitemcrossover.h/cc: added members m_value_str and m_type_str
