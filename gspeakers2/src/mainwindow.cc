@@ -23,6 +23,10 @@
 #include "settingsdialog.h"
 #include "tabwidget.h"
 
+#define NOTEBOOK_PAGE_DRIVERS   0
+#define NOTEBOOK_PAGE_ENCLOSURE 1
+#define NOTEBOOK_PAGE_FILTER    2
+
 MainWindow::MainWindow() :
   m_main_vbox(),
   m_main_notebook(),
@@ -69,9 +73,9 @@ MainWindow::MainWindow() :
     cout << fe.code() << endl;
 #endif
   }
-  
+  in_quit_phase = false;
   add(m_main_vbox);
-  m_main_vbox.set_spacing(3);
+  //m_main_vbox.set_spacing(3);
 //  signal_plot_crossover.connect(slot(*this, &MainWindow::on_on_plot_crossover));
    
   set_title("GSpeakers-" + string(VERSION));
@@ -81,6 +85,7 @@ MainWindow::MainWindow() :
   g_settings.defaultValueUnsignedInt("MainWindowHeight", 480);
   g_settings.defaultValueBool("UseAdvancedSpeakerModel", true);
   g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
+  g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_ICONS);
   
   /* You should be able to specify this in the settings dialog, if the window manager can set the size of the window
      it may as well do it, at least sawfish can do this */
@@ -124,15 +129,23 @@ MainWindow::MainWindow() :
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
 
-  	menulist.push_back( Gtk::Menu_Helpers::MenuElem("About...", slot(*this, &MainWindow::on_about) ) );
+  	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("About...", GSpeakers::image_widget("stock_menu_about.png"), 
+                                                         slot(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", m_file_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Edit", m_edit_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Drivers", speaker_editor.get_menu() ) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("E_nclosure", box_history.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", m_crossover_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
   //Add the MenuBar to the window:
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
+  
+  speaker_editor.get_toolbar().hide();
+  m_main_vbox.pack_start(speaker_editor.get_toolbar(), Gtk::SHRINK);
+  box_history.get_toolbar().hide();
+  m_main_vbox.pack_start(box_history.get_toolbar(), Gtk::SHRINK);
   
   m_main_vbox.pack_start(m_main_notebook);
   
@@ -209,11 +222,50 @@ MainWindow::MainWindow() :
   //g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
   //m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
   //signal_plot_crossover();  
+  
   show_all_children();
+  
   //signal_plot_crossover();  
   /* For some reason I had to put this row after show */
+  m_main_notebook.signal_switch_page().connect(slot(*this, &MainWindow::on_switch_page));
   m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
-  
+}
+
+void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
+{
+#ifdef OUTPUT_DEBUG
+  cout << "MainWindow::on_switch_page" << endl;
+#endif
+  if (in_quit_phase == false) {
+    switch (page_num) {
+      case NOTEBOOK_PAGE_DRIVERS:
+        if (speaker_editor.get_toolbar().is_visible() == false) {
+          speaker_editor.get_toolbar().show();
+        }
+        if (box_history.get_toolbar().is_visible() == true) {
+          box_history.get_toolbar().hide();
+        }
+        break;
+      case NOTEBOOK_PAGE_ENCLOSURE:
+        if (speaker_editor.get_toolbar().is_visible() == true) {
+          speaker_editor.get_toolbar().hide();
+        }
+        if (box_history.get_toolbar().is_visible() == false) {
+          box_history.get_toolbar().show();
+        }
+
+        break;
+      case NOTEBOOK_PAGE_FILTER:
+        if (speaker_editor.get_toolbar().is_visible() == true) {
+          speaker_editor.get_toolbar().hide();
+        }
+        if (box_history.get_toolbar().is_visible() == true) {
+          box_history.get_toolbar().hide();
+        }
+        
+        break;
+    }
+  }
 }
 
 MainWindow::~MainWindow()
@@ -226,6 +278,7 @@ void MainWindow::on_quit()
 #ifdef OUTPUT_DEBUG
   cout << "MainWindow::quit" << endl;
 #endif
+  in_quit_phase = true;
   g_settings.setValue("BoxMainPanedPosition", m_box_hpaned.get_position());
   g_settings.setValue("BoxEditPanedPosition", m_box_edit_vpaned.get_position());
   g_settings.setValue("BoxPlotPanedPosition", m_box_plot_vpaned.get_position());

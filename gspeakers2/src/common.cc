@@ -55,12 +55,26 @@ namespace GSpeakers {
   }
   
   int round( double d ) {
-  if ( ( d - (int)d ) >= 0.5 ) {
-    return (int)( (int)d + 1 );
-  } else {
-    return (int)(d);
+    if ( ( d - (int)d ) >= 0.5 ) {
+      return (int)( (int)d + 1 );
+    } else {
+      return (int)(d);
+    }
+    return 0;
   }
-  return 0;
-}
-
+  
+  Gtk::Widget& image_widget(string filename)
+  {
+    Gtk::Widget *im;
+    try {
+      Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + string("/share/pixmaps/") + filename);
+      im = manage(new Gtk::Image(pixbuf));
+    } catch (Glib::FileError fe) {
+      im = manage(new Gtk::Label());
+    } catch (Gdk::PixbufError pe) {
+      im = manage(new Gtk::Label());
+    }
+    
+    return *im;
+  }
 }

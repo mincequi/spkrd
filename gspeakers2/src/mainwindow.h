@@ -75,6 +75,7 @@ private:
   CrossoverHistory crossover_history;  
   GSpeakersFilterPlot filter_plot;
   TotalFilterPlot total_filter_plot;
+  bool in_quit_phase;
 
   /* Callbacks */
   void on_quit();
@@ -84,6 +85,7 @@ private:
   void on_on_plot_crossover();
   void on_update_crossover();
   void on_edit_settings();
+  void on_switch_page(GtkNotebookPage* page, guint page_num);
 };
 
 #endif

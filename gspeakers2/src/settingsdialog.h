@@ -36,7 +36,10 @@ private:
   Gtk::CheckButton m_autoupdate_filter_plots, m_use_advanced_speaker_model;
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
-  
+
+  Gtk::VBox m_toolbar_vbox;
+  Gtk::OptionMenu m_toolbar_style;
+
   Gtk::FileSelection *m_file_selection;
   
   Gtk::Button *close_button, *apply_button;

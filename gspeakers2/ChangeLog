@@ -1,5 +1,13 @@
 GSpeakers ChangeLog
 
+2002-09-20
+
+* settingsdialog.h/cc: new config option: toolbar style
+
+* mainwindow.h/cc: added driver toolbar
+
+* speakereditor.h/cc: added toolbar, added icons to menu, a couple of new icons
+
 2002-09-19
 
 * settingsdialog.h/cc: removed evil "gtk-critical", changed from Gtk::Entry -> 

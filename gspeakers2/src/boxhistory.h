@@ -39,7 +39,9 @@ class BoxHistory : public Gtk::Frame
 public:
   BoxHistory();
   virtual ~BoxHistory();
-
+  Gtk::Menu& get_menu();
+  Gtk::Widget& get_toolbar();
+  
 protected:
   /* callbacks */
   void on_open_xml();
@@ -61,6 +63,9 @@ protected:
   
   bool on_delete_event(GdkEventAny* event);
 
+  void on_plot_selected(int i);
+  void on_delete_plot();
+
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
@@ -76,6 +81,10 @@ protected:
   Gtk::VBox m_vbox;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
+
+  Gtk::Menu m_menu;
+  Gtk::HandleBox toolbar;
+  Gtk::Toolbar *tbar;
   
   /* Data containers */
   BoxList m_box_list;
@@ -98,6 +107,7 @@ protected:
   string m_filename;
   bool new_xml_pressed;
   int index;
+  int selected_plot;
 };
 
 #endif

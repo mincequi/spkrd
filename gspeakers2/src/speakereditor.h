@@ -37,6 +37,8 @@ public:
   Gtk::Widget& get_treeview_table();
   Gtk::Widget& get_editor_table();
   Gtk::Widget& get_plot();
+  Gtk::Menu& get_menu();
+  Gtk::Widget& get_toolbar();
   
 protected:
   /* callbacks */
@@ -57,6 +59,7 @@ protected:
   void on_close();
   void on_edit_freq_resp();
   void on_browse_freq_resp();
+  void on_settings_changed(const string&);
     
   /* Helper funtions */
   virtual void create_model();
@@ -82,6 +85,10 @@ protected:
   Gtk::Frame m_treeview_frame, m_editor_frame;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
+  Gtk::Menu m_menu;
+  
+  Gtk::HandleBox toolbar;
+  Gtk::Toolbar *tbar;
   
   /* Data container */
   SpeakerList *m_speaker_list;

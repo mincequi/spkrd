@@ -24,8 +24,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   m_autoupdate_filter_plots("Automaticly update crossover plots"),
   m_use_advanced_speaker_model("Use advanced speaker SPICE model"),
   m_vbox(),
-  m_hbox()
-
+  m_hbox(),
+  m_toolbar_style()
 {
   m_file_selection = NULL;
   apply_button = manage(new Gtk::Button(Gtk::Stock::APPLY));
@@ -38,8 +38,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   
   get_vbox()->pack_start(m_main_notebook);
   
-  /* Only one page at the moment */
-    
+
+  /* General page */
   m_hbox.pack_start(*manage(new Gtk::Label("Full path to SPICE executable: ")));
   m_spice_path_entry = manage(new Gtk::Entry());
   m_hbox.pack_start(*m_spice_path_entry);
@@ -50,6 +50,22 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   m_vbox.pack_start(m_use_advanced_speaker_model);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
   m_main_notebook.append_page(m_vbox, "General");
+  
+  /* Toolbar page */
+  Gtk::Menu *menu = manage(new Gtk::Menu());
+  Gtk::Menu_Helpers::MenuList& menulist = menu->items();
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Icons only") );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Text only") );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Text and icons") );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Text and icons (horz)") );
+  m_toolbar_style.set_menu(*menu);
+  Gtk::HBox *tbar_hbox1 = manage(new Gtk::HBox());
+  tbar_hbox1->pack_start(*manage(new Gtk::Label("Toolbar style: ")));
+  tbar_hbox1->pack_start(m_toolbar_style);
+  m_toolbar_vbox.pack_start(*tbar_hbox1);
+  m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
+  m_main_notebook.append_page(m_toolbar_vbox, "Toolbars");
+    
   show_all();
   
   g_settings.defaultValueString("SPICECmdLine", "spice3");
@@ -78,6 +94,7 @@ void SettingsDialog::on_apply()
   g_settings.setValue("SPICECmdLine", m_spice_path_entry->get_text());
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("UseAdvancedSpeakerModel", m_use_advanced_speaker_model.get_active());
+  g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
   g_settings.save();
 }
 

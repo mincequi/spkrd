@@ -57,7 +57,7 @@ the structure in the program, some are important due to the UI experience.
 * Optimize the order the colors appear in GSpeakersColor.cc/h (an easy task 
     but it requires some thinking), consecutive colors coming out of 
     GSpeakersColor should not be similar, the colors should also be clear and 
-    easy to distinguish (<-howto spell???) from each other
+    easy to distinguish from each other, use the 32 Basic Gnome colors
 
 * Reorder some columns in the treeviews to improve the user experience
 
@@ -89,3 +89,5 @@ the structure in the program, some are important due to the UI experience.
 * Add "autoupdate SPICE calculations" on drivers tab too
 
 * UI should look the same on each tab
+
+* Support nonmetric units

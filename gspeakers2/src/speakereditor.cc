@@ -21,10 +21,15 @@
 #include "common.h"
 #include "freqrespeditor.h"
 
+#define MENU_INDEX_SAVE 5
+#define MENU_INDEX_DELETE 8
+#define TOOLBAR_INDEX_SAVE 4
+#define TOOLBAR_INDEX_DELETE 6
+
 Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
   m_Table(20, 2, true), 
-  m_NewButton("New Speaker"), 
+  m_NewButton("New Driver"), 
   //m_NewButton(), 
   m_NewXmlButton("New Xml"), 
   m_AppendXmlButton("Append xml..."), 
@@ -59,12 +64,9 @@ Speaker_ListStore::Speaker_ListStore()
   m_vbox(),
   
   plot()
-#ifdef ENABLE_BROWSE_FILE
-  m_FreqRespFileEntry(), 
-  m_ImpRespFileEntry(),
-#endif  
   
 {
+  tbar = NULL;
   g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
   m_filename = g_settings.getValueString("SpeakerListXml");
   signal_speakerlist_loaded(m_filename);
@@ -111,15 +113,15 @@ Speaker_ListStore::Speaker_ListStore()
   */
   /* Setup the table */
   m_TreeViewTable.set_spacings(2);
-  m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 8);
+  m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
-  m_TreeViewTable.attach(m_NewButton       , 0, 1, 8, 9);
-  m_TreeViewTable.attach(m_NewXmlButton    , 1, 2, 8, 9);
-  m_TreeViewTable.attach(m_AppendXmlButton , 2, 3, 8, 9);
-  m_TreeViewTable.attach(m_OpenXmlButton   , 3, 4, 8, 9);
-  m_TreeViewTable.attach(m_RemoveButton    , 0, 1, 9, 10);
-  m_TreeViewTable.attach(m_SaveButton      , 1, 2, 9, 10);
-  m_TreeViewTable.attach(m_SaveAsButton    , 2, 3, 9, 10);
+  //m_TreeViewTable.attach(m_NewButton       , 0, 1, 8, 9);
+  //m_TreeViewTable.attach(m_NewXmlButton    , 1, 2, 8, 9);
+  //m_TreeViewTable.attach(m_AppendXmlButton , 2, 3, 8, 9);
+  //m_TreeViewTable.attach(m_OpenXmlButton   , 3, 4, 8, 9);
+  //m_TreeViewTable.attach(m_RemoveButton    , 0, 1, 9, 10);
+  //m_TreeViewTable.attach(m_SaveButton      , 1, 2, 9, 10);
+  //m_TreeViewTable.attach(m_SaveAsButton    , 2, 3, 9, 10);
   //m_TreeViewTable.attach(m_CloseButton     , 3, 4, 9, 10);
   
   /* All the entries and stuff */
@@ -205,7 +207,7 @@ Speaker_ListStore::Speaker_ListStore()
 
   set_entries_sensitive(false);
   m_AppendXmlButton.set_sensitive(true);
-  m_SaveAsButton.set_sensitive(false);
+  m_SaveAsButton.set_sensitive(true);
   m_SaveButton.set_sensitive(false);
   m_RemoveButton.set_sensitive(false);
   
@@ -219,6 +221,8 @@ Speaker_ListStore::Speaker_ListStore()
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   selection->signal_changed().connect(slot(*this, &Speaker_ListStore::on_selection_changed));
+
+  g_settings.settings_changed.connect(slot(*this, &Speaker_ListStore::on_settings_changed));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -245,6 +249,67 @@ Gtk::Widget& Speaker_ListStore::get_editor_table()
 Gtk::Widget& Speaker_ListStore::get_plot()
 {
   return plot;
+}
+
+Gtk::Menu& Speaker_ListStore::get_menu()
+{
+
+    Gtk::Menu::MenuList& menulist = m_menu.items();
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("_New Driver", GSpeakers::image_widget("stock_new_driver_16.png"), 
+                      slot(*this, &Speaker_ListStore::on_new) ) );
+    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("N_ew Xml", GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
+                      slot(*this, &Speaker_ListStore::on_new_xml) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("A_ppend Xml...", 
+                      slot(*this, &Speaker_ListStore::on_append_xml) ) );
+    menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::OPEN, 
+                      slot(*this, &Speaker_ListStore::on_open_xml) ) );
+    menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::SAVE, 
+                      slot(*this, &Speaker_ListStore::on_save) ) );
+    menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::SAVE_AS, 
+                      slot(*this, &Speaker_ListStore::on_save_as) ) );
+    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+    menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::DELETE, 
+                      slot(*this, &Speaker_ListStore::on_remove) ) );
+
+    menulist[MENU_INDEX_SAVE].set_sensitive(false);
+    menulist[MENU_INDEX_DELETE].set_sensitive(false);
+  return m_menu;
+}
+
+Gtk::Widget& Speaker_ListStore::get_toolbar()
+{
+  if (tbar == NULL) {
+    tbar = manage(new Gtk::Toolbar());
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Driver", GSpeakers::image_widget("stock_new_driver_24.png"), 
+                             slot(*this, &Speaker_ListStore::on_new), "Create new driver") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Xml", GSpeakers::image_widget("stock_new_driver_xml_24.png"), 
+                             slot(*this, &Speaker_ListStore::on_new_xml), "Create new driver xml (list)") );
+    Gtk::Image *im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Open Xml",  *im, 
+                             slot(*this, &Speaker_ListStore::on_open_xml), "Open driver xml (list)") );
+    Gtk::Image *im2 = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Save",  *im2, 
+                             slot(*this, &Speaker_ListStore::on_save), "Save driver xml (list)") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
+    Gtk::Image *im4 = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Delete",  *im4, 
+                             slot(*this, &Speaker_ListStore::on_remove), "Delete selected driver") );
+  
+    toolbar.add(*tbar);
+    tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
+    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(false);
+  }
+  return toolbar;
+}
+
+void Speaker_ListStore::on_settings_changed(const string& s)
+{
+  if (s == "ToolbarStyle") {
+    tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+  }
 }
 
 void Speaker_ListStore::on_close()
@@ -308,6 +373,11 @@ void Speaker_ListStore::on_new()
   m_SaveAsButton.set_sensitive(true);
   m_AppendXmlButton.set_sensitive(true);
   m_RemoveButton.set_sensitive(true);
+  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+
 }
 
 void Speaker_ListStore::on_new_xml()
@@ -339,6 +409,7 @@ void Speaker_ListStore::on_remove()
         m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin() + index);
     }
   } 
+  m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
 }
 
 void Speaker_ListStore::on_save()
@@ -356,6 +427,8 @@ void Speaker_ListStore::on_save()
     try {
       m_speaker_list->to_xml(m_filename);
       m_SaveButton.set_sensitive(false);
+      m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
+      tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
     } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
@@ -548,6 +621,9 @@ void Speaker_ListStore::on_selection_changed()
   m_IdStringEntry.grab_focus();
   set_entries_sensitive(true);
   m_RemoveButton.set_sensitive(true);
+  m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+
 }
 
 void Speaker_ListStore::on_clear()
@@ -661,6 +737,9 @@ void Speaker_ListStore::on_entry_changed(int i)
   }
   m_SaveButton.set_sensitive(true);
   m_SaveAsButton.set_sensitive(true);
+  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+
 
   //cout << "centry hanged" << endl;
   
@@ -772,6 +851,11 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     m_SaveButton.set_sensitive(true);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
+    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+    m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
+    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+
     signal_speakerlist_loaded(m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
