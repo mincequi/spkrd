@@ -43,7 +43,7 @@ TotalFilterPlot::~TotalFilterPlot()
 
 }
 
-int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int *i)
+int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int *i, Net *n)
 {
 #ifdef OUTPUT_DEBUG
   cout << "TotalFilterPlot::on_add_plot" << endl;
@@ -75,14 +75,18 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   //cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size() << ", " << m_points.size() << endl;
   
   /* sum the plots into one great plot */
-  vector<GSpeakers::Point> pnts = m_points[0];
-  
+  Gdk::Color c("red");
+  vector<GSpeakers::Point> pnts;
+  plot.remove_all_plots();  
   if (m_points.size() > 1) {
+    pnts = m_points[0];
+    plot.add_plot(m_points[0], c);
     for (unsigned j = 1; j < m_points.size(); j++) {
       for (unsigned k = 0; k < m_points[j].size(); k++) {
         pnts[k].set_y( 10 * log10( pow(10, pnts[k].get_y() / 10) + 
                        pow(10, (m_points[j])[k].get_y() / 10) ) );
       }
+      plot.add_plot(m_points[j], c);
     }
 
   }
@@ -94,8 +98,8 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   
   //if (position != -1) {
   //  cout << "TotalFilterPlot::on_add_plot: replace plot" << endl;
-  plot.remove_all_plots();
-  plot.add_plot(pnts, *m_color);
+
+  plot.select_plot(plot.add_plot(pnts, *m_color));
   //} else {
   //  plot.add_plot(pnts, *m_color);
   //  cout << "TotalFilterPlot::on_add_plot: add plot" << endl;

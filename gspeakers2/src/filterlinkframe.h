@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   filterlinkframe Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -26,14 +28,6 @@
 using namespace std;
 using namespace SigC;
 
-//#define NET_BESSEL        1
-//#define NET_BUTTERWORTH   2
-//#define NET_LINKWITZRILEY 3
-//#define NET_CHEBYCHEV     4
-//#define NET_GAUSSIAN      5
-//#define NET_LEGENDRE      6
-//#define NET_LINEARPHASE   7
-
 class FilterLinkFrame : public Gtk::Frame
 {
 public:
@@ -48,6 +42,7 @@ private:
   void on_plot_crossover();
   void on_clear_and_plot();
   void on_speakerlist_loaded(SpeakerList *speaker_list);
+  void on_settings_changed(const string& s);
 
   Gtk::Adjustment    adj;
 
@@ -69,7 +64,8 @@ private:
   Gtk::CheckButton   m_inv_pol_checkbutton;
   Gtk::SpinButton    m_damp_spinbutton;
   Gtk::CheckButton   m_imp_corr_checkbutton;
-  
+  Gtk::CheckButton   m_adv_imp_model_checkbutton;
+
   /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS */
   vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
   

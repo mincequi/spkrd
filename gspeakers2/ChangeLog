@@ -1,5 +1,21 @@
 GSpeakers ChangeLog
 
+2002-09-30
+
+* summedfreqrespplot.h/cc: added new class which displayes the estimated 
+    frequency response of the loudspeaker
+
+* common.h/cc and filterplot classes: added Net* parameter to 
+    signal_add_filter_plot
+
+* settingsdialog.h/cc, mainwindow.cc: remove "use advanced driver model" 
+    config option, reorder options on new pages
+
+* filterlinkframe.h/cc: handle the new net class members
+
+* net.h/cc: added new members, "use advanced driver impedance model" and 
+    "invert driver polarity"
+
 2002-09-27
 
 * gspeakersplot.h/cc: added set_y_label method, also use this in plot container 

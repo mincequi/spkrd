@@ -55,7 +55,6 @@ MainWindow::MainWindow()
   g_settings.defaultValueBool("SetMainWindowPosition", false);
   g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
   g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
-  g_settings.defaultValueBool("UseAdvancedSpeakerModel", true);
   g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
   g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
   g_settings.defaultValueString("SPICECmdLine", "spice3");  

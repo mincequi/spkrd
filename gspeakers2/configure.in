@@ -76,7 +76,7 @@ dnl Create makefiles
 AC_OUTPUT(
 	Makefile
 	src/Makefile
-	po/Makefile
+dnl	po/Makefile
 	xml/Makefile
 	pixmaps/Makefile
 	gspeakers.desktop

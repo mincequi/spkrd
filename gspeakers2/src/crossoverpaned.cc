@@ -35,6 +35,7 @@ CrossoverPaned::CrossoverPaned()
   m_vpaned.add1(m_plot_notebook);
   m_plot_notebook.append_page(filter_plot, "Crossover freq resp");
   m_plot_notebook.append_page(total_filter_plot, "Total crossover freq resp");
+  m_plot_notebook.append_page(summed_freq_resp_plot, "Total freq resp");
   m_vpaned.add2(crossover_history);
   m_hpaned2.add2(m_vpaned);
   g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);

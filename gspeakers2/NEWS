@@ -1,3 +1,14 @@
+GSpeakers-0.8
+
+* Improved the user interface a little bit more, a couple of new menu items 
+    and some new toolbar buttons
+
+* Config option "Use advanced driver impedance model" is now set per "net"
+
+* Plot of the estimated total frequency response of a loudspeaker
+
+* Lots of other bugfixes and improvements
+
 GSpeakers-0.7
 
 * Improved user interface. Moved the SpeakerEditor from dialog to separate tab.

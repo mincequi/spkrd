@@ -114,7 +114,8 @@ filterlinkframe.h filterlinkframe.cc gspeakersfilterplot.h \
 gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc \
 totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc \
 freqrespeditor.h freqrespeditor.cc driverfreqrespplot.h driverfreqrespplot.cc \
-enclosurepaned.h enclosurepaned.cc crossoverpaned.h crossoverpaned.cc
+enclosurepaned.h enclosurepaned.cc crossoverpaned.h crossoverpaned.cc \
+summedfreqrespplot.h summedfreqrespplot.cc
 
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0
@@ -136,7 +137,8 @@ crossoverhistory.o boxeditor.o boxhistory.o gspeakerscolor.o \
 plothistory.o gspeakersplot.o gspeakersboxplot.o settings.o \
 mainwindow.o crossoverwizard.o filterlinkframe.o gspeakersfilterplot.o \
 settingsdialog.o totalfilterplot.o tabwidget.o freqrespeditor.o \
-driverfreqrespplot.o enclosurepaned.o crossoverpaned.o
+driverfreqrespplot.o enclosurepaned.o crossoverpaned.o \
+summedfreqrespplot.o
 gspeakers_LDADD = $(LDADD)
 gspeakers_DEPENDENCIES = 
 gspeakers_LDFLAGS = 
@@ -165,7 +167,8 @@ DEP_FILES =  .deps/box.P .deps/boxeditor.P .deps/boxhistory.P \
 .deps/gspeakersplot.P .deps/main.P .deps/mainwindow.P .deps/net.P \
 .deps/part.P .deps/plothistory.P .deps/settings.P \
 .deps/settingsdialog.P .deps/speaker.P .deps/speakereditor.P \
-.deps/speakerlist.P .deps/tabwidget.P .deps/totalfilterplot.P
+.deps/speakerlist.P .deps/summedfreqrespplot.P .deps/tabwidget.P \
+.deps/totalfilterplot.P
 SOURCES = $(gspeakers_SOURCES)
 OBJECTS = $(gspeakers_OBJECTS)
 

@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   settingsdlg Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -33,9 +35,10 @@ private:
   Gtk::Notebook m_main_notebook;
   Gtk::Button m_spice_browse_button;
   Gtk::Entry *m_spice_path_entry;
-  Gtk::CheckButton m_autoupdate_filter_plots, m_use_advanced_speaker_model;
-  Gtk::CheckButton m_draw_driver_imp_plot;
+  Gtk::CheckButton m_autoupdate_filter_plots;
+  Gtk::CheckButton m_draw_driver_imp_plot, m_disable_filter_amp;
   Gtk::CheckButton m_save_mainwindow_size, m_save_mainwindow_position;
+  
 
   Gtk::OptionMenu m_toolbar_style;
 

@@ -3308,7 +3308,6 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile
 	src/Makefile
-	po/Makefile
 	xml/Makefile
 	pixmaps/Makefile
 	gspeakers.desktop
@@ -3438,7 +3437,6 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
 	src/Makefile
-	po/Makefile
 	xml/Makefile
 	pixmaps/Makefile
 	gspeakers.desktop

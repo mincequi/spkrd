@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   filterlinkframe Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -28,12 +30,10 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   Gtk::Frame(description),
   adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
   m_speaker_combo(),
-  //m_order_optionmenu(),
-  //m_type_optionmenu(),
-  //m_co_freq_spinbutton(1.0, 5),
   m_inv_pol_checkbutton("Invert polarity", false),
   m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
-  m_imp_corr_checkbutton("Impedance correction")
+  m_imp_corr_checkbutton("Impedance correction"),
+  m_adv_imp_model_checkbutton("Use adv. driver imp. model")
 {
   enable_edit = true;
   m_net = net;
@@ -48,7 +48,6 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     popdown_strings.push_back(speaker_name);
   }
 
-  //cout << "FilterLinkFrame::FilterLinkFrame" << (m_speaker_list == NULL) << endl;
   for (
     vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
     iter != m_speaker_list->speaker_list()->end();
@@ -64,7 +63,6 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_vbox.pack_start(m_speaker_combo);
     
   Gtk::Label *label;
-
   if (net->get_type() & NET_TYPE_HIGHPASS) {
     Gtk::Frame *frame = manage(new Gtk::Frame("Highpass"));
     m_vbox.pack_start(*frame);
@@ -80,16 +78,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
-    
     m_higher_order_optionmenu->set_menu(*m_higher_order_menu);
-    
-    
     m_higher_type_optionmenu = manage(new Gtk::OptionMenu());
     m_higher_type_menu = manage(new Gtk::Menu());
-    
     m_higher_order_optionmenu->set_history(m_net->get_highpass_order() - 1);
     on_order_selected(1, m_net->get_highpass_order());
-
     m_higher_type_optionmenu->set_menu(*m_higher_type_menu);
     
     /* menus ready */
@@ -97,13 +90,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     Gtk::HBox *hbox = manage(new Gtk::HBox());
     vbox->pack_start(*hbox);
     hbox->pack_start((*manage(new Gtk::Label("Order: ", Gtk::ALIGN_LEFT))));
-    
     hbox->pack_start(*m_higher_order_optionmenu);
     vbox->pack_start(*m_higher_type_optionmenu);
     hbox = manage(new Gtk::HBox());
     hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
     m_higher_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
-    
     hbox->pack_start(*m_higher_co_freq_spinbutton);
     label = manage(new Gtk::Label(" Hz"));
     label->set_alignment(Gtk::ALIGN_LEFT);
@@ -111,7 +102,6 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     vbox->pack_start(*hbox);
     set_family(m_higher_type_optionmenu, m_net->get_highpass_order(), m_net->get_highpass_family());
   }
-
 
   if (m_net->get_type() & NET_TYPE_LOWPASS) {
     Gtk::Frame *frame = manage(new Gtk::Frame("Lowpass"));
@@ -128,18 +118,13 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
-    
     m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
-
-    
     m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
     m_lower_type_menu = manage(new Gtk::Menu());
     m_lower_order_optionmenu->set_history(m_net->get_lowpass_order() - 1);
     on_order_selected(0, m_net->get_lowpass_order());
-       
-
-        
     m_lower_type_optionmenu->set_menu(*m_lower_type_menu);
+    
     /* menus ready */
     
     Gtk::HBox *hbox = manage(new Gtk::HBox());
@@ -150,20 +135,22 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     hbox = manage(new Gtk::HBox());
     hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
     m_lower_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
-    
     hbox->pack_start(*m_lower_co_freq_spinbutton);
     hbox->pack_start((*manage(new Gtk::Label("Hz"))));
     vbox->pack_start(*hbox);
     set_family(m_lower_type_optionmenu, m_net->get_lowpass_order(), m_net->get_lowpass_family());
   } 
-  
     
-  //m_vbox.pack_start(m_inv_pol_checkbutton);
   m_vbox.pack_start(m_imp_corr_checkbutton);
   if (m_net->get_has_imp_corr() == true) {
     m_imp_corr_checkbutton.set_active(true);
   }
-  
+
+  m_vbox.pack_start(m_adv_imp_model_checkbutton);
+  if (m_net->get_adv_imp_model() == 1) {
+    m_adv_imp_model_checkbutton.set_active(true);
+  }
+
   Gtk::HBox *hbox = manage(new Gtk::HBox());
   m_vbox.pack_start(*hbox);
   hbox->pack_start((*manage(new Gtk::Label("Damping: "))));
@@ -173,10 +160,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     /* Set damp value in dB here */
     double r_ser = m_net->get_damp_R1().get_value();
     Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
-
-    m_damp_spinbutton.set_value(round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+    m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
   }  
-
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
   
   add(m_vbox);
@@ -195,14 +180,13 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   }  
   m_imp_corr_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   m_damp_spinbutton.signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
+  m_adv_imp_model_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
-  //signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
   signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_clear_and_plot));
   g_settings.defaultValueString("SPICECmdLine", "spice3");
   my_filter_plot_index = -1;
-  //on_plot_crossover();
-  //signal_plot_crossover();
   signal_speakerlist_loaded.connect(slot(*this, &FilterLinkFrame::on_speakerlist_loaded));
+  g_settings.settings_changed.connect(slot(*this, &FilterLinkFrame::on_settings_changed));
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -210,9 +194,7 @@ void FilterLinkFrame::on_order_selected(int which, int order)
 #ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << endl;
 #endif
-
   Gtk::Menu::MenuList *menulist = &(m_lower_type_menu->items());
-    
   if (which == 0) {
     menulist = &m_lower_type_menu->items();
   } else if (which == 1) {
@@ -243,12 +225,18 @@ void FilterLinkFrame::on_order_selected(int which, int order)
       menulist->push_back(Gtk::Menu_Helpers::MenuElem("Linear-Phase"));    
       menulist->push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));    
       break;
-  
   }
   if (which == 0) {
     m_lower_type_optionmenu->set_history(0);
   } else if (which == 1) {
     m_higher_type_optionmenu->set_history(0);
+  }
+}
+
+void FilterLinkFrame::on_settings_changed(const string& s)
+{
+  if (s == "DisableFilterAmp") {
+    on_param_changed();
   }
 }
 
@@ -264,7 +252,6 @@ void FilterLinkFrame::on_param_changed()
 
     int index = 0;
     vector<double> num_params;
-    
     if (m_net->get_type() & NET_TYPE_LOWPASS) {
       m_net->set_lowpass_order(m_lower_order_optionmenu->get_history() + 1);
       double cutoff = m_lower_co_freq_spinbutton->get_value();
@@ -366,7 +353,6 @@ void FilterLinkFrame::on_param_changed()
     }
     if (m_net->get_type() & NET_TYPE_HIGHPASS) {
       m_net->set_highpass_order(m_higher_order_optionmenu->get_history() + 1);
-  
       double cutoff = m_higher_co_freq_spinbutton->get_value();
       switch (m_net->get_highpass_order()) {
         case NET_ORDER_1ST:
@@ -463,7 +449,6 @@ void FilterLinkFrame::on_param_changed()
           (*m_net->parts())[index++].set_unit("m");
           break;
       }
-  
     }
     if (m_imp_corr_checkbutton.get_active() == true) {
       m_net->set_has_imp_corr(true);
@@ -474,16 +459,18 @@ void FilterLinkFrame::on_param_changed()
     } else {
       m_net->set_has_imp_corr(false);
     }
+    if (m_adv_imp_model_checkbutton.get_active() == true) {
+      m_net->set_adv_imp_model(1);
+    } else {
+      m_net->set_adv_imp_model(0);
+    }
     if (m_damp_spinbutton.get_value_as_int() > 0) {
       m_net->set_has_damp(true);
-      
       /* Calculate resistors for damping network */
       double r_ser = speaker.get_rdc() * (pow(10, m_damp_spinbutton.get_value() / 20) - 1);
       double r_par = speaker.get_rdc() + pow(speaker.get_rdc(), 2) / r_ser;
       m_net->get_damp_R2().set_value(r_ser);
       m_net->get_damp_R1().set_value(r_par);
-      
-      
     } else {
       m_net->set_has_damp(false);
     }
@@ -493,7 +480,6 @@ void FilterLinkFrame::on_param_changed()
   if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
     on_plot_crossover();
   }
-  
 }
 
 void FilterLinkFrame::on_net_updated(Net *net)
@@ -503,7 +489,6 @@ void FilterLinkFrame::on_net_updated(Net *net)
     cout << "FilterLinkFrame::on_net_updated" << endl;
 #endif
     enable_edit = false;
-    
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
       on_plot_crossover();
     }
@@ -522,15 +507,11 @@ void FilterLinkFrame::on_net_updated(Net *net)
       points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
       points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
 
-
       double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
-      //double ydiff = y_next - y;
       int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
       double ytodbdiff = points[index1].get_y() + 3;
       m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
-  
     } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
-      //cout << "före" << endl;
       for (vector<GSpeakers::Point>::iterator iter = points.begin();
            iter != points.end();
            ++iter)
@@ -544,17 +525,11 @@ void FilterLinkFrame::on_net_updated(Net *net)
       points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
       points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
       
-      //double ydiff = y_prev - y;
-
       double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
       int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
-      //cout << "innan deklarationerna" << endl;
       double ytodbdiff = points[index2].get_y() + 3;
-      //double ytodbdiff = y + 3;
       m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
-      //cout << "efter" << endl;
     }
-  
     enable_edit = true;
   }
 }
@@ -575,13 +550,8 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList *speaker_list)
   }
   
   string speaker_name = m_net->get_speaker();
-  
   /* Setup the speaker combo box */
   vector<string> popdown_strings;
-  /*if (speaker_name != "") {
-    popdown_strings.push_back(speaker_name);
-  }
-  */
   bool speaker_is_in_speakerlist = false;
   for (
     vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
@@ -633,7 +603,6 @@ void FilterLinkFrame::on_plot_crossover()
   bool output = false;
   int id;
   float f1, f2, f3;
-//  vector<GSpeakers::Point> points;
   points.erase(points.begin(), points.end());
   while (!fin.eof()) {
     char *buffer = new char[100];
@@ -644,7 +613,7 @@ void FilterLinkFrame::on_plot_crossover()
     if (output == true) {
       /* TODO: Read the sscanf string from settings */
       sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
-      GSpeakers::Point p(round(f1), f3);
+      GSpeakers::Point p(GSpeakers::round(f1), f3);
       points.push_back(p);
     }
     if ((buffer[0] == '3') && (buffer[1] == '0')) {
@@ -661,12 +630,12 @@ void FilterLinkFrame::on_plot_crossover()
   } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
     c = Gdk::Color("darkgreen");
   }
-  //int id2 = m_net->get_id();
-  //g << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
-  signal_add_crossover_plot(points, c, &my_filter_plot_index);
-    
+  signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
 }   
 
+/* 
+ * Numerical coefficients for the filter principles 
+ */
 vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
 {
   vector<double> nums;
@@ -694,7 +663,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.2756);
               break;
           }
-        
           break;
         case NET_BUTTERWORTH:
           switch (net_type) {
@@ -719,7 +687,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.1592);
               break;
           }
-        
           break;
         case NET_LINKWITZRILEY:
           switch (net_type) {
@@ -732,7 +699,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.0796);
               break;
           }
-        
           break;
       }
       break;
@@ -751,7 +717,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.3953);                          
               break;
           }
-        
           break;
         case NET_BUTTERWORTH:
           switch (net_type) {
@@ -768,7 +733,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
           }
           break;
       }
-    
       break;
     case NET_ORDER_4TH:
       switch (net_name_type) {
@@ -787,7 +751,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.4983);                          
               break;
           }
-        
           break;
         case NET_BUTTERWORTH:
           switch (net_type) {
@@ -820,7 +783,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.3251);                          
               break;
           }
-        
           break;
         case NET_LEGENDRE:
           switch (net_type) {
@@ -852,7 +814,6 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.3853);                          
               break;
           }
-        
           break;
         case NET_LINKWITZRILEY:
           switch (net_type) {
@@ -869,10 +830,8 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.4501);                          
               break;
           }
-        
           break;
       }
-    
       break;
   }
   return nums;
@@ -930,24 +889,7 @@ void FilterLinkFrame::set_family(Gtk::OptionMenu *option_menu, int order, int fa
         case NET_LINKWITZRILEY:
           option_menu->set_history(5);
           break;
-          
       }
-    
       break;
   }
-
-}
-
-/*
- * Helper function to convert double->int and round it to nearest int
- *
- * The compiler wouldn't accept round (in math.h) so...
- */
-int FilterLinkFrame::round( double x ) {
-  if ( ( x - (int)x ) >= 0.5 ) {
-    return (int)( (int)x + 1 );
-  } else {
-    return (int)(x);
-  }
-  return 0;
 }

@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   net Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -67,7 +69,8 @@ public:
    * type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
    */
   Net(int type = NET_TYPE_LOWPASS, int lowpass_order = NET_ORDER_1ST, int highpass_order = NET_NOT_PRESENT, 
-      bool has_imp_corr = false, bool has_damp = false, bool has_res = false, int family = NET_BUTTERWORTH);
+      bool has_imp_corr = false, bool has_damp = false, bool has_res = false, int family = NET_BUTTERWORTH, 
+      int adv_imp_model = 0, bool inv_pol = false);
 
   /* Construct a part from an xml node */
   Net(xmlNodePtr parent); //or create_from_xml(xmlNodePtr); depending on excetions and stuff like that
@@ -92,6 +95,8 @@ public:
   int get_lowpass_family();
   int get_highpass_family();
   string get_speaker();
+  int get_adv_imp_model();
+  bool get_inv_pot();
   
   /* 
    * We return parts by ref to so that we not copy these parts.
@@ -130,6 +135,8 @@ public:
   void set_lowpass_family(int family);
   void set_highpass_family(int family);
   void set_speaker(string speaker);
+  void set_adv_imp_model(int model);
+  void set_inv_pol(bool pol);
   
 protected:
   /* Member variables */
@@ -151,6 +158,9 @@ protected:
   int m_lowpass_family;
   int m_highpass_family;
   string m_speaker;
+  int m_adv_imp_model;
+  bool m_inv_pol;
+  
 private:
   
   /*
@@ -173,8 +183,9 @@ private:
   void parse_parts(xmlNodePtr node);
   void parse_lowpass_family(xmlNodePtr node);
   void parse_highpass_family(xmlNodePtr node);
-  void parse_speaker(xmlNodePtr node);
-  
+  void parse_speaker(xmlNodePtr node);  
+  void parse_adv_imp_model(xmlNodePtr node);
+  void parse_inv_pol(xmlNodePtr node);
 };
 
 #endif

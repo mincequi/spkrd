@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   boxeditor Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -48,7 +50,6 @@ protected:
   void on_speaker_list_loaded(SpeakerList *);
   void on_combo_entry_changed();
   void on_box_data_changed(int i);
-  bool on_delete_event(GdkEventAny *event);
 
   /* Member widgets */
   Gtk::Table m_table;
@@ -58,12 +59,10 @@ protected:
   Gtk::Entry m_speaker_qts_entry, m_speaker_vas_entry, m_speaker_fs_entry;
   Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;
   Gtk::OptionMenu m_box_type_optionmenu;
-  //Gtk::Button m_optimize_button, m_append_button, m_plot_button, m_calc_port_button;
   Gtk::Menu m_option_menu;
 
 private: 
   Box *m_box;
-  //SpeakerList m_speaker_list;
   SpeakerList *m_speaker_list;
   Speaker m_current_speaker;
   bool disable_signals;

@@ -38,7 +38,7 @@ public:
   GSpeakersFilterPlot();
   ~GSpeakersFilterPlot();
   void clear();
-  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int *);
+  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *);
 private: 
   GSpeakersPlot plot;
   bool on_delete_event(GdkEventAny *event);
