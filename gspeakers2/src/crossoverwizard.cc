@@ -49,7 +49,7 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
        ++iter)
   {
     cout << iter->get_type() << endl;
-    FilterLinkFrame *link1 = manage(new FilterLinkFrame(iter, "filter", &m_speaker_list));
+    FilterLinkFrame *link1 = manage(new FilterLinkFrame((Net *)iter, "filter", &m_speaker_list));
     m_vbox.pack_start(*link1);
   }
   //signal_plot_crossover();

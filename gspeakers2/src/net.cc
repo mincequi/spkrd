@@ -509,9 +509,10 @@ string Net::to_SPICE(Speaker& s)
           break;
       }
     }
+    
     if (m_has_imp_corr == true) {
       of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " " << node_counter + 1 << " " << 
-            m_imp_corr_C.get_value() << endl;
+            m_imp_corr_R.get_value() << endl;
       of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0 << " " << 
             m_imp_corr_C.get_value() << m_imp_corr_C.get_unit() << endl;
       next_node_cnt_inc = 2;
@@ -524,12 +525,35 @@ string Net::to_SPICE(Speaker& s)
       of << "R" << m_damp_R2.get_id() << " " << node_counter << " " << node_counter + next_node_cnt_inc << " " << 
             m_damp_R2.get_value() << endl;
       node_counter = node_counter + next_node_cnt_inc;
+      next_node_cnt_inc = 1;
     
     }
+    int spk_node = node_counter;
+
     /* insert speaker resistance, TODO: insert speaker impedance table */
-    of << "R" << s.get_id() << " " << node_counter << " " << 0 << " " << s.get_rdc() << endl;
+    
+    if (g_settings.getValueBool("UseAdvancedSpeakerModel") == true) {
+      /* Complex model */
+      double cmes = s.get_mmd() / (s.get_bl() * s.get_bl()) * 1000000;
+      double lces = s.get_bl() * s.get_bl() * s.get_cms() * 1000;
+      double res = s.get_bl() * s.get_bl() / s.get_rms();
+      double po = 1.18; // air density kg/m^3
+      double cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad() / (3 * s.get_bl() * s.get_bl()) * 1000000;
+      of << "R" << s.get_id() << " " << node_counter << " " << node_counter + next_node_cnt_inc << " " << s.get_rdc() << endl;
+      node_counter = node_counter + next_node_cnt_inc;
+      of << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1 << " " << s.get_lvc() << "mH" << endl;
+      node_counter = node_counter + 1;
+      of << "lces " << node_counter << " " << 0 << " " << lces << "mH" << endl;
+      of << "cmes " << node_counter << " " << 0 << " " << cmes << "uF" << endl;
+      of << "res " << node_counter << " " << 0 << " " << res << endl;
+      of << "cmef " << node_counter << " " << 0 << " " << cmef << "uF" << endl;
+    } else {
+      /* simple model, model speaker as resistor */
+      of << "R" << s.get_id() << " " << node_counter << " " << 0 << " " << s.get_rdc() << endl;
+    }
+
     of << ".ac DEC 10 20 20k" << endl;
-    of << ".print ac db(v(" << node_counter << "))" << endl;
+    of << ".print ac db(v(" << spk_node << "))" << endl;
     of << ".end" << endl;
     of.close();
   } else {

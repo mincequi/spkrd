@@ -1,5 +1,16 @@
 GSpeakers ChangeLog
 
+2002-09-11
+
+* mainwindow.h/cc: added totalfilterplot to main window
+
+* totalfilterplot.h/cc: added new class to handle plots of total filter 
+    frequency response
+
+* net.cc: now generates advanced speaker model too, fixed a bug: of course 
+    the resistance in zobel network should have the resistor value...not 
+    the capacitor value...
+
 2002-09-10
 
 * settingsdialog.h/cc, mainwindow.cc: added config option 

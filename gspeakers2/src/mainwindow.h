@@ -30,6 +30,7 @@
 #include "crossoverhistory.h"
 #include "crossoverwizard.h"
 #include "gspeakersfilterplot.h"
+#include "totalfilterplot.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -71,7 +72,7 @@ private:
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
   GSpeakersFilterPlot filter_plot;
-  
+  TotalFilterPlot total_filter_plot;
 
   /* Callbacks */
   void on_quit();

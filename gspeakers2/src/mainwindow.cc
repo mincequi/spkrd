@@ -49,7 +49,8 @@ MainWindow::MainWindow() :
   crossover_history(),
   
   
-  filter_plot()
+  filter_plot(),
+  total_filter_plot()
   
 {
   add(m_main_vbox);
@@ -150,6 +151,7 @@ MainWindow::MainWindow() :
   m_crossover_hpaned2.add1(crossover_treeview);
   m_crossover_vpaned.add1(m_crossover_plot_notebook);
   m_crossover_plot_notebook.append_page(filter_plot, "Crossover freq resp");
+  m_crossover_plot_notebook.append_page(total_filter_plot, "Total crossover freq resp");
   m_crossover_vpaned.add2(crossover_history);
   m_crossover_hpaned2.add2(m_crossover_vpaned);
   g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
