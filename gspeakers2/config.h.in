@@ -93,6 +93,18 @@
 /* Define if you have the <argz.h> header file.  */
 #undef HAVE_ARGZ_H
 
+/* Define if you have the <exception> header file.  */
+#undef HAVE_EXCEPTION
+
+/* Define if you have the <fstream> header file.  */
+#undef HAVE_FSTREAM
+
+/* Define if you have the <iostream> header file.  */
+#undef HAVE_IOSTREAM
+
+/* Define if you have the <iterator> header file.  */
+#undef HAVE_ITERATOR
+
 /* Define if you have the <limits.h> header file.  */
 #undef HAVE_LIMITS_H
 
@@ -102,14 +114,26 @@
 /* Define if you have the <malloc.h> header file.  */
 #undef HAVE_MALLOC_H
 
+/* Define if you have the <map> header file.  */
+#undef HAVE_MAP
+
 /* Define if you have the <nl_types.h> header file.  */
 #undef HAVE_NL_TYPES_H
+
+/* Define if you have the <sstream> header file.  */
+#undef HAVE_SSTREAM
 
 /* Define if you have the <stdlib.h> header file.  */
 #undef HAVE_STDLIB_H
 
+/* Define if you have the <string> header file.  */
+#undef HAVE_STRING
+
 /* Define if you have the <string.h> header file.  */
 #undef HAVE_STRING_H
+
+/* Define if you have the <strstream> header file.  */
+#undef HAVE_STRSTREAM
 
 /* Define if you have the <sys/param.h> header file.  */
 #undef HAVE_SYS_PARAM_H
@@ -122,6 +146,9 @@
 
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
+
+/* Define if you have the <vector> header file.  */
+#undef HAVE_VECTOR
 
 /* Name of package */
 #undef PACKAGE

@@ -1,4 +1,11 @@
+2002-08-22
+
+* settings.cc/h, sstream_fix.h: Merged the excellent Settings-class from ickle 
+    into my source tree, thanks to Barnaby Gray, ickle maintainer. 
+
 2002-08-21
+
+* Prepared for GSpeakers-0.2 release
 
 * Disable close button on all windows but speakerlistselector.
 

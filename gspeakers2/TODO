@@ -21,9 +21,10 @@ the structure in the program, some are important due to the UI experience.
 * Change type field in speakereditor treeview to some text instead of the 
     current integer
 
-* Rpm, deb and tgz binary packages (important)
+* Rpm, deb and tgz binary packages, i will need maintainer for different 
+    packages too (important)
 
-* Compile and run on windows (important)
+* Compile and run on windows and docs for this (important) 
 
 * Windows installer
 
@@ -52,3 +53,8 @@ the structure in the program, some are important due to the UI experience.
     but it requires some thinking), consecutive colors coming out of 
     GSpeakersColor should not be similar, the colors should also be clear and 
     easy to distinguish (<-howto spell???) from each other
+
+* Add "insert_column_with_data_func();" to various columns in treeviews, for 
+    example: enclosure types
+
+* Reorder some columns in the treeviews to improve the user experience
