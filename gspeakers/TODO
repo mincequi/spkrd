@@ -1,0 +1,54 @@
+GSpeakers TODO-list
+-------------------
+
+1) The tasks does not appear in any specific order. If you want more information 
+about the tasks, mail dss@home.se
+
+2) Some tasks may be more important than others, some are important due to 
+the structure in the program, some are important due to the UI experience.
+
+* Remove all glib-stuff from part.cc, net.cc, crossover.cc, speaker.cc, 
+    speakerlist.cc, box.cc and boxlist.cc
+
+* Find out how to right adjust text in labels attached to a table (for example
+    in the SpeakerEditor)
+
+* Icons on the buttons in various dialogs
+
+* Print less decimals in box- and speakereditor treeview, and everywhere else 
+    we print decimal numbers
+
+* Change type field in speakereditor treeview to some text instead of the 
+    current integer
+
+* Rpm, deb and tgz binary packages (important)
+
+* Compile and run on windows (important)
+
+* Windows installer
+
+* Speakereditor and CrossoverHistory: ask if you want to save changes 
+    when open new xml
+
+* Loudspeaker design with GSpeakers HOWTO (important)
+
+* All dialogs and windows should save its size and position 
+    (use global settings, see common.h)
+
+* Make id_string cell in CrossoverHistory editable
+
+* CrossoverTreeView: add check for correct unit when the unit cell has 
+    been edited
+
+* Clear up and maybe rewrite BoxEditor
+
+* Internationalization, get_text support and more
+
+* Translate documentation
+
+* Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values
+
+* Optimize the order the colors appear in GSpeakersColor.cc/h (an easy task 
+    but it requires some thinking), consecutive colors coming out of 
+    GSpeakersColor should not be similar, the colors should also be clear and 
+    easy to distinguish (<-howto spell???) from each other

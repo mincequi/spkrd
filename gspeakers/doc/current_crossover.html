@@ -1,0 +1,47 @@
+<html>
+<body>
+<h1>GSpeakers documentation</h1>
+
+<h2>The Current Crossover window</h2>
+
+This window shows the parts in the crossover currently selected in the <a href="crossover_history.html">
+crossover history window</a>.<br>&nbsp;<br>
+<img src="current_crossover.png"><br>
+<i>The current crossover window</i><br>&nbsp;<br>
+
+<h3>Howto use the current crossover window</h3>
+In this window you can see the values of the different components used in the currently selected filter. You can also 
+change the value of a specific component. To change the value of a component, click on the corresponding cell and it 
+will become editable. To change the unit click on the unit cell. <b>Note:</b> The unit must be a valid SPICE unit, such 
+as <i>m, u, n, p, k, meg...</i> (see SPICE manual for furhter information on this topic).<br>&nbsp;<br>
+
+<h3>The fields in the table</h3>
+
+<b>Idstring:</b> This is the identifier for a component.<br>&nbsp;<br>
+
+<b>Id:</b> This is the id number associated with a specific part. This is used for debugging purpose and 
+will be removed in future versions of GSpeakers.<br>&nbsp;<br>
+
+<b>Type:</b> This is the type of component:<br>&nbsp;<br>
+<table>
+  <tr><td>Capacitor:</td><td>&nbsp;</td><td>1</td></tr>
+  <tr><td>Inductor:</td><td>&nbsp;</td><td>2</td></tr>
+  <tr><td>Resistor:</td><td>&nbsp;</td><td>3</td></tr>
+</table><br>
+
+<b>Value:</b> This is the part value. To edit the value, click on the cell and the value will become editable. The 
+value must be a valid floating point number or else it will be set to the default value for the C++ 
+istringstream operator which I think is 0.0. If the part value is set to 0.0 the program might not work properly.
+<br>&nbsp;<br>
+
+<b>Unit:</b> This is the unit which corresponds to the value. For example: if <i>value=0.2</i> and <i>unit=mH</i> 
+it could also be be <i>value=200</i> and <i>unit=uH</i>. Note that unit must be a valid SPICE unit, such as 
+<i>m, u, n, p, k, meg...</i> (see a SPICE manual for furhter information on this topic). To edit the unit, just 
+click on the cell and it will become editable.<br>&nbsp;<br>
+
+
+<center>
+<i>Daniel Sundberg, <a href="mailto:dss@home.se">dss at home dot se</a></i><br>&nbsp;<br>
+<a href="index.html">Index</a></center>
+</body>
+</html>

@@ -1,0 +1,48 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.13)
+
+AC_INIT(src/main.cc)
+
+AM_CONFIG_HEADER(config.h)
+
+dnl -----------------------------------------------
+dnl Package name and version number (user defined)
+dnl -----------------------------------------------
+
+PACKAGE=gspeakers
+VERSION=0.2.0
+
+dnl -----------------------------------------------
+dnl Package name and version number (DO NOT MODIFY)
+dnl -----------------------------------------------
+
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
+
+GNOME_COMMON_INIT
+
+dnl Checks for programs.
+AC_PROG_CXX
+
+dnl Checks for libraries.
+PKG_CHECK_MODULES(DEPS, gtkmm-2.0 libxml-2.0)
+AC_SUBST(DEPS_CFLAGS)
+AC_SUBST(DEPS_LIBS)
+
+dnl I18n
+GETTEXT_PACKAGE=$PACKAGE
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+AC_SUBST(GETTEXT_PACKAGE)
+
+dnl List all available languages here
+ALL_LINGUAS="hu"
+AM_GLIB_GNU_GETTEXT
+AC_PROG_INTLTOOL
+
+dnl Create makefiles
+AC_OUTPUT(
+	Makefile
+	src/Makefile
+	po/Makefile
+	xml/Makefile
+	gspeakers.desktop
+)

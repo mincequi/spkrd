@@ -1,0 +1,7 @@
+[Desktop Entry]
+_Name=GSpeakers
+_Comment=Gnome Loudspeaker design program
+Exec=gspeakers
+Icon=gspeakers.png
+Terminal=0
+Type=Application
