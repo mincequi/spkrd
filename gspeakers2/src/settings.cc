@@ -42,7 +42,7 @@ Settings::Settings() {
 void Settings::load(const string& filename)
   throw (runtime_error)
 {
-
+  
   ifstream inf(filename.c_str());
   if (!inf) {
     ostringstream ostr;
@@ -61,12 +61,12 @@ void Settings::load(const string& filename)
       m_map[k] = Unescape(v);
     }
   }
+  m_filename = filename;
 }
 
 void Settings::save(const string& filename)
   throw (runtime_error)
 {
-
   /* save to a temporary file first, then switch over, that way we
      should behave better on systems run by muppets have let their
      filesystem run down to no space left  */
@@ -100,6 +100,48 @@ void Settings::save(const string& filename)
     ostringstream ostr;
     ostr << "Settings::save: Failed renaming temporary file to replace old file: "
 	 << filename;
+    throw runtime_error( ostr.str() );
+  }
+  m_filename = filename;
+}
+
+void Settings::save()
+  throw (runtime_error)
+{
+
+  /* save to a temporary file first, then switch over, that way we
+     should behave better on systems run by muppets have let their
+     filesystem run down to no space left  */
+  string tempfilename = m_filename + ".temp";
+
+  ofstream of( tempfilename.c_str(), std::ios::out | std::ios::trunc );
+  if (!of) {
+    ostringstream ostr;
+    ostr << "Settings::save: Could not open temporary settings file to save to: "
+	 << tempfilename;
+    throw runtime_error( ostr.str() );
+  }
+  
+  map<const string,string>::iterator curr = m_map.begin();
+  while (curr != m_map.end()) {
+    of << (*curr).first << " = " << Escape((*curr).second) << endl;
+    if (!of) {
+      of.close();
+      unlink( tempfilename.c_str() );
+      ostringstream ostr;
+      ostr << "Settings::save: Failed writing to temporary file: "
+	   << tempfilename;
+      throw runtime_error( ostr.str() );
+    }
+    ++curr;
+  }
+  of.close();
+
+  // swap over temporary file to real file
+  if ( rename( tempfilename.c_str(), m_filename.c_str() ) == -1 ) {
+    ostringstream ostr;
+    ostr << "Settings::save: Failed renaming temporary file to replace old file: "
+	 << m_filename;
     throw runtime_error( ostr.str() );
   }
   

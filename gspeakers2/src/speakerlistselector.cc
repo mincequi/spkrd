@@ -57,7 +57,9 @@ SpeakerListSelector::SpeakerListSelector() :
 
 /* Fix some initstuff since we don't have any settings */
   f_open = new Gtk::FileSelection("Open speaker xml");
-  f_open->set_filename(string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+
+  g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  f_open->set_filename(g_settings.getValueString("SpeakerListXml"));
   f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));
   f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
   on_open_ok(f_open);
@@ -89,6 +91,7 @@ void SpeakerListSelector::on_open_ok(Gtk::FileSelection *f)
   try {
     m_speaker_list = SpeakerList(f->get_filename());
     signal_speakerlist_loaded(f->get_filename());
+    g_settings.setValue("SpeakerListXml", f->get_filename());
     f_open->hide();
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -101,6 +104,7 @@ void SpeakerListSelector::on_speakerlist_loaded(string speaker_list_filename)
   set_title("[" + speaker_list_filename + "]");
   m_speaker_list = SpeakerList(speaker_list_filename);
   m_SpeakerXmlFilenameEntry.set_text(speaker_list_filename);
+  g_settings.setValue("SpeakerListXml", speaker_list_filename);
   m_EditButton.set_sensitive(true);
 }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <stdlib.h>
 #include "part.h"
 #include "common.h"
 #include "gfilter.h"
@@ -44,7 +45,20 @@ int main (int argc, char *argv[])
   /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover to the TreeView */
   //CrossoverTreeView ctv;
   //CrossoverHistory ch;
-  
+  try {
+    g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
+  } catch (std::runtime_error e) {
+    cout << "Main: " << e.what() << endl;
+    Gtk::MessageDialog md("No configuration file found!\n\n" + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
+                          Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+    md.run();
+    string s = "mkdir " + Glib::get_home_dir() + "/.gspeakers";
+    system(s.c_str());
+    s = "touch " + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf";
+    system(s.c_str());
+    g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
+  }
+
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
   BoxEditor be;
   BoxHistory bh;
@@ -58,7 +72,8 @@ int main (int argc, char *argv[])
   SpeakerListSelector sls;
   kit.run(sls);
 //  cout << c1;
-
+  /* save settings */
+  g_settings.save();
 
   return 0;
 }

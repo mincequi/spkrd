@@ -23,6 +23,7 @@
 #include <exception>
 #include <gtkmm.h>
 #include <vector>
+#include "settings.h"
 
 using namespace SigC;
 using namespace std;
@@ -46,6 +47,8 @@ public:
   GSpeakersException(const string& what_arg): _what (what_arg) { }
   virtual const char* what () const { return _what.c_str (); }
 };
+
+extern Settings g_settings;
 
 /*
  * signal_part_modified

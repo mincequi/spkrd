@@ -52,7 +52,9 @@ CrossoverHistory::CrossoverHistory() :
   
   
   /* Read this from settings later */
-  m_filename = string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml";
+  g_settings.defaultValueString("CrossoverListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  m_filename = g_settings.getValueString("CrossoverListXml");
+
   m_crossover_list = CrossoverList(m_filename); 
   set_title("Crossover History [" + m_filename + "]");
   
@@ -103,7 +105,7 @@ void CrossoverHistory::on_part_modified() {
 
 CrossoverHistory::~CrossoverHistory()
 {
-
+  g_settings.setValue("CrossoverListXml", m_filename);
 }
 
 void CrossoverHistory::on_open_xml()

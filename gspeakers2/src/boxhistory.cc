@@ -53,7 +53,9 @@ BoxHistory::BoxHistory() :
   
   
   /* Read this from settings later */
-  m_filename = string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml";
+  g_settings.defaultValueString("BoxListXml", string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
+  
+  m_filename = g_settings.getValueString("BoxListXml");
   cout << "BoxHistory: " << m_filename << endl;
   m_box_list = BoxList(m_filename); 
   set_title("Box History [" + m_filename + "]");
@@ -96,12 +98,13 @@ BoxHistory::BoxHistory() :
 
 BoxHistory::~BoxHistory()
 {
-
+  g_settings.setValue("BoxListXml", m_filename);
 }
 
 bool BoxHistory::on_delete_event(GdkEventAny *event)
 {
  /* handle this since we don't want to close the window */
+ g_settings.setValue("BoxListXml", m_filename);
  cout << "BoxHistory: on_delete_event" << endl;
  return true;
 }
@@ -170,6 +173,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
     set_title("Box History [" + m_filename + "]");
+    g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -345,6 +349,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
   f->hide();
   m_filename = f->get_filename();
   set_title("Box History [" + m_filename + "]");
+  g_settings.setValue("BoxListXml", m_filename);
   m_SaveButton.set_sensitive(false);
 }
 

@@ -35,12 +35,14 @@ using std::map;
 class Settings : public SigC::Object {
  private:
   std::map<const string,string> m_map;
+  std::string m_filename;
   
  public:
   Settings();
   
   void load(const string& filename) throw(std::runtime_error);
   void save(const string& filename) throw(std::runtime_error);
+  void save() throw (std::runtime_error);
   
   string         getValueString       (const string& k);
   int            getValueInt          (const string& k);
