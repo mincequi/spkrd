@@ -29,7 +29,9 @@ using namespace sigc;
 SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true, true),
   m_main_notebook(),
   m_spice_browse_button(_("Browse...")),
-  m_spice_use_ngspice(_("SPICE executable is ngspice")),
+  m_spice_use_berkley(_("Berkley SPICE3f5")),
+  m_spice_use_ngspice(_("NG-SPICE-reworked")),
+  m_spice_use_gnucap(_("GNUCAP SPICE implementation")),
   m_autoupdate_filter_plots(_("Automaticly update crossover plots when a parameter has changed")),
   m_draw_driver_imp_plot(_("Draw driver impedance plot")),
   m_draw_driver_freq_resp_plot(_("Draw driver frequency response plot")), 
@@ -92,8 +94,18 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
                       0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-  spice_table->attach(m_spice_use_ngspice, 0, 3, 1, 2, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
   m_spice_browse_button.signal_clicked().connect(mem_fun(*this, &SettingsDialog::on_spice_browse));
+
+  /* Radio buttons */
+
+  Gtk::RadioButton::Group group = m_spice_use_berkley.get_group();  
+  m_spice_use_ngspice.set_group(group);
+  m_spice_use_gnucap.set_group(group);
+
+  spice_table->attach(m_spice_use_berkley, 0, 3, 1, 2, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+  spice_table->attach(m_spice_use_ngspice, 0, 3, 2, 3, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+  spice_table->attach(m_spice_use_gnucap, 0, 3, 3, 4, Gtk::EXPAND|Gtk::FILL, Gtk::SHRINK);
+
   spice_frame->add(*spice_table);
   m_main_notebook.append_page(*spice_frame, _("SPICE"));
 
@@ -127,7 +139,13 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   show_all();
   
   m_spice_path_entry.set_text(g_settings.getValueString("SPICECmdLine"));
-  m_spice_use_ngspice.set_active(g_settings.getValueBool("SPICEUseNGSPICE"));
+  if (g_settings.getValueBool("SPICEUseNGSPICE")) {
+    m_spice_use_ngspice.set_active(true);    
+  } else if (g_settings.getValueBool("SPICEUseGNUCAP")) {
+    m_spice_use_gnucap.set_active(true);    
+  } else {
+    m_spice_use_berkley.set_active(true);    
+  }
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
   m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
@@ -156,7 +174,12 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SPICE_PATH));
   m_spice_use_ngspice.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
-                                                                                     GSpeakers::SPICE_USE_NGSPICE));
+                                                                                     GSpeakers::SPICE_TYPE));
+  m_spice_use_berkley.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SPICE_TYPE));
+  m_spice_use_gnucap.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::SPICE_TYPE));
+
   m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::TOOLBAR_STYLE));
 
@@ -200,8 +223,18 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting)
     case GSpeakers::TOOLBAR_STYLE:
       g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
       break;
-    case GSpeakers::SPICE_USE_NGSPICE:
-      g_settings.setValue("SPICEUseNGSPICE", m_spice_use_ngspice.get_active());
+    case GSpeakers::SPICE_TYPE:
+      if (m_spice_use_berkley.get_active()) {
+	g_settings.setValue("SPICEUseNGSPICE", false);
+	g_settings.setValue("SPICEUseGNUCAP", false);
+      } else if (m_spice_use_ngspice.get_active()) {
+	g_settings.setValue("SPICEUseNGSPICE", true);
+	g_settings.setValue("SPICEUseGNUCAP", false);
+      } else {
+	g_settings.setValue("SPICEUseNGSPICE", false);
+	g_settings.setValue("SPICEUseGNUCAP", true);
+      }
+      
       break;
     default:
       // do nothing
