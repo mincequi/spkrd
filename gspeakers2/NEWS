@@ -1,3 +1,11 @@
+GSpeakers-0.7
+
+* Improved user interface. Moved the SpeakerEditor from dialog to separate tab.
+
+* Lots of new icons, toolbars and menus
+
+* Plot frequency response of a driver
+
 GSpeakers-0.6
 
 * You can now use an advanced model for the impedance of a driver since a 
@@ -28,6 +36,11 @@ GSpeakers-0.3
 
 * New UI
 
-* Autoload files you ware working with last time
+* Autoload files you were working with last time
 
 * Highlight a plot in the plotwindow when a plot is selected in the plot list
+
+GSpeakers-0.2
+
+* Implements all features found in GSpeakers-0.1, however in separate windows 
+    and in Gtkmm-2.0

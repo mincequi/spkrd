@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   crossoverhistory Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -25,6 +27,8 @@
 using namespace SigC;
 using namespace std;
 
+extern Signal1<void, bool> signal_crossover_set_save_state;
+
 /*
  * This class implements a TreeView connected with a ListStore
  * It is pretty much ripped off the liststore example in the 
@@ -41,51 +45,40 @@ class CrossoverHistory : public Gtk::Frame
 public:
   CrossoverHistory();
   virtual ~CrossoverHistory();
-  Gtk::Menu& get_menu();
-  Gtk::Widget& get_toolbar();
-
-protected:
-  /* callbacks */
+  /* public callbacks, for use in container class */
   void on_open_xml();
   void on_append_xml();
-  void on_open_ok(Gtk::FileSelection *f);
-  void on_append_ok(Gtk::FileSelection *f);
-  void on_selection_changed();
   void on_new_copy();
   void on_new();
   void on_new_from_menu(int type);
   void on_new_xml();
   void on_save();
   void on_save_as();
-  void on_save_as_ok(Gtk::FileSelection *f);
   void on_remove();
-  bool on_close(GdkEventAny *event);
+
+protected:
+  /* callbacks */
+  void on_open_ok(Gtk::FileSelection *f);
+  void on_append_ok(Gtk::FileSelection *f);
+  void on_save_as_ok(Gtk::FileSelection *f);
+  void on_selection_changed();
   void on_part_modified();  
   void on_net_modified_by_wizard(Net *net);
   void on_net_modified_by_user();
-  bool on_delete_event(GdkEventAny *event);
-  void on_settings_changed(const string&);
   void on_new_crossover_menu_action(int);
   void on_plot_crossover();
   
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void add_items(CrossoverList clist);
   virtual void liststore_add_item(Crossover foo);
 
   //Member widgets:
-  Gtk::Table m_Table;
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
-  Gtk::Button m_NewCopyButton, m_NewXmlButton, m_AppendXmlButton, m_OpenXmlButton, m_NewButton;
-  Gtk::Button m_SaveButton, m_SaveAsButton, m_RemoveButton;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
-  Gtk::HandleBox toolbar;
-  Gtk::Toolbar *tbar;
-  Gtk::Menu m_menu;
 
   /* Data containers */
   CrossoverList m_crossover_list;

@@ -27,40 +27,11 @@
 #define NOTEBOOK_PAGE_ENCLOSURE 1
 #define NOTEBOOK_PAGE_FILTER    2
 
-MainWindow::MainWindow() :
-  m_main_vbox(),
-  m_main_notebook(),
-  m_box_hpaned(),
-  m_box_edit_vpaned(),
-  m_box_plot_vpaned(),
-  m_driver_hpaned(),
-  m_driver_vpaned(),
-  m_crossover_hpaned1(),
-  m_crossover_hpaned2(),
-  m_crossover_vpaned(),
-
-  m_crossover_plot_notebook(),
-  
-  box_editor(),
-  box_history(),
-  plot_history(),  
-  //crossover_wizard(),
-  
-  
-  crossover_wizard(),
-  
-  //filter_plot(),
-  box_plot(),
-  speaker_editor(),
-  crossover_treeview(),
-  
-  crossover_history(),
-  
-  
-  filter_plot(),
-  total_filter_plot()
-  
+MainWindow::MainWindow()
 {
+  in_quit_phase = false;
+  
+  /* set program icon and title */
   try {
     Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
     set_icon(main_icon);
@@ -73,12 +44,10 @@ MainWindow::MainWindow() :
     cout << fe.code() << endl;
 #endif
   }
-  in_quit_phase = false;
-  add(m_main_vbox);
-  //m_main_vbox.set_spacing(3);
-//  signal_plot_crossover.connect(slot(*this, &MainWindow::on_on_plot_crossover));
-   
   set_title("GSpeakers-" + string(VERSION));
+
+  /* add a vbox to the window */
+  add(m_main_vbox);
 
   g_settings.defaultValueBool("SetMainWindowSize", true);
   g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
@@ -115,20 +84,22 @@ MainWindow::MainWindow() :
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", m_file_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Edit", m_edit_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Drivers", speaker_editor.get_menu() ) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("E_nclosure", box_history.get_menu() ) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", crossover_history.get_menu()) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("E_nclosure", enclosure_paned.get_menu() ) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", crossover_paned.get_menu()) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
   //Add the MenuBar to the window:
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
   
+  /* add toolbars */
   speaker_editor.get_toolbar().hide();
   m_main_vbox.pack_start(speaker_editor.get_toolbar(), Gtk::SHRINK);
-  box_history.get_toolbar().hide();
-  m_main_vbox.pack_start(box_history.get_toolbar(), Gtk::SHRINK);
-  crossover_history.get_toolbar().hide();
-  m_main_vbox.pack_start(crossover_history.get_toolbar(), Gtk::SHRINK);
+  enclosure_paned.get_toolbar().hide();
+  m_main_vbox.pack_start(enclosure_paned.get_toolbar(), Gtk::SHRINK);
+  crossover_paned.get_toolbar().hide();
+  m_main_vbox.pack_start(crossover_paned.get_toolbar(), Gtk::SHRINK);
   
+  /* Add main notebook */
   m_main_vbox.pack_start(m_main_notebook);
   
   /* Driver tab */
@@ -142,69 +113,12 @@ MainWindow::MainWindow() :
   m_driver_vpaned.add1(speaker_editor.get_plot());
   m_driver_vpaned.add2(speaker_editor.get_treeview_table());
   
-  /* Enclosure etab */
-  
-  m_main_notebook.append_page(m_box_hpaned, *manage(new TabWidget("speaker_small.png", "Enclosure")));
-  
-  /* Main paned for the enclosure tab */
-  m_box_hpaned.add1(m_box_edit_vpaned);
-  m_box_hpaned.add2(m_box_plot_vpaned);
-  g_settings.defaultValueUnsignedInt("BoxMainPanedPosition", 250);
-  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxMainPanedPosition"));
-
-  /* The left part, the editor and the history */
-  m_box_edit_vpaned.add1(box_editor);
-  m_box_edit_vpaned.add2(box_history);
-  g_settings.defaultValueUnsignedInt("BoxEditPanedPosition", 300);
-  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxEditPanedPosition"));
-
-  /* The right part, plot and plothistory */
-  m_box_plot_vpaned.add1(box_plot);
-  m_box_plot_vpaned.add2(plot_history);
-  g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
-  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
+  /* Enclosure tab */
+  m_main_notebook.append_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", "Enclosure")));
   
   /* Crossover tab */
-  m_main_notebook.append_page(m_crossover_hpaned1, *manage(new TabWidget("filter_small.png", "Crossover") ) );
-  m_crossover_hpaned1.add1(crossover_wizard);
-  g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
-  m_crossover_hpaned1.set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
-  m_crossover_hpaned1.add2(m_crossover_hpaned2);
-  m_crossover_hpaned2.add1(crossover_treeview);
-  m_crossover_vpaned.add1(m_crossover_plot_notebook);
-  m_crossover_plot_notebook.append_page(filter_plot, "Crossover freq resp");
-  m_crossover_plot_notebook.append_page(total_filter_plot, "Total crossover freq resp");
-  m_crossover_vpaned.add2(crossover_history);
-  m_crossover_hpaned2.add2(m_crossover_vpaned);
-  g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
-  m_crossover_hpaned2.set_position(g_settings.getValueUnsignedInt("CrossoverPaned2Position"));
-  g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
-  m_crossover_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
+  m_main_notebook.append_page(crossover_paned, *manage(new TabWidget("filter_small.png", "Crossover") ) );
 
-  
-  //m_main_notebook.append_page(*manage(new Gtk::Button), *manage(new TabWidget("measure_small.png", "Measurements")));
-  /* Setup the paned widget for the box plot tab */
-  //g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
-  
-  //g_settings.defaultValueUnsignedInt("CPanelPanedPosition", 220);
-  //m_cpanel_paned.set_position(g_settings.getValueUnsignedInt("CPanelPanedPosition"));
-
-  /* append pages to left notebook */
-  //m_cpanel_notebook.append_page(m_boxpanel_vbox, "Enclosure");
-  //m_cpanel_notebook.append_page(m_cpanel_paned, "Crossover");
-  //m_cpanel_notebook.append_page(crossover_wizard, "Crossover wizard");
-  //g_settings.defaultValueUnsignedInt("CPanelNotebookPage", 0);
-    
-  //m_cpanel_scrolled_window.add(m_cpanel_notebook);
-  //m_cpanel_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    
-  /* Add widgets to the main window */
-  //m_main_paned.add1(m_cpanel_scrolled_window);
-  //m_main_paned.add2(m_plot_notebook);
-  //g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
-  //m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
-  //signal_plot_crossover();  
-  
   show_all_children();
   
   //signal_plot_crossover();  
@@ -224,33 +138,33 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
         if (speaker_editor.get_toolbar().is_visible() == false) {
           speaker_editor.get_toolbar().show();
         }
-        if (box_history.get_toolbar().is_visible() == true) {
-          box_history.get_toolbar().hide();
+        if (enclosure_paned.get_toolbar().is_visible() == true) {
+          enclosure_paned.get_toolbar().hide();
         }
-        if (crossover_history.get_toolbar().is_visible() == true) {
-          crossover_history.get_toolbar().hide();
+        if (crossover_paned.get_toolbar().is_visible() == true) {
+          crossover_paned.get_toolbar().hide();
         }
         break;
       case NOTEBOOK_PAGE_ENCLOSURE:
         if (speaker_editor.get_toolbar().is_visible() == true) {
           speaker_editor.get_toolbar().hide();
         }
-        if (box_history.get_toolbar().is_visible() == false) {
-          box_history.get_toolbar().show();
+        if (enclosure_paned.get_toolbar().is_visible() == false) {
+          enclosure_paned.get_toolbar().show();
         }
-        if (crossover_history.get_toolbar().is_visible() == true) {
-          crossover_history.get_toolbar().hide();
+        if (crossover_paned.get_toolbar().is_visible() == true) {
+          crossover_paned.get_toolbar().hide();
         }
         break;
       case NOTEBOOK_PAGE_FILTER:
         if (speaker_editor.get_toolbar().is_visible() == true) {
           speaker_editor.get_toolbar().hide();
         }
-        if (box_history.get_toolbar().is_visible() == true) {
-          box_history.get_toolbar().hide();
+        if (enclosure_paned.get_toolbar().is_visible() == true) {
+          enclosure_paned.get_toolbar().hide();
         }
-        if (crossover_history.get_toolbar().is_visible() == false) {
-          crossover_history.get_toolbar().show();
+        if (crossover_paned.get_toolbar().is_visible() == false) {
+          crossover_paned.get_toolbar().show();
         }
         break;
     }
@@ -268,24 +182,18 @@ void MainWindow::on_quit()
   cout << "MainWindow::quit" << endl;
 #endif
   in_quit_phase = true;
-  g_settings.setValue("BoxMainPanedPosition", m_box_hpaned.get_position());
-  g_settings.setValue("BoxEditPanedPosition", m_box_edit_vpaned.get_position());
-  g_settings.setValue("BoxPlotPanedPosition", m_box_plot_vpaned.get_position());
-  g_settings.setValue("CrossoverPaned1Position", m_crossover_hpaned1.get_position());
-  g_settings.setValue("CrossoverPaned2Position", m_crossover_hpaned2.get_position());
-  g_settings.setValue("CrossoverPlotVPanedPosition", m_crossover_vpaned.get_position());
   g_settings.setValue("DriverMainPanedPosition", m_driver_hpaned.get_position());
   g_settings.setValue("DriverPlotPanedPosition", m_driver_vpaned.get_position());
 
-
+  /* Save size of window */
   int width, height;
   get_size(width, height);
   g_settings.setValue("MainWindowWidth", width);
   g_settings.setValue("MainWindowHeight", height);
   g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
-  
+
+  /* finally save settings */
   g_settings.save();
-  
 }
 
 void MainWindow::on_about()
@@ -298,38 +206,6 @@ void MainWindow::on_about()
   m.run();
 }
 
-void MainWindow::on_crossover_menu_action(int type) 
-{
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_crossover_menu_action: " << type << endl;
-#endif
-  signal_new_crossover(type);
-  /* Switch to crossover wizard page since you probably want to start there */
-  //m_cpanel_notebook.set_current_page(2);
-}
-
-void MainWindow::on_plot_crossover()
-{
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_plot_crossover" << endl;
-#endif
-  filter_plot.clear();
-  signal_plot_crossover();
-}
-
-void MainWindow::on_on_plot_crossover()
-{
-  
-}
-
-
-void MainWindow::on_update_crossover()
-{
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_update_crossover" << endl;
-#endif
-}
-
 void MainWindow::on_edit_settings()
 {
 #ifdef OUTPUT_DEBUG
@@ -338,6 +214,4 @@ void MainWindow::on_edit_settings()
   SettingsDialog *d = new SettingsDialog();
   d->run();
   delete d;
-  
-  
 }

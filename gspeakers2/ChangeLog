@@ -1,6 +1,20 @@
 GSpeakers ChangeLog
 
-2002-09-21
+2002-09-23
+
+* Prepared for GSpeakers-0.7 release
+
+* mainwindow.h/cc, crossoverhistory.h/cc, boxhistory.h/cc: move toolbars and 
+    menus to *paned-classes
+
+* crossoverpaned.h/cc: added class
+
+* enclosurepaned.h/cc: added container class for enclosure editors, history, ...
+    toolbar and menu now exists in this class
+
+2002-09-22
+
+* settingsdialog.h/cc: made the settings dialog look a little bit nicer
 
 * crossoverhistory.h/cc: added menu and toolbar, added new icons as usual
 
@@ -10,7 +24,7 @@ GSpeakers ChangeLog
 * boxhistory.h/cc, mainwindow.cc: added enclosure menu and toolbar, added some 
     new icons
 
-2002-09-20
+2002-09-21
 
 * settingsdialog.h/cc: new config option: toolbar style
 

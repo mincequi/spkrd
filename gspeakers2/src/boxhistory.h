@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   boxhistory Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -25,6 +27,8 @@
 using namespace SigC;
 using namespace std;
 
+extern Signal1<void, bool> signal_enclosure_set_save_state;
+
 /*
  * This class implements a TreeView connected with a ListStore
  * It is pretty much ripped off the liststore example in the 
@@ -39,33 +43,30 @@ class BoxHistory : public Gtk::Frame
 public:
   BoxHistory();
   virtual ~BoxHistory();
-  Gtk::Menu& get_menu();
-  Gtk::Widget& get_toolbar();
-  
-protected:
-  /* callbacks */
+
+  /* public callbacks, used in container classes from toolbar/menu events */
+  void on_new();
+  void on_new_copy();
   void on_open_xml();
   void on_append_xml();
-  void on_open_ok(Gtk::FileSelection *f);
-  void on_append_ok(Gtk::FileSelection *f);
-  void on_selection_changed();
-  void on_new_copy();
-  void on_new();
   void on_new_xml();
   void on_save();
   void on_save_as();
-  void on_save_as_ok(Gtk::FileSelection *f);
   void on_remove();
+  void on_delete_plot();
+  
+protected:
+  /* callbacks */
+  void on_open_ok(Gtk::FileSelection *f);
+  void on_append_ok(Gtk::FileSelection *f);
+  void on_selection_changed();
+  void on_save_as_ok(Gtk::FileSelection *f);
   void on_box_modified(Box *box);  
   void on_add_plot(Box *box, Speaker *speaker);
   void on_append_box(Box *box);
   void on_add_to_boxlist(Box *b);
-  
   bool on_delete_event(GdkEventAny* event);
-
   void on_plot_selected(int i);
-  void on_delete_plot();
-  void on_settings_changed(const string&);
 
   /* Helper member functions */
   virtual void create_model();
@@ -73,20 +74,13 @@ protected:
   virtual void liststore_add_item(Box box);
   
   //Member widgets:
-  Gtk::Table m_Table;
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
-  Gtk::Button m_NewCopyButton, m_NewXmlButton, m_AppendXmlButton, m_OpenXmlButton, m_NewButton;
-  Gtk::Button m_SaveButton, m_SaveAsButton, m_RemoveButton;
   Gtk::VBox m_vbox;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
 
-  Gtk::Menu m_menu;
-  Gtk::HandleBox toolbar;
-  Gtk::Toolbar *tbar;
-  
   /* Data containers */
   BoxList m_box_list;
 

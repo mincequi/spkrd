@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   mainwindow Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -21,16 +23,9 @@
 #include <gtkmm.h>
 #include "common.h"
 #include "settings.h"
-#include "gspeakersboxplot.h"
-#include "boxeditor.h"
-#include "plothistory.h"
-#include "boxhistory.h"
-#include "crossovertreeview.h"
-#include "crossoverhistory.h"
-#include "crossoverwizard.h"
-#include "gspeakersfilterplot.h"
-#include "totalfilterplot.h"
+#include "enclosurepaned.h"
 #include "speakereditor.h"
+#include "crossoverpaned.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -41,49 +36,23 @@ public:
 private:
   Gtk::VBox m_main_vbox;
   Gtk::Notebook m_main_notebook;
-  Gtk::HPaned m_box_hpaned;
-  Gtk::VPaned m_box_edit_vpaned;
-  Gtk::VPaned m_box_plot_vpaned;
   Gtk::HPaned m_driver_hpaned;
   Gtk::VPaned m_driver_vpaned;
-
-  Gtk::HPaned m_crossover_hpaned1;
-  Gtk::HPaned m_crossover_hpaned2;
-  Gtk::VPaned m_crossover_vpaned;
-
-  Gtk::Notebook m_crossover_plot_notebook;
 
   Gtk::MenuBar m_menubar;
   Gtk::Menu m_file_menu;
   Gtk::Menu m_edit_menu;
-  Gtk::Menu m_crossover_menu;
   Gtk::Menu m_help_menu;
 
-  /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
-  BoxEditor box_editor;
-  BoxHistory box_history;
-  /* Plot history will always be empty at startup for now */
-  PlotHistory plot_history;
-  
-  CrossoverWizard crossover_wizard;
-
-  GSpeakersBoxPlot box_plot;
-
+  EnclosurePaned enclosure_paned;
+  CrossoverPaned crossover_paned;
   Speaker_ListStore speaker_editor;
 
-  CrossoverTreeView crossover_treeview;
-  CrossoverHistory crossover_history;  
-  GSpeakersFilterPlot filter_plot;
-  TotalFilterPlot total_filter_plot;
   bool in_quit_phase;
 
   /* Callbacks */
   void on_quit();
   void on_about();
-  void on_crossover_menu_action(int);
-  void on_plot_crossover();
-  void on_on_plot_crossover();
-  void on_update_crossover();
   void on_edit_settings();
   void on_switch_page(GtkNotebookPage* page, guint page_num);
 };

@@ -1,5 +1,7 @@
 /*
-  settingsdlg Copyright (C) 2002 Daniel Sundberg
+  $Id$
+  
+  enclosurepaned Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -15,38 +17,44 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_SETTINGSDLG_H
-#define __GSPEAKERS_SETTINGSDLG_H
+#ifndef __ENCLOSURE_PANED_H
+#define __ENCLOSURE_PANED_H
 
 #include <gtkmm.h>
+#include "boxeditor.h"
 #include "common.h"
+#include "boxhistory.h"
+#include "plothistory.h"
+#include "gspeakersboxplot.h"
 
 using namespace std;
 using namespace SigC;
 
-class SettingsDialog : public Gtk::Dialog
+class EnclosurePaned : public Gtk::HPaned
 {
 public:
-  SettingsDialog();
-  virtual ~SettingsDialog();
+  EnclosurePaned();
+  virtual ~EnclosurePaned();
+  Gtk::Menu& get_menu();
+  Gtk::Widget& get_toolbar();
+
+protected:
+  /* Callbacks */
+  void on_settings_changed(const string&);
+  void set_save_state(bool b);
+  
 private:
-  Gtk::Notebook m_main_notebook;
-  Gtk::Button m_spice_browse_button;
-  Gtk::Entry *m_spice_path_entry;
-  Gtk::CheckButton m_autoupdate_filter_plots, m_use_advanced_speaker_model;
-
-  Gtk::OptionMenu m_toolbar_style;
-
-  Gtk::FileSelection *m_file_selection;
+  BoxEditor box_editor;
+  BoxHistory box_history;
+  PlotHistory plot_history;
+  GSpeakersBoxPlot box_plot;
   
-  Gtk::Button *close_button, *apply_button;
+  Gtk::VPaned m_edit_vpaned;
+  Gtk::VPaned m_plot_vpaned;
 
-  string m_filename;
-  
-  void on_close();
-  void on_apply();
-  void on_spice_browse();
-  void on_file_ok(Gtk::FileSelection *f);
+  Gtk::Menu m_menu;
+  Gtk::HandleBox m_toolbar;
+  Gtk::Toolbar *m_tbar;
 };
 
 #endif

@@ -17,14 +17,14 @@
 
 #include "settingsdialog.h"
 
+#define NOF_TABLE_ROWS 8
+
 SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, true),
   m_main_notebook(),
   m_spice_browse_button("Browse..."),
   //m_spice_path_entry(),
-  m_autoupdate_filter_plots("Automaticly update crossover plots"),
-  m_use_advanced_speaker_model("Use advanced speaker SPICE model"),
-  m_vbox(),
-  m_hbox(),
+  m_autoupdate_filter_plots("Automaticly update crossover plots when a parameter has changed"),
+  m_use_advanced_speaker_model("Use advanced driver SPICE model (if you have got a complete datasheet for your drivers)"),
   m_toolbar_style()
 {
   m_file_selection = NULL;
@@ -40,16 +40,15 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   
 
   /* General page */
-  m_hbox.pack_start(*manage(new Gtk::Label("Full path to SPICE executable: ")));
+  Gtk::Table *general_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, true));
+  general_table->attach(*manage(new Gtk::Label("Full path to SPICE executable: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_spice_path_entry = manage(new Gtk::Entry());
-  m_hbox.pack_start(*m_spice_path_entry);
-  m_hbox.pack_start(m_spice_browse_button);
-  
-  m_vbox.pack_start(m_hbox); 
-  m_vbox.pack_start(m_autoupdate_filter_plots);  
-  m_vbox.pack_start(m_use_advanced_speaker_model);
+  general_table->attach(*m_spice_path_entry, 1, 2, 0, 1);
+  general_table->attach(m_spice_browse_button, 2, 3, 0, 1);
+  general_table->attach(m_autoupdate_filter_plots, 0, 3, 1, 2);  
+  general_table->attach(m_use_advanced_speaker_model, 0, 3, 2, 3);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
-  m_main_notebook.append_page(m_vbox, "General");
+  m_main_notebook.append_page(*general_table, "General");
   
   /* Toolbar page */
   Gtk::Menu *menu = manage(new Gtk::Menu());
@@ -59,12 +58,11 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   menulist.push_back( Gtk::Menu_Helpers::MenuElem("Text and icons") );
   menulist.push_back( Gtk::Menu_Helpers::MenuElem("Text and icons (horz)") );
   m_toolbar_style.set_menu(*menu);
-  Gtk::HBox *tbar_hbox1 = manage(new Gtk::HBox());
-  tbar_hbox1->pack_start(*manage(new Gtk::Label("Toolbar style: ")));
-  tbar_hbox1->pack_start(m_toolbar_style);
-  m_toolbar_vbox.pack_start(*tbar_hbox1);
+  Gtk::Table *tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, true));
+  tbar_table->attach(*manage(new Gtk::Label("Toolbar style: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  tbar_table->attach(m_toolbar_style, 1, 2, 0, 1);
   m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
-  m_main_notebook.append_page(m_toolbar_vbox, "Toolbars");
+  m_main_notebook.append_page(*tbar_table, "Toolbars");
     
   show_all();
   
