@@ -446,6 +446,7 @@ void CrossoverHistory::create_model()
 
 void CrossoverHistory::add_columns()
 {
+/*
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
@@ -454,13 +455,14 @@ void CrossoverHistory::add_columns()
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
   }
-
+*/
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
     int cols_count =m_TreeView.append_column("Identifier", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
+		
     pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
   }
 
@@ -470,9 +472,55 @@ void CrossoverHistory::add_columns()
     int cols_count = m_TreeView.append_column("Type", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &CrossoverHistory::type_cell_data_func));
+//    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
 
+}
+
+void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+	Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+	string s = "";
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
+		s = s + "lowpass";
+	}
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) {
+		if (s.length() > 0) {
+			s = s + ", subsonic";
+		} else {
+			s = s + "subsonic";
+		}
+	}
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) {
+		if (s.length() > 0) {
+			s = s + ", highpass";
+		} else {
+			s = s + "highpass";
+		}
+	}
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) {
+		if (s.length() > 0) {
+			s = s + ", 2-way";
+		} else {
+			s = s + "2-way";
+		}
+	}
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) {
+		if (s.length() > 0) {
+			s = s + ", 3-way";
+		} else {
+			s = s + "3-way";
+		}
+	}
+	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) {
+		if (s.length() > 0) {
+			s = s + ", 4-way";
+		} else {
+			s = s + "4-way";
+		}
+	}
+	renderer.property_text() = s;
 }
 
 void CrossoverHistory::liststore_add_item(Crossover foo)

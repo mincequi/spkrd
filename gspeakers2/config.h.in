@@ -1,5 +1,4 @@
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
-
+/* config.h.in.  Generated from configure.in by autoheader.  */
 #undef PACKAGE
 #undef GETTEXT_PACKAGE
 #undef VERSION
@@ -11,42 +10,86 @@
 #undef ENABLE_NLS
 #undef ENABLE_GPRINT
 
-/* Define if you have the <fstream> header file.  */
-#undef HAVE_FSTREAM
-
-/* Define if you have the <iostream> header file.  */
-#undef HAVE_IOSTREAM
-
-/* Define if you have the <iterator> header file.  */
-#undef HAVE_ITERATOR
-
-/* Define if you have the <map> header file.  */
-#undef HAVE_MAP
-
-/* Define if you have the <sstream> header file.  */
-#undef HAVE_SSTREAM
-
-/* Define if you have the <string> header file.  */
-#undef HAVE_STRING
-
-/* Define if you have the <strstream> header file.  */
-#undef HAVE_STRSTREAM
-
-/* Define if you have the <vector> header file.  */
-#undef HAVE_VECTOR
-
-/* Name of package */
-#undef PACKAGE
-
-/* Version number of package */
-#undef VERSION
-
 /* package prefix */
 #undef GSPEAKERS_PREFIX
+
+/* Define to 1 if you have the <fstream> header file. */
+#undef HAVE_FSTREAM
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <iostream> header file. */
+#undef HAVE_IOSTREAM
+
+/* Define to 1 if you have the <iterator> header file. */
+#undef HAVE_ITERATOR
+
+/* Define to 1 if you have the <map> header file. */
+#undef HAVE_MAP
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <sstream> header file. */
+#undef HAVE_SSTREAM
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <string> header file. */
+#undef HAVE_STRING
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <strstream> header file. */
+#undef HAVE_STRSTREAM
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <vector> header file. */
+#undef HAVE_VECTOR
 
 /* Output debug information to console */
 #undef OUTPUT_DEBUG
 
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
 /* Compile for MS Windows */
 #undef TARGET_WIN32
 
+/* Version number of package */
+#undef VERSION

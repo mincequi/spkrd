@@ -60,7 +60,22 @@ protected:
   void on_edit_freq_resp();
   void on_browse_freq_resp();
   void on_settings_changed(const string&);
-    
+  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void qts_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void fs_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void vas_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void rdc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void lvc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void qms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	void qes_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void imp_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	void sens_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void mmd_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void ad_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);	
+  void bl_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void rms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	void cms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);	
+		
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();

@@ -68,6 +68,7 @@ protected:
   void on_net_modified_by_user();
   void on_new_crossover_menu_action(int);
   void on_plot_crossover();
+  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
   
   /* Helper member functions */
   virtual void create_model();

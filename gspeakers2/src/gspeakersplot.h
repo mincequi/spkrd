@@ -31,8 +31,9 @@
 /* This is max and min y-axis-values */
 #define MAX_NEG_VALUE -40
 #define MAX_POS_VALUE 10
-/* 20 is a nice little space to have between the graph and the window-border */
-#define BOX_FRAME_SIZE 20
+/* 30 is a nice little space to have between the graph and the window-border, especially if 
+   you're on aa fonts */
+#define BOX_FRAME_SIZE 30
 /* We want vertical lines on every 5 dB */
 #define N_VERTICAL_LINES ( 2 * ( -MAX_NEG_VALUE + MAX_POS_VALUE ) / 10 ) - 1
 /* Upper frequency limit */

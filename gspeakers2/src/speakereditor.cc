@@ -77,35 +77,35 @@ Speaker_ListStore::Speaker_ListStore()
   /* All the entries and stuff */
   m_Table.attach(*manage(new Gtk::Label("Speaker name:", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
-  m_Table.attach(*manage(new Gtk::Label("Qts:", Gtk::ALIGN_LEFT)), 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
-  m_Table.attach(m_QtsEntry, 1, 3, 1, 2);
-  m_Table.attach(*manage(new Gtk::Label("Fs: (Hz)", Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
-  m_Table.attach(m_FsEntry, 1, 3, 2, 3);
-  m_Table.attach(*manage(new Gtk::Label("Vas: (l)", Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
-  m_Table.attach(m_VasEntry, 1, 3, 3, 4);
-  m_Table.attach(*manage(new Gtk::Label("Rdc: (Ohm)", Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
-  m_Table.attach(m_RdcEntry, 1, 3, 4, 5);
-  m_Table.attach(*manage(new Gtk::Label("Lvc: (mH)", Gtk::ALIGN_LEFT)), 0, 1, 5, 6);
-  m_Table.attach(m_LvcEntry, 1, 3, 5, 6);
-  m_Table.attach(*manage(new Gtk::Label("Qms:", Gtk::ALIGN_LEFT)), 0, 1, 6, 7);
-  m_Table.attach(m_QmsEntry, 1, 3, 6, 7);
-  m_Table.attach(*manage(new Gtk::Label("Qes:", Gtk::ALIGN_LEFT)), 0, 1, 7, 8);
-  m_Table.attach(m_QesEntry, 1, 3, 7, 8);
-  m_Table.attach(*manage(new Gtk::Label("Impedance: (Ohm)", Gtk::ALIGN_LEFT)), 0, 1, 8, 9);
-  m_Table.attach(m_ImpEntry, 1, 3, 8, 9);
-  m_Table.attach(*manage(new Gtk::Label("Sensitivity: (dB/W/m)", Gtk::ALIGN_LEFT)), 0, 1, 9, 10);
-  m_Table.attach(m_SensEntry, 1, 3, 9, 10);
+  m_Table.attach(*manage(new Gtk::Label("Qts:", Gtk::ALIGN_LEFT)), 0, 2, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
+  m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
+  m_Table.attach(*manage(new Gtk::Label("Fs: (Hz)", Gtk::ALIGN_LEFT)), 0, 2, 2, 3);
+  m_Table.attach(m_FsEntry, 2, 3, 2, 3);
+  m_Table.attach(*manage(new Gtk::Label("Vas: (l)", Gtk::ALIGN_LEFT)), 0, 2, 3, 4);
+  m_Table.attach(m_VasEntry, 2, 3, 3, 4);
+  m_Table.attach(*manage(new Gtk::Label("Rdc: (Ohm)", Gtk::ALIGN_LEFT)), 0, 2, 4, 5);
+  m_Table.attach(m_RdcEntry, 2, 3, 4, 5);
+  m_Table.attach(*manage(new Gtk::Label("Lvc: (mH)", Gtk::ALIGN_LEFT)), 0, 2, 5, 6);
+  m_Table.attach(m_LvcEntry, 2, 3, 5, 6);
+  m_Table.attach(*manage(new Gtk::Label("Qms:", Gtk::ALIGN_LEFT)), 0, 2, 6, 7);
+  m_Table.attach(m_QmsEntry, 2, 3, 6, 7);
+  m_Table.attach(*manage(new Gtk::Label("Qes:", Gtk::ALIGN_LEFT)), 0, 2, 7, 8);
+  m_Table.attach(m_QesEntry, 2, 3, 7, 8);
+  m_Table.attach(*manage(new Gtk::Label("Impedance: (Ohm)", Gtk::ALIGN_LEFT)), 0, 2, 8, 9);
+  m_Table.attach(m_ImpEntry, 2, 3, 8, 9);
+  m_Table.attach(*manage(new Gtk::Label("Sensitivity: (dB/W/m)", Gtk::ALIGN_LEFT)), 0, 2, 9, 10);
+  m_Table.attach(m_SensEntry, 2, 3, 9, 10);
 
-  m_Table.attach(*manage(new Gtk::Label("Cone mass: (kg)", Gtk::ALIGN_LEFT)), 0, 1, 10, 11);
-  m_Table.attach(m_MmdEntry, 1, 3, 10, 11);
-  m_Table.attach(*manage(new Gtk::Label("Effective radius: (m)", Gtk::ALIGN_LEFT)), 0, 1, 11, 12);
-  m_Table.attach(m_AdEntry, 1, 3, 11, 12);
-  m_Table.attach(*manage(new Gtk::Label("Force factor: (N/A)", Gtk::ALIGN_LEFT)), 0, 1, 12, 13);
-  m_Table.attach(m_BlEntry, 1, 3, 12, 13);
-  m_Table.attach(*manage(new Gtk::Label("Susp. resistance: (Ns/m)", Gtk::ALIGN_LEFT)), 0, 1, 13, 14);
-  m_Table.attach(m_RmsEntry, 1, 3, 13, 14);
-  m_Table.attach(*manage(new Gtk::Label("Susp. compleance: (m/N)", Gtk::ALIGN_LEFT)), 0, 1, 14, 15);
-  m_Table.attach(m_CmsEntry, 1, 3, 14, 15);
+  m_Table.attach(*manage(new Gtk::Label("Cone mass: (kg)", Gtk::ALIGN_LEFT)), 0, 2, 10, 11);
+  m_Table.attach(m_MmdEntry, 2, 3, 10, 11);
+  m_Table.attach(*manage(new Gtk::Label("Effective radius: (m)", Gtk::ALIGN_LEFT)), 0, 2, 11, 12);
+  m_Table.attach(m_AdEntry, 2, 3, 11, 12);
+  m_Table.attach(*manage(new Gtk::Label("Force factor: (N/A)", Gtk::ALIGN_LEFT)), 0, 2, 12, 13);
+  m_Table.attach(m_BlEntry, 2, 3, 12, 13);
+  m_Table.attach(*manage(new Gtk::Label("Susp. resistance: (Ns/m)", Gtk::ALIGN_LEFT)), 0, 2, 13, 14);
+  m_Table.attach(m_RmsEntry, 2, 3, 13, 14);
+  m_Table.attach(*manage(new Gtk::Label("Susp. compleance: (m/N)", Gtk::ALIGN_LEFT)), 0, 2, 14, 15);
+  m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
 
   m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
   m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
@@ -424,11 +424,11 @@ void Speaker_ListStore::on_selection_changed()
       GString *buffer = g_string_new(str);
       g_string_printf(buffer, "%3.3f", s.get_qts());
       m_QtsEntry.set_text(Glib::ustring(buffer->str));
-      g_string_printf(buffer, "%3.0f", s.get_fs());
+      g_string_printf(buffer, "%1.0f", s.get_fs());
       m_FsEntry.set_text(Glib::ustring(buffer->str));
-      g_string_printf(buffer, "%3.0f", s.get_vas());
+      g_string_printf(buffer, "%1.4f", s.get_vas());
       m_VasEntry.set_text(Glib::ustring(buffer->str));
-      g_string_printf(buffer, "%2.0f", s.get_rdc());
+      g_string_printf(buffer, "%1.1f", s.get_rdc());
       m_RdcEntry.set_text(Glib::ustring(buffer->str));
       g_string_printf(buffer, "%0.2f", s.get_lvc());
       m_LvcEntry.set_text(Glib::ustring(buffer->str));
@@ -910,6 +910,7 @@ void Speaker_ListStore::liststore_add_item(Speaker spk)
 
 void Speaker_ListStore::add_columns()
 {
+	/* Do not show id column
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
@@ -918,7 +919,7 @@ void Speaker_ListStore::add_columns()
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
   }
-
+	*/
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
@@ -934,15 +935,17 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Type", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::type_cell_data_func));
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
     int cols_count = m_TreeView.append_column("Qts", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.qts);
+		
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qts_cell_data_func));
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.qts);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -950,7 +953,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Fs", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.fs);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::fs_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.fs);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -958,7 +962,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Vas", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.vas);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::vas_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.vas);
   }
 
   {
@@ -967,7 +972,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Rdc", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.rdc);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::rdc_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.rdc);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -975,7 +981,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Lvc", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.lvc);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::lvc_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.lvc);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -983,7 +990,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Qms", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.qms);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qms_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.qms);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -991,7 +999,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Qes", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.qes);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qes_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.qes);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -999,7 +1008,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Impedance", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.imp);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::imp_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.imp);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1007,7 +1017,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Sensitivity", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.sens);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::sens_cell_data_func));				
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.sens);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1015,7 +1026,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Cone mass", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.mmd);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::mmd_cell_data_func));				
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.mmd);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1023,7 +1035,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Active radius", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.ad);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::ad_cell_data_func));				
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.ad);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1031,7 +1044,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Force factor", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.bl);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::bl_cell_data_func));				
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.bl);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1039,7 +1053,8 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Susp. resistance", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.rms);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::rms_cell_data_func));		
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.rms);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -1047,9 +1062,135 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column("Susp. compliance", *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.cms);
+		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::cms_cell_data_func));				
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.cms);
   }
 
+}
+
+void Speaker_ListStore::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+	string s = "";
+  if ((*iter)[m_columns.type] & SPEAKER_TYPE_BASS) {
+		s = "Woofer";
+	}
+  if ((*iter)[m_columns.type] & SPEAKER_TYPE_MIDRANGE) {
+		if (s.size() > 0) {
+			s = s + ", Midrange";
+		} else {
+			s = "Midrange";
+		}
+	}
+  if ((*iter)[m_columns.type] & SPEAKER_TYPE_TWEETER) {
+		if (s.size() > 0) {
+			s = s + ", Tweeter";
+		} else {
+			s = "Tweeter";
+		}
+	}
+	if (s.size() == 0) {
+		s = "Unknown";
+	}
+  renderer.property_text() = s;
+}
+
+void Speaker_ListStore::qts_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qts], 3, 3);
+	renderer.property_xalign() = 1.0;	
+}
+
+void Speaker_ListStore::fs_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fs], 3, 0) + " Hz";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::vas_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vas], 3, 4) + " l";
+	renderer.property_xalign() = 1.0;	
+}
+
+void Speaker_ListStore::rdc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rdc], 3, 1) + " Ohm";
+	renderer.property_xalign() = 1.0;	
+}
+
+void Speaker_ListStore::lvc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.lvc], 3, 2) + " mH";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::qms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qms], 3, 3);
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::qes_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qes], 3, 2);
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::imp_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.imp], 3, 1) + " Ohm";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::sens_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.sens], 3, 1) + " dB";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::mmd_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.mmd] * 1000, 3, 2) + " g";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::ad_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.ad], 3, 3) + " m";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::bl_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.bl], 3, 1) + " N/A";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::rms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rms], 3, 2) + " Ns/m";
+	renderer.property_xalign() = 1.0;
+}
+
+void Speaker_ListStore::cms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
+{
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.cms], 3, 4) + " m/N";
+	renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::on_cell_fixed_toggled(const Glib::ustring& path_string)

@@ -502,6 +502,7 @@ void BoxHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeMod
       renderer.property_text() = "Unknown";
       break;
   }
+	renderer.property_xalign() = 1.0;
 }
 
 void BoxHistory::vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
@@ -509,13 +510,15 @@ void BoxHistory::vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeMode
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   /* Ok i write litres with capital 'L', i know it's not standard but if you use arial or whatever
      serif (?) it doesn't look good */
-  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + "L";
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
+	renderer.property_xalign() = 1.0;
 }
 
 void BoxHistory::fb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + "Hz";
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
+	renderer.property_xalign() = 1.0;
 }
 
 void BoxHistory::liststore_add_item(Box box)

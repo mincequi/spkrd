@@ -344,7 +344,7 @@ void GSpeakersPlot::redraw()
 	       ( box_height / (double)( -m_lower_y + m_upper_y ) ) );
     m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y, get_allocation().width - BOX_FRAME_SIZE + 3, y);
     m_refLayout->set_text(int_to_ustring3(i));
-    m_refPixmap->draw_layout(m_refGC, BOX_FRAME_SIZE - 18, y - 6, m_refLayout);
+    m_refPixmap->draw_layout(m_refGC, BOX_FRAME_SIZE - 27, y - 8, m_refLayout);
     if (m_enable_sec_scale == true) {
       m_refLayout->set_text(int_to_ustring3(i - m_lower_y));
       m_refPixmap->draw_layout(m_refGC, get_allocation().width - BOX_FRAME_SIZE + 5, y - 6, m_refLayout);

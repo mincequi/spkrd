@@ -104,3 +104,7 @@ the structure in the program, some are important due to the UI experience.
     a little while
 
 * GSpeakers should ask if you want to save changed upon quit
+
+* Make GSpeakers work on 640x480
+
+* Tune GSpeakersPlot so that it works with default screen font

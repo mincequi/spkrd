@@ -52,7 +52,10 @@ protected:
   void on_add_plot(Box *box, Speaker *speaker, Gdk::Color&);
   void on_cell_plot_toggled(const Glib::ustring& path_string);
   bool on_delete_event(GdkEventAny *);
-
+  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	void vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	void fb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+	
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();

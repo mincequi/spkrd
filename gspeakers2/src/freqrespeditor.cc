@@ -96,7 +96,7 @@ FreqRespEditor::FreqRespEditor(string filename) :
         /* TODO: Read the sscanf string from settings */
         float f1, f2;
         sscanf(buffer, "%f,%f", &f1, &f2);
-        dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2));
+        dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(bind<bool>(slot(m_save_button, &Gtk::Button::set_sensitive), true));
       }
     }

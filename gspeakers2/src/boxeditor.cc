@@ -59,7 +59,7 @@ BoxEditor::BoxEditor() :
   m_id_string_entry.set_width_chars(10);
   
   m_table.set_spacings(4);
-  m_table.attach(*manage(new Gtk::Label("Bass speaker: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  m_table.attach(*manage(new Gtk::Label("Woofer: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
   
   m_table.attach(*manage(new Gtk::Label("Qts: ", Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
@@ -147,14 +147,16 @@ void BoxEditor::on_optimize_button_clicked()
       m_box->set_vb1( m_current_speaker.get_vas() / vr );
       break;
     }
-    char *str = NULL;
-    GString *buffer = g_string_new(str);
+    //char *str = NULL;
+    //GString *buffer = g_string_new(str);
   
-    g_string_printf(buffer, "%f", m_box->get_vb1());
-    m_vb1_entry.set_text( Glib::ustring(buffer->str) );
+    //g_string_printf(buffer, "%f", m_box->get_vb1());
+    //m_vb1_entry.set_text( Glib::ustring(buffer->str) );
+		m_vb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_vb1(), 2, 1) );
     
-    g_string_printf(buffer, "%f", m_box->get_fb1());
-    m_fb1_entry.set_text( Glib::ustring(buffer->str) );
+    //g_string_printf(buffer, "%f", m_box->get_fb1());
+    //m_fb1_entry.set_text( Glib::ustring(buffer->str) );
+		m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
   }
   signal_box_modified(m_box);
   disable_signals = false;
@@ -240,12 +242,14 @@ void BoxEditor::on_box_selected(Box *b)
       m_box = b;
       m_id_string_entry.set_text(b->get_id_string());
       
-      char *str = NULL;
-      GString *buffer = g_string_new(str);
-      g_string_printf(buffer, "%f", b->get_vb1());
-      m_vb1_entry.set_text(string(buffer->str));
-      g_string_printf(buffer, "%f", b->get_fb1());
-      m_fb1_entry.set_text(string(buffer->str));
+      //char *str = NULL;
+      //GString *buffer = g_string_new(str);
+      //g_string_printf(buffer, "%f", b->get_vb1());
+      //m_vb1_entry.set_text(string(buffer->str));
+			m_vb1_entry.set_text( GSpeakers::double_to_ustring(b->get_vb1(), 2, 1) );
+      //g_string_printf(buffer, "%f", b->get_fb1());
+      //m_fb1_entry.set_text(string(buffer->str));
+			m_fb1_entry.set_text( GSpeakers::double_to_ustring(b->get_fb1(), 2, 1) );
       
       /* set state of option menu here */
       /* Box type is 1, 2, 3...therefor the '-1' */
@@ -254,9 +258,10 @@ void BoxEditor::on_box_selected(Box *b)
         m_fb1_entry.set_sensitive(false);
         double qr = ( 1 / m_current_speaker.get_qts() ) / ( 1 / 0.707 - 0.1 );
         m_box->set_fb1( qr * m_current_speaker.get_fs() );
-        buffer = g_string_new(str);
-        g_string_printf(buffer, "%f", m_box->get_fb1());
-        m_fb1_entry.set_text( Glib::ustring(buffer->str) );
+        //buffer = g_string_new(str);
+        //g_string_printf(buffer, "%f", m_box->get_fb1());
+        //m_fb1_entry.set_text( Glib::ustring(buffer->str) );
+				m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
       } else {
         m_fb1_entry.set_sensitive(true);
       }
@@ -297,9 +302,9 @@ void BoxEditor::on_combo_entry_changed()
 #endif
   /* Search for the new entry string in the SpeakerList */
   m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
-  m_speaker_qts_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts()));
-  m_speaker_vas_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas()));
-  m_speaker_fs_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs()));
+  m_speaker_qts_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
+  m_speaker_vas_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
+  m_speaker_fs_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
 }
 
 void BoxEditor::on_box_data_changed(int i)
@@ -310,8 +315,8 @@ void BoxEditor::on_box_data_changed(int i)
     cout << "BoxEditor::on_box_data_changed";
 #endif
     double qr;
-    char *str = NULL;
-    GString *buffer;
+    //char *str = NULL;
+    //GString *buffer;
   
     switch (i) {
       case SEALED_SELECTED:
@@ -320,12 +325,12 @@ void BoxEditor::on_box_data_changed(int i)
 #endif
         m_box->set_type(BOX_TYPE_SEALED);
         m_fb1_entry.set_sensitive(false);
-        buffer = g_string_new(str);
+        //buffer = g_string_new(str);
         qr = ( 1 / m_current_speaker.get_qts() ) / ( 1 / 0.707 - 0.1 );
         m_box->set_fb1( qr * m_current_speaker.get_fs() );
-        g_string_printf(buffer, "%f", m_box->get_fb1());
-        m_fb1_entry.set_text( Glib::ustring(buffer->str) );
-
+        //g_string_printf(buffer, "%f", m_box->get_fb1());
+        //m_fb1_entry.set_text( Glib::ustring(buffer->str) );
+				m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
         break;
       case PORTED_SELECTED:
 #ifdef OUTPUT_DEBUG      
