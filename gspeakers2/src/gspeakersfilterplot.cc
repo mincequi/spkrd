@@ -30,7 +30,7 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() :
   //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
   signal_add_crossover_plot.connect(slot(*this, &GSpeakersFilterPlot::on_add_plot));
   signal_crossover_selected.connect(slot(*this, &GSpeakersFilterPlot::on_crossover_selected));
-  plot.set_y_label("Magnitude / dB");
+  plot.set_y_label(_("Magnitude / dB"));
   show_all();
 }
 

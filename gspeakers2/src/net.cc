@@ -114,7 +114,7 @@ Net::Net(xmlNodePtr parent)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: net node expected");
+    throw GSpeakersException(_("Net: net node expected"));
   }
 }
 
@@ -128,7 +128,7 @@ void Net::parse_type(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: type node expected");
+    throw GSpeakersException(_("Net: type node expected"));
   }
 }
 
@@ -142,7 +142,7 @@ void Net::parse_lowpass_order(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: lowpass_order node expected");
+    throw GSpeakersException(_("Net: lowpass_order node expected"));
   }
 }
 
@@ -156,7 +156,7 @@ void Net::parse_highpass_order(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: highpass_order node expected");
+    throw GSpeakersException(_("Net: highpass_order node expected"));
   }
 }
 
@@ -174,7 +174,7 @@ void Net::parse_has_imp_corr(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: has_imp_corr node expected");
+    throw GSpeakersException(_("Net: has_imp_corr node expected"));
   }
 }
 
@@ -192,7 +192,7 @@ void Net::parse_has_damp(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: has_damp node expected");
+    throw GSpeakersException(_("Net: has_damp node expected"));
   }
 }
 
@@ -210,7 +210,7 @@ void Net::parse_has_res(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: has_res node expected");
+    throw GSpeakersException(_("Net: has_res node expected"));
   }
 }
 
@@ -288,7 +288,7 @@ void Net::parse_parts(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net: parts node expected");
+    throw GSpeakersException(_("Net: parts node expected"));
   }
 }
 
@@ -302,7 +302,7 @@ void Net::parse_lowpass_family(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net::parse_lowpass_family: lowpass_family node expected");
+    throw GSpeakersException(_("Net::parse_lowpass_family: lowpass_family node expected"));
   }
 }
 
@@ -316,7 +316,7 @@ void Net::parse_highpass_family(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net::parse_highpass_family: highpass_family node expected");
+    throw GSpeakersException(_("Net::parse_highpass_family: highpass_family node expected"));
   }
 }
 
@@ -330,7 +330,7 @@ void Net::parse_speaker(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net::parse_speaker: speaker node expected");
+    throw GSpeakersException(_("Net::parse_speaker: speaker node expected"));
   }
 }
 
@@ -344,7 +344,7 @@ void Net::parse_adv_imp_model(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Net::parse_adv_imp_model: adv_imp_model node expected");
+    throw GSpeakersException(_("Net::parse_adv_imp_model: adv_imp_model node expected"));
   }
 }
 
@@ -353,7 +353,7 @@ void Net::parse_inv_pol(xmlNodePtr node)
   if ((node != NULL) && (g_strcasecmp( (char *)node->name, "inv_pol" ) == 0)) {  
     istringstream((char *)xmlNodeGetContent(node)) >> m_inv_pol;
   } else {
-    throw GSpeakersException("Net::parse_inv_pol: inv_pol node expected");
+    throw GSpeakersException(_("Net::parse_inv_pol: inv_pol node expected"));
   }
 }
 
@@ -581,15 +581,15 @@ string Net::to_SPICE(Speaker& s)
 
 std::ostream& operator<< (std::ostream& o, const Net& net)
 {
-  o << "***Net*** ******" << endl <<
-       "Id:       " << net.m_id << endl << 
-       "Type:     " << net.m_type << endl <<
-       "Highpass #" << net.m_highpass_order << endl <<
-       "Lowpass  #" << net.m_lowpass_order << endl <<
-       "Has imp corr: " << net.m_has_imp_corr << endl <<
-       "Has damping : " << net.m_has_damp << endl <<
-       "Has resonanse circuit: " << net.m_has_res << endl;
-  o << "Parts:" << endl;
+  o << _("***Net*** ******") << endl <<
+       _("Id:       ") << net.m_id << endl << 
+       _("Type:     ") << net.m_type << endl <<
+       _("Highpass #") << net.m_highpass_order << endl <<
+       _("Lowpass  #") << net.m_lowpass_order << endl <<
+       _("Has imp corr: ") << net.m_has_imp_corr << endl <<
+       _("Has damping : ") << net.m_has_damp << endl <<
+       _("Has resonanse circuit: ") << net.m_has_res << endl;
+  o << _("Parts:") << endl;
   
   /* Print every part in this net */
   for (vector<Part>::iterator from = ((vector<Part>)(net.m_parts)).begin();
@@ -598,7 +598,7 @@ std::ostream& operator<< (std::ostream& o, const Net& net)
   {
     o << *from;
   }
-  return o << "********* ******" << endl;
+  return o << _("********* ******") << endl;
 }
 
 vector<Part> *Net::parts()

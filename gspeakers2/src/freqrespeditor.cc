@@ -30,8 +30,8 @@ FreqRespEditor::FreqRespEditor(string filename) :
   m_filename = filename;
   set_modal();
   
-  get_vbox()->pack_start(*manage(new Gtk::Label("Enter the freq response dB magnitude, this is not intended to provide an " 
-                                                "exact estimation of the total frequency response.")));
+  get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is not intended to provide an "
+                                                  "exact estimation of the total frequency response."))));
   get_vbox()->set_border_width(10);
   get_vbox()->set_spacing(5);
   m_table.set_spacings(5);
@@ -123,7 +123,7 @@ void FreqRespEditor::on_save()
     }
 
   } else {
-    Gtk::MessageDialog *d = new Gtk::MessageDialog(*this, string("Could not open file: ") + m_filename, Gtk::MESSAGE_ERROR, 
+    Gtk::MessageDialog *d = new Gtk::MessageDialog(*this, string(_("Could not open file: ")) + m_filename, Gtk::MESSAGE_ERROR, 
                                                Gtk::BUTTONS_OK, true, true);
     d->run();
     delete d;
@@ -136,7 +136,7 @@ void FreqRespEditor::on_save_as()
 #ifdef OUTPUT_DEBUG
   cout << "FreqRespEditor::on_save_as" << endl;
 #endif
-  Gtk::FileSelection *f = new Gtk::FileSelection("Enter filename...");
+  Gtk::FileSelection *f = new Gtk::FileSelection(_("Enter filename..."));
   f->set_modal();
   /* -5 == ok button clicked */
   if (f->run() == -5) {

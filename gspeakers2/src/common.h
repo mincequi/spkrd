@@ -25,8 +25,13 @@
 #include <gtkmm.h>
 #include <vector>
 #include <iostream>
+#include <libintl.h>
 #include "settings.h"
 #include "../config.h"
+
+#define _(String) gettext (String)
+#define gettext_noop(String) String
+#define N_(String) gettext_noop (String)
 
 using namespace SigC;
 using namespace std;

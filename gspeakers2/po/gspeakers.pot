@@ -1,0 +1,1253 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-01-12 15:22+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/box.cc:44
+msgid "Box: box node not found"
+msgstr ""
+
+#: src/box.cc:72
+msgid "Box"
+msgstr ""
+
+#: src/box.cc:73
+msgid "Id:        "
+msgstr ""
+
+#: src/box.cc:74
+msgid "Id-string: "
+msgstr ""
+
+#: src/box.cc:75
+msgid "Type:      "
+msgstr ""
+
+#: src/box.cc:76
+msgid "Vb1:       "
+msgstr ""
+
+#: src/box.cc:77
+msgid "Fb1:       "
+msgstr ""
+
+#: src/box.cc:141
+msgid "Box: id_string node not found"
+msgstr ""
+
+#: src/box.cc:155
+msgid "Box: type node not found"
+msgstr ""
+
+#: src/box.cc:169
+msgid "Box: vb1 node not found"
+msgstr ""
+
+#: src/box.cc:183
+msgid "Box: fb1 node not found"
+msgstr ""
+
+#: src/box.cc:197
+msgid "Box: vb2 node not found"
+msgstr ""
+
+#: src/box.cc:206
+msgid "Box: fb2 node not found"
+msgstr ""
+
+#: src/boxeditor.cc:35
+msgid "Enclosure editor"
+msgstr ""
+
+#: src/boxeditor.cc:62
+msgid "Woofer: "
+msgstr ""
+
+#: src/boxeditor.cc:65
+msgid "Qts: "
+msgstr ""
+
+#: src/boxeditor.cc:67
+msgid "Vas: "
+msgstr ""
+
+#: src/boxeditor.cc:70
+msgid "Fs: "
+msgstr ""
+
+#: src/boxeditor.cc:73
+msgid "Id string: "
+msgstr ""
+
+#: src/boxeditor.cc:75
+msgid "  Type: "
+msgstr ""
+
+#: src/boxeditor.cc:78
+msgid "Vb1: "
+msgstr ""
+
+#: src/boxeditor.cc:80
+msgid "  Fb1: "
+msgstr ""
+
+#: src/boxeditor.cc:94 src/boxhistory.cc:496 src/plothistory.cc:316
+msgid "Sealed"
+msgstr ""
+
+#: src/boxeditor.cc:95 src/boxhistory.cc:499 src/plothistory.cc:319
+msgid "Ported"
+msgstr ""
+
+#: src/boxhistory.cc:28
+msgid "Enclosure list"
+msgstr ""
+
+#: src/boxhistory.cc:47 src/boxhistory.cc:167 src/boxhistory.cc:334
+msgid "Enclosure list ["
+msgstr ""
+
+#: src/boxhistory.cc:110
+msgid "Open box xml"
+msgstr ""
+
+#: src/boxhistory.cc:122
+msgid "Append box xml"
+msgstr ""
+
+#: src/boxhistory.cc:248 src/boxhistory.cc:275
+msgid "Box: "
+msgstr ""
+
+#: src/boxhistory.cc:297
+msgid "Enclosure list [new file]"
+msgstr ""
+
+#: src/boxhistory.cc:319
+msgid "Save box xml as"
+msgstr ""
+
+#: src/boxhistory.cc:436 src/crossoverhistory.cc:462 src/plothistory.cc:241
+#: src/speakereditor.cc:930
+msgid "Identifier"
+msgstr ""
+
+#: src/boxhistory.cc:444 src/crossoverhistory.cc:472 src/plothistory.cc:267
+#: src/speakereditor.cc:939
+msgid "Type"
+msgstr ""
+
+#: src/boxhistory.cc:453 src/plothistory.cc:276
+msgid "Vb1"
+msgstr ""
+
+#: src/boxhistory.cc:462 src/plothistory.cc:285
+msgid "Fb1"
+msgstr ""
+
+#: src/boxhistory.cc:502 src/plothistory.cc:322 src/speakereditor.cc:1097
+msgid "Unknown"
+msgstr ""
+
+#: src/boxlist.cc:50
+msgid "BoxList: boxlist node not found"
+msgstr ""
+
+#: src/boxlist.cc:53
+msgid "BoxList: Xml file not found"
+msgstr ""
+
+#: src/boxlist.cc:78
+msgid "BoxList: Could not save to "
+msgstr ""
+
+#: src/crossover.cc:62
+msgid "Crossover: crossover node expected"
+msgstr ""
+
+#: src/crossover.cc:77
+msgid "Crossover: type node expected"
+msgstr ""
+
+#: src/crossover.cc:109
+msgid "Crossover: id_string node expected"
+msgstr ""
+
+#: src/crossover.cc:140
+msgid "Crossover type:"
+msgstr ""
+
+#: src/crossoverhistory.cc:30
+msgid "Crossover list"
+msgstr ""
+
+#: src/crossoverhistory.cc:46 src/crossoverhistory.cc:175
+msgid "Crossover list ["
+msgstr ""
+
+#: src/crossoverhistory.cc:115
+msgid "Open crossover xml"
+msgstr ""
+
+#: src/crossoverhistory.cc:127
+msgid "Append crossover xml"
+msgstr ""
+
+#: src/crossoverhistory.cc:263 src/crossoverhistory.cc:325
+msgid "Crossover: "
+msgstr ""
+
+#: src/crossoverhistory.cc:295
+msgid "Crossover "
+msgstr ""
+
+#: src/crossoverhistory.cc:350
+msgid "Crossover list [new file]"
+msgstr ""
+
+#: src/crossoverhistory.cc:378
+msgid "Save crossover xml as"
+msgstr ""
+
+#: src/crossoverhistory.cc:391
+msgid "save as ok"
+msgstr ""
+
+#: src/crossoverhistory.cc:486
+msgid "lowpass"
+msgstr ""
+
+#: src/crossoverhistory.cc:490
+msgid ", subsonic"
+msgstr ""
+
+#: src/crossoverhistory.cc:492
+msgid "subsonic"
+msgstr ""
+
+#: src/crossoverhistory.cc:497
+msgid ", highpass"
+msgstr ""
+
+#: src/crossoverhistory.cc:499
+msgid "highpass"
+msgstr ""
+
+#: src/crossoverhistory.cc:504
+msgid ", 2-way"
+msgstr ""
+
+#: src/crossoverhistory.cc:506
+msgid "2-way"
+msgstr ""
+
+#: src/crossoverhistory.cc:511
+msgid ", 3-way"
+msgstr ""
+
+#: src/crossoverhistory.cc:513
+msgid "3-way"
+msgstr ""
+
+#: src/crossoverhistory.cc:518
+msgid ", 4-way"
+msgstr ""
+
+#: src/crossoverhistory.cc:520
+msgid "4-way"
+msgstr ""
+
+#: src/crossoverlist.cc:47
+msgid "CrossoverList: crossoverlist node not found"
+msgstr ""
+
+#: src/crossoverlist.cc:50
+msgid "CrossoverList: Xml file not found"
+msgstr ""
+
+#: src/crossoverlist.cc:80
+msgid "CrossoverList: Could not save to "
+msgstr ""
+
+#: src/crossoverpaned.cc:36
+msgid "Crossover freq resp"
+msgstr ""
+
+#: src/crossoverpaned.cc:37
+msgid "Total crossover freq resp"
+msgstr ""
+
+#: src/crossoverpaned.cc:38
+msgid "Total freq resp"
+msgstr ""
+
+#. New crossover submenu
+#. sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"),
+#.                  slot(*this, &CrossoverHistory::on_new) ) );
+#. sub_menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+#: src/crossoverpaned.cc:78 src/crossoverpaned.cc:84
+msgid "New _highpass crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:81
+msgid "New _subsonic crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:87
+msgid "New _2-way crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:90
+msgid "New 2._5-way crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:93
+msgid "New _3-way crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:96
+msgid "New _4-way crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:99
+msgid "_New Crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:101 src/enclosurepaned.cc:82
+msgid "New _Copy"
+msgstr ""
+
+#: src/crossoverpaned.cc:104
+msgid "New Crossover _Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:106
+msgid "Append Crossover _Xml.."
+msgstr ""
+
+#: src/crossoverpaned.cc:108 src/speakereditor.cc:212
+msgid "_Open Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:110 src/enclosurepaned.cc:91 src/speakereditor.cc:214
+msgid "_Save Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:112 src/enclosurepaned.cc:93
+msgid "Save Xml _As"
+msgstr ""
+
+#: src/crossoverpaned.cc:115
+msgid "_Delete Crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:118
+msgid "_Plot Crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:136 src/enclosurepaned.cc:121
+msgid "New Copy"
+msgstr ""
+
+#: src/crossoverpaned.cc:137
+msgid "Create new crossover copy"
+msgstr ""
+
+#: src/crossoverpaned.cc:139 src/enclosurepaned.cc:124
+#: src/speakereditor.cc:234
+msgid "New Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:140
+msgid "Create new crossover xml (list)"
+msgstr ""
+
+#: src/crossoverpaned.cc:141 src/enclosurepaned.cc:126
+#: src/speakereditor.cc:236
+msgid "Open Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:142
+msgid "Open crossover xml (list)"
+msgstr ""
+
+#: src/crossoverpaned.cc:143 src/enclosurepaned.cc:128
+#: src/speakereditor.cc:238
+msgid "Save Xml"
+msgstr ""
+
+#: src/crossoverpaned.cc:144
+msgid "Save crossover xml (list)"
+msgstr ""
+
+#: src/crossoverpaned.cc:146
+msgid "Delete Crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:147
+msgid "Delete currently selected crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:149
+msgid "Plot Crossover"
+msgstr ""
+
+#: src/crossoverpaned.cc:150
+msgid "Plot frequency response for currently selected crossover"
+msgstr ""
+
+#: src/crossovertreeview.cc:26
+msgid "Currently selected crossover"
+msgstr ""
+
+#: src/crossovertreeview.cc:200
+msgid "Impedace correction"
+msgstr ""
+
+#: src/crossovertreeview.cc:205
+msgid "Damping network"
+msgstr ""
+
+#: src/crossovertreeview.cc:220 src/crossovertreeview.cc:233
+#: src/crossovertreeview.cc:292 src/filterlinkframe.cc:109
+msgid "Lowpass"
+msgstr ""
+
+#. If this is the filter parts node
+#: src/crossovertreeview.cc:227 src/crossovertreeview.cc:239
+#: src/crossovertreeview.cc:292 src/filterlinkframe.cc:69
+msgid "Highpass"
+msgstr ""
+
+#: src/crossovertreeview.cc:229
+msgid "Filter"
+msgstr ""
+
+#: src/crossovertreeview.cc:236
+msgid "Bandpass"
+msgstr ""
+
+#: src/crossovertreeview.cc:242
+msgid "Other"
+msgstr ""
+
+#: src/crossovertreeview.cc:338
+msgid "Id_string"
+msgstr ""
+
+#. col_cnt = m_TreeView.append_column(_("Value"), *pRenderer);
+#: src/crossovertreeview.cc:383
+msgid "Value"
+msgstr ""
+
+#: src/crossovertreeview.cc:401
+msgid "Unit"
+msgstr ""
+
+#: src/crossoverwizard.cc:21
+msgid "Crossover wizard"
+msgstr ""
+
+#: src/crossoverwizard.cc:67 src/crossoverwizard.cc:89
+msgid "Woofer/midrange filter"
+msgstr ""
+
+#: src/crossoverwizard.cc:70 src/crossoverwizard.cc:81
+#: src/crossoverwizard.cc:92
+msgid "Tweeter filter"
+msgstr ""
+
+#: src/crossoverwizard.cc:75 src/crossoverwizard.cc:86
+msgid "Woofer filter"
+msgstr ""
+
+#: src/crossoverwizard.cc:78
+msgid "Midrange filter"
+msgstr ""
+
+#. FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), _("filter"), m_speaker_list));
+#: src/crossoverwizard.cc:97
+msgid "filter"
+msgstr ""
+
+#.  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
+#: src/driverfreqrespplot.cc:31 src/gspeakersboxplot.cc:31
+#: src/gspeakersfilterplot.cc:33 src/summedfreqrespplot.cc:34
+#: src/totalfilterplot.cc:36
+msgid "Magnitude / dB"
+msgstr ""
+
+#: src/driverfreqrespplot.cc:32
+msgid "Impedance / Ohm"
+msgstr ""
+
+#: src/enclosurepaned.cc:80
+msgid "_New Enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:85
+msgid "N_ew Enclosure Xml"
+msgstr ""
+
+#: src/enclosurepaned.cc:87
+msgid "A_ppend Enclosure Xml..."
+msgstr ""
+
+#: src/enclosurepaned.cc:89
+msgid "_Open Xml..."
+msgstr ""
+
+#: src/enclosurepaned.cc:96
+msgid "_Delete Enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:99
+msgid "Append To _Xml"
+msgstr ""
+
+#: src/enclosurepaned.cc:100
+msgid "_Plot"
+msgstr ""
+
+#: src/enclosurepaned.cc:101
+msgid "_Optimize Enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:104 src/enclosurepaned.cc:139
+msgid "Delete Plot"
+msgstr ""
+
+#: src/enclosurepaned.cc:119
+msgid "New Enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:120
+msgid "Create new enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:122
+msgid "Copy currently selected enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:125
+msgid "Create new enclosure xml (list)"
+msgstr ""
+
+#: src/enclosurepaned.cc:127
+msgid "Open enclosure xml (list)"
+msgstr ""
+
+#: src/enclosurepaned.cc:129
+msgid "Save enclosure xml (list)"
+msgstr ""
+
+#: src/enclosurepaned.cc:131
+msgid "Delete Enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:132
+msgid "Delete selected enclosure"
+msgstr ""
+
+#: src/enclosurepaned.cc:134
+msgid "Optimize"
+msgstr ""
+
+#: src/enclosurepaned.cc:135
+msgid "Optimize enclosure volume"
+msgstr ""
+
+#: src/enclosurepaned.cc:136 src/plothistory.cc:233
+msgid "Plot"
+msgstr ""
+
+#: src/enclosurepaned.cc:137
+msgid "Append to enclosure list (xml) and plot"
+msgstr ""
+
+#: src/enclosurepaned.cc:140
+msgid "Delete selected plot from plotlist"
+msgstr ""
+
+#: src/filterlinkframe.cc:34
+msgid "Invert polarity"
+msgstr ""
+
+#: src/filterlinkframe.cc:36
+msgid "Impedance correction"
+msgstr ""
+
+#: src/filterlinkframe.cc:37
+msgid "Use adv. driver imp. model"
+msgstr ""
+
+#: src/filterlinkframe.cc:94 src/filterlinkframe.cc:134
+msgid "Order: "
+msgstr ""
+
+#: src/filterlinkframe.cc:98 src/filterlinkframe.cc:138
+msgid "Cutoff: "
+msgstr ""
+
+#: src/filterlinkframe.cc:141
+msgid "Hz"
+msgstr ""
+
+#: src/filterlinkframe.cc:158
+msgid "Damping: "
+msgstr ""
+
+#: src/filterlinkframe.cc:600
+msgid "FilterLinkFrame::on_plot_crossover: ERROR: "
+msgstr ""
+
+#: src/freqrespeditor.cc:33
+msgid ""
+"Enter the freq response dB magnitude, this is not intended to provide an "
+"exact estimation of the total frequency response."
+msgstr ""
+
+#: src/freqrespeditor.cc:126
+msgid "Could not open file: "
+msgstr ""
+
+#: src/freqrespeditor.cc:139 src/speakereditor.cc:866
+msgid "Enter filename..."
+msgstr ""
+
+#: src/main.cc:51 src/main.cc:54
+msgid "No configuration file found!"
+msgstr ""
+
+#: src/main.cc:51
+msgid "gspeakers2.conf created in current directory"
+msgstr ""
+
+#. Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm)
+#. BoxEditor be;
+#. BoxHistory bh;
+#. Plot history will always be empty at startup for now
+#. PlotHistory ph;
+#. GSpeakersBoxPlot gsbp;
+#: src/main.cc:81
+msgid "Testing gettext"
+msgstr ""
+
+#: src/mainwindow.cc:87
+msgid "About..."
+msgstr ""
+
+#: src/mainwindow.cc:90
+msgid "_File"
+msgstr ""
+
+#: src/mainwindow.cc:91
+msgid "_Edit"
+msgstr ""
+
+#: src/mainwindow.cc:92
+msgid "_Drivers"
+msgstr ""
+
+#: src/mainwindow.cc:93
+msgid "E_nclosure"
+msgstr ""
+
+#: src/mainwindow.cc:94
+msgid "_Crossover"
+msgstr ""
+
+#: src/mainwindow.cc:95
+msgid "_Help"
+msgstr ""
+
+#: src/net.cc:117
+msgid "Net: net node expected"
+msgstr ""
+
+#: src/net.cc:131
+msgid "Net: type node expected"
+msgstr ""
+
+#: src/net.cc:145
+msgid "Net: lowpass_order node expected"
+msgstr ""
+
+#: src/net.cc:159
+msgid "Net: highpass_order node expected"
+msgstr ""
+
+#: src/net.cc:177
+msgid "Net: has_imp_corr node expected"
+msgstr ""
+
+#: src/net.cc:195
+msgid "Net: has_damp node expected"
+msgstr ""
+
+#: src/net.cc:213
+msgid "Net: has_res node expected"
+msgstr ""
+
+#: src/net.cc:291
+msgid "Net: parts node expected"
+msgstr ""
+
+#: src/net.cc:305
+msgid "Net::parse_lowpass_family: lowpass_family node expected"
+msgstr ""
+
+#: src/net.cc:319
+msgid "Net::parse_highpass_family: highpass_family node expected"
+msgstr ""
+
+#: src/net.cc:333
+msgid "Net::parse_speaker: speaker node expected"
+msgstr ""
+
+#: src/net.cc:347
+msgid "Net::parse_adv_imp_model: adv_imp_model node expected"
+msgstr ""
+
+#: src/net.cc:356
+msgid "Net::parse_inv_pol: inv_pol node expected"
+msgstr ""
+
+#: src/net.cc:584
+msgid "***Net*** ******"
+msgstr ""
+
+#: src/net.cc:585
+msgid "Id:       "
+msgstr ""
+
+#: src/net.cc:586
+msgid "Type:     "
+msgstr ""
+
+#: src/net.cc:587
+msgid "Highpass #"
+msgstr ""
+
+#: src/net.cc:588
+msgid "Lowpass  #"
+msgstr ""
+
+#: src/net.cc:589
+msgid "Has imp corr: "
+msgstr ""
+
+#: src/net.cc:590
+msgid "Has damping : "
+msgstr ""
+
+#: src/net.cc:591
+msgid "Has resonanse circuit: "
+msgstr ""
+
+#: src/net.cc:592
+msgid "Parts:"
+msgstr ""
+
+#: src/net.cc:601
+msgid "********* ******"
+msgstr ""
+
+#: src/part.cc:45
+msgid "Part: part node not found"
+msgstr ""
+
+#: src/part.cc:59
+msgid "Part: type node not found"
+msgstr ""
+
+#: src/part.cc:73
+msgid "Part: value node not found"
+msgstr ""
+
+#: src/part.cc:83
+msgid "Part: unit node not found"
+msgstr ""
+
+#: src/part.cc:152
+msgid "***Part***"
+msgstr ""
+
+#: src/part.cc:153
+msgid "Id   : "
+msgstr ""
+
+#: src/part.cc:154
+msgid "Type : "
+msgstr ""
+
+#: src/part.cc:155
+msgid "Value: "
+msgstr ""
+
+#: src/part.cc:156
+msgid "Unit : "
+msgstr ""
+
+#: src/plothistory.cc:221
+msgid "Color"
+msgstr ""
+
+#: src/plothistory.cc:249
+msgid "Speaker"
+msgstr ""
+
+#: src/settings.cc:51
+msgid "Settings::load: Could not open file for reading: "
+msgstr ""
+
+#: src/settings.cc:80 src/settings.cc:125
+msgid "Settings::save: Could not open temporary settings file to save to: "
+msgstr ""
+
+#: src/settings.cc:92 src/settings.cc:137
+msgid "Settings::save: Failed writing to temporary file: "
+msgstr ""
+
+#: src/settings.cc:106 src/settings.cc:151
+msgid "Settings::save: Failed renaming temporary file to replace old file: "
+msgstr ""
+
+#: src/settingsdialog.cc:24
+msgid "GSpeakers settings..."
+msgstr ""
+
+#: src/settingsdialog.cc:26
+msgid "Browse..."
+msgstr ""
+
+#: src/settingsdialog.cc:27
+msgid "Automaticly update crossover plots when a parameter has changed"
+msgstr ""
+
+#: src/settingsdialog.cc:28
+msgid "Draw driver impedance plot"
+msgstr ""
+
+#: src/settingsdialog.cc:29
+msgid "Draw driver frequency response plot"
+msgstr ""
+
+#: src/settingsdialog.cc:30
+msgid "Disable filter amplification"
+msgstr ""
+
+#: src/settingsdialog.cc:31
+msgid "Save main window size"
+msgstr ""
+
+#: src/settingsdialog.cc:32
+msgid "Save main window position"
+msgstr ""
+
+#: src/settingsdialog.cc:49
+msgid "General"
+msgstr ""
+
+#: src/settingsdialog.cc:54
+msgid "Icons only"
+msgstr ""
+
+#: src/settingsdialog.cc:55
+msgid "Text only"
+msgstr ""
+
+#: src/settingsdialog.cc:56
+msgid "Text and icons"
+msgstr ""
+
+#: src/settingsdialog.cc:57
+msgid "Text and icons (horz)"
+msgstr ""
+
+#: src/settingsdialog.cc:60
+msgid "Toolbar style: "
+msgstr ""
+
+#: src/settingsdialog.cc:62
+msgid "Toolbars"
+msgstr ""
+
+#: src/settingsdialog.cc:66
+msgid "Full path to SPICE executable: "
+msgstr ""
+
+#: src/settingsdialog.cc:71
+msgid "SPICE"
+msgstr ""
+
+#: src/settingsdialog.cc:77
+msgid "Drivers"
+msgstr ""
+
+#: src/settingsdialog.cc:83
+msgid "Crossovers"
+msgstr ""
+
+#: src/settingsdialog.cc:140
+msgid "Select SPICE executable..."
+msgstr ""
+
+#: src/speaker.cc:58
+msgid "Speaker: speaker node not found"
+msgstr ""
+
+#: src/speaker.cc:128
+msgid "Id:   "
+msgstr ""
+
+#: src/speaker.cc:129
+msgid "Type: "
+msgstr ""
+
+#: src/speaker.cc:130
+msgid "Qts:  "
+msgstr ""
+
+#: src/speaker.cc:131
+msgid "Vas:  "
+msgstr ""
+
+#: src/speaker.cc:132
+msgid "Fs:   "
+msgstr ""
+
+#: src/speaker.cc:336
+msgid "Speaker: id_string node not found"
+msgstr ""
+
+#: src/speaker.cc:352
+msgid "Speaker: type node not found"
+msgstr ""
+
+#: src/speaker.cc:367
+msgid "Speaker: qts node not found"
+msgstr ""
+
+#: src/speaker.cc:382
+msgid "Speaker: vas node not found"
+msgstr ""
+
+#: src/speaker.cc:397
+msgid "Speaker: fs node not found"
+msgstr ""
+
+#: src/speaker.cc:412
+msgid "Speaker: rdc node not found"
+msgstr ""
+
+#: src/speaker.cc:427
+msgid "Speaker: lvc node not found"
+msgstr ""
+
+#: src/speaker.cc:442
+msgid "Speaker: qms node not found"
+msgstr ""
+
+#: src/speaker.cc:457
+msgid "Speaker: qes node not found"
+msgstr ""
+
+#: src/speaker.cc:472
+msgid "Speaker: imp node not found"
+msgstr ""
+
+#: src/speaker.cc:487
+msgid "Speaker: sens node not found"
+msgstr ""
+
+#: src/speaker.cc:501
+msgid "Speaker: freq_resp_filename node not found"
+msgstr ""
+
+#: src/speaker.cc:515
+msgid "Speaker: imp_resp_filename node not found"
+msgstr ""
+
+#: src/speaker.cc:529 src/speaker.cc:580
+msgid "Speaker: mmd node not found"
+msgstr ""
+
+#: src/speaker.cc:543
+msgid "Speaker: ad node not found"
+msgstr ""
+
+#: src/speaker.cc:557
+msgid "Speaker: bl node not found"
+msgstr ""
+
+#: src/speaker.cc:571
+msgid "Speaker: rms node not found"
+msgstr ""
+
+#: src/speakereditor.cc:34
+msgid "Edit..."
+msgstr ""
+
+#: src/speakereditor.cc:35
+msgid "..."
+msgstr ""
+
+#: src/speakereditor.cc:36
+msgid "Bass"
+msgstr ""
+
+#: src/speakereditor.cc:37 src/speakereditor.cc:1086
+msgid "Midrange"
+msgstr ""
+
+#: src/speakereditor.cc:38 src/speakereditor.cc:1093
+msgid "Tweeter"
+msgstr ""
+
+#: src/speakereditor.cc:71
+msgid "Currently selected driver"
+msgstr ""
+
+#. All the entries and stuff
+#: src/speakereditor.cc:78
+msgid "Speaker name:"
+msgstr ""
+
+#: src/speakereditor.cc:80
+msgid "Qts:"
+msgstr ""
+
+#: src/speakereditor.cc:82
+msgid "Fs: (Hz)"
+msgstr ""
+
+#: src/speakereditor.cc:84
+msgid "Vas: (l)"
+msgstr ""
+
+#: src/speakereditor.cc:86
+msgid "Rdc: (Ohm)"
+msgstr ""
+
+#: src/speakereditor.cc:88
+msgid "Lvc: (mH)"
+msgstr ""
+
+#: src/speakereditor.cc:90
+msgid "Qms:"
+msgstr ""
+
+#: src/speakereditor.cc:92
+msgid "Qes:"
+msgstr ""
+
+#: src/speakereditor.cc:94
+msgid "Impedance: (Ohm)"
+msgstr ""
+
+#: src/speakereditor.cc:96
+msgid "Sensitivity: (dB/W/m)"
+msgstr ""
+
+#: src/speakereditor.cc:99
+msgid "Cone mass: (kg)"
+msgstr ""
+
+#: src/speakereditor.cc:101
+msgid "Effective radius: (m)"
+msgstr ""
+
+#: src/speakereditor.cc:103
+msgid "Force factor: (N/A)"
+msgstr ""
+
+#: src/speakereditor.cc:105
+msgid "Susp. resistance: (Ns/m)"
+msgstr ""
+
+#: src/speakereditor.cc:107
+msgid "Susp. compleance: (m/N)"
+msgstr ""
+
+#: src/speakereditor.cc:114
+msgid "Freq resp file:"
+msgstr ""
+
+#: src/speakereditor.cc:205
+msgid "_New Driver"
+msgstr ""
+
+#: src/speakereditor.cc:208
+msgid "N_ew Xml"
+msgstr ""
+
+#: src/speakereditor.cc:210
+msgid "A_ppend Xml..."
+msgstr ""
+
+#: src/speakereditor.cc:216
+msgid "Save Xml _As..."
+msgstr ""
+
+#: src/speakereditor.cc:219 src/speakereditor.cc:241
+msgid "Delete Driver"
+msgstr ""
+
+#: src/speakereditor.cc:231
+msgid "New Driver"
+msgstr ""
+
+#: src/speakereditor.cc:232
+msgid "Create new driver"
+msgstr ""
+
+#: src/speakereditor.cc:235
+msgid "Create new driver xml (list)"
+msgstr ""
+
+#: src/speakereditor.cc:237
+msgid "Open driver xml (list)"
+msgstr ""
+
+#: src/speakereditor.cc:239
+msgid "Save driver xml (list)"
+msgstr ""
+
+#: src/speakereditor.cc:242
+msgid "Delete selected driver"
+msgstr ""
+
+#: src/speakereditor.cc:304
+msgid "New Speaker"
+msgstr ""
+
+#: src/speakereditor.cc:387 src/speakereditor.cc:391
+msgid "Save speaker xml as"
+msgstr ""
+
+#: src/speakereditor.cc:737 src/speakereditor.cc:741
+msgid "Append speaker xml"
+msgstr ""
+
+#. Fix some initstuff since we don't have any settings
+#: src/speakereditor.cc:750 src/speakereditor.cc:755
+#: src/speakerlistselector.cc:53 src/speakerlistselector.cc:75
+msgid "Open speaker xml"
+msgstr ""
+
+#: src/speakereditor.cc:948
+msgid "Qts"
+msgstr ""
+
+#: src/speakereditor.cc:957
+msgid "Fs"
+msgstr ""
+
+#: src/speakereditor.cc:966
+msgid "Vas"
+msgstr ""
+
+#: src/speakereditor.cc:976
+msgid "Rdc"
+msgstr ""
+
+#: src/speakereditor.cc:985
+msgid "Lvc"
+msgstr ""
+
+#: src/speakereditor.cc:994
+msgid "Qms"
+msgstr ""
+
+#: src/speakereditor.cc:1003
+msgid "Qes"
+msgstr ""
+
+#: src/speakereditor.cc:1012
+msgid "Impedance"
+msgstr ""
+
+#: src/speakereditor.cc:1021
+msgid "Sensitivity"
+msgstr ""
+
+#: src/speakereditor.cc:1030
+msgid "Cone mass"
+msgstr ""
+
+#: src/speakereditor.cc:1039
+msgid "Active radius"
+msgstr ""
+
+#: src/speakereditor.cc:1048
+msgid "Force factor"
+msgstr ""
+
+#: src/speakereditor.cc:1057
+msgid "Susp. resistance"
+msgstr ""
+
+#: src/speakereditor.cc:1066
+msgid "Susp. compliance"
+msgstr ""
+
+#: src/speakereditor.cc:1080
+msgid "Woofer"
+msgstr ""
+
+#: src/speakereditor.cc:1084
+msgid ", Midrange"
+msgstr ""
+
+#: src/speakereditor.cc:1091
+msgid ", Tweeter"
+msgstr ""
+
+#: src/speakerlist.cc:48
+msgid "SpeakerList: speakerlist node not found"
+msgstr ""
+
+#: src/speakerlist.cc:51
+msgid "SpeakerList: Xml file not found"
+msgstr ""
+
+#: src/speakerlist.cc:81
+msgid "SpeakerList: Could not save to "
+msgstr ""
+
+#: src/speakerlist.cc:88
+msgid "Speaker List"
+msgstr ""
+
+#: src/speakerlistselector.cc:24
+msgid "Speaker list xml"
+msgstr ""
+
+#: src/speakerlistselector.cc:26
+msgid "Open.."
+msgstr ""
+
+#: src/speakerlistselector.cc:27
+msgid "Edit speakers..."
+msgstr ""
+
+#: src/speakerlistselector.cc:30
+msgid "Speaker xml: "
+msgstr ""
+
+#: src/summedfreqrespplot.cc:72
+msgid "Could not open "
+msgstr ""

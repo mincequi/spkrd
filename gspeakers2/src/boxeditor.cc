@@ -32,7 +32,7 @@
 #define FB2_ENTRY_CHANGED       6
 
 BoxEditor::BoxEditor() :
-  Gtk::Frame("Enclosure editor"),
+  Gtk::Frame(_("Enclosure editor")),
   m_table(5, 5, true),
   m_vbox(),
   m_hbox(),
@@ -59,25 +59,25 @@ BoxEditor::BoxEditor() :
   m_id_string_entry.set_width_chars(10);
   
   m_table.set_spacings(4);
-  m_table.attach(*manage(new Gtk::Label("Woofer: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  m_table.attach(*manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
   
-  m_table.attach(*manage(new Gtk::Label("Qts: ", Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
+  m_table.attach(*manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
   m_table.attach(m_speaker_qts_entry, 1, 2, 1, 2);   
-  m_table.attach(*manage(new Gtk::Label("Vas: ", Gtk::ALIGN_RIGHT)), 3, 4, 1, 2);
+  m_table.attach(*manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_RIGHT)), 3, 4, 1, 2);
   m_table.attach(m_speaker_vas_entry, 4, 5, 1, 2);   
   
-  m_table.attach(*manage(new Gtk::Label("Fs: ", Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
+  m_table.attach(*manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
   m_table.attach(m_speaker_fs_entry, 1, 2, 2, 3);      
 
-  m_table.attach(*manage(new Gtk::Label("Id string: ", Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
+  m_table.attach(*manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
   m_table.attach(m_id_string_entry, 1, 3, 3, 4);
-  m_table.attach(*manage(new Gtk::Label("  Type: ", Gtk::ALIGN_RIGHT)), 3, 4, 3, 4);
+  m_table.attach(*manage(new Gtk::Label(_("  Type: "), Gtk::ALIGN_RIGHT)), 3, 4, 3, 4);
   m_table.attach(m_box_type_optionmenu, 4, 5, 3, 4);
   
-  m_table.attach(*manage(new Gtk::Label("Vb1: ", Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
+  m_table.attach(*manage(new Gtk::Label(_("Vb1: "), Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
   m_table.attach(m_vb1_entry, 1, 2, 4, 5);
-  m_table.attach(*manage(new Gtk::Label("  Fb1: ", Gtk::ALIGN_RIGHT)), 2, 3, 4, 5);
+  m_table.attach(*manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_RIGHT)), 2, 3, 4, 5);
   m_table.attach(m_fb1_entry, 3, 4, 4, 5);
   
   m_bass_speaker_combo.get_entry()->set_editable(false);
@@ -91,8 +91,8 @@ BoxEditor::BoxEditor() :
   
   /* Setup option menu */
   Gtk::Menu::MenuList& menulist = m_option_menu.items();
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Sealed", bind<int>(slot(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED) ) ); 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Ported", bind<int>(slot(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED) ) );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Sealed"), bind<int>(slot(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED) ) ); 
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Ported"), bind<int>(slot(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED) ) );
   m_box_type_optionmenu.set_menu(m_option_menu);
   
   signal_box_selected.connect(slot(*this, &BoxEditor::on_box_selected));

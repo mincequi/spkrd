@@ -21,13 +21,13 @@
 #include "../config.h"
 
 SpeakerListSelector::SpeakerListSelector() : 
-  Gtk::Frame("Speaker list xml"), 
+  Gtk::Frame(_("Speaker list xml")), 
   m_SpeakerXmlFilenameEntry(),
-  m_OpenButton("Open.."), 
-  m_EditButton("Edit speakers..."), 
+  m_OpenButton(_("Open..")), 
+  m_EditButton(_("Edit speakers...")), 
   m_Table(1, 4, false)
 {
-  Gtk::Label *l = manage(new Gtk::Label("Speaker xml: "));
+  Gtk::Label *l = manage(new Gtk::Label(_("Speaker xml: ")));
   m_Table.attach(*l, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   m_Table.attach(m_SpeakerXmlFilenameEntry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   m_Table.attach(m_EditButton, 3, 4, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
@@ -50,7 +50,7 @@ SpeakerListSelector::SpeakerListSelector() :
   signal_speakerlist_loaded.connect(slot(*this, &SpeakerListSelector::on_speakerlist_loaded));
 
 /* Fix some initstuff since we don't have any settings */
-  f_open = new Gtk::FileSelection("Open speaker xml");
+  f_open = new Gtk::FileSelection(_("Open speaker xml"));
 
   g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
   f_open->set_filename(g_settings.getValueString("SpeakerListXml"));
@@ -72,12 +72,12 @@ void SpeakerListSelector::on_open()
   cout << "on open" << endl;
 #endif
   if (f_open == NULL) {
-    f_open = new Gtk::FileSelection("Open speaker xml");
+    f_open = new Gtk::FileSelection(_("Open speaker xml"));
     f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));
     f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
   } else {
     f_open->show();
-    //f_open->set_title("Open speaker xml");
+    //f_open->set_title(_("Open speaker xml"));
   }
   f_open->run();
 }

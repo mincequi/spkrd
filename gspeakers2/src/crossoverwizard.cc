@@ -18,7 +18,7 @@
 #include "crossoverwizard.h"
 
 CrossoverWizard::CrossoverWizard() :
-  Gtk::Frame("Crossover wizard"),
+  Gtk::Frame(_("Crossover wizard")),
   m_scrolled_window(),
   m_vbox(),
   m_outer_vbox()
@@ -64,37 +64,37 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
     /* The following code is here because we want pretty labels for what was each subfilter is there for */
     if (type == CROSSOVER_TYPE_TWOWAY) {
       if (index == 0) {
-        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "Woofer/midrange filter", m_speaker_list);
+        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), _("Woofer/midrange filter"), m_speaker_list);
         m_vbox.pack_start(*link1);
       } else {
-        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "Tweeter filter", m_speaker_list);
+        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list);
         m_vbox.pack_start(*link1);
       }
     } else if (type == CROSSOVER_TYPE_THREEWAY) {
       if (index == 0) {
-        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "Woofer filter", m_speaker_list);
+        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), _("Woofer filter"), m_speaker_list);
         m_vbox.pack_start(*link1);
       } else if (index == 1) {
-        FilterLinkFrame *link2 = new FilterLinkFrame(&(*iter), "Midrange filter", m_speaker_list);
+        FilterLinkFrame *link2 = new FilterLinkFrame(&(*iter), _("Midrange filter"), m_speaker_list);
          m_vbox.pack_start(*link2);
       } else {        
-        FilterLinkFrame *link3 = new FilterLinkFrame(&(*iter), "Tweeter filter", m_speaker_list);
+        FilterLinkFrame *link3 = new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list);
         m_vbox.pack_start(*link3);
       }
     } else if (type == (CROSSOVER_TYPE_TWOWAY | CROSSOVER_TYPE_LOWPASS)) {
       if (index == 0) {
-        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "Woofer filter", m_speaker_list);
+        FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), _("Woofer filter"), m_speaker_list);
         m_vbox.pack_start(*link1);
       } else if (index == 1) {
-        FilterLinkFrame *link2 = new FilterLinkFrame(&(*iter), "Woofer/midrange filter", m_speaker_list);
+        FilterLinkFrame *link2 = new FilterLinkFrame(&(*iter), _("Woofer/midrange filter"), m_speaker_list);
          m_vbox.pack_start(*link2);
       } else {        
-        FilterLinkFrame *link3 = new FilterLinkFrame(&(*iter), "Tweeter filter", m_speaker_list);
+        FilterLinkFrame *link3 = new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list);
         m_vbox.pack_start(*link3);
       }
     } else {
-      //FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", m_speaker_list));
-      FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), "filter", m_speaker_list);
+      //FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), _("filter"), m_speaker_list));
+      FilterLinkFrame *link1 = new FilterLinkFrame(&(*iter), _("filter"), m_speaker_list);
       m_vbox.pack_start(*link1);
     }
   }

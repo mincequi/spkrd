@@ -103,8 +103,13 @@ the structure in the program, some are important due to the UI experience.
 * Maybe a configurable (on/off) splash screen, since loading the program takes 
     a little while
 
-* GSpeakers should ask if you want to save changed upon quit
+* GSpeakers should ask if you want to save changes upon quit
 
 * Make GSpeakers work on 640x480
 
 * Tune GSpeakersPlot so that it works with default screen font
+
+* Drag'n'drop reorder listviews
+
+* Tree with woofer/midrange/tweeter in driver list, will make it easier if we 
+    we have a lot of drivers, this should be configurable

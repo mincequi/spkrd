@@ -31,7 +31,7 @@ SummedFreqRespPlot::SummedFreqRespPlot() :
 {
   add(plot);
   
-  plot.set_y_label("Magnitude / dB");
+  plot.set_y_label(_("Magnitude / dB"));
   show_all();
   m_color = new Gdk::Color("blue");
   
@@ -69,7 +69,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
         freq_resp_points.push_back(p);
       }
     } else {
-      cout << "Could not open " << s.get_freq_resp_filename() << endl;
+      cout << _("Could not open ") << s.get_freq_resp_filename() << endl;
       return -1;
     }
   } else {

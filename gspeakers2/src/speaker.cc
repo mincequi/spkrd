@@ -55,7 +55,7 @@ Speaker::Speaker(xmlNodePtr parent)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: speaker node not found");
+    throw GSpeakersException(_("Speaker: speaker node not found"));
   }
 }
   
@@ -125,11 +125,11 @@ xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
 ostream& operator<< (ostream& o, const Speaker& speaker)
 {
   o << speaker.m_id_string << endl <<
-       "Id:   " << speaker.m_id << endl <<
-       "Type: " << speaker.m_type << endl <<
-       "Qts:  " << speaker.m_qts << endl << 
-       "Vas:  " << speaker.m_vas << endl <<
-       "Fs:   " << speaker.m_fs << endl;
+       _("Id:   ") << speaker.m_id << endl <<
+       _("Type: ") << speaker.m_type << endl <<
+       _("Qts:  ") << speaker.m_qts << endl << 
+       _("Vas:  ") << speaker.m_vas << endl <<
+       _("Fs:   ") << speaker.m_fs << endl;
   return o;
 }
 
@@ -333,7 +333,7 @@ void Speaker::parse_id_string(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: id_string node not found");
+    throw GSpeakersException(_("Speaker: id_string node not found"));
   }
 
 }
@@ -349,7 +349,7 @@ void Speaker::parse_type(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: type node not found");
+    throw GSpeakersException(_("Speaker: type node not found"));
   }
   
 }
@@ -364,7 +364,7 @@ void Speaker::parse_qts(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: qts node not found");
+    throw GSpeakersException(_("Speaker: qts node not found"));
   }
 
 }
@@ -379,7 +379,7 @@ void Speaker::parse_vas(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: vas node not found");
+    throw GSpeakersException(_("Speaker: vas node not found"));
   }
 
 }
@@ -394,7 +394,7 @@ void Speaker::parse_fs(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: fs node not found");
+    throw GSpeakersException(_("Speaker: fs node not found"));
   }
 
 }
@@ -409,7 +409,7 @@ void Speaker::parse_rdc(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: rdc node not found");
+    throw GSpeakersException(_("Speaker: rdc node not found"));
   }
 
 }
@@ -424,7 +424,7 @@ void Speaker::parse_lcv(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: lvc node not found");
+    throw GSpeakersException(_("Speaker: lvc node not found"));
   }
 
 }
@@ -439,7 +439,7 @@ void Speaker::parse_qms(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: qms node not found");
+    throw GSpeakersException(_("Speaker: qms node not found"));
   }
 
 }
@@ -454,7 +454,7 @@ void Speaker::parse_qes(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: qes node not found");
+    throw GSpeakersException(_("Speaker: qes node not found"));
   }
 
 }
@@ -469,7 +469,7 @@ void Speaker::parse_imp(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: imp node not found");
+    throw GSpeakersException(_("Speaker: imp node not found"));
   }
 
 }
@@ -484,7 +484,7 @@ void Speaker::parse_sens(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: sens node not found");
+    throw GSpeakersException(_("Speaker: sens node not found"));
   }
 }
 
@@ -498,7 +498,7 @@ void Speaker::parse_freq_resp_filename(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: freq_resp_filename node not found");
+    throw GSpeakersException(_("Speaker: freq_resp_filename node not found"));
   }
 }
 
@@ -512,7 +512,7 @@ void Speaker::parse_imp_resp_filename(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: imp_resp_filename node not found");
+    throw GSpeakersException(_("Speaker: imp_resp_filename node not found"));
   }
 }
 
@@ -526,7 +526,7 @@ void Speaker::parse_mmd(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: mmd node not found");
+    throw GSpeakersException(_("Speaker: mmd node not found"));
   }
 }
 
@@ -540,7 +540,7 @@ void Speaker::parse_ad(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: ad node not found");
+    throw GSpeakersException(_("Speaker: ad node not found"));
   }
 }
 
@@ -554,7 +554,7 @@ void Speaker::parse_bl(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: bl node not found");
+    throw GSpeakersException(_("Speaker: bl node not found"));
   }
 }
 
@@ -568,7 +568,7 @@ void Speaker::parse_rms(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Speaker: rms node not found");
+    throw GSpeakersException(_("Speaker: rms node not found"));
   }
 }
 
@@ -577,6 +577,6 @@ void Speaker::parse_cms(xmlNodePtr node)
   if (( node != NULL ) && ( string( (char *)node->name) == string( "cms" ))) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_cms;
   } else {
-    throw GSpeakersException("Speaker: mmd node not found");
+    throw GSpeakersException(_("Speaker: mmd node not found"));
   }
 }

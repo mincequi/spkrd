@@ -25,7 +25,7 @@
 Signal1<void, bool> signal_enclosure_set_save_state;
 
 BoxHistory::BoxHistory() :
-  Gtk::Frame("Enclosure list")
+  Gtk::Frame(_("Enclosure list"))
 {
   m_vbox.set_border_width(8);
   add(m_vbox);
@@ -44,7 +44,7 @@ BoxHistory::BoxHistory() :
   cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << endl;
 #endif
   m_box_list = BoxList(m_filename); 
-  set_label("Enclosure list [" + m_filename + "]");
+  set_label(_("Enclosure list [") + m_filename + "]");
   
   create_model();
 
@@ -107,7 +107,7 @@ bool BoxHistory::on_delete_event(GdkEventAny *event)
 void BoxHistory::on_open_xml()
 {
   if (f_open == NULL) {
-    f_open = new Gtk::FileSelection("Open box xml");
+    f_open = new Gtk::FileSelection(_("Open box xml"));
     f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_open_ok), f_open));
     f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
   } else {
@@ -119,7 +119,7 @@ void BoxHistory::on_open_xml()
 void BoxHistory::on_append_xml()
 {
   if (f_append == NULL) {
-    f_append = new Gtk::FileSelection("Append box xml");
+    f_append = new Gtk::FileSelection(_("Append box xml"));
     f_append->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_append_ok), f_append));
     f_append->get_cancel_button()->signal_clicked().connect(slot(*f_append, &Gtk::Widget::hide));
   } else {
@@ -164,7 +164,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
   
     }
     signal_enclosure_set_save_state(false);
-    set_label("Enclosure list [" + m_filename + "]");
+    set_label(_("Enclosure list [") + m_filename + "]");
     g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -245,7 +245,7 @@ void BoxHistory::on_new_copy()
         string s = string(ctime(&t));
         int length = s.length();
         s[length-1] = '\0';
-        b.set_id_string("Box: " + s);
+        b.set_id_string(_("Box: ") + s);
         
         /* the usual adding of items to the liststore and data-container */
         liststore_add_item(b);
@@ -272,7 +272,7 @@ void BoxHistory::on_new()
   string s = string(ctime(&t));
   int length = s.length();
   s[length-1] = '\0';
-  b.set_id_string("Box: " + s);
+  b.set_id_string(_("Box: ") + s);
   
   
   liststore_add_item(b);
@@ -294,7 +294,7 @@ void BoxHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   signal_enclosure_set_save_state(true);
-  set_label("Enclosure list [new file]");
+  set_label(_("Enclosure list [new file]"));
 }
 
 void BoxHistory::on_save()
@@ -316,7 +316,7 @@ void BoxHistory::on_save()
 void BoxHistory::on_save_as()
 {
   if (f_save_as == NULL) {
-    f_save_as = new Gtk::FileSelection("Save box xml as");
+    f_save_as = new Gtk::FileSelection(_("Save box xml as"));
     f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_save_as_ok), f_save_as));
     f_save_as->get_cancel_button()->signal_clicked().connect(slot(*f_save_as, &Gtk::Widget::hide));
   } else {
@@ -331,7 +331,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
     m_box_list.to_xml(f->get_filename());
     f->hide();
     m_filename = f->get_filename();
-    set_label("Enclosure list [" + m_filename + "]");
+    set_label(_("Enclosure list [") + m_filename + "]");
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);
   } catch (GSpeakersException e) {
@@ -433,7 +433,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt =m_TreeView.append_column("Identifier", *pRenderer);
+    col_cnt =m_TreeView.append_column(_("Identifier"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
@@ -441,7 +441,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.append_column("Type", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Type"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
 
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
@@ -450,7 +450,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.append_column("Vb1", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Vb1"), *pRenderer);
     
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
@@ -459,7 +459,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.append_column("Fb1", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Fb1"), *pRenderer);
     
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
@@ -470,7 +470,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    int cols_count = m_TreeView.append_column("Vb2", *pRenderer);
+    int cols_count = m_TreeView.append_column(_("Vb2"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.vb2);
@@ -478,7 +478,7 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    int cols_count = m_TreeView.append_column("Fb2", *pRenderer);
+    int cols_count = m_TreeView.append_column(_("Fb2"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
@@ -493,13 +493,13 @@ void BoxHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeMod
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
     case BOX_TYPE_SEALED:
-      renderer.property_text() = "Sealed";
+      renderer.property_text() = _("Sealed");
       break;
     case BOX_TYPE_PORTED:
-       renderer.property_text()= "Ported";
+       renderer.property_text()= _("Ported");
       break;
     default:
-      renderer.property_text() = "Unknown";
+      renderer.property_text() = _("Unknown");
       break;
   }
 	renderer.property_xalign() = 1.0;

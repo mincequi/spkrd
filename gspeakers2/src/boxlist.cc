@@ -47,10 +47,10 @@ BoxList::BoxList(string filename)
         }
       }
     } else {
-      throw GSpeakersException("BoxList: boxlist node not found");
+      throw GSpeakersException(_("BoxList: boxlist node not found"));
     }
   } else {
-    throw GSpeakersException("BoxList: Xml file not found");
+    throw GSpeakersException(_("BoxList: Xml file not found"));
   }
 }
   
@@ -75,7 +75,7 @@ void BoxList::to_xml(string filename)
 
   /* Save xml file */
   if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw GSpeakersException("BoxList: Could not save to " + filename);
+    throw GSpeakersException(_("BoxList: Could not save to ") + filename);
   }
 }
 

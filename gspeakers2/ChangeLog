@@ -1,8 +1,17 @@
 GSpeakers ChangeLog
 
+2003-01-12
+
+* Added gettext support to most of GSpeakers, added a swedish translation
+
+2003-01-07
+
+* Verified that GSpeakers compiles with gtk+-2.2, gtkmm-2.2 and friends
+
 2003-01-04
 
-* Copied the actual file "depcomp" to source dir instead of a symlink
+* Copied the actual file "depcomp" to source dir instead of a symlink, now you 
+    don't need automake-1.6 to compile
 
 2003-01-03
 

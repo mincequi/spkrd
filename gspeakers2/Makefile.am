@@ -1,4 +1,4 @@
-SUBDIRS = src xml pixmaps #po
+SUBDIRS = src xml pixmaps po
 
 # Desktop entry
 desktopdir		= $(datadir)/gnome/apps/Utilities

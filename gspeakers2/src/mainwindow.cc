@@ -84,15 +84,15 @@ MainWindow::MainWindow()
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
-  	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("About...", GSpeakers::image_widget("stock_menu_about.png"), 
+  	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("About..."), GSpeakers::image_widget("stock_menu_about.png"), 
                                                          slot(*this, &MainWindow::on_about) ) );
   }
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", m_file_menu) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Edit", m_edit_menu) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Drivers", speaker_editor.get_menu() ) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("E_nclosure", enclosure_paned.get_menu() ) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", crossover_paned.get_menu()) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), m_file_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Edit"), m_edit_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Drivers"), speaker_editor.get_menu() ) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("E_nclosure"), enclosure_paned.get_menu() ) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Crossover"), crossover_paned.get_menu()) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Help"), m_help_menu) );
 
   /* Add the MenuBar to the window */
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);

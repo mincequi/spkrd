@@ -41,7 +41,7 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject()
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: box node not found");
+    throw GSpeakersException(_("Box: box node not found"));
   }
 }
   
@@ -69,12 +69,12 @@ xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
 
 ostream& operator<< (ostream& o, const Box& box)
 {
-  o << "***Box***" << endl <<
-       "Id:        " << box.m_id << endl <<
-       "Id-string: " << box.m_id_string << endl <<
-       "Type:      " << box.m_type << endl <<
-       "Vb1:       " << box.m_vb1 << endl <<
-       "Fb1:       " << box.m_fb1 << endl;
+  o << _("Box") << endl <<
+       _("Id:        ") << box.m_id << endl <<
+       _("Id-string: ") << box.m_id_string << endl <<
+       _("Type:      ") << box.m_type << endl <<
+       _("Vb1:       ") << box.m_vb1 << endl <<
+       _("Fb1:       ") << box.m_fb1 << endl;
   return o;
 }
 
@@ -138,7 +138,7 @@ void Box::parse_id_string(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: id_string node not found");
+    throw GSpeakersException(_("Box: id_string node not found"));
   }
 }
 
@@ -152,7 +152,7 @@ void Box::parse_type(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: type node not found");
+    throw GSpeakersException(_("Box: type node not found"));
   }
 }
 
@@ -166,7 +166,7 @@ void Box::parse_vb1(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: vb1 node not found");
+    throw GSpeakersException(_("Box: vb1 node not found"));
   }
 }
 
@@ -180,7 +180,7 @@ void Box::parse_fb1(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: fb1 node not found");
+    throw GSpeakersException(_("Box: fb1 node not found"));
   }
 }
 
@@ -194,7 +194,7 @@ void Box::parse_vb2(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Box: vb2 node not found");
+    throw GSpeakersException(_("Box: vb2 node not found"));
   }
 }
 
@@ -203,6 +203,6 @@ void Box::parse_fb2(xmlNodePtr node)
   if (( node != NULL ) && ( string( (char *)node->name) == string( "fb2" ))) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
   } else {
-    throw GSpeakersException("Box: fb2 node not found");
+    throw GSpeakersException(_("Box: fb2 node not found"));
   }
 }

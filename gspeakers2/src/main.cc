@@ -9,6 +9,14 @@
 
 int main (int argc, char *argv[])
 {
+  /* Initialize gettext */
+#if ENABLE_NLS
+  setlocale(LC_ALL, "");
+  bindtextdomain(PACKAGE, GNOMELOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain(PACKAGE);
+#endif
+
   Gtk::Main kit(argc, argv);
   //SpeakerList slist;
   //slist.speaker_list()->push_back(Speaker("Vifa P21WO-20-08"));
@@ -41,10 +49,10 @@ int main (int argc, char *argv[])
     cout << "Main: " << e.what() << endl;
 #endif
 #ifdef TARGET_WIN32
-    Gtk::MessageDialog md("No configuration file found!\n\ngspeakers2.conf created in current directory", 
+    Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") _("gspeakers2.conf created in current directory"), 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
 #else
-    Gtk::MessageDialog md("No configuration file found!\n\n" + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
+    Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n\n") + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
 #endif
     md.run();
@@ -71,7 +79,7 @@ int main (int argc, char *argv[])
 
   
   //GSpeakersBoxPlot gsbp;
-   
+  cout << _("Testing gettext") << endl;
   //SpeakerListSelector sls;
   MainWindow mw;
   //mw.show_all_children();

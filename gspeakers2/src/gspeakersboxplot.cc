@@ -28,7 +28,7 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() :
   signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
   signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
-  plot.set_y_label("Magnitude / dB");
+  plot.set_y_label(_("Magnitude / dB"));
   show_all();
 }
 

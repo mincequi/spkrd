@@ -28,8 +28,8 @@ DriverFreqRespPlot::DriverFreqRespPlot() :
 {
   add(plot);
   show_all();
-  plot.set_y_label("Magnitude / dB");
-  plot.set_y_label2("Impedance / Ohm");
+  plot.set_y_label(_("Magnitude / dB"));
+  plot.set_y_label2(_("Impedance / Ohm"));
 }
 
 DriverFreqRespPlot::~DriverFreqRespPlot()

@@ -23,7 +23,7 @@
 #include "common.h"
 
 CrossoverTreeView::CrossoverTreeView() :
-  Gtk::Frame("Currently selected crossover")
+  Gtk::Frame(_("Currently selected crossover"))
 {
   set_border_width(8);
 
@@ -197,12 +197,12 @@ void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
     if (n.get_has_imp_corr() == true) {
       imp_corr.push_back( CellItem_Crossover(n.get_imp_corr_C()) );
       imp_corr.push_back( CellItem_Crossover(n.get_imp_corr_R()) );
-      crossover_elements.push_back( CellItem_Crossover("Impedace correction", imp_corr) );
+      crossover_elements.push_back( CellItem_Crossover(_("Impedace correction"), imp_corr) );
     }
     if (n.get_has_damp() == true) {
       damp.push_back( CellItem_Crossover(n.get_damp_R1()) );
       damp.push_back( CellItem_Crossover(n.get_damp_R2()) );
-      crossover_elements.push_back( CellItem_Crossover("Damping network", damp) );
+      crossover_elements.push_back( CellItem_Crossover(_("Damping network"), damp) );
     }
 
     /* The rest of the parts */
@@ -217,29 +217,29 @@ void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
       {
         lowpass_filter.push_back( CellItem_Crossover(parts[counter]) );
       }
-      filter.push_back( CellItem_Crossover("Lowpass", lowpass_filter) );
+      filter.push_back( CellItem_Crossover(_("Lowpass"), lowpass_filter) );
     } 
     if (type & NET_TYPE_HIGHPASS) {
       for (; (unsigned)counter < parts.size(); counter++)
       {
         highpass_filter.push_back( CellItem_Crossover(parts[counter]) );
       }
-      filter.push_back( CellItem_Crossover("Highpass", highpass_filter) );
+      filter.push_back( CellItem_Crossover(_("Highpass"), highpass_filter) );
     }
-    crossover_elements.push_back( CellItem_Crossover("Filter", filter) );
+    crossover_elements.push_back( CellItem_Crossover(_("Filter"), filter) );
     
     switch (type) {
       case NET_TYPE_LOWPASS:
-        m_vecItems.push_back( CellItem_Crossover("Lowpass", crossover_elements) );
+        m_vecItems.push_back( CellItem_Crossover(_("Lowpass"), crossover_elements) );
         break;
       case NET_TYPE_BANDPASS:
-        m_vecItems.push_back( CellItem_Crossover("Bandpass", crossover_elements) );
+        m_vecItems.push_back( CellItem_Crossover(_("Bandpass"), crossover_elements) );
         break;
       case NET_TYPE_HIGHPASS:
-        m_vecItems.push_back( CellItem_Crossover("Highpass", crossover_elements) );
+        m_vecItems.push_back( CellItem_Crossover(_("Highpass"), crossover_elements) );
         break;
       default:
-        m_vecItems.push_back( CellItem_Crossover("Other", crossover_elements) );
+        m_vecItems.push_back( CellItem_Crossover(_("Other"), crossover_elements) );
     }    
   }
   for_each(
@@ -289,7 +289,7 @@ void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo)
 
       Gtk::TreeRow child_row2 = *(m_refTreeStore->append(child_row.children()));
       /* If this is the filter parts node */
-      if ((child2.m_label == "Highpass") || (child2.m_label == "Lowpass")) {
+      if ((child2.m_label == _("Highpass")) || (child2.m_label == _("Lowpass"))) {
         /* One more node with the filter type */
         child_row2[m_columns.id_string]    = child2.m_label;
         child_row2[m_columns.id]           = 0;
@@ -335,7 +335,7 @@ void CrossoverTreeView::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    col_cnt = m_TreeView.append_column("Id_string", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Id_string"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
@@ -348,7 +348,7 @@ void CrossoverTreeView::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    col_cnt = m_TreeView.append_column("Id", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Id"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
@@ -362,8 +362,8 @@ void CrossoverTreeView::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
 
-    col_cnt = m_TreeView.append_column("Type", *pRenderer);
-//    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Type", *pRenderer, slot(*this, &CrossoverTreeView::on_insert_type));    
+    col_cnt = m_TreeView.append_column(_("Type"), *pRenderer);
+//    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, _("Type"), *pRenderer, slot(*this, &CrossoverTreeView::on_insert_type));    
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
@@ -379,9 +379,9 @@ void CrossoverTreeView::add_columns()
     pRenderer->property_xalign().set_value(0.0);
     pRenderer->signal_edited().connect(slot(*this, &CrossoverTreeView::on_cell_edited_value));
     
-    //col_cnt = m_TreeView.append_column("Value", *pRenderer);
-    col_cnt = m_TreeView.insert_column("Value", *pRenderer, -1);
-    //col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Value", *pRenderer, slot(*this, &CrossoverTreeView::on_insert_value));    
+    //col_cnt = m_TreeView.append_column(_("Value"), *pRenderer);
+    col_cnt = m_TreeView.insert_column(_("Value"), *pRenderer, -1);
+    //col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, _("Value"), *pRenderer, slot(*this, &CrossoverTreeView::on_insert_value));    
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
@@ -398,7 +398,7 @@ void CrossoverTreeView::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     pRenderer->property_xalign().set_value(0.0);
     
-    col_cnt = m_TreeView.append_column("Unit", *pRenderer);
+    col_cnt = m_TreeView.append_column(_("Unit"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {

@@ -42,7 +42,7 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject()
       throw e;
     }
   } else {
-    throw GSpeakersException("Part: part node not found");
+    throw GSpeakersException(_("Part: part node not found"));
   }
 }
 
@@ -56,7 +56,7 @@ void Part::parse_type(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Part: type node not found");
+    throw GSpeakersException(_("Part: type node not found"));
   }
 }
 
@@ -70,7 +70,7 @@ void Part::parse_value(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Part: value node not found");
+    throw GSpeakersException(_("Part: value node not found"));
   }
 
 }
@@ -80,7 +80,7 @@ void Part::parse_unit(xmlNodePtr node)
   if (( node != NULL ) && ( string( (char *)node->name) == string( "unit" ))) {
     m_unit = string((char *)xmlNodeGetContent(node));
   } else {
-    throw GSpeakersException("Part: unit node not found");
+    throw GSpeakersException(_("Part: unit node not found"));
   }
 }
 
@@ -149,9 +149,9 @@ void Part::on_part_type_changed(int id, int new_type)
 
 std::ostream& operator<< (std::ostream& o, const Part& part) 
 {
-  return o << "***Part***" << endl <<
-              "Id   : " << part.m_id << endl <<
-              "Type : " << part.m_type << endl <<
-              "Value: " << part.m_value << endl <<
-              "Unit : " << part.m_unit << endl;
+  return o << _("***Part***") << endl <<
+              _("Id   : ") << part.m_id << endl <<
+              _("Type : ") << part.m_type << endl <<
+              _("Value: ") << part.m_value << endl <<
+              _("Unit : ") << part.m_unit << endl;
 }

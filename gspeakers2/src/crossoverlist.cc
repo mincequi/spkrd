@@ -44,10 +44,10 @@ CrossoverList::CrossoverList(string filename)
         }
       }
     } else {
-      throw GSpeakersException("CrossoverList: crossoverlist node not found");
+      throw GSpeakersException(_("CrossoverList: crossoverlist node not found"));
     }
   } else {
-    throw GSpeakersException("CrossoverList: Xml file not found");
+    throw GSpeakersException(_("CrossoverList: Xml file not found"));
   }
 }
 
@@ -77,7 +77,7 @@ void CrossoverList::to_xml(string filename)
 
   /* Save xml file */
   if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw GSpeakersException("CrossoverList: Could not save to " + filename);
+    throw GSpeakersException(_("CrossoverList: Could not save to ") + filename);
   }
 }
 

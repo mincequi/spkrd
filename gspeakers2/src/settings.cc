@@ -27,6 +27,7 @@
 #include <iostream>
 #include <fstream>
 #include "sstream_fix.h"
+#include "common.h"
 
 using std::ostringstream;
 using std::istringstream;
@@ -47,7 +48,7 @@ void Settings::load(const string& filename)
   ifstream inf(filename.c_str());
   if (!inf) {
     ostringstream ostr;
-    ostr << "Settings::load: Could not open file for reading: "
+    ostr << _("Settings::load: Could not open file for reading: ")
 	 << filename;
     throw runtime_error( ostr.str() );
   }
@@ -76,7 +77,7 @@ void Settings::save(const string& filename)
   ofstream of( tempfilename.c_str(), std::ios::out | std::ios::trunc );
   if (!of) {
     ostringstream ostr;
-    ostr << "Settings::save: Could not open temporary settings file to save to: "
+    ostr << _("Settings::save: Could not open temporary settings file to save to: ")
 	 << tempfilename;
     throw runtime_error( ostr.str() );
   }
@@ -88,7 +89,7 @@ void Settings::save(const string& filename)
       of.close();
       unlink( tempfilename.c_str() );
       ostringstream ostr;
-      ostr << "Settings::save: Failed writing to temporary file: "
+      ostr << _("Settings::save: Failed writing to temporary file: ")
 	   << tempfilename;
       throw runtime_error( ostr.str() );
     }
@@ -102,7 +103,7 @@ void Settings::save(const string& filename)
 #endif
   if ( rename( tempfilename.c_str(), filename.c_str() ) == -1 ) {
     ostringstream ostr;
-    ostr << "Settings::save: Failed renaming temporary file to replace old file: "
+    ostr << _("Settings::save: Failed renaming temporary file to replace old file: ")
 	 << filename;
     throw runtime_error( ostr.str() );
   }
@@ -121,7 +122,7 @@ void Settings::save()
   ofstream of( tempfilename.c_str(), std::ios::out | std::ios::trunc );
   if (!of) {
     ostringstream ostr;
-    ostr << "Settings::save: Could not open temporary settings file to save to: "
+    ostr << _("Settings::save: Could not open temporary settings file to save to: ")
 	 << tempfilename;
     throw runtime_error( ostr.str() );
   }
@@ -133,7 +134,7 @@ void Settings::save()
       of.close();
       unlink( tempfilename.c_str() );
       ostringstream ostr;
-      ostr << "Settings::save: Failed writing to temporary file: "
+      ostr << _("Settings::save: Failed writing to temporary file: ")
 	   << tempfilename;
       throw runtime_error( ostr.str() );
     }
@@ -147,7 +148,7 @@ void Settings::save()
 #endif
   if ( rename( tempfilename.c_str(), m_filename.c_str() ) == -1 ) {
     ostringstream ostr;
-    ostr << "Settings::save: Failed renaming temporary file to replace old file: "
+    ostr << _("Settings::save: Failed renaming temporary file to replace old file: ")
 	 << m_filename;
     throw runtime_error( ostr.str() );
   }

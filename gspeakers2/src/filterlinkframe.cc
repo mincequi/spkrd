@@ -24,16 +24,17 @@
 #include <sstream>
 #include "filterlinkframe.h"
 #include "gspeakersplot.h"
+#include "common.h"
 #include "../config.h"
 
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
   Gtk::Frame(description),
   adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
   m_speaker_combo(),
-  m_inv_pol_checkbutton("Invert polarity", false),
+  m_inv_pol_checkbutton(_("Invert polarity"), false),
   m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
-  m_imp_corr_checkbutton("Impedance correction"),
-  m_adv_imp_model_checkbutton("Use adv. driver imp. model")
+  m_imp_corr_checkbutton(_("Impedance correction")),
+  m_adv_imp_model_checkbutton(_("Use adv. driver imp. model"))
 {
   init = true;
   enable_edit = false;
@@ -65,7 +66,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     
   Gtk::Label *label;
   if (net->get_type() & NET_TYPE_HIGHPASS) {
-    Gtk::Frame *frame = manage(new Gtk::Frame("Highpass"));
+    Gtk::Frame *frame = manage(new Gtk::Frame(_("Highpass")));
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());
     frame->add(*vbox);
@@ -90,11 +91,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
 
     Gtk::HBox *hbox = manage(new Gtk::HBox());
     vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label("Order: ", Gtk::ALIGN_LEFT))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Order: "), Gtk::ALIGN_LEFT))));
     hbox->pack_start(*m_higher_order_optionmenu);
     vbox->pack_start(*m_higher_type_optionmenu);
     hbox = manage(new Gtk::HBox());
-    hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Cutoff: ")))));
     m_higher_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
     hbox->pack_start(*m_higher_co_freq_spinbutton);
     label = manage(new Gtk::Label(" Hz"));
@@ -105,7 +106,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   }
 
   if (m_net->get_type() & NET_TYPE_LOWPASS) {
-    Gtk::Frame *frame = manage(new Gtk::Frame("Lowpass"));
+    Gtk::Frame *frame = manage(new Gtk::Frame(_("Lowpass")));
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());
     frame->add(*vbox);
@@ -130,14 +131,14 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     
     Gtk::HBox *hbox = manage(new Gtk::HBox());
     vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label("Order: "))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Order: ")))));
     hbox->pack_start(*m_lower_order_optionmenu);
     vbox->pack_start(*m_lower_type_optionmenu);
     hbox = manage(new Gtk::HBox());
-    hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Cutoff: ")))));
     m_lower_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
     hbox->pack_start(*m_lower_co_freq_spinbutton);
-    hbox->pack_start((*manage(new Gtk::Label("Hz"))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Hz")))));
     vbox->pack_start(*hbox);
     set_family(m_lower_type_optionmenu, m_net->get_lowpass_order(), m_net->get_lowpass_family());
   } 
@@ -154,7 +155,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
 
   Gtk::HBox *hbox = manage(new Gtk::HBox());
   m_vbox.pack_start(*hbox);
-  hbox->pack_start((*manage(new Gtk::Label("Damping: "))));
+  hbox->pack_start((*manage(new Gtk::Label(_("Damping: ")))));
   hbox->pack_start(m_damp_spinbutton);
   
   if (m_net->get_has_damp() == true) {
@@ -596,7 +597,7 @@ void FilterLinkFrame::on_plot_crossover()
 #ifdef OUTPUT_DEBUG
     cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
 #endif
-    Gtk::MessageDialog d(Glib::ustring("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()), 
+    Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()), 
                          Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d.run();
   }

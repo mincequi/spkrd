@@ -59,7 +59,7 @@ Crossover::Crossover(xmlNodePtr parent)
       throw e;
     }
   } else {
-    throw GSpeakersException("Crossover: crossover node expected");
+    throw GSpeakersException(_("Crossover: crossover node expected"));
   }
 }
 
@@ -74,7 +74,7 @@ void Crossover::parse_type(xmlNodePtr node)
       throw e;
     }
   } else {
-    throw GSpeakersException("Crossover: type node expected");
+    throw GSpeakersException(_("Crossover: type node expected"));
   }
 }
 
@@ -106,7 +106,7 @@ void Crossover::parse_id_string(xmlNodePtr node)
     m_id_string = string((char *)xmlNodeGetContent(node));
     //m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
-    throw GSpeakersException("Crossover: id_string node expected");
+    throw GSpeakersException(_("Crossover: id_string node expected"));
   }
 }
 
@@ -137,7 +137,7 @@ xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
 
 ostream& operator<< (ostream& o, const Crossover& crossover)
 {
-  o << "Crossover type:" << crossover.m_type << endl << "Id: " << crossover.m_id << endl << "---Nets----" << endl;
+  o << _("Crossover type:") << crossover.m_type << endl << "Id: " << crossover.m_id << endl << "---Nets----" << endl;
   for(
     vector<Net>::iterator from = ((vector<Net>)(crossover.m_networks)).begin();
     from != ((vector<Net>)(crossover.m_networks)).end();

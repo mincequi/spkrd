@@ -45,10 +45,10 @@ SpeakerList::SpeakerList(string filename)
         }
       }
     } else {
-      throw GSpeakersException("SpeakerList: speakerlist node not found");
+      throw GSpeakersException(_("SpeakerList: speakerlist node not found"));
     }
   } else {
-    throw GSpeakersException("SpeakerList: Xml file not found");
+    throw GSpeakersException(_("SpeakerList: Xml file not found"));
   }
 }
 
@@ -78,14 +78,14 @@ void SpeakerList::to_xml(string filename)
 
   /* Save xml file */
   if (xmlSaveFile(filename.c_str(), doc)  == -1) {
-    throw GSpeakersException("SpeakerList: Could not save to " + filename);
+    throw GSpeakersException(_("SpeakerList: Could not save to ") + filename);
   }
 }
 
 
 ostream& operator<< (ostream& o, const SpeakerList& speaker_list)
 {
-  o << "Speaker List" << endl;
+  o << _("Speaker List") << endl;
 
   for(
     vector<Speaker>::iterator from = ((vector<Speaker>)(speaker_list.m_speaker_list)).begin();
