@@ -103,15 +103,24 @@ namespace GSpeakers {
 
 //     return *im;
 //   }
-  
-  Glib::ustring short_filename(const Glib::ustring& filename)
+  Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
   {
+    using namespace std;
+
     Glib::ustring shorted_filename;
-    if (filename.length() >= 40) {
+    if (filename.length() >= length) {
       Glib::ustring file = Glib::path_get_basename(filename);
       Glib::ustring dir = Glib::path_get_dirname(filename);
-      shorted_filename = filename.substr(0, 40 - file.length() - 15);
-      shorted_filename = shorted_filename + "..." + dir.substr(dir.length() - 12, dir.length()) + "/" + file;
+      int base_length = length - file.length() - round(length/4);
+      if (base_length < 2) {
+	base_length = 2;
+      }
+      shorted_filename = filename.substr(0, base_length);
+      int space_left = length - file.length() - shorted_filename.length() - 6;
+      if (space_left <= 0) {
+	space_left = 1;
+      }
+      shorted_filename = shorted_filename + "..." + dir.substr(dir.length() - space_left, dir.length()) + "/" + file;
     } else {
       return filename;
     }

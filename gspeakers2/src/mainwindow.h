@@ -27,6 +27,7 @@
 #include "enclosurepaned.h"
 #include "speakereditor.h"
 #include "crossoverpaned.h"
+#include "iconnotebook.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -35,7 +36,7 @@ public:
 
 private:
   Gtk::VBox m_main_vbox;
-  Gtk::Notebook m_main_notebook;
+  IconNotebook m_main_notebook;
   Gtk::HPaned m_driver_hpaned;
   Gtk::VPaned m_driver_vpaned;
 

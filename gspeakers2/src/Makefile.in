@@ -170,7 +170,8 @@ summedfreqrespplot.h summedfreqrespplot.cc \
 popupentry.h popupentry.cc \
 cellrendererpopup.h cellrendererpopup.cc \
 crossoverimageview.h crossoverimageview.cc \
-gspeakersfilechooser.h gspeakersfilechooser.cc
+gspeakersfilechooser.h gspeakersfilechooser.cc \
+iconnotebook.h iconnotebook.cc 
 
 LDADD = $(DEPS_LIBS)
 subdir = src
@@ -198,7 +199,7 @@ am_gspeakers_OBJECTS = main.$(OBJEXT) common.$(OBJEXT) \
 	enclosurepaned.$(OBJEXT) crossoverpaned.$(OBJEXT) \
 	summedfreqrespplot.$(OBJEXT) popupentry.$(OBJEXT) \
 	cellrendererpopup.$(OBJEXT) crossoverimageview.$(OBJEXT) \
-	gspeakersfilechooser.$(OBJEXT)
+	gspeakersfilechooser.$(OBJEXT) iconnotebook.$(OBJEXT)
 gspeakers_OBJECTS = $(am_gspeakers_OBJECTS)
 gspeakers_LDADD = $(LDADD)
 gspeakers_DEPENDENCIES =
@@ -227,7 +228,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersfilechooser.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersfilterplot.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersobject.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gspeakersplot.Po ./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gspeakersplot.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/iconnotebook.Po ./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mainwindow.Po ./$(DEPDIR)/net.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/part.Po ./$(DEPDIR)/plothistory.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/popupentry.Po ./$(DEPDIR)/settings.Po \
@@ -317,6 +319,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersfilterplot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersobject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersplot.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconnotebook.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/net.Po@am__quote@

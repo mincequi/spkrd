@@ -1,7 +1,7 @@
 /*
   $Id$
   
-  crossoverpaned Copyright (C) 2002 Daniel Sundberg
+  crossoverpaned Copyright (C) 2002-2004 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -47,8 +47,8 @@ protected:
   void set_save_state(bool b);
   
 private:
-  Gtk::VBox m_notebook_vbox;
-  Gtk::Notebook m_plot_notebook;
+  //  Gtk::VBox m_notebook_vbox;
+  Gtk::Notebook m_crossover_notebook, m_plot_notebook;  
   CrossoverWizard crossover_wizard;
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
@@ -57,8 +57,8 @@ private:
   SummedFreqRespPlot summed_freq_resp_plot;
   CrossoverImageView crossover_image_view;
 
-  Gtk::HPaned m_hpaned2;
-  Gtk::VPaned m_vpaned;
+  //  Gtk::HPaned m_hpaned2;
+  //  Gtk::VPaned m_vpaned;
 
   Gtk::Menu m_menu;
   Gtk::HandleBox m_toolbar;

@@ -1,7 +1,7 @@
 /*
   $Id$
   
-  crossoverpaned Copyright (C) 2002 Daniel Sundberg
+  crossoverpaned Copyright (C) 2002-2004 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -29,15 +29,19 @@ CrossoverPaned::CrossoverPaned()
   m_tbar = NULL;
   g_settings.settings_changed.connect(mem_fun(*this, &CrossoverPaned::on_settings_changed));
   
-  add1(crossover_wizard);
+  add1(m_crossover_notebook);
   g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
   set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
-  add2(m_hpaned2);
-  m_hpaned2.add1(crossover_treeview);
+  add2(m_plot_notebook);
+  //  m_hpaned2.add1(crossover_treeview);
   
-  m_notebook_vbox.pack_start(m_plot_notebook);
-  m_notebook_vbox.set_border_width(2);
-  m_vpaned.add1(m_notebook_vbox);
+  //  m_notebook_vbox.pack_start(m_plot_notebook);
+  //  m_notebook_vbox.set_border_width(2);
+  //  m_vpaned.add1(m_notebook_vbox);
+
+  m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
+  m_crossover_notebook.append_page(crossover_treeview, _("Filter"));
+  m_crossover_notebook.append_page(crossover_history, _("History"));
 
   m_plot_notebook.append_page(filter_plot, _("Crossover freq resp"));
   m_plot_notebook.append_page(total_filter_plot, _("Total crossover freq resp"));
@@ -45,12 +49,12 @@ CrossoverPaned::CrossoverPaned()
   m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));  
 
   m_plot_notebook.set_scrollable();
-  m_vpaned.add2(crossover_history);
-  m_hpaned2.add2(m_vpaned);
-  g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
-  m_hpaned2.set_position(g_settings.getValueUnsignedInt("CrossoverPaned2Position"));
-  g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
-  m_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
+  //  m_vpaned.add2(crossover_history);
+  //  m_hpaned2.add2(m_vpaned);
+  //  g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
+  //  m_hpaned2.set_position(g_settings.getValueUnsignedInt("CrossoverPaned2Position"));
+  //  g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
+  //  m_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
   
   signal_crossover_set_save_state.connect( mem_fun(*this, &CrossoverPaned::set_save_state) );
 }
@@ -63,8 +67,8 @@ void CrossoverPaned::select_first_crossover()
 CrossoverPaned::~CrossoverPaned()
 {
   g_settings.setValue("CrossoverPaned1Position", get_position());
-  g_settings.setValue("CrossoverPaned2Position", m_hpaned2.get_position());
-  g_settings.setValue("CrossoverPlotVPanedPosition", m_vpaned.get_position());
+  //  g_settings.setValue("CrossoverPaned2Position", m_hpaned2.get_position());
+  //  g_settings.setValue("CrossoverPlotVPanedPosition", m_vpaned.get_position());
   try {
     g_settings.save();
   } catch (std::runtime_error e) {

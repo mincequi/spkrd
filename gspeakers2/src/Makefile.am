@@ -38,7 +38,8 @@ summedfreqrespplot.h summedfreqrespplot.cc \
 popupentry.h popupentry.cc \
 cellrendererpopup.h cellrendererpopup.cc \
 crossoverimageview.h crossoverimageview.cc \
-gspeakersfilechooser.h gspeakersfilechooser.cc
+gspeakersfilechooser.h gspeakersfilechooser.cc \
+iconnotebook.h iconnotebook.cc 
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0
 LDADD = $(DEPS_LIBS)

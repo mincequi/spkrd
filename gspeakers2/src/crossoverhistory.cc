@@ -50,11 +50,16 @@ CrossoverHistory::CrossoverHistory() :
   } catch (GSpeakersException e) {
     cout << "CrossoverHistory::CrossoverHistory: " << e.what() << endl;
   }
-//  set_label(_("Crossover list [") + m_filename + "]");
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
 
-  
+  m_evbox = manage(new Gtk::EventBox());
+  m_frame_label = manage(new Gtk::Label());
+  m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers [")) + 
+			    GSpeakers::short_filename(m_filename, 20) + "]</b>");
+  static_cast<Gtk::Container *>(m_evbox)->add(*m_frame_label);
+  set_label_widget(*m_evbox);  
+  GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+
   create_model();
 
   /* create tree view */
@@ -185,8 +190,9 @@ void CrossoverHistory::open_xml(const std::string& filename)
   
     }
     signal_crossover_set_save_state(false);
-    static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list")) + GSpeakers::short_filename(m_filename) + "]</b>");
-
+    m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ")) + 
+			      GSpeakers::short_filename(m_filename, 20) + "]</b>");
+    GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
     //set_label(_("Crossover list [") + m_filename + "]");
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -407,7 +413,7 @@ void CrossoverHistory::save_as_xml(const std::string& filename)
   try {
     m_crossover_list.to_xml(filename);
     m_filename = filename;
-    static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
+    static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename, 20) + "]</b>");
 
 //    set_label("Crossover list [" + m_filename + "]");
     signal_crossover_set_save_state(false);

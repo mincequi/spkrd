@@ -41,7 +41,8 @@ namespace GSpeakers {
     DRAW_DRIVER_FREQ_RESP_PLOT,
     AUTO_UPDATE_CROSSOVER_PLOT,
     DISABLE_FILTER_AMP,
-    SCALE_FILER_PARTS, 
+    SCALE_FILTER_PARTS, 
+    USE_DRIVER_IMPEDANCE, 
     SPICE_TYPE
   }; 
 }
@@ -64,7 +65,7 @@ private:
   Gtk::CheckButton m_draw_driver_imp_plot, m_draw_driver_freq_resp_plot, m_disable_filter_amp;
   Gtk::CheckButton m_save_mainwindow_size, m_save_mainwindow_position;
   Gtk::CheckButton m_scale_crossover_image_parts;
-
+  Gtk::CheckButton m_use_driver_impedance;
 
   Gtk::OptionMenu m_toolbar_style;
 
@@ -76,7 +77,6 @@ private:
   
   void on_close();
   void on_spice_browse();
-  void on_file_ok(Gtk::FileSelection *f);
   void on_config_option_change(GSpeakers::Settings setting);
 };
 

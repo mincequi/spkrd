@@ -1,7 +1,7 @@
 /*
   $Id$
 
-  crossoverhistory Copyright (C) 2002 Daniel Sundberg
+  crossoverhistory Copyright (C) 2002-2004 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -77,6 +77,8 @@ protected:
   virtual void liststore_add_item(Crossover foo);
 
   //Member widgets:
+  Gtk::Widget *m_evbox;
+  Gtk::Label *m_frame_label;
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;

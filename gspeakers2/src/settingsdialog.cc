@@ -21,6 +21,7 @@
 #include <gtkmm/table.h>
 #include <gtkmm/frame.h>
 #include "settingsdialog.h"
+#include "gspeakersfilechooser.h"
 
 #define NOF_TABLE_ROWS 10
 
@@ -39,6 +40,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_save_mainwindow_size(_("Save main window size")),
   m_save_mainwindow_position(_("Save main window position")),
   m_scale_crossover_image_parts(_("Scale components in crossover visual view")),
+  m_use_driver_impedance(_("Use driver impedance instead of rdc when calculating crossover")),
   m_toolbar_style()
 {
   m_file_selection = NULL;
@@ -133,6 +135,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   crossover_table->attach(m_autoupdate_filter_plots    , 0, 3, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);  
   crossover_table->attach(m_disable_filter_amp         , 0, 3, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
   crossover_table->attach(m_scale_crossover_image_parts, 0, 3, 2, 3, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
+  crossover_table->attach(m_use_driver_impedance       , 0, 3, 3, 4, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
   crossover_frame->add(*crossover_table);
   m_main_notebook.append_page(*crossover_frame, _("Crossovers"));
       
@@ -154,7 +157,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
   m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
   m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
-    
+  m_use_driver_impedance.set_active(g_settings.getValueBool("UseDriverImpedance"));
+
   /* Setup configuration option change handlers */
   m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                  GSpeakers::SAVE_MAIN_WINDOW_SIZE));
@@ -170,7 +174,9 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_disable_filter_amp.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::DISABLE_FILTER_AMP));
   m_scale_crossover_image_parts.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
-                                                                                     GSpeakers::SCALE_FILER_PARTS));
+                                                                                     GSpeakers::SCALE_FILTER_PARTS));
+  m_use_driver_impedance.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
+                                                                                     GSpeakers::USE_DRIVER_IMPEDANCE));
   m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SPICE_PATH));
   m_spice_use_ngspice.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
@@ -214,9 +220,11 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting)
     case GSpeakers::DISABLE_FILTER_AMP:
       g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
       break;
-    case GSpeakers::SCALE_FILER_PARTS:
+    case GSpeakers::SCALE_FILTER_PARTS:
       g_settings.setValue("ScaleCrossoverImageParts", m_scale_crossover_image_parts.get_active());
       break;
+    case GSpeakers::USE_DRIVER_IMPEDANCE:
+      g_settings.setValue("UseDriverImpedance", m_use_driver_impedance.get_active());
     case GSpeakers::SPICE_PATH:
       g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
       break;
@@ -267,26 +275,14 @@ void SettingsDialog::on_spice_browse()
 #ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_spice_browse" << endl;
 #endif
-  m_file_selection = new Gtk::FileSelection(_("Select SPICE executable..."));
-  m_file_selection->get_ok_button()->signal_clicked().connect(
-                      bind<Gtk::FileSelection *>(mem_fun(*this, &SettingsDialog::on_file_ok), m_file_selection) );
-  m_file_selection->run();
-  m_file_selection->hide();
-  delete m_file_selection;
-  if (m_filename != "") {
+  GSpeakersFileChooserDialog *fc = new GSpeakersFileChooserDialog(_("Select SPICE executable"), 
+								  Gtk::FILE_CHOOSER_ACTION_OPEN);
+  std::string filename = fc->get_filename();
+  if (filename.length() > 0) {
     g_settings.setValue("SPICECmdLine", m_filename);
+    m_spice_path_entry.set_text(m_filename);
   }
-  m_filename = "";
 #ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_spice_browse: " << m_filename << endl;
 #endif
-}
-
-void SettingsDialog::on_file_ok(Gtk::FileSelection *f)
-{
-#ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::on_file_ok" << endl;
-#endif
-  m_filename = f->get_filename();
-  m_spice_path_entry.set_text(m_filename);
 }

@@ -74,7 +74,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
   m_evbox = manage(new Gtk::EventBox());
   m_frame_label = manage(new Gtk::Label());
-  m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) + GSpeakers::short_filename(m_filename) + "]</b>");
+  m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) + GSpeakers::short_filename(m_filename, 50) + "]</b>");
   static_cast<Gtk::Container *>(m_evbox)->add(*m_frame_label);
 //   static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Drivers [")) + 
 //                               GSpeakers::short_filename(m_filename) + "]</b>");
@@ -957,7 +957,7 @@ bool Speaker_ListStore::open_xml(const std::string& filename)
       m_filename = filename;
       g_settings.setValue("SpeakerListXml", m_filename);
       m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) + 
-                                GSpeakers::short_filename(m_filename) + "]</b>");
+                                GSpeakers::short_filename(m_filename, 40) + "]</b>");
       GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
       for_each(
         temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),

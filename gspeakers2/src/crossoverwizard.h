@@ -20,7 +20,6 @@
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/box.h>
-#include <gtkmm/frame.h>
 #include "filterlinkframe.h"
 #include "common.h"
 #include "speakerlist.h"
@@ -28,7 +27,7 @@
 using namespace std;
 using namespace sigc;
 
-class CrossoverWizard : public Gtk::Frame
+class CrossoverWizard : public Gtk::ScrolledWindow
 {
 public:
   CrossoverWizard();
@@ -39,7 +38,7 @@ private:
   void on_button_plot_clicked();
   void on_button_update_clicked();
 
-  Gtk::ScrolledWindow m_scrolled_window;
+  //  Gtk::ScrolledWindow m_scrolled_window;
   Gtk::VBox m_vbox;
   void on_crossover_selected(Crossover *crossover);
   SpeakerList *m_speaker_list;
