@@ -33,6 +33,8 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
+  
+  
 }
 
 bool GSpeakersPlot::on_expose_event(GdkEventExpose* event)
@@ -54,11 +56,13 @@ bool GSpeakersPlot::on_expose_event(GdkEventExpose* event)
 }
 
 bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
+//void GSpeakersPlot::on_show()
 {
   /* Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap, will probably be faster 
      than redrawing the entire thing every time */
-  
+  cout << "GSpeakersPlot::on_configure_event" << endl;
   m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
+  
   m_refGC = get_style()->get_fg_gc(get_state());
 
   m_refColormap = m_refGC->get_colormap();

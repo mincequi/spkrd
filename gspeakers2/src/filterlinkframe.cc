@@ -22,7 +22,8 @@
 #include <sstream>
 #include "filterlinkframe.h"
 #include "gspeakersplot.h"
-  
+#include "../config.h"
+
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
   Gtk::Frame(description),
   adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
@@ -204,7 +205,9 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
 
 void FilterLinkFrame::on_order_selected(int which, int order)
 {
+#ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << endl;
+#endif
 
   Gtk::Menu::MenuList *menulist = &(m_lower_type_menu->items());
     
@@ -249,10 +252,10 @@ void FilterLinkFrame::on_order_selected(int which, int order)
 
 void FilterLinkFrame::on_param_changed()
 {
+#ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_param_changed" << endl;
-  
+#endif
   if (enable_edit == true) {
-    cout << "FilterLinkFrame::on_param_changed: running" << endl;
     enable_edit = false;
     Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     m_net->set_speaker(speaker.get_id_string());
@@ -460,7 +463,6 @@ void FilterLinkFrame::on_param_changed()
       }
   
     }
-    cout << "imp_corr_checkbutton state: " << m_imp_corr_checkbutton.get_active() << endl;
     if (m_imp_corr_checkbutton.get_active() == true) {
       m_net->set_has_imp_corr(true);
       /* calc imp corr here */
@@ -495,7 +497,9 @@ void FilterLinkFrame::on_param_changed()
 void FilterLinkFrame::on_net_updated(Net *net)
 {
   if (m_net->get_id() == net->get_id()) {
+#ifdef OUPUTDEBUG
     cout << "FilterLinkFrame::on_net_updated" << endl;
+#endif
     enable_edit = false;
     
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
@@ -513,8 +517,6 @@ void FilterLinkFrame::on_net_updated(Net *net)
         }
         i++;
       }
-      cout << "FilterLinkFrame::on_net_updated: value = " << -3 - m_damp_spinbutton.get_value() << ", " 
-           << points[index1].get_y() << ", " << points[index1 + 1].get_y() <<endl;
       points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
       points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
 
@@ -574,9 +576,14 @@ void FilterLinkFrame::on_plot_crossover()
   
   /* run spice with created file */
   string cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " + spice_filename;
+#ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << endl;
+#endif
   system(cmd.c_str());
+#ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
+#endif
+
   /* extract spice output into a vector */
   string spice_output_file = spice_filename + ".out";
   ifstream fin(spice_output_file.c_str());
@@ -611,8 +618,8 @@ void FilterLinkFrame::on_plot_crossover()
   } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
     c = Gdk::Color("darkgreen");
   }
-  int id2 = m_net->get_id();
-  cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
+  //int id2 = m_net->get_id();
+  //cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
   signal_add_crossover_plot(points, c, &my_filter_plot_index);
     
 }   
@@ -830,7 +837,9 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
 
 void FilterLinkFrame::set_family(Gtk::OptionMenu *option_menu, int order, int family)
 {
+#ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family << endl;
+#endif
   switch (order) {
     case NET_ORDER_2ND:
       switch (family) {

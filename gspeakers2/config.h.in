@@ -165,3 +165,6 @@
 /* package prefix */
 #undef GSPEAKERS_PREFIX
 
+/* Output debug information to console */
+#undef OUTPUT_DEBUG
+

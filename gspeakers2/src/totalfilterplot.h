@@ -43,7 +43,8 @@ public:
 private: 
   GSpeakersPlot plot;
   vector<int> m_nets;
-  Gdk::Color m_color;
+  Gdk::Color *m_color;
+  vector< vector<GSpeakers::Point> > m_points;
   bool on_delete_event(GdkEventAny *event);
   void on_crossover_selected(Crossover *);
 };

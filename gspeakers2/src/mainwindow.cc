@@ -196,7 +196,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_quit()
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::quit" << endl;
+#endif
   g_settings.setValue("BoxMainPanedPosition", m_box_hpaned.get_position());
   g_settings.setValue("BoxEditPanedPosition", m_box_edit_vpaned.get_position());
   g_settings.setValue("BoxPlotPanedPosition", m_box_plot_vpaned.get_position());
@@ -216,7 +218,9 @@ void MainWindow::on_quit()
 
 void MainWindow::on_about()
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::about" << endl;
+#endif
   Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + "\n\n(C) Daniel Sundberg <dss@home.se>\n\nhttp://gspeakers.sf.net", 
                         Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true, true);
   m.run();
@@ -224,7 +228,9 @@ void MainWindow::on_about()
 
 void MainWindow::on_crossover_menu_action(int type) 
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::on_crossover_menu_action: " << type << endl;
+#endif
   signal_new_crossover(type);
   /* Switch to crossover wizard page since you probably want to start there */
   //m_cpanel_notebook.set_current_page(2);
@@ -232,7 +238,9 @@ void MainWindow::on_crossover_menu_action(int type)
 
 void MainWindow::on_plot_crossover()
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::on_plot_crossover" << endl;
+#endif
   filter_plot.clear();
   signal_plot_crossover();
 }
@@ -245,12 +253,16 @@ void MainWindow::on_on_plot_crossover()
 
 void MainWindow::on_update_crossover()
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::on_update_crossover" << endl;
+#endif
 }
 
 void MainWindow::on_edit_settings()
 {
+#ifdef OUTPUT_DEBUG
   cout << "MainWindow::on_edit_settings" << endl;
+#endif
   SettingsDialog d;
   d.run();
 }

@@ -1,5 +1,13 @@
 GSpeakers ChangeLog
 
+2002-09-12
+
+* totalfilterplot.cc: added plot of total filter response, except for the 
+    configure event that does not get called until the widget is shown
+
+* configure.in, config.h.in: added --enable-no-output-debug option to be able 
+    to disable console debug output
+
 2002-09-11
 
 * mainwindow.h/cc: added totalfilterplot to main window

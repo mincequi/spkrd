@@ -118,6 +118,7 @@ protected:
   /* This is the function that draws the graphics */
   
   bool on_expose_event(GdkEventExpose* event);
+  //void on_show();
   bool on_configure_event(GdkEventConfigure* event);
   
   /* Vectors that hold the y magnitude points for the plots (dbmag) and 
