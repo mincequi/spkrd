@@ -450,18 +450,20 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Vb1", *pRenderer, slot(*this, &BoxHistory::on_insert_vb1));
+    col_cnt = m_TreeView.append_column("Vb1", *pRenderer);
     
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
+    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::vb1_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    col_cnt = m_TreeView.insert_column_with_data_func(col_cnt, "Fb1", *pRenderer, slot(*this, &BoxHistory::on_insert_fb1));
+    col_cnt = m_TreeView.append_column("Fb1", *pRenderer);
     
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
+    //pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
+    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::fb1_cell_data_func));
   }
   /* Disable vb2 and fb2 until we use it */
   /*
@@ -484,9 +486,10 @@ void BoxHistory::add_columns()
   */
 }
 
+/* This function will execute when a type cell is shown */
 void BoxHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
-  cout << "BoxHistory::type_cell_data_func" << endl;
+  //cout << "BoxHistory::type_cell_data_func" << endl;
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
     case BOX_TYPE_SEALED:
@@ -499,32 +502,20 @@ void BoxHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeMod
       renderer.property_text() = "Unknown";
       break;
   }
-  
 }
 
-void BoxHistory::on_insert_type(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
+void BoxHistory::vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
-  switch ((*iter)[m_columns.type]) {
-    case BOX_TYPE_SEALED:
-      (*iter)[m_columns.type_str] = "Sealed";
-      break;
-    case BOX_TYPE_PORTED:
-      (*iter)[m_columns.type_str] = "Ported";
-      break;
-    default:
-      (*iter)[m_columns.type_str] = "Unknown";
-      break;
-  }
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  /* Ok i write litres with capital 'L', i know it's not standard but if you use arial or whatever
+     serif (?) it doesn't look good */
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + "L";
 }
 
-void BoxHistory::on_insert_vb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
+void BoxHistory::fb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
-  (*iter)[m_columns.vb1_str] = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
-}
-
-void BoxHistory::on_insert_fb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
-{
-  (*iter)[m_columns.fb1_str] = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 0) + " Hz";
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + "Hz";
 }
 
 void BoxHistory::liststore_add_item(Box box)

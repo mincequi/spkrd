@@ -171,8 +171,6 @@ CrossoverTreeView::ModelColumns::ModelColumns()
   add(unit);
   add(editable);
   add(visible);
-  add(value_str);
-  add(type_str);
 }
 
 void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
@@ -367,7 +365,7 @@ void CrossoverTreeView::add_columns()
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
-      pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
+//      pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
     }
   }

@@ -70,8 +70,6 @@ protected:
     Gtk::TreeModelColumn<Glib::ustring>  unit;
     Gtk::TreeModelColumn<bool>           editable;
     Gtk::TreeModelColumn<bool>           visible;
-    Gtk::TreeModelColumn<Glib::ustring>  value_str;
-    Gtk::TreeModelColumn<Glib::ustring>  type_str;
     ModelColumns();
   };
 

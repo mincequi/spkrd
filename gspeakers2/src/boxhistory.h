@@ -67,10 +67,9 @@ protected:
   void on_add_to_boxlist(Box *b);
   bool on_delete_event(GdkEventAny* event);
   void on_plot_selected(int i);
-  void on_insert_vb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
-  void on_insert_type(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
-  void on_insert_fb1(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
-  void type_cell_data_func(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
+  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void fb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
 
   /* Helper member functions */
   virtual void create_model();
@@ -96,11 +95,8 @@ protected:
     Gtk::TreeModelColumn<double>        fb1;
     Gtk::TreeModelColumn<double>        vb2;
     Gtk::TreeModelColumn<double>        fb2;
-    Gtk::TreeModelColumn<Glib::ustring> type_str;
-    Gtk::TreeModelColumn<Glib::ustring> vb1_str;
-    Gtk::TreeModelColumn<Glib::ustring> fb1_str;
     
-    ModelColumns() { add(type); add(id_string); add(vb1); add(vb2); add(fb1); add(fb2); add(vb1_str); add(fb1_str); add(type_str); }
+    ModelColumns() { add(type); add(id_string); add(vb1); add(vb2); add(fb1); add(fb2); }
   };
   ModelColumns m_columns;
   
