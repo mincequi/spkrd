@@ -37,6 +37,7 @@ class BoxList : public Gtk::ScrolledWindow {
   void add_row( vector<string> text, Gdk_Color *c );
   int remove_selected_row();
   void clear();
+
  protected:
   void row_selected(gint p0, gint p1, GdkEvent* p2);
   

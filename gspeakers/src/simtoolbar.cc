@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/gnomespeakers
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -85,8 +85,8 @@ void SimToolbar::sim_clicked() {
   set_new_color();
 
   /* Calculate the frequency response for the supplied speaker and box */
-  if ( b->type == PORTED ) {
-    
+  switch ( b->type ) {
+  case PORTED:
     for (int f = 1; f < UPPER_LIMIT; f++) {
       A = pow( ( b->fb1 / s->fs ), 2 );
       B = A / s->qts + b->fb1 / ( 7 * s->fs * s->qts );
@@ -95,32 +95,37 @@ void SimToolbar::sim_clicked() {
       fn2 = pow( ( f / s->fs ), 2 );
       fn4 = pow( fn2, 2 );
       db_mag[f] = 10 * log10( pow( fn4, 2 ) / ( pow( ( fn4 - C * fn2 + A ), 2 ) + 
-					       fn2 * pow( ( D * fn2 - B), 2 ) ) );
-//        if (f < 200)
-//  	cout << db_mag[f] << ", ";
+						fn2 * pow( ( D * fn2 - B), 2 ) ) );
     }
-
-  } else if ( b->type == SEALED ) {
+    break;
+  case SEALED:
     for (int f = 1; f < UPPER_LIMIT; f++) {
       fr = pow( ( f / b->fb1 ), 2 );
       vr = s->vas / b->vol1;
       qr = sqrt( vr + 1 );
       qb = 1 / ( ( 1 / s->qts ) / qr + 0.1 );
       db_mag[f] = 10 * log10( pow( fr, 2 ) / ( pow( ( fr - 1 ), 2 ) + fr / ( pow( qb, 2 ) ) ) );
-//        if (f < 200)
-//  	cout << db_mag[f] << ", ";
     }
+    break;
   }
   plot->add_plot( db_mag, color );
   
   /* Setup vector for clist-row */
   vector<string> v;
-  /* First clist entry should be blank */
+  /* First clist entry should be blank (this is where we show the color) */
   v.push_back( "" );
+  switch ( b->type ) {
+  case SEALED:
+    v.push_back( "Sealed" );
+    break;
+  case PORTED:
+    v.push_back( "Ported" );
+    break;
+  }
+  v.push_back( g_strdup_printf("%5.1f", b->vol1 ) );
+  v.push_back( g_strdup_printf("%5.1f", b->fb1 ) );
+  v.push_back( s->name );
   v.push_back( b->name );
-  v.push_back( g_strdup_printf("%5.2f", b->vol1 ) );
-  v.push_back( g_strdup_printf("%5.2f", b->fb1 ) );
-
   blist->add_row( v, color );
 }
 
@@ -163,14 +168,17 @@ void SimToolbar::opt_box_clicked() {
   //  vr=qr^2-1;
   //  vb=vas/vr;
 
-  if ( b->type == PORTED ) {
+  switch ( b->type ) {
+  case PORTED:
     b->vol1 = 20 * s->vas * pow( s->qts, 3.3 );
     b->fb1  = s->fs * pow( s->vas / b->vol1 , 0.31);
-  } else { // Sealed
+    break;
+  case SEALED:
     double qr = ( 1 / s->qts ) / ( 1 / 0.707 - 0.1 );
     b->fb1 = qr * s->fs;
     double vr = pow( qr, 2 ) - 1;
     b->vol1 = s->vas / vr;
+    break;
   }
   bbar->set_box_data( b->vol1, b->fb1 );
 }
@@ -180,6 +188,11 @@ void SimToolbar::opt_box_clicked() {
  *
  *  This function works like somthing near what i want, however, this might be a 
  *  config option in the future with user configurable custom colors.
+ *
+ *  If YOU look at this and have some spare time, please fix it...:-)
+ *  I'm not really sure of what this piece of code actually does, however, it 
+ *  seems to rotate the colors pretty nice. Do not try to understand what I 
+ *  want to do with the following code, i've not got a clue...
  */
 void SimToolbar::set_new_color() {
   switch ( last_color ) {
@@ -230,5 +243,4 @@ void SimToolbar::about_clicked() {
   s.push_back("Daniel Sundberg <dss@home.se>");
   Gnome::About *a = manage( new Gnome::About( "GnomeSpeakers", "0.1", "(C) Daniel Sundberg 2001", s ) );
   a->run_and_close();
-
 }

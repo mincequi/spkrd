@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/jags
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -41,11 +41,18 @@
 #define N_VERTICAL_LINES 9
 #define UPPER_LIMIT 1000
 
+/*
+ * This is a class that can draw plots. It has add_plot, remove_plot 
+ * and a few other methods you can use. It has logarithmic x-axis and 
+ * a flat y-axis. The x-axis is supposed to be used for frequency and 
+ * the y-axis can be used for something linear, for example dB.
+ */
 class GSpeakersPlot : public Gtk::DrawingArea {
   Gdk_GC       gc;
   Gdk_Color    fg_color, bg_color, blue_, red_, green_, white_, black_;
   Gdk_Window   window;
   Gdk_Colormap colormap;
+  Gdk_Font     f;
 public:
   GSpeakersPlot();
   void add_plot(double *dbmag, Gdk_Color *c);

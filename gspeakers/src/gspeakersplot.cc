@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/jags
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -46,10 +46,13 @@ GSpeakersPlot::GSpeakersPlot() {
   colormap_.alloc(white_);
   colormap_.alloc(black_);
   colormap = colormap_;
+  f = Gdk_Font( "-adobe-helvetica-medium-o-normal-*-*-*-*-*-*-*-*-*" );
 }
 
+/*
+ * This is the function that does all the drawing on the window
+ */
 gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
-  // here is where we draw on the window
   int x, y;
   int size_x, size_y;
   int box_x, box_y, box_size_x, box_size_y;
@@ -66,7 +69,6 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
   box_size_y = size_y - 2 * BOX_FRAME_SIZE;
   xaxis_y = size_y - BOX_FRAME_SIZE;
   
-  
   /* Draw the grid, this is locked to <1000 Hz by now */
   gc.set_foreground( black_ );
   
@@ -78,11 +80,22 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
   for (int i = 2; i < 10; i++) {
     int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
     window.draw_line(gc, x, BOX_FRAME_SIZE, x, xaxis_y + 3);
+    if ( ( i == 2 ) || ( i == 5 ) ) {
+      char *buf = new char[3];
+      sprintf( buf, "%3d", 10 * i);
+      window.draw_string( f, gc, x - 4, xaxis_y + 10, string( buf ) );
+    } 
   }
   for (int i = 1; i < 10; i++) {
     int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
     window.draw_line(gc, half_space_x + x, BOX_FRAME_SIZE, half_space_x + x, xaxis_y + 3);
+    if ( ( i == 2 ) || ( i == 5 ) || (i == 1) ) {
+      char *buf = new char[3];
+      sprintf( buf, "%3d", 100 * i);
+      window.draw_string( f, gc, half_space_x + x - 4, xaxis_y + 10, string( buf ) );
+    } 
   }
+  window.draw_string( f, gc, box_size_x - 20, xaxis_y + 10, "Frequency (Hz)" );
   
   /* Draw vertical lines */
   inc_space_y = round( box_size_y /  (double)N_VERTICAL_LINES );
@@ -91,7 +104,11 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
 	       ( (double)(-MAX_NEG_VALUE) + (double)i ) * 
 	       ( box_size_y / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
     window.draw_line(gc, BOX_FRAME_SIZE - 3, y, size_x - BOX_FRAME_SIZE + 3, y);
+    char *buf = new char[3];
+    sprintf( buf, "%3d", i);
+    window.draw_string( f, gc, BOX_FRAME_SIZE - 18, y + 4, string( buf ) );
   }
+  window.draw_string( f, gc, BOX_FRAME_SIZE - 15, BOX_FRAME_SIZE - 5, "Magnitude (dB)" );
 
   /* Finally draw the plots */
   int n_plots = dbmag.size();
@@ -136,6 +153,9 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
   return true;
 }
 
+/*
+ * Add a plot to the drawingarea
+ */
 void GSpeakersPlot::add_plot(double *db_mag, Gdk_Color *c) {
   /* Insert the dbmag-vector (and related color) into vectors of dB magnitude */
   dbmag.push_back( db_mag );
@@ -147,6 +167,9 @@ void GSpeakersPlot::add_plot(double *db_mag, Gdk_Color *c) {
   expose_event_impl( NULL );
 }
 
+/*
+ * Remove plot #n
+ */
 void GSpeakersPlot::remove_plot( int n ) {
   cout << "remove selected plot:" << n << endl;
   if ( ( dbmag.size() - 1 ) == (unsigned)n ) {
@@ -179,6 +202,9 @@ void GSpeakersPlot::remove_plot( int n ) {
   redraw();
 }
 
+/*
+ * Remove all plots
+ */
 void GSpeakersPlot::remove_all_plots() {
   int size_v = colors.size();
   for ( int i = size_v - 1; i >= 0; i-- ) {
@@ -188,14 +214,21 @@ void GSpeakersPlot::remove_all_plots() {
     colors.pop_back();
   }
   redraw();
-
 }
 
+/*
+ * Update the drawingarea
+ */
 void GSpeakersPlot::redraw() {
   /* I suppose I can do this??? Seems to work... */
   expose_event_impl( NULL );
 }
 
+/*
+ * Helper function to convert double->int and round it to nearest int
+ *
+ * The compiler wouldn't accept round (in math.h) so...
+ */
 int GSpeakersPlot::round( double x ) {
   if ( ( x - (int)x ) >= 0.5 ) {
     return (int)( (int)x + 1 );

@@ -25,7 +25,7 @@
 #include "boxlist.h"
 
 BoxList::BoxList() : Gtk::ScrolledWindow() {
-  char *headers[] = { "ID", "Box", "Vol1", "F1b", "" };
+  char *headers[] = { "ID", "Type", "Vol1", "F1b", "Speaker", "Box", "" };
 
   selected_row = -1;
   set_policy( GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC );
@@ -44,7 +44,6 @@ void BoxList::add_row( vector<string> text, Gdk_Color *c ) {
   clist->columns_autosize();
 
   int last_row = clist->rows().size();
-  //  cout << last_row << endl;
 
   /* Create the style we use to set the background of the fist cell on every row
      We want to set the bg to be able to indentify the right plot in the plotwindow */

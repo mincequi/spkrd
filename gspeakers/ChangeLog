@@ -1,3 +1,13 @@
+2001-12-28 14.10 sumpan
+
+        * src/simtoolbar.cc src/boxlist.cc: 
+          Added some fields to the clist + code cleanup
+	
+	* src/gspeakersplot.cc: added text to x- and y-axis
+	
+	* configure.in src/Makefile.am:
+	  Changed name of the program from gnomespeakers to gspeakers
+
 2001-12-25 17:00 sumpan
 
 	* src/gspeakersplot.cc src/gspeakersplot.h: 
@@ -6,7 +16,7 @@
 	
         * src/gspeakersplot.cc: cleaning up and generalisation
 	
-        * Removed some warnings in header-files
+        * Removed some compiler warnings on header-files
 	
 	* Moved frequency response calculations from GSpeakersPlot to
 	  SimToolbar
@@ -24,14 +34,3 @@
           
 	  All features for 0.1 implemented. Installation, cvs and 
 	  testing left before release.
-	
-	
-# This is the format (ripped from ickle)
-#2001-12-11 23:40 nordman
-#
-#        * ickle/IckleApplet.c ickle/IckleApplet.hpp
-#          ickle/IckleClient.cpp ickle/IckleGUI.cpp
-#          
-#        Quit correctly when run as applet.
-#        Use a separate wmclass for IckleGUI, fixes problem where main
-#        GUI would jump around on the screen a lot when run as applet.

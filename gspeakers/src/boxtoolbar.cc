@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/jags
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -64,11 +64,13 @@ BoxToolbar::BoxToolbar( string infile ) : Gtk::HandleBox() {
 
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
+  filename_entry->set_usize( 100, 20 );
   hbox->pack_start( *filename_entry, false, false ); 
 
   box_combo = manage( new Gtk::Combo() );
   /* combo action on entry changed */
   box_combo->get_entry()->changed.connect( slot( this, &BoxToolbar::combo_changed ) );
+  box_combo->set_usize( 100, 20 );
   hbox->pack_start( *box_combo, false, false );
 
   /* Setup the optionmenu */

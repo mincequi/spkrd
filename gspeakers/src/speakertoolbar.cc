@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/gnomespeakers
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -62,10 +62,11 @@ SpeakerToolbar::SpeakerToolbar( string infile ) : Gtk::HandleBox() {
 
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
+  filename_entry->set_usize( 100, 20 );
   hbox->pack_start( *filename_entry, false, false ); 
 
   speaker_combo = manage( new Gtk::Combo() );
-
+  speaker_combo->set_usize( 100, 20 );
   /* combo action on entry changed */
   speaker_combo->get_entry()->changed.connect( slot( this, &SpeakerToolbar::combo_changed ) );
   hbox->pack_start( *speaker_combo, false, false );
