@@ -68,6 +68,7 @@ private:
   /* Callbacks */
   void on_quit();
   void on_about();
+  void on_crossover_menu_action(int);
 };
 
 #endif

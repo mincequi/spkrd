@@ -98,5 +98,6 @@ extern Signal1<void, int> signal_select_plot;
 /* Define two signals for crossover parts updates */
 extern Signal0<void> signal_net_modified_by_wizard;  // listen to this in crossover treeview
 extern Signal1<void, Net *> signal_net_modified_by_user;    // listan to this in filter wizard
+extern Signal1<void, int> signal_new_crossover;
 
 #endif //__GFILTER_COMMON_H

@@ -33,6 +33,7 @@ Signal1<void, int> signal_hide_box_plot;
 Signal1<void, int> signal_select_plot;
 Signal0<void> signal_net_modified_by_wizard;
 Signal1<void, Net *> signal_net_modified_by_user;
+Signal1<void, int> signal_new_crossover;
 
 namespace GSpeakers {
   Glib::ustring double_to_ustring(double d) 

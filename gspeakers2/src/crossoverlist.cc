@@ -76,7 +76,9 @@ void CrossoverList::to_xml(string filename)
   }
 
   /* Save xml file */
-  xmlSaveFile(filename.c_str(), doc);
+  if (xmlSaveFile(filename.c_str(), doc) == -1) {
+    throw GSpeakersException("CrossoverList: Could not save to " + filename);
+  }
 }
 
 

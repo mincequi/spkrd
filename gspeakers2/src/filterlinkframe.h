@@ -73,6 +73,9 @@ private:
   string m_description;
   SpeakerList *m_speaker_list;
   bool enable_edit;
+  
+  /* Helper function */
+  int round( double x );
 };
 
 #endif

@@ -150,8 +150,14 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   hbox->pack_start((*manage(new Gtk::Label("Damping: "))));
   hbox->pack_start(m_damp_spinbutton);
   
-  /* Set damp value in dB here */
-  
+  if (m_net->get_has_damp() == true) {
+    /* Set damp value in dB here */
+    double r_ser = m_net->get_damp_R1().get_value();
+    Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+
+    m_damp_spinbutton.set_value(round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+  }  
+
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
   
   add(m_vbox);
@@ -406,7 +412,7 @@ void FilterLinkFrame::on_param_changed()
     if (m_imp_corr_checkbutton.get_active() == true) {
       m_net->set_has_imp_corr(true);
       /* calc imp corr here */
-      m_net->get_imp_corr_C().set_value(speaker.get_lvc() * 1000 / pow(speaker.get_rdc(), 2) * 1000000);
+      m_net->get_imp_corr_C().set_value((speaker.get_lvc() / 1000) / pow(speaker.get_rdc(), 2) * 1000000);
       m_net->get_imp_corr_C().set_unit("u");
       m_net->get_imp_corr_R().set_value(speaker.get_rdc());
     } else {
@@ -415,9 +421,11 @@ void FilterLinkFrame::on_param_changed()
     if (m_damp_spinbutton.get_value_as_int() > 0) {
       m_net->set_has_damp(true);
       
-      /* TODO: fix these calculations */
-      m_net->get_damp_R1().set_value(m_damp_spinbutton.get_value_as_int());
-      m_net->get_damp_R2().set_value(m_damp_spinbutton.get_value_as_int());
+      /* Calculate resistors for damping network */
+      double r_ser = speaker.get_rdc() * (pow(10, m_damp_spinbutton.get_value() / 20) - 1);
+      double r_par = speaker.get_rdc() + pow(speaker.get_rdc(), 2) / r_ser;
+      m_net->get_damp_R1().set_value(r_ser);
+      m_net->get_damp_R2().set_value(r_par);
       
     } else {
       m_net->set_has_damp(false);
@@ -674,4 +682,18 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
       break;
   }
   return nums;
+}
+
+/*
+ * Helper function to convert double->int and round it to nearest int
+ *
+ * The compiler wouldn't accept round (in math.h) so...
+ */
+int FilterLinkFrame::round( double x ) {
+  if ( ( x - (int)x ) >= 0.5 ) {
+    return (int)( (int)x + 1 );
+  } else {
+    return (int)(x);
+  }
+  return 0;
 }

@@ -51,6 +51,7 @@ protected:
   void on_selection_changed();
   void on_new_copy();
   void on_new();
+  void on_new_from_menu(int type);
   void on_new_xml();
   void on_save();
   void on_save_as();

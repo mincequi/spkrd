@@ -250,8 +250,13 @@ void Speaker_ListStore::on_save()
     new_xml_pressed = false;
   } else {
     cout << "SpeakerEditor: Filename = " << m_filename << endl;
-    m_speaker_list->to_xml(m_filename);
-    m_SaveButton.set_sensitive(false);
+    try {
+      m_speaker_list->to_xml(m_filename);
+      m_SaveButton.set_sensitive(false);
+    } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+    }
   }
 }
 
@@ -272,10 +277,15 @@ void Speaker_ListStore::on_save_as()
 void Speaker_ListStore::on_save_as_ok(Gtk::FileSelection *f)
 {
   //cout << "save as ok" << endl;
-  m_speaker_list->to_xml(f->get_filename());
-  f->hide();
-  m_filename = f->get_filename();
-  signal_speakerlist_loaded(m_filename);
+  try {
+    m_speaker_list->to_xml(f->get_filename());
+    f->hide();
+    m_filename = f->get_filename();
+    signal_speakerlist_loaded(m_filename);
+  } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+  }
 }
 
 void Speaker_ListStore::on_selection_changed()

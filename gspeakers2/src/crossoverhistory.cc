@@ -102,7 +102,7 @@ CrossoverHistory::CrossoverHistory() :
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   selection->select(row);
-
+  signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
 }
 
 bool CrossoverHistory::on_delete_event(GdkEventAny *event)
@@ -118,6 +118,7 @@ void CrossoverHistory::on_part_modified() {
 CrossoverHistory::~CrossoverHistory()
 {
   g_settings.setValue("CrossoverListXml", m_filename);
+  g_settings.save();
 }
 
 void CrossoverHistory::on_open_xml()
@@ -288,6 +289,37 @@ void CrossoverHistory::on_new_copy()
   m_SaveButton.set_sensitive(true);
 }
 
+void CrossoverHistory::on_new_from_menu(int type)
+{
+  cout << "CrossoverHistory::on_new_from_menu: " << type << endl;
+  /* add new crossover of appropriate type here */
+  time_t t;
+  time(&t);
+  /* convert to nice time format */
+  string s = string(ctime(&t));
+  int length = s.length();
+  s[length-1] = '\0';
+  
+  Crossover c(type, "Crossover " + s);
+
+  /* Add to liststore */
+  liststore_add_item(c);
+  m_crossover_list.crossover_list()->push_back(c);
+  
+  Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+ 
+  /* make our new crossover the selected crossover */
+  char *str = NULL;
+  GString *buffer = g_string_new(str);
+  g_string_printf(buffer, "%d", m_crossover_list.crossover_list()->size() - 1);
+  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+  Gtk::TreePath path(gpath);
+  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  refSelection->select(row);
+  m_SaveButton.set_sensitive(true);
+
+}
+
 void CrossoverHistory::on_new()
 {
   Crossover c;
@@ -334,8 +366,13 @@ void CrossoverHistory::on_save()
     on_save_as();
     new_xml_pressed = false;
   } else {
-    m_crossover_list.to_xml(m_filename);
-    m_SaveButton.set_sensitive(false);
+    try {
+      m_crossover_list.to_xml(m_filename);
+      m_SaveButton.set_sensitive(false);
+    } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+    }
   }
 }
 
@@ -356,11 +393,16 @@ void CrossoverHistory::on_save_as()
 void CrossoverHistory::on_save_as_ok(Gtk::FileSelection *f)
 {
   cout << "save as ok" << endl;
-  m_crossover_list.to_xml(f->get_filename());
-  f->hide();
-  m_filename = f->get_filename();
-  set_label("Crossover list [" + m_filename + "]");
-  m_SaveButton.set_sensitive(false);
+  try {
+    m_crossover_list.to_xml(f->get_filename());
+    f->hide();
+    m_filename = f->get_filename();
+    set_label("Crossover list [" + m_filename + "]");
+    m_SaveButton.set_sensitive(false);
+  } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+  }
 }
 
 void CrossoverHistory::on_remove()

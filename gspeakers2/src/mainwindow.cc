@@ -19,6 +19,7 @@
 
 #include "../config.h"
 #include "mainwindow.h"
+#include "crossover.h"
 
 MainWindow::MainWindow() :
   m_main_vbox(),
@@ -65,13 +66,20 @@ MainWindow::MainWindow() :
   }
   {
   	Gtk::Menu::MenuList& menulist = m_crossover_menu.items();
-
-  	menulist.push_back( Gtk::Menu_Helpers::MenuElem("New lowpass crossover") );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New highpass crossover") );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2-way crossover") );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2.5-way crossover") );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 3-way crossover") );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 4-way crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _subsonic crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action) , CROSSOVER_TYPE_SUBSONIC) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_HIGHPASS) ) );
+        menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _2-way crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_TWOWAY) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2._5-way crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _3-way crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_THREEWAY) ) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _4-way crossover", 
+                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_FOURWAY) ) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
@@ -153,4 +161,12 @@ void MainWindow::on_about()
   Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + "\n\n(C) Daniel Sundberg <dss@home.se>\n\nhttp://gspeakers.sf.net", 
                         Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true, true);
   m.run();
+}
+
+void MainWindow::on_crossover_menu_action(int type) 
+{
+  cout << "MainWindow::on_crossover_menu_action: " << type << endl;
+  signal_new_crossover(type);
+  /* Switch to crossover wizard page since you probably want to start there */
+  m_cpanel_notebook.set_current_page(2);
 }

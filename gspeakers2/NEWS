@@ -1,3 +1,11 @@
+GSpeakers-0.4
+
+* Some bugfixes to older versions (for example, now GSpeakers
+    warns you if you try to save a file to a place where 
+    your user does not have write access)
+
+* Crossover Wizard (you can calculate simple crossovers)
+
 GSpeakers-0.3
 
 * New UI

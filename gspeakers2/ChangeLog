@@ -1,5 +1,22 @@
 GSpeakers ChangeLog
 
+2002-08-31
+
+* filterlinkframe.h/cc: impedance correction and damping network calculations
+
+* speakerlist.cc, boxlist.cc, crossoverlist.cc: throw exception if xmlSaveFile 
+    fails
+
+* speakereditor.cc, boxhistory.cc, crossoverhistory.cc: catch exception if 
+    xmlSaveFile failed, display error message
+
+2002-08-30
+
+* mainwindow.cc, crossoverhistory.h/cc: Added crossovermenu and corresponding 
+    new_from_menu-function in crossoverhistory.
+
+* common.h/cc: new signal: new_crossover_from_menu
+
 2002-08-29
 
 * filterlinkframe.cc/h: 3rd and 4th order calcs done

@@ -334,8 +334,13 @@ void BoxHistory::on_save()
     on_save_as();
     new_xml_pressed = false;
   } else {
-    m_box_list.to_xml(m_filename);
-    m_SaveButton.set_sensitive(false);
+    try {
+      m_box_list.to_xml(m_filename);
+      m_SaveButton.set_sensitive(false);
+    } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+    }
   }
 }
 
@@ -356,12 +361,17 @@ void BoxHistory::on_save_as()
 void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
 {
   //cout << "save as ok" << endl;
-  m_box_list.to_xml(f->get_filename());
-  f->hide();
-  m_filename = f->get_filename();
-  set_label("Enclosure list [" + m_filename + "]");
-  g_settings.setValue("BoxListXml", m_filename);
-  m_SaveButton.set_sensitive(false);
+  try {
+    m_box_list.to_xml(f->get_filename());
+    f->hide();
+    m_filename = f->get_filename();
+    set_label("Enclosure list [" + m_filename + "]");
+    g_settings.setValue("BoxListXml", m_filename);
+    m_SaveButton.set_sensitive(false);
+  } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+  }
 }
 
 void BoxHistory::on_remove()
