@@ -18,19 +18,19 @@
 #include "crossoverwizard.h"
 
 CrossoverWizard::CrossoverWizard() :
-  Gtk::Frame(_("Crossover wizard")),
+  Gtk::Frame(""),
   m_scrolled_window(),
-  m_vbox(),
-  m_outer_vbox()
-
+  m_vbox()
 {
+  set_border_width(2);
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Crossover wizard</b>"));
+
   signal_crossover_selected.connect(slot(*this, &CrossoverWizard::on_crossover_selected));
   m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-  //m_scrolled_window.set_shadow_type(Gtk::SHADOW_NONE);
+  m_scrolled_window.set_border_width(2);
   add(m_scrolled_window);
-  m_scrolled_window.add(m_outer_vbox);
-  m_outer_vbox.pack_start(m_vbox);
-  m_outer_vbox.set_border_width(5);
+  m_scrolled_window.add(m_vbox);
   show_all();
   signal_speakerlist_loaded.connect(slot(*this, &CrossoverWizard::on_speaker_list_loaded));
 }

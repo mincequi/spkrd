@@ -32,7 +32,10 @@ CrossoverPaned::CrossoverPaned()
   set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
   add2(m_hpaned2);
   m_hpaned2.add1(crossover_treeview);
-  m_vpaned.add1(m_plot_notebook);
+  
+  m_notebook_vbox.pack_start(m_plot_notebook);
+  m_notebook_vbox.set_border_width(2);
+  m_vpaned.add1(m_notebook_vbox);
 
   m_plot_notebook.append_page(filter_plot, _("Crossover freq resp"));
   m_plot_notebook.append_page(total_filter_plot, _("Total crossover freq resp"));

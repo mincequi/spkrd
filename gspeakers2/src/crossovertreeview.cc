@@ -23,10 +23,13 @@
 #include "common.h"
 
 CrossoverTreeView::CrossoverTreeView() :
-  Gtk::Frame(_("Currently selected crossover"))
+  Gtk::Frame("")
 {
-  set_border_width(8);
+  set_border_width(2);
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Currently selected crossover</b>"));
 
+  m_ScrolledWindow.set_border_width(12);
   add(m_ScrolledWindow);
 
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);

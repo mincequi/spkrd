@@ -20,7 +20,8 @@
 #ifndef __CROSSOVER_PANED_H
 #define __CROSSOVER_PANED_H
 
-#include <gtkmm.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/menu.h>
 #include "common.h"
 #include "crossovertreeview.h"
 #include "crossoverhistory.h"
@@ -46,6 +47,7 @@ protected:
   void set_save_state(bool b);
   
 private:
+  Gtk::VBox m_notebook_vbox;
   Gtk::Notebook m_plot_notebook;
   CrossoverWizard crossover_wizard;
   CrossoverTreeView crossover_treeview;

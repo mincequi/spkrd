@@ -24,7 +24,7 @@
 #ifndef __CELLRENDERER_POPUP_H
 #define __CELLRENDERER_POPUP_H
 
-#include <gdkmm.h>
+#include <gdkmm/rectangle.h>
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/window.h>
 

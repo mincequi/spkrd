@@ -21,7 +21,9 @@
 #ifndef __GSPEAKERS_CELLITEM_CROSSOVER
 #define __GSPEAKERS_CELLITEM_CROSSOVER
 
-#include <gtkmm.h>
+#include <glibmm/ustring.h>
+#include <glib/gstring.h>
+#include <vector>
 #include "part.h"
 
 /*

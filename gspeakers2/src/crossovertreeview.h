@@ -20,7 +20,12 @@
 #ifndef __GSPEAKERS_CROSSOVERTREEVIEW
 #define __GSPEAKERS_CROSSOVERTREEVIEW
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/box.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treeview.h>
 #include "crossover.h"
 #include "cellitemcrossover.h"
 
