@@ -53,7 +53,7 @@ GSpeakersPlot::GSpeakersPlot() {
  * This is the function that does all the drawing on the window
  */
 gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
-  int x, y, old_x = 0, old_y = 0;
+  int x = 0, y = 0, old_x = 0, old_y = 0;
   int size_x, size_y;
   int box_x, box_y, box_size_x, box_size_y;
   int xaxis_y;
@@ -149,12 +149,13 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
 		 ( box_size_y / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
       /* Don't draw anything if we got zeros */
       if ( db_mag[f] > MAX_NEG_VALUE ) {
-	if ( old_x == 0 ) { old_x = x; old_y = y; }
+	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
 	window.draw_line( gc, old_x, old_y, x, y );
 	//	window.draw_rectangle( gc, true, x, y, 1, 1 );
       }
       old_x = x; old_y = y;
     }
+    old_x = 0; old_y = 0;
   }
   gc.set_line_style( GDK_LINE_SOLID );
   gc.set_line_width( 1 );
@@ -247,6 +248,9 @@ int GSpeakersPlot::round( double x ) {
   return 0;
 }
 
+/*
+ * Kind of obvious setters...
+ */
 void GSpeakersPlot::set_font( string font ) {
   f = Gdk_Font( font );  
 }

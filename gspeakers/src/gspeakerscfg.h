@@ -25,16 +25,22 @@
 #define __GSPEAKERSCFG_H
 
 #include <string>
+#include <gdk--/gc.h>
+#include <gtk--/tooltips.h>
 #include "cconfig.h"
 
 class GSpeakersCFG : public CConfig {
  public:
   GSpeakersCFG();
+  ~GSpeakersCFG();
   string get_font();
-  int get_line_style();
+  GdkLineStyle get_line_style();
   int get_line_size();
+  Gtk::Tooltips *tooltips;
   
   void set_font( string newfont );
+  void set_line_style( GdkLineStyle style );
+  void set_line_size( int size );
  private:
 };
 

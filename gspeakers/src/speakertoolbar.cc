@@ -24,8 +24,12 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <gnome--/dialog.h>
+#include <gnome--.h>
 #include <gtk--/label.h>
+#include <gtk--/imageloader.h>
+#include <gtk--/tooltips.h>
 #include "speakertoolbar.h"
+
 
 using SigC::bind;
 
@@ -34,6 +38,8 @@ using SigC::bind;
  */
 SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg ) 
   : Gtk::HandleBox() {
+  Gtk::ImageLoader *il;
+  Gnome::Pixmap *pixmap;
   cfg = icfg;
   new_is_hit = false;
 
@@ -42,25 +48,57 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
 
   hbox = manage( new Gtk::HBox() );
   add( *hbox );
-  new_spk_button = manage( new Gtk::Button("New spk") );
+
+  new_spk_button = manage( new Gtk::Button() );
+  il = new Gtk::ImageLoader( "../xpm/new_speaker.xpm" );
+  new_spk_button->add_pixmap( il->pix(), il->bit() );
+  new_spk_button->set_relief( GTK_RELIEF_NONE );
+  cfg->tooltips->set_tip( *new_spk_button, "New Speaker" );
   hbox->pack_start( *new_spk_button, false, false );
   new_spk_button->clicked.connect( slot( this, &SpeakerToolbar::new_spk ) );
-  new_xml_button = manage( new Gtk::Button("New xml") );
+
+  new_xml_button = manage( new Gtk::Button() );
+  new_xml_button->set_relief( GTK_RELIEF_NONE );
+  il = new Gtk::ImageLoader( "../xpm/new_xml.xpm" );
+  new_xml_button->add_pixmap( il->pix(), il->bit() );
   hbox->pack_start( *new_xml_button, false, false );
   new_xml_button->clicked.connect( slot( this, &SpeakerToolbar::new_xml ) );
+  cfg->tooltips->set_tip( *new_xml_button, "New XML-file" );
 
-  open_button = manage( new Gtk::Button("Open") );
+  open_button = manage( new Gtk::Button() );
+  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
+  open_button->add( *pixmap );
+
   open_button->clicked.connect( slot( this, &SpeakerToolbar::open ) );
+  open_button->set_relief( GTK_RELIEF_NONE );
   hbox->pack_start( *open_button, false, false );
-  save_button = manage( new Gtk::Button("Save") );
+  cfg->tooltips->set_tip( *open_button, "Open XML-file" );
+
+  save_button = manage( new Gtk::Button() );
+  save_button->set_relief( GTK_RELIEF_NONE );
   save_button->clicked.connect( slot( this, &SpeakerToolbar::save ) );
+  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
+  save_button->add( *pixmap );
+  cfg->tooltips->set_tip( *save_button, "Save current speaker" );
   hbox->pack_start( *save_button, false, false ); 
-  save_as_button = manage( new Gtk::Button("Save as") );
+
+  save_as_button = manage( new Gtk::Button() );
+  save_as_button->set_relief( GTK_RELIEF_NONE );
   save_as_button->clicked.connect( slot( this, &SpeakerToolbar::save_as ) );
+  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
+  save_as_button->add( *pixmap );
+
   hbox->pack_start( *save_as_button, false, false ); 
-  remove_button = manage( new Gtk::Button("Del") );
+  cfg->tooltips->set_tip( *save_as_button, "Save XML-file as" );
+
+  remove_button = manage( new Gtk::Button() );
   remove_button->clicked.connect( slot( this, &SpeakerToolbar::remove ) );
+  remove_button->set_relief( GTK_RELIEF_NONE );
+  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
+  remove_button->add( *pixmap );
+
   hbox->pack_start( *remove_button, false, false ); 
+  cfg->tooltips->set_tip( *remove_button, "Delete this speaker" );
 
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
@@ -92,6 +130,7 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   /* Read default xml-file here */
   current_file = infile;
   filename_entry->set_text( current_file );
+  cfg->tooltips->set_tip( *filename_entry, current_file );
   load_xml( current_file );
 }
 
@@ -136,6 +175,7 @@ void SpeakerToolbar::new_xml() {
   qts_entry->set_text("");
   fs_entry->set_text("");
   filename_entry->set_text("");
+  cfg->tooltips->set_tip( *filename_entry, current_file );
   speaker_combo->get_entry()->set_text("");
   new_is_hit = true;
 }
@@ -168,6 +208,7 @@ void SpeakerToolbar::open_action( Gtk::FileSelection *s ) {
   i = current_file.find_last_of("/");
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
+    cfg->tooltips->set_tip( *filename_entry, current_file.substr( i + 1 ) );
   }
 } 
 
@@ -220,6 +261,8 @@ void SpeakerToolbar::save_as_action( Gtk::FileSelection *s ) {
   i = current_file.find_last_of("/");
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
+    cfg->tooltips->set_tip( *filename_entry, current_file.substr( i + 1 ) );
+    
   }
   
   save();

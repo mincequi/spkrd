@@ -29,16 +29,18 @@
 #include <gtk--/button.h>
 #include <gtk--/table.h>
 #include <gtk--/fontselection.h>
+#include <gtk--/spinbutton.h>
 #include "gspeakerscfg.h"
+#include "gspeakersplot.h"
 
 class GSpeakersCFGBox : public Gnome::PropertyBox {
  public:
-  GSpeakersCFGBox( GSpeakersCFG *icfg );
+  GSpeakersCFGBox( GSpeakersPlot *iplot, GSpeakersCFG *icfg );
 
  protected:
   /* Callbacks */
   virtual void apply_impl( gint page_num );
-  virtual void close_impl( gint page_num );
+  virtual gboolean close_impl();
   
   void browse_font();
   void browse_font_ok();
@@ -47,10 +49,17 @@ class GSpeakersCFGBox : public Gnome::PropertyBox {
  private:
   string oldfont;
   GSpeakersCFG *cfg;
+  GSpeakersPlot *plot;
   Gtk::Entry *font_entry;
   Gtk::Button *select_font_button;
   Gtk::Table *table;
   Gtk::FontSelectionDialog *font_dialog;
+  Gtk::RadioButton *solid_radio;
+  Gtk::RadioButton *ddash_radio;
+  Gtk::RadioButton *dash_radio;
+  Gtk::SpinButton *line_size_spin;
+
+  void reset_radio_state();
 }; 
 
 #endif

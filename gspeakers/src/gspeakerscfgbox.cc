@@ -22,11 +22,34 @@
  */
 
 #include <gtk--/label.h>
+#include <gtk--/radiobutton.h>
+#include <gtk--/adjustment.h>
 #include "gspeakerscfgbox.h"
 
-GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersCFG *icfg ) : Gnome::PropertyBox() {
+/*
+ * Construct and initialize the properties dialog
+ */
+GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersPlot *iplot, GSpeakersCFG *icfg ) 
+  : Gnome::PropertyBox() {
+  Gtk::Adjustment *adj;
   Gtk::Label *l;
   cfg = icfg;
+  plot = iplot;
+
+  solid_radio = manage( new Gtk::RadioButton( "Solid line" ) );
+  ddash_radio = manage( new Gtk::RadioButton( "Dashed line" ) );
+  dash_radio = manage( new Gtk::RadioButton( "On/Off dashed line" ) );
+  ddash_radio->set_group( solid_radio->group() );
+  dash_radio->set_group( solid_radio->group() );
+  solid_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  dash_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  ddash_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+
+  adj = manage( new Gtk::Adjustment( (gfloat)cfg->get_line_size(), (gfloat)1, (gfloat)30 ) );
+  line_size_spin = manage( new Gtk::SpinButton( *adj, (gfloat)1, 0 ) );
+  line_size_spin->changed.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  line_size_spin->set_wrap( true );
+  line_size_spin->set_snap_to_ticks( true );
 
   l = manage( new Gtk::Label( "Font: " ) );
   font_entry = manage( new Gtk::Entry() );
@@ -36,31 +59,61 @@ GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersCFG *icfg ) : Gnome::PropertyBox() {
   select_font_button = manage( new Gtk::Button( "Browse..." ) );
   select_font_button->clicked.connect( slot( this, &GSpeakersCFGBox::browse_font ) );
 
-  table = manage( new Gtk::Table( 1, 3 ) );
-  table->attach( *l, 0, 1, 0, 1 );
-  table->attach( *font_entry, 1, 2, 0, 1 );
-  table->attach( *select_font_button, 2, 3, 0, 1 );
-  
+  table = manage( new Gtk::Table( 6, 3 ) );
+  table->attach( *l, 0, 1, 5, 6 );
+  table->attach( *font_entry, 1, 2, 5, 6 );
+  table->attach( *select_font_button, 2, 3, 5, 6 );
+  table->attach( *solid_radio, 0, 2, 0, 1);
+  table->attach( *ddash_radio, 0, 2, 1, 2);
+  table->attach( *dash_radio, 0, 2, 3, 4);
+  l = manage( new Gtk::Label( "Line size: ") );
+  table->attach( *l, 0, 1, 4, 5);
+  table->attach( *line_size_spin, 1, 2, 4, 5);
   l = manage( new Gtk::Label( "Plot" ) );
   append_page( *table, *l );
   table->show_all();
+
+  realize();
+  reset_radio_state();
 }
 
 void GSpeakersCFGBox::apply_impl( gint page_num ) {
+  GdkLineStyle style = GDK_LINE_SOLID;
+
+  /* Write the config to cfg-file */
   oldfont = font_entry->get_text();
   cfg->set_font( font_entry->get_text() );
+  plot->set_font( font_entry->get_text() );
+  if ( solid_radio->get_active() == true ) {
+    style = GDK_LINE_SOLID;
+  } else if ( dash_radio->get_active() == true ) {
+    style = GDK_LINE_ON_OFF_DASH;
+  } else if ( ddash_radio->get_active() == true ) {
+    style = GDK_LINE_DOUBLE_DASH;
+  }
+  cfg->set_line_style( style );
+  plot->set_line_style( style );
+
+  cfg->set_line_size( line_size_spin->get_value_as_int() );
+  plot->set_line_size( line_size_spin->get_value_as_int() );
+
+  plot->redraw();
 }
 
-void GSpeakersCFGBox::close_impl( gint page_num ) {
+gboolean GSpeakersCFGBox::close_impl() {
+  /* Close the dialog and reset changed values */
   font_entry->set_text( oldfont );
+  reset_radio_state();
+  line_size_spin->set_value( (gfloat)cfg->get_line_size() );
+  return FALSE;
 }
 
 void GSpeakersCFGBox::browse_font() {
+  /* Setup the font-selection dialog */
   font_dialog = manage( new Gtk::FontSelectionDialog( "Select font..." ) );
   font_dialog->set_font_name( font_entry->get_text() );
   font_dialog->get_ok_button()->clicked.connect( slot( this, &GSpeakersCFGBox::browse_font_ok ) );
   font_dialog->get_cancel_button()->clicked.connect( slot( this, &GSpeakersCFGBox::browse_font_cancel ) );
-
   font_dialog->show();
 }
 
@@ -71,4 +124,18 @@ void GSpeakersCFGBox::browse_font_ok() {
 }
 void GSpeakersCFGBox::browse_font_cancel() {
   font_dialog->destroy();
+}
+
+void GSpeakersCFGBox::reset_radio_state() {
+  switch ( cfg->get_line_style() ) {
+  case GDK_LINE_SOLID:
+    solid_radio->set_active( true );
+    break;
+  case GDK_LINE_ON_OFF_DASH:
+    dash_radio->set_active( true );
+    break;
+  case GDK_LINE_DOUBLE_DASH:
+    ddash_radio->set_active( true );
+    break;
+  }
 }

@@ -73,6 +73,8 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
   */ 
   GSpeakersPlot *d = manage( new GSpeakersPlot( ) );
   d->set_font( cfg->get_font() );
+  d->set_line_style( cfg->get_line_style() );
+  d->set_line_size( cfg->get_line_size() );
   BoxList *l = manage( new BoxList( cfg ) );
   SimToolbar *simtoolbar = manage( new SimToolbar( stoolbar, btoolbar, d, l, cfg ) );
 
@@ -87,7 +89,7 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
   Gtk::Frame *frame1 = manage( new Gtk::Frame() );
   Gtk::Frame *frame2 = manage( new Gtk::Frame() );
 
-  l->set_usize(150, 100);
+  l->set_usize(200, 100);
   
   frame1->add( *l );
 

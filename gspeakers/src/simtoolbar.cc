@@ -44,7 +44,7 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   green = 0;
   blue = 1.0;
   last_color = COLOR_BLUE;
-  cfgbox = manage( new GSpeakersCFGBox( cfg ) );
+  cfgbox = manage( new GSpeakersCFGBox( plot, cfg ) );
   color = new Gdk_Color();
   color->set_rgb_p( red, green, blue );
   blist = iblist;
@@ -80,10 +80,10 @@ SimToolbar::~SimToolbar() {
 }
 
 void SimToolbar::cfg_clicked() {
-  cout << "config clicked" << endl;
-  cfgbox->run_and_close();
-  cout << "after close" << endl;
-  //  cfgbox->();
+  //  cout << "config clicked" << endl;
+  //  cfgbox->run_and_close();
+  //  cout << "after close" << endl;
+  cfgbox->show();
 }
 
 /*
@@ -213,7 +213,7 @@ void SimToolbar::set_new_color() {
     if ( blue == 1.0 ) {
       blue = 0;
     } else {
-      green = green + 0.2;
+      green = green + 0.3;
       blue = blue + 0.2;
     }
     last_color = COLOR_BLUE;
