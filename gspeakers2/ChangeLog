@@ -1,5 +1,13 @@
 GSpeakers ChangeLog
 
+2002-10-18
+
+* crossovertreeview.cc: use the new cellrendererpopup instead of a plain 
+    text renderer
+
+* popupentry.h/cc cellrendererpopup.h/cc: added files which handles enable a 
+    cell to have a spinbutton as renderer, not quite done but it works...
+
 2002-10-15
 
 * crossoverwizard.cc: prettier labels on most common filters in crossover wizard 

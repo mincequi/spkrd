@@ -17,6 +17,8 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
+#include "cellrendererpopup.h"
+#include "popupentry.h"
 #include "crossovertreeview.h"
 #include "common.h"
 
@@ -364,7 +366,8 @@ void CrossoverTreeView::add_columns()
     }
   }
   {
-    Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
+    //Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
+    CellRendererPopup* pRenderer = Gtk::manage( new CellRendererPopup() );
     pRenderer->property_xalign().set_value(0.0);
     pRenderer->signal_edited().connect(slot(*this, &CrossoverTreeView::on_cell_edited_value));
     
