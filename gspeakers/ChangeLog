@@ -1,3 +1,9 @@
+2001-12-31 15.00 sumpan
+         
+	* Added "show tooltips on toolbar" config option
+	
+	* Added icons to the boxtoolbar.
+	
 2001-12-29,30 23.00 sumpan
 
 	* Did some work on the properties dialog.

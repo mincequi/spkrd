@@ -40,6 +40,7 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   : Gtk::HandleBox() {
   cfg = icfg;
   new_is_hit = false;
+  set_shadow_type( GTK_SHADOW_NONE );
 
   /* Setup toolbar-UI */
   Gtk::Label *label;
@@ -399,7 +400,6 @@ void SpeakerToolbar::combo_changed() {
   set_speaker_data( speaker_combo->get_entry()->get_text() );
 }
 
-/* Fix memory management for this function! */
 void SpeakerToolbar::set_toolbar_style( int style ) {
   Gtk::ImageLoader *il1, *il2;
   Gnome::Pixmap *pixmap;
@@ -409,10 +409,12 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
   
   switch ( style ) {
   case ICONS_ONLY:
-    il1 = new Gtk::ImageLoader( "../xpm/new_speaker.xpm" );
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "new_speaker.xpm" );
     new_spk_button->add_pixmap( il1->pix(), il1->bit() );
-    il2 = new Gtk::ImageLoader( "../xpm/new_xml.xpm" );
+    delete il1;
+    il2 = new Gtk::ImageLoader( cfg->get_xpm_path() + "new_xml.xpm" );
     new_xml_button->add_pixmap( il2->pix(), il2->bit() );
+    delete il2;
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
     open_button->add( *pixmap );
     pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
@@ -431,14 +433,14 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
     remove_button->add_label( "Delete" );
     break;
   case TEXT_AND_ICONS:
-    gtk_pixmap = manage( new Gtk::Pixmap( "../xpm/new_speaker.xpm" ) );
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_speaker.xpm" ) );
     vbox = manage( new Gtk::VBox() );
     l = manage( new Gtk::Label( "New spk" ) );
     new_spk_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
     
-    gtk_pixmap = manage( new Gtk::Pixmap( "../xpm/new_xml.xpm" ) );
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_xml.xpm" ) );
     vbox = manage( new Gtk::VBox() );
     l = manage( new Gtk::Label( "New xml" ) );
     new_xml_button->add( *vbox );

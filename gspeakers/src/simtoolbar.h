@@ -49,6 +49,7 @@ class SimToolbar : public Gtk::HandleBox {
  public:
   SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar, GSpeakersPlot *gplot, BoxList *blist, GSpeakersCFG *icfg);
   ~SimToolbar();
+  void set_toolbar_style( int style );
 
  protected:
   /* Callbacks */

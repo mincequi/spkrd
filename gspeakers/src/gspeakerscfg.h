@@ -28,6 +28,7 @@
 #include <gdk--/gc.h>
 #include <gtk--/tooltips.h>
 #include "cconfig.h"
+#include "../config.h"
 
 #define TEXT_AND_ICONS 1
 #define TEXT_ONLY      2
@@ -41,11 +42,14 @@ class GSpeakersCFG : public CConfig {
   GdkLineStyle get_line_style();
   int get_line_size();
   int get_toolbar_style();
-
+  string get_xpm_path();
+  bool get_show_tooltips();
+  
   void set_font( string newfont );
   void set_line_style( GdkLineStyle style );
   void set_line_size( int size );
   void set_toolbar_style( int style );
+  void set_show_tooltips( bool show );
   Gtk::Tooltips *tooltips;
 
  private:

@@ -9,4 +9,12 @@ install-data-local:
 	    fi \
 	  done \
 	fi 
+	if test -d xpm; then \
+	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/xpm; \
+	  for xpm in xpm/*; do \
+	    if test -f $$xpm; then \
+	      $(INSTALL_DATA) $$xpm $(DESTDIR)$(pkgdatadir)/xpm; \
+	    fi \
+	  done \
+	fi 
 

@@ -48,6 +48,7 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   color = new Gdk_Color();
   color->set_rgb_p( red, green, blue );
   blist = iblist;
+  set_shadow_type( GTK_SHADOW_NONE );
 
   /* Toolbar buttons */
   sim_button = manage( new Gtk::Button( "Plot" ) );
@@ -265,4 +266,7 @@ double *SimToolbar::calc_dbmag( Box *b, Speaker *s ) {
     break;
   }
   return db_mag;
+}
+
+void SimToolbar::set_toolbar_style( int style ) {
 }

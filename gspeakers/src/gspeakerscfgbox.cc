@@ -84,10 +84,16 @@ GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersPlot *iplot, GSpeakersCFG *icfg )
   text_and_icons_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
   text_only_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
   icons_only_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
-  table = manage( new Gtk::Table( 3, 1 ) );
+
+  show_tooltips_check = manage( new Gtk::CheckButton( "Show tooltips" ) );
+  show_tooltips_check->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+
+  table = manage( new Gtk::Table( 4, 1 ) );
   table->attach( *text_and_icons_radio, 0, 1, 0, 1 );
   table->attach( *text_only_radio, 0, 1, 1, 2 );
   table->attach( *icons_only_radio, 0, 1, 2, 3 );
+  table->attach( *show_tooltips_check, 0, 1, 3, 4 );
+
   l = manage( new Gtk::Label( "Toolbars" ) );
   append_page( *table, *l );
   table->show_all();
@@ -122,6 +128,14 @@ void GSpeakersCFGBox::apply_impl( gint page_num ) {
     toolbar_style = ICONS_ONLY;
   }
   cfg->set_toolbar_style( toolbar_style );
+
+  if ( show_tooltips_check->get_active() == true ) {
+    cfg->set_show_tooltips( true );
+    cfg->tooltips->enable();
+  } else {
+    cfg->set_show_tooltips( false );
+    cfg->tooltips->disable();
+  }
 
   cfg->set_line_size( line_size_spin->get_value_as_int() );
   plot->set_line_size( line_size_spin->get_value_as_int() );
@@ -181,5 +195,9 @@ void GSpeakersCFGBox::reset_radio_state() {
     icons_only_radio->set_active( true );
     break;
   }
-
+  if ( cfg->get_show_tooltips() == true ) {
+    show_tooltips_check->set_active( true );
+  } else {
+    show_tooltips_check->set_active( false );
+  }
 }

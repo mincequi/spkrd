@@ -24,7 +24,9 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <gtk--/label.h>
+#include <gtk--/imageloader.h>
 #include <gtk--/item.h>
+#include <gnome--.h>
 #include <gnome--/dialog.h>
 #include "boxtoolbar.h"
 
@@ -35,33 +37,49 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
 
   /* Setup toolbar-UI */
   Gtk::Label *label;
+  set_shadow_type( GTK_SHADOW_NONE );
 
   hbox = manage( new Gtk::HBox() );
   add( *hbox );
 
-  new_box_button = manage( new Gtk::Button("New box") );
-
-  /* relief = NONE for all buttons ??? */
-  //new_box_button->set_relief( GTK_RELIEF_NONE );
-
+  new_box_button = manage( new Gtk::Button() );
+  new_box_button->set_relief( GTK_RELIEF_NONE );
   hbox->pack_start( *new_box_button, false, false );
   new_box_button->clicked.connect( slot( this, &BoxToolbar::new_box ) );
-  new_xml_button = manage( new Gtk::Button("New xml") );
+  cfg->tooltips->set_tip( *new_box_button, "New Box" );
+
+  /* relief = NONE for all buttons ??? */
+  //  new_box_button->set_relief( GTK_RELIEF_NONE );
+
+  new_xml_button = manage( new Gtk::Button() );
+  new_xml_button->set_relief( GTK_RELIEF_NONE );
   hbox->pack_start( *new_xml_button, false, false );
   new_xml_button->clicked.connect( slot( this, &BoxToolbar::new_xml ) );
+  cfg->tooltips->set_tip( *new_xml_button, "New XML-file" );
 
-  open_button = manage( new Gtk::Button("Open") );
+  open_button = manage( new Gtk::Button() );
+  open_button->set_relief( GTK_RELIEF_NONE );
   open_button->clicked.connect( slot( this, &BoxToolbar::open ) );
   hbox->pack_start( *open_button, false, false );
-  save_button = manage( new Gtk::Button("Save") );
+  cfg->tooltips->set_tip( *open_button, "Open XML-file" );
+
+  save_button = manage( new Gtk::Button() );
   save_button->clicked.connect( slot( this, &BoxToolbar::save ) );
+  save_button->set_relief( GTK_RELIEF_NONE );
   hbox->pack_start( *save_button, false, false ); 
-  save_as_button = manage( new Gtk::Button("Save as") );
+  cfg->tooltips->set_tip( *save_button, "Save current speaker" );
+
+  save_as_button = manage( new Gtk::Button() );
   save_as_button->clicked.connect( slot( this, &BoxToolbar::save_as ) );
   hbox->pack_start( *save_as_button, false, false ); 
-  remove_button = manage( new Gtk::Button("Del") );
+  save_as_button->set_relief( GTK_RELIEF_NONE );
+  cfg->tooltips->set_tip( *save_as_button, "Save XML-file as" );
+
+  remove_button = manage( new Gtk::Button() );
   remove_button->clicked.connect( slot( this, &BoxToolbar::remove ) );
   hbox->pack_start( *remove_button, false, false ); 
+  remove_button->set_relief( GTK_RELIEF_NONE );
+  cfg->tooltips->set_tip( *remove_button, "Delete this speaker" );
 
   filename_entry = manage( new Gtk::Entry() );
   filename_entry->set_sensitive( false );
@@ -73,6 +91,7 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
   box_combo->get_entry()->changed.connect( slot( this, &BoxToolbar::combo_changed ) );
   box_combo->set_usize( 100, 20 );
   hbox->pack_start( *box_combo, false, false );
+
 
   /* Setup the optionmenu */
   types_menu = manage( new Gtk::Menu() );
@@ -92,6 +111,8 @@ BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() 
   fb1_entry = manage( new Gtk::Entry() );
   fb1_entry->set_usize( 50, 20 );
   hbox->pack_start( *fb1_entry, false, false );
+
+  set_toolbar_style( cfg->get_toolbar_style() );
 
 //    label = manage( new Gtk::Label("   Vol2: ") );
 //    hbox->pack_start( *label, false, false );
@@ -443,4 +464,84 @@ Box *BoxToolbar::get_box(void) {
 		    current_boxtype, fb1_entry->get_text(), 
 		    vol2_entry->get_text(), fb2_entry->get_text() );
   return b;
+}
+
+void BoxToolbar::set_toolbar_style( int style ) {
+  Gtk::ImageLoader *il1, *il2;
+  Gnome::Pixmap *pixmap;
+  Gtk::VBox *vbox;
+  Gtk::Label *l;
+  Gtk::Pixmap *gtk_pixmap;
+  
+  switch ( style ) {
+  case ICONS_ONLY:
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "new_box.xpm" );
+    new_box_button->add_pixmap( il1->pix(), il1->bit() );
+    delete il1;
+    il2 = new Gtk::ImageLoader( cfg->get_xpm_path() + "new_xml.xpm" );
+    new_xml_button->add_pixmap( il2->pix(), il2->bit() );
+    delete il2;
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
+    open_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
+    save_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
+    save_as_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
+    remove_button->add( *pixmap );
+    break;
+  case TEXT_ONLY:
+    new_box_button->add_label( "New box" );
+    new_xml_button->add_label( "New xml" );
+    open_button->add_label( "Open" );
+    save_button->add_label( "Save" );
+    save_as_button->add_label( "Save as" );
+    remove_button->add_label( "Delete" );
+    break;
+  case TEXT_AND_ICONS:
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_box.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "New Box" ) );
+    new_box_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+    
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "new_xml.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "New xml" ) );
+    new_xml_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Open xml" ) );
+    open_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Save" ) );
+    save_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Save as" ) );
+    save_as_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Delete" ) );
+    remove_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    break;
+  }
 }

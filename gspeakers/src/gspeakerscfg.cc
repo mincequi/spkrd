@@ -29,6 +29,12 @@ string cfg_file = string( getenv("HOME") ) + string("/.gspeakers/gspeakers.conf"
 
 GSpeakersCFG::GSpeakersCFG() : CConfig( (char *)cfg_file.c_str() ) {
   tooltips = new Gtk::Tooltips();
+  if ( get_show_tooltips() == true ) {
+    tooltips->enable();
+  } else {
+    tooltips->disable();
+  }
+  
 };
 
 GSpeakersCFG::~GSpeakersCFG() {
@@ -95,4 +101,24 @@ void GSpeakersCFG::set_toolbar_style( int style ) {
 
 int GSpeakersCFG::get_toolbar_style() {
   return (int)atoi( getConfigKey( "toolbarstyle" ) );  
+}
+
+string GSpeakersCFG::get_xpm_path() {
+  return string( MYAPP_PREFIX ) + string( "/share/gspeakers/xpm/" );
+}
+
+void GSpeakersCFG::set_show_tooltips( bool show ) {
+  char *buf = new char[2];
+  if ( show == true ) {
+    sprintf( buf, "1" );
+    writeConfigKey( (char *)("showtooltips"), buf );
+  } else {
+    sprintf( buf, "0" );
+    writeConfigKey( (char *)("showtooltips"), buf );
+  }
+}
+
+
+bool GSpeakersCFG::get_show_tooltips() {
+  return (bool)atoi( getConfigKey( "showtooltips" ) );  
 }

@@ -30,6 +30,7 @@
 #include <gtk--/table.h>
 #include <gtk--/fontselection.h>
 #include <gtk--/spinbutton.h>
+#include <gtk--/checkbutton.h>
 #include "gspeakerscfg.h"
 #include "gspeakersplot.h"
 
@@ -62,6 +63,8 @@ class GSpeakersCFGBox : public Gnome::PropertyBox {
   Gtk::RadioButton *text_only_radio;
   Gtk::RadioButton *icons_only_radio;
   Gtk::RadioButton *text_and_icons_radio;
+
+  Gtk::CheckButton *show_tooltips_check;
 
   void reset_radio_state();
 }; 
