@@ -78,5 +78,6 @@ AC_OUTPUT(
 	src/Makefile
 	po/Makefile
 	xml/Makefile
+	pixmaps/Makefile
 	gspeakers.desktop
 )

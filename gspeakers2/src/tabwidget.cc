@@ -22,11 +22,17 @@
 TabWidget::TabWidget(string filename, string text) : Gtk::HBox()
 {
   try {
-    Glib::RefPtr<Gdk::Pixbuf> icon = Gdk::Pixbuf::create_from_file(filename);
+    Glib::RefPtr<Gdk::Pixbuf> icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/" + filename);
     image = manage(new Gtk::Image(icon));
     pack_start(*image);
   } catch (Gdk::PixbufError e) {
+#ifdef OUTPUT_DEBUG
     cout << e.code() << endl;
+#endif
+  }  catch (Glib::FileError fe) {
+#ifdef OUTPUT_DEBUG
+    cout << fe.code() << endl;
+#endif
   }
   
   pack_start(*(manage(new Gtk::Label(text))));

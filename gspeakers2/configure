@@ -3310,6 +3310,7 @@ trap 'rm -fr `echo "Makefile
 	src/Makefile
 	po/Makefile
 	xml/Makefile
+	pixmaps/Makefile
 	gspeakers.desktop
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -3439,6 +3440,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
 	src/Makefile
 	po/Makefile
 	xml/Makefile
+	pixmaps/Makefile
 	gspeakers.desktop
 "}
 EOF

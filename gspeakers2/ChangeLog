@@ -1,6 +1,11 @@
 GSpeakers ChangeLog
 
-2002-09-13
+2002-09-15
+
+* mainwindow.cc: added some pixmaps to notebook tabs and added icon for the 
+    main window, makes the app look a little bit nicer
+
+2002-09-14
 
 * Prepared for GSpeakers-0.6 release
 

@@ -54,6 +54,19 @@ MainWindow::MainWindow() :
   total_filter_plot()
   
 {
+  try {
+    Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+    set_icon(main_icon);
+  } catch (Gdk::PixbufError e) {
+#ifdef OUTPUT_DEBUG
+    cout << e.code() << endl;
+#endif
+  }  catch (Glib::FileError fe) {
+#ifdef OUTPUT_DEBUG
+    cout << fe.code() << endl;
+#endif
+  }
+  
   add(m_main_vbox);
   m_main_vbox.set_spacing(3);
 //  signal_plot_crossover.connect(slot(*this, &MainWindow::on_on_plot_crossover));
@@ -122,9 +135,12 @@ MainWindow::MainWindow() :
   
   m_main_vbox.pack_start(m_main_notebook);
   
+  /* Driver tab */
+  m_main_notebook.append_page(*manage(new Gtk::Button), *manage(new TabWidget("driver_small.png", "Drivers")));
+  
   /* Enclosure etab */
   
-  m_main_notebook.append_page(m_box_hpaned, *manage(new TabWidget("../pixmaps/speaker_small.png", "Enclosure")));
+  m_main_notebook.append_page(m_box_hpaned, *manage(new TabWidget("speaker_small.png", "Enclosure")));
   
   /* Main paned for the enclosure tab */
   m_box_hpaned.add1(m_box_edit_vpaned);
@@ -145,7 +161,7 @@ MainWindow::MainWindow() :
   m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
   
   /* Crossover tab */
-  m_main_notebook.append_page(m_crossover_hpaned1, *manage(new TabWidget("../pixmaps/filter_small.png", "Crossover") ) );
+  m_main_notebook.append_page(m_crossover_hpaned1, *manage(new TabWidget("filter_small.png", "Crossover") ) );
   m_crossover_hpaned1.add1(crossover_wizard);
   g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
   m_crossover_hpaned1.set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
@@ -162,7 +178,7 @@ MainWindow::MainWindow() :
   m_crossover_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
 
   
-
+  //m_main_notebook.append_page(*manage(new Gtk::Button), *manage(new TabWidget("measure_small.png", "Measurements")));
   /* Setup the paned widget for the box plot tab */
   //g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
   
