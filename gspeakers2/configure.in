@@ -18,7 +18,7 @@ dnl -----------------------------------------------
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 
-GNOME_COMMON_INIT
+dnl GNOME_COMMON_INIT
 
 dnl Checks for programs.
 AC_PROG_CXX
