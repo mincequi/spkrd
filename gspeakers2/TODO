@@ -14,8 +14,6 @@ GSpeakers TODO-list
 * Rpm, deb and tgz binary packages, i will need maintainer for different 
     packages too (pre-1.0)
 
-* Compile and run on windows and docs for this (important, maybe pre-1.0) 
-
 * Windows installer (maybe pre-1.0)
 
 * Loudspeaker design with GSpeakers HOWTO (important, will increase user 
@@ -70,9 +68,6 @@ GSpeakers TODO-list
 
 * Support nonmetric units
 
-* Config option: view all toolbars, view toolbars independently 
-    from each other
-
 * Splash screen, since loading the program takes a little while
 
 * Make GSpeakers work on 640x480 (pre 1.0)
@@ -86,7 +81,7 @@ GSpeakers TODO-list
 
 * show/edit Q for a sealed enclosure (pre 1.0)
 
-* Meassurement tab (pre 1.0 if libmls problems get sorted out)
+* Meassurement tab
 
 * Calculate enclosure dimensions
 
@@ -95,3 +90,5 @@ GSpeakers TODO-list
 * Phase response on crossover tab
 
 * Use standard pixmaps
+
+* Crossover edit redesign
