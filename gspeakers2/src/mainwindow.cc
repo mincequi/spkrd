@@ -30,7 +30,7 @@
 MainWindow::MainWindow()
 {
   in_quit_phase = false;
-  
+  crossover_paned.select_first_crossover();
   /* set program icon and title */
   try {
     Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
@@ -52,16 +52,24 @@ MainWindow::MainWindow()
   g_settings.defaultValueBool("SetMainWindowSize", true);
   g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
   g_settings.defaultValueUnsignedInt("MainWindowHeight", 480);
+  g_settings.defaultValueBool("SetMainWindowPosition", false);
+  g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
+  g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
   g_settings.defaultValueBool("UseAdvancedSpeakerModel", true);
   g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
   g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_ICONS);
+  g_settings.defaultValueString("SPICECmdLine", "spice3");  
   
   /* You should be able to specify this in the settings dialog, if the window manager can set the size of the window
      it may as well do it, at least sawfish can do this */
   if (g_settings.getValueBool("SetMainWindowSize") == true) {
-    set_default_size(g_settings.getValueUnsignedInt("MainWindowWidth"), g_settings.getValueUnsignedInt("MainWindowHeight"));
+    resize(g_settings.getValueUnsignedInt("MainWindowWidth"), g_settings.getValueUnsignedInt("MainWindowHeight"));
   } 
-  
+  if (g_settings.getValueBool("SetMainWindowPosition") == true) {
+    move(g_settings.getValueUnsignedInt("MainWindowPositionX"), g_settings.getValueUnsignedInt("MainWindowPositionY"));
+  } 
+
+
   /* Setup the menu */
   {
   	Gtk::Menu::MenuList& menulist = m_file_menu.items();
@@ -181,7 +189,8 @@ void MainWindow::on_quit()
 #ifdef OUTPUT_DEBUG
   cout << "MainWindow::quit" << endl;
 #endif
-  in_quit_phase = true;
+
+  in_quit_phase = true; // used to avoid segfault when some widget gets destructed at different times...
   g_settings.setValue("DriverMainPanedPosition", m_driver_hpaned.get_position());
   g_settings.setValue("DriverPlotPanedPosition", m_driver_vpaned.get_position());
 
@@ -190,6 +199,14 @@ void MainWindow::on_quit()
   get_size(width, height);
   g_settings.setValue("MainWindowWidth", width);
   g_settings.setValue("MainWindowHeight", height);
+
+  /* Save position */
+  int pos_x, pos_y;
+  get_position(pos_x, pos_y);
+  g_settings.setValue("MainWindowPositionX", pos_x);
+  g_settings.setValue("MainWindowPositionY", pos_y);
+  
+  /* Save current notebook page */
   g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
 
   /* finally save settings */

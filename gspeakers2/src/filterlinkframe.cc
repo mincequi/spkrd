@@ -47,6 +47,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   if (speaker_name != "") {
     popdown_strings.push_back(speaker_name);
   }
+  cout << "FilterLinkFrame::FilterLinkFrame" << (m_speaker_list == NULL) << endl;
   for (
     vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
     iter != m_speaker_list->speaker_list()->end();

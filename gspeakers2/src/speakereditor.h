@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   speakereditor Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -19,15 +21,11 @@
 #define __GSPEAKERS_SPEAKEREDITOR
 
 #include <gtkmm.h>
-#include "speaker.h"
 #include "speakerlist.h"
 #include "driverfreqrespplot.h"
 
 using namespace SigC;
 using namespace std;
-
-/* Prepare for future features */
-#define ENABLE_BROWSE_FILES 1
 
 class Speaker_ListStore : public SigC::Object
 {
@@ -41,6 +39,8 @@ public:
   Gtk::Widget& get_toolbar();
   
 protected:
+  bool updating_entries;
+
   /* callbacks */
   void on_cell_fixed_toggled(const Glib::ustring& path_string);
   void on_open_xml();
@@ -64,9 +64,9 @@ protected:
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void add_items(SpeakerList slist);
   virtual void liststore_add_item(Speaker foo);
-
+  void draw_imp_plot(Speaker& s, bool update = false);
+  
   //Member widgets:
   Gtk::Table m_TreeViewTable;
   Gtk::Table m_Table;
@@ -74,9 +74,7 @@ protected:
   Gtk::Label m_Label;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
-  Gtk::Button m_NewButton, m_NewXmlButton, m_AppendXmlButton, m_OpenXmlButton, m_CloseButton;
-  Gtk::Button m_BrowseImpRespButton, m_SaveButton, m_SaveAsButton, m_RemoveButton, 
-              m_EditFreqRespButton, m_BrowseFreqRespButton;
+  Gtk::Button m_EditFreqRespButton, m_BrowseFreqRespButton;
   Gtk::Entry m_IdStringEntry, m_QtsEntry, m_FsEntry, m_VasEntry, m_RdcEntry, m_LvcEntry, m_QmsEntry, m_QesEntry;
   Gtk::Entry m_ImpEntry, m_SensEntry, m_FreqRespFileEntry, m_ImpRespFileEntry;
   Gtk::CheckButton m_BassCheckButton, m_MidrangeCheckButton, m_TweeterCheckButton;

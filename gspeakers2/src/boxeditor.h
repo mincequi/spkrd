@@ -44,7 +44,7 @@ protected:
 
   /* Callbacks */
   void on_box_selected(Box *b);
-  void on_speaker_list_loaded(string);
+  void on_speaker_list_loaded(SpeakerList *);
   void on_combo_entry_changed();
   void on_box_data_changed(int i);
   bool on_delete_event(GdkEventAny *event);
@@ -62,7 +62,8 @@ protected:
 
 private: 
   Box *m_box;
-  SpeakerList m_speaker_list;
+  //SpeakerList m_speaker_list;
+  SpeakerList *m_speaker_list;
   Speaker m_current_speaker;
   bool disable_signals;
   GSpeakersColor m_color_list;

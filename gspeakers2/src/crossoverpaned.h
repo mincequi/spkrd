@@ -35,6 +35,7 @@ public:
   virtual ~CrossoverPaned();
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();
+  void select_first_crossover();
 
 protected:
   void on_settings_changed(const string&);

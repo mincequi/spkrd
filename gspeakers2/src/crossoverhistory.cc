@@ -49,9 +49,8 @@ CrossoverHistory::CrossoverHistory() :
   
   //m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   selection->signal_changed().connect(slot(*this, &CrossoverHistory::on_selection_changed));
-
+  //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   //signal_part_modified.connect(slot(*this, &CrossoverHistory::on_part_modified));
 
   add_columns();
@@ -62,16 +61,21 @@ CrossoverHistory::CrossoverHistory() :
   show_all();
   index = 0;
   
+  signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
+  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverHistory::on_net_modified_by_user));
+  signal_net_modified_by_user.connect(slot(*this, &CrossoverHistory::on_net_modified_by_wizard));
+}
+
+void CrossoverHistory::select_first_row()
+{
   char *str = NULL;
   GString *buffer = g_string_new(str);
   g_string_printf(buffer, "%d", 0);
   GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   selection->select(row);
-  signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
-  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverHistory::on_net_modified_by_user));
-  signal_net_modified_by_user.connect(slot(*this, &CrossoverHistory::on_net_modified_by_wizard));
 }
 
 void CrossoverHistory::on_net_modified_by_wizard(Net *net)

@@ -41,6 +41,7 @@ class Box;
 class Speaker;
 class Crossover;
 class Net;
+class SpeakerList;
 
 /*
  *  We define a Exception class for our program just for fun (and consistancy)
@@ -82,7 +83,8 @@ extern Signal1<void, Crossover *> signal_crossover_selected;
  *
  * SpeakerList arg is the new SpeakerList
  */
-extern Signal1<void, string> signal_speakerlist_loaded;
+//extern Signal1<void, string> signal_speakerlist_loaded;
+extern Signal1<void, SpeakerList *> signal_speakerlist_loaded;
 
 /*
  * signal_box_selected

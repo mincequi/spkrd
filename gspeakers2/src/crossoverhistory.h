@@ -55,6 +55,7 @@ public:
   void on_save();
   void on_save_as();
   void on_remove();
+  void select_first_row();
 
 protected:
   /* callbacks */

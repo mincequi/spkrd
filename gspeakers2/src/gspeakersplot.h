@@ -1,5 +1,7 @@
 /* gspeakersplot.h
  *
+ * $Id$
+ *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * This program is free software; you can redistribute it and/or 

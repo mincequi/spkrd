@@ -1,6 +1,20 @@
 GSpeakers ChangeLog
 
+2002-09-25
+
+* mainwindow.cc, settingsdialog.h/cc: config options: save size, save position
+
+2002-09-24
+
+* speakereditor.h/cc, settingdialog.h/cc: config option "draw driver imp plot"
+
+* speakereditor.h/cc: redraw imp plot if a relevant parameter has been changed
+
+* driverfreqrespplot.h/cc: added replace_plot
+
 2002-09-23
+
+* speakereditor.h/cc: code cleanup
 
 * Prepared for GSpeakers-0.7 release
 

@@ -25,6 +25,9 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   //m_spice_path_entry(),
   m_autoupdate_filter_plots("Automaticly update crossover plots when a parameter has changed"),
   m_use_advanced_speaker_model("Use advanced driver SPICE model (if you have got a complete datasheet for your drivers)"),
+  m_draw_driver_imp_plot("Draw driver impedance plot"),
+  m_save_mainwindow_size("Save main window size"),
+  m_save_mainwindow_position("Save main window position"),
   m_toolbar_style()
 {
   m_file_selection = NULL;
@@ -38,7 +41,6 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   
   get_vbox()->pack_start(m_main_notebook);
   
-
   /* General page */
   Gtk::Table *general_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, true));
   general_table->attach(*manage(new Gtk::Label("Full path to SPICE executable: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
@@ -48,6 +50,9 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   general_table->attach(m_autoupdate_filter_plots, 0, 3, 1, 2);  
   general_table->attach(m_use_advanced_speaker_model, 0, 3, 2, 3);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
+  general_table->attach(m_save_mainwindow_size, 0, 3, 3, 4);
+  general_table->attach(m_save_mainwindow_position, 0, 3, 4, 5);
+  
   m_main_notebook.append_page(*general_table, "General");
   
   /* Toolbar page */
@@ -61,16 +66,23 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   Gtk::Table *tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, true));
   tbar_table->attach(*manage(new Gtk::Label("Toolbar style: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   tbar_table->attach(m_toolbar_style, 1, 2, 0, 1);
-  m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
   m_main_notebook.append_page(*tbar_table, "Toolbars");
     
+  /* Driver page */
+  Gtk::Table *driver_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 1, true));
+  g_settings.defaultValueBool("DrawDriverImpPlot", true);
+  driver_table->attach(m_draw_driver_imp_plot, 0, 1, 0, 1);
+  m_main_notebook.append_page(*driver_table, "Drivers");
+      
   show_all();
   
-  g_settings.defaultValueString("SPICECmdLine", "spice3");
-    
   m_spice_path_entry->set_text(g_settings.getValueString("SPICECmdLine"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_use_advanced_speaker_model.set_active(g_settings.getValueBool("UseAdvancedSpeakerModel"));
+  m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
+  m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
+  m_save_mainwindow_size.set_active(g_settings.getValueBool("SetMainWindowSize"));
+  m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
 }
 
 SettingsDialog::~SettingsDialog() 
@@ -93,6 +105,10 @@ void SettingsDialog::on_apply()
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("UseAdvancedSpeakerModel", m_use_advanced_speaker_model.get_active());
   g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
+  g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
+  g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
+  g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
+  
   g_settings.save();
 }
 

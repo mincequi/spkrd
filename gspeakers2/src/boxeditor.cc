@@ -295,17 +295,15 @@ void BoxEditor::on_box_selected(Box *b)
   }
 }
 
-void BoxEditor::on_speaker_list_loaded(string speaker_list_filename)
+void BoxEditor::on_speaker_list_loaded(SpeakerList *speaker_list)
 {
-#ifdef OUTPUT_DEBUG
-  cout << "boxeditor: " << speaker_list_filename << " loaded" << endl;
-#endif
-  m_speaker_list = SpeakerList(speaker_list_filename);
+  //m_speaker_list = SpeakerList(speaker_list_filename);
+  m_speaker_list = speaker_list;
   vector<Glib::ustring> popdown_strings;
   
   for (
-    vector<Speaker>::iterator from = m_speaker_list.speaker_list()->begin();
-    from != m_speaker_list.speaker_list()->end();
+    vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
+    from != m_speaker_list->speaker_list()->end();
     ++from)
   {
     if ((*from).get_type() & SPEAKER_TYPE_BASS) {
@@ -321,7 +319,7 @@ void BoxEditor::on_combo_entry_changed()
   cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text() << endl;
 #endif
   /* Search for the new entry string in the SpeakerList */
-  m_current_speaker = m_speaker_list.get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
+  m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
   m_speaker_qts_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts()));
   m_speaker_vas_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas()));
   m_speaker_fs_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs()));

@@ -45,6 +45,11 @@ CrossoverPaned::CrossoverPaned()
   signal_crossover_set_save_state.connect( slot(*this, &CrossoverPaned::set_save_state) );
 }
 
+void CrossoverPaned::select_first_crossover()
+{
+  crossover_history.select_first_row();
+}
+
 CrossoverPaned::~CrossoverPaned()
 {
   g_settings.setValue("CrossoverPaned1Position", get_position());

@@ -21,7 +21,7 @@
 #include <fstream>
 #include <stdio.h>
 
-FreqRespEditor::FreqRespEditor(string filename = "") :
+FreqRespEditor::FreqRespEditor(string filename) :
   m_table(15, 4, false),
   m_save_button(Gtk::Stock::SAVE),
   m_saveas_button(Gtk::Stock::SAVE_AS),

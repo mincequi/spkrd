@@ -39,6 +39,7 @@ public:
   ~DriverFreqRespPlot();
   void clear();
   void add_plot(vector<GSpeakers::Point>&, Gdk::Color&);
+  void replace_plot(int, vector<GSpeakers::Point>&, Gdk::Color&);
 private: 
   GSpeakersPlot plot;
 };

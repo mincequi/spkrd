@@ -51,18 +51,19 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
        ++iter)
   {
     //cout << iter->get_type() << endl;
-    FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", &m_speaker_list));
+    FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", m_speaker_list));
     m_vbox.pack_start(*link1);
   }
   //signal_plot_crossover();
 }
 
-void CrossoverWizard::on_speaker_list_loaded(string speaker_list_filename)
+void CrossoverWizard::on_speaker_list_loaded(SpeakerList *speaker_list)
 {
 #ifdef OUTPUT_DEBUG
   cout << "CrossoverWizard::on_speaker_list_loaded" << endl;
 #endif
-  m_speaker_list = SpeakerList(speaker_list_filename);
+  //m_speaker_list = SpeakerList(speaker_list_filename);
+  m_speaker_list = speaker_list;
 }
 
 void CrossoverWizard::on_button_plot_clicked()
