@@ -113,6 +113,8 @@ void PlotHistory::on_remove()
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
+    
+    
     if(indices.size() > 0)
     {
       //Remove item from ListStore:
@@ -121,6 +123,8 @@ void PlotHistory::on_remove()
       /* Signal to the plot */
       /* We got the plot index to remove in indices[0] */
 #ifdef OUTPUT_DEBUG
+      //cout << "PlotHistory: plot to remove = " << indices[0] << endl;
+      cout << "Path: " << path[0] << endl;
       cout << "PlotHistory: plot to remove = " << indices[0] << endl;
 #endif
       signal_remove_box_plot(indices[0]);

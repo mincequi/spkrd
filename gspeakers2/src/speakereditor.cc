@@ -179,6 +179,7 @@ Speaker_ListStore::Speaker_ListStore()
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   
   selection->signal_changed().connect(slot(*this, &Speaker_ListStore::on_selection_changed));
+  //selection->set_mode(Gtk::SELECTION_SINGLE);
 
   g_settings.settings_changed.connect(slot(*this, &Speaker_ListStore::on_settings_changed));
 

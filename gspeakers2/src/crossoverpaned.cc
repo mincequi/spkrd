@@ -82,7 +82,7 @@ Gtk::Menu& CrossoverPaned::get_menu()
   //sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
   //                  slot(*this, &CrossoverHistory::on_new) ) );
   //sub_menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _highpass crossover"), 
+  sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _lowpass crossover"), 
                             GSpeakers::image_widget("stock_new_crossover_16.png"), 
                             bind<int>(slot(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_LOWPASS) ) );
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _subsonic crossover"), 
@@ -96,7 +96,8 @@ Gtk::Menu& CrossoverPaned::get_menu()
                             bind<int>(slot(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_TWOWAY) ) );
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New 2._5-way crossover"), 
                             GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(slot(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
+                            bind<int>(slot(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _3-way crossover"), 
                             GSpeakers::image_widget("stock_new_crossover_16.png"),
                             bind<int>(slot(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_THREEWAY) ) );
@@ -110,7 +111,8 @@ Gtk::Menu& CrossoverPaned::get_menu()
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New"), GSpeakers::image_widget("stock_new_crossover_xml_16.png"), 
                                                        slot(crossover_history, &CrossoverHistory::on_new_xml)) );
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend to Crossover Xml..."), slot(crossover_history, &CrossoverHistory::on_append_xml)) );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend to Crossover Xml..."), slot(crossover_history, 
+											 &CrossoverHistory::on_append_xml)) );
 
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
                                                         slot(crossover_history, &CrossoverHistory::on_open_xml)) );

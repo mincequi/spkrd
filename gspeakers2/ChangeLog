@@ -1,6 +1,17 @@
 GSpeakers ChangeLog
 
+2003-09-08
+
+* crossoverimageview.cc: fixed a bug that caused GSpeakers to display a 
+    wrong schematic in some cases
+	
+* crossoverpaned.cc: typo highpass->lowpass
+
 2003-03-11
+
+* Gspeakers-0.10.1 was released
+	
+2003-03-11 
 
 * gspeakersplot.cc: changed 1000->1k on plot x-axis
 

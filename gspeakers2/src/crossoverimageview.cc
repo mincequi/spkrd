@@ -166,7 +166,7 @@ void CrossoverImageView::redraw()
         /* highpass part */
         if (highpass_order > 0) {
           vector<Part> highpass_parts(part_vector.begin() + lowpass_order, part_vector.begin() + lowpass_order + highpass_order);
-          draw_lowpass_net(part_width + lowpass_order * part_width, i * vert_space_per_net, part_width, part_height, highpass_parts);
+          draw_highpass_net(part_width + lowpass_order * part_width, i * vert_space_per_net, part_width, part_height, highpass_parts);
         }
         
         int driver_offset = 0;
@@ -261,7 +261,7 @@ void CrossoverImageView::draw_lowpass_net(int x, int y, int part_width, int part
 void CrossoverImageView::draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts)
 {
   for (unsigned i = 0; i < parts.size(); i++) {
-    if (parts[i].get_type() == PART_TYPE_INDUCTOR) {
+    if (parts[i].get_type() == PART_TYPE_CAPACITOR) {
       draw_capacitor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
       draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
     } else {
