@@ -1,3 +1,12 @@
+GSpeakers-0.10.1
+
+* Lots of bugfixes: gettext compilation fix, a lot of potential segfaults 
+    were fixed
+
+* GSpeakers now asks if the user want to save changes upon exit
+
+* "Save all open file" menu item added
+
 GSpeakers-0.10
 
 * Improved the enclosure editor, enclosure list now saves the driver it now 

@@ -24,9 +24,6 @@ GSpeakers TODO-list
 
 * Windows installer (maybe pre-1.0)
 
-* Speakereditor, enclosureeditor and CrossoverHistory: ask if you want to 
-    save changes when open new xml (pre-1.0)
-
 * Loudspeaker design with GSpeakers HOWTO (important, will increase user 
     base, pre-1.0)
 
@@ -81,8 +78,6 @@ GSpeakers TODO-list
 
 * Config option: view all toolbars, view toolbars independently 
     from each other
-
-* GSpeakers should ask if you want to save changes (pre 1.0)
 
 * Maybe a configurable (on/off) splash screen, since loading the program takes 
     a little while

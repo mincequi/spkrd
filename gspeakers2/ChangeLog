@@ -1,6 +1,16 @@
 GSpeakers ChangeLog
 
+2003-03-11
+
+* gspeakersplot.cc: changed 1000->1k on plot x-axis
+
+* mainwindow.h/cc: implemented "Save all open files"
+
 2003-03-05
+
+* speakereditor.cc: cleaned up freq resp browse button hbox
+
+* mainwindow.cc/h: added "save all open files" menuitem
 
 * speakereditor.h/cc, boxhistory.h/cc, crossoverhistory.h/cc: added 
     signalhandlers for signal_save_open_files

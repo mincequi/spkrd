@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-02-12 00:02+0100\n"
+"POT-Creation-Date: 2003-03-11 21:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,102 +75,102 @@ msgstr ""
 msgid "Box: speaker node not found"
 msgstr ""
 
-#: src/boxeditor.cc:35 src/boxeditor.cc:55
+#: src/boxeditor.cc:35 src/boxeditor.cc:57
 msgid "Enclosure editor"
 msgstr ""
 
-#: src/boxeditor.cc:69
+#: src/boxeditor.cc:71
 msgid "Woofer: "
 msgstr ""
 
-#: src/boxeditor.cc:72
+#: src/boxeditor.cc:74
 msgid "Qts: "
 msgstr ""
 
-#: src/boxeditor.cc:74
+#: src/boxeditor.cc:76
 msgid "Vas: "
 msgstr ""
 
-#: src/boxeditor.cc:77
+#: src/boxeditor.cc:79
 msgid "Fs: "
 msgstr ""
 
-#: src/boxeditor.cc:80
+#: src/boxeditor.cc:82
 msgid "Id string: "
 msgstr ""
 
-#: src/boxeditor.cc:82
+#: src/boxeditor.cc:84
 msgid "  Type: "
 msgstr ""
 
-#: src/boxeditor.cc:85
+#: src/boxeditor.cc:87
 msgid "Vb1: "
 msgstr ""
 
-#: src/boxeditor.cc:87
+#: src/boxeditor.cc:89
 msgid "  Fb1: "
 msgstr ""
 
-#: src/boxeditor.cc:101 src/boxhistory.cc:517 src/plothistory.cc:322
+#: src/boxeditor.cc:103 src/boxhistory.cc:538 src/plothistory.cc:322
 msgid "Sealed"
 msgstr ""
 
-#: src/boxeditor.cc:102 src/boxhistory.cc:520 src/plothistory.cc:325
+#: src/boxeditor.cc:104 src/boxhistory.cc:541 src/plothistory.cc:325
 msgid "Ported"
 msgstr ""
 
-#: src/boxhistory.cc:33 src/crossoverhistory.cc:179
+#: src/boxhistory.cc:34 src/crossoverhistory.cc:193
 msgid "Enclosure list"
 msgstr ""
 
-#: src/boxhistory.cc:52 src/boxhistory.cc:172 src/boxhistory.cc:339
+#: src/boxhistory.cc:60 src/boxhistory.cc:193 src/boxhistory.cc:360
 msgid "Enclosure list ["
 msgstr ""
 
-#: src/boxhistory.cc:115
+#: src/boxhistory.cc:136
 msgid "Open box xml"
 msgstr ""
 
-#: src/boxhistory.cc:127
+#: src/boxhistory.cc:148
 msgid "Append box xml"
 msgstr ""
 
-#: src/boxhistory.cc:253 src/boxhistory.cc:280
+#: src/boxhistory.cc:274 src/boxhistory.cc:301
 msgid "Box: "
 msgstr ""
 
-#: src/boxhistory.cc:302
+#: src/boxhistory.cc:323
 msgid "Enclosure list [new file]"
 msgstr ""
 
-#: src/boxhistory.cc:324
+#: src/boxhistory.cc:345
 msgid "Save box xml as"
 msgstr ""
 
-#: src/boxhistory.cc:449 src/crossoverhistory.cc:472 src/plothistory.cc:247
-#: src/speakereditor.cc:962
+#: src/boxhistory.cc:470 src/crossoverhistory.cc:486 src/plothistory.cc:247
+#: src/speakereditor.cc:1000
 msgid "Identifier"
 msgstr ""
 
 #. Driver tab
-#: src/boxhistory.cc:457 src/mainwindow.cc:113
+#: src/boxhistory.cc:478 src/mainwindow.cc:119
 msgid "Driver"
 msgstr ""
 
-#: src/boxhistory.cc:465 src/crossoverhistory.cc:482 src/plothistory.cc:273
-#: src/speakereditor.cc:971
+#: src/boxhistory.cc:486 src/crossoverhistory.cc:496 src/plothistory.cc:273
+#: src/speakereditor.cc:1009
 msgid "Type"
 msgstr ""
 
-#: src/boxhistory.cc:474 src/plothistory.cc:282
+#: src/boxhistory.cc:495 src/plothistory.cc:282
 msgid "Vb1"
 msgstr ""
 
-#: src/boxhistory.cc:483 src/plothistory.cc:291
+#: src/boxhistory.cc:504 src/plothistory.cc:291
 msgid "Fb1"
 msgstr ""
 
-#: src/boxhistory.cc:523 src/plothistory.cc:328 src/speakereditor.cc:1129
+#: src/boxhistory.cc:544 src/plothistory.cc:328 src/speakereditor.cc:1167
 msgid "Unknown"
 msgstr ""
 
@@ -202,79 +202,79 @@ msgstr ""
 msgid "Crossover type:"
 msgstr ""
 
-#: src/crossoverhistory.cc:49 src/crossoverhistory.cc:405
+#: src/crossoverhistory.cc:53 src/crossoverhistory.cc:419
 msgid "Crossover list ["
 msgstr ""
 
-#: src/crossoverhistory.cc:119
+#: src/crossoverhistory.cc:133
 msgid "Open crossover xml"
 msgstr ""
 
-#: src/crossoverhistory.cc:131
+#: src/crossoverhistory.cc:145
 msgid "Append crossover xml"
 msgstr ""
 
-#: src/crossoverhistory.cc:269 src/crossoverhistory.cc:331
+#: src/crossoverhistory.cc:283 src/crossoverhistory.cc:345
 msgid "Crossover: "
 msgstr ""
 
-#: src/crossoverhistory.cc:301
+#: src/crossoverhistory.cc:315
 msgid "Crossover "
 msgstr ""
 
-#: src/crossoverhistory.cc:356
+#: src/crossoverhistory.cc:370
 msgid "Crossover list [new file]"
 msgstr ""
 
-#: src/crossoverhistory.cc:386
+#: src/crossoverhistory.cc:400
 msgid "Save crossover xml as"
 msgstr ""
 
-#: src/crossoverhistory.cc:399
+#: src/crossoverhistory.cc:413
 msgid "save as ok"
 msgstr ""
 
-#: src/crossoverhistory.cc:496
+#: src/crossoverhistory.cc:509
 msgid "lowpass"
 msgstr ""
 
-#: src/crossoverhistory.cc:500
+#: src/crossoverhistory.cc:513
 msgid ", subsonic"
 msgstr ""
 
-#: src/crossoverhistory.cc:502
+#: src/crossoverhistory.cc:515
 msgid "subsonic"
 msgstr ""
 
-#: src/crossoverhistory.cc:507
+#: src/crossoverhistory.cc:520
 msgid ", highpass"
 msgstr ""
 
-#: src/crossoverhistory.cc:509
+#: src/crossoverhistory.cc:522
 msgid "highpass"
 msgstr ""
 
-#: src/crossoverhistory.cc:514
+#: src/crossoverhistory.cc:527
 msgid ", 2-way"
 msgstr ""
 
-#: src/crossoverhistory.cc:516
+#: src/crossoverhistory.cc:529
 msgid "2-way"
 msgstr ""
 
-#: src/crossoverhistory.cc:521
+#: src/crossoverhistory.cc:534
 msgid ", 3-way"
 msgstr ""
 
-#: src/crossoverhistory.cc:523
+#: src/crossoverhistory.cc:536
 msgid "3-way"
 msgstr ""
 
-#: src/crossoverhistory.cc:528
+#: src/crossoverhistory.cc:541
 msgid ", 4-way"
 msgstr ""
 
-#: src/crossoverhistory.cc:530
+#: src/crossoverhistory.cc:543
 msgid "4-way"
 msgstr ""
 
@@ -350,11 +350,11 @@ msgstr ""
 msgid "A_ppend to Crossover Xml..."
 msgstr ""
 
-#: src/crossoverpaned.cc:115 src/speakereditor.cc:220
+#: src/crossoverpaned.cc:115 src/speakereditor.cc:240
 msgid "_Open"
 msgstr ""
 
-#: src/crossoverpaned.cc:117 src/speakereditor.cc:222
+#: src/crossoverpaned.cc:117 src/speakereditor.cc:242
 msgid "_Save"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgstr ""
 #.    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_crossover_xml_24.png"),
 #.                             slot(crossover_history, &CrossoverHistory::on_new_xml), _("Create new crossover xml (list)")) );
 #: src/crossoverpaned.cc:148 src/enclosurepaned.cc:125
-#: src/speakereditor.cc:244
+#: src/speakereditor.cc:264
 msgid "Open"
 msgstr ""
 
@@ -391,7 +391,7 @@ msgid "Open crossover xml (list)"
 msgstr ""
 
 #: src/crossoverpaned.cc:150 src/enclosurepaned.cc:127
-#: src/speakereditor.cc:246
+#: src/speakereditor.cc:266
 msgid "Save"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgid "Save crossover xml (list)"
 msgstr ""
 
 #: src/crossoverpaned.cc:153 src/enclosurepaned.cc:130
-#: src/speakereditor.cc:227 src/speakereditor.cc:249
+#: src/speakereditor.cc:247 src/speakereditor.cc:269
 msgid "Delete"
 msgstr ""
 
@@ -433,13 +433,13 @@ msgid "Damping network"
 msgstr ""
 
 #: src/crossovertreeview.cc:223 src/crossovertreeview.cc:236
-#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:144
+#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:149
 msgid "Lowpass"
 msgstr ""
 
 #. If this is the filter parts node
 #: src/crossovertreeview.cc:230 src/crossovertreeview.cc:242
-#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:101
+#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:106
 msgid "Highpass"
 msgstr ""
 
@@ -468,29 +468,29 @@ msgstr ""
 msgid "Unit"
 msgstr ""
 
-#: src/crossoverwizard.cc:27
+#: src/crossoverwizard.cc:28
 msgid "Crossover wizard"
 msgstr ""
 
-#: src/crossoverwizard.cc:67 src/crossoverwizard.cc:89
+#: src/crossoverwizard.cc:68 src/crossoverwizard.cc:90
 msgid "Woofer/midrange filter"
 msgstr ""
 
-#: src/crossoverwizard.cc:70 src/crossoverwizard.cc:81
-#: src/crossoverwizard.cc:92
+#: src/crossoverwizard.cc:71 src/crossoverwizard.cc:82
+#: src/crossoverwizard.cc:93
 msgid "Tweeter filter"
 msgstr ""
 
-#: src/crossoverwizard.cc:75 src/crossoverwizard.cc:86
+#: src/crossoverwizard.cc:76 src/crossoverwizard.cc:87
 msgid "Woofer filter"
 msgstr ""
 
-#: src/crossoverwizard.cc:78
+#: src/crossoverwizard.cc:79
 msgid "Midrange filter"
 msgstr ""
 
 #. FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), _("filter"), m_speaker_list));
-#: src/crossoverwizard.cc:97
+#: src/crossoverwizard.cc:98
 msgid "filter"
 msgstr ""
 
@@ -500,7 +500,7 @@ msgstr ""
 
 #.  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
 #: src/driverfreqrespplot.cc:38 src/gspeakersboxplot.cc:40
-#: src/gspeakersfilterplot.cc:33 src/summedfreqrespplot.cc:34
+#: src/gspeakersfilterplot.cc:33 src/summedfreqrespplot.cc:36
 #: src/totalfilterplot.cc:36
 msgid "Magnitude / dB"
 msgstr ""
@@ -593,23 +593,23 @@ msgstr ""
 msgid "Use adv. driver imp. model"
 msgstr ""
 
-#: src/filterlinkframe.cc:84
+#: src/filterlinkframe.cc:86
 msgid "Damping: "
 msgstr ""
 
-#: src/filterlinkframe.cc:126 src/filterlinkframe.cc:170
+#: src/filterlinkframe.cc:131 src/filterlinkframe.cc:175
 msgid "Order: "
 msgstr ""
 
-#: src/filterlinkframe.cc:130 src/filterlinkframe.cc:174
+#: src/filterlinkframe.cc:135 src/filterlinkframe.cc:179
 msgid "Cutoff: "
 msgstr ""
 
-#: src/filterlinkframe.cc:177
+#: src/filterlinkframe.cc:182
 msgid "Hz"
 msgstr ""
 
-#: src/filterlinkframe.cc:613
+#: src/filterlinkframe.cc:626
 msgid "FilterLinkFrame::on_plot_crossover: ERROR: "
 msgstr ""
 
@@ -630,7 +630,7 @@ msgstr ""
 msgid "Could not open file: "
 msgstr ""
 
-#: src/freqrespeditor.cc:165 src/speakereditor.cc:898
+#: src/freqrespeditor.cc:165 src/speakereditor.cc:935
 msgid "Enter filename..."
 msgstr ""
 
@@ -638,11 +638,11 @@ msgstr ""
 msgid "Enclosure frequency response"
 msgstr ""
 
-#: src/main.cc:52 src/main.cc:55
+#: src/main.cc:53 src/main.cc:56
 msgid "No configuration file found!"
 msgstr ""
 
-#: src/main.cc:52
+#: src/main.cc:53
 msgid "gspeakers2.conf created in current directory"
 msgstr ""
 
@@ -652,46 +652,68 @@ msgstr ""
 #. Plot history will always be empty at startup for now
 #. PlotHistory ph;
 #. GSpeakersBoxPlot gsbp;
-#: src/main.cc:82
+#: src/main.cc:83
 msgid "Testing gettext"
 msgstr ""
 
-#: src/mainwindow.cc:88
-msgid "About"
-msgstr ""
-
-#: src/mainwindow.cc:91
-msgid "_File"
-msgstr ""
-
-#: src/mainwindow.cc:92
-msgid "_Edit"
+#: src/mainwindow.cc:79
+msgid "_Save all files"
 msgstr ""
 
 #: src/mainwindow.cc:93
-msgid "_Drivers"
-msgstr ""
-
-#: src/mainwindow.cc:94
-msgid "E_nclosure"
-msgstr ""
-
-#: src/mainwindow.cc:95
-msgid "_Crossover"
+msgid "About"
 msgstr ""
 
 #: src/mainwindow.cc:96
+msgid "_File"
+msgstr ""
+
+#: src/mainwindow.cc:98
+msgid "_Edit"
+msgstr ""
+
+#: src/mainwindow.cc:99
+msgid "_Drivers"
+msgstr ""
+
+#: src/mainwindow.cc:100
+msgid "E_nclosure"
+msgstr ""
+
+#: src/mainwindow.cc:101
+msgid "_Crossover"
+msgstr ""
+
+#: src/mainwindow.cc:102
 msgid "_Help"
 msgstr ""
 
 #. Enclosure tab
-#: src/mainwindow.cc:124
+#: src/mainwindow.cc:130
 msgid "Enclosure"
 msgstr ""
 
 #. Crossover tab
-#: src/mainwindow.cc:127
+#: src/mainwindow.cc:133
 msgid "Crossover"
+msgstr ""
+
+#: src/mainwindow.cc:168 src/mainwindow.cc:232
+msgid "Save changes before closing?"
+msgstr ""
+
+#. Gtk::Label *label2 = manage(new Gtk::Label("\n\n"));
+#. vbox->pack_start(*label2);
+#: src/mainwindow.cc:172 src/mainwindow.cc:236
+msgid "There are unsaved files in GSpeakers. If you choose"
+msgstr ""
+
+#: src/mainwindow.cc:173 src/mainwindow.cc:237
+msgid "to quit without saving all changes since last save"
+msgstr ""
+
+#: src/mainwindow.cc:174 src/mainwindow.cc:238
+msgid "will be lost."
 msgstr ""
 
 #: src/net.cc:117
@@ -1058,210 +1080,210 @@ msgstr ""
 msgid "Bass"
 msgstr ""
 
-#: src/speakereditor.cc:37 src/speakereditor.cc:1118
+#: src/speakereditor.cc:37 src/speakereditor.cc:1156
 msgid "Midrange"
 msgstr ""
 
-#: src/speakereditor.cc:38 src/speakereditor.cc:1125
+#: src/speakereditor.cc:38 src/speakereditor.cc:1163
 msgid "Tweeter"
 msgstr ""
 
-#: src/speakereditor.cc:63 src/speakereditor.cc:828
+#: src/speakereditor.cc:69 src/speakereditor.cc:863
 msgid "Driver list ["
 msgstr ""
 
-#: src/speakereditor.cc:77
+#: src/speakereditor.cc:84
 msgid "Currently selected driver"
 msgstr ""
 
 #. All the entries and stuff
-#: src/speakereditor.cc:85
+#: src/speakereditor.cc:92
 msgid "Speaker name:"
 msgstr ""
 
-#: src/speakereditor.cc:87
+#: src/speakereditor.cc:94
 msgid "Qts:"
 msgstr ""
 
-#: src/speakereditor.cc:89
+#: src/speakereditor.cc:96
 msgid "Fs: (Hz)"
 msgstr ""
 
-#: src/speakereditor.cc:91
+#: src/speakereditor.cc:98
 msgid "Vas: (l)"
 msgstr ""
 
-#: src/speakereditor.cc:93
+#: src/speakereditor.cc:100
 msgid "Rdc: (Ohm)"
 msgstr ""
 
-#: src/speakereditor.cc:95
+#: src/speakereditor.cc:102
 msgid "Lvc: (mH)"
 msgstr ""
 
-#: src/speakereditor.cc:97
+#: src/speakereditor.cc:104
 msgid "Qms:"
 msgstr ""
 
-#: src/speakereditor.cc:99
+#: src/speakereditor.cc:106
 msgid "Qes:"
 msgstr ""
 
-#: src/speakereditor.cc:101
+#: src/speakereditor.cc:108
 msgid "Impedance: (Ohm)"
 msgstr ""
 
-#: src/speakereditor.cc:103
+#: src/speakereditor.cc:110
 msgid "Sensitivity: (dB/W/m)"
 msgstr ""
 
-#: src/speakereditor.cc:106
+#: src/speakereditor.cc:113
 msgid "Cone mass: (kg)"
 msgstr ""
 
-#: src/speakereditor.cc:108
+#: src/speakereditor.cc:115
 msgid "Effective radius: (m)"
 msgstr ""
 
-#: src/speakereditor.cc:110
+#: src/speakereditor.cc:117
 msgid "Force factor: (N/A)"
 msgstr ""
 
-#: src/speakereditor.cc:112
+#: src/speakereditor.cc:119
 msgid "Susp. resistance: (Ns/m)"
 msgstr ""
 
-#: src/speakereditor.cc:114
+#: src/speakereditor.cc:121
 msgid "Susp. compleance: (m/N)"
 msgstr ""
 
-#: src/speakereditor.cc:121
+#: src/speakereditor.cc:131
 msgid "Freq resp file:"
 msgstr ""
 
-#: src/speakereditor.cc:157
+#: src/speakereditor.cc:167
 msgid "Edit frequency response for this driver"
 msgstr ""
 
-#: src/speakereditor.cc:213
+#: src/speakereditor.cc:233
 msgid "_New Driver"
 msgstr ""
 
-#: src/speakereditor.cc:216
+#: src/speakereditor.cc:236
 msgid "N_ew"
 msgstr ""
 
-#: src/speakereditor.cc:218
+#: src/speakereditor.cc:238
 msgid "A_ppend Driver Xml..."
 msgstr ""
 
-#: src/speakereditor.cc:224
+#: src/speakereditor.cc:244
 msgid "Save _As..."
 msgstr ""
 
-#: src/speakereditor.cc:239
+#: src/speakereditor.cc:259
 msgid "New Driver"
 msgstr ""
 
-#: src/speakereditor.cc:240
+#: src/speakereditor.cc:260
 msgid "Create new driver"
 msgstr ""
 
-#: src/speakereditor.cc:245
+#: src/speakereditor.cc:265
 msgid "Open driver xml (list)"
 msgstr ""
 
-#: src/speakereditor.cc:247
+#: src/speakereditor.cc:267
 msgid "Save driver xml (list)"
 msgstr ""
 
-#: src/speakereditor.cc:250
+#: src/speakereditor.cc:270
 msgid "Delete selected driver"
 msgstr ""
 
-#: src/speakereditor.cc:312
+#: src/speakereditor.cc:339
 msgid "New Speaker"
 msgstr ""
 
-#: src/speakereditor.cc:395 src/speakereditor.cc:399
+#: src/speakereditor.cc:424 src/speakereditor.cc:428
 msgid "Save speaker xml as"
 msgstr ""
 
-#: src/speakereditor.cc:768 src/speakereditor.cc:772
+#: src/speakereditor.cc:800 src/speakereditor.cc:804
 msgid "Append speaker xml"
 msgstr ""
 
 #. Fix some initstuff since we don't have any settings
-#: src/speakereditor.cc:781 src/speakereditor.cc:786
+#: src/speakereditor.cc:813 src/speakereditor.cc:818
 #: src/speakerlistselector.cc:53 src/speakerlistselector.cc:75
 msgid "Open speaker xml"
 msgstr ""
 
-#: src/speakereditor.cc:980
+#: src/speakereditor.cc:1018
 msgid "Qts"
 msgstr ""
 
-#: src/speakereditor.cc:989
+#: src/speakereditor.cc:1027
 msgid "Fs"
 msgstr ""
 
-#: src/speakereditor.cc:998
+#: src/speakereditor.cc:1036
 msgid "Vas"
 msgstr ""
 
-#: src/speakereditor.cc:1008
+#: src/speakereditor.cc:1046
 msgid "Rdc"
 msgstr ""
 
-#: src/speakereditor.cc:1017
+#: src/speakereditor.cc:1055
 msgid "Lvc"
 msgstr ""
 
-#: src/speakereditor.cc:1026
+#: src/speakereditor.cc:1064
 msgid "Qms"
 msgstr ""
 
-#: src/speakereditor.cc:1035
+#: src/speakereditor.cc:1073
 msgid "Qes"
 msgstr ""
 
-#: src/speakereditor.cc:1044
+#: src/speakereditor.cc:1082
 msgid "Impedance"
 msgstr ""
 
-#: src/speakereditor.cc:1053
+#: src/speakereditor.cc:1091
 msgid "Sensitivity"
 msgstr ""
 
-#: src/speakereditor.cc:1062
+#: src/speakereditor.cc:1100
 msgid "Cone mass"
 msgstr ""
 
-#: src/speakereditor.cc:1071
+#: src/speakereditor.cc:1109
 msgid "Active radius"
 msgstr ""
 
-#: src/speakereditor.cc:1080
+#: src/speakereditor.cc:1118
 msgid "Force factor"
 msgstr ""
 
-#: src/speakereditor.cc:1089
+#: src/speakereditor.cc:1127
 msgid "Susp. resistance"
 msgstr ""
 
-#: src/speakereditor.cc:1098
+#: src/speakereditor.cc:1136
 msgid "Susp. compliance"
 msgstr ""
 
-#: src/speakereditor.cc:1112
+#: src/speakereditor.cc:1150
 msgid "Woofer"
 msgstr ""
 
-#: src/speakereditor.cc:1116
+#: src/speakereditor.cc:1154
 msgid ", Midrange"
 msgstr ""
 
-#: src/speakereditor.cc:1123
+#: src/speakereditor.cc:1161
 msgid ", Tweeter"
 msgstr ""
 
@@ -1297,6 +1319,6 @@ msgstr ""
 msgid "Speaker xml: "
 msgstr ""
 
-#: src/summedfreqrespplot.cc:78
+#: src/summedfreqrespplot.cc:83
 msgid "Could not open "
 msgstr ""
