@@ -33,7 +33,11 @@ MainWindow::MainWindow()
   crossover_paned.select_first_crossover();
   /* set program icon and title */
   try {
+#ifdef TARGET_WIN32
+    Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
+#else
     Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+#endif
     set_icon(main_icon);
   } catch (Gdk::PixbufError e) {
 #ifdef OUTPUT_DEBUG
@@ -96,11 +100,11 @@ MainWindow::MainWindow()
   
   /* add toolbars */
   speaker_editor.get_toolbar().hide();
-  m_main_vbox.pack_start(speaker_editor.get_toolbar(), Gtk::SHRINK);
+  m_main_vbox.pack_start(speaker_editor.get_toolbar(), Gtk::PACK_SHRINK);
   enclosure_paned.get_toolbar().hide();
-  m_main_vbox.pack_start(enclosure_paned.get_toolbar(), Gtk::SHRINK);
+  m_main_vbox.pack_start(enclosure_paned.get_toolbar(), Gtk::PACK_SHRINK);
   crossover_paned.get_toolbar().hide();
-  m_main_vbox.pack_start(crossover_paned.get_toolbar(), Gtk::SHRINK);
+  m_main_vbox.pack_start(crossover_paned.get_toolbar(), Gtk::PACK_SHRINK);
   
   /* Add main notebook */
   m_main_vbox.pack_start(m_main_notebook);

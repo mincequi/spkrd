@@ -22,7 +22,11 @@
 TabWidget::TabWidget(string filename, string text) : Gtk::HBox()
 {
   try {
+#ifdef TARGET_WIN32
+    Glib::RefPtr<Gdk::Pixbuf> icon = Gdk::Pixbuf::create_from_file(filename);
+#else
     Glib::RefPtr<Gdk::Pixbuf> icon = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/" + filename);
+#endif
     image = manage(new Gtk::Image(icon));
     pack_start(*image);
   } catch (Gdk::PixbufError e) {

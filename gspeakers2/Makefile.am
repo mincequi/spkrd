@@ -4,7 +4,7 @@ SUBDIRS = src xml pixmaps #po
 desktopdir		= $(datadir)/gnome/apps/Utilities
 desktop_in_files	= gspeakers.desktop.in
 desktop_DATA 		= $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+# @INTLTOOL_DESKTOP_RULE@
 
 # Icon
 icondir			= $(datadir)/pixmaps

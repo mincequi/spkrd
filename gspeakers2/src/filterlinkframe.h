@@ -73,6 +73,7 @@ private:
   string m_description;
   SpeakerList *m_speaker_list;
   bool enable_edit;
+  bool init;
 
   int my_filter_plot_index;
   vector<GSpeakers::Point> points;

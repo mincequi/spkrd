@@ -35,7 +35,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_imp_corr_checkbutton("Impedance correction"),
   m_adv_imp_model_checkbutton("Use adv. driver imp. model")
 {
-  enable_edit = true;
+  init = true;
+  enable_edit = false;
   m_net = net;
   m_description = description;
   m_speaker_list = speaker_list;
@@ -187,6 +188,9 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   my_filter_plot_index = -1;
   signal_speakerlist_loaded.connect(slot(*this, &FilterLinkFrame::on_speakerlist_loaded));
   g_settings.settings_changed.connect(slot(*this, &FilterLinkFrame::on_settings_changed));
+//  on_net_updated(m_net);
+  init = false;
+  enable_edit = false;
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -242,10 +246,10 @@ void FilterLinkFrame::on_settings_changed(const string& s)
 
 void FilterLinkFrame::on_param_changed()
 {
-#ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::on_param_changed" << endl;
-#endif
   if (enable_edit == true) {
+#ifdef OUTPUT_DEBUG
+    cout << "FilterLinkFrame::on_param_changed" << endl;
+#endif
     enable_edit = false;
     Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     m_net->set_speaker(speaker.get_id_string());
@@ -476,9 +480,10 @@ void FilterLinkFrame::on_param_changed()
     }
     signal_net_modified_by_wizard();
     enable_edit = true;  
-  }
-  if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
-    on_plot_crossover();
+    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+      on_plot_crossover();
+    }
+
   }
 }
 
@@ -489,12 +494,13 @@ void FilterLinkFrame::on_net_updated(Net *net)
     cout << "FilterLinkFrame::on_net_updated" << endl;
 #endif
     enable_edit = false;
+    
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
       on_plot_crossover();
     }
-    
-    int i = 0, index1 = 0, index2 = 0;
-    if (m_net->get_type() == NET_TYPE_LOWPASS) {
+/*    
+    if (m_net->get_type() & NET_TYPE_LOWPASS) {
+      int i = 0, index1 = 0;
       for (vector<GSpeakers::Point>::iterator iter = points.begin();
            iter != points.end();
            ++iter)
@@ -511,7 +517,9 @@ void FilterLinkFrame::on_net_updated(Net *net)
       int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
       double ytodbdiff = points[index1].get_y() + 3;
       m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
-    } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
+    } 
+    if (m_net->get_type() & NET_TYPE_HIGHPASS) {
+      int i = 0, index2 = 0;
       for (vector<GSpeakers::Point>::iterator iter = points.begin();
            iter != points.end();
            ++iter)
@@ -530,6 +538,7 @@ void FilterLinkFrame::on_net_updated(Net *net)
       double ytodbdiff = points[index2].get_y() + 3;
       m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
     }
+*/
     enable_edit = true;
   }
 }
@@ -631,6 +640,52 @@ void FilterLinkFrame::on_plot_crossover()
     c = Gdk::Color("darkgreen");
   }
   signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
+  
+  enable_edit = false;
+      if (m_net->get_type() & NET_TYPE_LOWPASS) {
+      int i = 0, index1 = 0;
+      for (vector<GSpeakers::Point>::iterator iter = points.begin();
+           iter != points.end();
+           ++iter)
+      {
+        if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
+          index1 = i;
+        }
+        i++;
+      }
+      points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
+      points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
+
+      double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
+      int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
+      double ytodbdiff = points[index1].get_y() + 3;
+      m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
+    } 
+    if (m_net->get_type() & NET_TYPE_HIGHPASS) {
+      bool done = false;
+      int i = 0, index2 = 0;
+      for (vector<GSpeakers::Point>::iterator iter = points.begin();
+           iter != points.end();
+           ++iter)
+      {
+        if (((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) && (done == false)) {
+          index2 = i;
+        } else {
+          done = true;
+        }
+        i++;
+      }
+      index2++;
+      points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
+      points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
+      
+      double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
+      int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
+      double ytodbdiff = points[index2].get_y() + 3;
+      m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
+    }
+  enable_edit = true;
+  
 }   
 
 /* 

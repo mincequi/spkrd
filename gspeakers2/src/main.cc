@@ -31,19 +31,35 @@ int main (int argc, char *argv[])
   //CrossoverTreeView ctv;
   
   try {
+#ifdef TARGET_WIN32
+    g_settings.load("gspeakers2.conf");
+#else
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
+#endif
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
     cout << "Main: " << e.what() << endl;
 #endif
+#ifdef TARGET_WIN32
+    Gtk::MessageDialog md("No configuration file found!\n\n" + "gspeakers2.conf created in current directory", 
+                          Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+#else
     Gtk::MessageDialog md("No configuration file found!\n\n" + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
+#endif
     md.run();
+#ifdef TARGET_WIN32
+    // Is touch a valid windows command???
+    s = "touch gspeakers2.conf";
+    system(s.c_str());
+    g_settings.load("gspeakers2.conf");
+#else
     string s = "mkdir " + Glib::get_home_dir() + "/.gspeakers";
     system(s.c_str());
     s = "touch " + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf";
     system(s.c_str());
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
+#endif
   }
 
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */

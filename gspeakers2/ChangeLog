@@ -1,5 +1,16 @@
 GSpeakers ChangeLog
 
+2002-10-02
+
+* Removed intl stuff from configure.in, added --enable-win32 configure time option
+
+* filterlinkframe.cc: fixed nonexistent backwards calculation of cutoff
+    frequencies
+
+2002-10-01
+
+* mainwindow.cc: use Gtk::PACK_SHRINK when packing the toolbars
+
 2002-09-30
 
 * summedfreqrespplot.h/cc: added new class which displayes the estimated 
@@ -15,6 +26,8 @@ GSpeakers ChangeLog
 
 * net.h/cc: added new members, "use advanced driver impedance model" and 
     "invert driver polarity"
+
+* Prepared for 0.8 release
 
 2002-09-27
 
