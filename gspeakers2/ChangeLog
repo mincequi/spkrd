@@ -2,6 +2,10 @@ GSpeakers ChangeLog
 
 2002-11-20
 
+* gspeakersplot.cc: remove cout in configure_event
+
+2002-11-19
+
 * plothistory.h/cc: set_cell_data_func
 
 * freqrespeditor.cc: tune nof decimals displayed
@@ -11,7 +15,7 @@ GSpeakers ChangeLog
 * gspeakersplot.h/cc: increased BOX_FRAME_SIZE to make room for aa fonts in plots, 
 		tuned the text placement a little bit
 
-2002-11-19
+2002-11-18
 
 * crossovertreeview.h/cc, boxhistory.h/cc, speakereditor.h/cc: 
 	  more set_cell_data_func-stuff

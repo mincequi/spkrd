@@ -63,7 +63,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   /* Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap, will probably be faster 
      than redrawing the entire thing every time */
 #ifdef OUTPUT_DEBUG
-  cout << "GSpeakersPlot::on_configure_event" << endl;
+  //cout << "GSpeakersPlot::on_configure_event" << endl;
 #endif
   visible = true;
   m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
