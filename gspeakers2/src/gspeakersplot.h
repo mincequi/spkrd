@@ -134,7 +134,6 @@ protected:
   vector<Gdk::Color> m_colors;
   vector<bool> m_visible_plots;
  private:
-  int round( double );
   Glib::ustring int_to_ustring(int d);
   Glib::ustring int_to_ustring3(int d);
   

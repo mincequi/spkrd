@@ -103,7 +103,6 @@ protected:
   
   /* Additional member variables */
   int index;
-  int round(double);
   int nof_plots;
 };
 

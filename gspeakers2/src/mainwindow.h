@@ -20,7 +20,8 @@
 #ifndef __GSPEAKERS_MAINWINDOW
 #define __GSPEAKERS_MAINWINDOW
 
-#include <gtkmm.h>
+#include <gtkmm/window.h>
+#include <gtkmm/menu.h>
 #include "common.h"
 #include "settings.h"
 #include "enclosurepaned.h"

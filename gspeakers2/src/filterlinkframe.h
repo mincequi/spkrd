@@ -79,7 +79,6 @@ private:
   int my_filter_plot_index;
   vector<GSpeakers::Point> points;
   /* Helper function */
-  int round( double x );
   void set_family(Gtk::OptionMenu *option_menu, int order, int family);
 };
 

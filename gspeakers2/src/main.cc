@@ -4,6 +4,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <stdlib.h>
+#include <locale.h>
 #include "common.h"
 #include "mainwindow.h"
 

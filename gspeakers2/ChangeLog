@@ -1,5 +1,15 @@
 GSpeakers ChangeLog
 
+2003-02-15
+
+* filterlinkframe.cc, speakereditor.cc: check so that we have a valid output 
+    file before reading spice output
+
+* Vaious files: use GSpeakers::round everywhere
+
+* main.cc: added #include <locale.h> which might fix compilation errors on 
+    some systems
+
 2003-02-12
 
 * Prepared for 0.10 release, just waiting for a more detailed bugreport from 

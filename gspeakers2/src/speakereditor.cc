@@ -567,51 +567,53 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
 #endif
       string spice_output_file = tmp_file + ".out";
       ifstream fin(spice_output_file.c_str());
-      bool output = false;
-      int id;
-      float f1, f2, f3;
-      while (!fin.eof()) {
-        char *buffer = new char[100];
-        fin.getline(buffer, 100, '\n');
-        if (buffer[0] == '0') {
-          output = true;
-        }
+      if (fin.good()) {
+        bool output = false;
+        int id;
+        float f1, f2, f3;
+        while (!fin.eof()) {
+          char *buffer = new char[100];
+          fin.getline(buffer, 100, '\n');
+          if (buffer[0] == '0') {
+            output = true;
+          }
 
-        if (output == true) {
-          /* Locale safe implementation of the following fscanf */
-          //sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
+          if (output == true) {
+            /* Locale safe implementation of the following fscanf */
+            //sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
           
-          id = atoi(buffer);
+            id = atoi(buffer);
 
-          strtok(buffer, "\t");
-          char *substr_ptr = strtok(NULL, "\t");
+            strtok(buffer, "\t");
+            char *substr_ptr = strtok(NULL, "\t");
           
-          f1 = g_ascii_strtod(substr_ptr, NULL);
-          substr_ptr = strtok(NULL, "\t");
-          f2 = g_ascii_strtod(substr_ptr, NULL);
-          substr_ptr = strtok(NULL, "\t");
-          f3 = g_ascii_strtod(substr_ptr, NULL);
+            f1 = g_ascii_strtod(substr_ptr, NULL);
+            substr_ptr = strtok(NULL, "\t");
+            f2 = g_ascii_strtod(substr_ptr, NULL);
+            substr_ptr = strtok(NULL, "\t");
+            f3 = g_ascii_strtod(substr_ptr, NULL);
 
-          //cout << id << ":" << f1 << ":" << f2 << ":" << f3 << endl;
-          GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / hypot(f2, f3)));
-          points.push_back(p);
+            //cout << id << ":" << f1 << ":" << f2 << ":" << f3 << endl;
+            GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / hypot(f2, f3)));
+            points.push_back(p);
+          }
+          if ((buffer[0] == '3') && (buffer[1] == '0')) {
+            output = false;
+          }
+          delete buffer;
         }
-        if ((buffer[0] == '3') && (buffer[1] == '0')) {
-          output = false;
-        }
-        delete buffer;
-      }
-      Gdk::Color c2("red");
-      if (update == true) {
-        int i;
-        if ((s.get_freq_resp_filename() == "") || !(g_settings.getValueBool("DrawDriverFreqRespPlot"))) {
-          i = 0;
+        Gdk::Color c2("red");
+        if (update == true) {
+          int i;
+          if ((s.get_freq_resp_filename() == "") || !(g_settings.getValueBool("DrawDriverFreqRespPlot"))) {
+            i = 0;
+          } else {
+            i = 1;
+          }
+          plot.replace_plot(i, points, c2);
         } else {
-          i = 1;
+          plot.add_plot(points, c2);    
         }
-        plot.replace_plot(i, points, c2);
-      } else {
-        plot.add_plot(points, c2);    
       }
     }
   }

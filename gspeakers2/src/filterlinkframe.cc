@@ -628,95 +628,97 @@ void FilterLinkFrame::on_plot_crossover()
   /* extract spice output into a vector */
   string spice_output_file = spice_filename + ".out";
   ifstream fin(spice_output_file.c_str());
-  bool output = false;
-  int id;
-  float f1, f2, f3;
-  points.erase(points.begin(), points.end());
-  while (!fin.eof()) {
-    char *buffer = new char[100];
-    fin.getline(buffer, 100, '\n');
-    if (buffer[0] == '0') {
-      output = true;
-    }
-    if (output == true) {
-      // sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+  if (fin.good()) {
+    bool output = false;
+    int id;
+    float f1, f2, f3;
+    points.erase(points.begin(), points.end());
+    while (!fin.eof()) {
+      char *buffer = new char[100];
+      fin.getline(buffer, 100, '\n');
+      if (buffer[0] == '0') {
+        output = true;
+      }
+      if (output == true) {
+        // sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
       
-      id = atoi(buffer);
+        id = atoi(buffer);
 
-      strtok(buffer, "\t");
-      char *substr_ptr = strtok(NULL, "\t");
+        strtok(buffer, "\t");
+        char *substr_ptr = strtok(NULL, "\t");
           
-      f1 = g_ascii_strtod(substr_ptr, NULL);
-      substr_ptr = strtok(NULL, "\t");
-      f2 = g_ascii_strtod(substr_ptr, NULL);
-      substr_ptr = strtok(NULL, "\t");
-      f3 = g_ascii_strtod(substr_ptr, NULL);
+        f1 = g_ascii_strtod(substr_ptr, NULL);
+        substr_ptr = strtok(NULL, "\t");
+        f2 = g_ascii_strtod(substr_ptr, NULL);
+        substr_ptr = strtok(NULL, "\t");
+        f3 = g_ascii_strtod(substr_ptr, NULL);
 
-      GSpeakers::Point p(GSpeakers::round(f1), f3);
-      points.push_back(p);
-    }
-    if ((buffer[0] == '3') && (buffer[1] == '0')) {
-      output = false;
-    }
-    delete buffer;
-  }
-  /* send the spice data to the plot */
-  /* TODO: improve color handling here */
-  Gdk::Color c;
-  if (m_net->get_type() == NET_TYPE_LOWPASS) {
-    c = Gdk::Color("blue");
-  } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
-    c = Gdk::Color("red");
-  } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
-    c = Gdk::Color("darkgreen");
-  }
-  signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
-  
-  if (enable_edit == true) {
-    enable_edit = false;
-    if (m_net->get_type() & NET_TYPE_LOWPASS) {
-      int i = 0, index1 = 0;
-      for (vector<GSpeakers::Point>::iterator iter = points.begin();
-           iter != points.end();
-           ++iter)
-      {
-        if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
-          index1 = i;
-        }
-        i++;
+        GSpeakers::Point p(GSpeakers::round(f1), f3);
+        points.push_back(p);
       }
-      points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
-      points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
-  
-      double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
-      int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
-      double ytodbdiff = points[index1].get_y() + 3;
-      m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
-    } 
-    if (m_net->get_type() & NET_TYPE_HIGHPASS) {
-      bool done = false;
-      int i = 0, index2 = 0;
-      for (vector<GSpeakers::Point>::iterator iter = points.begin();
-           iter != points.end();
-           ++iter)
-      {
-        if (((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) && (done == false)) {
-          index2 = i;
-        } else {
-          done = true;
-        }
-        i++;
+      if ((buffer[0] == '3') && (buffer[1] == '0')) {
+        output = false;
       }
-      index2++;
-      points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
-      points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
+      delete buffer;
+    }
+    /* send the spice data to the plot */
+    /* TODO: improve color handling here */
+    Gdk::Color c;
+    if (m_net->get_type() == NET_TYPE_LOWPASS) {
+      c = Gdk::Color("blue");
+    } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
+      c = Gdk::Color("red");
+    } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
+      c = Gdk::Color("darkgreen");
+    }
+    signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
+  
+    if (enable_edit == true) {
+      enable_edit = false;
+      if (m_net->get_type() & NET_TYPE_LOWPASS) {
+        int i = 0, index1 = 0;
+        for (vector<GSpeakers::Point>::iterator iter = points.begin();
+             iter != points.end();
+             ++iter)
+        {
+          if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
+            index1 = i;
+          }
+          i++;
+        }
+        points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
+        points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
+  
+        double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
+        int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
+        double ytodbdiff = points[index1].get_y() + 3;
+        m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
+      } 
+      if (m_net->get_type() & NET_TYPE_HIGHPASS) {
+        bool done = false;
+        int i = 0, index2 = 0;
+        for (vector<GSpeakers::Point>::iterator iter = points.begin();
+             iter != points.end();
+             ++iter)
+        {
+          if (((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) && (done == false)) {
+            index2 = i;
+          } else {
+            done = true;
+          }
+          i++;
+        }
+        index2++;
+        points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
+        points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
       
-      double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
-      int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
-      double ytodbdiff = points[index2].get_y() + 3;
-      m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
+        double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
+        int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
+        double ytodbdiff = points[index2].get_y() + 3;
+        m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
+      }
+      enable_edit = true;
     }
-    enable_edit = true;
   }
 }   
 
