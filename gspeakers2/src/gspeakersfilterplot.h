@@ -38,9 +38,11 @@ public:
   GSpeakersFilterPlot();
   ~GSpeakersFilterPlot();
   void clear();
+  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int *);
 private: 
   GSpeakersPlot plot;
   bool on_delete_event(GdkEventAny *event);
+  void on_crossover_selected(Crossover *);
 };
 
 #endif

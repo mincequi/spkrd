@@ -96,7 +96,7 @@ public:
                 int upper_y = 10, 
                 bool logx = true, 
                 int y_zero_freq = 0);
-  void add_plot(vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
+  int add_plot(vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
   void remove_plot(int n);
   void hide_plot(int n);
   void remove_all_plots();
@@ -108,6 +108,8 @@ public:
   void set_line_size( int size );
 
   void select_plot(int index);
+
+  void replace_plot(int index, vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
 
 protected:
   /* This is the function that draws the graphics */

@@ -35,17 +35,26 @@ MainWindow::MainWindow() :
   box_editor(),
   box_history(),
   plot_history(),  
+  //crossover_wizard(),
+  
+  
   crossover_wizard(),
+  
   speaker_list_selector(),
+  //filter_plot(),
   box_plot(),
   crossover_treeview(),
+  
   crossover_history(),
+  
+  
   filter_plot()
   
 {
   add(m_main_vbox);
   m_main_vbox.set_spacing(3);
-  
+//  signal_plot_crossover.connect(slot(*this, &MainWindow::on_on_plot_crossover));
+   
   set_title("GSpeakers-" + string(VERSION));
 
   g_settings.defaultValueBool("SetMainWindowSize", true);
@@ -159,10 +168,12 @@ MainWindow::MainWindow() :
   //m_main_paned.add2(m_plot_notebook);
   //g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
   //m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
-    
+  //signal_plot_crossover();  
   show_all_children();
+  //signal_plot_crossover();  
   /* For some reason I had to put this row after show */
   m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
+  
 }
 
 MainWindow::~MainWindow()
@@ -212,6 +223,12 @@ void MainWindow::on_plot_crossover()
   filter_plot.clear();
   signal_plot_crossover();
 }
+
+void MainWindow::on_on_plot_crossover()
+{
+  
+}
+
 
 void MainWindow::on_update_crossover()
 {

@@ -1,3 +1,7 @@
+GSpeakers-0.5
+
+* You can now plot the frequency response of a crossover network
+
 GSpeakers-0.4
 
 * Some bugfixes to older versions (for example, now GSpeakers

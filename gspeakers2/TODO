@@ -15,11 +15,14 @@ the structure in the program, some are important due to the UI experience.
 
 * Icons on the buttons in various dialogs
 
-* Print less decimals in box- and speakereditor treeview, and everywhere else 
-    we print decimal numbers
+* Add "insert_column_with_data_func();" to various columns in treeviews, for 
+    example: enclosure types
+     
+    -Print less decimals in box- and speakereditor treeview, and everywhere else 
+     we print decimal numbers
 
-* Change type field in speakereditor treeview to some text instead of the 
-    current integer
+    -Change type field in speakereditor treeview to some text instead of the 
+     current integer
 
 * Rpm, deb and tgz binary packages, i will need maintainer for different 
     packages too (important)
@@ -38,8 +41,7 @@ the structure in the program, some are important due to the UI experience.
 
 * Make id_string cell in CrossoverHistory editable
 
-* CrossoverTreeView: add check for correct unit when the unit cell has 
-    been edited
+* CrossoverTreeView: remove code for changing the unit for a part
 
 * Clear up and maybe rewrite BoxEditor
 
@@ -53,9 +55,6 @@ the structure in the program, some are important due to the UI experience.
     but it requires some thinking), consecutive colors coming out of 
     GSpeakersColor should not be similar, the colors should also be clear and 
     easy to distinguish (<-howto spell???) from each other
-
-* Add "insert_column_with_data_func();" to various columns in treeviews, for 
-    example: enclosure types
 
 * Reorder some columns in the treeviews to improve the user experience
 

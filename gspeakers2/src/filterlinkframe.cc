@@ -186,7 +186,10 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
   signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
   g_settings.defaultValueString("SPICECmdLine", "spice3");
+  my_filter_plot_index = -1;
   //on_plot_crossover();
+  //signal_plot_crossover();
+  
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -434,15 +437,19 @@ void FilterLinkFrame::on_param_changed()
       /* Calculate resistors for damping network */
       double r_ser = speaker.get_rdc() * (pow(10, m_damp_spinbutton.get_value() / 20) - 1);
       double r_par = speaker.get_rdc() + pow(speaker.get_rdc(), 2) / r_ser;
-      m_net->get_damp_R1().set_value(r_ser);
-      m_net->get_damp_R2().set_value(r_par);
+      m_net->get_damp_R2().set_value(r_ser);
+      m_net->get_damp_R1().set_value(r_par);
+      
       
     } else {
       m_net->set_has_damp(false);
     }
     signal_net_modified_by_wizard();
+    
   }
-  //on_plot_crossover();
+  on_plot_crossover();
+  //signal_plot_crossover();
+  
 }
 
 void FilterLinkFrame::on_net_updated(Net *net)
@@ -450,11 +457,12 @@ void FilterLinkFrame::on_net_updated(Net *net)
   cout << "FilterLinkFrame::on_net_updated" << endl;
   enable_edit = false;
   Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+  int index = 0;
   if (net->get_id() == m_net->get_id()) {
     if (m_net->get_type() & NET_TYPE_LOWPASS) {
       switch (m_net->get_lowpass_order()) {
         case NET_ORDER_1ST:
-          m_lower_co_freq_spinbutton->set_value(speaker.get_rdc() / ((*m_net->parts())[0].get_value()/1000 * 6.28));
+          m_lower_co_freq_spinbutton->set_value(speaker.get_rdc() / ((*m_net->parts())[index++].get_value()/1000 * 6.28));
           break;
         case NET_ORDER_2ND:
           m_lower_co_freq_spinbutton->set_value((1/sqrt((*m_net->parts())[0].get_value()/1000 * (*m_net->parts())[1].get_value()/1000000)) / (2 * 3.14159));
@@ -468,7 +476,7 @@ void FilterLinkFrame::on_net_updated(Net *net)
     if (m_net->get_type() & NET_TYPE_HIGHPASS) {
       switch (m_net->get_highpass_order()) {
         case NET_ORDER_1ST:
-          m_higher_co_freq_spinbutton->set_value(0.159 / ((*m_net->parts())[0].get_value()/1000000 * speaker.get_rdc()));
+          m_higher_co_freq_spinbutton->set_value(0.159 / ((*m_net->parts())[index].get_value()/1000000 * speaker.get_rdc()));
           break;
         case NET_ORDER_2ND:
           m_higher_co_freq_spinbutton->set_value(1 / (sqrt( ((*m_net->parts())[1].get_value()/1000) * (*m_net->parts())[0].get_value()/1000000)) / (2 * 3.14159));
@@ -531,10 +539,11 @@ void FilterLinkFrame::on_plot_crossover()
   } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
     c = Gdk::Color("red");
   } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
-    c = Gdk::Color("green");
+    c = Gdk::Color("darkgreen");
   }
-  
-  signal_add_crossover_plot(points, c);
+  int id2 = m_net->get_id();
+  cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
+  signal_add_crossover_plot(points, c, &my_filter_plot_index);
   /* TODO: update filterwizard, co_freq_spinbutton here */
   
 }   

@@ -74,7 +74,9 @@ private:
   string m_description;
   SpeakerList *m_speaker_list;
   bool enable_edit;
-  
+
+  int my_filter_plot_index;
+
   /* Helper function */
   int round( double x );
 };

@@ -366,10 +366,37 @@ string Net::to_SPICE(Speaker& s)
           part_index++;
           break;
         case NET_ORDER_2ND:
+          of << "L" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
           break;
         case NET_ORDER_3RD:
+          of << "L" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "L" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
           break;
         case NET_ORDER_4TH:
+          of << "L" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "L" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
           break;
       }
     }
@@ -379,12 +406,46 @@ string Net::to_SPICE(Speaker& s)
           of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
                 m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
           part_index++;
+          
           break;
         case NET_ORDER_2ND:
+          of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+
+          of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+        
           break;
         case NET_ORDER_3RD:
+          of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+
+          of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+        
           break;
         case NET_ORDER_4TH:
+          of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+
+          of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "C" << m_parts[part_index].get_id() << " " << ++node_counter << " " << node_counter - 1 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+          of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
+                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+          part_index++;
+        
           break;
       }
     }

@@ -55,8 +55,9 @@ int main (int argc, char *argv[])
   //GSpeakersBoxPlot gsbp;
    
   //SpeakerListSelector sls;
-
   MainWindow mw;
+  //mw.show_all_children();
+  //signal_plot_crossover();
   kit.run(mw);
 //  cout << c1;
   /* save settings */

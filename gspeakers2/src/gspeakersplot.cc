@@ -79,7 +79,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Color& ref_color)
+int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Color& ref_color)
 {
   cout << "GSpeakersPlot: on add plot" << endl;
   m_refGC->set_rgb_fg_color(ref_color);
@@ -175,7 +175,18 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
   //select_plot(m_colors.size() - 1);
   Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
   get_window()->invalidate_rect(update_rect, false);
+  /* Return index of the new plot so that the owner of this plot can keep track of plots */
+  return m_colors.size() - 1;
+}
 
+void GSpeakersPlot::replace_plot(int index, vector<GSpeakers::Point> &p, Gdk::Color& ref_color)
+{
+  m_points[index] = p;
+  m_colors[index] = ref_color;
+  
+  redraw();
+  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+  get_window()->invalidate_rect(update_rect, false);
 }
 
 void GSpeakersPlot::remove_plot(int n)

@@ -91,7 +91,7 @@ extern Signal1<void, Box *> signal_box_selected;
 extern Signal1<void, Box *> signal_box_modified;
 extern Signal1<void, Box *> signal_add_to_boxlist;
 extern Signal3<void, Box *, Speaker *, Gdk::Color&> signal_add_plot;
-extern Signal2<void, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
+extern Signal2<int, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 extern Signal1<void, int> signal_remove_box_plot;
 extern Signal1<void, int> signal_hide_box_plot;
 extern Signal1<void, int> signal_select_plot;
@@ -100,6 +100,6 @@ extern Signal0<void> signal_net_modified_by_wizard;  // listen to this in crosso
 extern Signal1<void, Net *> signal_net_modified_by_user;    // listan to this in filter wizard
 extern Signal1<void, int> signal_new_crossover;
 extern Signal0<void> signal_plot_crossover;
-extern Signal2<void, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_crossover_plot;
+extern Signal3<int, vector<GSpeakers::Point>&, Gdk::Color&, int *> signal_add_crossover_plot;
 
 #endif //__GFILTER_COMMON_H

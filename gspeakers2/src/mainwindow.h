@@ -36,7 +36,7 @@ class MainWindow : public Gtk::Window
 public:
   MainWindow();
   virtual ~MainWindow();
-  
+
 private:
   Gtk::VBox m_main_vbox;
   Gtk::Notebook m_main_notebook;
@@ -60,23 +60,26 @@ private:
   BoxHistory box_history;
   /* Plot history will always be empty at startup for now */
   PlotHistory plot_history;
+  
   CrossoverWizard crossover_wizard;
-
   SpeakerListSelector speaker_list_selector;
+  
 
   GSpeakersBoxPlot box_plot;
 
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
-
   GSpeakersFilterPlot filter_plot;
+  
 
   /* Callbacks */
   void on_quit();
   void on_about();
   void on_crossover_menu_action(int);
   void on_plot_crossover();
+  void on_on_plot_crossover();
   void on_update_crossover();
+
 };
 
 #endif

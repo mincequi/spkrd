@@ -28,7 +28,8 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() :
   //signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   //signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
   //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
-  signal_add_crossover_plot.connect(slot(plot, &GSpeakersPlot::add_plot));
+  signal_add_crossover_plot.connect(slot(*this, &GSpeakersFilterPlot::on_add_plot));
+  signal_crossover_selected.connect(slot(*this, &GSpeakersFilterPlot::on_crossover_selected));
   show_all();
 }
 
@@ -37,9 +38,25 @@ GSpeakersFilterPlot::~GSpeakersFilterPlot()
 
 }
 
+int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int *i)
+{
+  cout << "GSpeakersFilterPlot::on_add_plot" << endl;
+  if (*i == -1) {
+    *i = plot.add_plot(points, color);
+  } else {
+    plot.replace_plot(*i, points, color);
+  }
+  return 0;
+}
+
 void GSpeakersFilterPlot::clear()
 {
   plot.remove_all_plots();
+}
+
+void GSpeakersFilterPlot::on_crossover_selected(Crossover *)
+{
+  clear();
 }
 
 bool GSpeakersFilterPlot::on_delete_event(GdkEventAny *event)

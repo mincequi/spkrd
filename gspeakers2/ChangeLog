@@ -1,5 +1,12 @@
 GSpeakers ChangeLog
 
+2002-09-05
+
+* net.cc: added spice generation for 2nd, 3rd and 4th order filters
+
+* filterlinkframe.h/cc, gspeakersfilterplot.h/cc: update plot when user change 
+    something in the filter
+
 2002-09-03
 
 * filterlinkframe.cc: add SPICE parsing routines
