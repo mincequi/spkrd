@@ -134,24 +134,43 @@ target_alias = @target_alias@
 bin_PROGRAMS = gspeakers
 
 #List of source files needed to build the executable:
-gspeakers_SOURCES = main.cc common.h common.cc gspeakersobject.h gspeakersobject.cc \
-part.h part.cc net.h net.cc crossover.h crossover.cc crossoverlist.h \
-crossoverlist.cc speaker.h speaker.cc speakerlist.h speakerlist.cc box.h \
-box.cc boxlist.h boxlist.cc speakereditor.h speakereditor.cc \
-cellitemcrossover.h cellitemcrossover.cc crossovertreeview.h \
-crossovertreeview.cc crossoverhistory.h crossoverhistory.cc \
+gspeakers_SOURCES = main.cc \
+common.h common.cc \
+gspeakersobject.h gspeakersobject.cc \
+part.h part.cc \
+net.h net.cc \
+crossover.h crossover.cc \
+crossoverlist.h crossoverlist.cc \
+speaker.h speaker.cc \
+speakerlist.h speakerlist.cc \
+box.h box.cc \
+boxlist.h boxlist.cc \
+speakereditor.h speakereditor.cc \
+cellitemcrossover.h cellitemcrossover.cc \
+crossovertreeview.h crossovertreeview.cc \
+crossoverhistory.h crossoverhistory.cc \
 boxeditor.h boxeditor.cc \
-boxhistory.h boxhistory.cc gspeakerscolor.h gspeakerscolor.cc \
-plothistory.h plothistory.cc gspeakersplot.h gspeakersplot.cc \
-gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc \
-mainwindow.h mainwindow.cc crossoverwizard.h crossoverwizard.cc \
-filterlinkframe.h filterlinkframe.cc gspeakersfilterplot.h \
-gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc \
-totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc \
-freqrespeditor.h freqrespeditor.cc driverfreqrespplot.h driverfreqrespplot.cc \
-enclosurepaned.h enclosurepaned.cc crossoverpaned.h crossoverpaned.cc \
-summedfreqrespplot.h summedfreqrespplot.cc popupentry.h popupentry.cc \
-cellrendererpopup.h cellrendererpopup.cc
+boxhistory.h boxhistory.cc \
+gspeakerscolor.h gspeakerscolor.cc \
+plothistory.h plothistory.cc \
+gspeakersplot.h gspeakersplot.cc \
+gspeakersboxplot.h gspeakersboxplot.cc \
+settings.h settings.cc \
+mainwindow.h mainwindow.cc \
+crossoverwizard.h crossoverwizard.cc \
+filterlinkframe.h filterlinkframe.cc \
+gspeakersfilterplot.h gspeakersfilterplot.cc \
+settingsdialog.h settingsdialog.cc \
+totalfilterplot.h totalfilterplot.cc \
+tabwidget.h tabwidget.cc \
+freqrespeditor.h freqrespeditor.cc \
+driverfreqrespplot.h driverfreqrespplot.cc \
+enclosurepaned.h enclosurepaned.cc \
+crossoverpaned.h crossoverpaned.cc \
+summedfreqrespplot.h summedfreqrespplot.cc \
+popupentry.h popupentry.cc \
+cellrendererpopup.h cellrendererpopup.cc \
+crossoverimageview.h crossoverimageview.cc
 
 LDADD = $(DEPS_LIBS)
 subdir = src
@@ -177,7 +196,7 @@ am_gspeakers_OBJECTS = main.$(OBJEXT) common.$(OBJEXT) \
 	freqrespeditor.$(OBJEXT) driverfreqrespplot.$(OBJEXT) \
 	enclosurepaned.$(OBJEXT) crossoverpaned.$(OBJEXT) \
 	summedfreqrespplot.$(OBJEXT) popupentry.$(OBJEXT) \
-	cellrendererpopup.$(OBJEXT)
+	cellrendererpopup.$(OBJEXT) crossoverimageview.$(OBJEXT)
 gspeakers_OBJECTS = $(am_gspeakers_OBJECTS)
 gspeakers_LDADD = $(LDADD)
 gspeakers_DEPENDENCIES =
@@ -192,6 +211,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/cellrendererpopup.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/common.Po ./$(DEPDIR)/crossover.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/crossoverhistory.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/crossoverimageview.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/crossoverlist.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/crossoverpaned.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/crossovertreeview.Po \
@@ -279,6 +299,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossoverhistory.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossoverimageview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossoverlist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossoverpaned.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossovertreeview.Po@am__quote@

@@ -6,48 +6,30 @@ about the tasks, mail dss@home.se
 
 2) Some tasks may be more important than others, some are important due to 
 the structure in the program, some are important due to the UI experience.
+Tasks that I consider important are marked with "important".
 
-* Remove all glib-stuff from part.cc, net.cc, crossover.cc, speaker.cc, 
-    speakerlist.cc, box.cc and boxlist.cc
-
-* Find out how to right adjust text in labels attached to a table (for example
-    in the SpeakerEditor)
-
-* Icons on the buttons in various dialogs, maybe switch to toolbars...
-
-* Add "insert_column_with_data_func();" to various columns in treeviews, for 
-    example: enclosure types (important for the user experience)
-     
-    -Print less decimals in box- and speakereditor treeview, and everywhere else 
-     we print decimal numbers
-
-    -Change type field in speakereditor treeview to some text instead of the 
-     current integer
+3) Tasks that should be done before 1.0 is marked "pre 1.0"
 
 * Rpm, deb and tgz binary packages, i will need maintainer for different 
-    packages too (important)
+    packages too (pre 1.0)
 
 * Compile and run on windows and docs for this (important) 
 
 * Windows installer
 
 * Speakereditor and CrossoverHistory: ask if you want to save changes 
-    when open new xml (important)
+    when open new xml (pre-1.0)
 
-* Loudspeaker design with GSpeakers HOWTO (important, will increase user base)
+* Loudspeaker design with GSpeakers HOWTO (important, will increase user base, pre 1.0)
 
-* Make id_string cell in CrossoverHistory editable
+* Make id_string cell in CrossoverHistory editable (pre 1.0)
 
-* CrossoverTreeView: remove code for changing the unit for a part
+* CrossoverTreeView: remove code for changing the unit for a part (pre 1.0)
 
-* Clear up and maybe rewrite BoxEditor
-
-* Box xml should save driver (important)
+* Box xml should save driver (pre 1.0)
 
 * Rewrite boxhistory and boxplot history, make it more intuitive to 
-    use (important)
-
-* Internationalization, get_text support and more
+    use (pre 1.0)
 
 * Translate documentation
 
@@ -63,33 +45,35 @@ the structure in the program, some are important due to the UI experience.
 
 * Better icons in the main window notebook
 
-* Better program icon, install icon to gnome menus...
+* Better program icon, install icon to gnome menus (pre 1.0)
 
-* Add tooltips to appropriate widgets
+* Add tooltips to appropriate widgets (pre 1.0)
 
-* Add try/catch on xml files loaded in ctors
+* Add try/catch on xml files loaded in ctors (pre 1.0)
 
 * FilterLinkFrame: only recalc affected part values
 
 * Check that the spice executable selected in setting dialog really is a 
-    valid spice-program
+    valid spice-program (maybe pre 1.0)
 
 * Maybe we should remove the need for an external SPICE-interpreter...or call 
     a SPICE-interpreter from a lib or something like that
 
-* Clean up temp dir after SPICE execution
+* Clean up temp dir after SPICE execution (pre 1.0)
 
 * SpeakerEditor: select next (or previous) listitem on remove, you should be 
-    able to undo "delete driver"
+    able to undo "delete driver" (important)
 
 * SpeakerEditor: code cleanup
 
 * SpeakerEditor: cache SPICE calculations and file reads (may be important on 
     slow systems)
 
-* Add "autoupdate SPICE calculations" on drivers tab too
+* Add "autoupdate SPICE calculations" on drivers tab too (maybe pre 1.0)
 
 * UI should look the same on each tab
+
+* Follow Gnome HIG
 
 * Support nonmetric units
 
@@ -98,16 +82,14 @@ the structure in the program, some are important due to the UI experience.
 
 * Settings dialog should apply changes "on the fly"
 
-* GSpeakers should ask if you want to save changes
+* GSpeakers should ask if you want to save changes (pre 1.0)
 
 * Maybe a configurable (on/off) splash screen, since loading the program takes 
     a little while
 
-* GSpeakers should ask if you want to save changes upon quit
+* Make GSpeakers work on 640x480 (pre 1.0)
 
-* Make GSpeakers work on 640x480
-
-* Tune GSpeakersPlot so that it works with default screen font
+* Tune GSpeakersPlot so that it works with default screen font (maybe pre 1.0)
 
 * Drag'n'drop reorder listviews
 

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-12 15:22+0100\n"
+"POT-Creation-Date: 2003-01-13 22:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,51 +19,51 @@ msgstr ""
 msgid "Box: box node not found"
 msgstr ""
 
-#: src/box.cc:72
+#: src/box.cc:73
 msgid "Box"
 msgstr ""
 
-#: src/box.cc:73
+#: src/box.cc:74
 msgid "Id:        "
 msgstr ""
 
-#: src/box.cc:74
+#: src/box.cc:75
 msgid "Id-string: "
 msgstr ""
 
-#: src/box.cc:75
+#: src/box.cc:76
 msgid "Type:      "
 msgstr ""
 
-#: src/box.cc:76
+#: src/box.cc:77
 msgid "Vb1:       "
 msgstr ""
 
-#: src/box.cc:77
+#: src/box.cc:78
 msgid "Fb1:       "
 msgstr ""
 
-#: src/box.cc:141
+#: src/box.cc:142
 msgid "Box: id_string node not found"
 msgstr ""
 
-#: src/box.cc:155
+#: src/box.cc:156
 msgid "Box: type node not found"
 msgstr ""
 
-#: src/box.cc:169
+#: src/box.cc:171
 msgid "Box: vb1 node not found"
 msgstr ""
 
-#: src/box.cc:183
+#: src/box.cc:186
 msgid "Box: fb1 node not found"
 msgstr ""
 
-#: src/box.cc:197
+#: src/box.cc:201
 msgid "Box: vb2 node not found"
 msgstr ""
 
-#: src/box.cc:206
+#: src/box.cc:211
 msgid "Box: fb2 node not found"
 msgstr ""
 
@@ -140,12 +140,12 @@ msgid "Save box xml as"
 msgstr ""
 
 #: src/boxhistory.cc:436 src/crossoverhistory.cc:462 src/plothistory.cc:241
-#: src/speakereditor.cc:930
+#: src/speakereditor.cc:953
 msgid "Identifier"
 msgstr ""
 
 #: src/boxhistory.cc:444 src/crossoverhistory.cc:472 src/plothistory.cc:267
-#: src/speakereditor.cc:939
+#: src/speakereditor.cc:962
 msgid "Type"
 msgstr ""
 
@@ -157,7 +157,7 @@ msgstr ""
 msgid "Fb1"
 msgstr ""
 
-#: src/boxhistory.cc:502 src/plothistory.cc:322 src/speakereditor.cc:1097
+#: src/boxhistory.cc:502 src/plothistory.cc:322 src/speakereditor.cc:1120
 msgid "Unknown"
 msgstr ""
 
@@ -619,19 +619,19 @@ msgid ""
 "exact estimation of the total frequency response."
 msgstr ""
 
-#: src/freqrespeditor.cc:126
+#: src/freqrespeditor.cc:136
 msgid "Could not open file: "
 msgstr ""
 
-#: src/freqrespeditor.cc:139 src/speakereditor.cc:866
+#: src/freqrespeditor.cc:149 src/speakereditor.cc:889
 msgid "Enter filename..."
 msgstr ""
 
-#: src/main.cc:51 src/main.cc:54
+#: src/main.cc:52 src/main.cc:55
 msgid "No configuration file found!"
 msgstr ""
 
-#: src/main.cc:51
+#: src/main.cc:52
 msgid "gspeakers2.conf created in current directory"
 msgstr ""
 
@@ -641,7 +641,7 @@ msgstr ""
 #. Plot history will always be empty at startup for now
 #. PlotHistory ph;
 #. GSpeakersBoxPlot gsbp;
-#: src/main.cc:81
+#: src/main.cc:82
 msgid "Testing gettext"
 msgstr ""
 
@@ -671,6 +671,21 @@ msgstr ""
 
 #: src/mainwindow.cc:95
 msgid "_Help"
+msgstr ""
+
+#. Driver tab
+#: src/mainwindow.cc:112
+msgid "Driver"
+msgstr ""
+
+#. Enclosure tab
+#: src/mainwindow.cc:123
+msgid "Enclosure"
+msgstr ""
+
+#. Crossover tab
+#: src/mainwindow.cc:126
+msgid "Crossover"
 msgstr ""
 
 #: src/net.cc:117
@@ -725,43 +740,43 @@ msgstr ""
 msgid "Net::parse_inv_pol: inv_pol node expected"
 msgstr ""
 
-#: src/net.cc:584
+#: src/net.cc:585
 msgid "***Net*** ******"
 msgstr ""
 
-#: src/net.cc:585
+#: src/net.cc:586
 msgid "Id:       "
 msgstr ""
 
-#: src/net.cc:586
+#: src/net.cc:587
 msgid "Type:     "
 msgstr ""
 
-#: src/net.cc:587
+#: src/net.cc:588
 msgid "Highpass #"
 msgstr ""
 
-#: src/net.cc:588
+#: src/net.cc:589
 msgid "Lowpass  #"
 msgstr ""
 
-#: src/net.cc:589
+#: src/net.cc:590
 msgid "Has imp corr: "
 msgstr ""
 
-#: src/net.cc:590
+#: src/net.cc:591
 msgid "Has damping : "
 msgstr ""
 
-#: src/net.cc:591
+#: src/net.cc:592
 msgid "Has resonanse circuit: "
 msgstr ""
 
-#: src/net.cc:592
+#: src/net.cc:593
 msgid "Parts:"
 msgstr ""
 
-#: src/net.cc:601
+#: src/net.cc:602
 msgid "********* ******"
 msgstr ""
 
@@ -773,31 +788,31 @@ msgstr ""
 msgid "Part: type node not found"
 msgstr ""
 
-#: src/part.cc:73
+#: src/part.cc:74
 msgid "Part: value node not found"
 msgstr ""
 
-#: src/part.cc:83
+#: src/part.cc:84
 msgid "Part: unit node not found"
 msgstr ""
 
-#: src/part.cc:152
+#: src/part.cc:154
 msgid "***Part***"
 msgstr ""
 
-#: src/part.cc:153
+#: src/part.cc:155
 msgid "Id   : "
 msgstr ""
 
-#: src/part.cc:154
+#: src/part.cc:156
 msgid "Type : "
 msgstr ""
 
-#: src/part.cc:155
+#: src/part.cc:157
 msgid "Value: "
 msgstr ""
 
-#: src/part.cc:156
+#: src/part.cc:158
 msgid "Unit : "
 msgstr ""
 
@@ -909,91 +924,91 @@ msgstr ""
 msgid "Speaker: speaker node not found"
 msgstr ""
 
-#: src/speaker.cc:128
+#: src/speaker.cc:131
 msgid "Id:   "
 msgstr ""
 
-#: src/speaker.cc:129
+#: src/speaker.cc:132
 msgid "Type: "
 msgstr ""
 
-#: src/speaker.cc:130
+#: src/speaker.cc:133
 msgid "Qts:  "
 msgstr ""
 
-#: src/speaker.cc:131
+#: src/speaker.cc:134
 msgid "Vas:  "
 msgstr ""
 
-#: src/speaker.cc:132
+#: src/speaker.cc:135
 msgid "Fs:   "
 msgstr ""
 
-#: src/speaker.cc:336
+#: src/speaker.cc:339
 msgid "Speaker: id_string node not found"
 msgstr ""
 
-#: src/speaker.cc:352
+#: src/speaker.cc:355
 msgid "Speaker: type node not found"
 msgstr ""
 
-#: src/speaker.cc:367
+#: src/speaker.cc:371
 msgid "Speaker: qts node not found"
 msgstr ""
 
-#: src/speaker.cc:382
+#: src/speaker.cc:387
 msgid "Speaker: vas node not found"
 msgstr ""
 
-#: src/speaker.cc:397
+#: src/speaker.cc:403
 msgid "Speaker: fs node not found"
 msgstr ""
 
-#: src/speaker.cc:412
+#: src/speaker.cc:419
 msgid "Speaker: rdc node not found"
 msgstr ""
 
-#: src/speaker.cc:427
+#: src/speaker.cc:435
 msgid "Speaker: lvc node not found"
 msgstr ""
 
-#: src/speaker.cc:442
+#: src/speaker.cc:451
 msgid "Speaker: qms node not found"
 msgstr ""
 
-#: src/speaker.cc:457
+#: src/speaker.cc:467
 msgid "Speaker: qes node not found"
 msgstr ""
 
-#: src/speaker.cc:472
+#: src/speaker.cc:483
 msgid "Speaker: imp node not found"
 msgstr ""
 
-#: src/speaker.cc:487
+#: src/speaker.cc:499
 msgid "Speaker: sens node not found"
 msgstr ""
 
-#: src/speaker.cc:501
+#: src/speaker.cc:513
 msgid "Speaker: freq_resp_filename node not found"
 msgstr ""
 
-#: src/speaker.cc:515
+#: src/speaker.cc:527
 msgid "Speaker: imp_resp_filename node not found"
 msgstr ""
 
-#: src/speaker.cc:529 src/speaker.cc:580
+#: src/speaker.cc:542 src/speaker.cc:597
 msgid "Speaker: mmd node not found"
 msgstr ""
 
-#: src/speaker.cc:543
+#: src/speaker.cc:557
 msgid "Speaker: ad node not found"
 msgstr ""
 
-#: src/speaker.cc:557
+#: src/speaker.cc:572
 msgid "Speaker: bl node not found"
 msgstr ""
 
-#: src/speaker.cc:571
+#: src/speaker.cc:587
 msgid "Speaker: rms node not found"
 msgstr ""
 
@@ -1009,11 +1024,11 @@ msgstr ""
 msgid "Bass"
 msgstr ""
 
-#: src/speakereditor.cc:37 src/speakereditor.cc:1086
+#: src/speakereditor.cc:37 src/speakereditor.cc:1109
 msgid "Midrange"
 msgstr ""
 
-#: src/speakereditor.cc:38 src/speakereditor.cc:1093
+#: src/speakereditor.cc:38 src/speakereditor.cc:1116
 msgid "Tweeter"
 msgstr ""
 
@@ -1138,81 +1153,81 @@ msgstr ""
 msgid "Save speaker xml as"
 msgstr ""
 
-#: src/speakereditor.cc:737 src/speakereditor.cc:741
+#: src/speakereditor.cc:760 src/speakereditor.cc:764
 msgid "Append speaker xml"
 msgstr ""
 
 #. Fix some initstuff since we don't have any settings
-#: src/speakereditor.cc:750 src/speakereditor.cc:755
+#: src/speakereditor.cc:773 src/speakereditor.cc:778
 #: src/speakerlistselector.cc:53 src/speakerlistselector.cc:75
 msgid "Open speaker xml"
 msgstr ""
 
-#: src/speakereditor.cc:948
+#: src/speakereditor.cc:971
 msgid "Qts"
 msgstr ""
 
-#: src/speakereditor.cc:957
+#: src/speakereditor.cc:980
 msgid "Fs"
 msgstr ""
 
-#: src/speakereditor.cc:966
+#: src/speakereditor.cc:989
 msgid "Vas"
 msgstr ""
 
-#: src/speakereditor.cc:976
+#: src/speakereditor.cc:999
 msgid "Rdc"
 msgstr ""
 
-#: src/speakereditor.cc:985
+#: src/speakereditor.cc:1008
 msgid "Lvc"
 msgstr ""
 
-#: src/speakereditor.cc:994
+#: src/speakereditor.cc:1017
 msgid "Qms"
 msgstr ""
 
-#: src/speakereditor.cc:1003
+#: src/speakereditor.cc:1026
 msgid "Qes"
 msgstr ""
 
-#: src/speakereditor.cc:1012
+#: src/speakereditor.cc:1035
 msgid "Impedance"
 msgstr ""
 
-#: src/speakereditor.cc:1021
+#: src/speakereditor.cc:1044
 msgid "Sensitivity"
 msgstr ""
 
-#: src/speakereditor.cc:1030
+#: src/speakereditor.cc:1053
 msgid "Cone mass"
 msgstr ""
 
-#: src/speakereditor.cc:1039
+#: src/speakereditor.cc:1062
 msgid "Active radius"
 msgstr ""
 
-#: src/speakereditor.cc:1048
+#: src/speakereditor.cc:1071
 msgid "Force factor"
 msgstr ""
 
-#: src/speakereditor.cc:1057
+#: src/speakereditor.cc:1080
 msgid "Susp. resistance"
 msgstr ""
 
-#: src/speakereditor.cc:1066
+#: src/speakereditor.cc:1089
 msgid "Susp. compliance"
 msgstr ""
 
-#: src/speakereditor.cc:1080
+#: src/speakereditor.cc:1103
 msgid "Woofer"
 msgstr ""
 
-#: src/speakereditor.cc:1084
+#: src/speakereditor.cc:1107
 msgid ", Midrange"
 msgstr ""
 
-#: src/speakereditor.cc:1091
+#: src/speakereditor.cc:1114
 msgid ", Tweeter"
 msgstr ""
 
@@ -1248,6 +1263,6 @@ msgstr ""
 msgid "Speaker xml: "
 msgstr ""
 
-#: src/summedfreqrespplot.cc:72
+#: src/summedfreqrespplot.cc:78
 msgid "Could not open "
 msgstr ""

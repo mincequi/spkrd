@@ -1,5 +1,33 @@
 GSpeakers ChangeLog
 
+2003-01-14
+
+* crossoverimageview.h/cc: added crossover image view class, a visual view 
+    of the crossover network to this project
+
+2003-01-13
+
+The updates today means we now require gtkmm-2.2, however, i think this is much 
+better than depending on changing locales inside the program...
+
+* filterlinkframe.cc, summedfreqrespplot.cc: same as the below
+
+* freqrespeditor.cc: changed sscanf:s like below, fixed the same possible 
+    memory leak
+
+* speakereditor.cc: added g_ascii_dtostr/strtod on spice stuff, 
+    changed sscanf:s to something locale independent and fixed a 
+    couple of possible memory leaks (added "delete buffer")
+
+* box.cc: added g_ascii_dtostr/strtod around xml read-write float
+
+* net.cc: added g_ascii_dtostr in spice file generation
+
+* speaker.cc: added g_ascii_dtostr/strtod around xml-read/write floating 
+    point values
+
+* mainwindow.cc: added a few translation strings
+
 2003-01-12
 
 * Added gettext support to most of GSpeakers, added a swedish translation

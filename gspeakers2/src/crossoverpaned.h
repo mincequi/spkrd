@@ -28,6 +28,7 @@
 #include "gspeakersfilterplot.h"
 #include "totalfilterplot.h"
 #include "summedfreqrespplot.h"
+#include "crossoverimageview.h"
 
 class CrossoverPaned : public Gtk::HPaned
 {
@@ -52,6 +53,7 @@ private:
   GSpeakersFilterPlot filter_plot;
   TotalFilterPlot total_filter_plot;
   SummedFreqRespPlot summed_freq_resp_plot;
+  CrossoverImageView crossover_image_view;
 
   Gtk::HPaned m_hpaned2;
   Gtk::VPaned m_vpaned;
