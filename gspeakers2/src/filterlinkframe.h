@@ -47,7 +47,8 @@ private:
   void on_net_updated(Net *net);
   void on_plot_crossover();
   void on_clear_and_plot();
-  
+  void on_speakerlist_loaded(SpeakerList *speaker_list);
+
   Gtk::Adjustment    adj;
 
   Gtk::VBox          m_vbox;

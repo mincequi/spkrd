@@ -47,7 +47,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   if (speaker_name != "") {
     popdown_strings.push_back(speaker_name);
   }
-  cout << "FilterLinkFrame::FilterLinkFrame" << (m_speaker_list == NULL) << endl;
+
+  //cout << "FilterLinkFrame::FilterLinkFrame" << (m_speaker_list == NULL) << endl;
   for (
     vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
     iter != m_speaker_list->speaker_list()->end();
@@ -201,7 +202,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   my_filter_plot_index = -1;
   //on_plot_crossover();
   //signal_plot_crossover();
-  
+  signal_speakerlist_loaded.connect(slot(*this, &FilterLinkFrame::on_speakerlist_loaded));
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -562,6 +563,42 @@ void FilterLinkFrame::on_clear_and_plot()
 {
   my_filter_plot_index = -1;
   on_plot_crossover();
+}
+
+void FilterLinkFrame::on_speakerlist_loaded(SpeakerList *speaker_list)
+{
+#ifdef OUTPUT_DEBUG
+  cout << "FilterLinkFrame::on_speakerlist_loaded" << endl;
+#endif
+  if (speaker_list != NULL) {
+    m_speaker_list = speaker_list;
+  }
+  
+  string speaker_name = m_net->get_speaker();
+  
+  /* Setup the speaker combo box */
+  vector<string> popdown_strings;
+  /*if (speaker_name != "") {
+    popdown_strings.push_back(speaker_name);
+  }
+  */
+  bool speaker_is_in_speakerlist = false;
+  for (
+    vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
+    iter != m_speaker_list->speaker_list()->end();
+    ++iter)
+  {
+    /* TODO: only insert speakers appropriate for this particular crossover */
+    if (speaker_name != (*iter).get_id_string()) {
+      popdown_strings.push_back((*iter).get_id_string());
+    } else {
+      speaker_is_in_speakerlist = true;
+    }
+  }
+  if (speaker_is_in_speakerlist == true) {
+    popdown_strings.insert(popdown_strings.begin(), speaker_name);
+  }
+  m_speaker_combo.set_popdown_strings(popdown_strings);
 }
 
 void FilterLinkFrame::on_plot_crossover()

@@ -1,6 +1,22 @@
 GSpeakers ChangeLog
 
+2002-09-27
+
+* gspeakersplot.h/cc: added set_y_label method, also use this in plot container 
+    classes
+
+* boxeditor.h/cc: removed the buttons, use enter in fb entry or toolbar or menu
+
+* enclosurepaned.cc: added toolbar and menu items for the buttons in boxeditor
+
+* speakereditor.cc: signal speakerlist_loaded on new speaker
+
+* boxeditor.cc, filterlinkframe.cc: add new speakers to combo-boxes
+
 2002-09-25
+
+* All classes that uses SpeakerList: Prepared for better handling of new 
+    SpeakerList loaded signal
 
 * mainwindow.cc, settingsdialog.h/cc: config options: save size, save position
 

@@ -35,7 +35,8 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_linesize = 1;
   m_enable_sec_scale = enable_sec_scale;
   visible = false;
-  
+  m_y_label1 = "";
+  m_y_label2 = "";
 }
 
 bool GSpeakersPlot::on_expose_event(GdkEventExpose* event)
@@ -349,6 +350,16 @@ void GSpeakersPlot::redraw()
       m_refPixmap->draw_layout(m_refGC, get_allocation().width - BOX_FRAME_SIZE + 5, y - 6, m_refLayout);
     }
   }
+  if (m_y_label1 != "") {
+    m_refLayout->set_text(m_y_label1);
+    m_refPixmap->draw_layout(m_refGC, (int)(BOX_FRAME_SIZE / 2), (int)(BOX_FRAME_SIZE / 3), m_refLayout);
+  }
+  if (m_y_label2 != "") {
+    m_refLayout->set_text(m_y_label2);
+    int width, height;
+    m_refLayout->get_pixel_size(width, height);
+    m_refPixmap->draw_layout(m_refGC, box_width + (int)(1.5 * BOX_FRAME_SIZE) - width, (int)(BOX_FRAME_SIZE / 3), m_refLayout);
+  }
 
   int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
   int half_space_x = round( total_space_x / 2 );
@@ -556,6 +567,27 @@ void GSpeakersPlot::set_line_size( int size )
 
 }
 
+void GSpeakersPlot::set_y_label(const string& text)
+{
+  m_y_label1 = text;
+  
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
+}
+
+void GSpeakersPlot::set_y_label2(const string& text)
+{
+  m_y_label2 = text;
+  
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
+}
 
 /*
  * Helper function to convert double->int and round it to nearest int

@@ -35,12 +35,13 @@ class BoxEditor : public Gtk::Frame
 public:
   BoxEditor();
   ~BoxEditor();
-  
-protected:
   void on_optimize_button_clicked();
   void on_append_to_boxlist_clicked();
   void on_append_to_plot_clicked();
   void on_calc_port_clicked();
+  void append_and_plot();
+  
+protected:
 
   /* Callbacks */
   void on_box_selected(Box *b);
@@ -57,7 +58,7 @@ protected:
   Gtk::Entry m_speaker_qts_entry, m_speaker_vas_entry, m_speaker_fs_entry;
   Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;
   Gtk::OptionMenu m_box_type_optionmenu;
-  Gtk::Button m_optimize_button, m_append_button, m_plot_button, m_calc_port_button;
+  //Gtk::Button m_optimize_button, m_append_button, m_plot_button, m_calc_port_button;
   Gtk::Menu m_option_menu;
 
 private: 

@@ -28,16 +28,11 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() :
   signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
   signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
+  plot.set_y_label("Magnitude / dB");
   show_all();
 }
 
 GSpeakersBoxPlot::~GSpeakersBoxPlot()
 {
 
-}
-
-bool GSpeakersBoxPlot::on_delete_event(GdkEventAny *event)
-{
-  /* Don't wanna delete this window */
-  return true;
 }

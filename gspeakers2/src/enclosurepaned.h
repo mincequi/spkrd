@@ -43,6 +43,10 @@ protected:
   void on_settings_changed(const string&);
   void set_save_state(bool b);
   
+  void on_plot_selected(int);
+  void on_remove_boxplot(int);
+  void on_add_plot(Box *, Speaker *, Gdk::Color&);
+  
 private:
   BoxEditor box_editor;
   BoxHistory box_history;
@@ -55,6 +59,9 @@ private:
   Gtk::Menu m_menu;
   Gtk::HandleBox m_toolbar;
   Gtk::Toolbar *m_tbar;
+  
+  int nof_plots;
+  bool plot_selected;
 };
 
 #endif

@@ -281,7 +281,8 @@ void Speaker_ListStore::set_entries_sensitive(bool value)
 
 void Speaker_ListStore::on_new()
 {
-  Speaker s("New speaker");
+  Speaker s("New Speaker");
+  s.set_id_string(s.get_id_string() + " " + GSpeakers::int_to_ustring(s.get_id()));
   liststore_add_item(s);
   m_speaker_list->speaker_list()->push_back(s);
   
@@ -301,7 +302,7 @@ void Speaker_ListStore::on_new()
   m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
-
+  signal_speakerlist_loaded(m_speaker_list);
 }
 
 void Speaker_ListStore::on_new_xml()
@@ -310,6 +311,8 @@ void Speaker_ListStore::on_new_xml()
   m_speaker_list->clear();
   set_entries_sensitive(false);
   new_xml_pressed = true;
+  /* Add one new speaker to the new xml file, we usually want to do this  */
+  on_new();
 }
 
 void Speaker_ListStore::on_remove()
@@ -618,6 +621,7 @@ void Speaker_ListStore::on_entry_changed(int i)
             (*(m_speaker_list->speaker_list()))[index].set_type((*(m_speaker_list->speaker_list()))[index].get_type() & ~SPEAKER_TYPE_BASS);
           }
           row[m_columns.type] = (*(m_speaker_list->speaker_list()))[index].get_type();
+          signal_speakerlist_loaded(m_speaker_list);
           break;
         case 11:
           //cout << "midrange" << endl;

@@ -31,15 +31,11 @@
 
 BoxEditor::BoxEditor() :
   Gtk::Frame("Enclosure editor"),
-  m_table(6, 5, true),
+  m_table(5, 5, true),
   m_vbox(),
   m_hbox(),
   m_bass_speaker_combo(),
   m_box_type_optionmenu(),
-  m_optimize_button("Optimize"), 
-  m_append_button("Append to list"), 
-  m_plot_button("Plot"),
-  m_calc_port_button("Calc port..."),
   m_option_menu()
 {
   disable_signals = false;
@@ -62,31 +58,31 @@ BoxEditor::BoxEditor() :
   m_id_string_entry.set_width_chars(10);
   
   m_table.set_spacings(4);
-  m_table.attach(*manage(new Gtk::Label("Bass speaker: ")), 0, 1, 0, 1);
+  m_table.attach(*manage(new Gtk::Label("Bass speaker: ", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
   
-  m_table.attach(*manage(new Gtk::Label("Qts: ")), 0, 1, 1, 2);
+  m_table.attach(*manage(new Gtk::Label("Qts: ", Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
   m_table.attach(m_speaker_qts_entry, 1, 2, 1, 2);   
-  m_table.attach(*manage(new Gtk::Label("Vas: ")), 3, 4, 1, 2);
+  m_table.attach(*manage(new Gtk::Label("Vas: ", Gtk::ALIGN_RIGHT)), 3, 4, 1, 2);
   m_table.attach(m_speaker_vas_entry, 4, 5, 1, 2);   
   
-  m_table.attach(*manage(new Gtk::Label("Fs: ")), 0, 1, 2, 3);
+  m_table.attach(*manage(new Gtk::Label("Fs: ", Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
   m_table.attach(m_speaker_fs_entry, 1, 2, 2, 3);      
 
-  m_table.attach(*manage(new Gtk::Label("Id string: ")), 0, 1, 3, 4);
+  m_table.attach(*manage(new Gtk::Label("Id string: ", Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
   m_table.attach(m_id_string_entry, 1, 3, 3, 4);
-  m_table.attach(*manage(new Gtk::Label("  Type: ")), 3, 4, 3, 4);
+  m_table.attach(*manage(new Gtk::Label("  Type: ", Gtk::ALIGN_RIGHT)), 3, 4, 3, 4);
   m_table.attach(m_box_type_optionmenu, 4, 5, 3, 4);
   
-  m_table.attach(*manage(new Gtk::Label("Vb1: ")), 0, 1, 4, 5);
+  m_table.attach(*manage(new Gtk::Label("Vb1: ", Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
   m_table.attach(m_vb1_entry, 1, 2, 4, 5);
-  m_table.attach(*manage(new Gtk::Label("  Fb1: ")), 2, 3, 4, 5);
+  m_table.attach(*manage(new Gtk::Label("  Fb1: ", Gtk::ALIGN_RIGHT)), 2, 3, 4, 5);
   m_table.attach(m_fb1_entry, 3, 4, 4, 5);
   
 
-  m_table.attach(m_optimize_button, 0, 1, 5, 6);
-  m_table.attach(m_append_button, 1, 2, 5, 6);
-  m_table.attach(m_plot_button, 2, 3, 5, 6);
+  //m_table.attach(m_optimize_button, 0, 1, 5, 6);
+  //m_table.attach(m_append_button, 1, 2, 5, 6);
+  //m_table.attach(m_plot_button, 2, 3, 5, 6);
   //m_table.attach(m_calc_port_button, 3, 4, 3, 4);
 
   m_bass_speaker_combo.get_entry()->set_editable(false);
@@ -96,9 +92,9 @@ BoxEditor::BoxEditor() :
   m_vb1_entry.signal_changed().connect(bind<int>(slot(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
   m_fb1_entry.signal_changed().connect(bind<int>(slot(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
-  m_optimize_button.signal_clicked().connect(slot(*this, &BoxEditor::on_optimize_button_clicked));
-  m_append_button.signal_clicked().connect(slot(*this, &BoxEditor::on_append_to_boxlist_clicked));
-  m_plot_button.signal_clicked().connect(slot(*this, &BoxEditor::on_append_to_plot_clicked));
+  //m_optimize_button.signal_clicked().connect(slot(*this, &BoxEditor::on_optimize_button_clicked));
+  //m_append_button.signal_clicked().connect(slot(*this, &BoxEditor::on_append_to_boxlist_clicked));
+  //m_plot_button.signal_clicked().connect(slot(*this, &BoxEditor::on_append_to_plot_clicked));
 
   //m_hbox.pack_start(m_optimize_button);
   //m_hbox.pack_start(m_append_button);
@@ -117,6 +113,10 @@ BoxEditor::BoxEditor() :
   signal_box_selected.connect(slot(*this, &BoxEditor::on_box_selected));
   //on_box_selected(m_box);
   
+  /* On enter presses in vb entry we should move focus to fb entry */
+  m_vb1_entry.signal_activate().connect(slot(m_fb1_entry, &Gtk::Widget::grab_focus));
+  m_fb1_entry.signal_activate().connect(slot(*this, &BoxEditor::append_and_plot));
+  
   show_all();
 }
 
@@ -128,6 +128,12 @@ bool BoxEditor::on_delete_event(GdkEventAny *event)
 BoxEditor::~BoxEditor()
 {
 
+}
+
+void BoxEditor::append_and_plot()
+{
+  on_append_to_boxlist_clicked();
+  on_append_to_plot_clicked();
 }
 
 /*
@@ -297,7 +303,12 @@ void BoxEditor::on_box_selected(Box *b)
 
 void BoxEditor::on_speaker_list_loaded(SpeakerList *speaker_list)
 {
-  //m_speaker_list = SpeakerList(speaker_list_filename);
+#ifdef OUTPUT_DEBUG
+  cout << "BoxEditor::on_speaker_list_loaded: " << endl;
+#endif
+
+
+//m_speaker_list = SpeakerList(speaker_list_filename);
   m_speaker_list = speaker_list;
   vector<Glib::ustring> popdown_strings;
   

@@ -22,23 +22,18 @@
 
 PlotHistory::PlotHistory() :
   Gtk::Frame(),
-  m_Table(9, 4, true), 
-  m_RemoveButton("Remove"),
   m_vbox()
 {
   //set_title("Plot history");
   m_vbox.set_border_width(8);
   //set_default_size(250, 300);
+  nof_plots = 0;
 
-  m_vbox.pack_start(m_Table);
   add(m_vbox);
-  m_Table.set_spacings(4);
-  
+  m_vbox.pack_start(m_ScrolledWindow);
+
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-  
-  m_Table.attach(m_ScrolledWindow, 0, 4, 0, 8, Gtk::FILL);
-  m_Table.attach(m_RemoveButton, 3, 4, 8, 9);
   
   create_model();
 
@@ -53,7 +48,7 @@ PlotHistory::PlotHistory() :
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   selection->signal_changed().connect(slot(*this, &PlotHistory::on_selection_changed));
 
-  m_RemoveButton.signal_clicked().connect(slot(*this, &PlotHistory::on_remove));
+  //m_RemoveButton.signal_clicked().connect(slot(*this, &PlotHistory::on_remove));
 
   signal_box_modified.connect(slot(*this, &PlotHistory::on_box_modified));
   signal_add_plot.connect(slot(*this, &PlotHistory::on_add_plot));
@@ -126,18 +121,23 @@ void PlotHistory::on_remove()
       //  m_box_list.box_list()->erase(m_box_list.box_list()->begin() + index);
     }
   }
-
-  char *str = NULL;
-  GString *buffer = g_string_new(str);
-  if (index > 0) {
-    g_string_printf(buffer, "%d", index - 1);
-  } else {
-    g_string_printf(buffer, "%d", 0);
+  if (nof_plots > 0) {
+    nof_plots--;
   }
-  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
-  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-  refSelection->select(row);
+  if (nof_plots > 0) {
+    /* Select first row */
+    char *str = NULL;
+    GString *buffer = g_string_new(str);
+    if (index > 0) {
+      g_string_printf(buffer, "%d", index - 1);
+    } else {
+      g_string_printf(buffer, "%d", 0);
+    }
+    GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+    Gtk::TreePath path(gpath);
+    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    refSelection->select(row);
+  }
 }
 
 void PlotHistory::on_box_modified(Box *b)
@@ -156,6 +156,7 @@ void PlotHistory::on_add_plot(Box *b, Speaker *s, Gdk::Color &color)
     cout << "PlotHistory: plot added" << endl;
 #endif
   }
+  nof_plots++;
 }
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)

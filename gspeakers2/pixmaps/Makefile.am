@@ -14,6 +14,9 @@ pixmap_DATA		= driver_small.png filter_small.png measure_small.png \
 			  save_xml_16.png open_xml_24.png open_xml_16.png \
 			  delete_driver_16.png delete_driver_24.png \
 			  delete_enclosure_16.png delete_enclosure_24.png \
-			  delete_crossover_16.png delete_crossover_24.png
+			  delete_crossover_16.png delete_crossover_24.png \
+			  opt_enclosure_24.png append_plot_enclosure_24.png \
+			  delete_plot_24.png delete_plot_16.png \
+			  opt_enclosure_16.png plot_16.png
 
 EXTRA_DIST		= $(pixmap_DATA)

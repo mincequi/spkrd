@@ -26,6 +26,7 @@
 #include <gtkmm.h>
 #include <iostream>
 #include <vector>
+#include <string>
 
 /* This is max and min y-axis-values */
 #define MAX_NEG_VALUE -40
@@ -116,7 +117,9 @@ public:
   void select_plot(int index);
 
   void replace_plot(int index, vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
-
+  void set_y_label(const string& text);
+  void set_y_label2(const string& text);
+  
 protected:
   /* This is the function that draws the graphics */
   
@@ -142,6 +145,7 @@ protected:
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;
   bool m_logx, visible;
   int m_selected_plot;
+  string m_y_label1, m_y_label2;
   
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;

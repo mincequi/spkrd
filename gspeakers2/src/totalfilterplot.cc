@@ -33,6 +33,7 @@ TotalFilterPlot::TotalFilterPlot() :
   signal_add_crossover_plot.connect(slot(*this, &TotalFilterPlot::on_add_plot));
   signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
   
+  plot.set_y_label("Magnitude / dB");
   show_all();
   m_color = new Gdk::Color("blue");
 }

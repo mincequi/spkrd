@@ -39,7 +39,6 @@ public:
   ~GSpeakersBoxPlot();
 private: 
   GSpeakersPlot plot;
-  bool on_delete_event(GdkEventAny *event);
 };
 
 #endif

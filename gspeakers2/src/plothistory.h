@@ -41,11 +41,11 @@ class PlotHistory : public Gtk::Frame
 public:
   PlotHistory();
   virtual ~PlotHistory();
-
+  void on_remove();
+  
 protected:
   /* callbacks */
   void on_selection_changed();
-  void on_remove();
   void on_box_modified(Box *box);  
   void on_add_plot(Box *box, Speaker *speaker, Gdk::Color&);
   void on_cell_plot_toggled(const Glib::ustring& path_string);
@@ -61,7 +61,7 @@ protected:
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
-  Gtk::Button m_RemoveButton;
+  //Gtk::Button m_RemoveButton;
   Gtk::VBox m_vbox;
  
   /* Data containers */
@@ -93,7 +93,7 @@ protected:
   /* Additional member variables */
   int index;
   int round(double);
-
+  int nof_plots;
 };
 
 #endif
