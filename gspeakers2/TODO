@@ -1,26 +1,34 @@
 GSpeakers TODO-list
 -------------------
 
-1) The tasks does not appear in any specific order. If you want more information 
-about the tasks, mail dss@home.se
+1) The tasks does not appear in any specific order. If you want more 
+    information about the tasks, mail dss@home.se
 
 2) Some tasks may be more important than others, some are important due to 
-the structure in the program, some are important due to the UI experience.
-Tasks that I consider important are marked with "important".
+    the structure in the program, some are important due to the UI 
+    experience. Tasks that I consider important are marked with "important".
 
 3) Tasks that should be done before 1.0 is marked "pre 1.0"
 
+4) Version 1.0 of GSpeakers is targeted to be released somewhere around 
+    2002-05
+
+5) For more information about the GSpeakers roadmap, visit
+    http://gspeakers.sf.net/needhelp.html
+
+
 * Rpm, deb and tgz binary packages, i will need maintainer for different 
-    packages too (pre 1.0)
+    packages too (pre-1.0)
 
-* Compile and run on windows and docs for this (important) 
+* Compile and run on windows and docs for this (important, maybe pre-1.0) 
 
-* Windows installer
+* Windows installer (maybe pre-1.0)
 
-* Speakereditor and CrossoverHistory: ask if you want to save changes 
-    when open new xml (pre-1.0)
+* Speakereditor, enclosureeditor and CrossoverHistory: ask if you want to 
+    save changes when open new xml (pre-1.0)
 
-* Loudspeaker design with GSpeakers HOWTO (important, will increase user base, pre 1.0)
+* Loudspeaker design with GSpeakers HOWTO (important, will increase user 
+    base, pre-1.0)
 
 * Make id_string cell in CrossoverHistory editable (pre 1.0)
 
@@ -36,17 +44,15 @@ Tasks that I consider important are marked with "important".
     GSpeakersColor should not be similar, the colors should also be clear and 
     easy to distinguish from each other, use the 32 Basic Gnome colors
 
-* Reorder some columns in the treeviews to improve the user experience
-
 * Better icons in the main window notebook
 
 * Evolution/MrProject "notebook" instead of GtkNotebook
 
-* Better program icon, install icon to gnome menus (pre 1.0)
+* Better program icon
+
+* Install icon to gnome menus (pre 1.0)
 
 * Add tooltips to appropriate widgets (pre 1.0)
-
-* Add try/catch on xml files loaded in ctors (pre 1.0)
 
 * FilterLinkFrame: only recalc affected part values
 
@@ -68,7 +74,8 @@ Tasks that I consider important are marked with "important".
 
 * Add "autoupdate SPICE calculations" on drivers tab too (maybe pre 1.0)
 
-* UI should look the same on each tab and follow Gnome HIG (pre 1.0)
+* UI should look the same on each tab and follow Gnome HIG (most of this is 
+    done, pre 1.0)
 
 * Support nonmetric units
 
@@ -89,8 +96,8 @@ Tasks that I consider important are marked with "important".
 * Tree with woofer/midrange/tweeter in driver list, will make it easier if we 
     we have a lot of drivers, this should be configurable
 
-* catch exceptions in toolbar creation functions
+* Catch exceptions in toolbar creation functions (pre 1.0)
 
-* show/edit Q for a sealed enclosure
+* show/edit Q for a sealed enclosure (pre 1.0)
 
-* Meassurement tab
+* Meassurement tab (pre 1.0)
