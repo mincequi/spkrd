@@ -24,7 +24,7 @@ CrossoverWizard::CrossoverWizard() :
 {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Crossover wizard</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover wizard")) + "</b>");
 
   signal_crossover_selected.connect(slot(*this, &CrossoverWizard::on_crossover_selected));
   m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);

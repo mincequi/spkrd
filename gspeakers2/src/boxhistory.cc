@@ -30,7 +30,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
 {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure list</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list")) + "</b>");
   
   m_vbox.set_border_width(12);
   add(m_vbox);
@@ -49,7 +49,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << endl;
 #endif
   m_box_list = BoxList(m_filename); 
-  static_cast<Gtk::Label *>(get_label_widget())->set_markup(_("<b>Enclosure list [") + 
+  static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) + 
                                                               GSpeakers::short_filename(m_filename) + "]</b>");
   create_model();
 
@@ -169,7 +169,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
   
     }
     signal_enclosure_set_save_state(false);
-    static_cast<Gtk::Label *>(get_label_widget())->set_markup(_("<b>Enclosure list [") + GSpeakers::short_filename(m_filename) + "]</b>");
+    static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -299,7 +299,7 @@ void BoxHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   signal_enclosure_set_save_state(true);
-  static_cast<Gtk::Label *>(get_label_widget())->set_markup(_("<b>Enclosure list [new file]</b>"));
+  static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [new file]")) + "</b>");
 }
 
 void BoxHistory::on_save()
@@ -336,7 +336,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
     m_box_list.to_xml(f->get_filename());
     f->hide();
     m_filename = f->get_filename();
-    static_cast<Gtk::Label *>(get_label_widget())->set_markup(_("<b>Enclosure list [") + GSpeakers::short_filename(m_filename) + "]</b>");
+    static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);
   } catch (GSpeakersException e) {

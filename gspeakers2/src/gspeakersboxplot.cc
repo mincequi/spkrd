@@ -26,7 +26,7 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() :
 {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure frequency response</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure frequency response")) + "</b>");
   m_vbox.set_border_width(12);
   m_vbox.pack_start(sw);
   sw.add(plot);

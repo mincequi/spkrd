@@ -38,7 +38,7 @@ FreqRespEditor::FreqRespEditor(string filename) :
   Gtk::VBox *frame_vbox = manage(new Gtk::VBox());
   frame->set_border_width(5);
   frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Frequency response for selected driver</b>"));
+  static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
   
   //get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is not intended to provide an "
   //                                                "exact estimation of the total frequency response."))));

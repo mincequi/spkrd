@@ -60,7 +60,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_treeview_vbox.pack_start(m_treeview_frame);
   m_treeview_frame.add(m_inner_treeview_vbox);
   m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup(_("<b>Driver list [") + 
+  static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver list [")) + 
                               GSpeakers::short_filename(m_filename) + "]</b>");
   m_inner_treeview_vbox.set_border_width(12);
   m_inner_treeview_vbox.pack_start(m_TreeViewTable);
@@ -74,7 +74,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_inner_vbox.pack_start(m_Table);
   
   m_editor_frame.set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(m_editor_frame.get_label_widget())->set_markup(_("<b>Currently selected driver</b>"));
+  static_cast<Gtk::Label*>(m_editor_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Currently selected driver")) + "</b>");
   //m_editor_frame.set_label(_("Currently selected driver"));
   
   /* Setup the table */
@@ -825,7 +825,7 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
 
     m_filename = f->get_filename();
     g_settings.setValue("SpeakerListXml", m_filename);
-    static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup(_("<b>Driver list [") + 
+    static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver list [")) + 
                                 GSpeakers::short_filename(m_filename) + "]</b>");
         
     for_each(

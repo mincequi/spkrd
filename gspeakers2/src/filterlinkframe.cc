@@ -98,7 +98,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     
     frame->set_border_width(2);
     frame->set_shadow_type(Gtk::SHADOW_NONE);
-    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Highpass</b>"));
+    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Highpass")) + "</b>");
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());
     vbox->set_border_width(12);
@@ -141,7 +141,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     Gtk::Frame *frame = manage(new Gtk::Frame(""));
     frame->set_border_width(2);
     frame->set_shadow_type(Gtk::SHADOW_NONE);
-    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Lowpass</b>"));
+    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Lowpass")) + "</b>");
 
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());

@@ -52,7 +52,7 @@ BoxEditor::BoxEditor() :
   m_vbox.set_border_width(12);
   m_hbox.set_spacing(5);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure editor</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure editor")) + "</b>");
 
   //m_speaker_qts_entry.set_width_chars(5);
   //m_speaker_vas_entry.set_width_chars(10);

@@ -48,7 +48,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Frame *general_frame = manage(new Gtk::Frame(""));
   general_frame->set_border_width(5);
   general_frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(general_frame->get_label_widget())->set_markup(_("<b>General settings</b>"));
+  static_cast<Gtk::Label*>(general_frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("General settings")) + "</b>");
   Gtk::Table *general_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
   general_table->set_border_width(12);
   general_table->set_spacings(5);
@@ -61,7 +61,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Frame *toolbar_frame = manage(new Gtk::Frame(""));
   toolbar_frame->set_border_width(5);
   toolbar_frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(toolbar_frame->get_label_widget())->set_markup(_("<b>Toolbar settings</b>"));
+  static_cast<Gtk::Label*>(toolbar_frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Toolbar settings")) + "</b>");
   Gtk::Menu *menu = manage(new Gtk::Menu());
   Gtk::Menu_Helpers::MenuList& menulist = menu->items();
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Icons only")) );
@@ -81,7 +81,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Frame *spice_frame = manage(new Gtk::Frame(""));
   spice_frame->set_border_width(5);
   spice_frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(spice_frame->get_label_widget())->set_markup(_("<b>SPICE interpreter settings</b>"));
+  static_cast<Gtk::Label*>(spice_frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("SPICE interpreter settings")) + "</b>");
   Gtk::Table *spice_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3 , false));
   spice_table->set_border_width(12);
   spice_table->set_spacings(5);
@@ -97,7 +97,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Frame *driver_frame = manage(new Gtk::Frame(""));
   driver_frame->set_border_width(5);
   driver_frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(driver_frame->get_label_widget())->set_markup(_("<b>Driver tab settings</b>"));
+  static_cast<Gtk::Label*>(driver_frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver tab settings")) + "</b>");
   Gtk::Table *driver_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
   driver_table->set_border_width(12);
   driver_table->set_spacings(5);
@@ -110,7 +110,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Frame *crossover_frame = manage(new Gtk::Frame(""));
   crossover_frame->set_border_width(5);
   crossover_frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(crossover_frame->get_label_widget())->set_markup(_("<b>Crossover network tab settings</b>"));
+  static_cast<Gtk::Label*>(crossover_frame->get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover network tab settings")) + "</b>");
   Gtk::Table *crossover_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
   crossover_table->set_border_width(12);
   crossover_table->set_spacings(5);

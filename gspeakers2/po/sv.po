@@ -6,156 +6,169 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-25 16:18+0100\n"
-"PO-Revision-Date: 2003-01-25 16:27+0100\n"
+"POT-Creation-Date: 2003-02-12 00:02+0100\n"
+"PO-Revision-Date: 2003-02-12 00:05+0100\n"
 "Last-Translator: Daniel Sundberg <sumpan@sumpan.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/box.cc:44
+#: src/box.cc:45
 msgid "Box: box node not found"
 msgstr "Box: en box-nod kunde inte hittas i xml-dokumentet"
 
-#: src/box.cc:73
+#: src/box.cc:76
 msgid "Box"
 msgstr "Låda"
 
-#: src/box.cc:74
+#: src/box.cc:77
 msgid "Id:        "
 msgstr "Id: "
 
-#: src/box.cc:75
+#: src/box.cc:78
 msgid "Id-string: "
 msgstr "Identifierare: "
 
-#: src/box.cc:76
+#: src/box.cc:79
 msgid "Type:      "
 msgstr "Typ: "
 
-#: src/box.cc:77
+#: src/box.cc:80
 msgid "Vb1:       "
 msgstr "Vb1: "
 
-#: src/box.cc:78
+#: src/box.cc:81
 msgid "Fb1:       "
 msgstr "Fb1: "
 
-#: src/box.cc:142
+#: src/box.cc:82
+msgid "Speaker:   "
+msgstr "Högtalare: "
+
+#: src/box.cc:156
 msgid "Box: id_string node not found"
 msgstr "Box: id_string-noden kunde inte hittas i xml-dokumentet"
 
-#: src/box.cc:156
+#: src/box.cc:170
 msgid "Box: type node not found"
 msgstr "Låda: ingen typ-nod kunde inte hittas i xml-dokumentet"
 
-#: src/box.cc:171
+#: src/box.cc:185
 msgid "Box: vb1 node not found"
 msgstr "Box: ingen vb1-nod kunde hittas i xml-dokumentet"
 
-#: src/box.cc:186
+#: src/box.cc:200
 msgid "Box: fb1 node not found"
 msgstr "Box: ingen fb1-nod kunde hittas i xml-dokumentet"
 
-#: src/box.cc:201
+#: src/box.cc:215
 msgid "Box: vb2 node not found"
 msgstr "Box: ingen vb2-nod kunde hittas i xml-dokumentet"
 
-#: src/box.cc:211
+#: src/box.cc:230
 msgid "Box: fb2 node not found"
 msgstr "Box: ingen fb2-nod kunde hittas i xml-dokumentet"
 
-#: src/boxeditor.cc:35
+#: src/box.cc:240
+msgid "Box: speaker node not found"
+msgstr "Box: ingen typ-nod kunde inte hittas i xml-dokumentet"
+
+#: src/boxeditor.cc:35 src/boxeditor.cc:55
 msgid "Enclosure editor"
 msgstr "Lådeditor"
 
-#: src/boxeditor.cc:62
+#: src/boxeditor.cc:69
 msgid "Woofer: "
 msgstr "Bas: "
 
-#: src/boxeditor.cc:65
+#: src/boxeditor.cc:72
 msgid "Qts: "
 msgstr "Qts: "
 
-#: src/boxeditor.cc:67
+#: src/boxeditor.cc:74
 msgid "Vas: "
 msgstr "Vas: "
 
-#: src/boxeditor.cc:70
+#: src/boxeditor.cc:77
 msgid "Fs: "
 msgstr "Fs: "
 
-#: src/boxeditor.cc:73
+#: src/boxeditor.cc:80
 msgid "Id string: "
 msgstr "Namn: "
 
-#: src/boxeditor.cc:75
+#: src/boxeditor.cc:82
 msgid "  Type: "
 msgstr "  Typ: "
 
-#: src/boxeditor.cc:78
+#: src/boxeditor.cc:85
 msgid "Vb1: "
 msgstr "Vb1: "
 
-#: src/boxeditor.cc:80
+#: src/boxeditor.cc:87
 msgid "  Fb1: "
 msgstr "  Fb1: "
 
-#: src/boxeditor.cc:94 src/boxhistory.cc:496 src/plothistory.cc:316
+#: src/boxeditor.cc:101 src/boxhistory.cc:517 src/plothistory.cc:322
 msgid "Sealed"
 msgstr "Sluten"
 
-#: src/boxeditor.cc:95 src/boxhistory.cc:499 src/plothistory.cc:319
+#: src/boxeditor.cc:102 src/boxhistory.cc:520 src/plothistory.cc:325
 msgid "Ported"
 msgstr "Basreflex"
 
-#: src/boxhistory.cc:28
+#: src/boxhistory.cc:33 src/crossoverhistory.cc:179
 msgid "Enclosure list"
 msgstr "Lådlista"
 
-#: src/boxhistory.cc:47 src/boxhistory.cc:167 src/boxhistory.cc:334
+#: src/boxhistory.cc:52 src/boxhistory.cc:172 src/boxhistory.cc:339
 msgid "Enclosure list ["
 msgstr "Lådlista ["
 
-#: src/boxhistory.cc:110
+#: src/boxhistory.cc:115
 msgid "Open box xml"
 msgstr "Öppna ld-xml"
 
-#: src/boxhistory.cc:122
+#: src/boxhistory.cc:127
 msgid "Append box xml"
 msgstr "Lägg till ld-xml"
 
-#: src/boxhistory.cc:248 src/boxhistory.cc:275
+#: src/boxhistory.cc:253 src/boxhistory.cc:280
 msgid "Box: "
 msgstr "Låda"
 
-#: src/boxhistory.cc:297
+#: src/boxhistory.cc:302
 msgid "Enclosure list [new file]"
 msgstr "Lådlista [ny fil]"
 
-#: src/boxhistory.cc:319
+#: src/boxhistory.cc:324
 msgid "Save box xml as"
 msgstr "Spara låd-xml som"
 
-#: src/boxhistory.cc:436 src/crossoverhistory.cc:462 src/plothistory.cc:241
-#: src/speakereditor.cc:953
+#: src/boxhistory.cc:449 src/crossoverhistory.cc:472 src/plothistory.cc:247
+#: src/speakereditor.cc:962
 msgid "Identifier"
 msgstr "Identifierare"
 
-#: src/boxhistory.cc:444 src/crossoverhistory.cc:472 src/plothistory.cc:267
-#: src/speakereditor.cc:962
+#. Driver tab
+#: src/boxhistory.cc:457 src/mainwindow.cc:113
+msgid "Driver"
+msgstr "Högtalarelement"
+
+#: src/boxhistory.cc:465 src/crossoverhistory.cc:482 src/plothistory.cc:273
+#: src/speakereditor.cc:971
 msgid "Type"
 msgstr "Typ"
 
-#: src/boxhistory.cc:453 src/plothistory.cc:276
+#: src/boxhistory.cc:474 src/plothistory.cc:282
 msgid "Vb1"
 msgstr "Vb1"
 
-#: src/boxhistory.cc:462 src/plothistory.cc:285
+#: src/boxhistory.cc:483 src/plothistory.cc:291
 msgid "Fb1"
 msgstr "Fb1"
 
-#: src/boxhistory.cc:502 src/plothistory.cc:322 src/speakereditor.cc:1120
+#: src/boxhistory.cc:523 src/plothistory.cc:328 src/speakereditor.cc:1129
 msgid "Unknown"
 msgstr "Okänd"
 
@@ -187,83 +200,79 @@ msgstr "Crossover: namn förväntat"
 msgid "Crossover type:"
 msgstr "Delningsfiltertyp: "
 
-#: src/crossoverhistory.cc:30
-msgid "Crossover list"
+#: src/crossoverhistory.cc:49 src/crossoverhistory.cc:405
+msgid "Crossover list ["
 msgstr "Delningsfilterlista"
 
-#: src/crossoverhistory.cc:46 src/crossoverhistory.cc:175
-msgid "Crossover list ["
-msgstr "Delningsfilterlista ["
-
-#: src/crossoverhistory.cc:115
+#: src/crossoverhistory.cc:119
 msgid "Open crossover xml"
 msgstr "Öppna delningsfilter-xml"
 
-#: src/crossoverhistory.cc:127
+#: src/crossoverhistory.cc:131
 msgid "Append crossover xml"
 msgstr "Lägg till delnigsfilter-xml"
 
-#: src/crossoverhistory.cc:263 src/crossoverhistory.cc:325
+#: src/crossoverhistory.cc:269 src/crossoverhistory.cc:331
 msgid "Crossover: "
 msgstr "Delningsfilter: "
 
-#: src/crossoverhistory.cc:295
+#: src/crossoverhistory.cc:301
 msgid "Crossover "
 msgstr "Delningsfilter"
 
-#: src/crossoverhistory.cc:350
+#: src/crossoverhistory.cc:356
 msgid "Crossover list [new file]"
 msgstr "Delningsfilterlista [ny fil]"
 
-#: src/crossoverhistory.cc:378
+#: src/crossoverhistory.cc:386
 msgid "Save crossover xml as"
 msgstr "Spara delningsfilter-xml som"
 
-#: src/crossoverhistory.cc:391
+#: src/crossoverhistory.cc:399
 msgid "save as ok"
 msgstr ""
 
-#: src/crossoverhistory.cc:486
+#: src/crossoverhistory.cc:496
 msgid "lowpass"
 msgstr "lågpass"
 
-#: src/crossoverhistory.cc:490
+#: src/crossoverhistory.cc:500
 msgid ", subsonic"
 msgstr ", subsonic"
 
-#: src/crossoverhistory.cc:492
+#: src/crossoverhistory.cc:502
 msgid "subsonic"
 msgstr "subsonic"
 
-#: src/crossoverhistory.cc:497
+#: src/crossoverhistory.cc:507
 msgid ", highpass"
 msgstr ", högpass"
 
-#: src/crossoverhistory.cc:499
+#: src/crossoverhistory.cc:509
 msgid "highpass"
 msgstr "högpass"
 
-#: src/crossoverhistory.cc:504
+#: src/crossoverhistory.cc:514
 msgid ", 2-way"
 msgstr ", 2-vägs"
 
-#: src/crossoverhistory.cc:506
+#: src/crossoverhistory.cc:516
 msgid "2-way"
 msgstr "2-vägs"
 
-#: src/crossoverhistory.cc:511
+#: src/crossoverhistory.cc:521
 msgid ", 3-way"
 msgstr ", 3-vägs"
 
-#: src/crossoverhistory.cc:513
+#: src/crossoverhistory.cc:523
 msgid "3-way"
 msgstr "3-vägs"
 
-#: src/crossoverhistory.cc:518
+#: src/crossoverhistory.cc:528
 msgid ", 4-way"
 msgstr ", 4-vägs"
 
-#: src/crossoverhistory.cc:520
+#: src/crossoverhistory.cc:530
 msgid "4-way"
 msgstr "4-vägs"
 
@@ -279,19 +288,19 @@ msgstr "CrossoverList: Xml-filen kunde inte hittas"
 msgid "CrossoverList: Could not save to "
 msgstr "CrossoverList: Kunde inte spara till "
 
-#: src/crossoverpaned.cc:37
+#: src/crossoverpaned.cc:40
 msgid "Crossover freq resp"
 msgstr "Delningsfiltrets frekvenssvar"
 
-#: src/crossoverpaned.cc:38
+#: src/crossoverpaned.cc:41
 msgid "Total crossover freq resp"
 msgstr "Totalt frekvenssvar för delningsfiltret"
 
-#: src/crossoverpaned.cc:39
+#: src/crossoverpaned.cc:42
 msgid "Total freq resp"
 msgstr "Totalt frekvenssvar"
 
-#: src/crossoverpaned.cc:40
+#: src/crossoverpaned.cc:43
 msgid "Crossover network"
 msgstr "Delningsfilter"
 
@@ -299,166 +308,165 @@ msgstr "Delningsfilter"
 #. sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"),
 #.                  slot(*this, &CrossoverHistory::on_new) ) );
 #. sub_menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-#: src/crossoverpaned.cc:82 src/crossoverpaned.cc:88
+#: src/crossoverpaned.cc:85 src/crossoverpaned.cc:91
 msgid "New _highpass crossover"
 msgstr "Nytt _högpassfilter"
 
-#: src/crossoverpaned.cc:85
+#: src/crossoverpaned.cc:88
 msgid "New _subsonic crossover"
 msgstr "Nytt _subsonicfilter"
 
-#: src/crossoverpaned.cc:91
+#: src/crossoverpaned.cc:94
 msgid "New _2-way crossover"
 msgstr "Nytt _2-vägs delningsfilter"
 
-#: src/crossoverpaned.cc:94
+#: src/crossoverpaned.cc:97
 msgid "New 2._5-way crossover"
 msgstr "Nytt 2._5-vägs delningsfilter"
 
-#: src/crossoverpaned.cc:97
+#: src/crossoverpaned.cc:100
 msgid "New _3-way crossover"
 msgstr "Nytt _3-vägs delningsfilter"
 
-#: src/crossoverpaned.cc:100
+#: src/crossoverpaned.cc:103
 msgid "New _4-way crossover"
 msgstr "Nytt _4-vägs delningsfilter"
 
-#: src/crossoverpaned.cc:103
+#: src/crossoverpaned.cc:106
 msgid "_New Crossover"
 msgstr "_Nytt delningsfilter"
 
-#: src/crossoverpaned.cc:105 src/enclosurepaned.cc:82
+#: src/crossoverpaned.cc:108 src/enclosurepaned.cc:82
 msgid "New _Copy"
 msgstr "Ny _kopia"
 
-#: src/crossoverpaned.cc:108
-msgid "New Crossover _Xml"
-msgstr "Ny delningsfilter-_xml"
+#: src/crossoverpaned.cc:111 src/enclosurepaned.cc:118
+msgid "New"
+msgstr "Ny"
 
-#: src/crossoverpaned.cc:110
-msgid "Append Crossover _Xml.."
+#: src/crossoverpaned.cc:113
+msgid "A_ppend to Crossover Xml..."
 msgstr "Lägg till delningsfilter-_xml"
 
-#: src/crossoverpaned.cc:112 src/speakereditor.cc:212
-msgid "_Open Xml"
-msgstr "_Öppna xml"
+#: src/crossoverpaned.cc:115 src/speakereditor.cc:220
+msgid "_Open"
+msgstr "_Öppna..."
 
-#: src/crossoverpaned.cc:114 src/enclosurepaned.cc:91 src/speakereditor.cc:214
-msgid "_Save Xml"
-msgstr "_Spara xml"
-
-#: src/crossoverpaned.cc:116 src/enclosurepaned.cc:93
-msgid "Save Xml _As"
-msgstr "Spara xml _som"
+#: src/crossoverpaned.cc:117 src/speakereditor.cc:222
+msgid "_Save"
+msgstr "_Spara"
 
 #: src/crossoverpaned.cc:119
-msgid "_Delete Crossover"
-msgstr "_Radera delningsfilter"
+msgid "Save _As"
+msgstr "Spara _som"
 
 #: src/crossoverpaned.cc:122
-msgid "_Plot Crossover"
-msgstr "_Plotta delningsfilter"
+msgid "_Delete"
+msgstr "Ta bort"
 
-#: src/crossoverpaned.cc:140 src/enclosurepaned.cc:121
-msgid "New Copy"
-msgstr "Ny kopia"
+#.  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Append To _Xml"), slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );
+#: src/crossoverpaned.cc:125 src/enclosurepaned.cc:99
+msgid "_Plot"
+msgstr "_Plotta"
 
-#: src/crossoverpaned.cc:141
+#: src/crossoverpaned.cc:143 src/enclosurepaned.cc:120
+msgid "Copy"
+msgstr "Kopiera"
+
+#: src/crossoverpaned.cc:144
 msgid "Create new crossover copy"
 msgstr "Skapa ny delningsfilterkopia"
 
-#: src/crossoverpaned.cc:143 src/enclosurepaned.cc:124
-#: src/speakereditor.cc:234
-msgid "New Xml"
-msgstr "Ny xml"
+#.    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_crossover_xml_24.png"),
+#.                             slot(crossover_history, &CrossoverHistory::on_new_xml), _("Create new crossover xml (list)")) );
+#: src/crossoverpaned.cc:148 src/enclosurepaned.cc:125
+#: src/speakereditor.cc:244
+msgid "Open"
+msgstr "Öppna"
 
-#: src/crossoverpaned.cc:144
-msgid "Create new crossover xml (list)"
-msgstr "Skapa ny delningsfilter-xml (lista)"
-
-#: src/crossoverpaned.cc:145 src/enclosurepaned.cc:126
-#: src/speakereditor.cc:236
-msgid "Open Xml"
-msgstr "Öppna xml"
-
-#: src/crossoverpaned.cc:146
+#: src/crossoverpaned.cc:149
 msgid "Open crossover xml (list)"
 msgstr "Öpnna delningsfilter-xml (lista)"
 
-#: src/crossoverpaned.cc:147 src/enclosurepaned.cc:128
-#: src/speakereditor.cc:238
-msgid "Save Xml"
-msgstr "Spara xml"
+#: src/crossoverpaned.cc:150 src/enclosurepaned.cc:127
+#: src/speakereditor.cc:246
+msgid "Save"
+msgstr "Spara"
 
-#: src/crossoverpaned.cc:148
+#: src/crossoverpaned.cc:151
 msgid "Save crossover xml (list)"
 msgstr "Spara delningsfilter-xml (lista)"
 
-#: src/crossoverpaned.cc:150
-msgid "Delete Crossover"
-msgstr "Radera delningsfilter"
+#: src/crossoverpaned.cc:153 src/enclosurepaned.cc:130
+#: src/speakereditor.cc:227 src/speakereditor.cc:249
+msgid "Delete"
+msgstr "Ta bort"
 
-#: src/crossoverpaned.cc:151
+#: src/crossoverpaned.cc:154
 msgid "Delete currently selected crossover"
 msgstr "Radera valt delningsfilter"
 
-#: src/crossoverpaned.cc:153
-msgid "Plot Crossover"
-msgstr "Plotta delningsfilter"
+#.    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append"), GSpeakers::image_widget("append_enclosure_24.png"),
+#.                               slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
+#.    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append To Xml"), GSpeakers::image_widget("opt_enclosure_24.png"),
+#.                                 slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );
+#: src/crossoverpaned.cc:156 src/enclosurepaned.cc:139 src/plothistory.cc:239
+msgid "Plot"
+msgstr "Plotta"
 
-#: src/crossoverpaned.cc:154
+#: src/crossoverpaned.cc:157
 msgid "Plot frequency response for currently selected crossover"
 msgstr "Plotta frekvenssvaret för valt delningsfilter"
 
-#: src/crossovertreeview.cc:26
+#: src/crossovertreeview.cc:30
 msgid "Currently selected crossover"
 msgstr "Valt delningsfilter"
 
-#: src/crossovertreeview.cc:200
+#: src/crossovertreeview.cc:203
 msgid "Impedace correction"
 msgstr "Impedanskorrigering"
 
-#: src/crossovertreeview.cc:205
+#: src/crossovertreeview.cc:208
 msgid "Damping network"
 msgstr "Dämplänk"
 
-#: src/crossovertreeview.cc:220 src/crossovertreeview.cc:233
-#: src/crossovertreeview.cc:292 src/filterlinkframe.cc:109
+#: src/crossovertreeview.cc:223 src/crossovertreeview.cc:236
+#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:144
 msgid "Lowpass"
 msgstr "Lågpass"
 
 #. If this is the filter parts node
-#: src/crossovertreeview.cc:227 src/crossovertreeview.cc:239
-#: src/crossovertreeview.cc:292 src/filterlinkframe.cc:69
+#: src/crossovertreeview.cc:230 src/crossovertreeview.cc:242
+#: src/crossovertreeview.cc:295 src/filterlinkframe.cc:101
 msgid "Highpass"
 msgstr "Högpass"
 
-#: src/crossovertreeview.cc:229
+#: src/crossovertreeview.cc:232
 msgid "Filter"
 msgstr "Filter"
 
-#: src/crossovertreeview.cc:236
+#: src/crossovertreeview.cc:239
 msgid "Bandpass"
 msgstr "Bandpass"
 
-#: src/crossovertreeview.cc:242
+#: src/crossovertreeview.cc:245
 msgid "Other"
 msgstr "Annat"
 
-#: src/crossovertreeview.cc:338
+#: src/crossovertreeview.cc:341
 msgid "Id_string"
 msgstr "Namn"
 
 #. col_cnt = m_TreeView.append_column(_("Value"), *pRenderer);
-#: src/crossovertreeview.cc:383
+#: src/crossovertreeview.cc:386
 msgid "Value"
 msgstr "Värde"
 
-#: src/crossovertreeview.cc:401
+#: src/crossovertreeview.cc:404
 msgid "Unit"
 msgstr "Enhet"
 
-#: src/crossoverwizard.cc:21
+#: src/crossoverwizard.cc:27
 msgid "Crossover wizard"
 msgstr "Delningsfilterguide"
 
@@ -484,14 +492,18 @@ msgstr "Mellanregisterfilter"
 msgid "filter"
 msgstr "filter"
 
+#: src/driverfreqrespplot.cc:31
+msgid "Driver frequency response and impedance"
+msgstr "Högtalarelementets frekvenssvar och impedans"
+
 #.  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
-#: src/driverfreqrespplot.cc:31 src/gspeakersboxplot.cc:31
+#: src/driverfreqrespplot.cc:38 src/gspeakersboxplot.cc:40
 #: src/gspeakersfilterplot.cc:33 src/summedfreqrespplot.cc:34
 #: src/totalfilterplot.cc:36
 msgid "Magnitude / dB"
 msgstr "Magnitud / dB"
 
-#: src/driverfreqrespplot.cc:32
+#: src/driverfreqrespplot.cc:39
 msgid "Impedance / Ohm"
 msgstr "Impedans /Ohm"
 
@@ -511,75 +523,59 @@ msgstr "L_ägg till låd-xml..."
 msgid "_Open Xml..."
 msgstr "_Öppna xml..."
 
+#: src/enclosurepaned.cc:91
+msgid "_Save Xml"
+msgstr "_Spara xml"
+
+#: src/enclosurepaned.cc:93
+msgid "Save Xml _As"
+msgstr "Spara xml _som"
+
 #: src/enclosurepaned.cc:96
-msgid "_Delete Enclosure"
-msgstr "_Radera låda"
-
-#: src/enclosurepaned.cc:99
-msgid "Append To _Xml"
-msgstr "Lägg till _xml-filen"
-
-#: src/enclosurepaned.cc:100
-msgid "_Plot"
-msgstr "_Plotta"
-
-#: src/enclosurepaned.cc:101
 msgid "_Optimize Enclosure"
 msgstr "_Optimera låda"
 
-#: src/enclosurepaned.cc:104 src/enclosurepaned.cc:139
+#: src/enclosurepaned.cc:100
+msgid "_Delete Enclosure"
+msgstr "_Radera låda"
+
+#: src/enclosurepaned.cc:103 src/enclosurepaned.cc:142
 msgid "Delete Plot"
 msgstr "Radera plot"
 
 #: src/enclosurepaned.cc:119
-msgid "New Enclosure"
-msgstr "Ny låda"
-
-#: src/enclosurepaned.cc:120
 msgid "Create new enclosure"
 msgstr "Skapa ny låda"
 
-#: src/enclosurepaned.cc:122
+#: src/enclosurepaned.cc:121
 msgid "Copy currently selected enclosure"
 msgstr "Kopiera vald låda"
 
-#: src/enclosurepaned.cc:125
-msgid "Create new enclosure xml (list)"
-msgstr "Skapa ny låd-xml (lista)"
-
-#: src/enclosurepaned.cc:127
+#: src/enclosurepaned.cc:126
 msgid "Open enclosure xml (list)"
 msgstr "Öppna ld-xml (lista)"
 
-#: src/enclosurepaned.cc:129
+#: src/enclosurepaned.cc:128
 msgid "Save enclosure xml (list)"
 msgstr "Spara låd-xml (lista)"
 
 #: src/enclosurepaned.cc:131
-msgid "Delete Enclosure"
-msgstr "Radera låda"
-
-#: src/enclosurepaned.cc:132
 msgid "Delete selected enclosure"
 msgstr "Radera vald låda"
 
-#: src/enclosurepaned.cc:134
+#: src/enclosurepaned.cc:132
 msgid "Optimize"
 msgstr "Optimera"
 
-#: src/enclosurepaned.cc:135
+#: src/enclosurepaned.cc:133
 msgid "Optimize enclosure volume"
 msgstr "Optimera lådvolym"
 
-#: src/enclosurepaned.cc:136 src/plothistory.cc:233
-msgid "Plot"
-msgstr "Plotta"
-
-#: src/enclosurepaned.cc:137
-msgid "Append to enclosure list (xml) and plot"
-msgstr "Lägg till lådlista (xml) och plotta"
-
 #: src/enclosurepaned.cc:140
+msgid "Plot currently selected enclosure"
+msgstr "Plotta vald låda"
+
+#: src/enclosurepaned.cc:143
 msgid "Delete selected plot from plotlist"
 msgstr "Radera vald plot från plotlistan"
 
@@ -595,42 +591,52 @@ msgstr "Impedanskorrigering"
 msgid "Use adv. driver imp. model"
 msgstr "Använd avancerad imp.-modell"
 
-#: src/filterlinkframe.cc:94 src/filterlinkframe.cc:134
-msgid "Order: "
-msgstr "Ordning: "
-
-#: src/filterlinkframe.cc:98 src/filterlinkframe.cc:138
-msgid "Cutoff: "
-msgstr "Brytfrekv: "
-
-#: src/filterlinkframe.cc:141
-msgid "Hz"
-msgstr "Hz"
-
-#: src/filterlinkframe.cc:158
+#: src/filterlinkframe.cc:84
 msgid "Damping: "
 msgstr "Dämpning: "
 
-#: src/filterlinkframe.cc:600
+#: src/filterlinkframe.cc:126 src/filterlinkframe.cc:170
+msgid "Order: "
+msgstr "Ordning: "
+
+#: src/filterlinkframe.cc:130 src/filterlinkframe.cc:174
+msgid "Cutoff: "
+msgstr "Brytfrekv: "
+
+#: src/filterlinkframe.cc:177
+msgid "Hz"
+msgstr "Hz"
+
+#: src/filterlinkframe.cc:613
 msgid "FilterLinkFrame::on_plot_crossover: ERROR: "
 msgstr "FilterLinkFrame::on_plot_crossover: FEL: "
 
-#: src/freqrespeditor.cc:33
+#: src/freqrespeditor.cc:41
+msgid "Frequency response for selected driver"
+msgstr "Frekvenssvar för valt högtalarelement"
+
+#: src/freqrespeditor.cc:50
 msgid ""
-"Enter the freq response dB magnitude, this is not intended to provide an "
-"exact estimation of the total frequency response."
+"Enter the freq response dB magnitude, this is not intended to provide an"
 msgstr ""
 "Skriv in frekvenssvarets magnitud i dB, det här är inte till för att "
-"tillhandahålla en exakt representation av högtalarelementets frekvensgång "
-"utan snarare som ett hjälpmedel i designed."
+"tillhandahålla en"
 
-#: src/freqrespeditor.cc:136
+#: src/freqrespeditor.cc:51
+msgid "exact estimation of the total frequency response."
+msgstr "exakt beskriva hgtalarens frekvenssvar."
+
+#: src/freqrespeditor.cc:152
 msgid "Could not open file: "
 msgstr "Kunde inte öppna filen: "
 
-#: src/freqrespeditor.cc:149 src/speakereditor.cc:889
+#: src/freqrespeditor.cc:165 src/speakereditor.cc:898
 msgid "Enter filename..."
 msgstr "Välj fil..."
+
+#: src/gspeakersboxplot.cc:29
+msgid "Enclosure frequency response"
+msgstr "Lådans frekvessvar"
 
 #: src/main.cc:52 src/main.cc:55
 msgid "No configuration file found!"
@@ -650,46 +656,41 @@ msgstr "gspeakers2.conf skapad i aktuell mapp"
 msgid "Testing gettext"
 msgstr "Testar gettext"
 
-#: src/mainwindow.cc:87
+#: src/mainwindow.cc:88
 msgid "About"
 msgstr "Om..."
 
-#: src/mainwindow.cc:90
+#: src/mainwindow.cc:91
 msgid "_File"
 msgstr "_Arkiv"
 
-#: src/mainwindow.cc:91
+#: src/mainwindow.cc:92
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: src/mainwindow.cc:92
+#: src/mainwindow.cc:93
 msgid "_Drivers"
 msgstr "_Högtalarelement"
 
-#: src/mainwindow.cc:93
+#: src/mainwindow.cc:94
 msgid "E_nclosure"
 msgstr "_Lådor"
 
-#: src/mainwindow.cc:94
+#: src/mainwindow.cc:95
 msgid "_Crossover"
 msgstr "_Delningsfilter"
 
-#: src/mainwindow.cc:95
+#: src/mainwindow.cc:96
 msgid "_Help"
 msgstr "_Hjälp"
 
-#. Driver tab
-#: src/mainwindow.cc:112
-msgid "Driver"
-msgstr "Högtalarelement"
-
 #. Enclosure tab
-#: src/mainwindow.cc:123
+#: src/mainwindow.cc:124
 msgid "Enclosure"
 msgstr "Låda"
 
 #. Crossover tab
-#: src/mainwindow.cc:126
+#: src/mainwindow.cc:127
 msgid "Crossover"
 msgstr "Delningsfilter"
 
@@ -821,11 +822,15 @@ msgstr "Värde: "
 msgid "Unit : "
 msgstr "Enhet: "
 
-#: src/plothistory.cc:221
+#: src/plothistory.cc:31
+msgid "Plot list"
+msgstr "Plot-lista"
+
+#: src/plothistory.cc:227
 msgid "Color"
 msgstr "Färg"
 
-#: src/plothistory.cc:249
+#: src/plothistory.cc:255
 msgid "Speaker"
 msgstr "Högtalarelement"
 
@@ -847,88 +852,108 @@ msgid "Settings::save: Failed renaming temporary file to replace old file: "
 msgstr ""
 "Settings::save: kunde inte ersätta den gamla filen med den temporära filen"
 
-#: src/settingsdialog.cc:24
+#: src/settingsdialog.cc:27
 msgid "GSpeakers settings..."
 msgstr "GSpeakers inställningar..."
 
-#: src/settingsdialog.cc:26
+#: src/settingsdialog.cc:29
 msgid "Browse..."
 msgstr "Välj..."
 
-#: src/settingsdialog.cc:27
+#: src/settingsdialog.cc:30
 msgid "Automaticly update crossover plots when a parameter has changed"
 msgstr ""
 "Automatiskt uppdatera delningsfilterplottar när en parameter har ändrats"
 
-#: src/settingsdialog.cc:28
+#: src/settingsdialog.cc:31
 msgid "Draw driver impedance plot"
 msgstr "Rita högtalarelementets impedans"
 
-#: src/settingsdialog.cc:29
+#: src/settingsdialog.cc:32
 msgid "Draw driver frequency response plot"
 msgstr "Rita högtalarelementets frekvenssvar"
 
-#: src/settingsdialog.cc:30
+#: src/settingsdialog.cc:33
 msgid "Disable filter amplification"
 msgstr "Räkna bort filtrets förstärkning"
 
-#: src/settingsdialog.cc:31
+#: src/settingsdialog.cc:34
 msgid "Save main window size"
 msgstr "Spara huvudfönstrets storlek"
 
-#: src/settingsdialog.cc:32
+#: src/settingsdialog.cc:35
 msgid "Save main window position"
 msgstr "Spara huvudfönstrets position"
 
-#: src/settingsdialog.cc:33
+#: src/settingsdialog.cc:36
 msgid "Scale components in crossover visual view"
 msgstr "Skala komponenter i delningsfiltrets grafiska vy"
 
-#: src/settingsdialog.cc:50
+#: src/settingsdialog.cc:51
+msgid "General settings"
+msgstr "Generella inställningar"
+
+#: src/settingsdialog.cc:58
 msgid "General"
 msgstr "Generellt"
 
-#: src/settingsdialog.cc:55
+#: src/settingsdialog.cc:64
+msgid "Toolbar settings"
+msgstr "Inställningar för verktygsraden"
+
+#: src/settingsdialog.cc:67
 msgid "Icons only"
 msgstr "Bara ikoner"
 
-#: src/settingsdialog.cc:56
+#: src/settingsdialog.cc:68
 msgid "Text only"
 msgstr "Bara text"
 
-#: src/settingsdialog.cc:57
+#: src/settingsdialog.cc:69
 msgid "Text and icons"
 msgstr "Text och ikoner"
 
-#: src/settingsdialog.cc:58
+#: src/settingsdialog.cc:70
 msgid "Text and icons (horz)"
 msgstr "Text och ikoner (horizontellt)"
 
-#: src/settingsdialog.cc:61
+#: src/settingsdialog.cc:75
 msgid "Toolbar style: "
 msgstr "Stil på verktygsraden: "
 
-#: src/settingsdialog.cc:63
+#: src/settingsdialog.cc:78
 msgid "Toolbars"
 msgstr "Verktygsrader"
 
-#: src/settingsdialog.cc:67
+#: src/settingsdialog.cc:84
+msgid "SPICE interpreter settings"
+msgstr "Inställningar för SPICE-tolken"
+
+#: src/settingsdialog.cc:88
 msgid "Full path to SPICE executable: "
 msgstr "Full sökväg till den exekverbara SPICE-filen"
 
-#: src/settingsdialog.cc:72
+#: src/settingsdialog.cc:94
 msgid "SPICE"
 msgstr "SPICE"
 
-#: src/settingsdialog.cc:78
+#: src/settingsdialog.cc:100
+msgid "Driver tab settings"
+msgstr "Inställningar för högtalarfliken"
+
+#: src/settingsdialog.cc:107
 msgid "Drivers"
 msgstr "Högtalarelement"
 
-#: src/settingsdialog.cc:85
+#: src/settingsdialog.cc:113
+msgid "Crossover network tab settings"
+msgstr "Inställingar för delningsfilter-fliken"
+
+#: src/settingsdialog.cc:121
 msgid "Crossovers"
 msgstr "Delningsfilter"
 
-#: src/settingsdialog.cc:144
+#: src/settingsdialog.cc:224
 msgid "Select SPICE executable..."
 msgstr "Välj exekverbar SPICE-file"
 
@@ -1036,210 +1061,210 @@ msgstr "..."
 msgid "Bass"
 msgstr "Bas"
 
-#: src/speakereditor.cc:37 src/speakereditor.cc:1109
+#: src/speakereditor.cc:37 src/speakereditor.cc:1118
 msgid "Midrange"
 msgstr "Mellanregister"
 
-#: src/speakereditor.cc:38 src/speakereditor.cc:1116
+#: src/speakereditor.cc:38 src/speakereditor.cc:1125
 msgid "Tweeter"
 msgstr "Diskant"
 
-#: src/speakereditor.cc:71
+#: src/speakereditor.cc:63 src/speakereditor.cc:828
+msgid "Driver list ["
+msgstr "Högtalarelementslista ["
+
+#: src/speakereditor.cc:77
 msgid "Currently selected driver"
 msgstr "Valt högtalarelement"
 
 #. All the entries and stuff
-#: src/speakereditor.cc:78
+#: src/speakereditor.cc:85
 msgid "Speaker name:"
 msgstr "Namn: "
 
-#: src/speakereditor.cc:80
+#: src/speakereditor.cc:87
 msgid "Qts:"
 msgstr "Qts:"
 
-#: src/speakereditor.cc:82
+#: src/speakereditor.cc:89
 msgid "Fs: (Hz)"
 msgstr "Fs: (Hz)"
 
-#: src/speakereditor.cc:84
+#: src/speakereditor.cc:91
 msgid "Vas: (l)"
 msgstr "Vas: (l)"
 
-#: src/speakereditor.cc:86
+#: src/speakereditor.cc:93
 msgid "Rdc: (Ohm)"
 msgstr "Rdc: (Ohm)"
 
-#: src/speakereditor.cc:88
+#: src/speakereditor.cc:95
 msgid "Lvc: (mH)"
 msgstr "Lvc: (mH)"
 
-#: src/speakereditor.cc:90
+#: src/speakereditor.cc:97
 msgid "Qms:"
 msgstr "Qms:"
 
-#: src/speakereditor.cc:92
+#: src/speakereditor.cc:99
 msgid "Qes:"
 msgstr "Qes:"
 
-#: src/speakereditor.cc:94
+#: src/speakereditor.cc:101
 msgid "Impedance: (Ohm)"
 msgstr "Impedans: (Ohm)"
 
-#: src/speakereditor.cc:96
+#: src/speakereditor.cc:103
 msgid "Sensitivity: (dB/W/m)"
 msgstr "Känslighet: (dB/W/m)"
 
-#: src/speakereditor.cc:99
+#: src/speakereditor.cc:106
 msgid "Cone mass: (kg)"
 msgstr "Konmassa: (kg)"
 
-#: src/speakereditor.cc:101
+#: src/speakereditor.cc:108
 msgid "Effective radius: (m)"
 msgstr "Effektiv radie: (m)"
 
-#: src/speakereditor.cc:103
+#: src/speakereditor.cc:110
 msgid "Force factor: (N/A)"
 msgstr "Force factor: (N/A)"
 
-#: src/speakereditor.cc:105
+#: src/speakereditor.cc:112
 msgid "Susp. resistance: (Ns/m)"
 msgstr "Susp. resistans: (Ns/m)"
 
-#: src/speakereditor.cc:107
+#: src/speakereditor.cc:114
 msgid "Susp. compleance: (m/N)"
 msgstr "Susp. kompleans: (m/N)"
 
-#: src/speakereditor.cc:114
+#: src/speakereditor.cc:121
 msgid "Freq resp file:"
 msgstr "Frekv.-svars-fil:"
 
-#: src/speakereditor.cc:205
+#: src/speakereditor.cc:157
+msgid "Edit frequency response for this driver"
+msgstr "Redigera frekvenssvaret för den här högtalaren"
+
+#: src/speakereditor.cc:213
 msgid "_New Driver"
 msgstr "_Ny högtalare"
 
-#: src/speakereditor.cc:208
-msgid "N_ew Xml"
-msgstr "N_y xml"
+#: src/speakereditor.cc:216
+msgid "N_ew"
+msgstr "N_y"
 
-#: src/speakereditor.cc:210
-msgid "A_ppend Xml..."
+#: src/speakereditor.cc:218
+msgid "A_ppend Driver Xml..."
 msgstr "L_ägg till xml..."
 
-#: src/speakereditor.cc:216
-msgid "Save Xml _As..."
-msgstr "Spara xml _som..."
+#: src/speakereditor.cc:224
+msgid "Save _As..."
+msgstr "Spara _som..."
 
-#: src/speakereditor.cc:219 src/speakereditor.cc:241
-msgid "Delete Driver"
-msgstr "Radera högtalare"
-
-#: src/speakereditor.cc:231
+#: src/speakereditor.cc:239
 msgid "New Driver"
 msgstr "Ny högtalare"
 
-#: src/speakereditor.cc:232
+#: src/speakereditor.cc:240
 msgid "Create new driver"
 msgstr "Skapa nytt högtalarelement"
 
-#: src/speakereditor.cc:235
-msgid "Create new driver xml (list)"
-msgstr "Skapa ny högtalarelements-xml (lista)"
-
-#: src/speakereditor.cc:237
+#: src/speakereditor.cc:245
 msgid "Open driver xml (list)"
 msgstr "Öppna hgtalarelements-xml (lista)"
 
-#: src/speakereditor.cc:239
+#: src/speakereditor.cc:247
 msgid "Save driver xml (list)"
 msgstr "Spara högtalarelement-xml (lista)"
 
-#: src/speakereditor.cc:242
+#: src/speakereditor.cc:250
 msgid "Delete selected driver"
 msgstr "Radera vald högtalare"
 
-#: src/speakereditor.cc:304
+#: src/speakereditor.cc:312
 msgid "New Speaker"
 msgstr "Ny högtalare"
 
-#: src/speakereditor.cc:387 src/speakereditor.cc:391
+#: src/speakereditor.cc:395 src/speakereditor.cc:399
 msgid "Save speaker xml as"
 msgstr "Spara högtalarelements-xml som"
 
-#: src/speakereditor.cc:760 src/speakereditor.cc:764
+#: src/speakereditor.cc:768 src/speakereditor.cc:772
 msgid "Append speaker xml"
 msgstr "Lägg till högtalar-xml"
 
 #. Fix some initstuff since we don't have any settings
-#: src/speakereditor.cc:773 src/speakereditor.cc:778
+#: src/speakereditor.cc:781 src/speakereditor.cc:786
 #: src/speakerlistselector.cc:53 src/speakerlistselector.cc:75
 msgid "Open speaker xml"
 msgstr "Öppna högtalar-xml"
 
-#: src/speakereditor.cc:971
+#: src/speakereditor.cc:980
 msgid "Qts"
 msgstr "Qts"
 
-#: src/speakereditor.cc:980
+#: src/speakereditor.cc:989
 msgid "Fs"
 msgstr "Fs"
 
-#: src/speakereditor.cc:989
+#: src/speakereditor.cc:998
 msgid "Vas"
 msgstr "Vas"
 
-#: src/speakereditor.cc:999
+#: src/speakereditor.cc:1008
 msgid "Rdc"
 msgstr "Rdc"
 
-#: src/speakereditor.cc:1008
+#: src/speakereditor.cc:1017
 msgid "Lvc"
 msgstr "Lvc"
 
-#: src/speakereditor.cc:1017
+#: src/speakereditor.cc:1026
 msgid "Qms"
 msgstr "Qms"
 
-#: src/speakereditor.cc:1026
+#: src/speakereditor.cc:1035
 msgid "Qes"
 msgstr "Qes"
 
-#: src/speakereditor.cc:1035
+#: src/speakereditor.cc:1044
 msgid "Impedance"
 msgstr "Impedans"
 
-#: src/speakereditor.cc:1044
+#: src/speakereditor.cc:1053
 msgid "Sensitivity"
 msgstr "Känslighet"
 
-#: src/speakereditor.cc:1053
+#: src/speakereditor.cc:1062
 msgid "Cone mass"
 msgstr "Konmassa"
 
-#: src/speakereditor.cc:1062
+#: src/speakereditor.cc:1071
 msgid "Active radius"
 msgstr "Aktiv radie"
 
-#: src/speakereditor.cc:1071
+#: src/speakereditor.cc:1080
 msgid "Force factor"
 msgstr "Force-faktor"
 
-#: src/speakereditor.cc:1080
+#: src/speakereditor.cc:1089
 msgid "Susp. resistance"
 msgstr "Susp. resistans"
 
-#: src/speakereditor.cc:1089
+#: src/speakereditor.cc:1098
 msgid "Susp. compliance"
 msgstr "Susp. kompleance"
 
-#: src/speakereditor.cc:1103
+#: src/speakereditor.cc:1112
 msgid "Woofer"
 msgstr "Bas"
 
-#: src/speakereditor.cc:1107
+#: src/speakereditor.cc:1116
 msgid ", Midrange"
 msgstr ", Mellanregister"
 
-#: src/speakereditor.cc:1114
+#: src/speakereditor.cc:1123
 msgid ", Tweeter"
 msgstr ", Diskant"
 
@@ -1279,8 +1304,68 @@ msgstr "Högtalarelements-xml: "
 msgid "Could not open "
 msgstr "Kunde inte öppna "
 
+#~ msgid "<b>Enclosure editor</b>"
+#~ msgstr "<b>Lådeditor</b>"
+
+#~ msgid "<b>Enclosure list</b>"
+#~ msgstr "<b>Lådlista</b>"
+
+#~ msgid "<b>Crossover list ["
+#~ msgstr "<b>Delningsfilterlista ["
+
+#~ msgid "<b>Highpass</b>"
+#~ msgstr "<b>Högpass</b>"
+
+#~ msgid "<b>Lowpass</b>"
+#~ msgstr "<b>Lågpass</b>"
+
+#~ msgid "New Crossover _Xml"
+#~ msgstr "Ny delningsfilter-_xml"
+
+#~ msgid "_Open Xml"
+#~ msgstr "_Öppna xml"
+
+#~ msgid "_Delete Crossover"
+#~ msgstr "_Radera delningsfilter"
+
+#~ msgid "_Plot Crossover"
+#~ msgstr "_Plotta delningsfilter"
+
+#~ msgid "New Xml"
+#~ msgstr "Ny xml"
+
+#~ msgid "Create new crossover xml (list)"
+#~ msgstr "Skapa ny delningsfilter-xml (lista)"
+
+#~ msgid "Open Xml"
+#~ msgstr "Öppna xml"
+
+#~ msgid "Delete Crossover"
+#~ msgstr "Radera delningsfilter"
+
+#~ msgid "Plot Crossover"
+#~ msgstr "Plotta delningsfilter"
+
+#~ msgid "Append To _Xml"
+#~ msgstr "Lägg till _xml-filen"
+
+#~ msgid "New Enclosure"
+#~ msgstr "Ny låda"
+
+#~ msgid "Create new enclosure xml (list)"
+#~ msgstr "Skapa ny låd-xml (lista)"
+
+#~ msgid "Delete Enclosure"
+#~ msgstr "Radera låda"
+
+#~ msgid "Append to enclosure list (xml) and plot"
+#~ msgstr "Lägg till lådlista (xml) och plotta"
+
+#~ msgid "Delete Driver"
+#~ msgstr "Radera högtalare"
+
+#~ msgid "Create new driver xml (list)"
+#~ msgstr "Skapa ny högtalarelements-xml (lista)"
+
 #~ msgid "Id"
 #~ msgstr "Id"
-
-#~ msgid "exact estimation of the total frequency response."
-#~ msgstr "exakt beskriva hgtalarens frekvenssvar."

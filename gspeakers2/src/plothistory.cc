@@ -28,7 +28,7 @@ PlotHistory::PlotHistory() :
 {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Plot list</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Plot list")) + "</b>");
 
   //set_title("Plot history");
   m_vbox.set_border_width(12);

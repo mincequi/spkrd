@@ -46,7 +46,7 @@ CrossoverHistory::CrossoverHistory() :
   m_crossover_list = CrossoverList(m_filename); 
 //  set_label(_("Crossover list [") + m_filename + "]");
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Crossover list [") + GSpeakers::short_filename(m_filename) + "]</b>");
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
 
   
   create_model();
@@ -176,7 +176,7 @@ void CrossoverHistory::on_open_ok(Gtk::FileSelection *f)
   
     }
     signal_crossover_set_save_state(false);
-    static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure list") + GSpeakers::short_filename(m_filename) + "]</b>");
+    static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list")) + GSpeakers::short_filename(m_filename) + "]</b>");
 
     //set_label(_("Crossover list [") + m_filename + "]");
   } catch (GSpeakersException e) {
@@ -353,7 +353,7 @@ void CrossoverHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   signal_crossover_set_save_state(true);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Crossover list [new file]</b>"));
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [new file]")) + "</b>");
 
 //set_label(_("Crossover list [new file]"));
 }
@@ -402,7 +402,7 @@ void CrossoverHistory::on_save_as_ok(Gtk::FileSelection *f)
     m_crossover_list.to_xml(f->get_filename());
     f->hide();
     m_filename = f->get_filename();
-    static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Crossover list [") + GSpeakers::short_filename(m_filename) + "]</b>");
+    static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
 
 //    set_label("Crossover list [" + m_filename + "]");
     signal_crossover_set_save_state(false);
