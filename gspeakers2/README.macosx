@@ -1,25 +1,28 @@
 Installation instructions for GSpeakers on Mac OS X
 by Emil Hessman
 
-Make sure you have the following software installed before an attempt to 
-install GSpeakers:
+Make sure you have the following software installed before an attempt 
+to install GSpeakers:
 
-- The Developer tools -- http://www.apple.com/macosx/developertools/
+- The Developer tools (X11, xTools etc.)
 - gtkmm-2
 - libxml2
 
-The Developer Tools are included on the software install [CDs/DVDs] provided 
-by Apple, check them out or consult Apple's website ( http://www.apple.com/ ) 
-for help.
+The Developer Tools ( http://www.apple.com/macosx/developertools/ ) are 
+included on the software install [CDs/DVDs] provided by Apple, they can 
+also be found in Apple's  download section at their website 
+(http://www.apple.com/downloads/macosx/) - consult Apple's website 
+(http://www.apple.com/) for further information.
 
-gtkmm and libxml are, for an example, available in the DarwinPorts collection - 
-consult its documentation at http://darwinports.opendarwin.org/ for installation 
-instructions.
+gtkmm and libxml are, for an example, available in the DarwinPorts 
+collection - consult its documentation at 
+http://darwinports.opendarwin.org/ for installation instructions.
 
 
 Download the latest source code for GSpeakers.
 
-Uncompress the source code by performing the following command in the Terminal:
+Uncompress the source code by performing the following command in the 
+Terminal:
 
 tar zxvf gspeakers-0.xx.tar.gz
 
@@ -46,6 +49,7 @@ sudo make install
 
 How to run GSpeakers;
 
-Fire up the X Window System - X11 (being found in /Applications/Utilities/), open 
-up a Terminal from X11's menu and run '/usr/local/bin/gspeakers' (/usr/local/bin is 
-where GSpeakers is installed by default).
+Fire up the X Window System - X11 (being found in /Applications/Utilities/), 
+open up a Terminal from X11's menu and run '/usr/local/bin/gspeakers' 
+(/usr/local/bin is where GSpeakers is installed by default).
+

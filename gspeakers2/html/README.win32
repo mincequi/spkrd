@@ -7,9 +7,6 @@ to download the binary package.
 * Download and install the gtk+ runtime environment 
   (http://gladewin32.sourceforge.net/)
 
-* Download and install the gtkmm runtime environment
-  (http://www.pcpm.ucl.ac.be/~gustin/win32_ports/)
-
 * Download and unzip the GSpeakers zip file, double click on gspeakers.exe 
   to start GSpeakers
   
