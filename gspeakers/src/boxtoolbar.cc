@@ -29,7 +29,8 @@
 #include "boxtoolbar.h"
 
 using SigC::bind;
-BoxToolbar::BoxToolbar( string infile ) : Gtk::HandleBox() {
+BoxToolbar::BoxToolbar( string infile,  GSpeakersCFG *icfg ) : Gtk::HandleBox() {
+  cfg = icfg;
   new_is_hit = false;
 
   /* Setup toolbar-UI */

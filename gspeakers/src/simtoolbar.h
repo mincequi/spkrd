@@ -28,6 +28,7 @@
 #include <gtk--/button.h>
 #include <gtk--/box.h>
 #include <gdk--/color.h>
+#include "gspeakerscfg.h"
 #include "speakertoolbar.h"
 #include "boxtoolbar.h"
 #include "gspeakersplot.h"
@@ -45,7 +46,7 @@
  */
 class SimToolbar : public Gtk::HandleBox {
  public:
-  SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar, GSpeakersPlot *gplot, BoxList *blist);
+  SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar, GSpeakersPlot *gplot, BoxList *blist, GSpeakersCFG *icfg);
   ~SimToolbar();
 
  protected:
@@ -73,6 +74,7 @@ class SimToolbar : public Gtk::HandleBox {
   double red, green, blue;
   int color_i, color_j, color_k;
   int last_color;
+  GSpeakersCFG *cfg;
 }; 
 
 

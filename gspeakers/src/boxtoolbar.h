@@ -36,6 +36,7 @@
 #include <libxml/parser.h>
 #include <string>
 #include <vector>
+#include "gspeakerscfg.h"
 
 #define SEALED 10001
 #define PORTED 10002
@@ -91,7 +92,7 @@ class Box {
 
 class BoxToolbar : public Gtk::HandleBox {
  public:
-  BoxToolbar( string inname = "enclosures1.xml" );
+  BoxToolbar( string inname = "enclosures1.xml", GSpeakersCFG *icfg = NULL );
   ~BoxToolbar();
   
   void new_box();
@@ -138,6 +139,8 @@ class BoxToolbar : public Gtk::HandleBox {
   Gtk::Entry *fb1_entry;
   Gtk::Entry *vol2_entry;
   Gtk::Entry *fb2_entry;
+
+  GSpeakersCFG *cfg;
 }; 
 
 

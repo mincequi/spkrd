@@ -34,7 +34,7 @@
 #include <gtk--/paned.h>
 #include <vector>
 #include <list>
-
+#include "gspeakerscfg.h"
 
 /*
  * This is the main application class. This will display window, menu, 
@@ -56,6 +56,7 @@ protected:
   Gtk::HPaned *paned;
 
   gint delete_event_impl(GdkEventAny* e);
+  GSpeakersCFG *cfg;
 };
 
 #endif

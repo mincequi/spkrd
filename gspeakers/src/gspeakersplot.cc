@@ -23,8 +23,6 @@
 #include <math.h>
 #include "gspeakersplot.h"
 
-#define MAX_NEG_VALUE -40
-#define MAX_POS_VALUE 10
 
 GSpeakersPlot::GSpeakersPlot() {
   // in the ctor you can only allocate colors, 

@@ -33,10 +33,12 @@ using SigC::bind;
  * This is the constructor that sets up the toolbar
  */
 SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar, 
-		       GSpeakersPlot *gplot, BoxList *iblist) : Gtk::HandleBox() {
+		       GSpeakersPlot *gplot, BoxList *iblist, 
+		       GSpeakersCFG *icfg) : Gtk::HandleBox() {
   sbar = stoolbar;
   bbar = btoolbar;
   plot = gplot;
+  cfg = icfg;
   red = 0;
   green = 0;
   blue = 1.0;

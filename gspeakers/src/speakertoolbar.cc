@@ -32,7 +32,9 @@ using SigC::bind;
 /*
  * This is the constructor that sets up the toolbar
  */
-SpeakerToolbar::SpeakerToolbar( string infile ) : Gtk::HandleBox() {
+SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg ) 
+  : Gtk::HandleBox() {
+  cfg = icfg;
   new_is_hit = false;
 
   /* Setup toolbar-UI */

@@ -34,6 +34,7 @@
 #include <gtk--/box.h>
 #include <gtk--/fileselection.h>
 #include <libxml/tree.h>
+#include "gspeakerscfg.h"
 
 class Speaker {
  public:
@@ -60,7 +61,7 @@ class Speaker {
 
 class SpeakerToolbar : public Gtk::HandleBox {
  public:
-  SpeakerToolbar( string inname = "speakers1.xml" );
+  SpeakerToolbar( string inname = "speakers1.xml", GSpeakersCFG *icfg = NULL );
   ~SpeakerToolbar();
   
   Speaker *get_current_speaker();
@@ -101,6 +102,8 @@ class SpeakerToolbar : public Gtk::HandleBox {
   Gtk::Entry *fs_entry;
   Gtk::Entry *qts_entry;
   Gtk::Entry *filename_entry;
+
+  GSpeakersCFG *cfg;
 }; 
 
 #endif

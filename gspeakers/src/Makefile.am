@@ -15,5 +15,9 @@ boxlist.cc\
 simtoolbar.h\
 simtoolbar.cc\
 gspeakersplot.h\
-gspeakersplot.cc
+gspeakersplot.cc\
+cconfig.h\
+cconfig.cc\
+gspeakerscfg.h\
+gspeakerscfg.cc
 gspeakers_LDADD = $(G_LIBS)

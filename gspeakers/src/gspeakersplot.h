@@ -37,8 +37,14 @@
 #include "boxtoolbar.h"
 #include "speakertoolbar.h"
 
+/* This is max and min y-axis-values */
+#define MAX_NEG_VALUE -40
+#define MAX_POS_VALUE 10
+/* 20 is a nice little space to have between the graph and the window-border */
 #define BOX_FRAME_SIZE 20
-#define N_VERTICAL_LINES 9
+/* We want vertical lines on every 5 dB */
+#define N_VERTICAL_LINES ( 2 * ( -MAX_NEG_VALUE + MAX_POS_VALUE ) / 10 ) - 1
+/* Upper frequency limit */
 #define UPPER_LIMIT 1000
 
 /*

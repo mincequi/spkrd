@@ -24,9 +24,9 @@
 #include <gdk--/color.h>
 #include "boxlist.h"
 
-BoxList::BoxList() : Gtk::ScrolledWindow() {
+BoxList::BoxList( GSpeakersCFG *icfg ) : Gtk::ScrolledWindow() {
   char *headers[] = { "ID", "Type", "Vol1", "F1b", "Speaker", "Box", "" };
-
+  cfg = icfg;
   selected_row = -1;
   set_policy( GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC );
   clist = manage( new Gtk::CList( headers ) );

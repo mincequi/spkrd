@@ -29,10 +29,11 @@
 #include <gtk--/clist.h>
 #include <gtk--/scrolledwindow.h>
 #include <gtk--/style.h>
+#include "gspeakerscfg.h"
 
 class BoxList : public Gtk::ScrolledWindow {
  public:
-  BoxList();
+  BoxList( GSpeakersCFG *icfg );
   //  ~BoxList();
   void add_row( vector<string> text, Gdk_Color *c );
   int remove_selected_row();
@@ -46,6 +47,7 @@ class BoxList : public Gtk::ScrolledWindow {
   Gtk::Style *style;
   double red, blue, green;
   int selected_row;
+  GSpeakersCFG *cfg;
 }; 
 
 #endif

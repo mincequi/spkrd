@@ -46,10 +46,11 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
   /* First we have to check if this user got config-files */
   char *home = getenv("HOME");
   string cfg_path = string( home ) + string( "/.gspeakers" );
+  string cfg_file_name = cfg_path + string( "/gspeakers.conf" );
   string spk_file_name = cfg_path + string( "/speakers1.xml" );
   string box_file_name = cfg_path + string( "/enclosures1.xml" );
 
-  FILE *fp = fopen( spk_file_name.c_str(), "r" );
+  FILE *fp = fopen( cfg_file_name.c_str(), "r" );
   if ( fp != NULL ) {
     /* We got config, proceed */
   } else {
@@ -58,17 +59,21 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
     string cmd = string("mkdir ") + cfg_path;
     cout << "Creating config dir: " << cfg_path << endl;
     system( cmd.c_str() );
-    cmd = string("cp ") + string( MYAPP_PREFIX ) + string("/share/gnomespeakers/xml/* ") + cfg_path;
-    cout << "Copying xml-files to your config-dir...";   
+    cmd = string("cp ") + string( MYAPP_PREFIX ) + string("/share/gspeakers/xml/* ") + cfg_path;
+    cout << "Copying xml- and cfg-files to your config-dir...";   
     system( cmd.c_str() );
     cout << "done" << endl;
   }
-
-  SpeakerToolbar *stoolbar = manage( new SpeakerToolbar( spk_file_name ) );
-  BoxToolbar *btoolbar = manage( new BoxToolbar( box_file_name ) );
-  GSpeakersPlot *d = manage( new GSpeakersPlot() );
-  BoxList *l = manage( new BoxList() );
-  SimToolbar *simtoolbar = manage( new SimToolbar( stoolbar, btoolbar, d, l ) );
+  cfg = new GSpeakersCFG();
+  SpeakerToolbar *stoolbar = manage( new SpeakerToolbar( spk_file_name, cfg ) );
+  BoxToolbar *btoolbar = manage( new BoxToolbar( box_file_name, cfg ) );
+  /* Plot-widget should not have the config: if we want to put this in a separate 
+     library it shouldn't have to depend on gspeakers config. We set the widgets 
+     config-parameters with set-methods...example: plot->set_line_style( DASH )
+  */ 
+  GSpeakersPlot *d = manage( new GSpeakersPlot( ) );
+  BoxList *l = manage( new BoxList( cfg ) );
+  SimToolbar *simtoolbar = manage( new SimToolbar( stoolbar, btoolbar, d, l, cfg ) );
 
   set_statusbar( sbar );
   set_contents( vbox );
