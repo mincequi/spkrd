@@ -96,8 +96,6 @@ GSpeakers TODO-list
 * Tree with woofer/midrange/tweeter in driver list, will make it easier if we 
     we have a lot of drivers, this should be configurable
 
-* Catch exceptions in toolbar creation functions (pre 1.0)
-
 * show/edit Q for a sealed enclosure (pre 1.0)
 
 * Meassurement tab (pre 1.0)

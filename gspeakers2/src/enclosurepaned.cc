@@ -165,6 +165,7 @@ void EnclosurePaned::set_save_state(bool b)
   }
   if (m_menu.items().size() > 0) {
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+    GSpeakers::enclosurelist_modified() = b;
   }
 }
 

@@ -1,5 +1,27 @@
 GSpeakers ChangeLog
 
+2003-03-05
+
+* speakereditor.h/cc, boxhistory.h/cc, crossoverhistory.h/cc: added 
+    signalhandlers for signal_save_open_files
+
+* mainwindow.h/cc: implemented "save changes" dialog if there is unsaved 
+    changes
+
+* common.h/cc: added signal_save_open_files
+
+2003-02-27
+
+* speakereditor.cc, enclosurepaned.cc, crossoverpaned.cc: set modified in 
+    corresponding functions
+
+* common.h/common.cc: added *modified accessor functions so that i can mark 
+    a *list for "ask if you want to save"
+
+2003-02-20
+
+* mainwindow.h/cc: added on_delete_event
+
 2003-02-18
 
 * The changes 02-17 and 02-18 fix seg-faults that occur if the file names 

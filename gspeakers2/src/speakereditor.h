@@ -62,6 +62,7 @@ protected:
   void on_close();
   void on_edit_freq_resp();
   void on_browse_freq_resp();
+  void on_save_open_files();
   void on_settings_changed(const string&);
   void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
   void qts_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
@@ -78,7 +79,7 @@ protected:
   void bl_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
   void rms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
   void cms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);	
-		
+
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();

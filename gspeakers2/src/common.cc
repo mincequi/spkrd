@@ -40,6 +40,7 @@ Signal1<void, Net *> signal_net_modified_by_user;
 Signal1<void, int> signal_new_crossover;
 Signal0<void> signal_plot_crossover;
 Signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
+Signal0<void> signal_save_open_files;
 
 namespace GSpeakers {
   Glib::ustring double_to_ustring(double d) 
@@ -115,4 +116,25 @@ namespace GSpeakers {
     static Gtk::Tooltips tooltips;
     return tooltips;
   }
+  
+  bool& driverlist_modified() {
+    static bool driverlist_mod = false;
+    return driverlist_mod;
+  }
+  
+  bool& enclosurelist_modified() {
+    static bool enclosurelist_mod = false;
+    return enclosurelist_mod;
+  }
+  
+  bool& crossoverlist_modified() {
+    static bool crossoverlist_mod = false;
+    return crossoverlist_mod;
+  }
+
+  bool& meassurementlist_modified() {
+    static bool meassurementlist_mod = false;
+    return meassurementlist_mod;
+  }
+
 }

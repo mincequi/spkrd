@@ -76,7 +76,7 @@ MainWindow::MainWindow()
   {
   	Gtk::Menu::MenuList& menulist = m_file_menu.items();
 
-  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, slot(Gtk::Main::quit) ) );
+  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, slot(*this, &MainWindow::on_quit) ) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_edit_menu.items();
@@ -133,6 +133,166 @@ MainWindow::MainWindow()
   m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
 }
 
+bool MainWindow::on_delete_event(GdkEventAny *event)
+{
+#ifdef OUTPUT_DEBUG
+  cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << endl;  
+#endif
+  using namespace GSpeakers;
+
+  /* Popup dialog and ask if user want to save changes */
+  if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() || meassurementlist_modified()) {
+    cout << "MainWindow::on_quit: opening confirmation dialog" << endl;
+    Gtk::Dialog *d = new Gtk::Dialog("", true);
+    d->set_border_width(6);
+    d->get_vbox()->set_spacing(12);
+    Gtk::HBox *hbox = manage(new Gtk::HBox());
+    d->get_vbox()->pack_start(*hbox);
+    hbox->set_border_width(6);
+    hbox->set_spacing(12);
+
+    Gtk::Image *image = manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+    hbox->pack_start(*image);
+    
+    d->get_action_area()->set_border_width(12);
+    d->get_action_area()->set_spacing(6);
+
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+    Gtk::Label *label1 = manage(new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") + Glib::ustring("</b>\n\n"));
+    vbox->pack_start(*label1);
+    //Gtk::Label *label2 = manage(new Gtk::Label("\n\n"));
+    //vbox->pack_start(*label2);
+    Gtk::Label *label3 = manage(new Gtk::Label(_("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +  
+                                               _("to quit without saving all changes since last save") + Glib::ustring("\n") +  
+                                               _("will be lost."), Gtk::ALIGN_LEFT));
+    vbox->pack_start(*label3);
+    hbox->pack_start(*vbox);
+
+    d->add_button("Close without saving", 0);
+    d->add_button(Gtk::Stock::CANCEL, 1);
+    d->add_button(Gtk::Stock::SAVE, 2);
+    d->show_all();
+    
+    int response = d->run();
+    d->hide();
+  
+    switch (response) {
+      case 0:
+        break;
+      case 1:
+        return true;
+        break;
+      case 2:
+        signal_save_open_files();
+        break;
+      default:
+        break;
+    }
+    delete d;
+  } 
+  on_quit_common();
+  
+  return false;
+}
+
+void MainWindow::on_quit()
+{
+#ifdef OUTPUT_DEBUG
+  cout << "MainWindow::on_quit: do you want to save unsaved documents?" << endl;  
+#endif
+  
+  using namespace GSpeakers;
+
+  /* Popup dialog and ask if user want to save changes */
+  if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() || meassurementlist_modified()) {
+    cout << "MainWindow::on_quit: opening confirmation dialog" << endl;
+    Gtk::Dialog *d = new Gtk::Dialog("", true);
+    d->set_border_width(6);
+    d->get_vbox()->set_spacing(12);
+    Gtk::HBox *hbox = manage(new Gtk::HBox());
+    d->get_vbox()->pack_start(*hbox);
+    hbox->set_border_width(6);
+    hbox->set_spacing(12);
+
+    Gtk::Image *image = manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+    hbox->pack_start(*image);
+    
+    d->get_action_area()->set_border_width(12);
+    d->get_action_area()->set_spacing(6);
+
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+    Gtk::Label *label1 = manage(new Gtk::Label("", Gtk::ALIGN_LEFT));
+    label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") + Glib::ustring("</b>\n\n"));
+    vbox->pack_start(*label1);
+    //Gtk::Label *label2 = manage(new Gtk::Label("\n\n"));
+    //vbox->pack_start(*label2);
+    Gtk::Label *label3 = manage(new Gtk::Label(_("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +  
+                                               _("to quit without saving all changes since last save") + Glib::ustring("\n") +  
+                                               _("will be lost."), Gtk::ALIGN_LEFT));
+    vbox->pack_start(*label3);
+    hbox->pack_start(*vbox);
+
+    d->add_button("Close without saving", 0);
+    d->add_button(Gtk::Stock::CANCEL, 1);
+    d->add_button(Gtk::Stock::SAVE, 2);
+    d->show_all();
+    
+    int response = d->run();
+    d->hide();
+  
+    switch (response) {
+      case 0:
+        break;
+      case 1:
+        return;
+        break;
+      case 2:
+        signal_save_open_files();
+        break;
+      default:
+        break;
+    }
+    delete d;
+  } 
+  
+  on_quit_common();
+
+  Gtk::Main::quit();
+}
+
+void MainWindow::on_quit_common()
+{
+  in_quit_phase = true; // used to avoid segfault when some widget gets destructed at different times...
+  g_settings.setValue("DriverMainPanedPosition", m_driver_hpaned.get_position());
+  g_settings.setValue("DriverPlotPanedPosition", m_driver_vpaned.get_position());
+
+  /* Save size of window */
+  int width, height;
+  get_size(width, height);
+  g_settings.setValue("MainWindowWidth", width);
+  g_settings.setValue("MainWindowHeight", height);
+
+  /* Save position */
+  int pos_x, pos_y;
+  get_position(pos_x, pos_y);
+  g_settings.setValue("MainWindowPositionX", pos_x);
+  g_settings.setValue("MainWindowPositionY", pos_y);
+  
+  /* Save current notebook page */
+  g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
+
+  /* finally save settings */
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "MainWindow::on_delete_event: could not save settings" << endl;
+#endif
+  }
+
+}
+
 void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
 {
 #ifdef OUTPUT_DEBUG
@@ -174,46 +334,6 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
         }
         break;
     }
-  }
-}
-
-MainWindow::~MainWindow()
-{
-  on_quit();
-}
-
-void MainWindow::on_quit()
-{
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::quit" << endl;
-#endif
-
-  in_quit_phase = true; // used to avoid segfault when some widget gets destructed at different times...
-  g_settings.setValue("DriverMainPanedPosition", m_driver_hpaned.get_position());
-  g_settings.setValue("DriverPlotPanedPosition", m_driver_vpaned.get_position());
-
-  /* Save size of window */
-  int width, height;
-  get_size(width, height);
-  g_settings.setValue("MainWindowWidth", width);
-  g_settings.setValue("MainWindowHeight", height);
-
-  /* Save position */
-  int pos_x, pos_y;
-  get_position(pos_x, pos_y);
-  g_settings.setValue("MainWindowPositionX", pos_x);
-  g_settings.setValue("MainWindowPositionY", pos_y);
-  
-  /* Save current notebook page */
-  g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
-
-  /* finally save settings */
-  try {
-    g_settings.save();
-  } catch (std::runtime_error e) {
-#ifdef OUTPUT_DEBUG
-    cout << "MainWindow::on_quit " << e.what() << endl;
-#endif
   }
 }
 

@@ -95,7 +95,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   selected_plot = -1;
   signal_select_plot.connect(slot(*this, &BoxHistory::on_plot_selected));
 
-
+  signal_save_open_files.connect(slot(*this, &BoxHistory::on_save_open_files));
 }
 
 BoxHistory::~BoxHistory()
@@ -111,6 +111,13 @@ void BoxHistory::on_delete_plot()
 void BoxHistory::on_plot_selected(int i)
 {
   selected_plot = i;
+}
+
+void BoxHistory::on_save_open_files()
+{
+  if (GSpeakers::enclosurelist_modified() == true) {
+    on_save();
+  }
 }
 
 bool BoxHistory::on_delete_event(GdkEventAny *event)

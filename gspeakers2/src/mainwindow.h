@@ -32,7 +32,6 @@ class MainWindow : public Gtk::Window
 {
 public:
   MainWindow();
-  virtual ~MainWindow();
 
 private:
   Gtk::VBox m_main_vbox;
@@ -53,6 +52,8 @@ private:
 
   /* Callbacks */
   void on_quit();
+  virtual bool on_delete_event(GdkEventAny *event);
+  void on_quit_common();
   void on_about();
   void on_edit_settings();
   void on_switch_page(GtkNotebookPage* page, guint page_num);

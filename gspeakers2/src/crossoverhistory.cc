@@ -76,6 +76,14 @@ CrossoverHistory::CrossoverHistory() :
   signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
   signal_net_modified_by_wizard.connect(slot(*this, &CrossoverHistory::on_net_modified_by_user));
   signal_net_modified_by_user.connect(slot(*this, &CrossoverHistory::on_net_modified_by_wizard));
+  signal_save_open_files.connect(slot(*this, &CrossoverHistory::on_save_open_files));
+}
+
+void CrossoverHistory::on_save_open_files()
+{
+  if (GSpeakers::crossoverlist_modified() == true) {
+    on_save();
+  }
 }
 
 void CrossoverHistory::select_first_row()

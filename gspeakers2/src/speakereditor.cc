@@ -184,12 +184,11 @@ Speaker_ListStore::Speaker_ListStore()
   f_open = NULL;
   f_save_as = NULL;
   new_xml_pressed = false;
+  signal_save_open_files.connect(slot(*this, &Speaker_ListStore::on_save_open_files));
 }
 
 Speaker_ListStore::~Speaker_ListStore()
 {
-  //cout << "Speaker_ListStore::~Speaker_ListStore " << m_modified << endl;
-  //cout << true << ", " << false << endl;
   if (m_modified == true) {
 #ifdef OUTPUT_DEBUG
     // Insert dialog here that asks if we want to save changes
@@ -215,27 +214,26 @@ Gtk::Widget& Speaker_ListStore::get_plot()
 
 Gtk::Menu& Speaker_ListStore::get_menu()
 {
+  Gtk::Menu::MenuList& menulist = m_menu.items();
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
+                    slot(*this, &Speaker_ListStore::on_new) ) );
+  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew"), GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
+                    slot(*this, &Speaker_ListStore::on_new_xml) ) );
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Driver Xml..."), 
+                    slot(*this, &Speaker_ListStore::on_append_xml) ) );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
+                    slot(*this, &Speaker_ListStore::on_open_xml) ) );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"),  GSpeakers::image_widget("save_xml_16.png"),  
+                    slot(*this, &Speaker_ListStore::on_save) ) );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As..."), GSpeakers::image_widget("save_as_xml_16.png"),  
+                    slot(*this, &Speaker_ListStore::on_save_as) ) );
+  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete"), GSpeakers::image_widget("delete_driver_16.png"),  
+                    slot(*this, &Speaker_ListStore::on_remove) ) );
 
-    Gtk::Menu::MenuList& menulist = m_menu.items();
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
-                      slot(*this, &Speaker_ListStore::on_new) ) );
-    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew"), GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
-                      slot(*this, &Speaker_ListStore::on_new_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Driver Xml..."), 
-                      slot(*this, &Speaker_ListStore::on_append_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
-                      slot(*this, &Speaker_ListStore::on_open_xml) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"),  GSpeakers::image_widget("save_xml_16.png"),  
-                      slot(*this, &Speaker_ListStore::on_save) ) );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As..."), GSpeakers::image_widget("save_as_xml_16.png"),  
-                      slot(*this, &Speaker_ListStore::on_save_as) ) );
-    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete"), GSpeakers::image_widget("delete_driver_16.png"),  
-                      slot(*this, &Speaker_ListStore::on_remove) ) );
-
-    menulist[MENU_INDEX_SAVE].set_sensitive(false);
-    menulist[MENU_INDEX_DELETE].set_sensitive(false);
+  menulist[MENU_INDEX_SAVE].set_sensitive(false);
+  menulist[MENU_INDEX_DELETE].set_sensitive(false);
   return m_menu;
 }
 
@@ -262,6 +260,13 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
     tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(false);
   }
   return toolbar;
+}
+
+void Speaker_ListStore::on_save_open_files()
+{
+  if (GSpeakers::driverlist_modified() == true) {
+    on_save();
+  }
 }
 
 void Speaker_ListStore::on_settings_changed(const string& s)
@@ -337,6 +342,7 @@ void Speaker_ListStore::on_new()
   m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+  GSpeakers::driverlist_modified() = true;
   signal_speakerlist_loaded(m_speaker_list);
   m_modified = true;
 }
@@ -388,6 +394,7 @@ void Speaker_ListStore::on_save()
       m_speaker_list->to_xml(m_filename);
       m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
       tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
+      GSpeakers::driverlist_modified() = false;
       m_modified = false;
     } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -766,6 +773,7 @@ void Speaker_ListStore::on_entry_changed(int i)
     }
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+    GSpeakers::driverlist_modified() = true;
     m_modified = true;
   }
 
@@ -818,6 +826,9 @@ void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f)
     m_speaker_list->speaker_list()->size();
     set_entries_sensitive(true);
     m_modified = true;
+    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+    GSpeakers::driverlist_modified() = true;
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -871,6 +882,7 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     set_entries_sensitive(true);
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
+    GSpeakers::driverlist_modified() = true;
     tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
     tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
 
@@ -896,6 +908,7 @@ void Speaker_ListStore::on_edit_freq_resp()
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  GSpeakers::driverlist_modified() = true;
   m_modified = true;
 }
 
@@ -918,6 +931,7 @@ void Speaker_ListStore::on_browse_freq_resp()
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
   tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
   m_modified = true;
+  GSpeakers::driverlist_modified() = true;
 }
 
 void Speaker_ListStore::create_model()
