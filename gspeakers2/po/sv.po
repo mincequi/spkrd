@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-24 21:35+0100\n"
-"PO-Revision-Date: 2003-01-13 22:59+0100\n"
+"POT-Creation-Date: 2003-01-25 16:18+0100\n"
+"PO-Revision-Date: 2003-01-25 16:27+0100\n"
 "Last-Translator: Daniel Sundberg <sumpan@sumpan.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -292,7 +292,6 @@ msgid "Total freq resp"
 msgstr "Totalt frekvenssvar"
 
 #: src/crossoverpaned.cc:40
-#, fuzzy
 msgid "Crossover network"
 msgstr "Delningsfilter"
 
@@ -617,7 +616,6 @@ msgid "FilterLinkFrame::on_plot_crossover: ERROR: "
 msgstr "FilterLinkFrame::on_plot_crossover: FEL: "
 
 #: src/freqrespeditor.cc:33
-#, fuzzy
 msgid ""
 "Enter the freq response dB magnitude, this is not intended to provide an "
 "exact estimation of the total frequency response."
@@ -653,7 +651,6 @@ msgid "Testing gettext"
 msgstr "Testar gettext"
 
 #: src/mainwindow.cc:87
-#, fuzzy
 msgid "About"
 msgstr "Om..."
 
@@ -883,51 +880,55 @@ msgstr "Spara huvudfönstrets storlek"
 msgid "Save main window position"
 msgstr "Spara huvudfönstrets position"
 
-#: src/settingsdialog.cc:49
+#: src/settingsdialog.cc:33
+msgid "Scale components in crossover visual view"
+msgstr "Skala komponenter i delningsfiltrets grafiska vy"
+
+#: src/settingsdialog.cc:50
 msgid "General"
 msgstr "Generellt"
 
-#: src/settingsdialog.cc:54
+#: src/settingsdialog.cc:55
 msgid "Icons only"
 msgstr "Bara ikoner"
 
-#: src/settingsdialog.cc:55
+#: src/settingsdialog.cc:56
 msgid "Text only"
 msgstr "Bara text"
 
-#: src/settingsdialog.cc:56
+#: src/settingsdialog.cc:57
 msgid "Text and icons"
 msgstr "Text och ikoner"
 
-#: src/settingsdialog.cc:57
+#: src/settingsdialog.cc:58
 msgid "Text and icons (horz)"
 msgstr "Text och ikoner (horizontellt)"
 
-#: src/settingsdialog.cc:60
+#: src/settingsdialog.cc:61
 msgid "Toolbar style: "
 msgstr "Stil på verktygsraden: "
 
-#: src/settingsdialog.cc:62
+#: src/settingsdialog.cc:63
 msgid "Toolbars"
 msgstr "Verktygsrader"
 
-#: src/settingsdialog.cc:66
+#: src/settingsdialog.cc:67
 msgid "Full path to SPICE executable: "
 msgstr "Full sökväg till den exekverbara SPICE-filen"
 
-#: src/settingsdialog.cc:71
+#: src/settingsdialog.cc:72
 msgid "SPICE"
 msgstr "SPICE"
 
-#: src/settingsdialog.cc:77
+#: src/settingsdialog.cc:78
 msgid "Drivers"
 msgstr "Högtalarelement"
 
-#: src/settingsdialog.cc:83
+#: src/settingsdialog.cc:85
 msgid "Crossovers"
 msgstr "Delningsfilter"
 
-#: src/settingsdialog.cc:140
+#: src/settingsdialog.cc:144
 msgid "Select SPICE executable..."
 msgstr "Välj exekverbar SPICE-file"
 

@@ -37,6 +37,9 @@ BoxEditor::BoxEditor() :
   m_vbox(),
   m_hbox(),
   m_bass_speaker_combo(),
+  m_speaker_qts_label("", Gtk::ALIGN_LEFT),
+  m_speaker_vas_label("", Gtk::ALIGN_LEFT),
+  m_speaker_fs_label("", Gtk::ALIGN_LEFT),
   m_box_type_optionmenu(),
   m_option_menu()
 {
@@ -47,12 +50,12 @@ BoxEditor::BoxEditor() :
   m_vbox.set_border_width(8);
   m_hbox.set_spacing(5);
 
-  m_speaker_qts_entry.set_width_chars(5);
-  m_speaker_vas_entry.set_width_chars(10);
-  m_speaker_fs_entry.set_width_chars(5);
-  m_speaker_qts_entry.set_editable(false);
-  m_speaker_vas_entry.set_editable(false);
-  m_speaker_fs_entry.set_editable(false);
+  //m_speaker_qts_entry.set_width_chars(5);
+  //m_speaker_vas_entry.set_width_chars(10);
+  //m_speaker_fs_entry.set_width_chars(5);
+  //m_speaker_qts_entry.set_editable(false);
+  //m_speaker_vas_entry.set_editable(false);
+  //m_speaker_fs_entry.set_editable(false);
   
   m_vb1_entry.set_width_chars(10);
   m_fb1_entry.set_width_chars(10);
@@ -63,12 +66,12 @@ BoxEditor::BoxEditor() :
   m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
   
   m_table.attach(*manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
-  m_table.attach(m_speaker_qts_entry, 1, 2, 1, 2);   
+  m_table.attach(m_speaker_qts_label, 1, 2, 1, 2);   
   m_table.attach(*manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_RIGHT)), 3, 4, 1, 2);
-  m_table.attach(m_speaker_vas_entry, 4, 5, 1, 2);   
+  m_table.attach(m_speaker_vas_label, 4, 5, 1, 2);   
   
   m_table.attach(*manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
-  m_table.attach(m_speaker_fs_entry, 1, 2, 2, 3);      
+  m_table.attach(m_speaker_fs_label, 1, 2, 2, 3);      
 
   m_table.attach(*manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
   m_table.attach(m_id_string_entry, 1, 3, 3, 4);
@@ -302,9 +305,10 @@ void BoxEditor::on_combo_entry_changed()
 #endif
   /* Search for the new entry string in the SpeakerList */
   m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
-  m_speaker_qts_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
-  m_speaker_vas_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
-  m_speaker_fs_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+  // maybe set_markup here?
+  m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
+  m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
+  m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
 }
 
 void BoxEditor::on_box_data_changed(int i)

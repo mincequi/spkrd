@@ -1,8 +1,14 @@
 GSpeakers ChangeLog
 
+2003-01-26
+
+* Released GSpeakers-0.9
+
 2003-01-25
 
 * More 0.9 preparations
+
+* boxeditor.h/cc: changed speaker parameters display from entries to labels
 
 * speakereditor.cc: changed from 4 to 3 decimals on vsa display
 
@@ -94,6 +100,10 @@ better than depending on changing locales inside the program...
 
 * speakereditor.cc: save a loaded filename on exit and display the correct 
     filename in the frame
+
+2002-12-20
+
+* Released gspeakers-0.8.4
 
 2002-11-20
 

@@ -1,3 +1,14 @@
+GSpeakers-0.9
+
+* Gettext support and a swedish translation was added
+
+* GSpeakers now should work on all locales
+
+* A visual representation of the currently selected crossover network was 
+    added to the program
+
+* A couple of bugs were fixed
+
 GSpeakers-0.8.4
 
 * A couple of bugs were fixed
