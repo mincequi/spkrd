@@ -64,11 +64,22 @@ MainWindow::MainWindow() :
       slot(Gtk::Main::quit) ) );
   }
   {
+  	Gtk::Menu::MenuList& menulist = m_crossover_menu.items();
+
+  	menulist.push_back( Gtk::Menu_Helpers::MenuElem("New lowpass crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New highpass crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2-way crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2.5-way crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 3-way crossover") );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 4-way crossover") );
+  }
+  {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
 
   	menulist.push_back( Gtk::Menu_Helpers::MenuElem("About...", slot(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", m_file_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", m_crossover_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
   //Add the MenuBar to the window:

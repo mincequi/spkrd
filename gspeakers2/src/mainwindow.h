@@ -47,6 +47,7 @@ private:
 
   Gtk::MenuBar m_menubar;
   Gtk::Menu m_file_menu;
+  Gtk::Menu m_crossover_menu;
   Gtk::Menu m_help_menu;
 
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */

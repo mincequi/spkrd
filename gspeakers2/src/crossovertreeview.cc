@@ -148,6 +148,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string, c
     cout << "Id is: " << row[m_columns.id] << endl;
     /* Tell others that we have modified a part */
     signal_part_modified.emit();
+    signal_net_modified_by_user(n);
   }
 }
 

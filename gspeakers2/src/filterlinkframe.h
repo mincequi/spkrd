@@ -72,6 +72,7 @@ private:
   Net *m_net;
   string m_description;
   SpeakerList *m_speaker_list;
+  bool enable_edit;
 };
 
 #endif

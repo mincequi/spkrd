@@ -1,5 +1,14 @@
 GSpeakers ChangeLog
 
+2002-08-29
+
+* filterlinkframe.cc/h: 3rd and 4th order calcs done
+
+2002-08-28
+
+* filterlinkframe.cc/h: Finished filter-calculations for 1st and 2nd order 
+    filters, added backword calculation of first order filters
+
 2002-08-25
 
 * crossoverwizard.h/cc, filterlinkframe.cc.h: added files to source tree
