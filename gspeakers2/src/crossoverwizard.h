@@ -34,9 +34,11 @@ public:
 private:
   /* Callbacks */
   void on_speaker_list_loaded(string speaker_list_filename);
+  void on_button_plot_clicked();
+  void on_button_update_clicked();
 
   Gtk::ScrolledWindow m_scrolled_window;
-  Gtk::VBox m_vbox;
+  Gtk::VBox m_vbox, m_outer_vbox;
   void on_crossover_selected(Crossover *crossover);
   SpeakerList m_speaker_list;
 };

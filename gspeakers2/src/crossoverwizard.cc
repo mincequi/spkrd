@@ -20,13 +20,17 @@
 CrossoverWizard::CrossoverWizard() :
   Gtk::Frame("Crossover wizard"),
   m_scrolled_window(),
-  m_vbox()
+  m_vbox(),
+  m_outer_vbox()
 
 {
   signal_crossover_selected.connect(slot(*this, &CrossoverWizard::on_crossover_selected));
   m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+  //m_scrolled_window.set_shadow_type(Gtk::SHADOW_NONE);
   add(m_scrolled_window);
-  m_scrolled_window.add(m_vbox);
+  m_scrolled_window.add(m_outer_vbox);
+  m_outer_vbox.pack_start(m_vbox);
+  m_outer_vbox.set_border_width(5);
   show_all();
   signal_speakerlist_loaded.connect(slot(*this, &CrossoverWizard::on_speaker_list_loaded));
 }
@@ -54,4 +58,14 @@ void CrossoverWizard::on_speaker_list_loaded(string speaker_list_filename)
 {
   cout << "CrossoverWizard::on_speaker_list_loaded" << endl;
   m_speaker_list = SpeakerList(speaker_list_filename);
+}
+
+void CrossoverWizard::on_button_plot_clicked()
+{
+  cout << "CrossoverWiard::on_button_plot_cliecked" << endl;
+}
+
+void CrossoverWizard::on_button_update_clicked()
+{
+  cout << "CrossoverWiard::on_button_update_cliecked" << endl;
 }

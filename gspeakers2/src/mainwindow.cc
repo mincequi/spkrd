@@ -23,15 +23,14 @@
 
 MainWindow::MainWindow() :
   m_main_vbox(),
-  m_main_paned(),
-  m_cpanel_scrolled_window(), 
-  m_cpanel_notebook(),
-  m_plot_notebook(),
-  m_boxpanel_scrolled_window(),
-  m_filterpanel_scrolled_window(),
-  m_boxpanel_vbox(),
-  m_boxplot_paned(),
-  m_cpanel_paned(),
+  m_main_notebook(),
+  m_box_hpaned(),
+  m_box_edit_vpaned(),
+  m_box_plot_vpaned(),
+  m_crossover_hpaned1(),
+  m_crossover_hpaned2(),
+  m_crossover_vpaned(),
+  m_crossover_plot_notebook(),
   
   box_editor(),
   box_history(),
@@ -40,7 +39,8 @@ MainWindow::MainWindow() :
   speaker_list_selector(),
   box_plot(),
   crossover_treeview(),
-  crossover_history()
+  crossover_history(),
+  filter_plot()
   
 {
   add(m_main_vbox);
@@ -80,6 +80,9 @@ MainWindow::MainWindow() :
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_THREEWAY) ) );
     menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _4-way crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_FOURWAY) ) );
+    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("Update crossover", slot(*this, &MainWindow::on_update_crossover)) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("Plot crossover", slot(*this, &MainWindow::on_plot_crossover)) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
@@ -92,46 +95,71 @@ MainWindow::MainWindow() :
 
   //Add the MenuBar to the window:
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
-   
-  m_main_vbox.pack_start(m_main_paned);
   
+  m_main_vbox.pack_start(m_main_notebook);
   
-  /* Setup the paned widget for the box plot tab */
-  m_boxplot_paned.add1(box_plot);
-  m_boxplot_paned.add2(plot_history);
+  /* Enclosur etab */
+  m_main_notebook.append_page(m_box_hpaned, "Enclosure");
+  
+  /* Main paned for the enclosure tab */
+  m_box_hpaned.add1(m_box_edit_vpaned);
+  m_box_hpaned.add2(m_box_plot_vpaned);
+  g_settings.defaultValueUnsignedInt("BoxMainPanedPosition", 250);
+  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxMainPanedPosition"));
+
+  /* The left part, the editor and the history */
+  m_box_edit_vpaned.add1(box_editor);
+  m_box_edit_vpaned.add2(box_history);
+  g_settings.defaultValueUnsignedInt("BoxEditPanedPosition", 300);
+  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxEditPanedPosition"));
+
+  /* The right part, plot and plothistory */
+  m_box_plot_vpaned.add1(box_plot);
+  m_box_plot_vpaned.add2(plot_history);
   g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
-  m_boxplot_paned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
-  m_plot_notebook.append_page(m_boxplot_paned, "BoxPlot");
-  
-  /* Box-editor tab */
-  m_boxpanel_vbox.pack_start(speaker_list_selector);
-  m_boxpanel_vbox.pack_start(box_editor);
-  m_boxpanel_vbox.pack_start(box_history);
+  m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
   
   /* Crossover tab */
-  m_cpanel_paned.add1(crossover_treeview);
-  m_cpanel_paned.add2(crossover_history);
-  g_settings.defaultValueUnsignedInt("CPanelPanedPosition", 220);
-  m_cpanel_paned.set_position(g_settings.getValueUnsignedInt("CPanelPanedPosition"));
+  m_main_notebook.append_page(m_crossover_hpaned1, "Crossover");
+  m_crossover_hpaned1.add1(crossover_wizard);
+  g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
+  m_crossover_hpaned1.set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
+  m_crossover_hpaned1.add2(m_crossover_hpaned2);
+  m_crossover_hpaned2.add1(crossover_treeview);
+  m_crossover_vpaned.add1(m_crossover_plot_notebook);
+  m_crossover_plot_notebook.append_page(filter_plot, "Crossover freq resp");
+  m_crossover_vpaned.add2(crossover_history);
+  m_crossover_hpaned2.add2(m_crossover_vpaned);
+  g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
+  m_crossover_hpaned2.set_position(g_settings.getValueUnsignedInt("CrossoverPaned2Position"));
+  g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
+  m_crossover_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
+
+
+  /* Setup the paned widget for the box plot tab */
+  //g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
+  
+  //g_settings.defaultValueUnsignedInt("CPanelPanedPosition", 220);
+  //m_cpanel_paned.set_position(g_settings.getValueUnsignedInt("CPanelPanedPosition"));
 
   /* append pages to left notebook */
-  m_cpanel_notebook.append_page(m_boxpanel_vbox, "Enclosure");
-  m_cpanel_notebook.append_page(m_cpanel_paned, "Crossover");
-  m_cpanel_notebook.append_page(crossover_wizard, "Crossover wizard");
-  g_settings.defaultValueUnsignedInt("CPanelNotebookPage", 0);
+  //m_cpanel_notebook.append_page(m_boxpanel_vbox, "Enclosure");
+  //m_cpanel_notebook.append_page(m_cpanel_paned, "Crossover");
+  //m_cpanel_notebook.append_page(crossover_wizard, "Crossover wizard");
+  //g_settings.defaultValueUnsignedInt("CPanelNotebookPage", 0);
     
-  m_cpanel_scrolled_window.add(m_cpanel_notebook);
-  m_cpanel_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+  //m_cpanel_scrolled_window.add(m_cpanel_notebook);
+  //m_cpanel_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     
   /* Add widgets to the main window */
-  m_main_paned.add1(m_cpanel_scrolled_window);
-  m_main_paned.add2(m_plot_notebook);
-  g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
-  m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
-  
+  //m_main_paned.add1(m_cpanel_scrolled_window);
+  //m_main_paned.add2(m_plot_notebook);
+  //g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
+  //m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
+    
   show_all_children();
   /* For some reason I had to put this row after show */
-  m_cpanel_notebook.set_current_page(g_settings.getValueUnsignedInt("CPanelNotebookPage"));
+  m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
 }
 
 MainWindow::~MainWindow()
@@ -142,14 +170,18 @@ MainWindow::~MainWindow()
 void MainWindow::on_quit()
 {
   cout << "MainWindow::quit" << endl;
-  g_settings.setValue("MainWindowPanedPosition", m_main_paned.get_position());
-  g_settings.setValue("CPanelPanedPosition", m_cpanel_paned.get_position());
-  g_settings.setValue("BoxPlotPanedPosition", m_boxplot_paned.get_position());
+  g_settings.setValue("BoxMainPanedPosition", m_box_hpaned.get_position());
+  g_settings.setValue("BoxEditPanedPosition", m_box_edit_vpaned.get_position());
+  g_settings.setValue("BoxPlotPanedPosition", m_box_plot_vpaned.get_position());
+  g_settings.setValue("CrossoverPaned1Position", m_crossover_hpaned1.get_position());
+  g_settings.setValue("CrossoverPaned2Position", m_crossover_hpaned2.get_position());
+  g_settings.setValue("CrossoverPlotVPanedPosition", m_crossover_vpaned.get_position());
+
   int width, height;
   get_size(width, height);
   g_settings.setValue("MainWindowWidth", width);
   g_settings.setValue("MainWindowHeight", height);
-  g_settings.setValue("CPanelNotebookPage", m_cpanel_notebook.get_current_page());
+  g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
   
   g_settings.save();
   
@@ -168,5 +200,16 @@ void MainWindow::on_crossover_menu_action(int type)
   cout << "MainWindow::on_crossover_menu_action: " << type << endl;
   signal_new_crossover(type);
   /* Switch to crossover wizard page since you probably want to start there */
-  m_cpanel_notebook.set_current_page(2);
+  //m_cpanel_notebook.set_current_page(2);
+}
+
+void MainWindow::on_plot_crossover()
+{
+  cout << "MainWindow::on_plot_crossover" << endl;
+  signal_plot_crossover();
+}
+
+void MainWindow::on_update_crossover()
+{
+  cout << "MainWindow::on_update_crossover" << endl;
 }

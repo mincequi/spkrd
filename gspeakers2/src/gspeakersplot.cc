@@ -355,29 +355,25 @@ void GSpeakersPlot::draw_log_grid()
   }
   /* Draw some more vertical lines if upper limit is 20000 Hz */
   if (m_upper_x == 20000) {
-    for (int i = 0; i <= 10; i++) {
+    for (int i = 1; i <= 10; i++) {
       int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
       m_refPixmap->draw_line(m_refGC, 2 * half_space_x + x, BOX_FRAME_SIZE, 2 * half_space_x + x, xaxis_y_position + 3);
   
       /* Draw text below some vertical lines */
       if ( ( i == 2 ) || ( i == 5 ) ) {
-        //m_refPixmap->draw_glyphs(m_refGC, m_refFont, x - 4, xaxis_y_position + 15, pango_glyph_string_new("hej"));
-        //char *buf = new char[3];
-        //sprintf( buf, "%3d", 10 * i);
-        //window.draw_string( f, gc, x - 4, xaxis_y + 15, string( buf ) );
+        m_refLayout->set_text(int_to_ustring(i) + "k");
+        m_refPixmap->draw_layout(m_refGC, 2 * half_space_x + x - 8, xaxis_y_position + 5, m_refLayout);
       } 
     }
   
     for (int i = 1; i <= 10; i++) {
       int x = BOX_FRAME_SIZE + round( log10(i) * half_space_x );
       m_refPixmap->draw_line(m_refGC, 3 * half_space_x + x, BOX_FRAME_SIZE, 3 * half_space_x + x, xaxis_y_position + 3);
-      if ( ( i == 2 ) || ( i == 5 ) || (i == 1) ) {
-        //char *buf = new char[3];
-        //sprintf( buf, "%3d", 100 * i);
-        //window.draw_string( f, gc, half_space_x + x - 4, xaxis_y + 15, string( buf ) );
+      if ( ( i == 2 ) || (i == 5) || (i == 10)) {
+        m_refLayout->set_text(int_to_ustring(10 * i) + "k");
+        m_refPixmap->draw_layout(m_refGC, 3 * half_space_x + x - 8, xaxis_y_position + 5, m_refLayout);
       } 
     }
-    
   }
 }
 

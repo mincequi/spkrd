@@ -103,7 +103,20 @@ CrossoverHistory::CrossoverHistory() :
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   selection->select(row);
   signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
+  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverHistory::on_net_modified_by_user));
+  signal_net_modified_by_user.connect(slot(*this, &CrossoverHistory::on_net_modified_by_wizard));
 }
+
+void CrossoverHistory::on_net_modified_by_wizard(Net *net)
+{
+  m_SaveButton.set_sensitive(true);
+}
+
+void CrossoverHistory::on_net_modified_by_user()
+{
+  m_SaveButton.set_sensitive(true);
+}
+
 
 bool CrossoverHistory::on_delete_event(GdkEventAny *event)
 {

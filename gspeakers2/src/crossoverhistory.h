@@ -59,6 +59,8 @@ protected:
   void on_remove();
   bool on_close(GdkEventAny *event);
   void on_part_modified();  
+  void on_net_modified_by_wizard(Net *net);
+  void on_net_modified_by_user();
   bool on_delete_event(GdkEventAny *event);
   
   /* Helper member functions */

@@ -66,3 +66,5 @@ the structure in the program, some are important due to the UI experience.
 * Add tooltips to appropriate widgets
 
 * Add try/catch on xml files loaded in ctors
+
+* FilterLinkFrame: only recalc affected part values

@@ -62,6 +62,12 @@ int main (int argc, char *argv[])
   /* save settings */
   g_settings.save();
 
+  //Net n;
+  //n.set_has_imp_corr(true);
+  //n.set_has_damp(true);
+  //Speaker s;
+  //cout << n.to_SPICE(s) << endl;
+
   return 0;
 }
 /*

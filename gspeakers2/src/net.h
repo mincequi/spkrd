@@ -70,7 +70,7 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const Net& net);
 
   /* Maybe we should add a toSPICE function here */
-  //string to_SPICE();
+  string to_SPICE(Speaker& s);
 
   /* Use this to get the parts or add part to the net */
   vector<Part> *parts();

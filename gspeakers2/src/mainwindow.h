@@ -29,6 +29,7 @@
 #include "crossovertreeview.h"
 #include "crossoverhistory.h"
 #include "crossoverwizard.h"
+#include "gspeakersfilterplot.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -38,12 +39,16 @@ public:
   
 private:
   Gtk::VBox m_main_vbox;
-  Gtk::HPaned m_main_paned;
-  Gtk::ScrolledWindow m_cpanel_scrolled_window;
-  Gtk::Notebook m_cpanel_notebook, m_plot_notebook;
-  Gtk::ScrolledWindow m_boxpanel_scrolled_window, m_filterpanel_scrolled_window;
-  Gtk::VBox m_boxpanel_vbox;
-  Gtk::VPaned m_boxplot_paned, m_cpanel_paned;
+  Gtk::Notebook m_main_notebook;
+  Gtk::HPaned m_box_hpaned;
+  Gtk::VPaned m_box_edit_vpaned;
+  Gtk::VPaned m_box_plot_vpaned;
+
+  Gtk::HPaned m_crossover_hpaned1;
+  Gtk::HPaned m_crossover_hpaned2;
+  Gtk::VPaned m_crossover_vpaned;
+
+  Gtk::Notebook m_crossover_plot_notebook;
 
   Gtk::MenuBar m_menubar;
   Gtk::Menu m_file_menu;
@@ -64,11 +69,14 @@ private:
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
 
+  GSpeakersFilterPlot filter_plot;
 
   /* Callbacks */
   void on_quit();
   void on_about();
   void on_crossover_menu_action(int);
+  void on_plot_crossover();
+  void on_update_crossover();
 };
 
 #endif

@@ -16,6 +16,7 @@
 */
 
 #include <math.h>
+#include <stdlib.h>
 #include "filterlinkframe.h"
   
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
@@ -177,6 +178,8 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_imp_corr_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   m_damp_spinbutton.signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
   signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
+  signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
+  g_settings.defaultValueString("SPICECmdLine", "spice3");
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -472,6 +475,26 @@ void FilterLinkFrame::on_net_updated(Net *net)
   }
   enable_edit = true;
 }
+
+void FilterLinkFrame::on_plot_crossover()
+{
+  /* Create spice code for this net */
+  Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+  string spice_filename;
+  try {
+    spice_filename = m_net->to_SPICE(speaker);
+  } catch (GSpeakersException e) {
+    cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
+  }
+  
+  /* run spice with created file */
+  string cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " + spice_filename;
+  cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << endl;
+  system(cmd.c_str());
+  cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
+  /* extract spice output into a vector */
+  /* send the spice data to the plot */
+}   
 
 vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
 {

@@ -44,6 +44,7 @@ private:
   void on_order_selected(int which, int order);
   void on_param_changed();
   void on_net_updated(Net *net);
+  void on_plot_crossover();
 
   Gtk::Adjustment    adj;
 
