@@ -66,7 +66,8 @@ am_gspeakers_OBJECTS = main.$(OBJEXT) common.$(OBJEXT) \
 	enclosurepaned.$(OBJEXT) crossoverpaned.$(OBJEXT) \
 	summedfreqrespplot.$(OBJEXT) popupentry.$(OBJEXT) \
 	cellrendererpopup.$(OBJEXT) crossoverimageview.$(OBJEXT) \
-	gspeakersfilechooser.$(OBJEXT) iconnotebook.$(OBJEXT)
+	gspeakersfilechooser.$(OBJEXT) eggsidebarbutton.$(OBJEXT) \
+	eggsidebar.$(OBJEXT) gspeakersstock.$(OBJEXT)
 gspeakers_OBJECTS = $(am_gspeakers_OBJECTS)
 gspeakers_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
@@ -86,6 +87,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/crossovertreeview.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/crossoverwizard.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/driverfreqrespplot.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/eggsidebar.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/eggsidebarbutton.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/enclosurepaned.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/filterlinkframe.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/freqrespeditor.Po \
@@ -95,7 +98,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersfilterplot.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersobject.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gspeakersplot.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/iconnotebook.Po ./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gspeakersstock.Po ./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mainwindow.Po ./$(DEPDIR)/net.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/part.Po ./$(DEPDIR)/plothistory.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/popupentry.Po ./$(DEPDIR)/settings.Po \
@@ -106,15 +109,15 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/summedfreqrespplot.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/tabwidget.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/totalfilterplot.Po
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(gspeakers_SOURCES)
 DIST_SOURCES = $(gspeakers_SOURCES)
 ETAGS = etags
@@ -132,7 +135,7 @@ CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@
+CFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -255,13 +258,15 @@ popupentry.h popupentry.cc \
 cellrendererpopup.h cellrendererpopup.cc \
 crossoverimageview.h crossoverimageview.cc \
 gspeakersfilechooser.h gspeakersfilechooser.cc \
-iconnotebook.h iconnotebook.cc 
+libegg/eggsidebarbutton.h libegg/eggsidebarbutton.c \
+libegg/eggsidebar.h libegg/eggsidebar.c \
+gspeakersstock.h gspeakersstock.c
 
 LDADD = $(DEPS_LIBS)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cc .o .obj
+.SUFFIXES: .c .cc .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -339,6 +344,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossovertreeview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crossoverwizard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/driverfreqrespplot.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eggsidebar.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eggsidebarbutton.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/enclosurepaned.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filterlinkframe.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/freqrespeditor.Po@am__quote@
@@ -348,7 +355,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersfilterplot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersobject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersplot.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconnotebook.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gspeakersstock.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainwindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/net.Po@am__quote@
@@ -363,6 +370,54 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/summedfreqrespplot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tabwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/totalfilterplot.Po@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+eggsidebarbutton.o: libegg/eggsidebarbutton.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eggsidebarbutton.o -MD -MP -MF "$(DEPDIR)/eggsidebarbutton.Tpo" -c -o eggsidebarbutton.o `test -f 'libegg/eggsidebarbutton.c' || echo '$(srcdir)/'`libegg/eggsidebarbutton.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/eggsidebarbutton.Tpo" "$(DEPDIR)/eggsidebarbutton.Po"; else rm -f "$(DEPDIR)/eggsidebarbutton.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='libegg/eggsidebarbutton.c' object='eggsidebarbutton.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/eggsidebarbutton.Po' tmpdepfile='$(DEPDIR)/eggsidebarbutton.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eggsidebarbutton.o `test -f 'libegg/eggsidebarbutton.c' || echo '$(srcdir)/'`libegg/eggsidebarbutton.c
+
+eggsidebarbutton.obj: libegg/eggsidebarbutton.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eggsidebarbutton.obj -MD -MP -MF "$(DEPDIR)/eggsidebarbutton.Tpo" -c -o eggsidebarbutton.obj `if test -f 'libegg/eggsidebarbutton.c'; then $(CYGPATH_W) 'libegg/eggsidebarbutton.c'; else $(CYGPATH_W) '$(srcdir)/libegg/eggsidebarbutton.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/eggsidebarbutton.Tpo" "$(DEPDIR)/eggsidebarbutton.Po"; else rm -f "$(DEPDIR)/eggsidebarbutton.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='libegg/eggsidebarbutton.c' object='eggsidebarbutton.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/eggsidebarbutton.Po' tmpdepfile='$(DEPDIR)/eggsidebarbutton.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eggsidebarbutton.obj `if test -f 'libegg/eggsidebarbutton.c'; then $(CYGPATH_W) 'libegg/eggsidebarbutton.c'; else $(CYGPATH_W) '$(srcdir)/libegg/eggsidebarbutton.c'; fi`
+
+eggsidebar.o: libegg/eggsidebar.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eggsidebar.o -MD -MP -MF "$(DEPDIR)/eggsidebar.Tpo" -c -o eggsidebar.o `test -f 'libegg/eggsidebar.c' || echo '$(srcdir)/'`libegg/eggsidebar.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/eggsidebar.Tpo" "$(DEPDIR)/eggsidebar.Po"; else rm -f "$(DEPDIR)/eggsidebar.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='libegg/eggsidebar.c' object='eggsidebar.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/eggsidebar.Po' tmpdepfile='$(DEPDIR)/eggsidebar.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eggsidebar.o `test -f 'libegg/eggsidebar.c' || echo '$(srcdir)/'`libegg/eggsidebar.c
+
+eggsidebar.obj: libegg/eggsidebar.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT eggsidebar.obj -MD -MP -MF "$(DEPDIR)/eggsidebar.Tpo" -c -o eggsidebar.obj `if test -f 'libegg/eggsidebar.c'; then $(CYGPATH_W) 'libegg/eggsidebar.c'; else $(CYGPATH_W) '$(srcdir)/libegg/eggsidebar.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/eggsidebar.Tpo" "$(DEPDIR)/eggsidebar.Po"; else rm -f "$(DEPDIR)/eggsidebar.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='libegg/eggsidebar.c' object='eggsidebar.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/eggsidebar.Po' tmpdepfile='$(DEPDIR)/eggsidebar.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o eggsidebar.obj `if test -f 'libegg/eggsidebar.c'; then $(CYGPATH_W) 'libegg/eggsidebar.c'; else $(CYGPATH_W) '$(srcdir)/libegg/eggsidebar.c'; fi`
 
 .cc.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
