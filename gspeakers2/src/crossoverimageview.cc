@@ -22,10 +22,14 @@
 
 #include <pangomm/context.h>
 #include "crossoverimageview.h"
+#include "common.h"
 
-CrossoverImageView::CrossoverImageView() 
+CrossoverImageView::CrossoverImageView()
 {
-
+  using SigC::slot;
+  
+  visible = false;
+  signal_crossover_selected.connect(slot(*this, &CrossoverImageView::on_crossover_selected));
 }
 
 CrossoverImageView::~CrossoverImageView()
@@ -46,6 +50,7 @@ bool CrossoverImageView::on_expose_event(GdkEventExpose* event)
 
 bool CrossoverImageView::on_configure_event(GdkEventConfigure* event)
 {
+  visible = true;
   m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
   
   m_refGC = get_style()->get_fg_gc(get_state());
@@ -59,8 +64,58 @@ bool CrossoverImageView::on_configure_event(GdkEventConfigure* event)
   Glib::RefPtr<Pango::Context> refPangoContext = get_pango_context();
   m_refLayout = Pango::Layout::create(refPangoContext);
   
-  //redraw();
+  redraw();
 
   /* We've handled the configure event, no need for further processing. */
   return true;
+}
+
+void CrossoverImageView::redraw()
+{
+  /* Clear to white background color */
+  m_refGC->set_rgb_fg_color(white);
+  m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().width, get_allocation().height);
+  m_refGC->set_rgb_fg_color(black);
+
+  draw_capacitor(13, 10, 10, 80, 80, false);
+}
+
+void CrossoverImageView::on_crossover_selected(Crossover *selected_crossover)
+{
+  cout << "CrossoverImageView::on_crossover_selected" << endl;
+}
+
+void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int height, bool rotate)
+{
+  if (visible == true) {
+    int half_space_y  = GSpeakers::round(height / 2);
+    int half_space_x  = GSpeakers::round(width / 2);
+    int small_space_x = GSpeakers::round(width / 20);
+    int small_space_y = GSpeakers::round(height / 20);
+  
+    m_refLayout->set_text("C" + GSpeakers::int_to_ustring(id));
+    m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
+    
+    if (rotate == true) {
+      /* Horizontal line in capacitor */
+      m_refPixmap->draw_line(m_refGC, x + half_space_y, y, x + half_space_y, y + half_space_y - small_space_y);
+      m_refPixmap->draw_line(m_refGC, x + half_space_y, y + half_space_y + small_space_y, x + half_space_y, y + height);
+    
+      /* Vertical lines in capacitor */
+      m_refPixmap->draw_line(m_refGC, x + small_space_x, y + half_space_y - small_space_y,
+                                      x + width - small_space_x, y + half_space_y - small_space_y);
+      m_refPixmap->draw_line(m_refGC, x + small_space_x, y + half_space_y + small_space_y,
+                                      x + width - small_space_x, y + half_space_y + small_space_y);
+    } else {
+      /* Horizontal line in capacitor */
+      m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + half_space_x - small_space_x, y + half_space_y);
+      m_refPixmap->draw_line(m_refGC, x + half_space_x + small_space_x, y + half_space_y, x + width, y + half_space_y);
+    
+      /* Vertical lines in capacitor */
+      m_refPixmap->draw_line(m_refGC, x + half_space_x - small_space_x, y + small_space_y, 
+                                      x + half_space_x - small_space_x, y + height - small_space_y);
+      m_refPixmap->draw_line(m_refGC, x + half_space_x + small_space_x, y + small_space_y, 
+                                      x + half_space_x + small_space_x, y + height - small_space_y);
+    }
+  }
 }

@@ -33,10 +33,12 @@ CrossoverPaned::CrossoverPaned()
   add2(m_hpaned2);
   m_hpaned2.add1(crossover_treeview);
   m_vpaned.add1(m_plot_notebook);
+
   m_plot_notebook.append_page(filter_plot, _("Crossover freq resp"));
   m_plot_notebook.append_page(total_filter_plot, _("Total crossover freq resp"));
   m_plot_notebook.append_page(summed_freq_resp_plot, _("Total freq resp"));
-  m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));
+  m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));  
+
   m_plot_notebook.set_scrollable();
   m_vpaned.add2(crossover_history);
   m_hpaned2.add2(m_vpaned);

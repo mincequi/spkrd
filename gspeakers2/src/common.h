@@ -22,7 +22,9 @@
 
 #include <string>
 #include <sigc++/sigc++.h>
-#include <gtkmm.h>
+#include <gtkmm/widget.h>
+#include <glibmm/ustring.h>
+#include <gdkmm/color.h>
 #include <vector>
 #include <iostream>
 #include <libintl.h>

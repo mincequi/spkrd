@@ -29,7 +29,12 @@
 #include <gdkmm/colormap.h>
 #include <pangomm/layout.h>
 #include <gdkmm/color.h>
+#include "crossover.h"
 
+/*
+ * The CrossoverImageView is a widget that will display the 
+ * current crossover as an image of the component layout.
+ */
 class CrossoverImageView : public Gtk::DrawingArea {
 public:
   CrossoverImageView();
@@ -37,7 +42,25 @@ public:
 private:
   bool on_expose_event(GdkEventExpose* event);
   bool on_configure_event(GdkEventConfigure* event);
+
+  void on_crossover_selected(Crossover *selected_crossover);
   
+  void redraw();
+
+  /*
+   * Draw capacitor to refPixmap
+   *
+   * id     = component id
+   * x      = horizontal position
+   * y      = vertical position
+   * width  = width
+   * height = height
+   * rotate = rotate this component 90 degrees
+   */
+  void draw_capacitor(int id, int x, int y, int width, int height, bool rotate = false);
+
+  bool visible;
+
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;
   Glib::RefPtr<Gdk::Colormap> m_refColormap;
