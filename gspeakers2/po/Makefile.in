@@ -14,7 +14,7 @@
 
 GETTEXT_PACKAGE = gspeakers
 PACKAGE = gspeakers
-VERSION = 0.11.0
+VERSION = 0.12
 
 SHELL = /bin/sh
 
@@ -24,23 +24,23 @@ top_srcdir = ..
 top_builddir = ..
 
 
-prefix = /home/sumpan/gnome2
+prefix = /usr/local
 exec_prefix = ${prefix}
-datadir = $(prefix)/share
+datadir = $(prefix)/
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
 gettextsrcdir = $(prefix)/share/glib-2.0/gettext/po
 subdir = po
 
-INSTALL = /home/sumpan/bin/install-check
+INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 MKINSTALLDIRS = $(top_srcdir)/./mkinstalldirs
 
 CC = gcc
 GENCAT = @GENCAT@
-GMSGFMT = PATH=../src:$$PATH /usr/bin/msgfmt
-MSGFMT = /usr/bin/msgfmt
-XGETTEXT = PATH=../src:$$PATH /usr/bin/xgettext
+GMSGFMT = PATH=../src:$$PATH 
+MSGFMT = no
+XGETTEXT = PATH=../src:$$PATH :
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
@@ -62,9 +62,9 @@ stamp-cat-id $(POFILES) $(GMOFILES) $(SOURCES)
 
 POTFILES = \
 
-CATALOGS =  sv.gmo
-CATOBJEXT = .gmo
-INSTOBJEXT = .mo
+CATALOGS = 
+CATOBJEXT = NONE
+INSTOBJEXT = 
 
 .SUFFIXES:
 .SUFFIXES: .c .o .po .pox .gmo .mo .msg .cat

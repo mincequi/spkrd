@@ -95,7 +95,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     if (m_speaker_list != NULL) {
       speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     } 
-    m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+		if (g_settings.getValueBool("UseDriverImpedance") == true) {
+		  m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_imp() + 1)));
+		} else {
+	    m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+		}
   }  
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
   

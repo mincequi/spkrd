@@ -1,5 +1,9 @@
 GSpeakers ChangeLog
 
+2004-07-25
+
+* .spec file added, now we can produce rpms
+
 2004-07-22
 
 * added libegg sidebar: src/libegg/*

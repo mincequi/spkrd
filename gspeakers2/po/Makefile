@@ -14,7 +14,7 @@
 
 GETTEXT_PACKAGE = gspeakers
 PACKAGE = gspeakers
-VERSION = 0.11.0
+VERSION = 0.12
 
 SHELL = /bin/sh
 
@@ -24,23 +24,23 @@ top_srcdir = ..
 top_builddir = ..
 
 
-prefix = /home/sumpan/gnome2
+prefix = /usr/local
 exec_prefix = ${prefix}
-datadir = $(prefix)/share
+datadir = $(prefix)/
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
 gettextsrcdir = $(prefix)/share/glib-2.0/gettext/po
 subdir = po
 
-INSTALL = /home/sumpan/bin/install-check
+INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 MKINSTALLDIRS = $(top_srcdir)/./mkinstalldirs
 
 CC = gcc
 GENCAT = @GENCAT@
-GMSGFMT = PATH=../src:$$PATH /usr/bin/msgfmt
-MSGFMT = /usr/bin/msgfmt
-XGETTEXT = PATH=../src:$$PATH /usr/bin/xgettext
+GMSGFMT = PATH=../src:$$PATH 
+MSGFMT = no
+XGETTEXT = PATH=../src:$$PATH :
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
@@ -61,12 +61,97 @@ DISTFILES = ChangeLog Makefile.in.in POTFILES.in $(GETTEXT_PACKAGE).pot \
 stamp-cat-id $(POFILES) $(GMOFILES) $(SOURCES)
 
 POTFILES = \
-	../src/main.cc \
-	../gspeakers.desktop.in
+src/box.cc \
+src/boxeditor.cc \
+src/boxeditor.h \
+src/box.h \
+src/boxhistory.cc \
+src/boxhistory.h \
+src/boxlist.cc \
+src/boxlist.h \
+src/cellitemcrossover.cc \
+src/cellitemcrossover.h \
+src/cellrendererpopup.cc \
+src/cellrendererpopup.h \
+src/common.cc \
+src/common.h \
+src/crossover.cc \
+src/crossover.h \
+src/crossoverhistory.cc \
+src/crossoverhistory.h \
+src/crossoverimageview.cc \
+src/crossoverimageview.h \
+src/crossoverlist.cc \
+src/crossoverlist.h \
+src/crossoverpaned.cc \
+src/crossoverpaned.h \
+src/crossovertreeview2.cc \
+src/crossovertreeview.cc \
+src/crossovertreeview.h \
+src/crossoverwizard.cc \
+src/crossoverwizard.h \
+src/driverfreqrespplot.cc \
+src/driverfreqrespplot.h \
+src/enclosurepaned.cc \
+src/enclosurepaned.h \
+src/filterlinkframe.bak.cc \
+src/filterlinkframe.cc \
+src/filterlinkframe.h \
+src/freqrespeditor.cc \
+src/freqrespeditor.h \
+src/gfilter.cc \
+src/gfilter.h \
+src/gspeakersboxplot.cc \
+src/gspeakersboxplot.h \
+src/gspeakerscolor.cc \
+src/gspeakerscolor.h \
+src/gspeakersfilechooser.cc \
+src/gspeakersfilechooser.h \
+src/gspeakersfilterplot.cc \
+src/gspeakersfilterplot.h \
+src/gspeakersobject.cc \
+src/gspeakersobject.h \
+src/gspeakersplot2.cc \
+src/gspeakersplot3.cc \
+src/gspeakersplot.cc \
+src/gspeakersplot.h \
+src/gspeakersstock.cc \
+src/gspeakersstock.h \
+src/main.cc \
+src/mainwindow.cc \
+src/mainwindow.h \
+src/net.cc \
+src/net.h \
+src/part.cc \
+src/part.h \
+src/plothistory.cc \
+src/plothistory.h \
+src/popupentry.cc \
+src/popupentry.h \
+src/settings.cc \
+src/settingsdialog.cc \
+src/settingsdialog.h \
+src/settings.h \
+src/sidebarnotebook.cc \
+src/sidebarnotebook.h \
+src/speaker.cc \
+src/speakereditor.cc \
+src/speakereditor.h \
+src/speaker.h \
+src/speakerlist.cc \
+src/speakerlist.h \
+src/speakerlistselector.cc \
+src/speakerlistselector.h \
+src/sstream_fix.h \
+src/summedfreqrespplot.cc \
+src/summedfreqrespplot.h \
+src/totalfilterplot.cc \
+src/totalfilterplot.h \
+gspeakers.desktop.in
 
-CATALOGS =  sv.gmo
-CATOBJEXT = .gmo
-INSTOBJEXT = .mo
+CATALOGS = 
+CATOBJEXT = NONE
+INSTOBJEXT = 
 
 .SUFFIXES:
 .SUFFIXES: .c .o .po .pox .gmo .mo .msg .cat

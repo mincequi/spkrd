@@ -1,15 +1,38 @@
-# Note that this is NOT a relocatable package
-# DON'T FORGET TO UPDATE THE MOZILLA DEPENDENCY
+Name:           gspeakers
+Summary:        Gnome loudspeaker design program
 
-Summary:   Gnome loudspeaker design program
-Name:      gspeakers
-Version:   @VERSION@
-Release:   1
-Copyright: GPL
-Group:     Applications/Electronics
-Source:    %{name}-%{version}.tar.bz2
-URL:       http://gspeakers.sourceforge.net
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+#because the file is called amsn-0_83.tar.gz
+Version:        @VERSION@
+
+#has to be increased every rpm build
+Release:        1
+
+License:        GPL
+
+#see /usr/share/doc/rpm-*/GROUPS for the group list
+Group:          Applications/Engineering
+
+URL:            http://gspeakers.sourceforge.net/
+
+#name off source file in /usr/src/redhat/SOURCES/
+Source0:        %{name}-%{version}.tar.bz2
+#Source1:
+#Patch0:
+#Patch1:
+
+#packages needed to install
+Requires:       gtkmm24 >= 2.4.0
+
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+
+#packages needed by %pre and %post
+#Prereq:
+
+#packages needed for build (example: gtk2-devel)
+BuildPrereq: gtkmm24-devel
+
+#packages the package has conflicts with
+#Conflicts:
 
 %description
 GSpeakers is a loudspeaker design program built for the Gnome desktop. 
@@ -17,30 +40,105 @@ It aims to be a very powerful tool for the experienced loudspeaker
 designer while also be a simple program to work with for the newbie 
 in speakerbuilding.
 
-%prep
-%setup
 
+#unpack and apply patches
+%prep
+
+#unpack source code  -q: quiet
+%setup
+#apply patch on source code
+#-p # specifies the number of dirs to strip
+#%patch0 -p1 -b .
+
+
+#all commands needed for building
 %build
+
+#configure properly packages that use autoconf and automake
 %configure --prefix=/usr
 make
 
+
+#all commands needed for installing
 %install
-rm -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT install
+
+#removes old buildroots if exist
+rm -fr %{buildroot}
+#installs a autoconf/automake style package into your buildroot
+%makeinstall
+
 
 %clean
-rm -rf $RPM_BUILD_ROOT
 
-%defattr(-, root, root)
-%doc AUTHORS COPYING ChangeLog NEWS README TODO 
-%{_datadir}/pixmaps/*
-&{_datadir}/xml/*
+#cleanup your buildroot
+rm -fr %{buildroot}
 
-#%post
-#%{_bindir}/galeon-config-tool --fix-gconf-permissions
-#%{_bindir}/galeon-config-tool --pkg-install-schemas
-#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update; fi
 
-#%postun
-#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update; fi
+#all commands are executed after package install
+%post
 
+#echo package installed
+
+
+#all commands are executed just before package install
+%preun
+
+#echo begin install
+
+
+#all commands are executed after package removed
+%postun
+
+#echo package removed
+
+
+%files
+
+#default permissions (file permission, owner, group, directory permission)
+%defattr(-,root,root)
+
+%{_bindir}/gspeakers
+%{_datadir}/applications/gspeakers.desktop
+
+%{_datadir}/pixmaps/append_plot_enclosure_24.png
+%{_datadir}/pixmaps/driver64.png
+%{_datadir}/pixmaps/driver_small.png
+%{_datadir}/pixmaps/filter64.png
+%{_datadir}/pixmaps/filter_small.png
+%{_datadir}/pixmaps/gspeakers.png
+%{_datadir}/pixmaps/opt_enclosure_16.png
+%{_datadir}/pixmaps/opt_enclosure_24.png
+%{_datadir}/pixmaps/speaker64.png
+%{_datadir}/pixmaps/speaker_small.png
+%{_datadir}/pixmaps/stock_plot_crossover_16.png
+%{_datadir}/pixmaps/stock_plot_crossover_24.png
+
+%{_datadir}/xml/box1.xml
+%{_datadir}/xml/crossover1.xml
+%{_datadir}/xml/morelmdt32s.frf
+%{_datadir}/xml/peerles115dt-26-72sf.frf
+%{_datadir}/xml/seasl14rcyp.frf
+%{_datadir}/xml/seasl21rn4xp.frf
+%{_datadir}/xml/seast14rcyph.frf
+%{_datadir}/xml/vifa.xml
+%{_datadir}/xml/vifad27tg-05-06.frf
+%{_datadir}/xml/vifap21wo-20-08.frf
+
+#see /usr/lib/rmp/macros for all the %{_foo}
+#%dir marks a single directory in a file list to be included
+#%doc to mark documentation of the source package. These get installed in /usr/doc/$NAME-$VERSION-$RELEASE
+#%config tells rpm that this is a configuration file. During upgrades rpm will attempt to avoid overwriting
+#a user's carefully modified configuration with an RPM-packaged default configuration file.
+#%config(noreplace) config file won't be replaced when upgraded
+#%config(missingok) files that most be uninstalled but are installed during post-instell
+#%{_bindir}/*
+#%{_mandir}/*
+#default share dir location
+#%{_datadir}/*
+#%{_defaultdocdir}/*
+
+#do date +"%a %b %d %Y" to get the correct date notation date
+#date has to be in English and month and weekday must begin with a capital letter
+%changelog
+* Fri Jul 23 2004 Daniel Sundberg
+- made first fedora spec script for GSpeakers

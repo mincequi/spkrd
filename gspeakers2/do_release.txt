@@ -1,0 +1,64 @@
+* Check that the xml files refers to frf-files in installation path (use vifa1.xml.in in /xml)
+
+
+* Compile from source and check that everything works 
+(Check list goes here)
+
+
+* Prepare release
+make distclean
+cp -R gspeakers2 gspeakers-{VERSION}
+cd gspeakers-{VERSION}
+rm -rf doc
+rm -rf autom4te.cache 
+rm -rf `find -name CVS`
+rm -rf `find -name *~`
+
+* Make tar balls:
+
+tar xjf gspeakers-{VERSION}.tar.bz2 gspeakers-{VERSION}
+tar xzf gspeakers-{VERSION}.tar.bz2 gspeakers-{VERSION}
+
+
+* Make rpms:
+
+cp speakers-{VERSION}.tar.bz2 /home/sumpan/code/rpmbuild/SOURCES
+
+cd gspeakers2
+./configure
+cd gspeakers2
+rpmbuild -ba gspeakers.spec
+
+
+* Windows binary
+
+New checkout
+cd gspeakers2
+mkdir win32-bin
+cp pixmaps/* win32-bin
+cp xml/* win32-bin
+./configure --enable-win32
+
+Copy gtkmm runtime files
+Copy gnucap executable
+Test
+Check xml file frf paths
+Zip the file
+
+
+* Sourceforge
+
+Upload source tar balls, rpms and windows binary
+Release on sourceforge
+
+
+* Update web page
+
+New features
+
+
+* Freshmeat
+
+* Gnomefiles
+
+* http://footnews.org
