@@ -5,8 +5,8 @@ GSpeakers ChangeLog
 * common.cc: added GSpeakers::double_to_ustring(double, int, int) which can 
     format the output string as you want it
 
-* boxhistory.h/cc: added formatting callback on the vb1 column to illustrate 
-    how to use the insert_data_with_func callback
+* boxhistory.h/cc: added formatting callback on the vb1, fb1 and type columns 
+     using insert_data_with_func
 
 2002-10-18
 
