@@ -31,6 +31,7 @@
 #include <gdkmm/color.h>
 #include <vector>
 #include "crossover.h"
+#include "speakerlist.h"
 
 /*
  * The CrossoverImageView is a widget that will display the 
@@ -45,6 +46,7 @@ private:
   bool on_configure_event(GdkEventConfigure* event);
 
   void on_crossover_selected(Crossover *selected_crossover);
+  void on_speakerlist_selected(SpeakerList *selected_speaker_list);
   
   void redraw();
 
@@ -74,6 +76,10 @@ private:
   void draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
   void draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
 
+  void draw_imp_corr_net(int x, int y, int part_width, int part_height, Part& capacitor, Part& resistor);
+  void draw_damp_net(int x, int y, int part_width, int part_height, Part& r1, Part& r2);
+  void draw_driver(int x, int y, int part_width, int part_height, Speaker& speaker);
+
 
   bool visible;
 
@@ -85,6 +91,7 @@ private:
   Gdk::Color black, white;
   
   Crossover *crossover;
+  SpeakerList *speaker_list;
 };
 
 #endif
