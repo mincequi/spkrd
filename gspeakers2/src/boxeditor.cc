@@ -43,14 +43,16 @@ BoxEditor::BoxEditor() :
   m_box_type_optionmenu(),
   m_option_menu()
 {
+  speaker_list_is_loaded = false;
   disable_signals = false;
   m_vbox.pack_start(m_table);
 
+  set_border_width(2);
   add(m_vbox);
-  m_vbox.set_border_width(8);
+  m_vbox.set_border_width(12);
   m_hbox.set_spacing(5);
-  //set_shadow_type(Gtk::SHADOW_NONE);
-  //static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure editor</b>"));
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure editor</b>"));
 
   //m_speaker_qts_entry.set_width_chars(5);
   //m_speaker_vas_entry.set_width_chars(10);
@@ -82,8 +84,8 @@ BoxEditor::BoxEditor() :
   
   m_table.attach(*manage(new Gtk::Label(_("Vb1: "), Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
   m_table.attach(m_vb1_entry, 1, 2, 4, 5);
-  m_table.attach(*manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_RIGHT)), 2, 3, 4, 5);
-  m_table.attach(m_fb1_entry, 3, 4, 4, 5);
+  m_table.attach(*manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_RIGHT)), 3, 4, 4, 5);
+  m_table.attach(m_fb1_entry, 4, 5, 4, 5);
   
   m_bass_speaker_combo.get_entry()->set_editable(false);
   m_bass_speaker_combo.get_entry()->signal_changed().connect(slot(*this, &BoxEditor::on_combo_entry_changed));
@@ -246,16 +248,29 @@ void BoxEditor::on_box_selected(Box *b)
     if (b != NULL) {
       m_box = b;
       m_id_string_entry.set_text(b->get_id_string());
-      
-      //char *str = NULL;
-      //GString *buffer = g_string_new(str);
-      //g_string_printf(buffer, "%f", b->get_vb1());
-      //m_vb1_entry.set_text(string(buffer->str));
-			m_vb1_entry.set_text( GSpeakers::double_to_ustring(b->get_vb1(), 2, 1) );
-      //g_string_printf(buffer, "%f", b->get_fb1());
-      //m_fb1_entry.set_text(string(buffer->str));
-			m_fb1_entry.set_text( GSpeakers::double_to_ustring(b->get_fb1(), 2, 1) );
-      
+      m_vb1_entry.set_text( GSpeakers::double_to_ustring(b->get_vb1(), 2, 1) );
+      m_fb1_entry.set_text( GSpeakers::double_to_ustring(b->get_fb1(), 2, 1) );
+
+      /* Set combo to proper speaker */
+  
+
+      if (speaker_list_is_loaded == true) {
+        cout << b << endl;
+        m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
+        vector<Glib::ustring> popdown_strings;
+        for (
+          vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
+          from != m_speaker_list->speaker_list()->end();
+          ++from)
+        {
+          if (((*from).get_type() & SPEAKER_TYPE_BASS) && (m_current_speaker.get_id_string() != (*from).get_id_string())) {
+            popdown_strings.push_back((*from).get_id_string());
+          }
+        }
+        popdown_strings.insert(popdown_strings.begin(), m_current_speaker.get_id_string());
+        m_bass_speaker_combo.set_popdown_strings(popdown_strings);
+      }
+  
       /* set state of option menu here */
       /* Box type is 1, 2, 3...therefor the '-1' */
       m_box_type_optionmenu.set_history(b->get_type() - 1);
@@ -263,10 +278,7 @@ void BoxEditor::on_box_selected(Box *b)
         m_fb1_entry.set_sensitive(false);
         double qr = ( 1 / m_current_speaker.get_qts() ) / ( 1 / 0.707 - 0.1 );
         m_box->set_fb1( qr * m_current_speaker.get_fs() );
-        //buffer = g_string_new(str);
-        //g_string_printf(buffer, "%f", m_box->get_fb1());
-        //m_fb1_entry.set_text( Glib::ustring(buffer->str) );
-				m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
+	m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
       } else {
         m_fb1_entry.set_sensitive(true);
       }
@@ -288,16 +300,21 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList *speaker_list)
 
   m_speaker_list = speaker_list;
   vector<Glib::ustring> popdown_strings;
+  
+  cout << m_box->get_speaker() << endl;
+  
   for (
     vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
     from != m_speaker_list->speaker_list()->end();
     ++from)
   {
-    if ((*from).get_type() & SPEAKER_TYPE_BASS) {
+    if (((*from).get_type() & SPEAKER_TYPE_BASS) && (m_box->get_speaker() != (*from).get_id_string())) {
       popdown_strings.push_back((*from).get_id_string());
     }
   }
+  popdown_strings.insert(popdown_strings.begin(), m_box->get_speaker());
   m_bass_speaker_combo.set_popdown_strings(popdown_strings);
+  speaker_list_is_loaded = true;
 }
 
 void BoxEditor::on_combo_entry_changed() 

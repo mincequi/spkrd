@@ -45,6 +45,7 @@ namespace GSpeakers {
   Glib::ustring int_to_ustring(int d);
   int round(double d);
   Gtk::Widget& image_widget(string filename);
+  Glib::ustring short_filename(const Glib::ustring& filename);
 }   
 
 class Box;

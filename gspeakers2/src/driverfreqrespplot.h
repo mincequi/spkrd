@@ -24,7 +24,8 @@
 #ifndef __DRIVER_FREQ_RESP_PLOT_H
 #define __DRIVER_FREQ_RESP_PLOT_H
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
 #include "gspeakersplot.h"
 #include "common.h"
 
@@ -42,6 +43,7 @@ public:
   void replace_plot(int, vector<GSpeakers::Point>&, Gdk::Color&);
 private: 
   GSpeakersPlot plot;
+  Gtk::ScrolledWindow sw;
 };
 
 #endif

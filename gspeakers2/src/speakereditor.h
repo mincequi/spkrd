@@ -20,7 +20,10 @@
 #ifndef __GSPEAKERS_SPEAKEREDITOR
 #define __GSPEAKERS_SPEAKEREDITOR
 
-#include <gtkmm.h>
+#include <sigc++/object.h>
+#include <gtkmm/widget.h>
+#include <gtkmm/fileselection.h>
+#include <glibmm/ustring.h>
 #include "speakerlist.h"
 #include "driverfreqrespplot.h"
 

@@ -20,7 +20,13 @@
 #ifndef __GSPEAKERS_PLOTHISTORY
 #define __GSPEAKERS_PLOTHISTORY
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/cellrenderer.h>
+#include <gdkmm/event.h>
+#include <glibmm/ustring.h>
+#include <gtkmm/box.h>
+#include <gtkmm/table.h>
 #include "common.h"
 #include "boxlist.h"
 #include "speakerlist.h"

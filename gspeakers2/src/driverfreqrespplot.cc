@@ -24,9 +24,16 @@
 #include "driverfreqrespplot.h"
 
 DriverFreqRespPlot::DriverFreqRespPlot() : 
+  Gtk::Frame(""),
   plot(1, 20000, 50, 110, true, 0, true)
 {
-  add(plot);
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Driver frequency response and impedance</b>"));
+  set_border_width(2);
+  sw.add(plot);
+  sw.set_border_width(12);
+  sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+  add(sw);
   show_all();
   plot.set_y_label(_("Magnitude / dB"));
   plot.set_y_label2(_("Impedance / Ohm"));

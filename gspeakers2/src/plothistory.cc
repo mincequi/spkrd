@@ -23,11 +23,17 @@
 #include "gspeakersplot.h"
 
 PlotHistory::PlotHistory() :
-  Gtk::Frame(),
+  Gtk::Frame(""),
   m_vbox()
 {
+  set_border_width(2);
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Plot list</b>"));
+
   //set_title("Plot history");
-  m_vbox.set_border_width(8);
+  m_vbox.set_border_width(12);
+  
+  
   //set_default_size(250, 300);
   nof_plots = 0;
 

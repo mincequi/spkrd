@@ -20,6 +20,7 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
+#include <glibmm/miscutils.h>
 #include "common.h"
 
 Settings g_settings;
@@ -93,5 +94,19 @@ namespace GSpeakers {
       im = manage(new Gtk::Label());
     }
     return *im;
+  }
+  
+  Glib::ustring short_filename(const Glib::ustring& filename)
+  {
+    Glib::ustring shorted_filename;
+    if (filename.length() >= 40) {
+      Glib::ustring file = Glib::path_get_basename(filename);
+      Glib::ustring dir = Glib::path_get_dirname(filename);
+      shorted_filename = filename.substr(0, 40 - file.length() - 15);
+      shorted_filename = shorted_filename + "..." + dir.substr(dir.length() - 12, dir.length()) + "/" + file;
+    } else {
+      return filename;
+    }
+    return shorted_filename;
   }
 }

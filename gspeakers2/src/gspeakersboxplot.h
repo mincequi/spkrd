@@ -21,7 +21,9 @@
 #ifndef __GSPEAKERS_BOX_PLOT
 #define __GSPEAKERS_BOX_PLOT
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/box.h>
+#include <gtkmm/scrolledwindow.h>
 #include "gspeakersplot.h"
 #include "common.h"
 
@@ -38,6 +40,8 @@ public:
   GSpeakersBoxPlot();
   ~GSpeakersBoxPlot();
 private: 
+  Gtk::VBox m_vbox;
+  Gtk::ScrolledWindow sw;
   GSpeakersPlot plot;
 };
 

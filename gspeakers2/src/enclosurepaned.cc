@@ -32,7 +32,7 @@ EnclosurePaned::EnclosurePaned()
   plot_selected = false;
   m_tbar = NULL;
   g_settings.settings_changed.connect(slot(*this, &EnclosurePaned::on_settings_changed));
-  
+
   /* Main paned for the enclosure tab */
   add1(m_edit_vpaned);
   add2(m_plot_vpaned);

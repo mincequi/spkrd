@@ -30,12 +30,14 @@
 
 Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
-  m_Table(20, 2, true), 
+  m_Table(19, 2, true), 
   m_EditFreqRespButton(_("Edit...")),
   m_BrowseFreqRespButton(_("...")),
   m_BassCheckButton(_("Bass")), 
   m_MidrangeCheckButton(_("Midrange")), 
-  m_TweeterCheckButton(_("Tweeter"))
+  m_TweeterCheckButton(_("Tweeter")),
+  m_treeview_frame(""),
+  m_editor_frame("")
 {
   m_modified = false;
   updating_entries = false;
@@ -57,18 +59,23 @@ Speaker_ListStore::Speaker_ListStore()
   m_treeview_vbox.set_border_width(5);
   m_treeview_vbox.pack_start(m_treeview_frame);
   m_treeview_frame.add(m_inner_treeview_vbox);
-  m_inner_treeview_vbox.set_border_width(5);
+  m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup(_("<b>Driver list [") + 
+                              GSpeakers::short_filename(m_filename) + "]</b>");
+  m_inner_treeview_vbox.set_border_width(12);
   m_inner_treeview_vbox.pack_start(m_TreeViewTable);
-  m_treeview_frame.set_label(m_filename);
   
   //m_vbox.pack_start(m_Table);
-  m_vbox.set_border_width(5);
+  m_vbox.set_border_width(2);
   m_Table.set_spacings(2);
   m_vbox.pack_start(m_editor_frame);
   m_editor_frame.add(m_inner_vbox);
-  m_inner_vbox.set_border_width(5);
+  m_inner_vbox.set_border_width(12);
   m_inner_vbox.pack_start(m_Table);
-  m_editor_frame.set_label(_("Currently selected driver"));
+  
+  m_editor_frame.set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(m_editor_frame.get_label_widget())->set_markup(_("<b>Currently selected driver</b>"));
+  //m_editor_frame.set_label(_("Currently selected driver"));
   
   /* Setup the table */
   m_TreeViewTable.set_spacings(2);
@@ -817,8 +824,9 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
 
     m_filename = f->get_filename();
     g_settings.setValue("SpeakerListXml", m_filename);
-    m_treeview_frame.set_label(m_filename);
-    
+    static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup(_("<b>Driver list [") + 
+                                GSpeakers::short_filename(m_filename) + "]</b>");
+        
     for_each(
       temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
       slot(*this, &Speaker_ListStore::liststore_add_item));
