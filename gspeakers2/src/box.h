@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   box Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -72,7 +74,6 @@ private:
   void parse_fb1(xmlNodePtr node);
   void parse_vb2(xmlNodePtr node);
   void parse_fb2(xmlNodePtr node);
-
 };
 
 #endif

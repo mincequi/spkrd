@@ -73,12 +73,11 @@ protected:
   virtual void add_columns();
   virtual void liststore_add_item(Box box);
   
-  //Member widgets:
+  /* Member widgets */
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::VBox m_vbox;
-  
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
 
   /* Data containers */

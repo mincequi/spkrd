@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   cellitemcrossover Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -61,9 +63,7 @@ CellItem_Crossover::CellItem_Crossover(Part part)
     default:
       g_string_printf(buffer, "%d", id);
       break;
-          
   }
-      
   m_label = Glib::ustring(buffer->str);
 }
 

@@ -55,7 +55,6 @@ BoxHistory::BoxHistory() :
 
   signal_add_to_boxlist.connect(slot(*this, &BoxHistory::on_add_to_boxlist));
   signal_box_modified.connect(slot(*this, &BoxHistory::on_box_modified));
-  //signal_add_plot.connect(slot(*this, &BoxHistory::on_add_plot));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -155,7 +154,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
       GtkTreePath *gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(0).c_str());
       Gtk::TreePath path(gpath);
-  
+
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
       refSelection->select(row);
   
@@ -167,7 +166,6 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
   }
-  
 }
 
 void BoxHistory::on_append_ok(Gtk::FileSelection *f)
@@ -252,9 +250,6 @@ void BoxHistory::on_new_copy()
     } 
   } 
   /* Select the last crossover in the list: the new crossover */ 
-  //char *str = NULL;
-  //GString *buffer = g_string_new(str);
-  //g_string_printf(buffer, "%d", m_box_list.box_list()->size() - 1);
   GtkTreePath *gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -281,11 +276,7 @@ void BoxHistory::on_new()
   
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
  
-  //char *str = NULL;
-  //GString *buffer = g_string_new(str);
-  //g_string_printf(buffer, "%d", m_box_list.box_list()->size() - 1);
   GtkTreePath *gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
-  //GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
@@ -328,7 +319,6 @@ void BoxHistory::on_save_as()
     f_save_as->show();
   }
   f_save_as->run();
-  
 }
 
 void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
@@ -382,7 +372,6 @@ void BoxHistory::on_remove()
 void BoxHistory::on_box_modified(Box *b)
 {
   cout << "BoxHistory: box modified" << endl;
-  /* Modify fields in treeview here */
   // get the row from selection
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -409,7 +398,6 @@ void BoxHistory::on_box_modified(Box *b)
       (*m_box_list.box_list())[indices[0]].set_vb2(b->get_vb2());
       (*m_box_list.box_list())[indices[0]].set_fb2(b->get_fb2());
       signal_enclosure_set_save_state(true);
-      
     }
   }
 }
@@ -485,7 +473,6 @@ void BoxHistory::add_columns()
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
   }
-
 }
 
 void BoxHistory::liststore_add_item(Box box)

@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   cellitemcrossover Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -43,7 +45,7 @@ public:
   
   CellItem_Crossover(const CellItem_Crossover& src);
   CellItem_Crossover& operator=(const CellItem_Crossover& src);
-  ~CellItem_Crossover();
+  virtual ~CellItem_Crossover();
   
   /* Member variables */
   Glib::ustring m_label;

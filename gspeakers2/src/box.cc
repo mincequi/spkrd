@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   box Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -41,7 +43,6 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject()
   } else {
     throw GSpeakersException("Box: box node not found");
   }
-
 }
   
 xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
@@ -52,19 +53,14 @@ xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
 
   child = xmlNewChild( box, NULL, (xmlChar *)("id_string"), NULL );
   xmlNodeSetContent( child, (xmlChar *)m_id_string.c_str());
-
   child = xmlNewChild( box, NULL, (xmlChar *)("type"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%d", m_type));
-
   child = xmlNewChild( box, NULL, (xmlChar *)("vb1"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_vb1));
-
   child = xmlNewChild( box, NULL, (xmlChar *)("fb1"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_fb1));
-
   child = xmlNewChild( box, NULL, (xmlChar *)("vb2"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_vb2));
-  
   child = xmlNewChild( box, NULL, (xmlChar *)("fb2"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_fb2));
 
@@ -144,7 +140,6 @@ void Box::parse_id_string(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: id_string node not found");
   }
-
 }
 
 void Box::parse_type(xmlNodePtr node)
@@ -159,7 +154,6 @@ void Box::parse_type(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: type node not found");
   }
-
 }
 
 void Box::parse_vb1(xmlNodePtr node)
@@ -174,7 +168,6 @@ void Box::parse_vb1(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: vb1 node not found");
   }
-
 }
 
 void Box::parse_fb1(xmlNodePtr node)
@@ -189,7 +182,6 @@ void Box::parse_fb1(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: fb1 node not found");
   }
-
 }
 
 void Box::parse_vb2(xmlNodePtr node)
@@ -204,7 +196,6 @@ void Box::parse_vb2(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: vb2 node not found");
   }
-
 }
 
 void Box::parse_fb2(xmlNodePtr node)
@@ -214,5 +205,4 @@ void Box::parse_fb2(xmlNodePtr node)
   } else {
     throw GSpeakersException("Box: fb2 node not found");
   }
-
 }

@@ -68,23 +68,19 @@ MainWindow::MainWindow()
     move(g_settings.getValueUnsignedInt("MainWindowPositionX"), g_settings.getValueUnsignedInt("MainWindowPositionY"));
   } 
 
-
   /* Setup the menu */
   {
   	Gtk::Menu::MenuList& menulist = m_file_menu.items();
 
-  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT,
-      slot(Gtk::Main::quit) ) );
+  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, slot(Gtk::Main::quit) ) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_edit_menu.items();
 
   	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES, slot(*this, &MainWindow::on_edit_settings) ) );
   }
-
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
-
   	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("About...", GSpeakers::image_widget("stock_menu_about.png"), 
                                                          slot(*this, &MainWindow::on_about) ) );
   }
@@ -95,7 +91,7 @@ MainWindow::MainWindow()
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", crossover_paned.get_menu()) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
-  //Add the MenuBar to the window:
+  /* Add the MenuBar to the window */
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
   
   /* add toolbars */
@@ -128,7 +124,6 @@ MainWindow::MainWindow()
 
   show_all_children();
   
-  //signal_plot_crossover();  
   /* For some reason I had to put this row after show */
   m_main_notebook.signal_switch_page().connect(slot(*this, &MainWindow::on_switch_page));
   m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
