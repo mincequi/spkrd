@@ -28,7 +28,7 @@
 #include "../config.h"
 
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
-  Gtk::Frame(description),
+  Gtk::Frame(""),
   adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
   m_speaker_combo(),
   m_inv_pol_checkbutton(_("Invert polarity"), false),
@@ -36,6 +36,11 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_imp_corr_checkbutton(_("Impedance correction")),
   m_adv_imp_model_checkbutton(_("Use adv. driver imp. model"))
 {
+  set_border_width(2);
+  set_shadow_type(Gtk::SHADOW_NONE);
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + description + "</b>");
+  m_vbox.set_border_width(12);
+
   init = true;
   enable_edit = false;
   m_net = net;
@@ -63,15 +68,42 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_speaker_combo.set_popdown_strings(popdown_strings);
   m_speaker_combo.get_entry()->set_editable(false);
   m_vbox.pack_start(m_speaker_combo);
-    
+  
+  m_vbox.pack_start(m_imp_corr_checkbutton);
+  if (m_net->get_has_imp_corr() == true) {
+    m_imp_corr_checkbutton.set_active(true);
+  }
+
+  m_vbox.pack_start(m_adv_imp_model_checkbutton);
+  if (m_net->get_adv_imp_model() == 1) {
+    m_adv_imp_model_checkbutton.set_active(true);
+  }
+
+  Gtk::HBox *hbox = manage(new Gtk::HBox());
+  m_vbox.pack_start(*hbox);
+  hbox->pack_start((*manage(new Gtk::Label(_("Damping: ")))));
+  hbox->pack_start(m_damp_spinbutton);
+  
+  if (m_net->get_has_damp() == true) {
+    /* Set damp value in dB here */
+    double r_ser = m_net->get_damp_R1().get_value();
+    Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+  }  
+  hbox->pack_start((*manage(new Gtk::Label("dB"))));
+  
   Gtk::Label *label;
   if (net->get_type() & NET_TYPE_HIGHPASS) {
-    Gtk::Frame *frame = manage(new Gtk::Frame(_("Highpass")));
+    Gtk::Frame *frame = manage(new Gtk::Frame(""));
+    
+    frame->set_border_width(2);
+    frame->set_shadow_type(Gtk::SHADOW_NONE);
+    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Highpass</b>"));
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());
+    vbox->set_border_width(12);
     frame->add(*vbox);
-    vbox->set_border_width(5);
-
+    
     /* Setup menus */
     m_higher_order_optionmenu = manage(new Gtk::OptionMenu());
     m_higher_order_menu = manage(new Gtk::Menu());
@@ -106,11 +138,15 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   }
 
   if (m_net->get_type() & NET_TYPE_LOWPASS) {
-    Gtk::Frame *frame = manage(new Gtk::Frame(_("Lowpass")));
+    Gtk::Frame *frame = manage(new Gtk::Frame(""));
+    frame->set_border_width(2);
+    frame->set_shadow_type(Gtk::SHADOW_NONE);
+    static_cast<Gtk::Label*>(frame->get_label_widget())->set_markup(_("<b>Lowpass</b>"));
+
     m_vbox.pack_start(*frame);
     Gtk::VBox *vbox = manage(new Gtk::VBox());
     frame->add(*vbox);
-    vbox->set_border_width(5);
+    vbox->set_border_width(12);
     
     /* Setup menus */
     m_lower_order_optionmenu = manage(new Gtk::OptionMenu());
@@ -143,29 +179,6 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     set_family(m_lower_type_optionmenu, m_net->get_lowpass_order(), m_net->get_lowpass_family());
   } 
     
-  m_vbox.pack_start(m_imp_corr_checkbutton);
-  if (m_net->get_has_imp_corr() == true) {
-    m_imp_corr_checkbutton.set_active(true);
-  }
-
-  m_vbox.pack_start(m_adv_imp_model_checkbutton);
-  if (m_net->get_adv_imp_model() == 1) {
-    m_adv_imp_model_checkbutton.set_active(true);
-  }
-
-  Gtk::HBox *hbox = manage(new Gtk::HBox());
-  m_vbox.pack_start(*hbox);
-  hbox->pack_start((*manage(new Gtk::Label(_("Damping: ")))));
-  hbox->pack_start(m_damp_spinbutton);
-  
-  if (m_net->get_has_damp() == true) {
-    /* Set damp value in dB here */
-    double r_ser = m_net->get_damp_R1().get_value();
-    Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
-    m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
-  }  
-  hbox->pack_start((*manage(new Gtk::Label("dB"))));
-  
   add(m_vbox);
   show_all();
   

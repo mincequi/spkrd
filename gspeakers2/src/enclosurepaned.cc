@@ -128,13 +128,18 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save Xml"),  GSpeakers::image_widget("save_xml_24.png"),
                              slot(box_history, &BoxHistory::on_save), _("Save enclosure xml (list)")) );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete Enclosure"),  GSpeakers::image_widget("delete_enclosure_24.png"),   
+    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"),  GSpeakers::image_widget("delete_enclosure_24.png"),   
                              slot(box_history, &BoxHistory::on_remove), _("Delete selected enclosure")) );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Optimize"), GSpeakers::image_widget("opt_enclosure_24.png"), 
                                  slot(box_editor, &BoxEditor::on_optimize_button_clicked), _("Optimize enclosure volume")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append"), GSpeakers::image_widget("opt_enclosure_24.png"), 
+//                                       slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
+
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append To Xml"), GSpeakers::image_widget("opt_enclosure_24.png"),
+//                                 slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );                                  
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Plot"), GSpeakers::image_widget("append_plot_enclosure_24.png"), 
-                                 slot(box_editor, &BoxEditor::append_and_plot), _("Append to enclosure list (xml) and plot")) );
+                                 slot(box_editor, &BoxEditor::on_append_to_plot_clicked), _("Plot currently selected enclosure")) );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
     m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete Plot"), GSpeakers::image_widget("delete_plot_24.png"), 
                                  slot(plot_history, &PlotHistory::on_remove), _("Delete selected plot from plotlist")) );

@@ -1,5 +1,35 @@
 GSpeakers ChangeLog
 
+2003-02-06
+
+* filterlinkfram.h/cc: Gnome HIG adjustments, reordered some widgets
+
+2003-02-03
+
+* common.h/cc: added global tooltips accessor function, now we just have to add 
+    tooltips where we need it
+
+2003-02-02
+
+* crossoverwizard.h/cc: Gnome HIG
+
+* crossovertreeview.h/cc: Gnome HIG adjustments
+
+* crossoverhistory.h/cc: Gnome HIG adjustments
+
+* common.h/cc: added short_filename utillity function, this functions is used 
+    to short a given filename to a <=40 chracter string
+
+* driverfreqrespplot.h/cc: adjusted to follow Gnome HIG, removed unused headers
+
+* gspeakersboxplot.h/cc: adjusted to follow Gnome HIG, removed header files we 
+    don't need
+
+* plothistory.h/cc: adjusted to Gnome HIG, removed unneccessary header file 
+    dependencies
+
+* boxeditor.cc, boxhistory.cc: adjusted these parts to fit Gnome HIG
+
 2003-01-29
 
 * boxeditor.cc: set speaker in member box when a new speaker is selected in 

@@ -26,8 +26,6 @@ Tasks that I consider important are marked with "important".
 
 * CrossoverTreeView: remove code for changing the unit for a part (pre 1.0)
 
-* Box xml should save driver (pre 1.0)
-
 * Rewrite boxhistory and boxplot history, make it more intuitive to 
     use (pre 1.0)
 
@@ -44,6 +42,8 @@ Tasks that I consider important are marked with "important".
 * Reorder some columns in the treeviews to improve the user experience
 
 * Better icons in the main window notebook
+
+* Evolution/MrProject "notebook" instead of GtkNotebook
 
 * Better program icon, install icon to gnome menus (pre 1.0)
 
@@ -71,16 +71,14 @@ Tasks that I consider important are marked with "important".
 
 * Add "autoupdate SPICE calculations" on drivers tab too (maybe pre 1.0)
 
-* UI should look the same on each tab
-
-* Follow Gnome HIG
+* UI should look the same on each tab and follow Gnome HIG (pre 1.0)
 
 * Support nonmetric units
 
 * Config option: view all toolbars, view toolbars independently 
     from each other
 
-* Settings dialog should apply changes "on the fly"
+* Settings dialog should apply changes "on the fly" (pre 1.0)
 
 * GSpeakers should ask if you want to save changes (pre 1.0)
 
@@ -95,3 +93,7 @@ Tasks that I consider important are marked with "important".
 
 * Tree with woofer/midrange/tweeter in driver list, will make it easier if we 
     we have a lot of drivers, this should be configurable
+
+* catch exceptions in toolbar creation functions
+
+* show Q for a sealed enclosure
