@@ -86,3 +86,13 @@ void GSpeakersCFG::set_line_size( int size ) {
   sprintf( buf, "%d", size );
   writeConfigKey( (char *)("linesize"), buf );
 }
+
+void GSpeakersCFG::set_toolbar_style( int style ) {
+  char *buf = new char[2];
+  sprintf( buf, "%d", style );
+  writeConfigKey( (char *)("toolbarstyle"), buf );
+}
+
+int GSpeakersCFG::get_toolbar_style() {
+  return (int)atoi( getConfigKey( "toolbarstyle" ) );  
+}

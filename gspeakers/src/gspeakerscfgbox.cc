@@ -24,6 +24,7 @@
 #include <gtk--/label.h>
 #include <gtk--/radiobutton.h>
 #include <gtk--/adjustment.h>
+#include <gnome--/dialog.h>
 #include "gspeakerscfgbox.h"
 
 /*
@@ -36,6 +37,7 @@ GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersPlot *iplot, GSpeakersCFG *icfg )
   cfg = icfg;
   plot = iplot;
 
+  /* Plot config page */
   solid_radio = manage( new Gtk::RadioButton( "Solid line" ) );
   ddash_radio = manage( new Gtk::RadioButton( "Dashed line" ) );
   dash_radio = manage( new Gtk::RadioButton( "On/Off dashed line" ) );
@@ -73,12 +75,30 @@ GSpeakersCFGBox::GSpeakersCFGBox( GSpeakersPlot *iplot, GSpeakersCFG *icfg )
   append_page( *table, *l );
   table->show_all();
 
+  /* Toolbar style page */
+  text_and_icons_radio = manage( new Gtk::RadioButton( "Icons and text" ) );
+  text_only_radio = manage( new Gtk::RadioButton( "Text only" ) );
+  icons_only_radio = manage( new Gtk::RadioButton( "Icons only" ) );
+  text_only_radio->set_group( text_and_icons_radio->group() );
+  icons_only_radio->set_group( text_and_icons_radio->group() );
+  text_and_icons_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  text_only_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  icons_only_radio->clicked.connect( slot( this, &GSpeakersCFGBox::changed ) );
+  table = manage( new Gtk::Table( 3, 1 ) );
+  table->attach( *text_and_icons_radio, 0, 1, 0, 1 );
+  table->attach( *text_only_radio, 0, 1, 1, 2 );
+  table->attach( *icons_only_radio, 0, 1, 2, 3 );
+  l = manage( new Gtk::Label( "Toolbars" ) );
+  append_page( *table, *l );
+  table->show_all();
+
   realize();
   reset_radio_state();
 }
 
 void GSpeakersCFGBox::apply_impl( gint page_num ) {
   GdkLineStyle style = GDK_LINE_SOLID;
+  int toolbar_style = 1;
 
   /* Write the config to cfg-file */
   oldfont = font_entry->get_text();
@@ -94,10 +114,22 @@ void GSpeakersCFGBox::apply_impl( gint page_num ) {
   cfg->set_line_style( style );
   plot->set_line_style( style );
 
+  if ( text_and_icons_radio->get_active() == true ) {
+    toolbar_style = TEXT_AND_ICONS;
+  } else if ( text_only_radio->get_active() == true ) {
+    toolbar_style = TEXT_ONLY;
+  } else if ( icons_only_radio->get_active() == true ) {
+    toolbar_style = ICONS_ONLY;
+  }
+  cfg->set_toolbar_style( toolbar_style );
+
   cfg->set_line_size( line_size_spin->get_value_as_int() );
   plot->set_line_size( line_size_spin->get_value_as_int() );
 
   plot->redraw();
+  if ( page_num == 1 ) {
+    Gnome::Dialogs::ok("Please restart gspeakers to activate the new toolbar-settings." );
+  }
 }
 
 gboolean GSpeakersCFGBox::close_impl() {
@@ -138,4 +170,16 @@ void GSpeakersCFGBox::reset_radio_state() {
     ddash_radio->set_active( true );
     break;
   }
+  switch ( cfg->get_toolbar_style() ) {
+  case TEXT_AND_ICONS:
+    text_and_icons_radio->set_active( true );
+    break;
+  case TEXT_ONLY:
+    text_only_radio->set_active( true );
+    break;
+  case ICONS_ONLY:
+    icons_only_radio->set_active( true );
+    break;
+  }
+
 }

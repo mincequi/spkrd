@@ -73,6 +73,7 @@ class SpeakerToolbar : public Gtk::HandleBox {
   void save_as();
   void remove();
   void load_xml(string filename);
+  void set_toolbar_style( int style );
 
  private:
   void open_action( Gtk::FileSelection *s );

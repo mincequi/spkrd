@@ -38,8 +38,6 @@ using SigC::bind;
  */
 SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg ) 
   : Gtk::HandleBox() {
-  Gtk::ImageLoader *il;
-  Gnome::Pixmap *pixmap;
   cfg = icfg;
   new_is_hit = false;
 
@@ -50,8 +48,6 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   add( *hbox );
 
   new_spk_button = manage( new Gtk::Button() );
-  il = new Gtk::ImageLoader( "../xpm/new_speaker.xpm" );
-  new_spk_button->add_pixmap( il->pix(), il->bit() );
   new_spk_button->set_relief( GTK_RELIEF_NONE );
   cfg->tooltips->set_tip( *new_spk_button, "New Speaker" );
   hbox->pack_start( *new_spk_button, false, false );
@@ -59,16 +55,11 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
 
   new_xml_button = manage( new Gtk::Button() );
   new_xml_button->set_relief( GTK_RELIEF_NONE );
-  il = new Gtk::ImageLoader( "../xpm/new_xml.xpm" );
-  new_xml_button->add_pixmap( il->pix(), il->bit() );
   hbox->pack_start( *new_xml_button, false, false );
   new_xml_button->clicked.connect( slot( this, &SpeakerToolbar::new_xml ) );
   cfg->tooltips->set_tip( *new_xml_button, "New XML-file" );
 
   open_button = manage( new Gtk::Button() );
-  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
-  open_button->add( *pixmap );
-
   open_button->clicked.connect( slot( this, &SpeakerToolbar::open ) );
   open_button->set_relief( GTK_RELIEF_NONE );
   hbox->pack_start( *open_button, false, false );
@@ -77,16 +68,13 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   save_button = manage( new Gtk::Button() );
   save_button->set_relief( GTK_RELIEF_NONE );
   save_button->clicked.connect( slot( this, &SpeakerToolbar::save ) );
-  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
-  save_button->add( *pixmap );
+
   cfg->tooltips->set_tip( *save_button, "Save current speaker" );
   hbox->pack_start( *save_button, false, false ); 
 
   save_as_button = manage( new Gtk::Button() );
   save_as_button->set_relief( GTK_RELIEF_NONE );
   save_as_button->clicked.connect( slot( this, &SpeakerToolbar::save_as ) );
-  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
-  save_as_button->add( *pixmap );
 
   hbox->pack_start( *save_as_button, false, false ); 
   cfg->tooltips->set_tip( *save_as_button, "Save XML-file as" );
@@ -94,8 +82,6 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   remove_button = manage( new Gtk::Button() );
   remove_button->clicked.connect( slot( this, &SpeakerToolbar::remove ) );
   remove_button->set_relief( GTK_RELIEF_NONE );
-  pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
-  remove_button->add( *pixmap );
 
   hbox->pack_start( *remove_button, false, false ); 
   cfg->tooltips->set_tip( *remove_button, "Delete this speaker" );
@@ -126,6 +112,8 @@ SpeakerToolbar::SpeakerToolbar( string infile,  GSpeakersCFG *icfg )
   qts_entry->set_max_length(5);
   qts_entry->set_usize( 50, 20 );
   hbox->pack_start( *qts_entry, false, false );
+
+  set_toolbar_style( cfg->get_toolbar_style() );
 
   /* Read default xml-file here */
   current_file = infile;
@@ -409,4 +397,84 @@ void SpeakerToolbar::remove() {
  */
 void SpeakerToolbar::combo_changed() {
   set_speaker_data( speaker_combo->get_entry()->get_text() );
+}
+
+/* Fix memory management for this function! */
+void SpeakerToolbar::set_toolbar_style( int style ) {
+  Gtk::ImageLoader *il1, *il2;
+  Gnome::Pixmap *pixmap;
+  Gtk::VBox *vbox;
+  Gtk::Label *l;
+  Gtk::Pixmap *gtk_pixmap;
+  
+  switch ( style ) {
+  case ICONS_ONLY:
+    il1 = new Gtk::ImageLoader( "../xpm/new_speaker.xpm" );
+    new_spk_button->add_pixmap( il1->pix(), il1->bit() );
+    il2 = new Gtk::ImageLoader( "../xpm/new_xml.xpm" );
+    new_xml_button->add_pixmap( il2->pix(), il2->bit() );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
+    open_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
+    save_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
+    save_as_button->add( *pixmap );
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
+    remove_button->add( *pixmap );
+    break;
+  case TEXT_ONLY:
+    new_spk_button->add_label( "New spk" );
+    new_xml_button->add_label( "New xml" );
+    open_button->add_label( "Open" );
+    save_button->add_label( "Save" );
+    save_as_button->add_label( "Save as" );
+    remove_button->add_label( "Delete" );
+    break;
+  case TEXT_AND_ICONS:
+    gtk_pixmap = manage( new Gtk::Pixmap( "../xpm/new_speaker.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "New spk" ) );
+    new_spk_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+    
+    gtk_pixmap = manage( new Gtk::Pixmap( "../xpm/new_xml.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "New xml" ) );
+    new_xml_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_OPEN ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Open xml" ) );
+    open_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Save" ) );
+    save_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_SAVE_AS ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Save as" ) );
+    save_as_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_CLOSE ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Delete" ) );
+    remove_button->add( *vbox );
+    vbox->pack_start( *pixmap );
+    vbox->pack_start( *l );
+
+    break;
+  }
+  
 }

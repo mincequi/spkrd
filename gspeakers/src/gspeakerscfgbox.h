@@ -59,6 +59,10 @@ class GSpeakersCFGBox : public Gnome::PropertyBox {
   Gtk::RadioButton *dash_radio;
   Gtk::SpinButton *line_size_spin;
 
+  Gtk::RadioButton *text_only_radio;
+  Gtk::RadioButton *icons_only_radio;
+  Gtk::RadioButton *text_and_icons_radio;
+
   void reset_radio_state();
 }; 
 
