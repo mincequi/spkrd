@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -60,44 +60,41 @@ POST_UNINSTALL = :
 CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
+GNOMEGNORBA_LIBS = @GNOMEGNORBA_LIBS@
 GNOMEMM_CFLAGS = @GNOMEMM_CFLAGS@
 GNOMEMM_LIBS = @GNOMEMM_LIBS@
+GNOMEUI_LIBS = @GNOMEUI_LIBS@
+GNOME_ACLOCAL_DIR = @GNOME_ACLOCAL_DIR@
+GNOME_APPLETS_LIBS = @GNOME_APPLETS_LIBS@
+GNOME_CAPPLET_LIBS = @GNOME_CAPPLET_LIBS@
 GNOME_CONFIG = @GNOME_CONFIG@
+GNOME_INCLUDEDIR = @GNOME_INCLUDEDIR@
+GNOME_LIBDIR = @GNOME_LIBDIR@
+GNOME_LIBS = @GNOME_LIBS@
+GNORBA_CFLAGS = @GNORBA_CFLAGS@
+GNORBA_LIBS = @GNORBA_LIBS@
 GTKMM_CFLAGS = @GTKMM_CFLAGS@
 GTKMM_CONFIG = @GTKMM_CONFIG@
 GTKMM_LIBS = @GTKMM_LIBS@
+GTKXMHTML_LIBS = @GTKXMHTML_LIBS@
 G_CFLAGS = @G_CFLAGS@
 G_LIBS = @G_LIBS@
 MAKEINFO = @MAKEINFO@
+ORBIT_CFLAGS = @ORBIT_CFLAGS@
+ORBIT_CONFIG = @ORBIT_CONFIG@
+ORBIT_IDL = @ORBIT_IDL@
+ORBIT_LIBS = @ORBIT_LIBS@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
+ZVT_LIBS = @ZVT_LIBS@
+cflags_set = @cflags_set@
+cxxflags_set = @cxxflags_set@
 
 CFLAGS = 
 CXXFLAGS = -Wall -g
 INCLUDES = $(G_CFLAGS)
 bin_PROGRAMS = gspeakers
-gspeakers_SOURCES = \
-main.cc\
-gnomespeakers.h\
-gnomespeakers.cc\
-speakertoolbar.h\
-speakertoolbar.cc\
-boxtoolbar.h\
-boxtoolbar.cc\
-boxlist.h\
-boxlist.cc\
-simtoolbar.h\
-simtoolbar.cc\
-gspeakersplot.h\
-gspeakersplot.cc\
-cconfig.h\
-cconfig.cc\
-gspeakerscfg.h\
-gspeakerscfg.cc\
-gspeakerscfgbox.h\
-gspeakerscfgbox.cc\
-gspeakersmenu.h\
-gspeakersmenu.cc
+gspeakers_SOURCES =  main.cc gnomespeakers.h gnomespeakers.cc speakertoolbar.h speakertoolbar.cc boxtoolbar.h boxtoolbar.cc boxlist.h boxlist.cc simtoolbar.h simtoolbar.cc gspeakersplot.h gspeakersplot.cc cconfig.h cconfig.cc gspeakerscfg.h gspeakerscfg.cc gspeakerscfgbox.h gspeakerscfgbox.cc gspeakersmenu.h gspeakersmenu.cc
 
 gspeakers_LDADD = $(G_LIBS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -126,7 +123,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/boxlist.P .deps/boxtoolbar.P .deps/cconfig.P \
 .deps/gnomespeakers.P .deps/gspeakerscfg.P .deps/gspeakerscfgbox.P \

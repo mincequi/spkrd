@@ -11,9 +11,15 @@
 <a href="#screenshots">Screenshots</a> | 
 <a href="#download">Download</a> | 
 <a href="#support">Support</a> | 
+<a href="#faq">FAQ</a> | 
 <a href="#doc">Documentation</a> | 
 <a href="http://www.sf.net/projects/gspeakers">gspeakers@Sourceforge</a>
 </center><br>&nbsp;<br>
+
+<b>News</b><br>
+<b>2002-01-07</b>: 
+Initial public release of gspeakers-0.1 today.
+<a href="http://www.sf.net/projects/gspeakers">Download</a>.<br>&nbsp;<br>
 
 <a name="about">
 <b>About</b><br>
@@ -32,28 +38,29 @@ modular so it is very easy to add new features. I suppose it'll only take a few
 0.x-releases before this is ready for the great version 1.0.<br>&nbsp;<br>
 
 <b>What about filters/crossover networks?</b><br>
-I have decided to not include a filter/crossover-designer in this program. Since I 
+I have decided not to include a filter/crossover-designer in this program since I 
 consider the filterdesigners usually included in loudspeaker design program too 
-simple (as I'm a fourth year electronics student and know some about filter design, 
-however, not as much as i would like to know) 
-I want a filter design program to be very powerful. And still it should be easy to 
-use since I want everyone to be able to use my program. 
+simple. I'm a fourth year electronics student who know some about filter design, 
+however, not as much as i would like to know. 
+I want a filter design program to be very powerful and still easy to use. 
 I'll probably create a filter 
-design program as a separate project. Anyone with ideas for such a program should 
-contact me. I really need some advice and I want to discuss the GUI with someone.
+design program as a separate project. Anyone with ideas for such a program/project should 
+contact me. I really need some advice on this topic and I would like to discuss
+how to build GUI with someone.
 <br>&nbsp;<br>
 
 <a name="history">
 <b>History</b><br>
-Back in 1995 (i think it was 95) I started a programming course in school. The 
+Back in 1995 (at least i think it was 95) I started a programming course in school. The 
 programming language was Pascal and the operating system was MS Dos. I wanted my own 
 project to work on and since I was intrested in building loudspeakers a loudspeaker 
 design program was the obvious choice for a programming project. Later I got more 
-intrested in GUI-programming and switched to windows and made one version of the 
-program for windows (which I called BassCAD). The result was something that I 
+intrested in GUI-programming and switched to windows. I made one version of the 
+program (which I called BassCAD) for windows. The result was something that I 
 called a BETA-version but you should probably call it a pre-alpha...:-) However, 
-last time I touched BassCAD was approximately four years ago. Last novermber it 
-was time for a new project and a new name. GnomeSpeakers is the new project I'm 
+last time I touched BassCAD was almost four years ago. I would not like to see that
+piece of code today. Last november it 
+was time for a new project and a brand new name. GnomeSpeakers is the new project I'm 
 working on. Please try it and <a href="mailto:dss@home.se">tell me</a> what 
 you think about it.<br>&nbsp;<br>
 
@@ -70,24 +77,37 @@ Screenshots: <br>
 <b>Download</b><br>
 <a href="download/gspeakers-0.1.tar.gz">gspeakers-0.1</a>
 <br>&nbsp;<br>
-Please mail me (<a href="mailto:dss@home.se">dss at home dot se</a>)what do you like 
-about the program and also what you don't like. Now is 
-the right time for me to make big changes to the program and unless I get negative 
-feedback I'll suppose that everyone likes it.<br>&nbsp;<br>
+Please mail me (<a href="mailto:dss@home.se">dss at home dot se</a>)what do you like
+and dislike about the program. Now is 
+the right time for me to make big changes to the program. If I don't get negative 
+feedback I'll suppose everyone like it.<br>&nbsp;<br>
 
 <a name="support">
 <b>Support</b><br>
 The best way to get quick support on gspeakers is to send a mail to me 
 (<a href="mailto:dss@home.se">dss at home dot se</a>). I'll try to answer 
-questions as soon as possible. If I get a lot of mails I'll set up a 
+questions as soon as possible. If I get a lot of mail I'll set up a 
 mailinglist.<br>&nbsp;<br>
+
+<a name="faq">
+<b>FAQ</b><br>
+<i>Why does not gspeakers display any text in the plot? I also get a lot of error
+messages in the console.</i><br>
+You probably have gspeakers configured to use a font which does not exist on your
+system. Open preferences dialog and select a font.<br>
+<i>GSpeakers crashes upon startup, what is wrong?</i><br>
+There might be an error in the config-file. Try "mv ~/.gspeakers ~/.gspeakers.bak" and
+restart gspeakers. There might also be a problem if you specified a "pkgdatadir"
+different from "[prefix]/share/gspeakers" (where [prefix] is the prefix specified when
+you ran ./configure).<br>&nbsp;<br>
 
 <a name="doc">
 <b>Documentation</b><br>
 This is a short tutorial on how to use gspeakers. The idea of the user interface 
 (see screenshots) is that you store speakers and enclosures in xml-files. 
 Internally the data is stored in structures but you only have to care about the 
-xml-file.
+xml-file. This is just a short walk through the toolbars. I'm not trying to teach you
+how to design loudspeakers. You have to learn that elsewhere.
 <br>&nbsp;<br>
 
 <img src="spktoolbar.png"><br><i>Figure 1: the speaker toolbar</i><br>&nbsp;<br>
@@ -154,7 +174,8 @@ the volume that gives the speaker a flat frequency response.<br>
 <a href="#history">History</a> | 
 <a href="#screenshots">Screenshots</a> | 
 <a href="#download">Download</a> | 
-<a href="#support">Support</a> | 
+<a href="#support">Support</a> |
+<a href="#faq">FAQ</a> | 
 <a href="#doc">Documentation</a> | 
 <a href="http://www.sf.net/projects/gspeakers">gspeakers@Sourceforge</a>
 </center><br>&nbsp;<br>
