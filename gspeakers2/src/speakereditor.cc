@@ -17,6 +17,7 @@
 
 #include "speakereditor.h"
 #include "common.h"
+#include "freqrespeditor.h"
 
 Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
@@ -183,13 +184,15 @@ Speaker_ListStore::Speaker_ListStore()
   m_BlEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 15));
   m_RmsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 16));
   m_CmsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 17));
+  m_FreqRespFileEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 18));
+  m_FreqRespFileEntry.set_sensitive(false);
   
   m_BassCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 10));
   m_MidrangeCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 11));
   m_TweeterCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 12));
 
   set_entries_sensitive(false);
-  m_AppendXmlButton.set_sensitive(false);
+  m_AppendXmlButton.set_sensitive(true);
   m_SaveAsButton.set_sensitive(false);
   m_SaveButton.set_sensitive(false);
   m_RemoveButton.set_sensitive(false);
@@ -250,11 +253,14 @@ void Speaker_ListStore::set_entries_sensitive(bool value)
   m_RmsEntry.set_sensitive(value);
   m_CmsEntry.set_sensitive(value);
     
-  m_FreqRespFileEntry.set_sensitive(value);
+  //m_FreqRespFileEntry.set_sensitive(value);
   m_ImpRespFileEntry.set_sensitive(value);
   m_BassCheckButton.set_sensitive(value); 
   m_MidrangeCheckButton.set_sensitive(value); 
   m_TweeterCheckButton.set_sensitive(value);
+  m_BrowseFreqRespButton.set_sensitive(value);
+  m_EditFreqRespButton.set_sensitive(value);
+  
   if (value == false) {
     m_BassCheckButton.set_active(false); 
     m_MidrangeCheckButton.set_active(false); 
@@ -433,7 +439,10 @@ void Speaker_ListStore::on_selection_changed()
       } else {
         m_TweeterCheckButton.set_active(false);
       }      
-  
+      
+      /* Freq resp file entry */
+      m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
+
     }
   }
   m_IdStringEntry.grab_focus();
@@ -677,7 +686,13 @@ void Speaker_ListStore::on_edit_freq_resp()
 #ifdef OUTPUT_DEBUG
   cout << "SpeakerEditor::on_edit_freq_resp" << endl;
 #endif
-
+  //m_FreqRespFileEntry.get_text();
+  cout << "index == " << index << endl;
+  FreqRespEditor *f = new FreqRespEditor(m_FreqRespFileEntry.get_text());
+  f->run();
+  m_FreqRespFileEntry.set_text(f->get_filename());
+  (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
+  delete f;
 }
 
 void Speaker_ListStore::on_browse_freq_resp()
@@ -685,6 +700,15 @@ void Speaker_ListStore::on_browse_freq_resp()
 #ifdef OUTPUT_DEBUG
   cout << "SpeakerEditor::on_browse_freq_resp" << endl;
 #endif
+  Gtk::FileSelection *f = new Gtk::FileSelection("Enter filename...");
+  f->set_modal();
+  /* -5 == ok button clicked */
+  if (f->run() == -5) {
+    m_FreqRespFileEntry.set_text(f->get_filename());
+    (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
+  } 
+  f->hide();
+  delete f;
 }
 
 

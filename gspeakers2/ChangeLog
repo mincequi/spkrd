@@ -1,5 +1,16 @@
 GSpeakers ChangeLog
 
+2002-09-17
+
+* speakereditor.cc: use freq resp editor
+
+* freqrespeditor.h/cc: added freq resp editor class, this class can now handle 
+    30 dbmag values
+
+2002-09-16
+
+* mainwindow.cc: UI updates, removed speakerlistselector from the application
+
 2002-09-15
 
 * mainwindow.cc: added some pixmaps to notebook tabs and added icon for the 

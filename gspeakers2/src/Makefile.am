@@ -14,7 +14,8 @@ gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc \
 mainwindow.h mainwindow.cc crossoverwizard.h crossoverwizard.cc \
 filterlinkframe.h filterlinkframe.cc gspeakersfilterplot.h \
 gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc \
-totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc
+totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc \
+freqrespeditor.h freqrespeditor.cc
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall
 LDADD = $(DEPS_LIBS)
