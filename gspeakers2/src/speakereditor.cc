@@ -815,7 +815,7 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     set_entries_sensitive(true);
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
-    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
     tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
 
     signal_speakerlist_loaded(m_speaker_list);
@@ -837,6 +837,8 @@ void Speaker_ListStore::on_edit_freq_resp()
   (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
   delete f;
   on_selection_changed();
+  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
 }
 
 void Speaker_ListStore::on_browse_freq_resp()
@@ -853,6 +855,9 @@ void Speaker_ListStore::on_browse_freq_resp()
   } 
   f->hide();
   delete f;
+  on_selection_changed();
+  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
 }
 
 void Speaker_ListStore::create_model()

@@ -79,7 +79,8 @@ the structure in the program, some are important due to the UI experience.
 
 * Clean up temp dir after SPICE execution
 
-* SpeakerEditor: select next (or previous) listitem on remove
+* SpeakerEditor: select next (or previous) listitem on remove, you should be 
+    able to undo "delete driver"
 
 * SpeakerEditor: code cleanup
 
@@ -92,7 +93,7 @@ the structure in the program, some are important due to the UI experience.
 
 * Support nonmetric units
 
-* Config option: view all toolbars, adaptive toolbars, view toolbars indipendently 
+* Config option: view all toolbars, view toolbars independently 
     from each other
 
 * Settings dialog should apply changes "on the fly"
@@ -101,3 +102,5 @@ the structure in the program, some are important due to the UI experience.
 
 * Maybe a configurable (on/off) splash screen, since loading the program takes 
     a little while
+
+* GSpeakers should ask if you want to save changed upon quit

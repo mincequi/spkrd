@@ -1,6 +1,15 @@
 GSpeakers ChangeLog
 
-2002-10-04
+2002-10-12
+
+* speakereditor.cc: redraw freq plot on browse too, ungrey toolbar and menu save 
+    after you had changed the freq resp file
+
+2002-10-11
+
+* Oops, forgot to update version number
+
+2002-10-10
 
 * speakereditor.cc: draw frequency response plot when freq resp editor is closed
 
