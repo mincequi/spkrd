@@ -61,9 +61,9 @@ MainWindow::MainWindow()
   g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
   g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
   g_settings.defaultValueBool("AutoUpdateFilterPlots", false);
-  g_settings.defaultValueString("SPICECmdLine", "spice3");  
+  g_settings.defaultValueString("SPICECmdLine", "gnucap");  
   g_settings.defaultValueBool("SPICEUseNGSPICE", false);  
-  g_settings.defaultValueBool("SPICEUseGNUCAP", false);  
+  g_settings.defaultValueBool("SPICEUseGNUCAP", true);  
   
   /* You should be able to specify this in the settings dialog, if the window manager can set the size of the window
      it may as well do it, at least sawfish can do this */

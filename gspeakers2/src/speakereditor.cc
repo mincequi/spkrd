@@ -265,19 +265,22 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
     tbar = manage(new Gtk::Toolbar());
     // TODO: tooltip _("Create new driver")
     Gtk::ToolButton *t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_new_driver_24.png"), _("New Driver")));
+    //Gtk::ToolButton *t = manage(new Gtk::ToolButton(Gtk::Stock::NEW));
     t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_new));
     tbar->append( *t );    
 
     Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
     tbar->append( *s );
     
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+    //    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+    t = manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
     t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_open_xml));
     tbar->append( *t );    
 //    tbar->append( Gtk::ToolButton(_("Open"),  GSpeakers::image_widget("open_xml_24.png"), 
 //                                  mem_fun(*this, &Speaker_ListStore::on_open_xml), _("Open driver xml (list)")) );
     
     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("save_xml_24.png"), _("Save")));
+    //t = manage(new Gtk::ToolButton(Gtk::Stock::SAVE));
     t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_save));
     tbar->append( *t );    
    
@@ -288,6 +291,7 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
     tbar->append( *s );
   
     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_driver_24.png"), _("Delete")));
+    //    t = manage(new Gtk::ToolButton(Gtk::Stock::DELETE));
     t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_remove));
     tbar->append( *t );    
         

@@ -2,6 +2,10 @@ GSpeakers ChangeLog
 
 2004-06-21
 
+* gspeakersfilechooser.h/cc: added files
+	
+* mainwindow.cc: made gnucap default SPICE interpreter
+	
 * speakereditor.cc: use gnucap if specified
 	 
 * filterlinkframe.cc: use gnucap if specified
