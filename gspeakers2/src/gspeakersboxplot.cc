@@ -27,6 +27,7 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() :
   signal_add_box_plot.connect(slot(plot, &GSpeakersPlot::add_plot));
   signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
+  signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
   show_all();
 }
 

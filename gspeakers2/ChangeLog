@@ -2,6 +2,11 @@ GSpeakers ChangeLog
 
 2002-08-24
 
+* gspeakersplot.cc, gspeakersboxplot.cc, plothistory.cc, common.h/cc: when 
+    you click on a row in plot history we draw the plot with an extra think 
+    line in the graph, makes it easier to see which plot that corresponds 
+    to a row in the list
+
 * crossovertreeview.h/cc, crossoverhistory.h/cc: Gtk::Window -> Gtk::Frame
 
 * mainwindow.h/cc: Added all frames to new mainwindow, save window size and 

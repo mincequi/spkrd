@@ -85,8 +85,12 @@ void PlotHistory::on_selection_changed()
     std::vector<int> indices = path.get_indices();
     if(indices.size() > 0)
     {
+      /* Check config if user want to mark selected plot */
+      signal_select_plot(indices[0]);
+
       index = indices[0];
       cout << "PlotHistory: selection changed" << endl;
+      
       //signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
     }
   } 

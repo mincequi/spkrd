@@ -20,6 +20,7 @@
 #include "../config.h"
 
 CrossoverHistory::CrossoverHistory() :
+  Gtk::Frame("Crossover list"),
   m_Table(10, 4, true), 
   m_NewCopyButton("New copy"), 
   m_NewXmlButton("New Xml"), 
@@ -58,7 +59,7 @@ CrossoverHistory::CrossoverHistory() :
   m_filename = g_settings.getValueString("CrossoverListXml");
   
   m_crossover_list = CrossoverList(m_filename); 
-  //set_title("Crossover History [" + m_filename + "]");
+  set_label("Crossover list [" + m_filename + "]");
   
   create_model();
 
@@ -185,7 +186,7 @@ void CrossoverHistory::on_open_ok(Gtk::FileSelection *f)
     m_SaveButton.set_sensitive(false);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
-    //set_title("Crossover History [" + m_filename + "]");
+    set_label("Crossover list [" + m_filename + "]");
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -323,7 +324,7 @@ void CrossoverHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   m_SaveButton.set_sensitive(true);
-  //set_title("Crossover History [new file]");
+  set_label("Crossover list [new file]");
 }
 
 void CrossoverHistory::on_save()
@@ -358,7 +359,7 @@ void CrossoverHistory::on_save_as_ok(Gtk::FileSelection *f)
   m_crossover_list.to_xml(f->get_filename());
   f->hide();
   m_filename = f->get_filename();
-  //set_title("Crossover History [" + m_filename + "]");
+  set_label("Crossover list [" + m_filename + "]");
   m_SaveButton.set_sensitive(false);
 }
 

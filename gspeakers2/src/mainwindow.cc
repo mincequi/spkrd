@@ -1,4 +1,6 @@
 /*
+  $Id$
+  
   mainwindow Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify

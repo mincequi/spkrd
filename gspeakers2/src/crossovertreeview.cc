@@ -18,7 +18,8 @@
 #include "crossovertreeview.h"
 #include "common.h"
 
-CrossoverTreeView::CrossoverTreeView()
+CrossoverTreeView::CrossoverTreeView() :
+  Gtk::Frame("Currently selected crossover")
 {
 //  set_title("Current crossover");
   set_border_width(8);
