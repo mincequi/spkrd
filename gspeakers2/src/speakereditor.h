@@ -101,6 +101,8 @@ protected:
   Gtk::VBox m_vbox, m_treeview_vbox, m_inner_treeview_vbox;
   Gtk::Frame m_treeview_frame;
   
+  Gtk::Widget *m_evbox;
+  Gtk::Label *m_frame_label;
   Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
   Gtk::Menu m_menu;
   
