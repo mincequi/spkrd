@@ -67,6 +67,11 @@ PlotHistory::~PlotHistory()
 
 }
 
+bool PlotHistory::on_delete_event(GdkEventAny *event)
+{
+  return true;
+}
+
 void PlotHistory::on_selection_changed()
 {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();

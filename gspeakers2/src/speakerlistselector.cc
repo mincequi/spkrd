@@ -18,6 +18,7 @@
 #include "speakerlistselector.h"
 #include "speakereditor.h"
 #include "common.h"
+#include "../config.h"
 
 SpeakerListSelector::SpeakerListSelector() :
   m_SpeakerXmlFilenameEntry(),
@@ -56,7 +57,7 @@ SpeakerListSelector::SpeakerListSelector() :
 
 /* Fix some initstuff since we don't have any settings */
   f_open = new Gtk::FileSelection("Open speaker xml");
-  f_open->set_filename("../xml/vifa.xml");
+  f_open->set_filename(string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
   f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));
   f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
   on_open_ok(f_open);

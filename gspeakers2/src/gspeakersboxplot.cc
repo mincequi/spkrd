@@ -20,14 +20,23 @@
 
 #include "gspeakersboxplot.h"
 
-GSpeakersBoxPlot::GSpeakersBoxPlot() : GSpeakersPlot(1, 1000)
+GSpeakersBoxPlot::GSpeakersBoxPlot() : 
+  plot(1, 1000)
 {
-  signal_add_box_plot.connect(slot(*this, &GSpeakersBoxPlot::add_plot));
-  signal_remove_box_plot.connect(slot(*this, &GSpeakersBoxPlot::remove_plot));
-  signal_hide_box_plot.connect(slot(*this, &GSpeakersBoxPlot::hide_plot));
+  add(plot);
+  signal_add_box_plot.connect(slot(plot, &GSpeakersPlot::add_plot));
+  signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
+  signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
+  show_all();
 }
 
 GSpeakersBoxPlot::~GSpeakersBoxPlot()
 {
 
+}
+
+bool GSpeakersBoxPlot::on_delete_event(GdkEventAny *event)
+{
+  /* Don't wanna delete this window */
+  return true;
 }

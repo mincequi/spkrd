@@ -48,6 +48,11 @@ CrossoverTreeView::~CrossoverTreeView()
 {
 }
 
+bool CrossoverTreeView::on_delete_event(GdkEventAny *event)
+{
+  return true;
+}
+
 void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text)
 {
   cout << "value cell edited" << endl;

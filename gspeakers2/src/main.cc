@@ -42,8 +42,8 @@ int main (int argc, char *argv[])
   //clist.to_xml("crossover1.xml");
   
   /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover to the TreeView */
-  CrossoverTreeView ctv;
-  CrossoverHistory ch;
+  //CrossoverTreeView ctv;
+  //CrossoverHistory ch;
   
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
   BoxEditor be;
@@ -53,13 +53,8 @@ int main (int argc, char *argv[])
   PlotHistory ph;
 
   
-  Gtk::Window w;
   GSpeakersBoxPlot gsbp;
-  
-  gsbp.show();
-  w.add(gsbp);
-  w.show_all();
-  
+   
   SpeakerListSelector sls;
   kit.run(sls);
 //  cout << c1;

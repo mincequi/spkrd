@@ -1,0 +1,66 @@
+<b>GSpeakers-0.1 Documentation</b><br>&nbsp;<br>
+This is a short tutorial on how to use gspeakers. The idea of the user interface 
+(see screenshots) is that you store speakers and enclosures in xml-files. 
+Internally the data is stored in structures but you only have to care about the 
+xml-file. This is just a short walk through the toolbars. I'm not trying to teach you
+how to design loudspeakers. You have to learn that elsewhere.
+<br>&nbsp;<br>
+
+<img src="spktoolbar.png"><br><i>Figure 1: the speaker toolbar</i><br>&nbsp;<br>
+1: Create new speaker, press this button to clear the toolbar and prepare to 
+add a new speaker. Press this button if you want to add a speaker.<br>
+2: Create new xml-file. Press this button if you want to start on a new set of 
+speakers.<br>
+3: Open xml-file. Opens a file you've created earlier or a file downloaded from 
+somewhere (perhaps here later).<br>
+4: Save changes you made, for example if you add a speaker, press this button to 
+save that speaker to the xml-file.<br>
+5: Save xml-file as...save the xml-file with a new filename.<br>
+6: Remove current speaker from the toolbar.<br>
+7: This is the xml-file you're working with.<br>
+8: This is name of the currently selected speaker.<br>
+9: Vas is a parameter for the speaker you can find in its datasheet or in most 
+retailors catalouges.<br>
+10: Fs is the resonanse frequency of the speaker.<br>
+11: Qts is one damping-factor (i don't relly know exactely what this is)<br>
+<br>&nbsp;<br>
+
+<img src="boxtoolbar.png"><br><i>Figure 2: the enclosure toolbar</i><br>&nbsp;<br>
+
+1: Create new enclosure, press this button to clear the toolbar and prepare to 
+add a new enclosure.<br>
+2: Create new xml-file. Press this button if you want to start on a new set of 
+enclosures.<br>
+3: Open xml-file. Opens a file you've created earlier or a file downloaded from 
+somewhere (perhaps here later).<br>
+4: Save changes you made, for example if you add an enclosure, press this button to 
+save that enclosure to the xml-file.<br>
+5: Save xml-file as...save the xml-file with a new filename.<br>
+6: Remove current enclosure from the toolbar.<br>
+7: This is the xml-file you're working with.<br>
+8: This is the name of the currently selected enclosure.<br>
+9: Here you can select type of box, for now you can choose between two types of
+boxes, ported/vented and sealed/closed box. More types will be added later but i 
+want to improve the functionality of the program first.<br>
+10: This is the volume (in litres) of the encolsure.<br>
+11: This is the resonanse frequency of the enclosure.<br><br>&nbsp;<br>
+
+<img src="simtoolbar.png"><br><i>Figure 3: the simulation toolbar</i><br>&nbsp;<br>
+1: Create a plot of the frequncy response for the currently selected speaker in 
+the currently selected enclosure.<br>
+2: This will create a plot of the frequency response for the currently selected 
+speaker in each of the enclsures in the enclosure toolbar. This is a powerfull 
+feature that should be convenient when you want to simulate the performance for 
+a lot of different speakers in a lot of different enclsures.<br>
+3: The same as 2 but here you take each speaker and plot the frequency response 
+for each speaker in the currently selected enclosure.<br>
+4: Plot each speaker in the corresponding box. For example, if you got 3 speakers 
+in the currently opened speaker xml file and 3 enclosures in the currently opened 
+enclosure xml-file then this command will plot frequency response for speaker #1 in 
+enclosure #1, speaker #2 in enclosure #2...<br>
+5: Remove the plot you selected in the list of plots.<br>
+6: Remove all plots from the greaph.<br>
+7: Set enclosure volume (and for sealed enclosure the resonance frequency too) to 
+the optimized volume for the currently selected speaker. The optimized volume is 
+the volume that gives the speaker a flat frequency response.<br>
+8: Open the properties dialog.<br>&nbsp;<br>

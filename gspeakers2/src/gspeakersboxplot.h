@@ -21,6 +21,7 @@
 #ifndef __GSPEAKERS_BOX_PLOT
 #define __GSPEAKERS_BOX_PLOT
 
+#include <gtkmm.h>
 #include "gspeakersplot.h"
 #include "common.h"
 
@@ -31,11 +32,14 @@
  * an extra layer (where we can connect signals and so on) 
  * between the program and the plot widget.
  */
-class GSpeakersBoxPlot : public GSpeakersPlot 
+class GSpeakersBoxPlot : public Gtk::Window 
 {
 public:
   GSpeakersBoxPlot();
   ~GSpeakersBoxPlot();
+private: 
+  GSpeakersPlot plot;
+  bool on_delete_event(GdkEventAny *event);
 };
 
 #endif

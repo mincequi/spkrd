@@ -42,6 +42,7 @@ protected:
   /* callbacks */
   void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
   void on_cell_edited_unit(const Glib::ustring& path_string, const Glib::ustring& new_text);
+  bool on_delete_event(GdkEventAny *event);
 
   /* Helper functions */
   virtual void create_model();

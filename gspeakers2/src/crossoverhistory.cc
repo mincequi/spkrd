@@ -17,6 +17,7 @@
 
 #include <time.h>
 #include "crossoverhistory.h"
+#include "../config.h"
 
 CrossoverHistory::CrossoverHistory() :
   m_Table(10, 4, true), 
@@ -51,7 +52,7 @@ CrossoverHistory::CrossoverHistory() :
   
   
   /* Read this from settings later */
-  m_filename = "../xml/crossover1.xml";
+  m_filename = string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml";
   m_crossover_list = CrossoverList(m_filename); 
   set_title("Crossover History [" + m_filename + "]");
   
@@ -88,6 +89,12 @@ CrossoverHistory::CrossoverHistory() :
   show_all();
   index = 0;
   m_SaveButton.set_sensitive(false);
+}
+
+bool CrossoverHistory::on_delete_event(GdkEventAny *event)
+{
+  /* don't wanna close this window */
+  return true;
 }
 
 void CrossoverHistory::on_part_modified() {

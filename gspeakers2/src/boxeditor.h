@@ -47,6 +47,7 @@ protected:
   void on_speaker_list_loaded(string);
   void on_combo_entry_changed();
   void on_box_data_changed(int i);
+  bool on_delete_event(GdkEventAny *event);
 
   /* Member widgets */
   Gtk::Table m_table;

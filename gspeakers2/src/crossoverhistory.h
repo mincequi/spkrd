@@ -58,6 +58,7 @@ protected:
   void on_remove();
   bool on_close(GdkEventAny *event);
   void on_part_modified();  
+  bool on_delete_event(GdkEventAny *event);
   
   /* Helper member functions */
   virtual void create_model();

@@ -59,6 +59,7 @@ protected:
   void on_append_box(Box *box);
   void on_add_to_boxlist(Box *b);
   
+  bool on_delete_event(GdkEventAny* event);
 
   /* Helper member functions */
   virtual void create_model();

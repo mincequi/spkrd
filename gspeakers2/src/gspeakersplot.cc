@@ -150,34 +150,46 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
 void GSpeakersPlot::remove_plot(int n)
 {
   int i = 0;
+  cout << "n == " << n << endl;
   
-  for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
-       iter != m_points.end();
-       ++iter, i++)
-  {
-    if (n == i) {
-      m_points.erase(iter);
+  /* For some reason something goes wrong when we select the last row so we add a special case for that event */
+  if (n == (int)(m_points.size() - 1)) {
+    cout << "GSpeakersPlot: last list item" << endl;
+    m_points.erase(m_points.begin() + m_points.size());
+    m_colors.erase(m_colors.begin() + m_colors.size());
+    m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
+  } else {
+  
+    for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
+         iter != m_points.end();
+         ++iter, i++)
+    {
+      if (n == i) {
+        m_points.erase(iter);
+      }
+    }
+    
+    i = 0;
+    for (vector<Gdk::Color>::iterator iter = m_colors.begin();
+         iter != m_colors.end();
+         ++iter, i++)
+    {
+      if (n == i) {
+        m_colors.erase(iter);
+      }
+    }
+    cout << "loop 2" << endl;
+    i = 0;
+    for (vector<bool>::iterator iter = m_visible_plots.begin();
+         iter != m_visible_plots.end();
+         ++iter, i++)
+    {
+      if (n == i) {
+        m_visible_plots.erase(iter);
+      }
     }
   }
-  i = 0;
-  for (vector<Gdk::Color>::iterator iter = m_colors.begin();
-       iter != m_colors.end();
-       ++iter, i++)
-  {
-    if (n == i) {
-      m_colors.erase(iter);
-    }
-  }
-  i = 0;
-  for (vector<bool>::iterator iter = m_visible_plots.begin();
-       iter != m_visible_plots.end();
-       ++iter, i++)
-  {
-    if (n == i) {
-      m_visible_plots.erase(iter);
-    }
-  }
-
+  cout << "loop 3" << endl;
   redraw();
   Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
   get_window()->invalidate_rect(update_rect, false);

@@ -17,6 +17,7 @@
 
 #include <time.h>
 #include "boxhistory.h"
+#include "../config.h"
 
 BoxHistory::BoxHistory() :
   m_Table(10, 4, true), 
@@ -52,7 +53,8 @@ BoxHistory::BoxHistory() :
   
   
   /* Read this from settings later */
-  m_filename = "../xml/box1.xml";
+  m_filename = string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml";
+  cout << "BoxHistory: " << m_filename << endl;
   m_box_list = BoxList(m_filename); 
   set_title("Box History [" + m_filename + "]");
   
@@ -95,6 +97,13 @@ BoxHistory::BoxHistory() :
 BoxHistory::~BoxHistory()
 {
 
+}
+
+bool BoxHistory::on_delete_event(GdkEventAny *event)
+{
+ /* handle this since we don't want to close the window */
+ cout << "BoxHistory: on_delete_event" << endl;
+ return true;
 }
 
 void BoxHistory::on_open_xml()

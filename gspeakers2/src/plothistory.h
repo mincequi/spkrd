@@ -49,6 +49,7 @@ protected:
   void on_box_modified(Box *box);  
   void on_add_plot(Box *box, Speaker *speaker, Gdk::Color&);
   void on_cell_plot_toggled(const Glib::ustring& path_string);
+  bool on_delete_event(GdkEventAny *);
 
   /* Helper member functions */
   virtual void create_model();

@@ -119,6 +119,11 @@ BoxEditor::BoxEditor() :
   show_all();
 }
 
+bool BoxEditor::on_delete_event(GdkEventAny *event)
+{
+  return true;
+}
+
 BoxEditor::~BoxEditor()
 {
 
