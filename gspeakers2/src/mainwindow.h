@@ -55,8 +55,10 @@ private:
   virtual bool on_delete_event(GdkEventAny *event);
   void on_quit_common();
   void on_about();
+  void on_save_all();
   void on_edit_settings();
   void on_switch_page(GtkNotebookPage* page, guint page_num);
+  bool on_edit_menu_expose_event(GdkEventExpose *event);
 };
 
 #endif

@@ -267,31 +267,9 @@ void GSpeakersPlot::remove_plot(int n)
 
 void GSpeakersPlot::remove_all_plots()
 {
-//  for (unsigned i = m_points.size(); i > 0; --i) {
-//    remove_plot((int)i);
-//  }
-  //cout << "number of point vectors: " << m_points.size() << endl;
   m_points.erase(m_points.begin(), m_points.end());
   m_colors.erase(m_colors.begin(), m_colors.end());
   m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
-//  for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
-//       iter != m_points.end();
-//       ++iter)
-//  {
-//    m_points.erase(iter);
-//  }
-//  for (vector<Gdk::Color>::iterator iter = m_colors.begin();
-//       iter != m_colors.end();
-//       ++iter)
-//  {
-//    m_colors.erase(iter);
-//  }
-//  for (vector<bool>::iterator iter = m_visible_plots.begin();
- //      iter != m_visible_plots.end();
- //      ++iter)
- // {
- //   m_visible_plots.erase(iter);
- // }
   if (visible == true) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
@@ -491,7 +469,11 @@ void GSpeakersPlot::draw_log_grid()
   for (int i = 1; i <= 10; i++) {
     int x = BOX_FRAME_SIZE + GSpeakers::round( log10((double)i) * half_space_x );
     m_refPixmap->draw_line(m_refGC, half_space_x + x, BOX_FRAME_SIZE, half_space_x + x, xaxis_y_position + 3);
-    if ( ( i == 2 ) || ( i == 5 ) || (i == 1) || (i == 10)) {
+    // Special case: draw 1k instead of 1000
+    if ( i == 10 ) {
+      m_refLayout->set_text("1k");
+      m_refPixmap->draw_layout(m_refGC, half_space_x + x - 8, xaxis_y_position + 5, m_refLayout);
+    } else if ( ( i == 2 ) || ( i == 5 ) || (i == 1) ) {
       m_refLayout->set_text(int_to_ustring(100 * i));
       m_refPixmap->draw_layout(m_refGC, half_space_x + x - 8, xaxis_y_position + 5, m_refLayout);
     } 

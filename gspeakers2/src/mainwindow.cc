@@ -75,7 +75,12 @@ MainWindow::MainWindow()
   /* Setup the menu */
   {
   	Gtk::Menu::MenuList& menulist = m_file_menu.items();
-
+        Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
+        menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save all files"),  
+                                                             Gtk::Menu_Helpers::AccelKey::AccelKey('s', Gdk::CONTROL_MASK), 
+                                                             *im,  
+                                                             slot(*this, &MainWindow::on_save_all) ) );
+        menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, slot(*this, &MainWindow::on_quit) ) );
   }
   {
@@ -89,6 +94,7 @@ MainWindow::MainWindow()
                                                          slot(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), m_file_menu) );
+  m_file_menu.signal_expose_event().connect(slot(*this, &MainWindow::on_edit_menu_expose_event));
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Edit"), m_edit_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Drivers"), speaker_editor.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("E_nclosure"), enclosure_paned.get_menu() ) );
@@ -290,6 +296,27 @@ void MainWindow::on_quit_common()
     cout << "MainWindow::on_delete_event: could not save settings" << endl;
 #endif
   }
+}
+
+void MainWindow::on_save_all()
+{
+  signal_save_open_files();
+}
+
+bool MainWindow::on_edit_menu_expose_event(GdkEventExpose *event)
+{
+#ifdef OUTPUT_DEBUG
+  cout << "MainWindow::on_filemenu_popup" << endl;
+#endif
+  /* Check whether to ungrey "save all" menuitem or not */
+  using namespace GSpeakers;
+  if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() || meassurementlist_modified()) {
+    m_file_menu.items()[0].set_sensitive(true);
+  } else {
+    m_file_menu.items()[0].set_sensitive(false);
+  }
+  
+  return false;
 
 }
 

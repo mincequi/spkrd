@@ -125,13 +125,16 @@ Speaker_ListStore::Speaker_ListStore()
   m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
   m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
-  m_Table.attach(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_LEFT)), 0, 1, 18, 19);
-  m_Table.attach(m_FreqRespFileEntry, 1, 2, 18, 19);
+  //m_Table.attach(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_LEFT)), 0, 1, 18, 19);
+  //m_Table.attach(m_FreqRespFileEntry, 1, 2, 18, 19);
   Gtk::HBox *vbox = manage(new Gtk::HBox());
+  vbox->pack_start(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_LEFT)));
+  vbox->pack_start(m_FreqRespFileEntry);
+  m_FreqRespFileEntry.set_width_chars(15);
   vbox->pack_start(m_BrowseFreqRespButton);
   vbox->pack_start(m_EditFreqRespButton);
-  vbox->set_spacing(3);
-  m_Table.attach(*vbox, 2, 3, 18, 19);
+  vbox->set_spacing(12);
+  m_Table.attach(*vbox, 0, 3, 18, 19);
   
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -174,6 +177,7 @@ Speaker_ListStore::Speaker_ListStore()
   //m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
+  
   selection->signal_changed().connect(slot(*this, &Speaker_ListStore::on_selection_changed));
 
   g_settings.settings_changed.connect(slot(*this, &Speaker_ListStore::on_settings_changed));
@@ -185,6 +189,17 @@ Speaker_ListStore::Speaker_ListStore()
   f_save_as = NULL;
   new_xml_pressed = false;
   signal_save_open_files.connect(slot(*this, &Speaker_ListStore::on_save_open_files));
+
+  /* Select first row */
+  /*
+  char *str = NULL;
+  GString *buffer = g_string_new(str);
+  g_string_printf(buffer, "%d", 0);
+  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+  Gtk::TreePath path(gpath);
+  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  selection->select(row);
+  */
 }
 
 Speaker_ListStore::~Speaker_ListStore()
