@@ -41,6 +41,8 @@ class CrossoverHistory : public Gtk::Frame
 public:
   CrossoverHistory();
   virtual ~CrossoverHistory();
+  Gtk::Menu& get_menu();
+  Gtk::Widget& get_toolbar();
 
 protected:
   /* callbacks */
@@ -62,6 +64,9 @@ protected:
   void on_net_modified_by_wizard(Net *net);
   void on_net_modified_by_user();
   bool on_delete_event(GdkEventAny *event);
+  void on_settings_changed(const string&);
+  void on_new_crossover_menu_action(int);
+  void on_plot_crossover();
   
   /* Helper member functions */
   virtual void create_model();
@@ -78,7 +83,10 @@ protected:
   Gtk::Button m_SaveButton, m_SaveAsButton, m_RemoveButton;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
-  
+  Gtk::HandleBox toolbar;
+  Gtk::Toolbar *tbar;
+  Gtk::Menu m_menu;
+
   /* Data containers */
   CrossoverList m_crossover_list;
 

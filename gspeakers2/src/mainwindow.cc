@@ -107,26 +107,6 @@ MainWindow::MainWindow() :
   }
 
   {
-  	Gtk::Menu::MenuList& menulist = m_crossover_menu.items();
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _subsonic crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action) , CROSSOVER_TYPE_SUBSONIC) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_HIGHPASS) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _2-way crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_TWOWAY) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2._5-way crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _3-way crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_THREEWAY) ) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _4-way crossover", 
-                        bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_FOURWAY) ) );
-    menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    //menulist.push_back( Gtk::Menu_Helpers::MenuElem("Update crossover", slot(*this, &MainWindow::on_update_crossover)) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("_Plot crossover", slot(*this, &MainWindow::on_plot_crossover)) );
-  }
-  {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
 
   	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("About...", GSpeakers::image_widget("stock_menu_about.png"), 
@@ -136,7 +116,7 @@ MainWindow::MainWindow() :
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Edit", m_edit_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Drivers", speaker_editor.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("E_nclosure", box_history.get_menu() ) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", m_crossover_menu) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Crossover", crossover_history.get_menu()) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem("_Help", m_help_menu) );
 
   //Add the MenuBar to the window:
@@ -146,6 +126,8 @@ MainWindow::MainWindow() :
   m_main_vbox.pack_start(speaker_editor.get_toolbar(), Gtk::SHRINK);
   box_history.get_toolbar().hide();
   m_main_vbox.pack_start(box_history.get_toolbar(), Gtk::SHRINK);
+  crossover_history.get_toolbar().hide();
+  m_main_vbox.pack_start(crossover_history.get_toolbar(), Gtk::SHRINK);
   
   m_main_vbox.pack_start(m_main_notebook);
   
@@ -245,6 +227,9 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
         if (box_history.get_toolbar().is_visible() == true) {
           box_history.get_toolbar().hide();
         }
+        if (crossover_history.get_toolbar().is_visible() == true) {
+          crossover_history.get_toolbar().hide();
+        }
         break;
       case NOTEBOOK_PAGE_ENCLOSURE:
         if (speaker_editor.get_toolbar().is_visible() == true) {
@@ -253,7 +238,9 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
         if (box_history.get_toolbar().is_visible() == false) {
           box_history.get_toolbar().show();
         }
-
+        if (crossover_history.get_toolbar().is_visible() == true) {
+          crossover_history.get_toolbar().hide();
+        }
         break;
       case NOTEBOOK_PAGE_FILTER:
         if (speaker_editor.get_toolbar().is_visible() == true) {
@@ -262,7 +249,9 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
         if (box_history.get_toolbar().is_visible() == true) {
           box_history.get_toolbar().hide();
         }
-        
+        if (crossover_history.get_toolbar().is_visible() == false) {
+          crossover_history.get_toolbar().show();
+        }
         break;
     }
   }

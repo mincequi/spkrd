@@ -91,3 +91,6 @@ the structure in the program, some are important due to the UI experience.
 * UI should look the same on each tab
 
 * Support nonmetric units
+
+* Config option: view all toolbars, adaptive toolbars, view toolbars indipendently 
+    from each other

@@ -19,11 +19,11 @@
 #include "boxhistory.h"
 #include "../config.h"
 
-#define MENU_INDEX_SAVE           5
+#define MENU_INDEX_SAVE           6
 #define MENU_INDEX_DELETE         8
 #define MENU_INDEX_DELETE_PLOT    9
 #define TOOLBAR_INDEX_SAVE        5
-#define TOOLBAR_INDEX_DELETE      6
+#define TOOLBAR_INDEX_DELETE      7
 #define TOOLBAR_INDEX_DELETE_PLOT 7
 
 BoxHistory::BoxHistory() :
@@ -44,21 +44,22 @@ BoxHistory::BoxHistory() :
   //set_default_size(250, 300);
   tbar = NULL;
   add(m_vbox);
-  m_vbox.pack_start(m_Table);
+  m_vbox.pack_start(m_ScrolledWindow);
+  //m_vbox.pack_start(m_Table);
   m_Table.set_spacings(4);
   
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-  
-  m_Table.attach(m_ScrolledWindow, 0, 4, 0, 8, Gtk::FILL);
-  m_Table.attach(m_NewCopyButton, 0, 1, 8, 9);
-  m_Table.attach(m_NewButton, 1, 2, 8, 9);
-  m_Table.attach(m_NewXmlButton, 2, 3, 8, 9);
-  m_Table.attach(m_RemoveButton, 3, 4, 8, 9);
-  m_Table.attach(m_OpenXmlButton, 0, 1, 9, 10);
-  m_Table.attach(m_AppendXmlButton, 1, 2, 9, 10);
-  m_Table.attach(m_SaveButton, 2, 3, 9, 10);
-  m_Table.attach(m_SaveAsButton, 3, 4, 9, 10);
+  g_settings.settings_changed.connect(slot(*this, &BoxHistory::on_settings_changed));
+  //m_Table.attach(m_ScrolledWindow, 0, 4, 0, 10, Gtk::FILL);
+  //m_Table.attach(m_NewCopyButton, 0, 1, 8, 9);
+  //m_Table.attach(m_NewButton, 1, 2, 8, 9);
+  //m_Table.attach(m_NewXmlButton, 2, 3, 8, 9);
+  //m_Table.attach(m_RemoveButton, 3, 4, 8, 9);
+  //m_Table.attach(m_OpenXmlButton, 0, 1, 9, 10);
+  //m_Table.attach(m_AppendXmlButton, 1, 2, 9, 10);
+  //m_Table.attach(m_SaveButton, 2, 3, 9, 10);
+  //m_Table.attach(m_SaveAsButton, 3, 4, 9, 10);
   
   
   /* Read this from settings later */
@@ -124,27 +125,28 @@ BoxHistory::~BoxHistory()
 Gtk::Menu& BoxHistory::get_menu()
 {
   Gtk::Menu::MenuList& menulist = m_menu.items();
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem("_New Enclosure", 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("_New Enclosure", GSpeakers::image_widget("stock_new_enclosure_16.png"), 
                       slot(*this, &BoxHistory::on_new) ) );
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("New _Copy", GSpeakers::image_widget("stock_new_enclosure_copy_16.png"), 
+                      slot(*this, &BoxHistory::on_new_copy) ) );
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem("N_ew Enclosure Xml", 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("N_ew Enclosure Xml", GSpeakers::image_widget("stock_new_enclosure_xml_16.png"), 
                       slot(*this, &BoxHistory::on_new_xml) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::MenuElem("A_ppend Enclosure Xml...", 
                       slot(*this, &BoxHistory::on_append_xml) ) );
-  menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::OPEN, 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("_Open Xml...", GSpeakers::image_widget("open_xml_16.png"),   
                       slot(*this, &BoxHistory::on_open_xml) ) );
-  menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::SAVE, 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("_Save Xml", GSpeakers::image_widget("save_xml_16.png"),   
                       slot(*this, &BoxHistory::on_save) ) );
-  menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::SAVE_AS, 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("Save Xml _As", GSpeakers::image_widget("save_as_xml_16.png"),   
                       slot(*this, &BoxHistory::on_save_as) ) );
-
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::DELETE, 
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem("_Delete Enclosure", GSpeakers::image_widget("delete_enclosure_16.png"),  
                       slot(*this, &BoxHistory::on_remove) ) ); 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem("Delete Selected Plo_t", 
-                      slot(*this, &BoxHistory::on_delete_plot) ) ); 
+  //menulist.push_back( Gtk::Menu_Helpers::MenuElem("Delete Selected Plo_t", 
+  //                    slot(*this, &BoxHistory::on_delete_plot) ) ); 
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
-  menulist[MENU_INDEX_DELETE_PLOT].set_sensitive(false);
+  //menulist[MENU_INDEX_DELETE].set_sensitive(false);
   return m_menu;
 }
 
@@ -152,30 +154,35 @@ Gtk::Widget& BoxHistory::get_toolbar()
 {
   if (tbar == NULL) {
     tbar = manage(new Gtk::Toolbar());
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Driver", GSpeakers::image_widget("stock_new_driver_24.png"), 
-                             slot(*this, &BoxHistory::on_new), "Create new driver") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Enclosure", GSpeakers::image_widget("stock_new_enclosure_24.png"), 
+                             slot(*this, &BoxHistory::on_new), "Create new enclosure") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Copy", GSpeakers::image_widget("stock_new_enclosure_copy_24.png"), 
+                             slot(*this, &BoxHistory::on_new_copy), "Copy currently selected enclosure") );
     tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Xml", GSpeakers::image_widget("stock_new_driver_xml_24.png"), 
-                             slot(*this, &BoxHistory::on_new_xml), "Create new driver xml (list)") );
-    Gtk::Image *im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Open Xml",  *im, 
-                             slot(*this, &BoxHistory::on_open_xml), "Open driver xml (list)") );
-    Gtk::Image *im2 = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Save",  *im2, 
-                             slot(*this, &BoxHistory::on_save), "Save driver xml (list)") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("New Xml", GSpeakers::image_widget("stock_new_enclosure_xml_24.png"), 
+                             slot(*this, &BoxHistory::on_new_xml), "Create new enclosure xml (list)") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Open Xml",  GSpeakers::image_widget("open_xml_24.png"),
+                             slot(*this, &BoxHistory::on_open_xml), "Open enclosure xml (list)") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Save Xml",  GSpeakers::image_widget("save_xml_24.png"),
+                             slot(*this, &BoxHistory::on_save), "Save enclosure xml (list)") );
     tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    Gtk::Image *im4 = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Delete",  *im4, 
-                             slot(*this, &BoxHistory::on_remove), "Delete selected driver") );
+    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem("Delete",  GSpeakers::image_widget("delete_enclosure_24.png"),   
+                             slot(*this, &BoxHistory::on_remove), "Delete selected enclosure") );
   
     toolbar.add(*tbar);
     tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-    //tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
     //tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(false);
   }
   return toolbar;
 }
 
+void BoxHistory::on_settings_changed(const string& s)
+{
+  if (s == "ToolbarStyle") {
+    tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+  }
+}
 
 void BoxHistory::on_delete_plot()
 {
@@ -258,6 +265,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     m_AppendXmlButton.set_sensitive(true);
     m_SaveButton.set_sensitive(false);
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
     set_label("Enclosure list [" + m_filename + "]");
@@ -294,6 +302,8 @@ void BoxHistory::on_append_ok(Gtk::FileSelection *f)
   }
   m_SaveButton.set_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+
 }
 
 void BoxHistory::on_selection_changed()
@@ -364,6 +374,7 @@ void BoxHistory::on_new_copy()
   refSelection->select(row);
   m_SaveButton.set_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
 }
 
 void BoxHistory::on_new()
@@ -395,6 +406,7 @@ void BoxHistory::on_new()
   refSelection->select(row);
   m_SaveButton.set_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
 }
 
 void BoxHistory::on_new_xml()
@@ -405,6 +417,7 @@ void BoxHistory::on_new_xml()
   on_new();
   m_SaveButton.set_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
   set_label("Enclosure list [new file]");
 }
 
@@ -419,6 +432,7 @@ void BoxHistory::on_save()
       m_box_list.to_xml(m_filename);
       m_SaveButton.set_sensitive(false);
       m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
+      tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
     } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
@@ -451,6 +465,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
     g_settings.setValue("BoxListXml", m_filename);
     m_SaveButton.set_sensitive(false);
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
+    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
   } catch (GSpeakersException e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
@@ -489,6 +504,7 @@ void BoxHistory::on_remove()
   refSelection->select(row);
   m_SaveButton.set_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
 }
 
 void BoxHistory::on_box_modified(Box *b)
@@ -522,6 +538,7 @@ void BoxHistory::on_box_modified(Box *b)
       (*m_box_list.box_list())[indices[0]].set_fb2(b->get_fb2());
       m_SaveButton.set_sensitive(true);
       m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+      tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
       
     }
   }

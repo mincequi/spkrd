@@ -17,5 +17,5 @@ gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc \
 totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc \
 freqrespeditor.h freqrespeditor.cc driverfreqrespplot.h driverfreqrespplot.cc
 
-CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall
+CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0
 LDADD = $(DEPS_LIBS)

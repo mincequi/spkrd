@@ -65,6 +65,7 @@ protected:
 
   void on_plot_selected(int i);
   void on_delete_plot();
+  void on_settings_changed(const string&);
 
   /* Helper member functions */
   virtual void create_model();
