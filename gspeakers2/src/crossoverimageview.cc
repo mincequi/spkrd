@@ -159,7 +159,7 @@ void CrossoverImageView::redraw()
 
 //draw_capacitor(13, 10, 10, width, height, false);
     draw_inductor(15, 200, 200, 49, 87, false);
-    draw_capacitor(14, 300, 200, 49, 87, true);
+//    draw_capacitor(14, 300, 200, 49, 87, true);
     //draw_inductor(15, 100, 10, width, height, false);
     //draw_inductor(16, 100, 100, width, height, true);
     //draw_connector(200, 10, width, height, true);
@@ -208,67 +208,72 @@ void CrossoverImageView::draw_highpass_net(int x, int y, int part_width, int par
 
 void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int height, bool rotate)
 {
-  int half_space_y  = GSpeakers::round(height / 2);
-  int half_space_x  = GSpeakers::round(width / 2);
-  int small_space_x = GSpeakers::round(width / 20);
-  int small_space_y = GSpeakers::round(height / 20);
+  using GSpeakers::round;
+  
+  double half_space_y  = round(height / 2);
+  double half_space_x  = round(width / 2);
+  double small_space_x = round(width / 20);
+  double small_space_y = round(height / 20);
   
   m_refLayout->set_text("C" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
     
   if (rotate == true) {
     /* Horizontal line in capacitor */
-    m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + half_space_y - small_space_y);
-    m_refPixmap->draw_line(m_refGC, x + half_space_x, y + half_space_y + small_space_y, x + half_space_x, y + height);
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x), round(y + half_space_y - small_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y + round(half_space_y + small_space_y), round(x + half_space_x), y + height);
     
     /* Vertical lines in capacitor */
-    m_refPixmap->draw_line(m_refGC, x + 2 * small_space_x, y + half_space_y - small_space_y,
-                                    x + width - 2 * small_space_x, y + half_space_y - small_space_y);
-    m_refPixmap->draw_line(m_refGC, x + 2 * small_space_x, y + half_space_y + small_space_y,
-                                    x + width - 2 * small_space_x, y + half_space_y + small_space_y);
+    m_refPixmap->draw_line(m_refGC, round(x + 2 * small_space_x), round(y + half_space_y - small_space_y),
+                                    round(x + width - 2 * small_space_x), round(y + half_space_y - small_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + 2 * small_space_x), round(y + half_space_y + small_space_y),
+                                    round(x + width - 2 * small_space_x), round(y + half_space_y + small_space_y));
   } else {
     /* Horizontal line in capacitor */
-    m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + half_space_x - small_space_x, y + half_space_y);
-    m_refPixmap->draw_line(m_refGC, x + half_space_x + small_space_x, y + half_space_y, x + width, y + half_space_y);
+    m_refPixmap->draw_line(m_refGC, x, round(y + half_space_y), round(x + half_space_x - small_space_x), round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x + small_space_x), round(y + half_space_y), x + width, round(y + half_space_y));
   
     /* Vertical lines in capacitor */
-    m_refPixmap->draw_line(m_refGC, x + half_space_x - small_space_x, y + 2 * small_space_y, 
-                                    x + half_space_x - small_space_x, y + height - 2 * small_space_y);
-    m_refPixmap->draw_line(m_refGC, x + half_space_x + small_space_x, y + 2 * small_space_y, 
-                                    x + half_space_x + small_space_x, y + height - 2 * small_space_y);
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x - small_space_x), round(y + 2 * small_space_y), 
+                                    round(x + half_space_x - small_space_x), round(y + height - 2 * small_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x + small_space_x), round(y + 2 * small_space_y), 
+                                    round(x + half_space_x + small_space_x), round(y + height - 2 * small_space_y));
   }
 }
 
 void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int height, bool rotate)
 {
-  int half_space_y  = GSpeakers::round(height / 2);
-  int half_space_x  = GSpeakers::round(width / 2);
-  int small_space_x = GSpeakers::round(width / 20);
-  int small_space_y = GSpeakers::round(height / 20);
+  using GSpeakers::round;
+  
+  double half_space_y  = double(height) / 2;
+  double half_space_x  = double(width) / 2;
+  double small_space_x = double(width) / 20;
+  double small_space_y = double(height) / 20;
 
   m_refLayout->set_text("L" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
   if (rotate == true) {
     /* Horizontal line in inductor */
-    m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + (2 * small_space_y));
-    m_refPixmap->draw_line(m_refGC, x + half_space_x, y + height - (2 * small_space_y), x + half_space_x, y + height);
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x), round(y + 2 * small_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y + height - round(2 * small_space_y), round(x + half_space_x), y + height);
 
     /* Arcs in inductor */
     for (int i = 0; i <= 12; i +=4) {
-      m_refPixmap->draw_arc(m_refGC, false, x + half_space_x - (2 * small_space_x), y + (2 * small_space_y) + (i * small_space_y), 
-                                            4 * small_space_x, 4 * small_space_y, 17280, 11520);
+      m_refPixmap->draw_arc(m_refGC, false, round(x + half_space_x - 2 * small_space_x), y + round(2 * small_space_y + i * small_space_y), 
+                                            round(4 * small_space_x), round(4 * small_space_y), 17280, 11520);
     }
 
   } else {
     /* Horizontal line in inductor */
-    m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + 2 * small_space_x, y + half_space_y);
-    m_refPixmap->draw_line(m_refGC, x + width - 2 * small_space_x, y + half_space_y, x + width, y + half_space_y);
+    m_refPixmap->draw_line(m_refGC, x, round(y + half_space_y), round(x + 2 * small_space_x), round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, round(x + width - 2 * small_space_x), round(y + half_space_y), x + width, round(y + half_space_y));
   
     /* Arcs in inductor */
     for (int i = 0; i <= 12; i += 4) {
-      m_refPixmap->draw_arc(m_refGC, false, x + 2 * small_space_x + i * small_space_x, y + half_space_y - (2 * small_space_y), 
-                                            4 * small_space_x, 4 * small_space_y, 0, 11520);
+      m_refPixmap->draw_arc(m_refGC, false, round(x + 2 * small_space_x + i * small_space_x), round(y + half_space_y - 2 * small_space_y), 
+                                            round(4 * small_space_x), round(4 * small_space_y), 0, 11520);
+      cout << width << ":" << 2 * small_space_x + small_space_x * i << endl;
     }
   }
 }
@@ -306,10 +311,12 @@ void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int heig
 
 void CrossoverImageView::draw_connector(int x, int y, int width, int height, bool positive)
 {
-  int half_space_x  = GSpeakers::round(width / 2);
-  int half_space_y  = GSpeakers::round(height / 2);
-  int small_space_x = GSpeakers::round(width / 20);
-  int small_space_y = GSpeakers::round(height / 20);
+  using GSpeakers::round;
+  
+  int half_space_x  = round(double(width) / 2);
+  int half_space_y  = round(double(height) / 2);
+  int small_space_x = round(double(width) / 20);
+  int small_space_y = round(double(height) / 20);
 
   if (positive == true) {
     m_refLayout->set_text("+");
@@ -356,10 +363,10 @@ void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool u
 void CrossoverImageView::draw_line(int x, int y, int width, int height, bool rotate)
 {
   if (rotate == true) {
-    int half_space_x  = GSpeakers::round(width / 2);
+    int half_space_x  = GSpeakers::round(double(width) / 2);
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + height);
   } else {
-    int half_space_y  = GSpeakers::round(height / 2);
+    int half_space_y  = GSpeakers::round(double(height) / 2);
     m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + width, y + half_space_y);
   }
 }
