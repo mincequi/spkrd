@@ -21,6 +21,7 @@
 #include <gtkmm.h>
 #include "crossover.h"
 #include "speakerlist.h"
+#include "gspeakersplot.h"
 
 using namespace std;
 using namespace SigC;
@@ -76,7 +77,7 @@ private:
   bool enable_edit;
 
   int my_filter_plot_index;
-
+  vector<GSpeakers::Point> points;
   /* Helper function */
   int round( double x );
 };

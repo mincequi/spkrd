@@ -47,6 +47,7 @@ class GSpeakersException : public exception {
   string _what;
 public:
   GSpeakersException(const string& what_arg): _what (what_arg) { }
+  virtual ~GSpeakersException() {}
   virtual const char* what () const { return _what.c_str (); }
 };
 

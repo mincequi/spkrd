@@ -242,6 +242,8 @@ void FilterLinkFrame::on_param_changed()
   cout << "FilterLinkFrame::on_param_changed" << endl;
   
   if (enable_edit == true) {
+    cout << "FilterLinkFrame::on_param_changed: running" << endl;
+    enable_edit = false;
     Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     
     int index = 0;
@@ -445,51 +447,58 @@ void FilterLinkFrame::on_param_changed()
       m_net->set_has_damp(false);
     }
     signal_net_modified_by_wizard();
-    
+    enable_edit = true;  
   }
   on_plot_crossover();
-  //signal_plot_crossover();
   
 }
 
 void FilterLinkFrame::on_net_updated(Net *net)
 {
-  cout << "FilterLinkFrame::on_net_updated" << endl;
-  enable_edit = false;
-  Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
-  int index = 0;
-  if (net->get_id() == m_net->get_id()) {
-    if (m_net->get_type() & NET_TYPE_LOWPASS) {
-      switch (m_net->get_lowpass_order()) {
-        case NET_ORDER_1ST:
-          m_lower_co_freq_spinbutton->set_value(speaker.get_rdc() / ((*m_net->parts())[index++].get_value()/1000 * 6.28));
-          break;
-        case NET_ORDER_2ND:
-          m_lower_co_freq_spinbutton->set_value((1/sqrt((*m_net->parts())[0].get_value()/1000 * (*m_net->parts())[1].get_value()/1000000)) / (2 * 3.14159));
-          break;
-        case NET_ORDER_3RD:
-          break;
-        case NET_ORDER_4TH:
-          break;
+  if (m_net->get_id() == net->get_id()) {
+    cout << "FilterLinkFrame::on_net_updated" << endl;
+    enable_edit = false;
+    on_plot_crossover();
+  //  on_plot_crossover();
+    int i = 0, index1 = 0, index2 = 0;
+    if (m_net->get_type() == NET_TYPE_LOWPASS) {
+      for (vector<GSpeakers::Point>::iterator iter = points.begin();
+           iter != points.end();
+           ++iter)
+      {
+        if ((*iter).get_y() > -3) {
+          index1 = i;
+        }
+        i++;
       }
+  
+      double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
+      int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
+      double ytodbdiff = points[index1].get_y() + 3;
+      m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 + 1].get_x());
+  
+    } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
+      //cout << "före" << endl;
+      for (vector<GSpeakers::Point>::iterator iter = points.begin();
+           iter != points.end();
+           ++iter)
+      {
+        if ((*iter).get_y() < -3) {
+          index2 = i;
+        }
+        i++;
+      }
+      
+      double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
+      int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
+      //cout << "innan deklarationerna" << endl;
+      double ytodbdiff = points[index2].get_y() + 3;
+      m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
+      //cout << "efter" << endl;
     }
-    if (m_net->get_type() & NET_TYPE_HIGHPASS) {
-      switch (m_net->get_highpass_order()) {
-        case NET_ORDER_1ST:
-          m_higher_co_freq_spinbutton->set_value(0.159 / ((*m_net->parts())[index].get_value()/1000000 * speaker.get_rdc()));
-          break;
-        case NET_ORDER_2ND:
-          m_higher_co_freq_spinbutton->set_value(1 / (sqrt( ((*m_net->parts())[1].get_value()/1000) * (*m_net->parts())[0].get_value()/1000000)) / (2 * 3.14159));
-          break;
-        case NET_ORDER_3RD:
-          break;
-        case NET_ORDER_4TH:
-          break;
-      }
     
-    }
+    enable_edit = true;
   }
-  enable_edit = true;
 }
 
 void FilterLinkFrame::on_plot_crossover()
@@ -514,7 +523,8 @@ void FilterLinkFrame::on_plot_crossover()
   bool output = false;
   int id;
   float f1, f2, f3;
-  vector<GSpeakers::Point> points;
+//  vector<GSpeakers::Point> points;
+  points.erase(points.begin(), points.end());
   while (!fin.eof()) {
     char *buffer = new char[100];
     fin.getline(buffer, 100, '\n');
@@ -545,7 +555,7 @@ void FilterLinkFrame::on_plot_crossover()
   cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
   signal_add_crossover_plot(points, c, &my_filter_plot_index);
   /* TODO: update filterwizard, co_freq_spinbutton here */
-  
+    
 }   
 
 vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
@@ -571,8 +581,8 @@ vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_ord
               nums.push_back(0.0912);
               break;
             case NET_TYPE_HIGHPASS:
+              nums.push_back(0.0912);
               nums.push_back(0.2756);
-              nums.push_back(0.912);
               break;
           }
         

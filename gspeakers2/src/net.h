@@ -37,6 +37,15 @@
 #define NET_ORDER_3RD 3
 #define NET_ORDER_4TH 4
 
+/* filter family */
+#define NET_BESSEL        1
+#define NET_BUTTERWORTH   2
+#define NET_CHEBYCHEV     3
+#define NET_LINKWITZRILEY 4
+#define NET_GAUSSIAN      5
+#define NET_LEGENDRE      6
+#define NET_LINEARPHASE   7
+
 using namespace std;
 
 /*
@@ -58,7 +67,7 @@ public:
    * type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
    */
   Net(int type = NET_TYPE_LOWPASS, int lowpass_order = NET_ORDER_1ST, int highpass_order = NET_NOT_PRESENT, 
-      bool has_imp_corr = false, bool has_damp = false, bool has_res = false);
+      bool has_imp_corr = false, bool has_damp = false, bool has_res = false, int family = NET_BUTTERWORTH);
 
   /* Construct a part from an xml node */
   Net(xmlNodePtr parent); //or create_from_xml(xmlNodePtr); depending on excetions and stuff like that
@@ -80,6 +89,8 @@ public:
   bool get_has_imp_corr();
   bool get_has_damp();
   bool get_has_res();
+  int get_lowpass_family();
+  int get_highpass_family();
 
   /* 
    * We return parts by ref to so that we not copy these parts.
@@ -114,6 +125,9 @@ public:
   void set_res_R(Part p);
   void set_res_C(Part p);
   void set_res_L(Part p);
+  
+  void set_lowpass_family(int family);
+  void set_highpass_family(int family);
 
 protected:
   /* Member variables */
@@ -132,6 +146,8 @@ protected:
   Part m_res_C;
   Part m_res_L;
   vector<Part> m_parts;
+  int m_lowpass_family;
+  int m_highpass_family;
 
 private:
   
@@ -153,6 +169,8 @@ private:
   void parse_has_damp(xmlNodePtr node);
   void parse_has_res(xmlNodePtr node);
   void parse_parts(xmlNodePtr node);
+  void parse_lowpass_family(xmlNodePtr node);
+  void parse_highpass_family(xmlNodePtr node);
   
 };
 

@@ -395,7 +395,7 @@ void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo)
       child_row2[m_columns.type]         = child2.m_type;
       child_row2[m_columns.value]        = child2.m_value;
       child_row2[m_columns.unit]         = child2.m_unit;
-      child_row2[m_columns.editable]     = false;
+      child_row2[m_columns.editable]     = true;
       child_row2[m_columns.visible]      = true;
     }
 
@@ -466,7 +466,7 @@ void CrossoverTreeView::add_columns()
     if(pColumn)
     {
       pColumn->add_attribute(pRenderer->property_text(), m_columns.unit);
-      pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
+      //pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
     }
   }

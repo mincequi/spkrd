@@ -22,7 +22,8 @@
 #include "../config.h"
 #include "speaker.h"
 
-Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, bool has_damp, bool has_res) : GSpeakersObject()
+Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, 
+         bool has_damp, bool has_res, int family) : GSpeakersObject()
 {
   m_type = type;
   m_highpass_order = highpass_order;
@@ -30,6 +31,8 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
   m_has_imp_corr = has_imp_corr;
   m_has_damp = has_damp;
   m_has_res = has_res;
+  m_lowpass_family = family;
+  m_highpass_family = family;
 
   /* Init lowpass filter if present */
   if (m_type & NET_TYPE_LOWPASS) {
@@ -294,11 +297,45 @@ void Net::parse_parts(xmlNodePtr node)
       child = child->next;
     }
     //cout << "Found #" << m_parts.size() << " parts" << endl;
+    try {
+      parse_lowpass_family(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+
   } else {
     throw GSpeakersException("Net: parts node expected");
   }
 }
-  
+
+void Net::parse_lowpass_family(xmlNodePtr node)
+{
+  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "lowpass_family" ) == 0)) {  
+    istringstream((char *)xmlNodeGetContent(node)) >> m_lowpass_family;
+    //m_family = 1;
+    try {
+      parse_highpass_family(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+  } else {
+    throw GSpeakersException("Net::parse_lowpass_family: lowpass_family node expected");
+  }
+
+}
+
+void Net::parse_highpass_family(xmlNodePtr node)
+{
+  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "highpass_family" ) == 0)) {  
+    istringstream((char *)xmlNodeGetContent(node)) >> m_highpass_family;
+    //m_family = 1;
+  } else {
+    throw GSpeakersException("Net::parse_highpass_family: highpass_family node expected");
+  }
+
+}
+
+
 xmlNodePtr Net::to_xml_node(xmlNodePtr parent) 
 {
   xmlNodePtr net, field;
@@ -341,7 +378,11 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
   {
     ((Part)(*from)).to_xml_node(field);
   }
-
+  field = xmlNewChild( net, NULL, (xmlChar *)("lowpass_family"), NULL );
+  xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_lowpass_family));
+  field = xmlNewChild( net, NULL, (xmlChar *)("highpass_family"), NULL );
+  xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_highpass_family));
+  
   return net;
 }
 
@@ -506,6 +547,16 @@ vector<Part> *Net::parts()
   return &m_parts;
 }
 
+int Net::get_lowpass_family()
+{
+  return m_lowpass_family;
+}
+
+int Net::get_highpass_family()
+{
+  return m_highpass_family;
+}
+
 int Net::get_highpass_order()
 {
   return m_highpass_order;
@@ -618,6 +669,16 @@ void Net::set_has_damp(bool has_damp)
     m_damp_R2 = Part(PART_TYPE_RESISTOR, 1, "");
   }
 
+}
+
+void Net::set_lowpass_family(int family) 
+{
+  m_lowpass_family = family;
+}
+
+void Net::set_highpass_family(int family) 
+{
+  m_highpass_family = family;
 }
 
 void Net::set_imp_corr_R(Part p)

@@ -1,5 +1,12 @@
 GSpeakers ChangeLog
 
+2002-09-06
+
+* net.h/cc: added net family type, butterworth, bessel, ... class members for 
+    lowpas and highpass network
+
+* filterlinkframe.cc: verified backwords calculations of cutoff freq 
+
 2002-09-05
 
 * net.cc: added spice generation for 2nd, 3rd and 4th order filters
