@@ -17,7 +17,11 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
+#include <sstream>
 #include "filterlinkframe.h"
+#include "gspeakersplot.h"
   
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
   Gtk::Frame(description),
@@ -50,50 +54,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   m_vbox.pack_start(m_speaker_combo);
     
   Gtk::Label *label;
-    
-  if (m_net->get_type() & NET_TYPE_LOWPASS) {
-    Gtk::Frame *frame = manage(new Gtk::Frame("Lowpass"));
-    m_vbox.pack_start(*frame);
-    Gtk::VBox *vbox = manage(new Gtk::VBox());
-    frame->add(*vbox);
-    vbox->set_border_width(5);
-    
-    /* Setup menus */
-    m_lower_order_optionmenu = manage(new Gtk::OptionMenu());
-    m_lower_order_menu = manage(new Gtk::Menu());
-    Gtk::Menu::MenuList& menulist = m_lower_order_menu->items();
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
-    
-    m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
 
-    
-    m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
-    m_lower_type_menu = manage(new Gtk::Menu());
-    m_lower_order_optionmenu->set_history(m_net->get_lowpass_order() - 1);
-    on_order_selected(0, m_net->get_lowpass_order());
-       
-    /* Grey items in this menu */
-    
-    m_lower_type_optionmenu->set_menu(*m_lower_type_menu);
-    /* menus ready */
-    
-    Gtk::HBox *hbox = manage(new Gtk::HBox());
-    vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label("Order: "))));
-    hbox->pack_start(*m_lower_order_optionmenu);
-    vbox->pack_start(*m_lower_type_optionmenu);
-    hbox = manage(new Gtk::HBox());
-    hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
-    m_lower_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
-    
-    hbox->pack_start(*m_lower_co_freq_spinbutton);
-    hbox->pack_start((*manage(new Gtk::Label("Hz"))));
-    vbox->pack_start(*hbox);
-  } 
-  
   if (net->get_type() & NET_TYPE_HIGHPASS) {
     Gtk::Frame *frame = manage(new Gtk::Frame("Highpass"));
     m_vbox.pack_start(*frame);
@@ -139,6 +100,51 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     hbox->pack_start(*label);
     vbox->pack_start(*hbox);
   }
+
+
+  if (m_net->get_type() & NET_TYPE_LOWPASS) {
+    Gtk::Frame *frame = manage(new Gtk::Frame("Lowpass"));
+    m_vbox.pack_start(*frame);
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+    frame->add(*vbox);
+    vbox->set_border_width(5);
+    
+    /* Setup menus */
+    m_lower_order_optionmenu = manage(new Gtk::OptionMenu());
+    m_lower_order_menu = manage(new Gtk::Menu());
+    Gtk::Menu::MenuList& menulist = m_lower_order_menu->items();
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
+    
+    m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
+
+    
+    m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
+    m_lower_type_menu = manage(new Gtk::Menu());
+    m_lower_order_optionmenu->set_history(m_net->get_lowpass_order() - 1);
+    on_order_selected(0, m_net->get_lowpass_order());
+       
+    /* Grey items in this menu */
+    
+    m_lower_type_optionmenu->set_menu(*m_lower_type_menu);
+    /* menus ready */
+    
+    Gtk::HBox *hbox = manage(new Gtk::HBox());
+    vbox->pack_start(*hbox);
+    hbox->pack_start((*manage(new Gtk::Label("Order: "))));
+    hbox->pack_start(*m_lower_order_optionmenu);
+    vbox->pack_start(*m_lower_type_optionmenu);
+    hbox = manage(new Gtk::HBox());
+    hbox->pack_start((*manage(new Gtk::Label("Cutoff: "))));
+    m_lower_co_freq_spinbutton = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
+    
+    hbox->pack_start(*m_lower_co_freq_spinbutton);
+    hbox->pack_start((*manage(new Gtk::Label("Hz"))));
+    vbox->pack_start(*hbox);
+  } 
+  
     
   //m_vbox.pack_start(m_inv_pol_checkbutton);
   m_vbox.pack_start(m_imp_corr_checkbutton);
@@ -180,6 +186,7 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
   signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_plot_crossover));
   g_settings.defaultValueString("SPICECmdLine", "spice3");
+  //on_plot_crossover();
 }
 
 void FilterLinkFrame::on_order_selected(int which, int order)
@@ -435,6 +442,7 @@ void FilterLinkFrame::on_param_changed()
     }
     signal_net_modified_by_wizard();
   }
+  //on_plot_crossover();
 }
 
 void FilterLinkFrame::on_net_updated(Net *net)
@@ -493,7 +501,42 @@ void FilterLinkFrame::on_plot_crossover()
   system(cmd.c_str());
   cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
   /* extract spice output into a vector */
+  string spice_output_file = spice_filename + ".out";
+  ifstream fin(spice_output_file.c_str());
+  bool output = false;
+  int id;
+  float f1, f2, f3;
+  vector<GSpeakers::Point> points;
+  while (!fin.eof()) {
+    char *buffer = new char[100];
+    fin.getline(buffer, 100, '\n');
+    if (buffer[0] == '0') {
+      output = true;
+    }
+    if (output == true) {
+      /* TODO: Read the sscanf string from settings */
+      sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+      GSpeakers::Point p(round(f1), f3);
+      points.push_back(p);
+    }
+    if ((buffer[0] == '3') && (buffer[1] == '0')) {
+      output = false;
+    }
+  }
   /* send the spice data to the plot */
+  /* TODO: improve color handling here */
+  Gdk::Color c;
+  if (m_net->get_type() == NET_TYPE_LOWPASS) {
+    c = Gdk::Color("blue");
+  } else if (m_net->get_type() == NET_TYPE_HIGHPASS) {
+    c = Gdk::Color("red");
+  } else if (m_net->get_type() == NET_TYPE_BANDPASS) {
+    c = Gdk::Color("green");
+  }
+  
+  signal_add_crossover_plot(points, c);
+  /* TODO: update filterwizard, co_freq_spinbutton here */
+  
 }   
 
 vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)

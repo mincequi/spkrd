@@ -46,7 +46,7 @@ bool GSpeakersPlot::on_expose_event(GdkEventExpose* event)
 		     event->area.x, event->area.y,
 		     event->area.x, event->area.y,
 		     event->area.width, event->area.height);
-
+  m_selected_plot = -1;
   //cout << "GSpeakersPlot: on_expose" << endl;
 
   return false;
@@ -102,19 +102,48 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
   
   vector<GSpeakers::Point>::iterator iter;
   for ( iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter ) {
+    if (m_upper_x == 20000) {
+      if ( (*iter).get_x() < 100 ) {
+        /* Devide by 10 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 10;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = BOX_FRAME_SIZE + round( half_space_x / 2 * f_mapped );
+      } else if ((*iter).get_x() >= 100) {
+        /* Devide by 100 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 100;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = round(BOX_FRAME_SIZE + half_space_x / 2 + round( half_space_x / 2 * f_mapped ));
+      } else if ((*iter).get_x() >= 1000) {
+        /* Devide by 1000 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 1000;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = BOX_FRAME_SIZE + half_space_x + round( (half_space_x / 2) * f_mapped );
+      } else if ((*iter).get_x() >= 10000) {
+        /* Devide by 1000 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 10000;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = round(BOX_FRAME_SIZE + 1.5 * half_space_x + round( (half_space_x / 2) * f_mapped ));
+      }
+  
 
-    if ( (*iter).get_x() < 100 ) {
-      /* Devide by 10 to only log numbers 0 < number < 10 */
-      f_div = (double)((*iter).get_x()) / 10;
-      f_mapped = log10( f_div );
-      /* This is the x coordinate */
-      x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
-    } else if ((*iter).get_x() >= 100) {
-      /* Devide by 100 to only log numbers 0 < number < 10 */
-      f_div = (double)((*iter).get_x()) / 100;
-      f_mapped = log10( f_div );
-      /* This is the x coordinate */
-      x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+    } else {
+      if ( (*iter).get_x() < 100 ) {
+        /* Devide by 10 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 10;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
+      } else if ((*iter).get_x() >= 100) {
+        /* Devide by 100 to only log numbers 0 < number < 10 */
+        f_div = (double)((*iter).get_x()) / 100;
+        f_mapped = log10( f_div );
+        /* This is the x coordinate */
+        x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+      }    
     }
 
     /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
@@ -180,7 +209,6 @@ void GSpeakersPlot::remove_plot(int n)
         m_colors.erase(iter);
       }
     }
-    cout << "loop 2" << endl;
     i = 0;
     for (vector<bool>::iterator iter = m_visible_plots.begin();
          iter != m_visible_plots.end();
@@ -192,6 +220,7 @@ void GSpeakersPlot::remove_plot(int n)
     }
   }
   cout << "loop 3" << endl;
+  m_selected_plot = -1;
   redraw();
   Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
   get_window()->invalidate_rect(update_rect, false);
@@ -199,9 +228,35 @@ void GSpeakersPlot::remove_plot(int n)
 
 void GSpeakersPlot::remove_all_plots()
 {
-  for (unsigned i = 0; i < m_points.size(); i++) {
-    remove_plot((int)i);
-  }
+//  for (unsigned i = m_points.size(); i > 0; --i) {
+//    remove_plot((int)i);
+//  }
+  //cout << "number of point vectors: " << m_points.size() << endl;
+  m_points.erase(m_points.begin(), m_points.end());
+  m_colors.erase(m_colors.begin(), m_colors.end());
+  m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
+//  for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
+//       iter != m_points.end();
+//       ++iter)
+//  {
+//    m_points.erase(iter);
+//  }
+//  for (vector<Gdk::Color>::iterator iter = m_colors.begin();
+//       iter != m_colors.end();
+//       ++iter)
+//  {
+//    m_colors.erase(iter);
+//  }
+//  for (vector<bool>::iterator iter = m_visible_plots.begin();
+ //      iter != m_visible_plots.end();
+ //      ++iter)
+ // {
+ //   m_visible_plots.erase(iter);
+ // }
+  redraw();
+  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+  get_window()->invalidate_rect(update_rect, false);
+  
 }
 
 void GSpeakersPlot::hide_plot(int n)
@@ -270,19 +325,49 @@ void GSpeakersPlot::redraw()
       
       vector<GSpeakers::Point>::iterator iter;
       for ( iter = m_points[i].begin(); iter != m_points[i].end(); ++iter ) {
-  
-        if ( (*iter).get_x() < 100 ) {
-          /* Devide by 10 to only log numbers 0 < number < 10 */
-          f_div = (double)((*iter).get_x()) / 10;
-          f_mapped = log10( f_div );
-          /* This is the x coordinate */
-          x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
-        } else if ((*iter).get_x() >= 100) {
-          /* Devide by 100 to only log numbers 0 < number < 10 */
-          f_div = (double)((*iter).get_x()) / 100;
-          f_mapped = log10( f_div );
-          /* This is the x coordinate */
-          x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+
+        if (m_upper_x == 20000) {
+          if ( (*iter).get_x() < 100 ) {
+            /* Devide by 10 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 10;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = BOX_FRAME_SIZE + round( half_space_x / 2 * f_mapped );
+          } else if ((*iter).get_x() >= 100) {
+            /* Devide by 100 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 100;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = round(BOX_FRAME_SIZE + half_space_x / 2 + round( half_space_x / 2 * f_mapped ));
+          } else if ((*iter).get_x() >= 1000) {
+            /* Devide by 1000 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 1000;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = BOX_FRAME_SIZE + half_space_x + round( (half_space_x / 2) * f_mapped );
+          } else if ((*iter).get_x() >= 10000) {
+            /* Devide by 1000 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 10000;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = round(BOX_FRAME_SIZE + 1.5 * half_space_x + round( (half_space_x / 2) * f_mapped ));
+          }
+      
+    
+        } else {
+          if ( (*iter).get_x() < 100 ) {
+            /* Devide by 10 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 10;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = BOX_FRAME_SIZE + round( half_space_x * f_mapped );
+          } else if ((*iter).get_x() >= 100) {
+            /* Devide by 100 to only log numbers 0 < number < 10 */
+            f_div = (double)((*iter).get_x()) / 100;
+            f_mapped = log10( f_div );
+            /* This is the x coordinate */
+            x = BOX_FRAME_SIZE + half_space_x + round( half_space_x * f_mapped );
+          }    
         }
   
         /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
@@ -309,11 +394,13 @@ void GSpeakersPlot::redraw()
       if (i == m_selected_plot) {
         m_linesize = m_linesize + 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
+        cout << "select plot" << endl;
       }
       m_refPixmap->draw_lines( m_refGC, points );
       if (i == m_selected_plot) {
         m_linesize = m_linesize - 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
+        cout << "select plot" << endl;
       }
 
     }

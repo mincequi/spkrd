@@ -28,12 +28,18 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() :
   //signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   //signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
   //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
+  signal_add_crossover_plot.connect(slot(plot, &GSpeakersPlot::add_plot));
   show_all();
 }
 
 GSpeakersFilterPlot::~GSpeakersFilterPlot()
 {
 
+}
+
+void GSpeakersFilterPlot::clear()
+{
+  plot.remove_all_plots();
 }
 
 bool GSpeakersFilterPlot::on_delete_event(GdkEventAny *event)

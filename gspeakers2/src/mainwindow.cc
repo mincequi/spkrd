@@ -44,7 +44,8 @@ MainWindow::MainWindow() :
   
 {
   add(m_main_vbox);
-
+  m_main_vbox.set_spacing(3);
+  
   set_title("GSpeakers-" + string(VERSION));
 
   g_settings.defaultValueBool("SetMainWindowSize", true);
@@ -81,8 +82,8 @@ MainWindow::MainWindow() :
     menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _4-way crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_FOURWAY) ) );
     menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("Update crossover", slot(*this, &MainWindow::on_update_crossover)) );
-    menulist.push_back( Gtk::Menu_Helpers::MenuElem("Plot crossover", slot(*this, &MainWindow::on_plot_crossover)) );
+    //menulist.push_back( Gtk::Menu_Helpers::MenuElem("Update crossover", slot(*this, &MainWindow::on_update_crossover)) );
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("_Plot crossover", slot(*this, &MainWindow::on_plot_crossover)) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
@@ -95,6 +96,8 @@ MainWindow::MainWindow() :
 
   //Add the MenuBar to the window:
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
+  
+  m_main_vbox.pack_start(speaker_list_selector, Gtk::PACK_SHRINK, Gtk::PACK_SHRINK);
   
   m_main_vbox.pack_start(m_main_notebook);
   
@@ -206,6 +209,7 @@ void MainWindow::on_crossover_menu_action(int type)
 void MainWindow::on_plot_crossover()
 {
   cout << "MainWindow::on_plot_crossover" << endl;
+  filter_plot.clear();
   signal_plot_crossover();
 }
 

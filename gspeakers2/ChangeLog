@@ -1,5 +1,12 @@
 GSpeakers ChangeLog
 
+2002-09-03
+
+* filterlinkframe.cc: add SPICE parsing routines
+
+* mainwindow.cc, speakerlistselector.cc, filterlinkframe.cc: ui tweaks, added 
+    simple filter plot for 1st order crossover networks
+
 2002-09-02
 
 * common.h/cc: new signals, add_crossover_plot and plot_crossover

@@ -37,6 +37,7 @@ class GSpeakersFilterPlot : public Gtk::Frame
 public:
   GSpeakersFilterPlot();
   ~GSpeakersFilterPlot();
+  void clear();
 private: 
   GSpeakersPlot plot;
   bool on_delete_event(GdkEventAny *event);

@@ -67,7 +67,7 @@ int main (int argc, char *argv[])
   //n.set_has_damp(true);
   //Speaker s;
   //cout << n.to_SPICE(s) << endl;
-
+  //printf("%e\n", 3.0);
   return 0;
 }
 /*

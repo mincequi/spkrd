@@ -28,14 +28,14 @@ SpeakerListSelector::SpeakerListSelector() :
   m_Table(1, 4, false)
 {
   Gtk::Label *l = manage(new Gtk::Label("Speaker xml: "));
-  m_Table.attach(*l, 0, 1, 0, 1);
-  m_Table.attach(m_SpeakerXmlFilenameEntry, 1, 2, 0, 1);
-  m_Table.attach(m_EditButton, 3, 4, 0, 1);
-  m_Table.attach(m_OpenButton, 2, 3, 0, 1);
+  m_Table.attach(*l, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  m_Table.attach(m_SpeakerXmlFilenameEntry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  m_Table.attach(m_EditButton, 3, 4, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
+  m_Table.attach(m_OpenButton, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   
   m_Table.set_spacings(5);
   m_vbox.set_border_width(5);
-  m_vbox.pack_start(m_Table);
+  m_vbox.pack_start(m_Table, Gtk::PACK_SHRINK);
   add(m_vbox);
   
   m_SpeakerXmlFilenameEntry.set_sensitive(false);

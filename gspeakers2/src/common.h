@@ -100,6 +100,6 @@ extern Signal0<void> signal_net_modified_by_wizard;  // listen to this in crosso
 extern Signal1<void, Net *> signal_net_modified_by_user;    // listan to this in filter wizard
 extern Signal1<void, int> signal_new_crossover;
 extern Signal0<void> signal_plot_crossover;
-extern Signal1<void, vector<GSpeakers::Point>&, Gdk::Color> signal_add_crossover_plot;
+extern Signal2<void, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_crossover_plot;
 
 #endif //__GFILTER_COMMON_H
