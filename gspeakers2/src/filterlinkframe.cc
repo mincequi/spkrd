@@ -620,7 +620,7 @@ void FilterLinkFrame::on_plot_crossover()
   }
   string spice_filename;
   try {
-    spice_filename = m_net->to_SPICE(speaker);
+    spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (GSpeakersException e) {
 #ifdef OUTPUT_DEBUG
     cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
@@ -632,8 +632,8 @@ void FilterLinkFrame::on_plot_crossover()
   
   /* run spice with created file */
   string cmd;
-  if (g_settings.getValueBool("SPICEUseNGSPICE") == true) {
-    cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + "> " + spice_filename + ".out";
+  if ((g_settings.getValueBool("SPICEUseNGSPICE") == true) || (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
+    cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + " > " + spice_filename + ".out";
   } else {
     cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " + spice_filename;
   }
@@ -651,30 +651,69 @@ void FilterLinkFrame::on_plot_crossover()
   if (fin.good()) {
     bool output = false;
     int id;
+    float f_id;
     float f1, f2, f3;
     points.erase(points.begin(), points.end());
     while (!fin.eof()) {
       char *buffer = new char[100];
       fin.getline(buffer, 100, '\n');
-      if (buffer[0] == '0') {
-        output = true;
+      if (g_settings.getValueBool("SPICEUseGNUCAP") == true ) {
+	if (isblank(buffer[0])) {
+	  output = true;
+	}
+      } else {
+	if (buffer[0] == '0') {
+	  output = true;
+	}
       }
-      if (output == true) {
-        // sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
       
-        id = atoi(buffer);
 
-        strtok(buffer, "\t");
-        char *substr_ptr = strtok(NULL, "\t");
+      if (output == true) {
+	if (g_settings.getValueBool("SPICEUseGNUCAP") == true ) {	    
+	  f_id = atof(buffer);
+	  if (f_id != 0) {
+	    /* Check if we got a freq more than 10kHz */
+	    char *substr_ptr = strstr(buffer, "K");
+	    if (substr_ptr != NULL) {
+	      f1 = f_id * 1000;
+	    } else {
+	      f1 = f_id;
+	    }
+	    substr_ptr = strtok(buffer, " ");
+	    substr_ptr = strtok(NULL, " ");
+	    f2 = g_ascii_strtod(substr_ptr, NULL);
+// 	    if (strstr(substr_ptr, "m")) {
+// 	      f2 = f2 / 1000.;
+// 	    } else if (strstr(substr_ptr, "u")) {
+// 	      f2 = f2 / 1000000.;
+// 	    } else if (strstr(substr_ptr, "n")) {
+// 	      f2 = f2 / 1000000000.;
+// 	    } else if (strstr(substr_ptr, "p")) {
+// 	      f2 = f2 / 1000000000000.;
+// 	    }
+	    //	    cout << f1 << '\t' << endl;
+	    GSpeakers::Point p(GSpeakers::round(f1), f2);
+	    points.push_back(p);
+	  }
+
+	} else {
+
+	  // sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+	  
+	  id = atoi(buffer);
+	  
+	  strtok(buffer, "\t");
+	  char *substr_ptr = strtok(NULL, "\t");
           
-        f1 = g_ascii_strtod(substr_ptr, NULL);
-        substr_ptr = strtok(NULL, "\t");
-        f2 = g_ascii_strtod(substr_ptr, NULL);
-        substr_ptr = strtok(NULL, "\t");
-        f3 = g_ascii_strtod(substr_ptr, NULL);
-
-        GSpeakers::Point p(GSpeakers::round(f1), f3);
-        points.push_back(p);
+	  f1 = g_ascii_strtod(substr_ptr, NULL);
+	  substr_ptr = strtok(NULL, "\t");
+	  f2 = g_ascii_strtod(substr_ptr, NULL);
+	  substr_ptr = strtok(NULL, "\t");
+	  f3 = g_ascii_strtod(substr_ptr, NULL);
+	  
+	  GSpeakers::Point p(GSpeakers::round(f1), f3);
+	  points.push_back(p);
+	}
       }
       if ((buffer[0] == '3') && (buffer[1] == '0')) {
         output = false;

@@ -1,6 +1,20 @@
 GSpeakers ChangeLog
 
-2004-06-10
+2004-06-21
+
+* speakereditor.cc: use gnucap if specified
+	 
+* filterlinkframe.cc: use gnucap if specified
+	
+* net.h/cc: added use_gnucap property to Net::to_spice
+	
+* mainwindow.cc, speakereditor.cc: added gnucap config option
+	
+2004-06-19
+
+* filterlinkframe.cc, speakereditor.cc: added ngspice 
+
+2004-06-19
 
 * mainwindow.cc, settingsdialog.h/cc: added use ngspice checkbox
 	

@@ -227,12 +227,15 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting)
       if (m_spice_use_berkley.get_active()) {
 	g_settings.setValue("SPICEUseNGSPICE", false);
 	g_settings.setValue("SPICEUseGNUCAP", false);
+	m_spice_path_entry.set_text("spice3");
       } else if (m_spice_use_ngspice.get_active()) {
 	g_settings.setValue("SPICEUseNGSPICE", true);
 	g_settings.setValue("SPICEUseGNUCAP", false);
+	m_spice_path_entry.set_text("ngspice");
       } else {
 	g_settings.setValue("SPICEUseNGSPICE", false);
 	g_settings.setValue("SPICEUseGNUCAP", true);
+	m_spice_path_entry.set_text("gnucap");
       }
       
       break;

@@ -82,7 +82,7 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const Net& net);
 
   /* Maybe we should add a toSPICE function here */
-  string to_SPICE(Speaker& s);
+  string to_SPICE(Speaker& s, bool use_gnucap = false);
 
   /* Use this to get the parts or add part to the net */
   vector<Part> *parts();
