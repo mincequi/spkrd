@@ -1,5 +1,17 @@
 GSpeakers ChangeLog
 
+2004-06-22
+
+* GSpeakers-0.11
+	
+* crossoverhistory.h/cc: use FileChooser
+	
+* boxhistory.h/cc: use the FileChooser
+	
+* gspeakersfilechooser.h/cc: Implemented GSpeakersFileChooserDialog
+
+* speakereditor.h/cc: converted to GSpeakersFileChooser
+	
 2004-06-21
 
 * gspeakersfilechooser.h/cc: added files

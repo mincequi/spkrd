@@ -1,5 +1,7 @@
 GSpeakers-0.11
 
+* GSpeakers can now build and run on Windows and Mac-OSX
+
 * GSpeakers now requires gtkmm-2.4
 
 * Use new filechooser dialogs
