@@ -51,7 +51,6 @@ class SimToolbar : public Gtk::HandleBox {
   ~SimToolbar();
   void set_toolbar_style( int style );
 
- protected:
   /* Callbacks */
   void sim_clicked();
   void rem_plot_clicked();
@@ -64,6 +63,7 @@ class SimToolbar : public Gtk::HandleBox {
   void sim_all_speakers_clicked();
   void all_boxes_all_speakers_clicked();
   
+ protected:
   SpeakerToolbar *sbar;
   BoxToolbar *bbar;
   GSpeakersPlot *plot;
@@ -77,8 +77,8 @@ class SimToolbar : public Gtk::HandleBox {
   Gtk::Button *rem_plot_button;
   Gtk::Button *rem_all_button;
   Gtk::Button *opt_box_button;
-  Gtk::Button *cfg_button;
-  Gtk::Button *about_button;
+/*    Gtk::Button *cfg_button; */
+/*    Gtk::Button *about_button; */
 
  private:
   Gdk_Color *color;

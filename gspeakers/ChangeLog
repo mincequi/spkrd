@@ -1,3 +1,9 @@
+2002-01-03 19.00 sumpan
+	
+	* src/gspeakersmenu.h src/gspeakersmenu.cc
+	  Added menubar to the project
+	  Removed properties and about from toolbar
+
 2002-01-01 17.30 sumpan
 
 	* Added "plot current speaker with all boxes"

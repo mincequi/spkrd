@@ -21,5 +21,7 @@ cconfig.cc\
 gspeakerscfg.h\
 gspeakerscfg.cc\
 gspeakerscfgbox.h\
-gspeakerscfgbox.cc
+gspeakerscfgbox.cc\
+gspeakersmenu.h\
+gspeakersmenu.cc
 gspeakers_LDADD = $(G_LIBS)

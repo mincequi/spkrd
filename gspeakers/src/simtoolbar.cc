@@ -86,14 +86,14 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   cfg->tooltips->set_tip( *opt_box_button, "Optimize box size for current speaker and boxtype" );
   opt_box_button->set_relief( GTK_RELIEF_NONE );
   opt_box_button->clicked.connect( slot( this, &SimToolbar::opt_box_clicked ) );
-  cfg_button = manage( new Gtk::Button() );
-  cfg->tooltips->set_tip( *cfg_button, "Open properties dialog" );
-  cfg_button->set_relief( GTK_RELIEF_NONE );
-  cfg_button->clicked.connect( slot( this, &SimToolbar::cfg_clicked ) );
-  about_button = manage( new Gtk::Button() );
-  cfg->tooltips->set_tip( *about_button, "Open about dialog" );
-  about_button->set_relief( GTK_RELIEF_NONE );
-  about_button->clicked.connect( slot( this, &SimToolbar::about_clicked ) );
+//    cfg_button = manage( new Gtk::Button() );
+//    cfg->tooltips->set_tip( *cfg_button, "Open properties dialog" );
+//    cfg_button->set_relief( GTK_RELIEF_NONE );
+//    cfg_button->clicked.connect( slot( this, &SimToolbar::cfg_clicked ) );
+//    about_button = manage( new Gtk::Button() );
+//    cfg->tooltips->set_tip( *about_button, "Open about dialog" );
+//    about_button->set_relief( GTK_RELIEF_NONE );
+//    about_button->clicked.connect( slot( this, &SimToolbar::about_clicked ) );
 
   /* The horizontal box */
   hbox = manage( new Gtk::HBox() );
@@ -105,8 +105,8 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   hbox->pack_start( *rem_plot_button, false, true );
   hbox->pack_start( *rem_all_button, false, true );
   hbox->pack_start( *opt_box_button, false, true );
-  hbox->pack_start( *cfg_button, false, true );
-  hbox->pack_start( *about_button, false, true );
+//    hbox->pack_start( *cfg_button, false, true );
+//    hbox->pack_start( *about_button, false, true );
   set_toolbar_style( cfg->get_toolbar_style() );
 }
 
@@ -361,7 +361,7 @@ double *SimToolbar::calc_dbmag( Box *b, Speaker *s ) {
 
 void SimToolbar::set_toolbar_style( int style ) {
   Gtk::ImageLoader *il1, *il2, *il3, *il4;
-  Gnome::Pixmap *pixmap;
+  //  Gnome::Pixmap *pixmap;
   Gtk::VBox *vbox;
   Gtk::Label *l;
   Gtk::Pixmap *gtk_pixmap;
@@ -389,10 +389,10 @@ void SimToolbar::set_toolbar_style( int style ) {
     il4 = new Gtk::ImageLoader( cfg->get_xpm_path() + "opt_box.xpm" );
     opt_box_button->add_pixmap( il4->pix(), il4->bit() );
     delete il4;
-    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
-    cfg_button->add( *pixmap );
-    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
-    about_button->add( *pixmap );
+//      pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
+//      cfg_button->add( *pixmap );
+//      pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
+//      about_button->add( *pixmap );
     break;
   case TEXT_ONLY:
     sim_button->add_label( "Plot" );
@@ -402,8 +402,8 @@ void SimToolbar::set_toolbar_style( int style ) {
     rem_plot_button->add_label( "Remove plot" );
     rem_all_button->add_label( "Remove all plots" );
     opt_box_button->add_label( "Optimize box" );
-    cfg_button->add_label( "Properties" );
-    about_button->add_label( "About" );
+//      cfg_button->add_label( "Properties" );
+//      about_button->add_label( "About" );
     break;
   case TEXT_AND_ICONS:
     gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "plot_template.xpm" ) );
@@ -455,19 +455,19 @@ void SimToolbar::set_toolbar_style( int style ) {
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
 
-    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
-    vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "Properties" ) );
-    cfg_button->add( *vbox );
-    vbox->pack_start( *pixmap );
-    vbox->pack_start( *l );
+//      pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_PROPERTIES ) );
+//      vbox = manage( new Gtk::VBox() );
+//      l = manage( new Gtk::Label( "Properties" ) );
+//      cfg_button->add( *vbox );
+//      vbox->pack_start( *pixmap );
+//      vbox->pack_start( *l );
 
-    pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
-    vbox = manage( new Gtk::VBox() );
-    l = manage( new Gtk::Label( "About" ) );
-    about_button->add( *vbox );
-    vbox->pack_start( *pixmap );
-    vbox->pack_start( *l );
+//      pixmap = manage( new Gnome::StockPixmap( GNOME_STOCK_PIXMAP_ABOUT ) );
+//      vbox = manage( new Gtk::VBox() );
+//      l = manage( new Gtk::Label( "About" ) );
+//      about_button->add( *vbox );
+//      vbox->pack_start( *pixmap );
+//      vbox->pack_start( *l );
 
     break;
   }

@@ -38,6 +38,7 @@
 #include "simtoolbar.h"
 #include "boxlist.h"
 #include "gspeakersplot.h"
+#include "gspeakersmenu.h"
 #include "../config.h"
 
 GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeakers"), 
@@ -78,9 +79,13 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
   BoxList *l = manage( new BoxList( cfg ) );
   SimToolbar *simtoolbar = manage( new SimToolbar( stoolbar, btoolbar, d, l, cfg ) );
 
+  GSpeakersMenu *menubar = manage( new GSpeakersMenu( stoolbar, btoolbar, 
+						      simtoolbar, cfg ) );
+
   set_statusbar( sbar );
   set_contents( vbox );
 
+  vbox.pack_start( *menubar, false, false );
   vbox.pack_start( *stoolbar, false, false );
   vbox.pack_start( *btoolbar, false, false );
   vbox.pack_start( *simtoolbar, false, false );
