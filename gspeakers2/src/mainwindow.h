@@ -26,12 +26,14 @@
 #include "boxeditor.h"
 #include "plothistory.h"
 #include "boxhistory.h"
+#include "crossovertreeview.h"
+#include "crossoverhistory.h"
 
 class MainWindow : public Gtk::Window
 {
 public:
   MainWindow();
-  ~MainWindow();
+  virtual ~MainWindow();
   
 private:
   Gtk::VBox m_main_vbox;
@@ -40,8 +42,12 @@ private:
   Gtk::Notebook m_cpanel_notebook, m_plot_notebook;
   Gtk::ScrolledWindow m_boxpanel_scrolled_window, m_filterpanel_scrolled_window;
   Gtk::VBox m_boxpanel_vbox;
-  Gtk::VPaned m_boxplot_paned;
-  
+  Gtk::VPaned m_boxplot_paned, m_cpanel_paned;
+
+  Gtk::MenuBar m_menubar;
+  Gtk::Menu m_file_menu;
+  Gtk::Menu m_help_menu;
+
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
   BoxEditor box_editor;
   BoxHistory box_history;
@@ -50,6 +56,13 @@ private:
   SpeakerListSelector speaker_list_selector;
 
   GSpeakersBoxPlot box_plot;
+
+  CrossoverTreeView crossover_treeview;
+  CrossoverHistory crossover_history;  
+
+  /* Callbacks */
+  void on_quit();
+  void on_about();
 };
 
 #endif

@@ -18,11 +18,11 @@
 #include "crossovertreeview.h"
 #include "common.h"
 
-CrossoverTreeView::CrossoverTreeView() : Gtk::Window()
+CrossoverTreeView::CrossoverTreeView()
 {
-  set_title("Current crossover");
+//  set_title("Current crossover");
   set_border_width(8);
-  set_default_size(300, 300);
+  //set_default_size(300, 300);
 
   add(m_ScrolledWindow);
 
@@ -336,7 +336,7 @@ void CrossoverTreeView::on_crossover_selected(SigC::Object *new_crossover)
     m_vecItems.begin(), m_vecItems.end(),
     slot(*this, &CrossoverTreeView::treestore_add_item));
   m_TreeView.expand_all();
-  set_title("Current crossover [" + cover->get_id_string() + "]");
+  //set_title("Current crossover [" + cover->get_id_string() + "]");
 }
 
 void CrossoverTreeView::create_model()
@@ -470,5 +470,5 @@ void CrossoverTreeView::on_realize()
   m_TreeView.expand_all();
 
   //call base class:
-  Window::on_realize();
+  Frame::on_realize();
 }

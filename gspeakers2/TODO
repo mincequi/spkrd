@@ -64,3 +64,5 @@ the structure in the program, some are important due to the UI experience.
 * Program icon for the main window
 
 * Add tooltips to appropriate widgets
+
+* Add try/catch on xml files loaded in ctors

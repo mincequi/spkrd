@@ -31,6 +31,7 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_upper_y = upper_y;
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
+  m_linesize = 1;
 }
 
 bool GSpeakersPlot::on_expose_event(GdkEventExpose* event)
@@ -85,7 +86,7 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
   m_visible_plots.push_back(true);
   m_colors.push_back(ref_color);
   m_points.push_back(ref_point_vector);
-
+  
   int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
   int half_space_x = round( total_space_x / 2 );
   int box_x, box_y, box_width, box_height;
@@ -141,7 +142,8 @@ void GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Co
 
   /* Reset rgb fg color */
   m_refGC->set_rgb_fg_color(black);
-
+  
+  //select_plot(m_colors.size() - 1);
   Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
   get_window()->invalidate_rect(update_rect, false);
 
@@ -209,6 +211,14 @@ void GSpeakersPlot::hide_plot(int n)
   Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
   get_window()->invalidate_rect(update_rect, false);
 
+}
+
+void GSpeakersPlot::select_plot(int index) 
+{
+  m_selected_plot = index;
+  redraw();
+  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+  get_window()->invalidate_rect(update_rect, false);
 }
 
 void GSpeakersPlot::redraw()
@@ -296,7 +306,16 @@ void GSpeakersPlot::redraw()
         } 
       }
       /* Don't draw the line until we have it all done */
+      if (i == m_selected_plot) {
+        m_linesize = m_linesize + 2;
+        m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
+      }
       m_refPixmap->draw_lines( m_refGC, points );
+      if (i == m_selected_plot) {
+        m_linesize = m_linesize - 2;
+        m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
+      }
+
     }
   }
 

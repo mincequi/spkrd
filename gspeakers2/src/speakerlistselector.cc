@@ -23,27 +23,20 @@
 SpeakerListSelector::SpeakerListSelector() : 
   Gtk::Frame("Speaker list xml"), 
   m_SpeakerXmlFilenameEntry(),
-  m_OpenButton("Open..."), 
+  m_OpenButton("Open.."), 
   m_EditButton("Edit speakers..."), 
-  m_hbox1(), 
-  m_hbox2(),
-  m_vbox()
+  m_Table(1, 4, false)
 {
   Gtk::Label *l = manage(new Gtk::Label("Speaker xml: "));
-  m_hbox1.pack_start(*l, Gtk::FILL);
-  m_hbox1.pack_start(m_SpeakerXmlFilenameEntry);
-  m_hbox2.pack_end(m_EditButton, Gtk::FILL);
-  m_hbox2.pack_end(m_OpenButton, Gtk::FILL);
+  m_Table.attach(*l, 0, 1, 0, 1);
+  m_Table.attach(m_SpeakerXmlFilenameEntry, 1, 2, 0, 1);
+  m_Table.attach(m_EditButton, 3, 4, 0, 1);
+  m_Table.attach(m_OpenButton, 2, 3, 0, 1);
   
-  m_vbox.pack_start(m_hbox1);
-  m_vbox.pack_start(m_hbox2);
-  m_hbox1.set_spacing(5);
-  m_hbox2.set_spacing(5);
-  m_vbox.set_spacing(5);
+  m_Table.set_spacings(5);
+  m_vbox.set_border_width(5);
+  m_vbox.pack_start(m_Table);
   add(m_vbox);
-  
-  m_vbox.set_border_width(8);
-//  set_title("Select speaker xml");
   
   m_SpeakerXmlFilenameEntry.set_sensitive(false);
   m_OpenButton.signal_clicked().connect(slot(*this, &SpeakerListSelector::on_open));
@@ -102,7 +95,7 @@ void SpeakerListSelector::on_open_ok(Gtk::FileSelection *f)
 
 void SpeakerListSelector::on_speakerlist_loaded(string speaker_list_filename)
 {
-  //set_title("[" + speaker_list_filename + "]");
+  //set_label("Speaker list xml [" + speaker_list_filename + "]");
   m_speaker_list = SpeakerList(speaker_list_filename);
   m_SpeakerXmlFilenameEntry.set_text(speaker_list_filename);
   g_settings.setValue("SpeakerListXml", speaker_list_filename);
@@ -111,7 +104,7 @@ void SpeakerListSelector::on_speakerlist_loaded(string speaker_list_filename)
 
 void SpeakerListSelector::on_edit_speakers()
 {
-  cout << "on edit" << endl;
+  cout << "SpeakerListSelector::on_edit_speakers" << endl;
   speaker_liststore = new Speaker_ListStore(&m_speaker_list, m_SpeakerXmlFilenameEntry.get_text());
 
 }

@@ -4,23 +4,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <stdlib.h>
-#include "part.h"
 #include "common.h"
-#include "gfilter.h"
-#include "net.h"
-#include "crossoverlist.h"
-#include <stdio.h>
-#include "speaker.h"
-#include "speakerlist.h"
-#include "boxlist.h"
-#include "speakereditor.h"
-#include "crossovertreeview.h"
-#include "crossoverhistory.h"
-#include "speakerlistselector.h"
-#include "boxeditor.h"
-#include "boxhistory.h"
-#include "plothistory.h"
-#include "gspeakersboxplot.h"
 #include "mainwindow.h"
 
 int main (int argc, char *argv[])
@@ -45,7 +29,7 @@ int main (int argc, char *argv[])
   
   /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover to the TreeView */
   //CrossoverTreeView ctv;
-  //CrossoverHistory ch;
+  
   try {
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
   } catch (std::runtime_error e) {

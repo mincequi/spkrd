@@ -28,7 +28,7 @@ using namespace std;
 /*
  * This is a TreeView that displays the currently selected crossover
  */
-class CrossoverTreeView : public Gtk::Window {
+class CrossoverTreeView : public Gtk::Frame {
 public:
   CrossoverTreeView();
   virtual ~CrossoverTreeView();

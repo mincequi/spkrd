@@ -107,6 +107,8 @@ public:
   void set_line_style( Gdk::LineStyle &style );
   void set_line_size( int size );
 
+  void select_plot(int index);
+
 protected:
   /* This is the function that draws the graphics */
   
@@ -126,10 +128,11 @@ protected:
   void draw_log_grid();
   void draw_lin_grid();
   void draw_horz_grid();
-  int line_size;
+  int m_linesize;
   Gdk::LineStyle line_style;
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq;
   bool m_logx;
+  int m_selected_plot;
   
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;

@@ -91,5 +91,6 @@ extern Signal3<void, Box *, Speaker *, Gdk::Color&> signal_add_plot;
 extern Signal2<void, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 extern Signal1<void, int> signal_remove_box_plot;
 extern Signal1<void, int> signal_hide_box_plot;
+extern Signal1<void, int> signal_select_plot;
 
 #endif //__GFILTER_COMMON_H

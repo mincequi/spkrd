@@ -46,10 +46,11 @@ protected:
   /* Member widgets */
   Gtk::Entry m_SpeakerXmlFilenameEntry;
   Gtk::Button m_OpenButton, m_EditButton;
-  Gtk::HBox m_hbox1, m_hbox2;
+  Gtk::Table m_Table;
   Gtk::VBox m_vbox;
   
   Gtk::FileSelection *f_open;
+  
   
 private:
   SpeakerList m_speaker_list;

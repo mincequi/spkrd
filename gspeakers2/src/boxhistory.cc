@@ -32,7 +32,7 @@ BoxHistory::BoxHistory() :
   m_RemoveButton("Remove"),
   m_vbox()
 {
-  //set_title("Box history");
+  //    ("Box history");
   m_vbox.set_border_width(8);
   //set_default_size(250, 300);
 
@@ -60,7 +60,7 @@ BoxHistory::BoxHistory() :
   m_filename = g_settings.getValueString("BoxListXml");
   cout << "BoxHistory: " << m_filename << endl;
   m_box_list = BoxList(m_filename); 
-  //set_title("Box History [" + m_filename + "]");
+  set_label("Enclosure list [" + m_filename + "]");
   
   create_model();
 
@@ -183,7 +183,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     m_SaveButton.set_sensitive(false);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
-    //set_title("Box History [" + m_filename + "]");
+    set_label("Enclosure list [" + m_filename + "]");
     g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -324,7 +324,7 @@ void BoxHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   m_SaveButton.set_sensitive(true);
-  //set_title("Box History [new file]");
+  set_label("Enclosure list [new file]");
 }
 
 void BoxHistory::on_save()
@@ -359,7 +359,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
   m_box_list.to_xml(f->get_filename());
   f->hide();
   m_filename = f->get_filename();
-  //set_title("Box History [" + m_filename + "]");
+  set_label("Enclosure list [" + m_filename + "]");
   g_settings.setValue("BoxListXml", m_filename);
   m_SaveButton.set_sensitive(false);
 }

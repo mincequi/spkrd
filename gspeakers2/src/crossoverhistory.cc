@@ -30,10 +30,11 @@ CrossoverHistory::CrossoverHistory() :
   m_SaveAsButton("Save as..."),
   m_RemoveButton("Remove")
 {
-  set_title("Crossover history");
+  
+//  set_title("Crossover history");
   set_border_width(8);
-  set_default_size(250, 300);
-
+//  set_default_size(250, 300);
+  
   add(m_Table);
   m_Table.set_spacings(4);
   
@@ -41,6 +42,7 @@ CrossoverHistory::CrossoverHistory() :
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   
   m_Table.attach(m_ScrolledWindow, 0, 4, 0, 8, Gtk::FILL);
+  
   m_Table.attach(m_NewCopyButton, 0, 1, 8, 9);
   m_Table.attach(m_NewButton, 1, 2, 8, 9);
   m_Table.attach(m_NewXmlButton, 2, 3, 8, 9);
@@ -52,11 +54,11 @@ CrossoverHistory::CrossoverHistory() :
   
   
   /* Read this from settings later */
-  g_settings.defaultValueString("CrossoverListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  g_settings.defaultValueString("CrossoverListXml", string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
   m_filename = g_settings.getValueString("CrossoverListXml");
-
+  
   m_crossover_list = CrossoverList(m_filename); 
-  set_title("Crossover History [" + m_filename + "]");
+  //set_title("Crossover History [" + m_filename + "]");
   
   create_model();
 
@@ -81,7 +83,7 @@ CrossoverHistory::CrossoverHistory() :
   m_AppendXmlButton.signal_clicked().connect(slot(*this, &CrossoverHistory::on_append_xml));
 
 
-  signal_part_modified.connect(slot(*this, &CrossoverHistory::on_part_modified));
+  //signal_part_modified.connect(slot(*this, &CrossoverHistory::on_part_modified));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -91,6 +93,15 @@ CrossoverHistory::CrossoverHistory() :
   show_all();
   index = 0;
   m_SaveButton.set_sensitive(false);
+  
+  char *str = NULL;
+  GString *buffer = g_string_new(str);
+  g_string_printf(buffer, "%d", 0);
+  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+  Gtk::TreePath path(gpath);
+  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  selection->select(row);
+
 }
 
 bool CrossoverHistory::on_delete_event(GdkEventAny *event)
@@ -174,7 +185,7 @@ void CrossoverHistory::on_open_ok(Gtk::FileSelection *f)
     m_SaveButton.set_sensitive(false);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
-    set_title("Crossover History [" + m_filename + "]");
+    //set_title("Crossover History [" + m_filename + "]");
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
@@ -312,7 +323,7 @@ void CrossoverHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   m_SaveButton.set_sensitive(true);
-  set_title("Crossover History [new file]");
+  //set_title("Crossover History [new file]");
 }
 
 void CrossoverHistory::on_save()
@@ -347,7 +358,7 @@ void CrossoverHistory::on_save_as_ok(Gtk::FileSelection *f)
   m_crossover_list.to_xml(f->get_filename());
   f->hide();
   m_filename = f->get_filename();
-  set_title("Crossover History [" + m_filename + "]");
+  //set_title("Crossover History [" + m_filename + "]");
   m_SaveButton.set_sensitive(false);
 }
 
@@ -395,7 +406,7 @@ void CrossoverHistory::create_model()
 {
   m_refListStore = Gtk::ListStore::create(m_columns);
   
-  add_items(m_crossover_list);
+  //add_items(m_crossover_list);
 
   for_each(
       m_crossover_list.crossover_list()->begin(), m_crossover_list.crossover_list()->end(),

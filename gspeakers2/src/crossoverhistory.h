@@ -36,7 +36,7 @@ using namespace std;
  * depend on the currently selected crossover can update thier 
  * data.
  */
-class CrossoverHistory : public Gtk::Window
+class CrossoverHistory : public Gtk::Frame
 {
 public:
   CrossoverHistory();
