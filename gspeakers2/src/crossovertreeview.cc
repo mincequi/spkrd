@@ -41,7 +41,8 @@ CrossoverTreeView::CrossoverTreeView() :
   m_ScrolledWindow.add(m_TreeView);
 
   signal_crossover_selected.connect(slot(*this, &CrossoverTreeView::on_crossover_selected));
-
+  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverTreeView::on_net_modified_by_wizard));
+  
   show_all();
 }
 
@@ -52,6 +53,12 @@ CrossoverTreeView::~CrossoverTreeView()
 bool CrossoverTreeView::on_delete_event(GdkEventAny *event)
 {
   return true;
+}
+
+void CrossoverTreeView::on_net_modified_by_wizard()
+{
+  cout << "CrossoverTreeView::on_net_modified_by_wizard" << endl;
+  on_crossover_selected(cover);
 }
 
 void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text)

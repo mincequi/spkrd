@@ -54,6 +54,8 @@ private:
   BoxHistory box_history;
   /* Plot history will always be empty at startup for now */
   PlotHistory plot_history;
+  CrossoverWizard crossover_wizard;
+
   SpeakerListSelector speaker_list_selector;
 
   GSpeakersBoxPlot box_plot;
@@ -61,7 +63,6 @@ private:
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
 
-  CrossoverWizard crossover_wizard;
 
   /* Callbacks */
   void on_quit();

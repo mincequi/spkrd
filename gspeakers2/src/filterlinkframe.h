@@ -20,19 +20,30 @@
 
 #include <gtkmm.h>
 #include "crossover.h"
+#include "speakerlist.h"
 
 using namespace std;
 using namespace SigC;
 
+#define NET_BESSEL        1
+#define NET_BUTTERWORTH   2
+#define NET_LINKWITZRILEY 3
+#define NET_CHEBYCHEV     4
+#define NET_GAUSSIAN      5
+#define NET_LEGENDRE      6
+#define NET_LINEARPHASE   7
+
 class FilterLinkFrame : public Gtk::Frame
 {
 public:
-  FilterLinkFrame(Net *net, const string& description);
+  FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list);
   
 private:
   /* callbacks */
   /* which == 0: lower, which == 1: higher, order = filter order */
   void on_order_selected(int which, int order);
+  void on_param_changed();
+  void on_net_updated(Net *net);
 
   Gtk::Adjustment    adj;
 
@@ -55,9 +66,12 @@ private:
   Gtk::SpinButton    m_damp_spinbutton;
   Gtk::CheckButton   m_imp_corr_checkbutton;
   
+  /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS */
+  vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
   
   Net *m_net;
   string m_description;
+  SpeakerList *m_speaker_list;
 };
 
 #endif

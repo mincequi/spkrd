@@ -28,6 +28,7 @@ CrossoverWizard::CrossoverWizard() :
   add(m_scrolled_window);
   m_scrolled_window.add(m_vbox);
   show_all();
+  signal_speakerlist_loaded.connect(slot(*this, &CrossoverWizard::on_speaker_list_loaded));
 }
 
 CrossoverWizard::~CrossoverWizard() 
@@ -44,7 +45,13 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
        ++iter)
   {
     cout << iter->get_type() << endl;
-    FilterLinkFrame *link1 = manage(new FilterLinkFrame(iter, "filter"));
+    FilterLinkFrame *link1 = manage(new FilterLinkFrame(iter, "filter", &m_speaker_list));
     m_vbox.pack_start(*link1);
   }
+}
+
+void CrossoverWizard::on_speaker_list_loaded(string speaker_list_filename)
+{
+  cout << "CrossoverWizard::on_speaker_list_loaded" << endl;
+  m_speaker_list = SpeakerList(speaker_list_filename);
 }

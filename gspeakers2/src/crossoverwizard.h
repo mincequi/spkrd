@@ -21,6 +21,7 @@
 #include <gtkmm.h>
 #include "filterlinkframe.h"
 #include "common.h"
+#include "speakerlist.h"
 
 using namespace std;
 using namespace SigC;
@@ -31,9 +32,13 @@ public:
   CrossoverWizard();
   ~CrossoverWizard();
 private:
+  /* Callbacks */
+  void on_speaker_list_loaded(string speaker_list_filename);
+
   Gtk::ScrolledWindow m_scrolled_window;
   Gtk::VBox m_vbox;
   void on_crossover_selected(Crossover *crossover);
+  SpeakerList m_speaker_list;
 };
 
 #endif

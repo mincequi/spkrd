@@ -37,6 +37,7 @@ namespace GSpeakers {
 class Box;
 class Speaker;
 class Crossover;
+class Net;
 
 /*
  *  We define a Exception class for our program just for fun (and consistancy)
@@ -94,5 +95,8 @@ extern Signal2<void, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot
 extern Signal1<void, int> signal_remove_box_plot;
 extern Signal1<void, int> signal_hide_box_plot;
 extern Signal1<void, int> signal_select_plot;
+/* Define two signals for crossover parts updates */
+extern Signal0<void> signal_net_modified_by_wizard;  // listen to this in crossover treeview
+extern Signal1<void, Net *> signal_net_modified_by_user;    // listan to this in filter wizard
 
 #endif //__GFILTER_COMMON_H

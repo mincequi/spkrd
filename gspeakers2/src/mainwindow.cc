@@ -35,11 +35,11 @@ MainWindow::MainWindow() :
   box_editor(),
   box_history(),
   plot_history(),  
+  crossover_wizard(),
   speaker_list_selector(),
   box_plot(),
   crossover_treeview(),
-  crossover_history(),
-  crossover_wizard()
+  crossover_history()
   
 {
   add(m_main_vbox);
