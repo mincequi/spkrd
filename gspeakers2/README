@@ -1,1 +1,4 @@
-gspeakers is a loudspeaker enclosure and crossovernetwork designer for the gtk+/gnome desktop version 2.0
+GSpeakers is a loudspeaker enclosure and crossovernetwork designer for the gtk+/gnome desktop. 
+
+However, you can build GSpeakers on both Microsoft Windows and MacOS X. See README.win32 and 
+README.macosx for further details.

@@ -4,7 +4,8 @@ GSpeakers-0.11
 
 * Use new filechooser dialogs
 
-* GSpeakers can now use ngspice or gnucap instead of Berkley SPICE
+* GSpeakers can now use ngspice or gnucap instead of Berkley SPICE, gnucap 
+    is now preferred SPICE
 
 * A couple of bugs were fixed
 
