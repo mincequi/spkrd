@@ -117,7 +117,7 @@ MainWindow::MainWindow()
   m_main_vbox.pack_start(m_main_notebook);
   
   /* Driver tab */
-  m_main_notebook.append_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", _("Driver"))));
+  m_main_notebook.append_page(m_driver_hpaned, Gtk::Stock::OPEN, _("_Driver"));
   m_driver_hpaned.add1(speaker_editor.get_editor_table());
   g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
   g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
@@ -128,10 +128,10 @@ MainWindow::MainWindow()
   m_driver_vpaned.add2(speaker_editor.get_treeview_table());
   
   /* Enclosure tab */
-  m_main_notebook.append_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", _("Enclosure"))));
+  m_main_notebook.append_page(enclosure_paned, Gtk::Stock::SAVE, _("_Enclosure"));
   
   /* Crossover tab */
-  m_main_notebook.append_page(crossover_paned, *manage(new TabWidget("filter_small.png", _("Crossover") ) ));
+  m_main_notebook.append_page(crossover_paned, Gtk::Stock::QUIT, _("_Crossover"));
 
   show_all_children();
   

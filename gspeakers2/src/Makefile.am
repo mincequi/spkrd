@@ -41,7 +41,8 @@ crossoverimageview.h crossoverimageview.cc \
 gspeakersfilechooser.h gspeakersfilechooser.cc \
 libegg/eggsidebarbutton.h libegg/eggsidebarbutton.c \
 libegg/eggsidebar.h libegg/eggsidebar.c \
-gspeakersstock.h gspeakersstock.c
+gspeakersstock.h gspeakersstock.cc \
+sidebarnotebook.h sidebarnotebook.cc
 
 CFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall -O0

@@ -187,7 +187,7 @@ egg_sidebar_button_class_init (EggSidebarButtonClass *klass)
 							       "Static",
 							       "Static",
 							       FALSE,
-							       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							       G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_SIDEBAR,

@@ -7,6 +7,7 @@
 #include <locale.h>
 #include "common.h"
 #include "mainwindow.h"
+#include "gspeakersstock.h"
 
 int main (int argc, char *argv[])
 {
@@ -38,6 +39,8 @@ int main (int argc, char *argv[])
   
   /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover to the TreeView */
   //CrossoverTreeView ctv;
+
+	gspeakers_stock_init();
   
   try {
 #ifdef TARGET_WIN32

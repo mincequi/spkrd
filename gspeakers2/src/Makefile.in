@@ -67,7 +67,8 @@ am_gspeakers_OBJECTS = main.$(OBJEXT) common.$(OBJEXT) \
 	summedfreqrespplot.$(OBJEXT) popupentry.$(OBJEXT) \
 	cellrendererpopup.$(OBJEXT) crossoverimageview.$(OBJEXT) \
 	gspeakersfilechooser.$(OBJEXT) eggsidebarbutton.$(OBJEXT) \
-	eggsidebar.$(OBJEXT) gspeakersstock.$(OBJEXT)
+	eggsidebar.$(OBJEXT) gspeakersstock.$(OBJEXT) \
+	sidebarnotebook.$(OBJEXT)
 gspeakers_OBJECTS = $(am_gspeakers_OBJECTS)
 gspeakers_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
@@ -103,6 +104,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/part.Po ./$(DEPDIR)/plothistory.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/popupentry.Po ./$(DEPDIR)/settings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/settingsdialog.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/sidebarnotebook.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/speaker.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/speakereditor.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/speakerlist.Po \
@@ -260,7 +262,8 @@ crossoverimageview.h crossoverimageview.cc \
 gspeakersfilechooser.h gspeakersfilechooser.cc \
 libegg/eggsidebarbutton.h libegg/eggsidebarbutton.c \
 libegg/eggsidebar.h libegg/eggsidebar.c \
-gspeakersstock.h gspeakersstock.c
+gspeakersstock.h gspeakersstock.c \
+sidebarnotebook.h sidebarnotebook.cc
 
 LDADD = $(DEPS_LIBS)
 all: all-am
@@ -364,6 +367,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/popupentry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/settings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/settingsdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sidebarnotebook.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speaker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speakereditor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speakerlist.Po@am__quote@
