@@ -49,7 +49,7 @@ public:
 
   static int get_button_width();
 
-  SigC::Signal0<void>& signal_arrow_clicked();
+  sigc::signal0<void>& signal_arrow_clicked();
 
 protected:
   virtual bool on_key_press_event(GdkEventKey* event);
@@ -67,7 +67,7 @@ private:
   bool          editing_canceled_;
   
 
-  SigC::Signal0<void> signal_arrow_clicked_;
+  sigc::signal0<void> signal_arrow_clicked_;
 };
 
 #endif

@@ -22,6 +22,8 @@
 #include "plothistory.h"
 #include "gspeakersplot.h"
 
+using namespace sigc;
+
 PlotHistory::PlotHistory() :
   Gtk::Frame(""),
   m_vbox()
@@ -49,17 +51,17 @@ PlotHistory::PlotHistory() :
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
   
-  //signal_delete_event().connect(slot(*this, &BoxHistory::on_close));
+  //signal_delete_event().connect(mem_fun(*this, &BoxHistory::on_close));
   
   //m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
-  selection->signal_changed().connect(slot(*this, &PlotHistory::on_selection_changed));
+  selection->signal_changed().connect(mem_fun(*this, &PlotHistory::on_selection_changed));
 
-  //m_RemoveButton.signal_clicked().connect(slot(*this, &PlotHistory::on_remove));
+  //m_RemoveButton.signal_clicked().connect(mem_fun(*this, &PlotHistory::on_remove));
 
-  signal_box_modified.connect(slot(*this, &PlotHistory::on_box_modified));
-  signal_add_plot.connect(slot(*this, &PlotHistory::on_add_plot));
+  signal_box_modified.connect(mem_fun(*this, &PlotHistory::on_box_modified));
+  signal_add_plot.connect(mem_fun(*this, &PlotHistory::on_add_plot));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -219,7 +221,7 @@ void PlotHistory::create_model()
 
   //for_each(
   //    m_box_list.box_list()->begin(), m_box_list.box_list()->end(),
-  //    slot(*this, &BoxHistory::liststore_add_item));
+  //    mem_fun(*this, &BoxHistory::liststore_add_item));
 
 }
 
@@ -238,7 +240,7 @@ void PlotHistory::add_columns()
   }
   {
     Gtk::CellRendererToggle* pRenderer = Gtk::manage( new Gtk::CellRendererToggle() );
-    pRenderer->signal_toggled().connect( SigC::slot(*this, &PlotHistory::on_cell_plot_toggled) );
+    pRenderer->signal_toggled().connect( mem_fun(*this, &PlotHistory::on_cell_plot_toggled) );
 
     int cols_count =m_TreeView.append_column(_("Plot"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
@@ -277,7 +279,7 @@ void PlotHistory::add_columns()
     int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
 
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &PlotHistory::type_cell_data_func));		
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::type_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
   {
@@ -286,7 +288,7 @@ void PlotHistory::add_columns()
     int cols_count = m_TreeView.append_column(_("Vb1"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
 
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &PlotHistory::vb1_cell_data_func));				
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::vb1_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1);
   }
   {
@@ -295,7 +297,7 @@ void PlotHistory::add_columns()
     int cols_count = m_TreeView.append_column(_("Fb1"), *pRenderer);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
 
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &PlotHistory::fb1_cell_data_func));				
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::fb1_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1);
   }
 	/*

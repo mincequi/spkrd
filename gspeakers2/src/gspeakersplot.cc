@@ -66,7 +66,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   //cout << "GSpeakersPlot::on_configure_event" << endl;
 #endif
   visible = true;
-  m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
+  m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(), get_allocation().get_height(), -1);
   
   m_refGC = get_style()->get_fg_gc(get_state());
 
@@ -101,13 +101,13 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
   m_colors.push_back(ref_color);
   m_points.push_back(ref_point_vector);
   
-  int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
+  int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   int half_space_x = GSpeakers::round( total_space_x / 2 );
   int box_x, box_y, box_width, box_height;
   box_x = BOX_FRAME_SIZE;
   box_y = BOX_FRAME_SIZE;
-  box_width = get_allocation().width - (2 * BOX_FRAME_SIZE);
-  box_height = get_allocation().height - (2 * BOX_FRAME_SIZE);
+  box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
+  box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
 
   vector<Gdk::Point> points;
@@ -194,7 +194,7 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
     m_refGC->set_rgb_fg_color(black);
     
     //select_plot(m_colors.size() - 1);
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
   /* Return index of the new plot so that the owner of this plot can keep track of plots */
@@ -208,7 +208,7 @@ void GSpeakersPlot::replace_plot(int index, vector<GSpeakers::Point> &p, Gdk::Co
   
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -260,7 +260,7 @@ void GSpeakersPlot::remove_plot(int n)
 
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -272,7 +272,7 @@ void GSpeakersPlot::remove_all_plots()
   m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -282,7 +282,7 @@ void GSpeakersPlot::hide_plot(int n)
   m_visible_plots[n] = !m_visible_plots[n];
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -292,7 +292,7 @@ void GSpeakersPlot::select_plot(int index)
   m_selected_plot = index;
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -301,14 +301,14 @@ void GSpeakersPlot::redraw()
 {
   /* Clear to white background color */
   m_refGC->set_rgb_fg_color(white);
-  m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().width, get_allocation().height);
+  m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().get_width(), get_allocation().get_height());
   
    /* Calc coordinates for a rectangular box */
   int box_x, box_y, box_width, box_height;
   box_x = BOX_FRAME_SIZE;
   box_y = BOX_FRAME_SIZE;
-  box_width = get_allocation().width - (2 * BOX_FRAME_SIZE);
-  box_height = get_allocation().height - (2 * BOX_FRAME_SIZE);
+  box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
+  box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
     
   /* Draw the box */
   m_refGC->set_rgb_fg_color(black);
@@ -326,12 +326,12 @@ void GSpeakersPlot::redraw()
     int y = GSpeakers::round( box_height + BOX_FRAME_SIZE - 
 	       ( (double)(-m_lower_y) + (double)i ) * 
 	       ( box_height / (double)( -m_lower_y + m_upper_y ) ) );
-    m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y, get_allocation().width - BOX_FRAME_SIZE + 3, y);
+    m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y, get_allocation().get_width() - BOX_FRAME_SIZE + 3, y);
     m_refLayout->set_text(int_to_ustring3(i));
     m_refPixmap->draw_layout(m_refGC, BOX_FRAME_SIZE - 27, y - 8, m_refLayout);
     if (m_enable_sec_scale == true) {
       m_refLayout->set_text(int_to_ustring3(i - m_lower_y));
-      m_refPixmap->draw_layout(m_refGC, get_allocation().width - BOX_FRAME_SIZE + 5, y - 6, m_refLayout);
+      m_refPixmap->draw_layout(m_refGC, get_allocation().get_width() - BOX_FRAME_SIZE + 5, y - 6, m_refLayout);
     }
   }
   if (m_y_label1 != "") {
@@ -345,7 +345,7 @@ void GSpeakersPlot::redraw()
     m_refPixmap->draw_layout(m_refGC, box_width + (int)(1.5 * BOX_FRAME_SIZE) - width, (int)(BOX_FRAME_SIZE / 3), m_refLayout);
   }
 
-  int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
+  int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   int half_space_x = GSpeakers::round( total_space_x / 2 );
 
   /* Map points in m_points to screen points */
@@ -447,10 +447,10 @@ void GSpeakersPlot::redraw()
   
 void GSpeakersPlot::draw_log_grid()
 {
-  int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
+  int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   int quarter_space_x = GSpeakers::round( total_space_x / 4 );
   int half_space_x = GSpeakers::round( total_space_x / 2 );
-  int xaxis_y_position = get_allocation().height - BOX_FRAME_SIZE;
+  int xaxis_y_position = get_allocation().get_height() - BOX_FRAME_SIZE;
   
   /* Draw the logaritmic vertical x-lines */
   if (m_upper_x == 20000) {
@@ -509,10 +509,10 @@ void GSpeakersPlot::draw_log_grid()
 void GSpeakersPlot::draw_lin_grid()
 {
   /* Calc total horizontal space inside the box */
-  int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
+  int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   
   /* Calculate the xaxis vertical position, from upper edge of the drawingarea */
-  int xaxis_y_position = get_allocation().height - BOX_FRAME_SIZE;
+  int xaxis_y_position = get_allocation().get_height() - BOX_FRAME_SIZE;
   
   /* Determine distance (in x units) between the vertical lines */
   int freq_range = m_upper_x - m_lower_x;
@@ -561,7 +561,7 @@ void GSpeakersPlot::set_y_label(const string& text)
   
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }
@@ -572,7 +572,7 @@ void GSpeakersPlot::set_y_label2(const string& text)
   
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
   }
 }

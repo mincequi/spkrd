@@ -18,7 +18,7 @@
 #include "gspeakersobject.h"
 
 
-GSpeakersObject::GSpeakersObject() : SigC::Object()
+GSpeakersObject::GSpeakersObject() : sigc::trackable()
 {
   static int next_id = 0;
 

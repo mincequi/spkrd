@@ -23,8 +23,10 @@
 #include "boxhistory.h"
 #include "../config.h"
 
+using namespace sigc;
+
 /* Use this to signal parent when to gray/ungray save-buttons */
-Signal1<void, bool> signal_enclosure_set_save_state;
+signal1<void, bool> signal_enclosure_set_save_state;
 
 BoxHistory::BoxHistory() : Gtk::Frame("")
 {
@@ -67,8 +69,8 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   
   //m_TreeView.set_search_column(m_columns.id.index());
 
-  signal_add_to_boxlist.connect(slot(*this, &BoxHistory::on_add_to_boxlist));
-  signal_box_modified.connect(slot(*this, &BoxHistory::on_box_modified));
+  signal_add_to_boxlist.connect(mem_fun(*this, &BoxHistory::on_add_to_boxlist));
+  signal_box_modified.connect(mem_fun(*this, &BoxHistory::on_box_modified));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -80,7 +82,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
 
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
-  selection->signal_changed().connect(slot(*this, &BoxHistory::on_selection_changed));
+  selection->signal_changed().connect(mem_fun(*this, &BoxHistory::on_selection_changed));
 
 
   if (boxlist_found == true) {
@@ -93,9 +95,9 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
     selection->select(row);
   }
   selected_plot = -1;
-  signal_select_plot.connect(slot(*this, &BoxHistory::on_plot_selected));
+  signal_select_plot.connect(mem_fun(*this, &BoxHistory::on_plot_selected));
 
-  signal_save_open_files.connect(slot(*this, &BoxHistory::on_save_open_files));
+  signal_save_open_files.connect(mem_fun(*this, &BoxHistory::on_save_open_files));
 }
 
 BoxHistory::~BoxHistory()
@@ -134,8 +136,8 @@ void BoxHistory::on_open_xml()
 {
   if (f_open == NULL) {
     f_open = new Gtk::FileSelection(_("Open box xml"));
-    f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_open_ok), f_open));
-    f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
+    f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_open_ok), f_open));
+    f_open->get_cancel_button()->signal_clicked().connect(mem_fun(*f_open, &Gtk::Widget::hide));
   } else {
     f_open->show();
   }
@@ -146,8 +148,8 @@ void BoxHistory::on_append_xml()
 {
   if (f_append == NULL) {
     f_append = new Gtk::FileSelection(_("Append box xml"));
-    f_append->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_append_ok), f_append));
-    f_append->get_cancel_button()->signal_clicked().connect(slot(*f_append, &Gtk::Widget::hide));
+    f_append->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_append_ok), f_append));
+    f_append->get_cancel_button()->signal_clicked().connect(mem_fun(*f_append, &Gtk::Widget::hide));
   } else {
     f_append->show();
   }
@@ -165,7 +167,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     m_filename = f->get_filename();
     for_each(
       temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
-      slot(*this, &BoxHistory::liststore_add_item));
+      mem_fun(*this, &BoxHistory::liststore_add_item));
   
     /* Delete items in box_list */
     m_box_list.box_list()->erase(m_box_list.box_list()->begin(), m_box_list.box_list()->end());
@@ -205,7 +207,7 @@ void BoxHistory::on_append_ok(Gtk::FileSelection *f)
     temp_box_list = BoxList(f->get_filename());
     for_each(
       temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
-      slot(*this, &BoxHistory::liststore_add_item));
+      mem_fun(*this, &BoxHistory::liststore_add_item));
     for (
       vector<Box>::iterator from = temp_box_list.box_list()->begin();
       from != temp_box_list.box_list()->end();
@@ -343,8 +345,8 @@ void BoxHistory::on_save_as()
 {
   if (f_save_as == NULL) {
     f_save_as = new Gtk::FileSelection(_("Save box xml as"));
-    f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &BoxHistory::on_save_as_ok), f_save_as));
-    f_save_as->get_cancel_button()->signal_clicked().connect(slot(*f_save_as, &Gtk::Widget::hide));
+    f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(mem_fun(*this, &BoxHistory::on_save_as_ok), f_save_as));
+    f_save_as->get_cancel_button()->signal_clicked().connect(mem_fun(*f_save_as, &Gtk::Widget::hide));
   } else {
     f_save_as->show();
   }
@@ -458,7 +460,7 @@ void BoxHistory::create_model()
   
   for_each(
       m_box_list.box_list()->begin(), m_box_list.box_list()->end(),
-      slot(*this, &BoxHistory::liststore_add_item));
+      mem_fun(*this, &BoxHistory::liststore_add_item));
 }
 
 void BoxHistory::add_columns()
@@ -487,7 +489,7 @@ void BoxHistory::add_columns()
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
 
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::type_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::type_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -496,7 +498,7 @@ void BoxHistory::add_columns()
     
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::vb1_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::vb1_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -505,7 +507,7 @@ void BoxHistory::add_columns()
     
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
-    pColumn->set_cell_data_func(*pRenderer, slot(*this, &BoxHistory::fb1_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::fb1_cell_data_func));
   }
   /* Disable vb2 and fb2 until we use it */
   /*

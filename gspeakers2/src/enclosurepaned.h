@@ -28,7 +28,7 @@
 #include "gspeakersboxplot.h"
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 class EnclosurePaned : public Gtk::HPaned
 {

@@ -41,6 +41,8 @@ Settings::Settings() {
   defaultSettings();
 }
 
+Settings::~Settings() { }
+
 void Settings::load(const string& filename)
   throw (runtime_error)
 {

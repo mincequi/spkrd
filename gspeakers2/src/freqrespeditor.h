@@ -26,7 +26,7 @@
 #include <gtkmm/entry.h>
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 class FreqRespEditor : public Gtk::Dialog
 {

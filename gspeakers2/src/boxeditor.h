@@ -32,7 +32,7 @@
 #include "gspeakerscolor.h"
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 /*
  * This class will contain the control panel where you can adjust 

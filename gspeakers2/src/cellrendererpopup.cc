@@ -30,6 +30,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace sigc;
 
 namespace
 {
@@ -68,14 +69,13 @@ CellRendererPopup::CellRendererPopup()
   editing_canceled_     (false)
 {
   cout << "CellRendererPopup::CellRendererPopup" << endl;
-  using SigC::slot;
   
-  signal_show_popup_.connect(slot(*this, &Self::on_show_popup));
-  signal_hide_popup_.connect(slot(*this, &Self::on_hide_popup));
+  signal_show_popup_.connect(mem_fun(*this, &Self::on_show_popup));
+  signal_hide_popup_.connect(mem_fun(*this, &Self::on_hide_popup));
 
-  popup_window_.signal_button_press_event().connect(slot(*this, &Self::on_button_press_event));
-  popup_window_.signal_key_press_event   ().connect(slot(*this, &Self::on_key_press_event));
-  popup_window_.signal_style_changed     ().connect(slot(*this, &Self::on_style_changed));
+  popup_window_.signal_button_press_event().connect(mem_fun(*this, &Self::on_button_press_event));
+  popup_window_.signal_key_press_event   ().connect(mem_fun(*this, &Self::on_key_press_event));
+  popup_window_.signal_style_changed     ().connect(mem_fun(*this, &Self::on_style_changed));
 }
 
 CellRendererPopup::~CellRendererPopup()
@@ -101,12 +101,12 @@ Gtk::Widget* CellRendererPopup::get_focus_widget()
   return focus_widget_;
 }
 
-SigC::Signal5<void,const Glib::ustring&,int,int,int,int>& CellRendererPopup::signal_show_popup()
+signal5<void,const Glib::ustring&,int,int,int,int>& CellRendererPopup::signal_show_popup()
 {
   return signal_show_popup_;
 }
 
-SigC::Signal0<void>& CellRendererPopup::signal_hide_popup()
+signal0<void>& CellRendererPopup::signal_hide_popup()
 {
   return signal_hide_popup_;
 }
@@ -140,7 +140,6 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*,
                                                           Gtk::CellRendererState)
 {
   cout << "CellRendererPopup::start_editing_vfunc" << endl;
-  using SigC::slot;
 
   // If the cell isn't editable we return 0.
   if(!property_editable())
@@ -148,9 +147,9 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*,
 
   std::auto_ptr<PopupEntry> popup_entry (new PopupEntry(path));
 
-  popup_entry->signal_editing_done ().connect(slot(*this, &Self::on_popup_editing_done));
-  //popup_entry->signal_arrow_clicked().connect(slot(*this, &Self::on_popup_arrow_clicked));
-  popup_entry->signal_hide         ().connect(slot(*this, &Self::on_popup_hide));
+  popup_entry->signal_editing_done ().connect(mem_fun(*this, &Self::on_popup_editing_done));
+  //popup_entry->signal_arrow_clicked().connect(mem_fun(*this, &Self::on_popup_arrow_clicked));
+  popup_entry->signal_hide         ().connect(mem_fun(*this, &Self::on_popup_hide));
 
   cout << property_text() << endl;
 
@@ -171,7 +170,7 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
   popup_window_.move(-500, -500);
   popup_window_.show();
 
-  const GtkAllocation alloc = popup_window_.get_allocation();
+  const Gtk::Allocation alloc = popup_window_.get_allocation();
 
   int x = x2;
   int y = y2;
@@ -182,14 +181,14 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
   const int screen_width  = Gdk::screen_width();
 
   // Check if it fits in the available height.
-  if(alloc.height > screen_height)
+  if(alloc.get_height() > screen_height)
   {
     // It doesn't fit, so we see if we have the minimum space needed.
-    if((alloc.height > screen_height) && (y - button_height > screen_height))
+    if((alloc.get_height() > screen_height) && (y - button_height > screen_height))
     {
       // We don't, so we show the popup above the cell instead of below it.
       screen_height = y - button_height;
-      y -= (alloc.height + button_height);
+      y -= (alloc.get_height() + button_height);
       y = std::max(0, y);
     }
   }
@@ -198,7 +197,7 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
   // want it to go off the edges of the screen.
   x = std::min(x, screen_width);
 
-  x -= alloc.width;
+  x -= alloc.get_width();
   x = std::max(0, x);
 
   gtk_grab_add(popup_window_.Gtk::Widget::gobj());
@@ -248,15 +247,15 @@ bool CellRendererPopup::on_button_press_event(GdkEventButton* event)
   int xoffset = 0, yoffset = 0;
   popup_window_.get_window()->get_root_origin(xoffset, yoffset);
 
-  const GtkAllocation alloc = popup_window_.get_allocation();
+  const Gtk::Allocation alloc = popup_window_.get_allocation();
 
-  xoffset += alloc.x;
-  yoffset += alloc.y;
+  xoffset += alloc.get_x();
+  yoffset += alloc.get_y();
 
-  const int x1 = alloc.x + xoffset;
-  const int y1 = alloc.y + yoffset;
-  const int x2 = x1 + alloc.width;
-  const int y2 = y1 + alloc.height;
+  const int x1 = alloc.get_x() + xoffset;
+  const int y1 = alloc.get_y() + yoffset;
+  const int x2 = x1 + alloc.get_width();
+  const int y2 = y1 + alloc.get_height();
 
   if(x > x1 && x < x2 && y > y1 && y < y2)
     return false;
@@ -323,9 +322,9 @@ void CellRendererPopup::on_popup_arrow_clicked()
   int x = 0, y = 0;
   popup_entry_->get_window()->get_origin(x, y);
 
-  const GtkAllocation alloc = popup_entry_->get_allocation();
+  const Gtk::Allocation alloc = popup_entry_->get_allocation();
 
-  signal_show_popup_(popup_entry_->get_path(), x, y, x + alloc.width, y + alloc.height);
+  signal_show_popup_(popup_entry_->get_path(), x, y, x + alloc.get_width(), y + alloc.get_height());
 }
 
 void CellRendererPopup::on_popup_hide()

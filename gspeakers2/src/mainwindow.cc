@@ -77,24 +77,23 @@ MainWindow::MainWindow()
   	Gtk::Menu::MenuList& menulist = m_file_menu.items();
         Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
         menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save all files"),  
-                                                             Gtk::Menu_Helpers::AccelKey::AccelKey('s', Gdk::CONTROL_MASK), 
                                                              *im,  
-                                                             slot(*this, &MainWindow::on_save_all) ) );
+                                                             mem_fun(*this, &MainWindow::on_save_all) ) );
         menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, slot(*this, &MainWindow::on_quit) ) );
+  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT, mem_fun(*this, &MainWindow::on_quit) ) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_edit_menu.items();
 
-  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES, slot(*this, &MainWindow::on_edit_settings) ) );
+  	menulist.push_back( Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES, mem_fun(*this, &MainWindow::on_edit_settings) ) );
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
   	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("About"), GSpeakers::image_widget("stock_menu_about.png"), 
-                                                         slot(*this, &MainWindow::on_about) ) );
+                                                         mem_fun(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), m_file_menu) );
-  m_file_menu.signal_expose_event().connect(slot(*this, &MainWindow::on_edit_menu_expose_event));
+  m_file_menu.signal_expose_event().connect(mem_fun(*this, &MainWindow::on_edit_menu_expose_event));
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Edit"), m_edit_menu) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Drivers"), speaker_editor.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("E_nclosure"), enclosure_paned.get_menu() ) );
@@ -135,7 +134,7 @@ MainWindow::MainWindow()
   show_all_children();
   
   /* For some reason I had to put this row after show */
-  m_main_notebook.signal_switch_page().connect(slot(*this, &MainWindow::on_switch_page));
+  m_main_notebook.signal_switch_page().connect(mem_fun(*this, &MainWindow::on_switch_page));
   m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
 }
 
@@ -369,8 +368,9 @@ void MainWindow::on_about()
 #ifdef OUTPUT_DEBUG
   cout << "MainWindow::about" << endl;
 #endif
-  Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net", 
-                        Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true, true);
+  Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + 
+                       "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net", false, 
+                       Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
   m.run();
 }
 

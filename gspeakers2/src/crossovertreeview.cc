@@ -22,6 +22,8 @@
 #include "crossovertreeview.h"
 #include "common.h"
 
+using namespace sigc;
+
 CrossoverTreeView::CrossoverTreeView() :
   Gtk::Frame("")
 {
@@ -45,8 +47,8 @@ CrossoverTreeView::CrossoverTreeView() :
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
 
-  signal_crossover_selected.connect(slot(*this, &CrossoverTreeView::on_crossover_selected));
-  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverTreeView::on_net_modified_by_wizard));
+  signal_crossover_selected.connect(mem_fun(*this, &CrossoverTreeView::on_crossover_selected));
+  signal_net_modified_by_wizard.connect(mem_fun(*this, &CrossoverTreeView::on_net_modified_by_wizard));
   
   show_all();
 }
@@ -247,7 +249,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
   }
   for_each(
     m_vecItems.begin(), m_vecItems.end(),
-    slot(*this, &CrossoverTreeView::treestore_add_item));
+    mem_fun(*this, &CrossoverTreeView::treestore_add_item));
   m_TreeView.expand_all();
 }
 
@@ -257,7 +259,7 @@ void CrossoverTreeView::create_model()
 
   std::for_each(
       m_vecItems.begin(), m_vecItems.end(),
-      SigC::slot(*this, &CrossoverTreeView::treestore_add_item));
+      sigc::mem_fun(*this, &CrossoverTreeView::treestore_add_item));
 }
 
 void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo)
@@ -380,7 +382,7 @@ void CrossoverTreeView::add_columns()
     //Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
     CellRendererPopup* pRenderer = Gtk::manage( new CellRendererPopup() );
     pRenderer->property_xalign().set_value(0.0);
-    pRenderer->signal_edited().connect(slot(*this, &CrossoverTreeView::on_cell_edited_value));
+    pRenderer->signal_edited().connect(mem_fun(*this, &CrossoverTreeView::on_cell_edited_value));
     
     //col_cnt = m_TreeView.append_column(_("Value"), *pRenderer);
     col_cnt = m_TreeView.insert_column(_("Value"), *pRenderer, -1);
@@ -388,7 +390,7 @@ void CrossoverTreeView::add_columns()
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
     if(pColumn)
     {
-      pColumn->set_cell_data_func(*pRenderer, slot(*this, &CrossoverTreeView::value_cell_data_func));
+      pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &CrossoverTreeView::value_cell_data_func));
       //pColumn->add_attribute(pRenderer->property_text(), m_columns.value);
       pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
       pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);

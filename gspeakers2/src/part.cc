@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <glib/gstrfuncs.h>
 
-using namespace SigC;
+using namespace sigc;
 using namespace std;
 
 Part::Part(int type, double value, string unit) : GSpeakersObject()

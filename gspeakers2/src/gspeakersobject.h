@@ -26,7 +26,7 @@
  * Since every part and every net will have an unique id this 
  * is probably a pretty nice base-class
  */
-class GSpeakersObject : public SigC::Object
+class GSpeakersObject : public sigc::trackable
 {
 public:
   GSpeakersObject();

@@ -32,7 +32,7 @@
 #include "speakerlist.h"
 #include "gspeakerscolor.h"
 
-using namespace SigC;
+using namespace sigc;
 using namespace std;
 
 /*

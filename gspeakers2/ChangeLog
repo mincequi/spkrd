@@ -1,5 +1,11 @@
 GSpeakers ChangeLog
 
+2004-05-10
+
+* speakereditor.h/cc: use FileChooserDialog
+
+* Ported to gtkmm-2.4 and libsigc++-2.0
+
 2003-09-08
 
 * mainwindow.cc: in previous versions of gtkmm there seem to have been a 
@@ -11,15 +17,18 @@ GSpeakers ChangeLog
 	
 * crossoverpaned.cc: typo highpass->lowpass
 
+
 2003-03-11
 
 * Gspeakers-0.10.1 was released
 	
+
 2003-03-11 
 
 * gspeakersplot.cc: changed 1000->1k on plot x-axis
 
 * mainwindow.h/cc: implemented "Save all open files"
+
 
 2003-03-05
 
@@ -35,6 +44,7 @@ GSpeakers ChangeLog
 
 * common.h/cc: added signal_save_open_files
 
+
 2003-02-27
 
 * speakereditor.cc, enclosurepaned.cc, crossoverpaned.cc: set modified in 
@@ -43,9 +53,11 @@ GSpeakers ChangeLog
 * common.h/common.cc: added *modified accessor functions so that i can mark 
     a *list for "ask if you want to save"
 
+
 2003-02-20
 
 * mainwindow.h/cc: added on_delete_event
+
 
 2003-02-18
 
@@ -62,6 +74,7 @@ GSpeakers ChangeLog
 
 * speakereditor.cc: init speakerlist even if xml not found
 
+
 2003-02-17
 
 * boxeditor.cc, boxhistory.cc: fixed so that GSpeakers can start with a 
@@ -70,6 +83,7 @@ GSpeakers ChangeLog
 * speakereditor.cc, crossoverhistory.cc, boxhistory.cc: added try/catch around 
     loading files in contructors, this prevents gspeakers from segfaulting if 
     you try to start gspeakers with an invalid xml file in the config
+
 
 2003-02-15
 
@@ -81,10 +95,12 @@ GSpeakers ChangeLog
 * main.cc: added #include <locale.h> which might fix compilation errors on 
     some systems
 
+
 2003-02-12
 
 * Prepared for 0.10 release, just waiting for a more detailed bugreport from 
     a user
+
 
 2003-02-11
 
@@ -105,6 +121,7 @@ GSpeakers ChangeLog
 * boxhistory.cc: select appended box in boxhistory, this fixed a segfault 
     caused by an invalid pointer
 
+
 2003-02-10
 
 * speakereditor.cc, crossoverpaned.cc, enclosurepaned.cc: removed some toolbar 
@@ -114,14 +131,17 @@ GSpeakers ChangeLog
 
 * enclosurepaned.cc: added a toolbar button
 
+
 2003-02-06
 
 * filterlinkfram.h/cc: Gnome HIG adjustments, reordered some widgets
+
 
 2003-02-03
 
 * common.h/cc: added global tooltips accessor function, now we just have to add 
     tooltips where we need it
+
 
 2003-02-02
 
@@ -144,6 +164,7 @@ GSpeakers ChangeLog
 
 * boxeditor.cc, boxhistory.cc: adjusted these parts to fit Gnome HIG
 
+
 2003-01-29
 
 * boxeditor.cc: set speaker in member box when a new speaker is selected in 
@@ -162,9 +183,11 @@ GSpeakers ChangeLog
 
 * gspeakersobject.h/cc: only include sigc++/object.h instead of entire sigc++
 
+
 2003-01-26
 
 * Released GSpeakers-0.9
+
 
 2003-01-25
 
@@ -177,15 +200,18 @@ GSpeakers ChangeLog
 * settingsdialog.h/cc, crossoverimageview.h/cc: config option for parts 
     autoscale
 
+
 2003-01-24
 
 * Prepared for 0.9 release
+
 
 2003-01-23
 
 * crossoverimageview.h/cc: draw_highpass done, some small adjustments and 
     a few new methods: draw_imp_corr_net, draw_damp_net and draw_driver, 
     implementation of scaling crossover image view is now done
+
 
 2003-01-22
 

@@ -28,6 +28,10 @@
 #define TOOLBAR_INDEX_SAVE 3
 #define TOOLBAR_INDEX_DELETE 5
 
+#define FILE_CHOOSER_CANCEL 10001
+#define FILE_CHOOSER_OPEN   10002
+#define FILE_CHOOSER_SAVE   10003
+
 Speaker_ListStore::Speaker_ListStore()
 : m_TreeViewTable(10, 4, true),
   m_Table(19, 2, true), 
@@ -39,6 +43,8 @@ Speaker_ListStore::Speaker_ListStore()
   m_treeview_frame(""),
   m_editor_frame("")
 {
+  using namespace sigc;
+
   m_modified = false;
   updating_entries = false;
   tbar = NULL;
@@ -139,30 +145,30 @@ Speaker_ListStore::Speaker_ListStore()
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-  m_IdStringEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 0));
-  m_QtsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 1));
-  m_FsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 2));
-  m_VasEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 3));
-  m_RdcEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 4));
-  m_LvcEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 5));
-  m_QmsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 6));
-  m_QesEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 7));
-  m_ImpEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 8));
-  m_SensEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 9));
-  m_MmdEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 13));
-  m_AdEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 14));
-  m_BlEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 15));
-  m_RmsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 16));
-  m_CmsEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 17));
-  m_FreqRespFileEntry.signal_changed().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 18));
+  m_IdStringEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 0));
+  m_QtsEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 1));
+  m_FsEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 2));
+  m_VasEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 3));
+  m_RdcEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 4));
+  m_LvcEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 5));
+  m_QmsEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 6));
+  m_QesEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 7));
+  m_ImpEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 8));
+  m_SensEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 9));
+  m_MmdEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 13));
+  m_AdEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 14));
+  m_BlEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 15));
+  m_RmsEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 16));
+  m_CmsEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 17));
+  m_FreqRespFileEntry.signal_changed().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 18));
   m_FreqRespFileEntry.set_sensitive(false);
   
-  m_BassCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 10));
-  m_MidrangeCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 11));
-  m_TweeterCheckButton.signal_toggled().connect(bind<int>(slot(*this, &Speaker_ListStore::on_entry_changed), 12));
+  m_BassCheckButton.signal_toggled().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 10));
+  m_MidrangeCheckButton.signal_toggled().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 11));
+  m_TweeterCheckButton.signal_toggled().connect(bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 12));
 
-  m_EditFreqRespButton.signal_clicked().connect( slot(*this, &Speaker_ListStore::on_edit_freq_resp) );
-  m_BrowseFreqRespButton.signal_clicked().connect( slot(*this, &Speaker_ListStore::on_browse_freq_resp) );
+  m_EditFreqRespButton.signal_clicked().connect( mem_fun(*this, &Speaker_ListStore::on_edit_freq_resp) );
+  m_BrowseFreqRespButton.signal_clicked().connect( mem_fun(*this, &Speaker_ListStore::on_browse_freq_resp) );
 
   GSpeakers::tooltips().set_tip(m_EditFreqRespButton, _("Edit frequency response for this driver"));
 
@@ -178,10 +184,10 @@ Speaker_ListStore::Speaker_ListStore()
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   //selection->set_mode(Gtk::SELECTION_MULTIPLE);
   
-  selection->signal_changed().connect(slot(*this, &Speaker_ListStore::on_selection_changed));
+  selection->signal_changed().connect(mem_fun(*this, &Speaker_ListStore::on_selection_changed));
   //selection->set_mode(Gtk::SELECTION_SINGLE);
 
-  g_settings.settings_changed.connect(slot(*this, &Speaker_ListStore::on_settings_changed));
+  g_settings.settings_changed.connect(mem_fun(*this, &Speaker_ListStore::on_settings_changed));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -189,7 +195,7 @@ Speaker_ListStore::Speaker_ListStore()
   f_open = NULL;
   f_save_as = NULL;
   new_xml_pressed = false;
-  signal_save_open_files.connect(slot(*this, &Speaker_ListStore::on_save_open_files));
+  signal_save_open_files.connect(mem_fun(*this, &Speaker_ListStore::on_save_open_files));
 
   /* Select first row */
   /*
@@ -232,21 +238,21 @@ Gtk::Menu& Speaker_ListStore::get_menu()
 {
   Gtk::Menu::MenuList& menulist = m_menu.items();
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
-                    slot(*this, &Speaker_ListStore::on_new) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_new) ) );
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew"), GSpeakers::image_widget("stock_new_driver_xml_16.png"),  
-                    slot(*this, &Speaker_ListStore::on_new_xml) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_new_xml) ) );
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Driver Xml..."), 
-                    slot(*this, &Speaker_ListStore::on_append_xml) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_append_xml) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
-                    slot(*this, &Speaker_ListStore::on_open_xml) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_open_xml) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"),  GSpeakers::image_widget("save_xml_16.png"),  
-                    slot(*this, &Speaker_ListStore::on_save) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_save) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As..."), GSpeakers::image_widget("save_as_xml_16.png"),  
-                    slot(*this, &Speaker_ListStore::on_save_as) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_save_as) ) );
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete"), GSpeakers::image_widget("delete_driver_16.png"),  
-                    slot(*this, &Speaker_ListStore::on_remove) ) );
+                    mem_fun(*this, &Speaker_ListStore::on_remove) ) );
 
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
   menulist[MENU_INDEX_DELETE].set_sensitive(false);
@@ -257,23 +263,41 @@ Gtk::Widget& Speaker_ListStore::get_toolbar()
 {
   if (tbar == NULL) {
     tbar = manage(new Gtk::Toolbar());
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New Driver"), GSpeakers::image_widget("stock_new_driver_24.png"), 
-                             slot(*this, &Speaker_ListStore::on_new), _("Create new driver")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-//    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_driver_xml_24.png"), 
-//                             slot(*this, &Speaker_ListStore::on_new_xml), _("Create new driver xml (list)")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open"),  GSpeakers::image_widget("open_xml_24.png"), 
-                             slot(*this, &Speaker_ListStore::on_open_xml), _("Open driver xml (list)")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save"),  GSpeakers::image_widget("save_xml_24.png"), 
-                             slot(*this, &Speaker_ListStore::on_save), _("Save driver xml (list)")) );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"),  GSpeakers::image_widget("delete_driver_24.png"), 
-                             slot(*this, &Speaker_ListStore::on_remove), _("Delete selected driver")) );
+    // TODO: tooltip _("Create new driver")
+    Gtk::ToolButton *t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_new_driver_24.png"), _("New Driver")));
+    t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_new));
+    tbar->append( *t );    
+
+    Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
+    tbar->append( *s );
+    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+    t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_open_xml));
+    tbar->append( *t );    
+//    tbar->append( Gtk::ToolButton(_("Open"),  GSpeakers::image_widget("open_xml_24.png"), 
+//                                  mem_fun(*this, &Speaker_ListStore::on_open_xml), _("Open driver xml (list)")) );
+    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("save_xml_24.png"), _("Save")));
+    t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_save));
+    tbar->append( *t );    
+   
+//    tbar->append( Gtk::ToolButton(_("Save"),  GSpeakers::image_widget("save_xml_24.png"), 
+//                                  mem_fun(*this, &Speaker_ListStore::on_save), _("Save driver xml (list)")) );
+
+    s = manage(new Gtk::SeparatorToolItem() );
+    tbar->append( *s );
+  
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_driver_24.png"), _("Delete")));
+    t->signal_clicked().connect(mem_fun(*this, &Speaker_ListStore::on_remove));
+    tbar->append( *t );    
+        
+//    tbar->append( Gtk::ToolButton(_("Delete"),  GSpeakers::image_widget("delete_driver_24.png"), 
+//                                  mem_fun(*this, &Speaker_ListStore::on_remove), _("Delete selected driver")) );
   
     toolbar.add(*tbar);
     tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
-    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(false);
+    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
+    tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(false);
   }
   return toolbar;
 }
@@ -356,8 +380,8 @@ void Speaker_ListStore::on_new()
   set_entries_sensitive(true);
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
   m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
-  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
-  tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+  tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+  tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
   GSpeakers::driverlist_modified() = true;
   signal_speakerlist_loaded(m_speaker_list);
   m_modified = true;
@@ -409,7 +433,7 @@ void Speaker_ListStore::on_save()
     try {
       m_speaker_list->to_xml(m_filename);
       m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
-      tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
+      tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
       GSpeakers::driverlist_modified() = false;
       m_modified = false;
     } catch (GSpeakersException e) {
@@ -421,10 +445,12 @@ void Speaker_ListStore::on_save()
 
 void Speaker_ListStore::on_save_as()
 {
+  using namespace sigc;
+
   if (f_save_as == NULL) {
-    f_save_as = new Gtk::FileSelection(_("Save speaker xml as"));
-    f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &Speaker_ListStore::on_save_as_ok), f_save_as));
-    f_save_as->get_cancel_button()->signal_clicked().connect(slot(*f_save_as, &Gtk::Widget::hide));
+    f_save_as = new Gtk::FileChooserDialog(_("Save speaker xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE);
+    f_save_as->signal_file_activated().connect(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_save_as_ok), f_save_as));
+//    f_save_as->get_cancel_button()->signal_clicked().connect(mem_fun(*f_save_as, &Gtk::Widget::hide));
   } else {
     f_save_as->set_title(_("Save speaker xml as"));
     f_save_as->show();
@@ -432,7 +458,7 @@ void Speaker_ListStore::on_save_as()
   f_save_as->run();
 }
 
-void Speaker_ListStore::on_save_as_ok(Gtk::FileSelection *f)
+void Speaker_ListStore::on_save_as_ok(Gtk::FileChooserDialog *f)
 {
   try {
     m_speaker_list->to_xml(f->get_filename());
@@ -551,7 +577,7 @@ void Speaker_ListStore::on_selection_changed()
   m_IdStringEntry.grab_focus();
   set_entries_sensitive(true);
   m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
-  tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
+  tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 }
 
 void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
@@ -788,7 +814,7 @@ void Speaker_ListStore::on_entry_changed(int i)
       }
     }
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
     m_modified = true;
   }
@@ -797,10 +823,12 @@ void Speaker_ListStore::on_entry_changed(int i)
 
 void Speaker_ListStore::on_append_xml()
 {
+  using namespace sigc;
+  
   if (f_append == NULL) {
-    f_append = new Gtk::FileSelection(_("Append speaker xml"));
-    f_append->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &Speaker_ListStore::on_append_ok), f_append));
-    f_append->get_cancel_button()->signal_clicked().connect(slot(*f_append, &Gtk::Widget::hide));
+    f_append = new Gtk::FileChooserDialog(_("Append speaker xml"));
+    f_append->signal_file_activated().connect(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_append_ok), f_append));
+//    f_append->get_cancel_button()->signal_clicked().connect(mem_fun(*f_append, &Gtk::Widget::hide));
   } else {
     f_append->set_title(_("Append speaker xml"));
     f_append->show();
@@ -810,19 +838,35 @@ void Speaker_ListStore::on_append_xml()
 
 void Speaker_ListStore::on_open_xml()
 {
+  using namespace sigc;
+  bool flag = false;
+  
   if (f_open == NULL) {
-    f_open = new Gtk::FileSelection(_("Open speaker xml"));
-    f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &Speaker_ListStore::on_open_ok), f_open));
-    f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
+    f_open = new Gtk::FileChooserDialog(_("Open speaker xml"), Gtk::FILE_CHOOSER_ACTION_OPEN);
+//    f_open->signal_file_activated(bind<Gtk::FileChooserDialog *>(mem_fun(*this, &Speaker_ListStore::on_open_ok), f_open));
+    f_open->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
+    f_open->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
   } else {
     f_open->show();
     f_open->set_title(_("Open speaker xml"));
   }
-  f_open->run();
+  int r; 
+  while (flag == false) {
+    r = f_open->run();
+    switch (r) {
+      case FILE_CHOOSER_OPEN:
+        flag = on_open_ok(f_open);
+        break;
+      default:
+        f_open->hide();
+        flag = true;
+        break;
+    }
+  }
 }
 
 
-void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f) 
+void Speaker_ListStore::on_append_ok(Gtk::FileChooserDialog *f) 
 {
   SpeakerList temp_speaker_list;
   try {
@@ -830,7 +874,7 @@ void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f)
 
     for_each(
       temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
-      slot(*this, &Speaker_ListStore::liststore_add_item));
+      mem_fun(*this, &Speaker_ListStore::liststore_add_item));
     for (
       vector<Speaker>::iterator from = temp_speaker_list.speaker_list()->begin();
       from != temp_speaker_list.speaker_list()->end();
@@ -843,7 +887,7 @@ void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f)
     set_entries_sensitive(true);
     m_modified = true;
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -851,62 +895,69 @@ void Speaker_ListStore::on_append_ok(Gtk::FileSelection *f)
   }
 }
 
-void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f) 
+bool Speaker_ListStore::on_open_ok(Gtk::FileChooserDialog *f) 
 {
   m_refListStore->clear();
 
   SpeakerList temp_speaker_list;
-  try {
-    temp_speaker_list = SpeakerList(f->get_filename());
+  
+  if (f->get_filename().length()>0) { 
+    try {
+      temp_speaker_list = SpeakerList(f->get_filename());
 
-    m_filename = f->get_filename();
-    g_settings.setValue("SpeakerListXml", m_filename);
-    static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver list [")) + 
+      m_filename = f->get_filename();
+      g_settings.setValue("SpeakerListXml", m_filename);
+      static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver list [")) + 
                                 GSpeakers::short_filename(m_filename) + "]</b>");
         
-    for_each(
-      temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
-      slot(*this, &Speaker_ListStore::liststore_add_item));
+      for_each(
+        temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
+        mem_fun(*this, &Speaker_ListStore::liststore_add_item));
   
-    /* Delete items in speaker_list */
-    m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(), m_speaker_list->speaker_list()->end());
+      /* Delete items in speaker_list */
+      m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(), m_speaker_list->speaker_list()->end());
   
-    for (
-      vector<Speaker>::iterator from = temp_speaker_list.speaker_list()->begin();
-      from != temp_speaker_list.speaker_list()->end();
-      ++from)
-    {
-      m_speaker_list->speaker_list()->push_back(*from);
+      for (
+        vector<Speaker>::iterator from = temp_speaker_list.speaker_list()->begin();
+        from != temp_speaker_list.speaker_list()->end();
+        ++from)
+      {
+        m_speaker_list->speaker_list()->push_back(*from);
+      }
+      f->hide();
+    
+      /* Select the first item in the list */
+      //cout << m_speaker_list.speaker_list()->size() << endl;
+      if (m_speaker_list->speaker_list()->size() > 0) {
+        Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+        char *str = NULL;
+        GString *buffer = g_string_new(str);
+        g_string_printf(buffer, "%d", 0);
+        GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+        Gtk::TreePath path(gpath);
+    
+        Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+        refSelection->select(row);
+    
+      }
+      m_IdStringEntry.grab_focus();
+      set_entries_sensitive(true);
+      m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+      m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
+      GSpeakers::driverlist_modified() = true;
+      tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+      tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
+  
+      signal_speakerlist_loaded(m_speaker_list);
+      m_modified = true;
+    } catch (GSpeakersException e) {
+      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      m.run();
+      return false;
     }
-    f->hide();
-  
-    /* Select the first item in the list */
-    //cout << m_speaker_list.speaker_list()->size() << endl;
-    if (m_speaker_list->speaker_list()->size() > 0) {
-      Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-      char *str = NULL;
-      GString *buffer = g_string_new(str);
-      g_string_printf(buffer, "%d", 0);
-      GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
-      Gtk::TreePath path(gpath);
-  
-      Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-      refSelection->select(row);
-  
-    }
-    m_IdStringEntry.grab_focus();
-    set_entries_sensitive(true);
-    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-    m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
-    GSpeakers::driverlist_modified() = true;
-    tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
-    tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(true);
-
-    signal_speakerlist_loaded(m_speaker_list);
-    m_modified = true;
-  } catch (GSpeakersException e) {
-    Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
-    m.run();
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -923,7 +974,7 @@ void Speaker_ListStore::on_edit_freq_resp()
   delete f;
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
   GSpeakers::driverlist_modified() = true;
   m_modified = true;
 }
@@ -933,7 +984,7 @@ void Speaker_ListStore::on_browse_freq_resp()
 #ifdef OUTPUT_DEBUG
   cout << "SpeakerEditor::on_browse_freq_resp" << endl;
 #endif
-  Gtk::FileSelection *f = new Gtk::FileSelection(_("Enter filename..."));
+  Gtk::FileChooserDialog *f = new Gtk::FileChooserDialog(_("Enter filename..."));
   f->set_modal();
   /* -5 == ok button clicked */
   if (f->run() == -5) {
@@ -945,7 +996,7 @@ void Speaker_ListStore::on_browse_freq_resp()
   delete f;
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-  tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(true);
+  tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
   m_modified = true;
   GSpeakers::driverlist_modified() = true;
 }
@@ -956,7 +1007,7 @@ void Speaker_ListStore::create_model()
   
   for_each(
       m_speaker_list->speaker_list()->begin(), m_speaker_list->speaker_list()->end(),
-      slot(*this, &Speaker_ListStore::liststore_add_item));
+      mem_fun(*this, &Speaker_ListStore::liststore_add_item));
 }
 
 void Speaker_ListStore::liststore_add_item(Speaker spk)
@@ -1010,7 +1061,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::type_cell_data_func));
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::type_cell_data_func));
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
   {
@@ -1019,7 +1070,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Qts"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 		
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qts_cell_data_func));
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::qts_cell_data_func));
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.qts);
   }
   {
@@ -1028,7 +1079,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Fs"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::fs_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::fs_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.fs);
   }
   {
@@ -1037,7 +1088,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Vas"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::vas_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::vas_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.vas);
   }
 
@@ -1047,7 +1098,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Rdc"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::rdc_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::rdc_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.rdc);
   }
   {
@@ -1056,7 +1107,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Lvc"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::lvc_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::lvc_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.lvc);
   }
   {
@@ -1065,7 +1116,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Qms"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qms_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::qms_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.qms);
   }
   {
@@ -1074,7 +1125,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Qes"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::qes_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::qes_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.qes);
   }
   {
@@ -1083,7 +1134,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Impedance"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::imp_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::imp_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.imp);
   }
   {
@@ -1092,7 +1143,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Sensitivity"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::sens_cell_data_func));				
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::sens_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.sens);
   }
   {
@@ -1101,7 +1152,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Cone mass"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::mmd_cell_data_func));				
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::mmd_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.mmd);
   }
   {
@@ -1110,7 +1161,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Active radius"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::ad_cell_data_func));				
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::ad_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.ad);
   }
   {
@@ -1119,7 +1170,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Force factor"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::bl_cell_data_func));				
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::bl_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.bl);
   }
   {
@@ -1128,7 +1179,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Susp. resistance"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::rms_cell_data_func));		
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::rms_cell_data_func));		
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.rms);
   }
   {
@@ -1137,7 +1188,7 @@ void Speaker_ListStore::add_columns()
     int cols_count = m_TreeView.append_column(_("Susp. compliance"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &Speaker_ListStore::cms_cell_data_func));				
+		pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &Speaker_ListStore::cms_cell_data_func));				
     //pColumn->add_attribute(pRenderer->property_text(), m_columns.cms);
   }
 

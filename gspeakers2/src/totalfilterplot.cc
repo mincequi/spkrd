@@ -24,14 +24,16 @@
 TotalFilterPlot::TotalFilterPlot() : 
   plot(1, 20000)
 {
+  using namespace sigc;
+
   add(plot);
-  //signal_add_box_plot.connect(slot(plot, &GSpeakersPlot::add_plot));
-  //signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
-  //signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
-  //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
-  signal_plot_crossover.connect(slot(*this, &TotalFilterPlot::on_plot_crossover));
-  signal_add_crossover_plot.connect(slot(*this, &TotalFilterPlot::on_add_plot));
-//  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
+  //signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
+  //signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
+  //signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
+  //signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
+  signal_plot_crossover.connect(mem_fun(*this, &TotalFilterPlot::on_plot_crossover));
+  signal_add_crossover_plot.connect(mem_fun(*this, &TotalFilterPlot::on_add_plot));
+//  signal_crossover_selected.connect(mem_fun(*this, &TotalFilterPlot::on_crossover_selected));
   
   plot.set_y_label(_("Magnitude / dB"));
   show_all();

@@ -8,7 +8,7 @@
  * Modified by Daniel Sundberg 2002
  *
  *   - added save()
- *
+ *   - added virtual destructor
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,13 +37,14 @@
 using std::string;
 using std::map;
 
-class Settings : public SigC::Object {
+class Settings : public sigc::trackable {
  private:
   std::map<const string,string> m_map;
   std::string m_filename;
   
  public:
   Settings();
+  virtual ~Settings();
   
   void load(const string& filename) throw(std::runtime_error);
   void save(const string& filename) throw(std::runtime_error);
@@ -76,7 +77,7 @@ class Settings : public SigC::Object {
   static string Escape(const string& t);
   static string Unescape(const string& t);
 
-  SigC::Signal1<void,const string &> settings_changed;
+  sigc::signal1<void,const string &> settings_changed;
 };
 
 #endif

@@ -42,8 +42,8 @@ public:
   void set_focus_widget(Gtk::Widget& focus_widget);
   Gtk::Widget* get_focus_widget();
 
-  SigC::Signal5<void,const Glib::ustring&,int,int,int,int>& signal_show_popup();
-  SigC::Signal0<void>&                                      signal_hide_popup();
+  sigc::signal5<void,const Glib::ustring&,int,int,int,int>& signal_show_popup();
+  sigc::signal0<void>&                                      signal_hide_popup();
 
   void hide_popup();
 
@@ -66,8 +66,8 @@ protected:
 private:
   typedef CellRendererPopup Self;
 
-  SigC::Signal5<void,const Glib::ustring&,int,int,int,int>  signal_show_popup_;
-  SigC::Signal0<void>                                       signal_hide_popup_;
+  sigc::signal5<void,const Glib::ustring&,int,int,int,int>  signal_show_popup_;
+  sigc::signal0<void>                                       signal_hide_popup_;
 
   int           button_width_;
   Gtk::Window   popup_window_;

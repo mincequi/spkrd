@@ -29,7 +29,7 @@
 #include "crossover.h"
 #include "cellitemcrossover.h"
 
-using namespace SigC;
+using namespace sigc;
 using namespace std;
 
 /*
@@ -40,7 +40,7 @@ public:
   CrossoverTreeView();
   virtual ~CrossoverTreeView();
   /* Callback */
-  void on_crossover_selected(Crossover *new_crossover); // SigC::Object&);
+  void on_crossover_selected(Crossover *new_crossover);
   
 protected:
   //vfunc overrides:

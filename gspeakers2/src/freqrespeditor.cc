@@ -25,6 +25,8 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/fileselection.h>
 
+using namespace sigc;
+
 FreqRespEditor::FreqRespEditor(string filename) :
   m_table(15, 4, false),
   m_save_button(Gtk::Stock::SAVE),
@@ -97,9 +99,9 @@ FreqRespEditor::FreqRespEditor(string filename) :
   get_action_area()->pack_start(m_saveas_button);
   get_action_area()->pack_start(m_close_button);
 
-  m_saveas_button.signal_clicked().connect(slot(*this, &FreqRespEditor::on_save_as));
-  m_save_button.signal_clicked().connect(slot(*this, &FreqRespEditor::on_save));
-  m_close_button.signal_clicked().connect(slot(*this, &FreqRespEditor::on_close));
+  m_saveas_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_save_as));
+  m_save_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_save));
+  m_close_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_close));
   m_save_button.set_sensitive(false);
   
   if (m_filename != "") {
@@ -119,7 +121,7 @@ FreqRespEditor::FreqRespEditor(string filename) :
         f2 = g_ascii_strtod(substr_ptr, NULL);
 
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
-        dbmag_entries[i]->signal_changed().connect(bind<bool>(slot(m_save_button, &Gtk::Button::set_sensitive), true));
+        dbmag_entries[i]->signal_changed().connect(bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
         
         delete buffer;
       }
@@ -145,12 +147,14 @@ void FreqRespEditor::on_save()
     delete buffer;
     of.close();
     for (int i = 0; i < 30; i++) {
-      dbmag_entries[i]->signal_changed().connect(bind<bool>(slot(m_save_button, &Gtk::Button::set_sensitive), true));
+      dbmag_entries[i]->signal_changed().connect(bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
     }
 
   } else {
-    Gtk::MessageDialog *d = new Gtk::MessageDialog(*this, string(_("Could not open file: ")) + m_filename, Gtk::MESSAGE_ERROR, 
-                                               Gtk::BUTTONS_OK, true, true);
+    Gtk::MessageDialog *d = new Gtk::MessageDialog(*this, 
+                                                   string(_("Could not open file: ")) + m_filename, 
+                                                   false, Gtk::MESSAGE_ERROR,
+                                                   Gtk::BUTTONS_OK, true);
     d->run();
     delete d;
   }

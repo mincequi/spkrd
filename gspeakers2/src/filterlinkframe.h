@@ -26,7 +26,7 @@
 #include "gspeakersplot.h"
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 class FilterLinkFrame : public Gtk::Frame
 {

@@ -25,22 +25,22 @@
 
 Settings g_settings;
 
-Signal1<void, Crossover *> signal_crossover_selected;
-Signal1<void, SpeakerList *> signal_speakerlist_loaded;
-Signal1<void, Box *> signal_box_selected;
-Signal1<void, Box *> signal_add_to_boxlist;
-Signal3<void, Box *, Speaker *, Gdk::Color&> signal_add_plot;
-Signal1<void, Box *> signal_box_modified;
-Signal2<int, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
-Signal1<void, int> signal_remove_box_plot;
-Signal1<void, int> signal_hide_box_plot;
-Signal1<void, int> signal_select_plot;
-Signal0<void> signal_net_modified_by_wizard;
-Signal1<void, Net *> signal_net_modified_by_user;
-Signal1<void, int> signal_new_crossover;
-Signal0<void> signal_plot_crossover;
-Signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
-Signal0<void> signal_save_open_files;
+signal1<void, Crossover *> signal_crossover_selected;
+signal1<void, SpeakerList *> signal_speakerlist_loaded;
+signal1<void, Box *> signal_box_selected;
+signal1<void, Box *> signal_add_to_boxlist;
+signal3<void, Box *, Speaker *, Gdk::Color&> signal_add_plot;
+signal1<void, Box *> signal_box_modified;
+signal2<int, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
+signal1<void, int> signal_remove_box_plot;
+signal1<void, int> signal_hide_box_plot;
+signal1<void, int> signal_select_plot;
+signal0<void> signal_net_modified_by_wizard;
+signal1<void, Net *> signal_net_modified_by_user;
+signal1<void, int> signal_new_crossover;
+signal0<void> signal_plot_crossover;
+signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
+signal0<void> signal_save_open_files;
 
 namespace GSpeakers {
   Glib::ustring double_to_ustring(double d) 
@@ -84,7 +84,7 @@ namespace GSpeakers {
     Gtk::Widget *im;
     try {
 #ifdef TARGET_WIN32
-      Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(string("../pixmaps/") + filename);
+      Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(filename);
 #else
       Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + string("/share/pixmaps/") + filename);
 #endif

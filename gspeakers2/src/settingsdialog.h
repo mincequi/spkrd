@@ -28,7 +28,7 @@
 #include "common.h"
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 namespace GSpeakers {
   enum Settings { 

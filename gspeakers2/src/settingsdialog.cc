@@ -24,6 +24,8 @@
 
 #define NOF_TABLE_ROWS 10
 
+using namespace sigc;
+
 SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true, true),
   m_main_notebook(),
   m_spice_browse_button(_("Browse...")),
@@ -39,7 +41,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_file_selection = NULL;
   close_button = manage(new Gtk::Button(Gtk::Stock::CLOSE));
   get_action_area()->pack_start(*close_button);
-  close_button->signal_clicked().connect(slot(*this, &SettingsDialog::on_close));
+  close_button->signal_clicked().connect(mem_fun(*this, &SettingsDialog::on_close));
  
   get_vbox()->pack_start(m_main_notebook);
   m_main_notebook.set_border_width(5);
@@ -89,7 +91,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
                       0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-  m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
+  m_spice_browse_button.signal_clicked().connect(mem_fun(*this, &SettingsDialog::on_spice_browse));
   spice_frame->add(*spice_table);
   m_main_notebook.append_page(*spice_frame, _("SPICE"));
 
@@ -133,24 +135,24 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
   
   /* Setup configuration option change handlers */
-  m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                  GSpeakers::SAVE_MAIN_WINDOW_SIZE));
-  m_save_mainwindow_position.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_save_mainwindow_position.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SAVE_MAIN_WINDOW_SIZE));
   
-  m_autoupdate_filter_plots.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_autoupdate_filter_plots.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT));
-  m_draw_driver_imp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_draw_driver_imp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::DRAW_DRIVER_IMP_PLOT));
-  m_draw_driver_freq_resp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_draw_driver_freq_resp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT));
-  m_disable_filter_amp.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_disable_filter_amp.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::DISABLE_FILTER_AMP));
-  m_scale_crossover_image_parts.signal_clicked().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_scale_crossover_image_parts.signal_clicked().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SCALE_FILER_PARTS));
-  m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::SPICE_PATH));
-  m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(slot(*this, &SettingsDialog::on_config_option_change), 
+  m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change), 
                                                                                      GSpeakers::TOOLBAR_STYLE));
 
 }
@@ -223,7 +225,7 @@ void SettingsDialog::on_spice_browse()
 #endif
   m_file_selection = new Gtk::FileSelection(_("Select SPICE executable..."));
   m_file_selection->get_ok_button()->signal_clicked().connect(
-                      bind<Gtk::FileSelection *>(slot(*this, &SettingsDialog::on_file_ok), m_file_selection) );
+                      bind<Gtk::FileSelection *>(mem_fun(*this, &SettingsDialog::on_file_ok), m_file_selection) );
   m_file_selection->run();
   m_file_selection->hide();
   delete m_file_selection;

@@ -26,7 +26,7 @@
 #include "speakerlist.h"
 
 using namespace std;
-using namespace SigC;
+using namespace sigc;
 
 class CrossoverWizard : public Gtk::Frame
 {

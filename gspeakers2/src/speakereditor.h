@@ -22,15 +22,15 @@
 
 #include <sigc++/object.h>
 #include <gtkmm/widget.h>
-#include <gtkmm/fileselection.h>
+#include <gtkmm/filechooserdialog.h>
 #include <glibmm/ustring.h>
 #include "speakerlist.h"
 #include "driverfreqrespplot.h"
 
-using namespace SigC;
+using namespace sigc;
 using namespace std;
 
-class Speaker_ListStore : public SigC::Object
+class Speaker_ListStore : public sigc::trackable
 {
 public:
   Speaker_ListStore();
@@ -48,8 +48,8 @@ protected:
   void on_cell_fixed_toggled(const Glib::ustring& path_string);
   void on_open_xml();
   void on_append_xml();
-  void on_open_ok(Gtk::FileSelection *f);
-  void on_append_ok(Gtk::FileSelection *f);
+  bool on_open_ok(Gtk::FileChooserDialog *f);
+  void on_append_ok(Gtk::FileChooserDialog *f);
   void on_clear();
   void on_selection_changed();
   void on_new();
@@ -57,7 +57,7 @@ protected:
   void on_entry_changed(int i);
   void on_save();
   void on_save_as();
-  void on_save_as_ok(Gtk::FileSelection *f);
+  void on_save_as_ok(Gtk::FileChooserDialog *f);
   void on_remove();
   void on_close();
   void on_edit_freq_resp();
@@ -101,7 +101,7 @@ protected:
   Gtk::VBox m_vbox, m_treeview_vbox, m_inner_vbox, m_inner_treeview_vbox;
   Gtk::Frame m_treeview_frame, m_editor_frame;
   
-  Gtk::FileSelection *f_open, *f_save_as, *f_append;
+  Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
   Gtk::Menu m_menu;
   
   Gtk::HandleBox toolbar;

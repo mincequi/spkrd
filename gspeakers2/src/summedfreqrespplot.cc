@@ -29,6 +29,8 @@
 SummedFreqRespPlot::SummedFreqRespPlot() : 
   plot(1, 20000, 50, 110, true, 0)
 {
+  using namespace sigc;
+
   m_speakerlist = NULL;
   
   add(plot);
@@ -39,9 +41,9 @@ SummedFreqRespPlot::SummedFreqRespPlot() :
   
   g_settings.defaultValueBool("DisableFilterAmp", false);
   
-  signal_speakerlist_loaded.connect(slot(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
-  signal_add_crossover_plot.connect(slot(*this, &SummedFreqRespPlot::on_add_plot));
-  signal_crossover_selected.connect(slot(*this, &SummedFreqRespPlot::on_crossover_selected));
+  signal_speakerlist_loaded.connect(mem_fun(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
+  signal_add_crossover_plot.connect(mem_fun(*this, &SummedFreqRespPlot::on_add_plot));
+  signal_crossover_selected.connect(mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
 }
 
 SummedFreqRespPlot::~SummedFreqRespPlot()

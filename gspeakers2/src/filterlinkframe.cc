@@ -27,6 +27,8 @@
 #include "common.h"
 #include "../config.h"
 
+using namespace sigc;
+
 FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerList *speaker_list) :
   Gtk::Frame(""),
   adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
@@ -113,10 +115,10 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     m_higher_order_optionmenu = manage(new Gtk::OptionMenu());
     m_higher_order_menu = manage(new Gtk::Menu());
     Gtk::Menu::MenuList& menulist = m_higher_order_menu->items();
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 1)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 1)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
     m_higher_order_optionmenu->set_menu(*m_higher_order_menu);
     m_higher_type_optionmenu = manage(new Gtk::OptionMenu());
     m_higher_type_menu = manage(new Gtk::Menu());
@@ -157,10 +159,10 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     m_lower_order_optionmenu = manage(new Gtk::OptionMenu());
     m_lower_order_menu = manage(new Gtk::Menu());
     Gtk::Menu::MenuList& menulist = m_lower_order_menu->items();
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(slot(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("1", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("2", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("3", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("4", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
     m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
     m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
     m_lower_type_menu = manage(new Gtk::Menu());
@@ -187,26 +189,26 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   add(m_vbox);
   show_all();
   
-  m_speaker_combo.get_entry()->signal_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
+  m_speaker_combo.get_entry()->signal_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
   if (net->get_type() & NET_TYPE_LOWPASS) {
-    m_lower_type_optionmenu->signal_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed)); 
-    m_lower_co_freq_spinbutton->signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-    m_lower_order_optionmenu->signal_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
+    m_lower_type_optionmenu->signal_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed)); 
+    m_lower_co_freq_spinbutton->signal_value_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+    m_lower_order_optionmenu->signal_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
   } 
   if (net->get_type() & NET_TYPE_HIGHPASS) {
-    m_higher_order_optionmenu->signal_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-    m_higher_co_freq_spinbutton->signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-    m_higher_type_optionmenu->signal_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
+    m_higher_order_optionmenu->signal_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+    m_higher_co_freq_spinbutton->signal_value_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+    m_higher_type_optionmenu->signal_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }  
-  m_imp_corr_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-  m_damp_spinbutton.signal_value_changed().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-  m_adv_imp_model_checkbutton.signal_toggled().connect(slot(*this, &FilterLinkFrame::on_param_changed));
-  signal_net_modified_by_user.connect(slot(*this, &FilterLinkFrame::on_net_updated));
-  signal_plot_crossover.connect(slot(*this, &FilterLinkFrame::on_clear_and_plot));
+  m_imp_corr_checkbutton.signal_toggled().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+  m_damp_spinbutton.signal_value_changed().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+  m_adv_imp_model_checkbutton.signal_toggled().connect(mem_fun(*this, &FilterLinkFrame::on_param_changed));
+  signal_net_modified_by_user.connect(mem_fun(*this, &FilterLinkFrame::on_net_updated));
+  signal_plot_crossover.connect(mem_fun(*this, &FilterLinkFrame::on_clear_and_plot));
   g_settings.defaultValueString("SPICECmdLine", "spice3");
   my_filter_plot_index = -1;
-  signal_speakerlist_loaded.connect(slot(*this, &FilterLinkFrame::on_speakerlist_loaded));
-  g_settings.settings_changed.connect(slot(*this, &FilterLinkFrame::on_settings_changed));
+  signal_speakerlist_loaded.connect(mem_fun(*this, &FilterLinkFrame::on_speakerlist_loaded));
+  g_settings.settings_changed.connect(mem_fun(*this, &FilterLinkFrame::on_settings_changed));
 //  on_net_updated(m_net);
   init = false;
   enable_edit = true;
@@ -624,7 +626,7 @@ void FilterLinkFrame::on_plot_crossover()
     cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
 #endif
     Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()), 
-                         Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+                         false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d.run();
   }
   

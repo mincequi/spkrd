@@ -98,13 +98,13 @@ int PopupEntry::get_button_width()
   window.move(-500, -500);
   window.show_all();
 
-  GtkRequisition requisition = { 0, };
-  window.size_request(&requisition);
+  Gtk::Requisition requisition = { 0, };
+  window.size_request(requisition);
 
   return requisition.width;
 }
 
-SigC::Signal0<void>& PopupEntry::signal_arrow_clicked()
+sigc::signal0<void>& PopupEntry::signal_arrow_clicked()
 {
   return signal_arrow_clicked_;
 }
@@ -146,12 +146,12 @@ bool PopupEntry::on_button_press_event(GdkEventButton *event)
 void PopupEntry::start_editing_vfunc(GdkEvent* event)
 {
   cout << "PopupEntry::start_editing_vfunc" << endl;
-  using SigC::slot;
+  using sigc::mem_fun;
 
   entry_->select_region(0, -1);
 
-  entry_->signal_activate       ().connect(slot(*this, &Self::on_entry_activate));
-  //entry_->signal_key_press_event().connect(slot(*this, &Self::on_entry_key_press_event));
+  entry_->signal_activate       ().connect(mem_fun(*this, &Self::on_entry_activate));
+  //entry_->signal_key_press_event().connect(mem_fun(*this, &Self::on_entry_key_press_event));
 
 }
 

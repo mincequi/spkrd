@@ -31,10 +31,10 @@
 #include "common.h"
 #include "boxlist.h"
 
-using namespace SigC;
+using namespace sigc;
 using namespace std;
 
-extern Signal1<void, bool> signal_enclosure_set_save_state;
+extern signal1<void, bool> signal_enclosure_set_save_state;
 
 /*
  * This class implements a TreeView connected with a ListStore

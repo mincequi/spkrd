@@ -1,4 +1,3 @@
-# Generated automatically from Makefile.in.in by configure.
 # Makefile for program source directory in GNU NLS utilities package.
 # Copyright (C) 1995, 1996, 1997 by Ulrich Drepper <drepper@gnu.ai.mit.edu>
 #
@@ -15,7 +14,7 @@
 
 GETTEXT_PACKAGE = gspeakers
 PACKAGE = gspeakers
-VERSION = 0.2.0
+VERSION = 0.11.0
 
 SHELL = /bin/sh
 
@@ -24,7 +23,8 @@ srcdir = .
 top_srcdir = ..
 top_builddir = ..
 
-prefix = /usr/local
+
+prefix = /home/sumpan/gnome2
 exec_prefix = ${prefix}
 datadir = $(prefix)/share
 localedir = $(datadir)/locale
@@ -32,7 +32,7 @@ gnulocaledir = $(prefix)/share/locale
 gettextsrcdir = $(prefix)/share/glib-2.0/gettext/po
 subdir = po
 
-INSTALL = /usr/bin/install -c
+INSTALL = /home/sumpan/bin/install-check
 INSTALL_DATA = ${INSTALL} -m 644
 MKINSTALLDIRS = $(top_srcdir)/./mkinstalldirs
 
@@ -41,8 +41,8 @@ GENCAT = @GENCAT@
 GMSGFMT = PATH=../src:$$PATH /usr/bin/msgfmt
 MSGFMT = /usr/bin/msgfmt
 XGETTEXT = PATH=../src:$$PATH /usr/bin/xgettext
-INTLTOOL_UPDATE = $(top_builddir)/intltool-update
-INTLTOOL_EXTRACT = $(top_builddir)/intltool-extract
+INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
 GENPOT   = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --pot
 
@@ -55,14 +55,14 @@ INCLUDES = -I.. -I$(top_srcdir)/intl
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
 SOURCES = cat-id-tbl.c
-POFILES =  hu.po
-GMOFILES =  hu.gmo
+POFILES =  sv.po
+GMOFILES =  sv.gmo
 DISTFILES = ChangeLog Makefile.in.in POTFILES.in $(GETTEXT_PACKAGE).pot \
 stamp-cat-id $(POFILES) $(GMOFILES) $(SOURCES)
 
 POTFILES = \
 
-CATALOGS =  hu.gmo
+CATALOGS =  sv.gmo
 CATOBJEXT = .gmo
 INSTOBJEXT = .mo
 

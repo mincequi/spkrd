@@ -27,17 +27,17 @@
 
 CrossoverImageView::CrossoverImageView()
 {
-  using SigC::slot;
+  using sigc::mem_fun;
   
   visible = false;
   crossover = NULL;
   speaker_list = NULL;
   g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
   scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
-  g_settings.settings_changed.connect(slot(*this, &CrossoverImageView::on_settings_changed));
-  signal_crossover_selected.connect(slot(*this, &CrossoverImageView::on_crossover_selected));
-  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverImageView::on_net_modified));
-  signal_speakerlist_loaded.connect(slot(*this, &CrossoverImageView::on_speakerlist_selected));
+  g_settings.settings_changed.connect(mem_fun(*this, &CrossoverImageView::on_settings_changed));
+  signal_crossover_selected.connect(mem_fun(*this, &CrossoverImageView::on_crossover_selected));
+  signal_net_modified_by_wizard.connect(mem_fun(*this, &CrossoverImageView::on_net_modified));
+  signal_speakerlist_loaded.connect(mem_fun(*this, &CrossoverImageView::on_speakerlist_selected));
 }
 
 CrossoverImageView::~CrossoverImageView()
@@ -58,7 +58,7 @@ bool CrossoverImageView::on_expose_event(GdkEventExpose* event)
 bool CrossoverImageView::on_configure_event(GdkEventConfigure* event)
 {
   visible = true;
-  m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
+  m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(), get_allocation().get_height(), -1);
   
   m_refGC = get_style()->get_fg_gc(get_state());
 
@@ -82,7 +82,7 @@ void CrossoverImageView::redraw()
   if (visible == true) {
     /* Clear to white background color */
     m_refGC->set_rgb_fg_color(white);
-    m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().width, get_allocation().height);
+    m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().get_width(), get_allocation().get_height());
     m_refGC->set_rgb_fg_color(black);
 
     if (crossover != NULL) {
@@ -96,8 +96,8 @@ void CrossoverImageView::redraw()
       
       if (vert_space_per_net_devider == 0) return;
       
-      int window_height = get_allocation().height;
-      int window_width  = get_allocation().width;
+      int window_height = get_allocation().get_height();
+      int window_width  = get_allocation().get_width();
       int vert_space_per_net = GSpeakers::round(double(window_height) / double(vert_space_per_net_devider));
       
       /* Draw first net here */
@@ -213,7 +213,7 @@ void CrossoverImageView::on_settings_changed(const std::string& s)
     scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
     if (visible == true) {
       redraw();
-      Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+      Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
       get_window()->invalidate_rect(update_rect, true);
     }
   }
@@ -224,7 +224,7 @@ void CrossoverImageView::on_crossover_selected(Crossover *selected_crossover)
   crossover = selected_crossover;
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, true);
   }
 }
@@ -239,7 +239,7 @@ void CrossoverImageView::on_speakerlist_selected(SpeakerList *selected_speaker_l
   speaker_list = selected_speaker_list;
   if (visible == true) {
     redraw();
-    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, true);
   }
 }

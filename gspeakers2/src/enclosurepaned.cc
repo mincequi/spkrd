@@ -26,12 +26,14 @@
 #define TOOLBAR_INDEX_DELETE            5
 #define TOOLBAR_INDEX_DELETE_BOXPLOT    10
 
+using namespace sigc;
+
 EnclosurePaned::EnclosurePaned()
 {
   nof_plots = 0;
   plot_selected = false;
   m_tbar = NULL;
-  g_settings.settings_changed.connect(slot(*this, &EnclosurePaned::on_settings_changed));
+  g_settings.settings_changed.connect(mem_fun(*this, &EnclosurePaned::on_settings_changed));
 
   /* Main paned for the enclosure tab */
   add1(m_edit_vpaned);
@@ -51,10 +53,10 @@ EnclosurePaned::EnclosurePaned()
   g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
   m_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
 
-  signal_enclosure_set_save_state.connect( slot(*this, &EnclosurePaned::set_save_state) );
-  signal_remove_box_plot.connect(slot(*this, &EnclosurePaned::on_remove_boxplot));
-  signal_select_plot.connect(slot(*this, &EnclosurePaned::on_plot_selected));
-  signal_add_plot.connect(slot(*this, &EnclosurePaned::on_add_plot));
+  signal_enclosure_set_save_state.connect( mem_fun(*this, &EnclosurePaned::set_save_state) );
+  signal_remove_box_plot.connect(mem_fun(*this, &EnclosurePaned::on_remove_boxplot));
+  signal_select_plot.connect(mem_fun(*this, &EnclosurePaned::on_plot_selected));
+  signal_add_plot.connect(mem_fun(*this, &EnclosurePaned::on_add_plot));
 }
 
 EnclosurePaned::~EnclosurePaned()
@@ -78,33 +80,33 @@ Gtk::Menu& EnclosurePaned::get_menu()
 {
   Gtk::Menu::MenuList& menulist = m_menu.items();
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Enclosure"), GSpeakers::image_widget("stock_new_enclosure_16.png"), 
-                      slot(box_history, &BoxHistory::on_new) ) );
+                      mem_fun(box_history, &BoxHistory::on_new) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _Copy"), GSpeakers::image_widget("stock_new_enclosure_copy_16.png"), 
-                      slot(box_history, &BoxHistory::on_new_copy) ) );
+                      mem_fun(box_history, &BoxHistory::on_new_copy) ) );
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew Enclosure Xml"), GSpeakers::image_widget("stock_new_enclosure_xml_16.png"), 
-                      slot(box_history, &BoxHistory::on_new_xml) ) ); 
+                      mem_fun(box_history, &BoxHistory::on_new_xml) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Enclosure Xml..."), 
-                      slot(box_history, &BoxHistory::on_append_xml) ) );
+                      mem_fun(box_history, &BoxHistory::on_append_xml) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open Xml..."), GSpeakers::image_widget("open_xml_16.png"),   
-                      slot(box_history, &BoxHistory::on_open_xml) ) );
+                      mem_fun(box_history, &BoxHistory::on_open_xml) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save Xml"), GSpeakers::image_widget("save_xml_16.png"),   
-                      slot(box_history, &BoxHistory::on_save) ) );
+                      mem_fun(box_history, &BoxHistory::on_save) ) );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save Xml _As"), GSpeakers::image_widget("save_as_xml_16.png"),   
-                      slot(box_history, &BoxHistory::on_save_as) ) );
+                      mem_fun(box_history, &BoxHistory::on_save_as) ) );
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Optimize Enclosure"), GSpeakers::image_widget("opt_enclosure_16.png"), 
-                        slot(box_editor, &BoxEditor::on_optimize_button_clicked) ) ); 
-//  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Append To _Xml"), slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) ); 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_Plot"), slot(box_editor, &BoxEditor::on_append_to_plot_clicked) ) ); 
+                        mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked) ) ); 
+//  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Append To _Xml"), mem_fun(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) ); 
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_Plot"), mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Delete Enclosure"), GSpeakers::image_widget("delete_enclosure_16.png"),  
-                      slot(box_history, &BoxHistory::on_remove) ) ); 
+                      mem_fun(box_history, &BoxHistory::on_remove) ) ); 
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
   menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete Plot"), GSpeakers::image_widget("delete_plot_16.png"), 
-                        slot(plot_history, &PlotHistory::on_remove) ) ); 
+                        mem_fun(plot_history, &PlotHistory::on_remove) ) ); 
   
   //menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Delete Selected Plo_t"), 
-  //                    slot(*this, &EnclosurePaned::on_delete_plot) ) ); 
+  //                    mem_fun(*this, &EnclosurePaned::on_delete_plot) ) ); 
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
   menulist[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(false);
   //menulist[MENU_INDEX_DELETE].set_sensitive(false);
@@ -115,38 +117,75 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
 {
   if (m_tbar == NULL) {
     m_tbar = manage(new Gtk::Toolbar());
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_enclosure_24.png"), 
-                             slot(box_history, &BoxHistory::on_new), _("Create new enclosure")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Copy"), GSpeakers::image_widget("stock_new_enclosure_copy_24.png"), 
-                             slot(box_history, &BoxHistory::on_new_copy), _("Copy currently selected enclosure")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
+
+    Gtk::ToolButton *t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_new_enclosure_24.png"), _("New")));
+    t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_new));
+    m_tbar->append( *t );    
+
+    //m_tbar->( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_enclosure_24.png"), 
+    //          mem_fun(box_history, &BoxHistory::on_new), _("Create new enclosure")) );
+    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_new_enclosure_copy_24.png"), _("Copy")));
+    t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_new_copy));
+    m_tbar->append( *t );    
+
+    //m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Copy"), 
+    //GSpeakers::image_widget("stock_new_enclosure_copy_24.png"), 
+    //                         mem_fun(box_history, &BoxHistory::on_new_copy), _("Copy currently selected enclosure")) );
+    
+    Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
+    m_tbar->append( *s );
+
+    //m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
 //    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New Xml"), GSpeakers::image_widget("stock_new_enclosure_xml_24.png"), 
-//                             slot(box_history, &BoxHistory::on_new_xml), _("Create new enclosure xml (list)")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open"),  GSpeakers::image_widget("open_xml_24.png"),
-                             slot(box_history, &BoxHistory::on_open_xml), _("Open enclosure xml (list)")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save"),  GSpeakers::image_widget("save_xml_24.png"),
-                             slot(box_history, &BoxHistory::on_save), _("Save enclosure xml (list)")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"),  GSpeakers::image_widget("delete_enclosure_24.png"),   
-                             slot(box_history, &BoxHistory::on_remove), _("Delete selected enclosure")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Optimize"), GSpeakers::image_widget("opt_enclosure_24.png"), 
-                              slot(box_editor, &BoxEditor::on_optimize_button_clicked), _("Optimize enclosure volume")) );
+//                             mem_fun(box_history, &BoxHistory::on_new_xml), _("Create new enclosure xml (list)")) );
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+    t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_open_xml));
+    m_tbar->append( *t );    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("save_xml_24.png"), _("Save")));
+    t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_save));
+    m_tbar->append( *t );    
+    s = manage(new Gtk::SeparatorToolItem() );
+    m_tbar->append( *s );
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_enclosure_24.png"), _("Delete")));
+    t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_remove));
+    m_tbar->append( *t );    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Optimize")));
+    t->signal_clicked().connect(mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked));
+    m_tbar->append( *t );    
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("append_plot_enclosure_24.png"), _("Plot")));
+    t->signal_clicked().connect(mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked));
+    m_tbar->append( *t );    
+    s = manage(new Gtk::SeparatorToolItem() );
+    m_tbar->append( *s );
+    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_plot_24.png"), _("Delete Plot")));
+    t->signal_clicked().connect(mem_fun(plot_history, &PlotHistory::on_remove));
+    m_tbar->append( *t );    
+
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open"),  GSpeakers::image_widget("open_xml_24.png"),
+//                             mem_fun(box_history, &BoxHistory::on_open_xml), _("Open enclosure xml (list)")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save"),  GSpeakers::image_widget("save_xml_24.png"),
+//                             mem_fun(box_history, &BoxHistory::on_save), _("Save enclosure xml (list)")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"),  GSpeakers::image_widget("delete_enclosure_24.png"),   
+//                             mem_fun(box_history, &BoxHistory::on_remove), _("Delete selected enclosure")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Optimize"), GSpeakers::image_widget("opt_enclosure_24.png"), 
+//                              mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked), _("Optimize enclosure volume")) );
 //    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append"), GSpeakers::image_widget("append_enclosure_24.png"), 
-//                               slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
+//                               mem_fun(box_editor, &BoxEditor::on_append_to_boxlist_clicked), _("Append to enclosure list (xml)")) );
 
 //    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Append To Xml"), GSpeakers::image_widget("opt_enclosure_24.png"),
-//                                 slot(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );                                  
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Plot"), GSpeakers::image_widget("append_plot_enclosure_24.png"), 
-                                 slot(box_editor, &BoxEditor::on_append_to_plot_clicked), _("Plot currently selected enclosure")) );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete Plot"), GSpeakers::image_widget("delete_plot_24.png"), 
-                                 slot(plot_history, &PlotHistory::on_remove), _("Delete selected plot from plotlist")) );
+//                                 mem_fun(box_editor, &BoxEditor::on_append_to_boxlist_clicked) ) );                                  
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Plot"), GSpeakers::image_widget("append_plot_enclosure_24.png"), 
+//                                 mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked), _("Plot currently selected enclosure")) );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
+//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete Plot"), GSpeakers::image_widget("delete_plot_24.png"), 
+//                                 mem_fun(plot_history, &PlotHistory::on_remove), _("Delete selected plot from plotlist")) );
                                  
     m_toolbar.add(*m_tbar);
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-    m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(false);
-    m_tbar->tools()[TOOLBAR_INDEX_DELETE_BOXPLOT].get_widget()->set_sensitive(false);
-    //tbar->tools()[TOOLBAR_INDEX_DELETE].get_widget()->set_sensitive(false);
+    m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
+    m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(false);
   }
   return m_toolbar;
 }
@@ -161,7 +200,7 @@ void EnclosurePaned::on_settings_changed(const string& s)
 void EnclosurePaned::set_save_state(bool b)
 {
   if (m_tbar != NULL) {
-    m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(b);
+    m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
   }
   if (m_menu.items().size() > 0) {
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
@@ -175,7 +214,7 @@ void EnclosurePaned::on_plot_selected(int)
   cout << "EnclsourePaned::on_plot_selected" << endl;
 #endif
   plot_selected = true;
-  m_tbar->tools()[TOOLBAR_INDEX_DELETE_BOXPLOT].get_widget()->set_sensitive(true);
+  m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(true);
   m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(true);
 }
 
@@ -188,7 +227,7 @@ void EnclosurePaned::on_remove_boxplot(int)
     nof_plots--;
   }
   if (nof_plots < 1) {
-    m_tbar->tools()[TOOLBAR_INDEX_DELETE_BOXPLOT].get_widget()->set_sensitive(false);
+    m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(false);
     m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(false);
   }
 }
