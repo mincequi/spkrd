@@ -26,6 +26,7 @@
 #include <math.h>
 #include <gnome--/about.h>
 #include "simtoolbar.h"
+#include "../config.h"
 
 using SigC::bind;
 
@@ -58,6 +59,8 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
 
   opt_box_button = manage( new Gtk::Button( "Opt box" ) );
   opt_box_button->clicked.connect( slot( this, &SimToolbar::opt_box_clicked ) );
+  cfg_button = manage( new Gtk::Button( "Config" ) );
+  cfg_button->clicked.connect( slot( this, &SimToolbar::cfg_clicked ) );
   about_button = manage( new Gtk::Button( "About" ) );
   about_button->clicked.connect( slot( this, &SimToolbar::about_clicked ) );
 
@@ -68,49 +71,36 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   hbox->pack_start( *rem_plot_button, false, true );
   hbox->pack_start( *rem_all_button, false, true );
   hbox->pack_start( *opt_box_button, false, true );
+  hbox->pack_start( *cfg_button, false, true );
   hbox->pack_start( *about_button, false, true );
 }
 
 SimToolbar::~SimToolbar() {
+  delete color;
+}
 
+void SimToolbar::cfg_clicked() {
+  cout << "config clicked" << endl;
+}
+
+void SimToolbar::on_cfg_ok() {
+  cout << "cfg ok" << endl;
+}
+
+void SimToolbar::on_cfg_cancel() {
+  cout << "cfg cancel" << endl;
 }
 
 /*
  * Plot a curve with current enclosure and speaker
  */
 void SimToolbar::sim_clicked() {
-  double *db_mag = new double[UPPER_LIMIT];
-  double A, B, C, D, fn2, fn4, fr, vr, qr, qb;
 
   Box *b = bbar->get_box();
   Speaker *s = sbar->get_speaker();
   set_new_color();
 
-  /* Calculate the frequency response for the supplied speaker and box */
-  switch ( b->type ) {
-  case PORTED:
-    for (int f = 1; f < UPPER_LIMIT; f++) {
-      A = pow( ( b->fb1 / s->fs ), 2 );
-      B = A / s->qts + b->fb1 / ( 7 * s->fs * s->qts );
-      C = 1 + A + ( s->vas / b->vol1 ) + b->fb1 / ( 7 * s->fs * s->qts );
-      D = 1 / s->qts + b->fb1 / ( 7 * s->fs );
-      fn2 = pow( ( f / s->fs ), 2 );
-      fn4 = pow( fn2, 2 );
-      db_mag[f] = 10 * log10( pow( fn4, 2 ) / ( pow( ( fn4 - C * fn2 + A ), 2 ) + 
-						fn2 * pow( ( D * fn2 - B), 2 ) ) );
-    }
-    break;
-  case SEALED:
-    for (int f = 1; f < UPPER_LIMIT; f++) {
-      fr = pow( ( f / b->fb1 ), 2 );
-      vr = s->vas / b->vol1;
-      qr = sqrt( vr + 1 );
-      qb = 1 / ( ( 1 / s->qts ) / qr + 0.1 );
-      db_mag[f] = 10 * log10( pow( fr, 2 ) / ( pow( ( fr - 1 ), 2 ) + fr / ( pow( qb, 2 ) ) ) );
-    }
-    break;
-  }
-  plot->add_plot( db_mag, color );
+  plot->add_plot( calc_dbmag( b, s ), color );
   
   /* Setup vector for clist-row */
   vector<string> v;
@@ -243,6 +233,41 @@ void SimToolbar::set_new_color() {
 void SimToolbar::about_clicked() {
   vector<string> s;
   s.push_back("Daniel Sundberg <dss@home.se>");
-  Gnome::About *a = manage( new Gnome::About( "GnomeSpeakers", "0.1", "(C) Daniel Sundberg 2001", s ) );
+  Gnome::About *a = manage( new Gnome::About( "GnomeSpeakers", VERSION, "(C) Daniel Sundberg 2001", s ) );
   a->run_and_close();
+}
+
+/*
+ * This is a helper-function that calculates the frequency response for this 
+ * speaker in this particular box.
+ */
+double *SimToolbar::calc_dbmag( Box *b, Speaker *s ) {
+  double *db_mag = new double[UPPER_LIMIT];
+  double A, B, C, D, fn2, fn4, fr, vr, qr, qb;
+  
+  /* Calculate the frequency response for the supplied speaker and box */
+  switch ( b->type ) {
+  case PORTED:
+    for (int f = 1; f < UPPER_LIMIT; f++) {
+      A = pow( ( b->fb1 / s->fs ), 2 );
+      B = A / s->qts + b->fb1 / ( 7 * s->fs * s->qts );
+      C = 1 + A + ( s->vas / b->vol1 ) + b->fb1 / ( 7 * s->fs * s->qts );
+      D = 1 / s->qts + b->fb1 / ( 7 * s->fs );
+      fn2 = pow( ( f / s->fs ), 2 );
+      fn4 = pow( fn2, 2 );
+      db_mag[f] = 10 * log10( pow( fn4, 2 ) / ( pow( ( fn4 - C * fn2 + A ), 2 ) + 
+						fn2 * pow( ( D * fn2 - B), 2 ) ) );
+    }
+    break;
+  case SEALED:
+    for (int f = 1; f < UPPER_LIMIT; f++) {
+      fr = pow( ( f / b->fb1 ), 2 );
+      vr = s->vas / b->vol1;
+      qr = sqrt( vr + 1 );
+      qb = 1 / ( ( 1 / s->qts ) / qr + 0.1 );
+      db_mag[f] = 10 * log10( pow( fr, 2 ) / ( pow( ( fr - 1 ), 2 ) + fr / ( pow( qb, 2 ) ) ) );
+    }
+    break;
+  }
+  return db_mag;
 }

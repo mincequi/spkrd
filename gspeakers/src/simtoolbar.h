@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
- * http://sumpan.campus.luth.se/software/jags
+ * http://sumpan.campus.luth.se/software/gspeakers
  *
  * This program is free software; you can redistribute it and/or 
  * modify it under the terms of the GNU General Public License as 
@@ -57,6 +57,10 @@ class SimToolbar : public Gtk::HandleBox {
   void set_new_color();
   void about_clicked();
   void rem_all_clicked();
+  void cfg_clicked();
+  
+  void on_cfg_ok();
+  void on_cfg_cancel();
 
   SpeakerToolbar *sbar;
   BoxToolbar *bbar;
@@ -67,6 +71,7 @@ class SimToolbar : public Gtk::HandleBox {
   Gtk::Button *sim_button;
   Gtk::Button *rem_plot_button;
   Gtk::Button *opt_box_button;
+  Gtk::Button *cfg_button;
   Gtk::Button *about_button;
   Gtk::Button *rem_all_button;
  private:
@@ -75,6 +80,8 @@ class SimToolbar : public Gtk::HandleBox {
   int color_i, color_j, color_k;
   int last_color;
   GSpeakersCFG *cfg;
+
+  double *calc_dbmag( Box *, Speaker * );
 }; 
 
 
