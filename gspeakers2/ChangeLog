@@ -1,5 +1,22 @@
 GSpeakers ChangeLog
 
+2002-10-15
+
+* crossoverwizard.cc: prettier labels on most common filters in crossover wizard 
+    panel
+
+* crossovertreeview.cc: add an extra level to the filter treeview so that the 
+    user can see which components that are used in lowpass and highpass filters 
+    and code cleanup
+
+* crossovertreeview.cc: removed on_unit_cell_edited since we do not let the 
+    user edit this cell
+
+* common.h/cc, crossovertreeview.cc: removed unused signal_part_modifed
+
+* filterlinkframe.cc: fixed a bug that saved bessel instead of butterworth in 
+    2nd order filters
+
 2002-10-14
 
 * Prepared for 0.8.3 bugfix release
@@ -20,6 +37,8 @@ GSpeakers ChangeLog
 * Oops, forgot to update version number
 
 2002-10-10
+
+* Prepared for 0.8.2 release
 
 * speakereditor.cc: draw frequency response plot when freq resp editor is closed
 

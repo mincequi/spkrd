@@ -203,7 +203,7 @@ void FilterLinkFrame::on_order_selected(int which, int order)
 #ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << endl;
 #endif
-  Gtk::Menu::MenuList *menulist = &(m_lower_type_menu->items());
+  Gtk::Menu::MenuList *menulist;// = &(m_lower_type_menu->items());
   if (which == 0) {
     menulist = &m_lower_type_menu->items();
   } else if (which == 1) {
@@ -378,7 +378,7 @@ void FilterLinkFrame::on_param_changed()
               break;
             case 1:  // butterworth
               num_params = get_filter_params(NET_BUTTERWORTH,   NET_ORDER_2ND, NET_TYPE_HIGHPASS);
-              m_net->set_highpass_family(NET_BESSEL);
+              m_net->set_highpass_family(NET_BUTTERWORTH);
               break;
             case 2:  // chebychev
               num_params = get_filter_params(NET_CHEBYCHEV,     NET_ORDER_2ND, NET_TYPE_HIGHPASS);

@@ -1,4 +1,6 @@
 /*
+  $Id$
+
   crossovertreeview Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -41,14 +43,11 @@ protected:
   
   /* callbacks */
   void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
-  void on_cell_edited_unit(const Glib::ustring& path_string, const Glib::ustring& new_text);
-  bool on_delete_event(GdkEventAny *event);
   void on_net_modified_by_wizard();
 
   /* Helper functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void add_items();
   virtual void treestore_add_item(const CellItem_Crossover& foo);
   
   //Member widgets:

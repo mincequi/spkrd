@@ -31,7 +31,7 @@ TotalFilterPlot::TotalFilterPlot() :
   //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
   signal_plot_crossover.connect(slot(*this, &TotalFilterPlot::on_plot_crossover));
   signal_add_crossover_plot.connect(slot(*this, &TotalFilterPlot::on_add_plot));
-  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
+//  signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
   
   plot.set_y_label("Magnitude / dB");
   show_all();
