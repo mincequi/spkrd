@@ -1,5 +1,11 @@
 GSpeakers ChangeLog
 
+2002-08-25
+
+* crossoverwizard.h/cc, filterlinkframe.cc.h: added files to source tree
+
+* Released GSpeakers-0.3
+
 2002-08-24
 
 * gspeakersplot.cc, gspeakersboxplot.cc, plothistory.cc, common.h/cc: when 

@@ -38,10 +38,13 @@ MainWindow::MainWindow() :
   speaker_list_selector(),
   box_plot(),
   crossover_treeview(),
-  crossover_history()
+  crossover_history(),
+  crossover_wizard()
   
 {
   add(m_main_vbox);
+
+  set_title("GSpeakers-" + string(VERSION));
 
   g_settings.defaultValueBool("SetMainWindowSize", true);
   g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
@@ -95,7 +98,9 @@ MainWindow::MainWindow() :
   /* append pages to left notebook */
   m_cpanel_notebook.append_page(m_boxpanel_vbox, "Enclosure");
   m_cpanel_notebook.append_page(m_cpanel_paned, "Crossover");
-  
+  m_cpanel_notebook.append_page(crossover_wizard, "Crossover wizard");
+  g_settings.defaultValueUnsignedInt("CPanelNotebookPage", 0);
+    
   m_cpanel_scrolled_window.add(m_cpanel_notebook);
   m_cpanel_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     
@@ -104,8 +109,10 @@ MainWindow::MainWindow() :
   m_main_paned.add2(m_plot_notebook);
   g_settings.defaultValueUnsignedInt("MainWindowPanedPosition", 350);
   m_main_paned.set_position(g_settings.getValueUnsignedInt("MainWindowPanedPosition"));
-
+  
   show_all_children();
+  /* For some reason I had to put this row after show */
+  m_cpanel_notebook.set_current_page(g_settings.getValueUnsignedInt("CPanelNotebookPage"));
 }
 
 MainWindow::~MainWindow()
@@ -123,6 +130,7 @@ void MainWindow::on_quit()
   get_size(width, height);
   g_settings.setValue("MainWindowWidth", width);
   g_settings.setValue("MainWindowHeight", height);
+  g_settings.setValue("CPanelNotebookPage", m_cpanel_notebook.get_current_page());
   
   g_settings.save();
   

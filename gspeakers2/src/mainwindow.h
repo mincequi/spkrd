@@ -28,6 +28,7 @@
 #include "boxhistory.h"
 #include "crossovertreeview.h"
 #include "crossoverhistory.h"
+#include "crossoverwizard.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -59,6 +60,8 @@ private:
 
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  
+
+  CrossoverWizard crossover_wizard;
 
   /* Callbacks */
   void on_quit();
