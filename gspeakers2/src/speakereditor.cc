@@ -486,10 +486,16 @@ void Speaker_ListStore::on_selection_changed()
               fin.getline(buffer, 100, '\n');
             
               float f1, f2;
-              sscanf(buffer, "%f,%f", &f1, &f2);
+              //sscanf(buffer, "%f,%f", &f1, &f2);
+              char *substr_ptr = strtok(buffer, ",");
+              f1 = g_ascii_strtod(substr_ptr, NULL);
+              substr_ptr = strtok(NULL, ",");
+              f2 = g_ascii_strtod(substr_ptr, NULL);
+
               //cout << f1 << ", " << f2 << endl;
               GSpeakers::Point p(GSpeakers::round(f1), f2 );
               points.push_back(p);
+              delete buffer;
             }
             Gdk::Color c("blue");
             plot.add_plot(points, c);
@@ -512,6 +518,8 @@ void Speaker_ListStore::on_selection_changed()
 
 void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
 {
+  gchar *buffer = new gchar[8];
+
   if (g_settings.getValueBool("DrawDriverImpPlot") == true) {
     vector<GSpeakers::Point> points;
     /* Produce SPICE input-file */
@@ -530,12 +538,12 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
       double res = s.get_bl() * s.get_bl() / s.get_rms();
       double po = 1.18; // air density kg/m^3
       double cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad() / (3 * s.get_bl() * s.get_bl()) * 1000000;
-      of << "R" << s.get_id() << " 1 2 " << s.get_rdc() << endl;
-      of << "L" << s.get_id() << " 2 3 " << s.get_lvc() << "mH" << endl;
-      of << "lces 3 0 " << lces << "mH" << endl;
-      of << "cmes 3 0 " << cmes << "uF" << endl;
-      of << "res 3 0 " << res << endl;
-      of << "cmef 3 0 " << cmef << "uF" << endl;
+      of << "R" << s.get_id() << " 1 2 " << g_ascii_dtostr(buffer, 8, s.get_rdc()) << endl;
+      of << "L" << s.get_id() << " 2 3 " << g_ascii_dtostr(buffer, 8, s.get_lvc()) << "mH" << endl;
+      of << "lces 3 0 " << g_ascii_dtostr(buffer, 8, lces) << "mH" << endl;
+      of << "cmes 3 0 " << g_ascii_dtostr(buffer, 8, cmes) << "uF" << endl;
+      of << "res 3 0 " << g_ascii_dtostr(buffer, 8, res) << endl;
+      of << "cmef 3 0 " << g_ascii_dtostr(buffer, 8, cmef) << "uF" << endl;
       of << ".ac DEC 10 20 20k" << endl;
       of << ".print ac i(vamp)" << endl;
       of << ".end" << endl;
@@ -559,15 +567,30 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update)
         if (buffer[0] == '0') {
           output = true;
         }
+
         if (output == true) {
-          /* TODO: Read the sscanf string from settings */
-          sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+          /* Locale safe implementation of the following fscanf */
+          //sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
+          
+          id = atoi(buffer);
+
+          strtok(buffer, "\t");
+          char *substr_ptr = strtok(NULL, "\t");
+          
+          f1 = g_ascii_strtod(substr_ptr, NULL);
+          substr_ptr = strtok(NULL, "\t");
+          f2 = g_ascii_strtod(substr_ptr, NULL);
+          substr_ptr = strtok(NULL, "\t");
+          f3 = g_ascii_strtod(substr_ptr, NULL);
+
+          //cout << id << ":" << f1 << ":" << f2 << ":" << f3 << endl;
           GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / hypot(f2, f3)));
           points.push_back(p);
         }
         if ((buffer[0] == '3') && (buffer[1] == '0')) {
           output = false;
         }
+        delete buffer;
       }
       Gdk::Color c2("red");
       if (update == true) {

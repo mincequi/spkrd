@@ -114,8 +114,13 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
   double f_div, f_mapped;
   int x, y;
   
+  //for (vector<GSpeakers::Point>::iterator iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter) {
+  //  cout << (*iter).get_x() << ":" << (*iter).get_y() << endl;
+  //}
+
   vector<GSpeakers::Point>::iterator iter;
-  for ( iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter ) {
+  
+    for ( iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter ) {
     if (m_upper_x == 20000) {
       if ( (*iter).get_x() < 100 ) {
         /* Devide by 10 to only log numbers 0 < number < 10 */
@@ -182,9 +187,10 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
   }
   if (visible == true) {
     /* Don't draw the line until we have it all done */
+    
     m_refPixmap->draw_lines( m_refGC, points );
   
-    /* Reset rgb fg color */
+        /* Reset rgb fg color */
     m_refGC->set_rgb_fg_color(black);
     
     //select_plot(m_colors.size() - 1);

@@ -64,9 +64,15 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
         fin.getline(buffer, 100, '\n');
       
         float f1, f2;
-        sscanf(buffer, "%f,%f", &f1, &f2);
+        //sscanf(buffer, "%f,%f", &f1, &f2);
+        char *substr_ptr = strtok(buffer, ",");
+        f1 = g_ascii_strtod(substr_ptr, NULL);
+        substr_ptr = strtok(NULL, ",");
+        f2 = g_ascii_strtod(substr_ptr, NULL);
+
         GSpeakers::Point p(GSpeakers::round(f1), f2 );
         freq_resp_points.push_back(p);
+        delete buffer;
       }
     } else {
       cout << _("Could not open ") << s.get_freq_resp_filename() << endl;

@@ -626,14 +626,26 @@ void FilterLinkFrame::on_plot_crossover()
       output = true;
     }
     if (output == true) {
-      /* TODO: Read the sscanf string from settings */
-      sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+      // sscanf(buffer, "%d\t%f,\t%f\t%f", &id, &f1, &f2, &f3);
+      
+      id = atoi(buffer);
+
+      strtok(buffer, "\t");
+      char *substr_ptr = strtok(NULL, "\t");
+          
+      f1 = g_ascii_strtod(substr_ptr, NULL);
+      substr_ptr = strtok(NULL, "\t");
+      f2 = g_ascii_strtod(substr_ptr, NULL);
+      substr_ptr = strtok(NULL, "\t");
+      f3 = g_ascii_strtod(substr_ptr, NULL);
+
       GSpeakers::Point p(GSpeakers::round(f1), f3);
       points.push_back(p);
     }
     if ((buffer[0] == '3') && (buffer[1] == '0')) {
       output = false;
     }
+    delete buffer;
   }
   /* send the spice data to the plot */
   /* TODO: improve color handling here */

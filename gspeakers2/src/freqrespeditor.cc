@@ -93,11 +93,19 @@ FreqRespEditor::FreqRespEditor(string filename) :
       for (int i = 0; i < 30; i++) {
         char *buffer = new char[100];
         fin.getline(buffer, 100, '\n');
-        /* TODO: Read the sscanf string from settings */
+
         float f1, f2;
-        sscanf(buffer, "%f,%f", &f1, &f2);
+        //sscanf(buffer, "%f,%f", &f1, &f2);
+
+        char *substr_ptr = strtok(buffer, ",");
+        f1 = g_ascii_strtod(substr_ptr, NULL);
+        substr_ptr = strtok(NULL, ",");
+        f2 = g_ascii_strtod(substr_ptr, NULL);
+
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(bind<bool>(slot(m_save_button, &Gtk::Button::set_sensitive), true));
+        
+        delete buffer;
       }
     }
   }
@@ -113,10 +121,12 @@ void FreqRespEditor::on_save()
   vector<double> v = get_x_vector();
   ofstream of(m_filename.c_str());
   if (of.good()) {
+    gchar *buffer = new char[8];
     for (int j = 0; j < 15; j++) {
-      of << v[2 * j] << "," << dbmag_entries[2 * j]->get_text() << endl;
-      of << v[2 * j + 1] << "," << dbmag_entries[2 * j + 1]->get_text() << endl;
+      of << v[2 * j] << "," << g_ascii_dtostr(buffer, 8, g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), NULL)) << endl;
+      of << v[2 * j + 1] << "," << g_ascii_dtostr(buffer, 8, g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), NULL)) << endl;
     }
+    delete buffer;
     of.close();
     for (int i = 0; i < 30; i++) {
       dbmag_entries[i]->signal_changed().connect(bind<bool>(slot(m_save_button, &Gtk::Button::set_sensitive), true));

@@ -426,6 +426,7 @@ string Net::to_SPICE(Speaker& s)
   int node_counter = 0;
   int part_index = 0;
   int next_node_cnt_inc = 1;
+  gchar *buffer = new gchar[8];
   
   ofstream of(tmp_file.c_str());
   if (of.good()) {
@@ -436,45 +437,45 @@ string Net::to_SPICE(Speaker& s)
         case NET_ORDER_1ST:
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_2ND:
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_3RD:
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_4TH:
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           node_counter++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
       }
@@ -484,45 +485,45 @@ string Net::to_SPICE(Speaker& s)
         case NET_ORDER_1ST:
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_2ND:
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_3RD:
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
         case NET_ORDER_4TH:
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           node_counter++;
           of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << node_counter - 1 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0 << " " << 
-                m_parts[part_index].get_value() << m_parts[part_index].get_unit() << endl;
+                g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value()) << m_parts[part_index].get_unit() << endl;
           part_index++;
           break;
       }
@@ -530,18 +531,18 @@ string Net::to_SPICE(Speaker& s)
     
     if (m_has_imp_corr == true) {
       of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " " << node_counter + 1 << " " << 
-            m_imp_corr_R.get_value() << endl;
+            g_ascii_dtostr(buffer, 8, m_imp_corr_R.get_value()) << endl;
       of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0 << " " << 
-            m_imp_corr_C.get_value() << m_imp_corr_C.get_unit() << endl;
+            g_ascii_dtostr(buffer, 8, m_imp_corr_C.get_value()) << m_imp_corr_C.get_unit() << endl;
       next_node_cnt_inc = 2;
     } else {
       next_node_cnt_inc = 1;
     }
     if (m_has_damp == true) {
       of << "R" << m_damp_R1.get_id() << " " << node_counter << " " << 0 << " " << 
-            m_damp_R1.get_value() << endl;
+            g_ascii_dtostr(buffer, 8, m_damp_R1.get_value()) << endl;
       of << "R" << m_damp_R2.get_id() << " " << node_counter << " " << node_counter + next_node_cnt_inc << " " << 
-            m_damp_R2.get_value() << endl;
+            g_ascii_dtostr(buffer, 8, m_damp_R2.get_value()) << endl;
       node_counter = node_counter + next_node_cnt_inc;
       next_node_cnt_inc = 1;
     }
@@ -560,13 +561,13 @@ string Net::to_SPICE(Speaker& s)
       node_counter = node_counter + next_node_cnt_inc;
       of << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1 << " " << s.get_lvc() << "mH" << endl;
       node_counter = node_counter + 1;
-      of << "lces " << node_counter << " " << 0 << " " << lces << "mH" << endl;
-      of << "cmes " << node_counter << " " << 0 << " " << cmes << "uF" << endl;
-      of << "res " << node_counter << " " << 0 << " " << res << endl;
-      of << "cmef " << node_counter << " " << 0 << " " << cmef << "uF" << endl;
+      of << "lces " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, lces) << "mH" << endl;
+      of << "cmes " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmes) << "uF" << endl;
+      of << "res " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, res) << endl;
+      of << "cmef " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmef) << "uF" << endl;
     } else {
       /* simple model, model speaker as resistor */
-      of << "R" << s.get_id() << " " << node_counter << " " << 0 << " " << s.get_rdc() << endl;
+      of << "R" << s.get_id() << " " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, s.get_rdc()) << endl;
     }
 
     of << ".ac DEC 10 20 20k" << endl;

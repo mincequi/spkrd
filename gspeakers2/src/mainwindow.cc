@@ -84,7 +84,7 @@ MainWindow::MainWindow()
   }
   {
   	Gtk::Menu::MenuList& menulist = m_help_menu.items();
-  	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("About..."), GSpeakers::image_widget("stock_menu_about.png"), 
+  	menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("About"), GSpeakers::image_widget("stock_menu_about.png"), 
                                                          slot(*this, &MainWindow::on_about) ) );
   }
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), m_file_menu) );
@@ -109,7 +109,7 @@ MainWindow::MainWindow()
   m_main_vbox.pack_start(m_main_notebook);
   
   /* Driver tab */
-  m_main_notebook.append_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", "Driver")));
+  m_main_notebook.append_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", _("Driver"))));
   m_driver_hpaned.add1(speaker_editor.get_editor_table());
   g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
   g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
@@ -120,10 +120,10 @@ MainWindow::MainWindow()
   m_driver_vpaned.add2(speaker_editor.get_treeview_table());
   
   /* Enclosure tab */
-  m_main_notebook.append_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", "Enclosure")));
+  m_main_notebook.append_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", _("Enclosure"))));
   
   /* Crossover tab */
-  m_main_notebook.append_page(crossover_paned, *manage(new TabWidget("filter_small.png", "Crossover") ) );
+  m_main_notebook.append_page(crossover_paned, *manage(new TabWidget("filter_small.png", _("Crossover") ) ) );
 
   show_all_children();
   

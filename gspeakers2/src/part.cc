@@ -63,7 +63,8 @@ void Part::parse_type(xmlNodePtr node)
 void Part::parse_value(xmlNodePtr node)
 {
   if (( node != NULL ) && ( string( (char *)node->name) == string( "value" ))) {
-    istringstream((char *)xmlNodeGetContent(node)) >> m_value;
+    //istringstream((char *)xmlNodeGetContent(node)) >> m_value;
+    m_value = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
     try {
       parse_unit(node->next);
     } catch (GSpeakersException e) {
@@ -89,12 +90,13 @@ void Part::parse_unit(xmlNodePtr node)
 xmlNodePtr Part::to_xml_node(xmlNodePtr parent)
 {
   xmlNodePtr part, field;
+  gchar *buffer = new gchar[8];
   
   part = xmlNewChild( parent, NULL, (xmlChar *)("part"), NULL );
   field = xmlNewChild( part, NULL, (xmlChar *)("type"), NULL );
   xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_type));
   field = xmlNewChild( part, NULL, (xmlChar *)("value"), NULL );
-  xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%f", m_value));
+  xmlNodeSetContent( field, (xmlChar *)g_ascii_dtostr(buffer, 8, m_value));
   field = xmlNewChild( part, NULL, (xmlChar *)("unit"), NULL );
   xmlNodeSetContent( field, (xmlChar *)(m_unit.c_str()));
 
