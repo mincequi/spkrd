@@ -1,3 +1,14 @@
+GSpeakers-0.6
+
+* You can now use an advanced model for the impedance of a driver since a 
+    couple of new parameters were added to the representation of a speaker
+
+* You can plot the summed freqeuncy response of a filter
+
+* You can choose not to print debug information to console at configure time
+
+* Fixes for gcc-3.2
+
 GSpeakers-0.5
 
 * You can now plot the frequency response of a crossover network (with the 

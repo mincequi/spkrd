@@ -2,6 +2,24 @@ GSpeakers ChangeLog
 
 2002-09-13
 
+* Prepared for GSpeakers-0.6 release
+
+* mainwindow.cc: added icons to the tabs on the main notebook
+
+* tabwidget.h/cc: new class
+
+* Added #ifdef OUTPUT_DEBUG around all cout statements
+
+* totalfilterplot.cc: fixed a bug that sometimes caused two plots to be drawn 
+    in this graph
+
+* gspeakersplot.h/cc: added visible member variable which knows if the widget is 
+    visible or not, this way we don't draw to the window unless it's visible
+
+* verfied that we compile on gcc-2.95, 2.96 and 3.2
+
+2002-09-13
+
 * crossoverwizard.cc, : fixes for gcc-3.2
 
 2002-09-12

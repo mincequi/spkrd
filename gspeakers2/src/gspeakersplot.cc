@@ -33,7 +33,7 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
-  
+  visible = false;
   
 }
 
@@ -60,7 +60,10 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
 {
   /* Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap, will probably be faster 
      than redrawing the entire thing every time */
+#ifdef OUTPUT_DEBUG
   cout << "GSpeakersPlot::on_configure_event" << endl;
+#endif
+  visible = true;
   m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().width, get_allocation().height, -1);
   
   m_refGC = get_style()->get_fg_gc(get_state());
@@ -77,7 +80,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   //m_refFont = refPangoContext->load_font(font_description);
 
   m_refLayout = Pango::Layout::create(refPangoContext);
-
+  
   redraw();
 
   /* We've handled the configure event, no need for further processing. */
@@ -86,8 +89,12 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
 
 int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Color& ref_color)
 {
+#ifdef OUTPUT_DEBUG
   cout << "GSpeakersPlot: on add plot" << endl;
-  m_refGC->set_rgb_fg_color(ref_color);
+#endif
+  if (visible == true) {
+    m_refGC->set_rgb_fg_color(ref_color);
+  }
   m_visible_plots.push_back(true);
   m_colors.push_back(ref_color);
   m_points.push_back(ref_point_vector);
@@ -171,15 +178,17 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
       points.push_back(p);
     } 
   }
-  /* Don't draw the line until we have it all done */
-  m_refPixmap->draw_lines( m_refGC, points );
-
-  /* Reset rgb fg color */
-  m_refGC->set_rgb_fg_color(black);
+  if (visible == true) {
+    /* Don't draw the line until we have it all done */
+    m_refPixmap->draw_lines( m_refGC, points );
   
-  //select_plot(m_colors.size() - 1);
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
+    /* Reset rgb fg color */
+    m_refGC->set_rgb_fg_color(black);
+    
+    //select_plot(m_colors.size() - 1);
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
   /* Return index of the new plot so that the owner of this plot can keep track of plots */
   return m_colors.size() - 1;
 }
@@ -189,19 +198,22 @@ void GSpeakersPlot::replace_plot(int index, vector<GSpeakers::Point> &p, Gdk::Co
   m_points[index] = p;
   m_colors[index] = ref_color;
   
-  redraw();
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
 }
 
 void GSpeakersPlot::remove_plot(int n)
 {
   int i = 0;
+#ifdef OUTPUT_DEBUG
   cout << "n == " << n << endl;
-  
+#endif
   /* For some reason something goes wrong when we select the last row so we add a special case for that event */
   if (n == (int)(m_points.size() - 1)) {
-    cout << "GSpeakersPlot: last list item" << endl;
+//    cout << "GSpeakersPlot: last list item" << endl;
     m_points.erase(m_points.begin() + m_points.size());
     m_colors.erase(m_colors.begin() + m_colors.size());
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
@@ -235,11 +247,14 @@ void GSpeakersPlot::remove_plot(int n)
       }
     }
   }
-  cout << "loop 3" << endl;
+  //cout << "loop 3" << endl;
   m_selected_plot = -1;
-  redraw();
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
+
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
 }
 
 void GSpeakersPlot::remove_all_plots()
@@ -269,27 +284,31 @@ void GSpeakersPlot::remove_all_plots()
  // {
  //   m_visible_plots.erase(iter);
  // }
-  redraw();
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
-  
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
 }
 
 void GSpeakersPlot::hide_plot(int n)
 {
   m_visible_plots[n] = !m_visible_plots[n];
-  redraw();
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
-
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
 }
 
 void GSpeakersPlot::select_plot(int index) 
 {
   m_selected_plot = index;
-  redraw();
-  Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
-  get_window()->invalidate_rect(update_rect, false);
+  if (visible == true) {
+    redraw();
+    Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+    get_window()->invalidate_rect(update_rect, false);
+  }
 }
 
 void GSpeakersPlot::redraw()
@@ -410,13 +429,13 @@ void GSpeakersPlot::redraw()
       if (i == m_selected_plot) {
         m_linesize = m_linesize + 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
-        cout << "select plot" << endl;
+        //cout << "select plot" << endl;
       }
       m_refPixmap->draw_lines( m_refGC, points );
       if (i == m_selected_plot) {
         m_linesize = m_linesize - 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST, Gdk::JOIN_MITER);
-        cout << "select plot" << endl;
+        //cout << "select plot" << endl;
       }
 
     }

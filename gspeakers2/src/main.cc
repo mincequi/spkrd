@@ -33,7 +33,9 @@ int main (int argc, char *argv[])
   try {
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
   } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
     cout << "Main: " << e.what() << endl;
+#endif
     Gtk::MessageDialog md("No configuration file found!\n\n" + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
     md.run();

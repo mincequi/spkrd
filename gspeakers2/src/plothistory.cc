@@ -89,7 +89,9 @@ void PlotHistory::on_selection_changed()
       signal_select_plot(indices[0]);
 
       index = indices[0];
+#ifdef OUTPUT_DEBUG
       cout << "PlotHistory: selection changed" << endl;
+#endif
       
       //signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
     }
@@ -98,7 +100,9 @@ void PlotHistory::on_selection_changed()
 
 void PlotHistory::on_remove()
 {
+#ifdef OUTPUT_DEBUG
   cout << "PlotHistory: on_remove" << endl;
+#endif
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   if(const Gtk::TreeIter iter = refSelection->get_selected())
@@ -113,7 +117,9 @@ void PlotHistory::on_remove()
 
       /* Signal to the plot */
       /* We got the plot index to remove in indices[0] */
+#ifdef OUTPUT_DEBUG
       cout << "PlotHistory: plot to remove = " << indices[0] << endl;
+#endif
       signal_remove_box_plot(indices[0]);
       
       //if(index < (int)m_box_list.box_list()->size())
@@ -143,21 +149,20 @@ void PlotHistory::on_add_plot(Box *b, Speaker *s, Gdk::Color &color)
 {
   //liststore_add_item(*b);
   if ((b != NULL) && (s != NULL)) {
-
-    cout << "PlotHistory: innan boxlist.push_back" << endl;
     m_box_list.box_list()->push_back(*b);
-    cout << "PlotHistory: innan speakerlist.push_back" << endl;
     m_speaker_list.speaker_list()->push_back(*s);
-    cout << "PlotHistory: innan add item" << endl;
     liststore_add_item(*b, *s, color);
-    
+#ifdef OUTPUT_DEBUG    
     cout << "PlotHistory: plot added" << endl;
+#endif
   }
 }
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)
 {
+#ifdef OUTPUT_DEBUG
   cout << "PlotHistory: toggle plot" << endl;
+#endif
   
   GtkTreePath *gpath = gtk_tree_path_new_from_string (path_string.c_str());
   Gtk::TreePath path(gpath);
@@ -177,7 +182,9 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)
   std::vector<int> indices = path.get_indices();
   if(indices.size() > 0)
   {
+#ifdef OUTPUT_DEBUG
     cout << "PlotHistory: hide" << endl;
+#endif
     signal_hide_box_plot(indices[0]);
   }  
   /* set new value */
@@ -303,7 +310,9 @@ void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color)
   r = (int)((color.get_red_p()) * 255);
   g = (int)((color.get_green_p()) * 255);
   b = (int)((color.get_blue_p()) * 255);
+#ifdef OUTPUT_DEBUG
   cout << "color: " << r << ", " << g << ", " << b << endl;
+#endif
   char *str = NULL;
   GString *buffer = g_string_new(str);
   g_string_printf(buffer, "#%.2X%.2X%.2X", r, g, b);
@@ -313,7 +322,9 @@ void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color)
   row[m_columns.view_plot]  = true;
   row[m_columns.id]         = box.get_id();
   row[m_columns.id_string]  = box.get_id_string();
+#ifdef OUTPUT_DEBUG
   cout << box.get_id_string() << endl;
+#endif
   row[m_columns.speaker_string] = spk.get_id_string();
   row[m_columns.type]       = box.get_type();
   row[m_columns.vb1]        = box.get_vb1();

@@ -29,8 +29,10 @@ TotalFilterPlot::TotalFilterPlot() :
   //signal_remove_box_plot.connect(slot(plot, &GSpeakersPlot::remove_plot));
   //signal_hide_box_plot.connect(slot(plot, &GSpeakersPlot::hide_plot));
   //signal_select_plot.connect(slot(plot, &GSpeakersPlot::select_plot));
+  signal_plot_crossover.connect(slot(*this, &TotalFilterPlot::on_plot_crossover));
   signal_add_crossover_plot.connect(slot(*this, &TotalFilterPlot::on_add_plot));
   signal_crossover_selected.connect(slot(*this, &TotalFilterPlot::on_crossover_selected));
+  
   show_all();
   m_color = new Gdk::Color("blue");
 }
@@ -59,7 +61,7 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
     l++;
   }
 
-  cout << "TotalFilterPlot::on_add_plot: position, *i = " << position << ", " << *i << endl;
+  //cout << "TotalFilterPlot::on_add_plot: position, *i = " << position << ", " << *i << endl;
 
   /* Om *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end of the vector */
   if ((position != -1) && (m_points.size() > 0)) {
@@ -69,7 +71,7 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
     m_nets.push_back(*i);
   }
   
-  cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size() << ", " << m_points.size() << endl;
+  //cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size() << ", " << m_points.size() << endl;
   
   /* sum the plots into one great plot */
   vector<GSpeakers::Point> pnts = m_points[0];
@@ -89,14 +91,14 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   // om *i inte finns, lägg till den och spara vektorn
   // rita om plotten
   
-  if (position != -1) {
-    cout << "TotalFilterPlot::on_add_plot: replace plot" << endl;
-    plot.remove_all_plots();
-    plot.add_plot(pnts, *m_color);
-  } else {
-    plot.add_plot(pnts, *m_color);
-    cout << "TotalFilterPlot::on_add_plot: add plot" << endl;
-  }
+  //if (position != -1) {
+  //  cout << "TotalFilterPlot::on_add_plot: replace plot" << endl;
+  plot.remove_all_plots();
+  plot.add_plot(pnts, *m_color);
+  //} else {
+  //  plot.add_plot(pnts, *m_color);
+  //  cout << "TotalFilterPlot::on_add_plot: add plot" << endl;
+  //}
 //  if (*i == -1) {
 //    *i = plot.add_plot(points, color);
 //  } else {
@@ -116,6 +118,11 @@ void TotalFilterPlot::clear()
 void TotalFilterPlot::on_crossover_selected(Crossover *)
 {
   clear();
+}
+
+void TotalFilterPlot::on_plot_crossover()
+{
+  //clear();
 }
 
 bool TotalFilterPlot::on_delete_event(GdkEventAny *event)

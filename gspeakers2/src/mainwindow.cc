@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "crossover.h"
 #include "settingsdialog.h"
+#include "tabwidget.h"
 
 MainWindow::MainWindow() :
   m_main_vbox(),
@@ -121,8 +122,9 @@ MainWindow::MainWindow() :
   
   m_main_vbox.pack_start(m_main_notebook);
   
-  /* Enclosur etab */
-  m_main_notebook.append_page(m_box_hpaned, "Enclosure");
+  /* Enclosure etab */
+  
+  m_main_notebook.append_page(m_box_hpaned, *manage(new TabWidget("../pixmaps/speaker_small.png", "Enclosure")));
   
   /* Main paned for the enclosure tab */
   m_box_hpaned.add1(m_box_edit_vpaned);
@@ -143,7 +145,7 @@ MainWindow::MainWindow() :
   m_box_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
   
   /* Crossover tab */
-  m_main_notebook.append_page(m_crossover_hpaned1, "Crossover");
+  m_main_notebook.append_page(m_crossover_hpaned1, *manage(new TabWidget("../pixmaps/filter_small.png", "Crossover") ) );
   m_crossover_hpaned1.add1(crossover_wizard);
   g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
   m_crossover_hpaned1.set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));

@@ -211,7 +211,9 @@ void CrossoverHistory::on_open_ok(Gtk::FileSelection *f)
 
 void CrossoverHistory::on_append_ok(Gtk::FileSelection *f)
 {
+#ifdef OUTPUT_DEBUG
   cout << "append xml ok" << endl;
+#endif
   CrossoverList temp_crossover_list;
   try {
     temp_crossover_list = CrossoverList(f->get_filename());
@@ -307,7 +309,9 @@ void CrossoverHistory::on_new_copy()
 
 void CrossoverHistory::on_new_from_menu(int type)
 {
+#ifdef OUTPUT_DEBUG
   cout << "CrossoverHistory::on_new_from_menu: " << type << endl;
+#endif
   /* add new crossover of appropriate type here */
   time_t t;
   time(&t);
@@ -377,7 +381,9 @@ void CrossoverHistory::on_new_xml()
 
 void CrossoverHistory::on_save()
 {
+#ifdef OUTPUT_DEBUG
   cout << "save" << endl;
+#endif
   if (new_xml_pressed == true) {
     on_save_as();
     new_xml_pressed = false;
@@ -394,7 +400,9 @@ void CrossoverHistory::on_save()
 
 void CrossoverHistory::on_save_as()
 {
+#ifdef OUTPUT_DEBUG
   cout << "save as" << endl;
+#endif
   if (f_save_as == NULL) {
     f_save_as = new Gtk::FileSelection("Save crossover xml as");
     f_save_as->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &CrossoverHistory::on_save_as_ok), f_save_as));
@@ -408,7 +416,9 @@ void CrossoverHistory::on_save_as()
 
 void CrossoverHistory::on_save_as_ok(Gtk::FileSelection *f)
 {
+#ifdef OUTPUT_DEBUG
   cout << "save as ok" << endl;
+#endif
   try {
     m_crossover_list.to_xml(f->get_filename());
     f->hide();
@@ -456,7 +466,9 @@ void CrossoverHistory::on_remove()
 
 bool CrossoverHistory::on_close(GdkEventAny *event)
 {
+#ifdef OUTPUT_DEBUG
   cout << "close" << endl;
+#endif
   hide();
   return false;
 }

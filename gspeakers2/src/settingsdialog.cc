@@ -62,7 +62,9 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::on_apply()
 {
+#ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_apply" << endl;
+#endif
   g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("UseAdvancedSpeakerModel", m_use_advanced_speaker_model.get_active());
@@ -71,12 +73,16 @@ void SettingsDialog::on_apply()
 
 void SettingsDialog::on_close()
 {
+#ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_close" << endl;
+#endif
 }
 
 void SettingsDialog::on_spice_browse()
 {
+#ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_spice_browse" << endl;
+#endif
   m_file_selection = new Gtk::FileSelection("Select SPICE executable...");
   m_file_selection->get_ok_button()->signal_clicked().connect(
                       bind<Gtk::FileSelection *>(slot(*this, &SettingsDialog::on_file_ok), m_file_selection) );
@@ -87,12 +93,16 @@ void SettingsDialog::on_spice_browse()
     g_settings.setValue("SPICECmdLine", m_filename);
   }
   m_filename = "";
+#ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_spice_browse: " << m_filename << endl;
+#endif
 }
 
 void SettingsDialog::on_file_ok(Gtk::FileSelection *f)
 {
+#ifdef OUTPUT_DEBUG
   cout << "SettingsDialog::on_file_ok" << endl;
+#endif
   m_filename = f->get_filename();
   m_spice_path_entry.set_text(m_filename);
 }

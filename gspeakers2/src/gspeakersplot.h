@@ -137,7 +137,7 @@ protected:
   int m_linesize;
   Gdk::LineStyle line_style;
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq;
-  bool m_logx;
+  bool m_logx, visible;
   int m_selected_plot;
   
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;

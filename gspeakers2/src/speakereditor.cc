@@ -152,10 +152,9 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_SaveButton.set_sensitive(false);
   m_RemoveButton.set_sensitive(false);
   
-  cout << "Innan create model" << endl;
   /* create model */
   create_model();
-  cout << "Efter create model" << endl;
+
   /* create tree view */
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
@@ -272,12 +271,16 @@ void Speaker_ListStore::on_remove()
 
 void Speaker_ListStore::on_save()
 {
+#ifdef OUTPUT_DEBUG
   cout << "SpeakerEditor: save" << endl;
+#endif
   if (new_xml_pressed == true) {
     on_save_as();
     new_xml_pressed = false;
   } else {
+#ifdef OUTPUT_DEBUG
     cout << "SpeakerEditor: Filename = " << m_filename << endl;
+#endif
     try {
       m_speaker_list->to_xml(m_filename);
       m_SaveButton.set_sensitive(false);

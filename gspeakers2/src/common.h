@@ -24,6 +24,7 @@
 #include <vector>
 #include <iostream>
 #include "settings.h"
+#include "../config.h"
 
 using namespace SigC;
 using namespace std;
@@ -32,6 +33,7 @@ namespace GSpeakers {
   class Point;
   Glib::ustring double_to_ustring(double d);
   Glib::ustring int_to_ustring(int d);
+
 }   
 
 class Box;

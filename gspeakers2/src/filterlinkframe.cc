@@ -571,7 +571,12 @@ void FilterLinkFrame::on_plot_crossover()
   try {
     spice_filename = m_net->to_SPICE(speaker);
   } catch (GSpeakersException e) {
+#ifdef OUTPUT_DEBUG
     cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
+#endif
+    Gtk::MessageDialog d(Glib::ustring("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()), 
+                         Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+    d.run();
   }
   
   /* run spice with created file */
@@ -619,7 +624,7 @@ void FilterLinkFrame::on_plot_crossover()
     c = Gdk::Color("darkgreen");
   }
   //int id2 = m_net->get_id();
-  //cout << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
+  //g << "FilterLinkFrame::on_plot_crossover: id = " << id2 << endl;
   signal_add_crossover_plot(points, c, &my_filter_plot_index);
     
 }   

@@ -180,7 +180,9 @@ void BoxEditor::on_optimize_button_clicked()
  */
 void BoxEditor::on_append_to_plot_clicked()
 {
+#ifdef OUTPUT_DEBUG
   cout << "BoxEditor: add plot" << endl;
+#endif
   m_box = new Box();
   m_box->set_id_string(m_id_string_entry.get_text());
   m_box->set_vb1(atof(m_vb1_entry.get_text().c_str()));
@@ -188,7 +190,9 @@ void BoxEditor::on_append_to_plot_clicked()
   m_box->set_type(m_box_type_optionmenu.get_history() + 1);
 
   string str = m_color_list.get_color_string();
+#ifdef OUTPUT_DEBUG
   cout << "color: " << str << endl;
+#endif
   Gdk::Color color = Gdk::Color(str);
 
   /* Calculate the frequency response graph */
@@ -239,7 +243,9 @@ void BoxEditor::on_calc_port_clicked()
 
 void BoxEditor::on_append_to_boxlist_clicked()
 {
+#ifdef OUTPUT_DEBUG
   cout << "BoxEditor: append to boxlist" << endl;
+#endif
   signal_add_to_boxlist(m_box);
 }
 
@@ -250,7 +256,9 @@ void BoxEditor::on_box_selected(Box *b)
 {
   if (disable_signals == false) {
     disable_signals = true;
+#ifdef OUTPUT_DEBUG
     cout << "Boxeditor: on box selected" << endl;
+#endif
     if (b != NULL) {
       m_box = b;
       m_id_string_entry.set_text(b->get_id_string());
@@ -278,7 +286,9 @@ void BoxEditor::on_box_selected(Box *b)
       }
       
     } else {
+#ifdef OUTPUT_DEBUG
       cout << "Box ptr = NULL" << endl;
+#endif
       b = new Box(); // Maybe we don't really need this one */
     }
     disable_signals = false;
@@ -287,7 +297,9 @@ void BoxEditor::on_box_selected(Box *b)
 
 void BoxEditor::on_speaker_list_loaded(string speaker_list_filename)
 {
+#ifdef OUTPUT_DEBUG
   cout << "boxeditor: " << speaker_list_filename << " loaded" << endl;
+#endif
   m_speaker_list = SpeakerList(speaker_list_filename);
   vector<Glib::ustring> popdown_strings;
   
@@ -305,7 +317,9 @@ void BoxEditor::on_speaker_list_loaded(string speaker_list_filename)
 
 void BoxEditor::on_combo_entry_changed() 
 {
+#ifdef OUTPUT_DEBUG
   cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text() << endl;
+#endif
   /* Search for the new entry string in the SpeakerList */
   m_current_speaker = m_speaker_list.get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
   m_speaker_qts_entry.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts()));
@@ -318,14 +332,18 @@ void BoxEditor::on_box_data_changed(int i)
 {
   if (disable_signals == false) {
     disable_signals = true;
+#ifdef OUTPUT_DEBUG    
     cout << "changed: ";
+#endif
     double qr;
     char *str = NULL;
     GString *buffer;
   
     switch (i) {
       case SEALED_SELECTED:
+#ifdef OUTPUT_DEBUG      
         cout << "Sealed enclosure" << endl;
+#endif
         m_box->set_type(BOX_TYPE_SEALED);
         m_fb1_entry.set_sensitive(false);
         buffer = g_string_new(str);
@@ -336,28 +354,40 @@ void BoxEditor::on_box_data_changed(int i)
 
         break;
       case PORTED_SELECTED:
+#ifdef OUTPUT_DEBUG      
         cout << "ported enclosure" << endl;
+#endif
         m_box->set_type(BOX_TYPE_PORTED);
         m_fb1_entry.set_sensitive(true);
         break;
       case ID_STRING_ENTRY_CHANGED:
         m_box->set_id_string(m_id_string_entry.get_text());
+#ifdef OUTPUT_DEBUG        
         cout << "id string entry" << endl;
+#endif
         break;
       case VB1_ENTRY_CHANGED:
+#ifdef OUTPUT_DEBUG      
         cout << "vb1 entry changed" << endl;
+#endif
         m_box->set_vb1(atof(m_vb1_entry.get_text().c_str()));
         break;
       case FB1_ENTRY_CHANGED:
+#ifdef OUTPUT_DEBUG
         cout << "fb1 entry changed" << endl;
+#endif
         m_box->set_fb1(atof(m_fb1_entry.get_text().c_str()));
         break;
       case VB2_ENTRY_CHANGED:
+#ifdef OUTPUT_DEBUG
         cout << "vb2 entry changed" << endl;
+#endif
         m_box->set_vb2(atof(m_vb2_entry.get_text().c_str()));
         break;
       case FB2_ENTRY_CHANGED:
+#ifdef OUTPUT_DEBUG
         cout << "fb2 entry changed" << endl;
+#endif
         m_box->set_fb2(atof(m_fb2_entry.get_text().c_str()));
         break;
       

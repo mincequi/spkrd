@@ -47,6 +47,7 @@ private:
   vector< vector<GSpeakers::Point> > m_points;
   bool on_delete_event(GdkEventAny *event);
   void on_crossover_selected(Crossover *);
+  void on_plot_crossover();
 };
 
 #endif

@@ -42,13 +42,15 @@ CrossoverWizard::~CrossoverWizard()
 
 void CrossoverWizard::on_crossover_selected(Crossover *crossover)
 {
+#ifdef OUTPUT_DEBUG
   cout << "CrossoverWizard::on_crossover_selected" << endl;
+#endif
   m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
   for (vector<Net>::iterator iter = crossover->networks()->begin();
        iter != crossover->networks()->end();
        ++iter)
   {
-    cout << iter->get_type() << endl;
+    //cout << iter->get_type() << endl;
     FilterLinkFrame *link1 = manage(new FilterLinkFrame(&(*iter), "filter", &m_speaker_list));
     m_vbox.pack_start(*link1);
   }
@@ -57,16 +59,22 @@ void CrossoverWizard::on_crossover_selected(Crossover *crossover)
 
 void CrossoverWizard::on_speaker_list_loaded(string speaker_list_filename)
 {
+#ifdef OUTPUT_DEBUG
   cout << "CrossoverWizard::on_speaker_list_loaded" << endl;
+#endif
   m_speaker_list = SpeakerList(speaker_list_filename);
 }
 
 void CrossoverWizard::on_button_plot_clicked()
 {
+#ifdef OUTPUT_DEBUG
   cout << "CrossoverWiard::on_button_plot_cliecked" << endl;
+#endif
 }
 
 void CrossoverWizard::on_button_update_clicked()
 {
+#ifdef OUTPUT_DEBUG
   cout << "CrossoverWiard::on_button_update_cliecked" << endl;
+#endif
 }

@@ -68,7 +68,9 @@ SpeakerListSelector::~SpeakerListSelector()
   
 void SpeakerListSelector::on_open()
 {
+#ifdef OUTPUT_DEBUG
   cout << "on open" << endl;
+#endif
   if (f_open == NULL) {
     f_open = new Gtk::FileSelection("Open speaker xml");
     f_open->get_ok_button()->signal_clicked().connect(bind<Gtk::FileSelection *>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));
@@ -104,7 +106,9 @@ void SpeakerListSelector::on_speakerlist_loaded(string speaker_list_filename)
 
 void SpeakerListSelector::on_edit_speakers()
 {
+#ifdef OUTPUT_DEBUG
   cout << "SpeakerListSelector::on_edit_speakers" << endl;
+#endif
   speaker_liststore = new Speaker_ListStore(&m_speaker_list, m_SpeakerXmlFilenameEntry.get_text());
 
 }
