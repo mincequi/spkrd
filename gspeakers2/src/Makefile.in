@@ -108,7 +108,8 @@ crossovertreeview.cc crossoverhistory.h crossoverhistory.cc \
 speakerlistselector.h speakerlistselector.cc boxeditor.h boxeditor.cc \
 boxhistory.h boxhistory.cc gspeakerscolor.h gspeakerscolor.cc \
 plothistory.h plothistory.cc gspeakersplot.h gspeakersplot.cc \
-gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc
+gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc \
+mainwindow.h mainwindow.cc
 
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall
@@ -128,7 +129,7 @@ crossover.o crossoverlist.o speaker.o speakerlist.o box.o boxlist.o \
 speakereditor.o cellitemcrossover.o crossovertreeview.o \
 crossoverhistory.o speakerlistselector.o boxeditor.o boxhistory.o \
 gspeakerscolor.o plothistory.o gspeakersplot.o gspeakersboxplot.o \
-settings.o
+settings.o mainwindow.o
 gspeakers_LDADD = $(LDADD)
 gspeakers_DEPENDENCIES = 
 gspeakers_LDFLAGS = 
@@ -151,9 +152,9 @@ DEP_FILES =  .deps/box.P .deps/boxeditor.P .deps/boxhistory.P \
 .deps/crossover.P .deps/crossoverhistory.P .deps/crossoverlist.P \
 .deps/crossovertreeview.P .deps/gspeakersboxplot.P \
 .deps/gspeakerscolor.P .deps/gspeakersobject.P .deps/gspeakersplot.P \
-.deps/main.P .deps/net.P .deps/part.P .deps/plothistory.P \
-.deps/settings.P .deps/speaker.P .deps/speakereditor.P \
-.deps/speakerlist.P .deps/speakerlistselector.P
+.deps/main.P .deps/mainwindow.P .deps/net.P .deps/part.P \
+.deps/plothistory.P .deps/settings.P .deps/speaker.P \
+.deps/speakereditor.P .deps/speakerlist.P .deps/speakerlistselector.P
 SOURCES = $(gspeakers_SOURCES)
 OBJECTS = $(gspeakers_OBJECTS)
 

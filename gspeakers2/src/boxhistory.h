@@ -34,7 +34,7 @@ using namespace std;
  * The list contains a list of all enclosures...you can select 
  * to plot, not plot or whatever for each enclosure.
  */
-class BoxHistory : public Gtk::Window
+class BoxHistory : public Gtk::Frame
 {
 public:
   BoxHistory();
@@ -73,6 +73,7 @@ protected:
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::Button m_NewCopyButton, m_NewXmlButton, m_AppendXmlButton, m_OpenXmlButton, m_NewButton;
   Gtk::Button m_SaveButton, m_SaveAsButton, m_RemoveButton;
+  Gtk::VBox m_vbox;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
   

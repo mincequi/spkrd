@@ -30,7 +30,7 @@ using namespace SigC;
  * selected speaker xml file. This window also contains button to open 
  * a new speakerlist xml and a button that launched the speakereditor.
  */
-class SpeakerListSelector : public Gtk::Window
+class SpeakerListSelector : public Gtk::Frame
 {
 public:
   SpeakerListSelector();

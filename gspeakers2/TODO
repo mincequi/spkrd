@@ -58,3 +58,9 @@ the structure in the program, some are important due to the UI experience.
     example: enclosure types
 
 * Reorder some columns in the treeviews to improve the user experience
+
+* Icons for the notebooks in the main window
+
+* Program icon for the main window
+
+* Add tooltips to appropriate widgets

@@ -20,6 +20,7 @@
 #include "../config.h"
 
 BoxHistory::BoxHistory() :
+  Gtk::Frame("Enclosure list"),
   m_Table(10, 4, true), 
   m_NewCopyButton("New copy"), 
   m_NewXmlButton("New Xml"), 
@@ -28,14 +29,15 @@ BoxHistory::BoxHistory() :
   m_NewButton("New box"), 
   m_SaveButton("Save"),
   m_SaveAsButton("Save as..."),
-  m_RemoveButton("Remove")
-
+  m_RemoveButton("Remove"),
+  m_vbox()
 {
-  set_title("Box history");
-  set_border_width(8);
-  set_default_size(250, 300);
+  //set_title("Box history");
+  m_vbox.set_border_width(8);
+  //set_default_size(250, 300);
 
-  add(m_Table);
+  add(m_vbox);
+  m_vbox.pack_start(m_Table);
   m_Table.set_spacings(4);
   
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
@@ -58,7 +60,7 @@ BoxHistory::BoxHistory() :
   m_filename = g_settings.getValueString("BoxListXml");
   cout << "BoxHistory: " << m_filename << endl;
   m_box_list = BoxList(m_filename); 
-  set_title("Box History [" + m_filename + "]");
+  //set_title("Box History [" + m_filename + "]");
   
   create_model();
 
@@ -94,6 +96,15 @@ BoxHistory::BoxHistory() :
   show_all();
   index = 0;
   m_SaveButton.set_sensitive(false);
+
+  char *str = NULL;
+  GString *buffer = g_string_new(str);
+  g_string_printf(buffer, "%d", 0);
+  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+  Gtk::TreePath path(gpath);
+  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+  selection->select(row);
+
 }
 
 BoxHistory::~BoxHistory()
@@ -172,7 +183,7 @@ void BoxHistory::on_open_ok(Gtk::FileSelection *f)
     m_SaveButton.set_sensitive(false);
     m_SaveAsButton.set_sensitive(true);
     m_RemoveButton.set_sensitive(true);
-    set_title("Box History [" + m_filename + "]");
+    //set_title("Box History [" + m_filename + "]");
     g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
@@ -313,7 +324,7 @@ void BoxHistory::on_new_xml()
   new_xml_pressed = true;
   on_new();
   m_SaveButton.set_sensitive(true);
-  set_title("Box History [new file]");
+  //set_title("Box History [new file]");
 }
 
 void BoxHistory::on_save()
@@ -348,7 +359,7 @@ void BoxHistory::on_save_as_ok(Gtk::FileSelection *f)
   m_box_list.to_xml(f->get_filename());
   f->hide();
   m_filename = f->get_filename();
-  set_title("Box History [" + m_filename + "]");
+  //set_title("Box History [" + m_filename + "]");
   g_settings.setValue("BoxListXml", m_filename);
   m_SaveButton.set_sensitive(false);
 }

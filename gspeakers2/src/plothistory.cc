@@ -21,15 +21,17 @@
 #include "gspeakersplot.h"
 
 PlotHistory::PlotHistory() :
+  Gtk::Frame(),
   m_Table(9, 4, true), 
-  m_RemoveButton("Remove")
-
+  m_RemoveButton("Remove"),
+  m_vbox()
 {
-  set_title("Plot history");
-  set_border_width(8);
-  set_default_size(250, 300);
+  //set_title("Plot history");
+  m_vbox.set_border_width(8);
+  //set_default_size(250, 300);
 
-  add(m_Table);
+  m_vbox.pack_start(m_Table);
+  add(m_vbox);
   m_Table.set_spacings(4);
   
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);

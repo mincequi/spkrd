@@ -2,6 +2,11 @@ GSpeakers ChangeLog
 
 2002-08-23
 
+* speakerlistselector.h/cc, gspeakersboxplot.h/cc, boxeditor.h/cc, 
+    boxhistory.h/cc, plothistory.h/cc: base class Gtk::Window -> Gtk::Frame
+
+* mainwindow.h/cc: Added main window class
+
 * main.cc: check for config file
 
 * settings.h/cc: Made the settings class remember config file name

@@ -30,6 +30,7 @@
 #define FB2_ENTRY_CHANGED       6
 
 BoxEditor::BoxEditor() :
+  Gtk::Frame("Enclosure editor"),
   m_table(6, 5, true),
   m_vbox(),
   m_hbox(),
@@ -42,14 +43,14 @@ BoxEditor::BoxEditor() :
   m_option_menu()
 {
   disable_signals = false;
-  set_title("Boxeditor");
+  //set_title("Boxeditor");
   m_vbox.pack_start(m_table);
   //m_vbox.pack_start(m_hbox);
   add(m_vbox);
-  set_border_width(8);
+  m_vbox.set_border_width(8);
   m_hbox.set_spacing(5);
 
-  m_speaker_qts_entry.set_width_chars(10);
+  m_speaker_qts_entry.set_width_chars(5);
   m_speaker_vas_entry.set_width_chars(10);
   m_speaker_fs_entry.set_width_chars(5);
   m_speaker_qts_entry.set_editable(false);

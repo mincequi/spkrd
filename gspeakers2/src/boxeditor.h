@@ -30,7 +30,7 @@ using namespace SigC;
  * This class will contain the control panel where you can adjust 
  * settings for the enclosure you're working with.
  */
-class BoxEditor : public Gtk::Window
+class BoxEditor : public Gtk::Frame
 {
 public:
   BoxEditor();

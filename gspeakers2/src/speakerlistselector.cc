@@ -20,7 +20,8 @@
 #include "common.h"
 #include "../config.h"
 
-SpeakerListSelector::SpeakerListSelector() :
+SpeakerListSelector::SpeakerListSelector() : 
+  Gtk::Frame("Speaker list xml"), 
   m_SpeakerXmlFilenameEntry(),
   m_OpenButton("Open..."), 
   m_EditButton("Edit speakers..."), 
@@ -41,8 +42,8 @@ SpeakerListSelector::SpeakerListSelector() :
   m_vbox.set_spacing(5);
   add(m_vbox);
   
-  set_border_width(8);
-  set_title("Select speaker xml");
+  m_vbox.set_border_width(8);
+//  set_title("Select speaker xml");
   
   m_SpeakerXmlFilenameEntry.set_sensitive(false);
   m_OpenButton.signal_clicked().connect(slot(*this, &SpeakerListSelector::on_open));
@@ -81,7 +82,7 @@ void SpeakerListSelector::on_open()
     f_open->get_cancel_button()->signal_clicked().connect(slot(*f_open, &Gtk::Widget::hide));
   } else {
     f_open->show();
-    f_open->set_title("Open speaker xml");
+    //f_open->set_title("Open speaker xml");
   }
   f_open->run();
 }
@@ -101,7 +102,7 @@ void SpeakerListSelector::on_open_ok(Gtk::FileSelection *f)
 
 void SpeakerListSelector::on_speakerlist_loaded(string speaker_list_filename)
 {
-  set_title("[" + speaker_list_filename + "]");
+  //set_title("[" + speaker_list_filename + "]");
   m_speaker_list = SpeakerList(speaker_list_filename);
   m_SpeakerXmlFilenameEntry.set_text(speaker_list_filename);
   g_settings.setValue("SpeakerListXml", speaker_list_filename);

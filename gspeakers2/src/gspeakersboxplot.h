@@ -32,7 +32,7 @@
  * an extra layer (where we can connect signals and so on) 
  * between the program and the plot widget.
  */
-class GSpeakersBoxPlot : public Gtk::Window 
+class GSpeakersBoxPlot : public Gtk::Frame 
 {
 public:
   GSpeakersBoxPlot();

@@ -21,6 +21,7 @@
 #include "boxhistory.h"
 #include "plothistory.h"
 #include "gspeakersboxplot.h"
+#include "mainwindow.h"
 
 int main (int argc, char *argv[])
 {
@@ -60,17 +61,19 @@ int main (int argc, char *argv[])
   }
 
   /* Init BoxEditor before BoxHistory, this will make BoxHistory signal BoxEditor with selected box, which is nice (tm) */
-  BoxEditor be;
-  BoxHistory bh;
+  //BoxEditor be;
+  //BoxHistory bh;
   
   /* Plot history will always be empty at startup for now */
-  PlotHistory ph;
+  //PlotHistory ph;
 
   
-  GSpeakersBoxPlot gsbp;
+  //GSpeakersBoxPlot gsbp;
    
-  SpeakerListSelector sls;
-  kit.run(sls);
+  //SpeakerListSelector sls;
+
+  MainWindow mw;
+  kit.run(mw);
 //  cout << c1;
   /* save settings */
   g_settings.save();

@@ -36,7 +36,7 @@ using namespace std;
  * The list contains a list of all enclosures...you can select 
  * to plot, not plot or whatever for each enclosure.
  */
-class PlotHistory : public Gtk::Window
+class PlotHistory : public Gtk::Frame
 {
 public:
   PlotHistory();
@@ -62,7 +62,7 @@ protected:
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::Button m_RemoveButton;
-  
+  Gtk::VBox m_vbox;
  
   /* Data containers */
   BoxList m_box_list;
