@@ -1,7 +1,7 @@
 /*
   $Id$
   
-  mainwindow Copyright (C) 2002 Daniel Sundberg
+  mainwindow Copyright (C) 2002-2003 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -116,7 +116,7 @@ MainWindow::MainWindow()
   m_main_vbox.pack_start(m_main_notebook);
   
   /* Driver tab */
-  m_main_notebook.insert_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", _("Driver"))), 0);
+  m_main_notebook.append_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", _("Driver"))));
   m_driver_hpaned.add1(speaker_editor.get_editor_table());
   g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
   g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
@@ -127,10 +127,10 @@ MainWindow::MainWindow()
   m_driver_vpaned.add2(speaker_editor.get_treeview_table());
   
   /* Enclosure tab */
-  m_main_notebook.insert_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", _("Enclosure"))), 0);
+  m_main_notebook.append_page(enclosure_paned, *manage(new TabWidget("speaker_small.png", _("Enclosure"))));
   
   /* Crossover tab */
-  m_main_notebook.insert_page(crossover_paned, *manage(new TabWidget("filter_small.png", _("Crossover") ) ), 0 );
+  m_main_notebook.append_page(crossover_paned, *manage(new TabWidget("filter_small.png", _("Crossover") ) ));
 
   show_all_children();
   
@@ -369,7 +369,7 @@ void MainWindow::on_about()
 #ifdef OUTPUT_DEBUG
   cout << "MainWindow::about" << endl;
 #endif
-  Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + "\n\n(C) Daniel Sundberg <dss@home.se>\n\nhttp://gspeakers.sf.net", 
+  Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net", 
                         Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true, true);
   m.run();
 }

@@ -2,6 +2,10 @@ GSpeakers ChangeLog
 
 2003-09-08
 
+* mainwindow.cc: in previous versions of gtkmm there seem to have been a 
+    bug causing Notebook::insert_page to append pages on the wrong end of 
+    the notebook, GSpeakers was modified to use this function properly.
+	
 * crossoverimageview.cc: fixed a bug that caused GSpeakers to display a 
     wrong schematic in some cases
 	
