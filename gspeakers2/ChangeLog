@@ -1,4 +1,14 @@
 GSpeakers ChangeLog
+
+2004-07-22
+
+* added libegg sidebar: src/libegg/*
+
+* added src/sidebarnotebook.h/cc, a notebook using eggsidebar
+
+* use sidebarnotebook in GSpeakers
+
+* added icons for the sidebar
 	
 2004-07-03
 

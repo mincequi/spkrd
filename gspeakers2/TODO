@@ -35,8 +35,6 @@ GSpeakers TODO-list
 
 * Better icons in the main window notebook
 
-* Evolution/MrProject "notebook" instead of GtkNotebook
-
 * Better program icon
 
 * Install icon to gnome menus (pre 1.0)
@@ -104,3 +102,5 @@ GSpeakers TODO-list
 * Frd compatible freq resp files
 
 * Use plotmm
+
+* Nicer looking icons in the sidebar
