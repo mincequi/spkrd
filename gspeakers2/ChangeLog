@@ -2,6 +2,8 @@ GSpeakers ChangeLog
 
 2002-11-20
 
+* plothistory.h/cc: set_cell_data_func
+
 * freqrespeditor.cc: tune nof decimals displayed
 
 * speakereditor.cc: tune cell_data_func's and sprintfs	
