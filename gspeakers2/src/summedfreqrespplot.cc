@@ -57,6 +57,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   vector<GSpeakers::Point> freq_resp_points;
   if (s.get_freq_resp_filename() != "") {
     ifstream fin(s.get_freq_resp_filename().c_str());
+    cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename() << endl;
     if (fin.good()) {
       for (int j = 0; j < NOF_POINTS; j++) {
         char *buffer = new char[100];
@@ -69,6 +70,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
       }
     } else {
       cout << "Could not open " << s.get_freq_resp_filename() << endl;
+      return -1;
     }
   } else {
     for (int i = 0; i < NOF_POINTS; i++) {

@@ -793,6 +793,9 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     temp_speaker_list = SpeakerList(f->get_filename());
 
     m_filename = f->get_filename();
+    g_settings.setValue("SpeakerListXml", m_filename);
+    m_treeview_frame.set_label(m_filename);
+    
     for_each(
       temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
       slot(*this, &Speaker_ListStore::liststore_add_item));
@@ -864,6 +867,7 @@ void Speaker_ListStore::on_browse_freq_resp()
   f->set_modal();
   /* -5 == ok button clicked */
   if (f->run() == -5) {
+    /* TODO: Check that selected file exists */
     m_FreqRespFileEntry.set_text(f->get_filename());
     (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
   } 
