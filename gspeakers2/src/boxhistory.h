@@ -67,6 +67,7 @@ protected:
   void on_add_to_boxlist(Box *b);
   bool on_delete_event(GdkEventAny* event);
   void on_plot_selected(int i);
+  void on_insert_data(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter);
 
   /* Helper member functions */
   virtual void create_model();
@@ -92,8 +93,9 @@ protected:
     Gtk::TreeModelColumn<double>        fb1;
     Gtk::TreeModelColumn<double>        vb2;
     Gtk::TreeModelColumn<double>        fb2;
+    Gtk::TreeModelColumn<Glib::ustring> vb1_str;
     
-    ModelColumns() { add(type); add(id_string); add(vb1); add(vb2); add(fb1); add(fb2); }
+    ModelColumns() { add(type); add(id_string); add(vb1); add(vb2); add(fb1); add(fb2); add(vb1_str);}
   };
   ModelColumns m_columns;
   

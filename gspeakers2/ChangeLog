@@ -1,5 +1,13 @@
 GSpeakers ChangeLog
 
+2002-11-05
+
+* common.cc: added GSpeakers::double_to_ustring(double, int, int) which can 
+    format the output string as you want it
+
+* boxhistory.h/cc: added formatting callback on the vb1 column to illustrate 
+    how to use the insert_data_with_func callback
+
 2002-10-18
 
 * crossovertreeview.cc: use the new cellrendererpopup instead of a plain 

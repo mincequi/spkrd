@@ -429,6 +429,7 @@ void BoxHistory::create_model()
 
 void BoxHistory::add_columns()
 {
+  int col_cnt;
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
@@ -440,18 +441,18 @@ void BoxHistory::add_columns()
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    int cols_count = m_TreeView.append_column("Type", *pRenderer);
-    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
+    col_cnt = m_TreeView.append_column("Type", *pRenderer);
+    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
-    int cols_count = m_TreeView.append_column("Vb1", *pRenderer);
-    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1);
+    int cols_count = m_TreeView.insert_column_with_data_func(col_cnt, "Vb1", *pRenderer, slot(*this, &BoxHistory::on_insert_data));
+    
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+    pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -477,6 +478,11 @@ void BoxHistory::add_columns()
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
   }
+}
+
+void BoxHistory::on_insert_data(Gtk::CellRenderer *renderer, const Gtk::TreeModel::iterator& iter)
+{
+  (*iter)[m_columns.vb1_str] = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1);
 }
 
 void BoxHistory::liststore_add_item(Box box)

@@ -34,6 +34,7 @@ using namespace std;
 namespace GSpeakers {
   class Point;
   Glib::ustring double_to_ustring(double d);
+  Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
   Glib::ustring int_to_ustring(int d);
   int round(double d);
   Gtk::Widget& image_widget(string filename);

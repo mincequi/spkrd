@@ -45,7 +45,18 @@ namespace GSpeakers {
     g_string_printf(buffer, "%f", d);
     return Glib::ustring(buffer->str);
   }
-
+  
+  Glib::ustring double_to_ustring(double d, int format_len, int format_dec) 
+  {
+    char *str1 = NULL;
+    GString *buffer1 = g_string_new(str1);
+    g_string_printf(buffer1, "%%%d.%df", format_len, format_dec);
+    char *str2 = NULL;
+    GString *buffer2 = g_string_new(str2);
+    g_string_printf(buffer2, buffer1->str, d);
+    return Glib::ustring(buffer2->str);
+  }
+  
   Glib::ustring int_to_ustring(int d)
   {
     char *str = NULL;
