@@ -1,0 +1,22 @@
+2001-12-13 23:28 sumpan
+
+	* Added installation stuff
+	  src/gnomespeakers.cc: Load config from ~/.gspeakers instead of ./
+
+2001-12-11 23:40 sumpan
+	
+        * Now you can use this program
+          
+	  All features for 0.1 implemented. Installation, cvs and 
+	  testing left before release.
+	
+	
+# This is the format (ripped from ickle)
+#2001-12-11 23:40 nordman
+#
+#        * ickle/IckleApplet.c ickle/IckleApplet.hpp
+#          ickle/IckleClient.cpp ickle/IckleGUI.cpp
+#          
+#        Quit correctly when run as applet.
+#        Use a separate wmclass for IckleGUI, fixes problem where main
+#        GUI would jump around on the screen a lot when run as applet.

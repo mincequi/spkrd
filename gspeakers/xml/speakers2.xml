@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<speakerfile>
+    <speaker>
+      <name>Peerles P21</name>
+      <vas>113</vas>
+      <qts>0.33</qts>
+      <fs>33</fs>
+    </speaker>
+    <speaker>
+      <name>Vifa P21WO</name>
+      <vas>100</vas>
+      <qts>0.39</qts>
+      <fs>42</fs>
+    </speaker>
+    <speaker>
+      <name>Focal</name>
+      <vas>30</vas>
+      <qts>0.32</qts>
+      <fs>50</fs>
+    </speaker>
+    <speaker>
+      <name>Dynaudio</name>
+      <vas>45</vas>
+      <qts>0.3</qts>
+      <fs>41</fs>
+    </speaker>
+
+</speakerfile>
