@@ -61,14 +61,13 @@ am_gspeakers_OBJECTS = main.$(OBJEXT) common.$(OBJEXT) \
 	settings.$(OBJEXT) mainwindow.$(OBJEXT) \
 	crossoverwizard.$(OBJEXT) filterlinkframe.$(OBJEXT) \
 	gspeakersfilterplot.$(OBJEXT) settingsdialog.$(OBJEXT) \
-	totalfilterplot.$(OBJEXT) tabwidget.$(OBJEXT) \
-	freqrespeditor.$(OBJEXT) driverfreqrespplot.$(OBJEXT) \
-	enclosurepaned.$(OBJEXT) crossoverpaned.$(OBJEXT) \
-	summedfreqrespplot.$(OBJEXT) popupentry.$(OBJEXT) \
-	cellrendererpopup.$(OBJEXT) crossoverimageview.$(OBJEXT) \
-	gspeakersfilechooser.$(OBJEXT) eggsidebarbutton.$(OBJEXT) \
-	eggsidebar.$(OBJEXT) gspeakersstock.$(OBJEXT) \
-	sidebarnotebook.$(OBJEXT)
+	totalfilterplot.$(OBJEXT) freqrespeditor.$(OBJEXT) \
+	driverfreqrespplot.$(OBJEXT) enclosurepaned.$(OBJEXT) \
+	crossoverpaned.$(OBJEXT) summedfreqrespplot.$(OBJEXT) \
+	popupentry.$(OBJEXT) cellrendererpopup.$(OBJEXT) \
+	crossoverimageview.$(OBJEXT) gspeakersfilechooser.$(OBJEXT) \
+	eggsidebarbutton.$(OBJEXT) eggsidebar.$(OBJEXT) \
+	gspeakersstock.$(OBJEXT) sidebarnotebook.$(OBJEXT)
 gspeakers_OBJECTS = $(am_gspeakers_OBJECTS)
 gspeakers_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
@@ -109,7 +108,6 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/speakereditor.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/speakerlist.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/summedfreqrespplot.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/tabwidget.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/totalfilterplot.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -250,7 +248,6 @@ filterlinkframe.h filterlinkframe.cc \
 gspeakersfilterplot.h gspeakersfilterplot.cc \
 settingsdialog.h settingsdialog.cc \
 totalfilterplot.h totalfilterplot.cc \
-tabwidget.h tabwidget.cc \
 freqrespeditor.h freqrespeditor.cc \
 driverfreqrespplot.h driverfreqrespplot.cc \
 enclosurepaned.h enclosurepaned.cc \
@@ -262,7 +259,7 @@ crossoverimageview.h crossoverimageview.cc \
 gspeakersfilechooser.h gspeakersfilechooser.cc \
 libegg/eggsidebarbutton.h libegg/eggsidebarbutton.c \
 libegg/eggsidebar.h libegg/eggsidebar.c \
-gspeakersstock.h gspeakersstock.c \
+gspeakersstock.h gspeakersstock.cc \
 sidebarnotebook.h sidebarnotebook.cc
 
 LDADD = $(DEPS_LIBS)
@@ -372,7 +369,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speakereditor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speakerlist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/summedfreqrespplot.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tabwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/totalfilterplot.Po@am__quote@
 
 .c.o:

@@ -40,7 +40,7 @@ int main (int argc, char *argv[])
   /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover to the TreeView */
   //CrossoverTreeView ctv;
 
-	gspeakers_stock_init();
+	
   
   try {
 #ifdef TARGET_WIN32
@@ -88,9 +88,11 @@ int main (int argc, char *argv[])
   //GSpeakersBoxPlot gsbp;
   cout << _("Testing gettext") << endl;
   //SpeakerListSelector sls;
-  MainWindow mw;
+  gspeakers_stock_init();
+	MainWindow mw;
   //mw.show_all_children();
   //signal_plot_crossover();
+	
   kit.run(mw);
 //  cout << c1;
   /* save settings */

@@ -45,7 +45,7 @@ gspeakers_stock_init (void)
        gtk_icon_factory_add_default (icon_factory);
        
        for (i = 0; i < G_N_ELEMENTS (stock_items); i++) {
-	       filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/%s.png", stock_items[i].stock_id);
+	       filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
 	       pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 	       g_free (filename);
 
