@@ -17,7 +17,7 @@
 </center><br>&nbsp;<br>
 
 <h2>About</h2>
-GnomeSpeakers (short name: gspeakers or GSpeakers) is a Gnome-based loudspeaker design 
+GSpeakers is a multi platform loudspeaker design 
 program. It's built using the 
 Gtkmm libraries (C++ wrapper for the Gtk+ libraries 
 <a href="http://gtkmm.sf.net">http://gtkmm.sf.net</a>). The 
@@ -27,7 +27,7 @@ How can I make it easier to design loudspeakers? You can download the result
 of my work (so far).<br/>&nbsp;<br/>
 
 Although GSpeakers was built for Linux and the Gnome platform you should be able 
-to build GSpeakers on any Unix system, on <b>Microsoft Windows</b> (with mingw) and on 
+to build GSpeakers on <b>any Unix system</b>, on <b>Microsoft Windows</b> (with mingw) and on 
 <b>MacOS-X</b>.<br/>&nbsp;<br/>
 
 <h2>Download</h2>
@@ -36,14 +36,29 @@ to build GSpeakers on any Unix system, on <b>Microsoft Windows</b> (with mingw) 
 <a href="http://sourceforge.net/project/showfiles.php?group_id=42280&release_id=68786">GSpeakers-0.1 (2002-01-07, gtkmm-1.2)</a>
 <br/>&nbsp;<br/>
 
-Use GSpeakers-0.11 if you want to try something new. You need libxml2 and 
-Gtkmm-2.* to compile GSpeakers-0.10.1. Please submit any 
-comments to <a href="mailto:dss@home.se">me</a>. You also need a SPICE interpreter, you can find one 
-<a href="http://www.ibiblio.org/pub/Linux/apps/circuits/">here</a> or read more in 
-<a href="doc/gspeakers-gtk2/linuxinstall.html">the installation 
+Please give GSpeakers-0.11 before you try anything older. You need libxml2 (avaliable on most 
+Linux system by default) and <a href="http://www.gtkmm.org">Gtkmm-2.4</a> to compile GSpeakers. 
+If you are using MacOS-X, please read the <a href="README.macosx">MacOS-X installation instructions</a>. 
+I you use windows you also have some reading to do, <a href="README.win32">README.win32</a>. You 
+might also want to try the Windows binaries that will be avaliable soon.<br/>&nbsp;<br/>
+
+To use GSpeakers you also need a SPICE interpreter. GSpeakers works with three different 
+SPICE interpreters: 
+<a href="http://www.ibiblio.org/pub/Linux/apps/circuits/">Berkley SPICE</a>, 
+<a href="http://ngspice.sourceforge.net/download.html">NGSpice</a> or 
+<a href="http://www.gnu.org/software/gnucap/">Gnucap</a>. I recommend using 
+gnucap because that is the one that was easiest to compile on different platforms so 
+in the future GSpeakers might only support gnucap.<br/>&nbsp;<br/>
+
+Read some more in <a href="linuxinstall.html">the installation 
 instructions</a>. <br>&nbsp;<br>
 
 <h2>News</h2>
+<b>2004-06-22</b>: GSpeakers-0.11 released today. The great news are: GSpeakers now works on Windows and MacOS-X. 
+Other important stuff is that you now need gtkmm-2.4 to build GSpeakers so that you can enjoy the new 
+file chooser. GSpeakers now also supports two additional SPICE interpreters, you can now use ngspice or gnucap.
+<br/>&nbsp;<br/>
+
 <b>2003-03-11</b>: GSpeakers-0.10.1 released today. A lot of bugs were fixed in this release. If you had problems 
 with segfaults or problems compiling previous versions of GSpeakers you should definately upgrade. 
 Other good news is that there now is Gtkmm win32 binaries avaliable. This means that one of the next few releases 
