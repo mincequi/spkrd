@@ -1,0 +1,42 @@
+<html><body>
+<h1>A simple crossover network</h1>
+
+First we are going to design a crossover network using only one midrange and a tweeter to make the design procedure as simple as possible. Choose <i>Crossover/New Crossover/New two way crossover</i> (see figure 1) from the menu.<br>&nbsp;<br>
+
+<img src="simple_crossover1.png"><br>
+<i>Figure 1: Select new two way crossover from the menu</i><br>&nbsp;<br>
+
+To the left on the crossover tab you have the "Crossover wizard" (figure 2) which is sort of a control panel where you can change basic parameters of a crossover.<br>&nbsp;<br>
+
+<img src="simple_crossover2.png"><br>
+<i>Figure 2: the crossover wizard</i><br>&nbsp;<br>
+
+Here we design a filter for a loudspeaker with two drivers, one woofer/midrange and one tweeter. The upper part of the crossover wizard corresponds to the filter for the woofer/midrange, the lower part is the filter for the tweeter. Select <i>Seas L14RCY/P</i> in the upper part and select <i>Morel MDT32-S</i> in the lower part. Select <i>2nd order</i>, <i>Butterworth</i> as type and <i>2200</i> as crossover frequency for both networks. This is probably the most simple filter you could build for these particular drivers. <br>&nbsp;<br>
+
+<img src="simple_crossover3.png"><br>
+<i>Figure 3: the components required for the filter</i><br>&nbsp;<br>
+
+<img src="simple_crossover5.png"><br>
+<i>Figure 4: frequency response of the filter</i><br>&nbsp;<br>
+
+<img src="simple_crossover4.png"><br>
+<i>Figure 5: estimated frequency response of the total loudspeaker system</i><br>&nbsp;<br>
+
+In figure 3 you can see the components required to build this filter. You can see that the frequency response of the electronic components is very straight (figure 4) but as you can see in figure 5 the frequency response is not very smooth. The magnitude of the frequency response increases with respect to the frequnecy. We will deal with this problem in one of the following chapters.<br>&nbsp;<br>
+
+<img src="simple_crossover6.png"><br>
+<i>Figure 6: hit <b>New Copy</b> to create a copy of the currently selected crossover network</i><br>&nbsp;<br>
+
+So far we are happy with the result. Maybe we want to save this state of our work? Fortunately it is very ease to save different version of crossovers in GSpeakers, just hit <b>New copy</b> in the toolbar and you will get a new copy of the currently selected crossover.<br>&nbsp;<br>
+
+<img src="simple_crossover7.png"><br>
+<i>Figure 7: real world component values</i><br>&nbsp;<br>
+
+<img src="simple_crossover8.png"><br>
+<i>Figure 8: filter frequency response with real world component values</i><br>&nbsp;<br>
+
+The component values that you can see in figure 3 may not be values avaliable in the real world. You can try to change this values to real world values and inspect the resulting crossover frequency response. Inspect the new component values in figure 7 and the resulting crossover frequency response in figure 8. Since the crossover frequency response is pretty much the same the resulting total frequency response will look the same.<br>&nbsp;<br>
+
+A crossover network built with this technique might work out just fine for you particular loudspeaker but for the loudspeaker in our example we have to do some more work. GSpeakers contains much more powerful crossover design functions. Read next chapter to learn more...
+
+</body></html>
