@@ -276,12 +276,12 @@ void CrossoverTreeView::add_items()
     
 }
 
-void CrossoverTreeView::on_crossover_selected(SigC::Object *new_crossover)
+void CrossoverTreeView::on_crossover_selected(Crossover *new_crossover)
 {
   m_refTreeStore->clear();
   m_vecItems.erase(m_vecItems.begin(), m_vecItems.end());
   
-  cover = (Crossover *)new_crossover; //Crossover((Crossover&)new_crossover);
+  cover = new_crossover; //Crossover((Crossover&)new_crossover);
   vector<Net> networks = *(cover->networks());
   
   for (

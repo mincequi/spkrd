@@ -72,25 +72,25 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_Table.attach(m_CloseButton, 7, 8, 16, 17);
   
   /* All the entries and stuff */
-  m_Table.attach(*manage(new Gtk::Label("Speaker name:")), 4, 5, 0, 1);
+  m_Table.attach(*manage(new Gtk::Label("Speaker name:", Gtk::ALIGN_LEFT)), 4, 5, 0, 1);
   m_Table.attach(m_IdStringEntry, 5, 8, 0, 1);
-  m_Table.attach(*manage(new Gtk::Label("Qts:")), 4, 5, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
+  m_Table.attach(*manage(new Gtk::Label("Qts:", Gtk::ALIGN_LEFT)), 4, 5, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
   m_Table.attach(m_QtsEntry, 5, 8, 1, 2);
-  m_Table.attach(*manage(new Gtk::Label("Fs:")), 4, 5, 2, 3);
+  m_Table.attach(*manage(new Gtk::Label("Fs:", Gtk::ALIGN_LEFT)), 4, 5, 2, 3);
   m_Table.attach(m_FsEntry, 5, 8, 2, 3);
-  m_Table.attach(*manage(new Gtk::Label("Vas:")), 4, 5, 3, 4);
+  m_Table.attach(*manage(new Gtk::Label("Vas:", Gtk::ALIGN_LEFT)), 4, 5, 3, 4);
   m_Table.attach(m_VasEntry, 5, 8, 3, 4);
-  m_Table.attach(*manage(new Gtk::Label("Rdc:")), 4, 5, 4, 5);
+  m_Table.attach(*manage(new Gtk::Label("Rdc:", Gtk::ALIGN_LEFT)), 4, 5, 4, 5);
   m_Table.attach(m_RdcEntry, 5, 8, 4, 5);
-  m_Table.attach(*manage(new Gtk::Label("Lvc:")), 4, 5, 5, 6);
+  m_Table.attach(*manage(new Gtk::Label("Lvc:", Gtk::ALIGN_LEFT)), 4, 5, 5, 6);
   m_Table.attach(m_LvcEntry, 5, 8, 5, 6);
-  m_Table.attach(*manage(new Gtk::Label("Qms:")), 4, 5, 6, 7);
+  m_Table.attach(*manage(new Gtk::Label("Qms:", Gtk::ALIGN_LEFT)), 4, 5, 6, 7);
   m_Table.attach(m_QmsEntry, 5, 8, 6, 7);
-  m_Table.attach(*manage(new Gtk::Label("Qes:")), 4, 5, 7, 8);
+  m_Table.attach(*manage(new Gtk::Label("Qes:", Gtk::ALIGN_LEFT)), 4, 5, 7, 8);
   m_Table.attach(m_QesEntry, 5, 8, 7, 8);
-  m_Table.attach(*manage(new Gtk::Label("Impedance:")), 4, 5, 8, 9);
+  m_Table.attach(*manage(new Gtk::Label("Impedance:", Gtk::ALIGN_LEFT)), 4, 5, 8, 9);
   m_Table.attach(m_ImpEntry, 5, 8, 8, 9);
-  m_Table.attach(*manage(new Gtk::Label("Sensitivity:")), 4, 5, 9, 10);
+  m_Table.attach(*manage(new Gtk::Label("Sensitivity:", Gtk::ALIGN_LEFT)), 4, 5, 9, 10);
   m_Table.attach(m_SensEntry, 5, 8, 9, 10);
 
   m_Table.attach(m_BassCheckButton, 4, 8, 10, 11);

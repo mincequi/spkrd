@@ -27,9 +27,15 @@ using namespace SigC;
 class FilterLinkFrame : public Gtk::Frame
 {
 public:
-  FilterLinkFrame(int net_type, string description);
+  FilterLinkFrame(Net *net, const string& description);
   
 private:
+  /* callbacks */
+  /* which == 0: lower, which == 1: higher, order = filter order */
+  void on_order_selected(int which, int order);
+
+  Gtk::Adjustment    adj;
+
   Gtk::VBox          m_vbox;
   Gtk::Combo         m_speaker_combo;
   Gtk::CheckButton   m_enable_checkbutton;
@@ -47,8 +53,10 @@ private:
   /* For both */
   Gtk::CheckButton   m_inv_pol_checkbutton;
   Gtk::SpinButton    m_damp_spinbutton;
+  Gtk::CheckButton   m_imp_corr_checkbutton;
   
-  int m_net_type;
+  
+  Net *m_net;
   string m_description;
 };
 

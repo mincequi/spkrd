@@ -20,6 +20,10 @@
 
 #include <gtkmm.h>
 #include "filterlinkframe.h"
+#include "common.h"
+
+using namespace std;
+using namespace SigC;
 
 class CrossoverWizard : public Gtk::Frame
 {
@@ -27,8 +31,9 @@ public:
   CrossoverWizard();
   ~CrossoverWizard();
 private:
+  Gtk::ScrolledWindow m_scrolled_window;
   Gtk::VBox m_vbox;
-  
+  void on_crossover_selected(Crossover *crossover);
 };
 
 #endif

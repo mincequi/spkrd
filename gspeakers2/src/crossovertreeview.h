@@ -33,7 +33,7 @@ public:
   CrossoverTreeView();
   virtual ~CrossoverTreeView();
   /* Callback */
-  void on_crossover_selected(SigC::Object *new_crossover); // SigC::Object&);
+  void on_crossover_selected(Crossover *new_crossover); // SigC::Object&);
   
 protected:
   //vfunc overrides:

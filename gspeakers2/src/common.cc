@@ -20,7 +20,8 @@
 Settings g_settings;
 
 Signal0<void> signal_part_modified;
-Signal1<void, SigC::Object *> signal_crossover_selected;
+//Signal1<void, SigC::Object *> signal_crossover_selected;
+Signal1<void, Crossover *> signal_crossover_selected;
 Signal1<void, string> signal_speakerlist_loaded;
 Signal1<void, Box *> signal_box_selected;
 Signal1<void, Box *> signal_add_to_boxlist;

@@ -19,18 +19,32 @@
 
 CrossoverWizard::CrossoverWizard() :
   Gtk::Frame("Crossover wizard"),
+  m_scrolled_window(),
   m_vbox()
-{
-  FilterLinkFrame *link1 = manage(new FilterLinkFrame(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, "Bandpass"));
-  
-  m_vbox.pack_start(*link1);
-  
 
-  add(m_vbox);
+{
+  signal_crossover_selected.connect(slot(*this, &CrossoverWizard::on_crossover_selected));
+  m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+  add(m_scrolled_window);
+  m_scrolled_window.add(m_vbox);
   show_all();
 }
 
 CrossoverWizard::~CrossoverWizard() 
 {
 
+}
+
+void CrossoverWizard::on_crossover_selected(Crossover *crossover)
+{
+  cout << "CrossoverWizard::on_crossover_selected" << endl;
+  m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
+  for (vector<Net>::iterator iter = crossover->networks()->begin();
+       iter != crossover->networks()->end();
+       ++iter)
+  {
+    cout << iter->get_type() << endl;
+    FilterLinkFrame *link1 = manage(new FilterLinkFrame(iter, "filter"));
+    m_vbox.pack_start(*link1);
+  }
 }

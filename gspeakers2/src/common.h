@@ -36,6 +36,7 @@ namespace GSpeakers {
 
 class Box;
 class Speaker;
+class Crossover;
 
 /*
  *  We define a Exception class for our program just for fun (and consistancy)
@@ -66,7 +67,8 @@ extern Signal0<void> signal_part_modified;
  *
  * SigC::Object is the new crossover
  */
-extern Signal1<void, SigC::Object *> signal_crossover_selected;
+//extern Signal1<void, SigC::Object *> signal_crossover_selected;
+extern Signal1<void, Crossover *> signal_crossover_selected;
 
 /*
  * signal_speakerlist_loaded
