@@ -20,7 +20,13 @@
 #ifndef __GSPEAKERS_BOXEDITOR
 #define __GSPEAKERS_BOXEDITOR
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/table.h>
+#include <gtkmm/box.h>
+#include <gtkmm/combo.h>
+#include <gtkmm/label.h>
+#include <gtkmm/optionmenu.h>
+#include <gtkmm/menu.h>
 #include "box.h"
 #include "speakerlist.h"
 #include "gspeakerscolor.h"

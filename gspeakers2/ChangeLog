@@ -1,5 +1,23 @@
 GSpeakers ChangeLog
 
+2003-01-29
+
+* boxeditor.cc: set speaker in member box when a new speaker is selected in 
+    the combo
+
+* boxhistory.h/cc: only include headers we need, added speaker column to the 
+    listview
+
+* crossoverpaned.cc, enclosurepaned.cc: in function set_save_state we should 
+    check if m_toolbar and m_menu has been initialized
+
+* box.h/cc: added speaker string member variable, added public methods to read 
+    and modified this variable and added it to the xml, sorry to break the xml 
+    files but i consider the box editor broken so please look at this in a 
+    positive way
+
+* gspeakersobject.h/cc: only include sigc++/object.h instead of entire sigc++
+
 2003-01-26
 
 * Released GSpeakers-0.9

@@ -157,8 +157,12 @@ void EnclosurePaned::on_settings_changed(const string& s)
 
 void EnclosurePaned::set_save_state(bool b)
 {
-  m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(b);
-  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+  if (m_tbar != NULL) {
+    m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(b);
+  }
+  if (m_menu.items().size() > 0) {
+    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+  }
 }
 
 void EnclosurePaned::on_plot_selected(int)

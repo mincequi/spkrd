@@ -22,7 +22,7 @@
 #include "box.h"
 #include "common.h"
 
-Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2) : GSpeakersObject()
+Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2, string speaker) : GSpeakersObject()
 {
   m_id_string = id_string;
   m_type = type;
@@ -30,6 +30,7 @@ Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double 
   m_fb1 = fb1;
   m_vb2 = vb2;
   m_fb2 = fb2;
+  m_speaker = speaker;
 }
 
 Box::Box(xmlNodePtr parent) : GSpeakersObject()
@@ -64,6 +65,8 @@ xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
   xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_vb2));
   child = xmlNewChild( box, NULL, (xmlChar *)("fb2"), NULL );
   xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_fb2));
+  child = xmlNewChild( box, NULL, (xmlChar *)("speaker"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)m_speaker.c_str());
 
   return box;
 }
@@ -75,7 +78,8 @@ ostream& operator<< (ostream& o, const Box& box)
        _("Id-string: ") << box.m_id_string << endl <<
        _("Type:      ") << box.m_type << endl <<
        _("Vb1:       ") << box.m_vb1 << endl <<
-       _("Fb1:       ") << box.m_fb1 << endl;
+       _("Fb1:       ") << box.m_fb1 << endl <<
+       _("Speaker:   ") << box.m_speaker << endl;
   return o;
 }
 
@@ -104,6 +108,11 @@ void Box::set_fb2(double fb2)
   m_fb2 = fb2;
 }
 
+void Box::set_speaker(const string& speaker)
+{
+  m_speaker = speaker;
+}
+
 string Box::get_id_string()
 {
   return m_id_string;
@@ -128,7 +137,12 @@ double Box::get_fb2()
 {
   return m_fb2;
 }
-  
+ 
+const string& Box::get_speaker()
+{
+  return m_speaker;
+} 
+ 
 void Box::parse_id_string(xmlNodePtr node)
 {
   if (( node != NULL ) && ( string( (char *)node->name) == string( "id_string" ))) {
@@ -207,7 +221,22 @@ void Box::parse_fb2(xmlNodePtr node)
   if (( node != NULL ) && ( string( (char *)node->name) == string( "fb2" ))) {
     //istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
     m_fb2 = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
+    try {
+      parse_speaker(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
   } else {
     throw GSpeakersException(_("Box: fb2 node not found"));
+  }
+}
+
+void Box::parse_speaker(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "speaker" ))) {
+    //istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
+    m_speaker = string((char *)xmlNodeGetContent(node));
+  } else {
+    throw GSpeakersException(_("Box: speaker node not found"));
   }
 }

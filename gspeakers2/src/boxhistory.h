@@ -20,7 +20,14 @@
 #ifndef __GSPEAKERS_BOXHISTORY
 #define __GSPEAKERS_BOXHISTORY
 
-#include <gtkmm.h>
+#include <sigc++/signal.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/fileselection.h>
+#include <gtkmm/cellrenderer.h>
+#include <gtkmm/treemodel.h>
+#include <gdkmm/event.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treeview.h>
 #include "common.h"
 #include "boxlist.h"
 
@@ -91,12 +98,13 @@ protected:
   {
     Gtk::TreeModelColumn<int>           type;
     Gtk::TreeModelColumn<Glib::ustring> id_string;
+    Gtk::TreeModelColumn<Glib::ustring> speaker;
     Gtk::TreeModelColumn<double>        vb1;
     Gtk::TreeModelColumn<double>        fb1;
     Gtk::TreeModelColumn<double>        vb2;
     Gtk::TreeModelColumn<double>        fb2;
     
-    ModelColumns() { add(type); add(id_string); add(vb1); add(vb2); add(fb1); add(fb2); }
+    ModelColumns() { add(type); add(id_string); add(speaker); add(vb1); add(vb2); add(fb1); add(fb2); }
   };
   ModelColumns m_columns;
   

@@ -18,6 +18,8 @@
 */
 
 #include <time.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/messagedialog.h>
 #include "boxhistory.h"
 #include "../config.h"
 
@@ -390,6 +392,7 @@ void BoxHistory::on_box_modified(Box *b)
       /* Update the liststore */
       row[m_columns.type]      = b->get_type();
       row[m_columns.id_string] = b->get_id_string();
+      row[m_columns.speaker]   = b->get_speaker();
       row[m_columns.vb1]       = b->get_vb1();
       row[m_columns.fb1]       = b->get_fb1();
       row[m_columns.vb2]       = b->get_vb2();
@@ -397,6 +400,7 @@ void BoxHistory::on_box_modified(Box *b)
       /* Update the boxlist */
       (*m_box_list.box_list())[indices[0]].set_type(b->get_type());
       (*m_box_list.box_list())[indices[0]].set_id_string(b->get_id_string());
+      (*m_box_list.box_list())[indices[0]].set_speaker(b->get_speaker());
       (*m_box_list.box_list())[indices[0]].set_vb1(b->get_vb1());
       (*m_box_list.box_list())[indices[0]].set_fb1(b->get_fb1());
       (*m_box_list.box_list())[indices[0]].set_vb2(b->get_vb2());
@@ -434,9 +438,17 @@ void BoxHistory::add_columns()
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
 
     col_cnt =m_TreeView.append_column(_("Identifier"), *pRenderer);
-    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(col_cnt-1);
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
+  }
+  {
+    Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
+
+    col_cnt =m_TreeView.append_column(_("Driver"), *pRenderer);
+    Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt-1);
+
+    pColumn->add_attribute(pRenderer->property_text(), m_columns.speaker);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
@@ -525,6 +537,7 @@ void BoxHistory::liststore_add_item(Box box)
 {
   Gtk::TreeRow row = *(m_refListStore->append());
   row[m_columns.id_string]  = box.get_id_string();
+  row[m_columns.speaker]    = box.get_speaker();
   row[m_columns.type]       = box.get_type();
   row[m_columns.vb1]        = box.get_vb1();
   row[m_columns.fb1]        = box.get_fb1();

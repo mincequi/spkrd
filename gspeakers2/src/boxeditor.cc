@@ -49,6 +49,8 @@ BoxEditor::BoxEditor() :
   add(m_vbox);
   m_vbox.set_border_width(8);
   m_hbox.set_spacing(5);
+  //set_shadow_type(Gtk::SHADOW_NONE);
+  //static_cast<Gtk::Label*>(get_label_widget())->set_markup(_("<b>Enclosure editor</b>"));
 
   //m_speaker_qts_entry.set_width_chars(5);
   //m_speaker_vas_entry.set_width_chars(10);
@@ -305,10 +307,13 @@ void BoxEditor::on_combo_entry_changed()
 #endif
   /* Search for the new entry string in the SpeakerList */
   m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
+
   // maybe set_markup here?
   m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
   m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
   m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+  m_box->set_speaker(m_bass_speaker_combo.get_entry()->get_text());
+  signal_box_modified(m_box);
 }
 
 void BoxEditor::on_box_data_changed(int i)
@@ -334,7 +339,7 @@ void BoxEditor::on_box_data_changed(int i)
         m_box->set_fb1( qr * m_current_speaker.get_fs() );
         //g_string_printf(buffer, "%f", m_box->get_fb1());
         //m_fb1_entry.set_text( Glib::ustring(buffer->str) );
-				m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
+	m_fb1_entry.set_text( GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1) );
         break;
       case PORTED_SELECTED:
 #ifdef OUTPUT_DEBUG      

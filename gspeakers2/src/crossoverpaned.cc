@@ -188,6 +188,10 @@ void CrossoverPaned::on_new_crossover_menu_action(int i)
 
 void CrossoverPaned::set_save_state(bool b)
 {
-  m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(b);
-  m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+  if (m_tbar != NULL) {
+    m_tbar->tools()[TOOLBAR_INDEX_SAVE].get_widget()->set_sensitive(b);
+  }
+  if (m_menu.items().size() > 0) {
+    m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+  }
 }

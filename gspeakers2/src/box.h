@@ -37,7 +37,8 @@ using namespace std;
 class Box : public GSpeakersObject
 {
 public:
-  Box(string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40, double vb2 = 0, double fb2 = 0);
+  Box(string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40, 
+      double vb2 = 0, double fb2 = 0, string speaker = "");
   /* Construct box object from an xmlNode */
   Box(xmlNodePtr parent);
   
@@ -52,12 +53,14 @@ public:
   void set_fb1(double fb1);
   void set_vb2(double vb2);
   void set_fb2(double fb2);
+  void set_speaker(const string& speaker);
   
   string get_id_string();
   double get_vb1();
   double get_fb1();
   double get_vb2();
   double get_fb2();
+  const string& get_speaker();
   
 protected:
   string m_id_string;
@@ -65,6 +68,7 @@ protected:
   double m_fb1;
   double m_vb2;
   double m_fb2;
+  string m_speaker;
 
 private:
   /* various helper functions for the xml parsing routine */
@@ -74,6 +78,7 @@ private:
   void parse_fb1(xmlNodePtr node);
   void parse_vb2(xmlNodePtr node);
   void parse_fb2(xmlNodePtr node);
+  void parse_speaker(xmlNodePtr node);
 };
 
 #endif
