@@ -54,8 +54,14 @@ Speaker_ListStore::Speaker_ListStore()
   
   index = -1;
   changed = false;
-  m_speaker_list = new SpeakerList(m_filename);
-  signal_speakerlist_loaded(m_speaker_list);
+  
+  try {
+    m_speaker_list = new SpeakerList(m_filename);
+    signal_speakerlist_loaded(m_speaker_list);
+  } catch (GSpeakersException e) {
+    m_speaker_list = new SpeakerList();
+    cout << "Speaker_ListStore::Speaker_ListStore: " << e.what() << endl;
+  }
   m_treeview_vbox.set_border_width(5);
   m_treeview_vbox.pack_start(m_treeview_frame);
   m_treeview_frame.add(m_inner_treeview_vbox);

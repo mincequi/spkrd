@@ -43,6 +43,8 @@ BoxEditor::BoxEditor() :
   m_box_type_optionmenu(),
   m_option_menu()
 {
+  m_box = NULL;
+  
   speaker_list_is_loaded = false;
   disable_signals = false;
   m_vbox.pack_start(m_table);
@@ -309,24 +311,42 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList *speaker_list)
 #ifdef OUTPUT_DEBUG
   cout << "BoxEditor::on_speaker_list_loaded: " << endl;
 #endif
-
-  m_speaker_list = speaker_list;
-  vector<Glib::ustring> popdown_strings;
+  if (disable_signals == false) {
+    disable_signals = true;
+    m_speaker_list = speaker_list;
+    vector<Glib::ustring> popdown_strings;
   
-  cout << m_box->get_speaker() << endl;
-  
-  for (
-    vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
-    from != m_speaker_list->speaker_list()->end();
-    ++from)
-  {
-    if (((*from).get_type() & SPEAKER_TYPE_BASS) && (m_box->get_speaker() != (*from).get_id_string())) {
-      popdown_strings.push_back((*from).get_id_string());
+    /* If we have got a selected box, insert the items with the driver belonging to the current speaker
+       at the top position, if we havn't got a selected box: insert all drivers and don't care about 
+       the sort */
+    if (m_box != NULL) {
+      for (
+        vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
+        from != m_speaker_list->speaker_list()->end();
+        ++from)
+      {
+        if (((*from).get_type() & SPEAKER_TYPE_BASS) && (m_box->get_speaker() != (*from).get_id_string())) {
+          popdown_strings.push_back((*from).get_id_string());
+        }
+      }
+      popdown_strings.insert(popdown_strings.begin(), m_box->get_speaker());
+      m_bass_speaker_combo.set_popdown_strings(popdown_strings);
+    } else {
+      for (
+        vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
+        from != m_speaker_list->speaker_list()->end();
+        ++from)
+      {
+        if ((*from).get_type() & SPEAKER_TYPE_BASS) {
+          popdown_strings.push_back((*from).get_id_string());
+        }
+      }
+      cout << popdown_strings.size() << endl;
+      m_bass_speaker_combo.set_popdown_strings(popdown_strings);
     }
+    speaker_list_is_loaded = true;
+    disable_signals = false;
   }
-  popdown_strings.insert(popdown_strings.begin(), m_box->get_speaker());
-  m_bass_speaker_combo.set_popdown_strings(popdown_strings);
-  speaker_list_is_loaded = true;
 }
 
 void BoxEditor::on_combo_entry_changed() 
@@ -334,15 +354,20 @@ void BoxEditor::on_combo_entry_changed()
 #ifdef OUTPUT_DEBUG
   cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text() << endl;
 #endif
-  /* Search for the new entry string in the SpeakerList */
-  m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
 
-  // maybe set_markup here?
-  m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
-  m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
-  m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
-  m_box->set_speaker(m_bass_speaker_combo.get_entry()->get_text());
-  signal_box_modified(m_box);
+  if (disable_signals == false) {
+    disable_signals = true;
+    /* Search for the new entry string in the SpeakerList */
+    m_current_speaker = m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_entry()->get_text());
+  
+    // maybe set_markup here?
+    m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
+    m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
+    m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+    m_box->set_speaker(m_bass_speaker_combo.get_entry()->get_text());
+    signal_box_modified(m_box);
+    disable_signals = false;
+  }
 }
 
 void BoxEditor::on_box_data_changed(int i)

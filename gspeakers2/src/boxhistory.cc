@@ -28,6 +28,7 @@ Signal1<void, bool> signal_enclosure_set_save_state;
 
 BoxHistory::BoxHistory() : Gtk::Frame("")
 {
+  bool boxlist_found = false;
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
   static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list")) + "</b>");
@@ -48,7 +49,14 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
 #ifdef __OUTPUT_DEBUG
   cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << endl;
 #endif
-  m_box_list = BoxList(m_filename); 
+
+  try {
+    m_box_list = BoxList(m_filename); 
+    boxlist_found = true;
+  } catch (GSpeakersException e) {
+    cout << "BoxHistory::BoxHistory: " << e.what() << endl;
+  }
+  cout << "boxlist_found = " << boxlist_found << endl;
   static_cast<Gtk::Label *>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) + 
                                                               GSpeakers::short_filename(m_filename) + "]</b>");
   create_model();
@@ -58,9 +66,6 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   m_TreeView.set_rules_hint();
   
   //m_TreeView.set_search_column(m_columns.id.index());
-  Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  //selection->set_mode(Gtk::SELECTION_MULTIPLE);
-  selection->signal_changed().connect(slot(*this, &BoxHistory::on_selection_changed));
 
   signal_add_to_boxlist.connect(slot(*this, &BoxHistory::on_add_to_boxlist));
   signal_box_modified.connect(slot(*this, &BoxHistory::on_box_modified));
@@ -73,15 +78,24 @@ BoxHistory::BoxHistory() : Gtk::Frame("")
   show_all();
   index = 0;
 
-  char *str = NULL;
-  GString *buffer = g_string_new(str);
-  g_string_printf(buffer, "%d", 0);
-  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
-  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-  selection->select(row);
+  Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+  //selection->set_mode(Gtk::SELECTION_MULTIPLE);
+  selection->signal_changed().connect(slot(*this, &BoxHistory::on_selection_changed));
+
+
+  if (boxlist_found == true) {
+    char *str = NULL;
+    GString *buffer = g_string_new(str);
+    g_string_printf(buffer, "%d", 0);
+    GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+    Gtk::TreePath path(gpath);
+    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    selection->select(row);
+  }
   selected_plot = -1;
   signal_select_plot.connect(slot(*this, &BoxHistory::on_plot_selected));
+
+
 }
 
 BoxHistory::~BoxHistory()

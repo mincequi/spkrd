@@ -55,14 +55,16 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
     popdown_strings.push_back(speaker_name);
   }
 
-  for (
-    vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
-    iter != m_speaker_list->speaker_list()->end();
-    ++iter)
-  {
-    /* TODO: only insert speakers appropriate for this particular crossover */
-    if (speaker_name != (*iter).get_id_string()) {
-      popdown_strings.push_back((*iter).get_id_string());
+  if (m_speaker_list != NULL) {
+    for (
+      vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
+      iter != m_speaker_list->speaker_list()->end();
+      ++iter)
+    {
+      /* TODO: only insert speakers appropriate for this particular crossover */
+      if (speaker_name != (*iter).get_id_string()) {
+        popdown_strings.push_back((*iter).get_id_string());
+      }
     }
   }
   m_speaker_combo.set_popdown_strings(popdown_strings);
@@ -87,7 +89,10 @@ FilterLinkFrame::FilterLinkFrame(Net *net, const string& description, SpeakerLis
   if (m_net->get_has_damp() == true) {
     /* Set damp value in dB here */
     double r_ser = m_net->get_damp_R1().get_value();
-    Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    Speaker speaker;
+    if (m_speaker_list != NULL) {
+      speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    } 
     m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
   }  
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
@@ -270,7 +275,10 @@ void FilterLinkFrame::on_param_changed()
     cout << "FilterLinkFrame::on_param_changed" << endl;
 #endif
     enable_edit = false;
-    Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    Speaker speaker;
+    if (m_speaker_list != NULL) {
+      speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    }
     m_net->set_speaker(speaker.get_id_string());
 
     int index = 0;
@@ -573,24 +581,26 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList *speaker_list)
 #ifdef OUTPUT_DEBUG
   cout << "FilterLinkFrame::on_speakerlist_loaded" << endl;
 #endif
-  if (speaker_list != NULL) {
+  //if (speaker_list != NULL) {
     m_speaker_list = speaker_list;
-  }
+  //}
   
   string speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */
   vector<string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
-  for (
-    vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
-    iter != m_speaker_list->speaker_list()->end();
-    ++iter)
-  {
-    /* TODO: only insert speakers appropriate for this particular crossover */
-    if (speaker_name != (*iter).get_id_string()) {
-      popdown_strings.push_back((*iter).get_id_string());
-    } else {
-      speaker_is_in_speakerlist = true;
+  if (m_speaker_list != NULL) {
+    for (
+      vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
+      iter != m_speaker_list->speaker_list()->end();
+      ++iter)
+    {
+      /* TODO: only insert speakers appropriate for this particular crossover */
+      if (speaker_name != (*iter).get_id_string()) {
+        popdown_strings.push_back((*iter).get_id_string());
+      } else {
+        speaker_is_in_speakerlist = true;
+      }
     }
   }
   if (speaker_is_in_speakerlist == true) {
@@ -602,7 +612,10 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList *speaker_list)
 void FilterLinkFrame::on_plot_crossover()
 {
   /* Create spice code for this net */
-  Speaker speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+  Speaker speaker;
+  if (m_speaker_list != NULL) {
+    speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+  }
   string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker);

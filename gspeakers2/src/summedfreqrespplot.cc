@@ -29,6 +29,8 @@
 SummedFreqRespPlot::SummedFreqRespPlot() : 
   plot(1, 20000, 50, 110, true, 0)
 {
+  m_speakerlist = NULL;
+  
   add(plot);
   
   plot.set_y_label(_("Magnitude / dB"));
@@ -53,7 +55,10 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   cout << "SummedFreqRespPlot::on_add_plot" << endl;
 #endif
 
-  Speaker s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
+  Speaker s;
+  if (m_speakerlist != NULL) {
+    s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
+  }
   vector<GSpeakers::Point> freq_resp_points;
   if (s.get_freq_resp_filename() != "") {
     ifstream fin(s.get_freq_resp_filename().c_str());

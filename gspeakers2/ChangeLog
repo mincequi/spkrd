@@ -1,5 +1,29 @@
 GSpeakers ChangeLog
 
+2003-02-18
+
+* The changes 02-17 and 02-18 fix seg-faults that occur if the file names 
+    in the config-file do not exist or is invalid
+
+* crossoverhistory.cc: only select first crossover if we have got a 
+    crossover list with more than zero elements
+
+* filterlinkframe.cc, summedfreqrespplot.cc, crossoverimageview.cc: check if 
+    speakerlist ptr equals NULL
+
+* crossoverwizard.cc: init speakerlist member ptr to NULL
+
+* speakereditor.cc: init speakerlist even if xml not found
+
+2003-02-17
+
+* boxeditor.cc, boxhistory.cc: fixed so that GSpeakers can start with a 
+    faulty boxlist-config option without segfaults
+
+* speakereditor.cc, crossoverhistory.cc, boxhistory.cc: added try/catch around 
+    loading files in contructors, this prevents gspeakers from segfaulting if 
+    you try to start gspeakers with an invalid xml file in the config
+
 2003-02-15
 
 * filterlinkframe.cc, speakereditor.cc: check so that we have a valid output 

@@ -43,7 +43,11 @@ CrossoverHistory::CrossoverHistory() :
 #endif
   m_filename = g_settings.getValueString("CrossoverListXml");
   
-  m_crossover_list = CrossoverList(m_filename); 
+  try {
+    m_crossover_list = CrossoverList(m_filename); 
+  } catch (GSpeakersException e) {
+    cout << "CrossoverHistory::CrossoverHistory: " << e.what() << endl;
+  }
 //  set_label(_("Crossover list [") + m_filename + "]");
   set_shadow_type(Gtk::SHADOW_NONE);
   static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover list [")) + GSpeakers::short_filename(m_filename) + "]</b>");
@@ -76,14 +80,16 @@ CrossoverHistory::CrossoverHistory() :
 
 void CrossoverHistory::select_first_row()
 {
-  char *str = NULL;
-  GString *buffer = g_string_new(str);
-  g_string_printf(buffer, "%d", 0);
-  GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
-  Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-  Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  selection->select(row);
+  if (m_crossover_list.crossover_list()->size() > 0) {
+    char *str = NULL;
+    GString *buffer = g_string_new(str);
+    g_string_printf(buffer, "%d", 0);
+    GtkTreePath *gpath = gtk_tree_path_new_from_string(buffer->str);
+    Gtk::TreePath path(gpath);
+    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    selection->select(row);
+  }
 }
 
 void CrossoverHistory::on_net_modified_by_wizard(Net *net)
@@ -482,55 +488,54 @@ void CrossoverHistory::add_columns()
     int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
     Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
 
-		pColumn->set_cell_data_func(*pRenderer, slot(*this, &CrossoverHistory::type_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, slot(*this, &CrossoverHistory::type_cell_data_func));
 //    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
-
 }
 
 void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
-	Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-	string s = "";
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
-		s = s + _("lowpass");
-	}
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) {
-		if (s.length() > 0) {
-			s = s + _(", subsonic");
-		} else {
-			s = s + _("subsonic");
-		}
-	}
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) {
-		if (s.length() > 0) {
-			s = s + _(", highpass");
-		} else {
-			s = s + _("highpass");
-		}
-	}
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) {
-		if (s.length() > 0) {
-			s = s + _(", 2-way");
-		} else {
-			s = s + _("2-way");
-		}
-	}
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) {
-		if (s.length() > 0) {
-			s = s + _(", 3-way");
-		} else {
-			s = s + _("3-way");
-		}
-	}
-	if ((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) {
-		if (s.length() > 0) {
-			s = s + _(", 4-way");
-		} else {
-			s = s + _("4-way");
-		}
-	}
-	renderer.property_text() = s;
+  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  string s = "";
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
+          s = s + _("lowpass");
+  }
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) {
+          if (s.length() > 0) {
+                  s = s + _(", subsonic");
+          } else {
+                  s = s + _("subsonic");
+          }
+  }
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) {
+          if (s.length() > 0) {
+                  s = s + _(", highpass");
+          } else {
+                  s = s + _("highpass");
+          }
+  }
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) {
+          if (s.length() > 0) {
+                  s = s + _(", 2-way");
+          } else {
+                  s = s + _("2-way");
+          }
+  }
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) {
+          if (s.length() > 0) {
+                  s = s + _(", 3-way");
+          } else {
+                  s = s + _("3-way");
+          }
+  }
+  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) {
+          if (s.length() > 0) {
+                  s = s + _(", 4-way");
+          } else {
+                  s = s + _("4-way");
+          }
+  }
+  renderer.property_text() = s;
 }
 
 void CrossoverHistory::liststore_add_item(Crossover foo)
@@ -539,5 +544,4 @@ void CrossoverHistory::liststore_add_item(Crossover foo)
   row[m_columns.id]         = foo.get_id();
   row[m_columns.id_string]  = foo.get_id_string();
   row[m_columns.type]       = foo.get_type();
-
 }

@@ -31,6 +31,7 @@ CrossoverImageView::CrossoverImageView()
   
   visible = false;
   crossover = NULL;
+  speaker_list = NULL;
   g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
   scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
   g_settings.settings_changed.connect(slot(*this, &CrossoverImageView::on_settings_changed));
@@ -180,7 +181,10 @@ void CrossoverImageView::redraw()
           driver_offset += 2;
         }
         string spk = net_vector[i].get_speaker();
-        Speaker speaker = speaker_list->get_speaker_by_id_string(spk);
+        Speaker speaker;
+        if (speaker_list != NULL) {
+          speaker = speaker_list->get_speaker_by_id_string(spk);
+        }
         draw_driver((1 + lowpass_order + highpass_order + driver_offset) * part_width, i * vert_space_per_net,
                     part_width, part_height, speaker);
       }
