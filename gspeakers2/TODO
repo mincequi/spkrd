@@ -26,9 +26,6 @@ Tasks that I consider important are marked with "important".
 
 * CrossoverTreeView: remove code for changing the unit for a part (pre 1.0)
 
-* Rewrite boxhistory and boxplot history, make it more intuitive to 
-    use (pre 1.0)
-
 * Translate documentation
 
 * Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values, also improve 
@@ -78,8 +75,6 @@ Tasks that I consider important are marked with "important".
 * Config option: view all toolbars, view toolbars independently 
     from each other
 
-* Settings dialog should apply changes "on the fly" (pre 1.0)
-
 * GSpeakers should ask if you want to save changes (pre 1.0)
 
 * Maybe a configurable (on/off) splash screen, since loading the program takes 
@@ -96,4 +91,6 @@ Tasks that I consider important are marked with "important".
 
 * catch exceptions in toolbar creation functions
 
-* show Q for a sealed enclosure
+* show/edit Q for a sealed enclosure
+
+* Meassurement tab

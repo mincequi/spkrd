@@ -73,6 +73,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_inner_vbox.set_border_width(12);
   m_inner_vbox.pack_start(m_Table);
   
+
   m_editor_frame.set_shadow_type(Gtk::SHADOW_NONE);
   static_cast<Gtk::Label*>(m_editor_frame.get_label_widget())->set_markup("<b>" + Glib::ustring(_("Currently selected driver")) + "</b>");
   //m_editor_frame.set_label(_("Currently selected driver"));

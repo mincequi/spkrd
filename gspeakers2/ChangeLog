@@ -1,5 +1,10 @@
 GSpeakers ChangeLog
 
+2003-02-12
+
+* Prepared for 0.10 release, just waiting for a more detailed bugreport from 
+    a user
+
 2003-02-11
 
 * Various files: removed <b>-tags from gettext strings

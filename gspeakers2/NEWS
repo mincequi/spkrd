@@ -1,3 +1,22 @@
+GSpeakers-0.10
+
+* Improved the enclosure editor, enclosure list now saves the driver it now 
+    behaves more like you expect it to
+
+* Adjusted a lot of the UI to follow the Gnome HIG, also this release looks 
+    much nicer than it used to, there are still more to be done but this is 
+    a step in the right direction
+
+* Instant apply in the configuration dialog was implemented
+
+* Removed unused included headers from source files, this might slightly 
+    decrease compile time on slow systems
+
+* Improved toolbars
+
+* A few bugfixes were made, see the ChangeLog for details
+
+
 GSpeakers-0.9
 
 * Gettext support and a swedish translation was added
