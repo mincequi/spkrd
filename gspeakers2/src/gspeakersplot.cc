@@ -23,7 +23,7 @@
 #include "gspeakersplot.h"
 #include "common.h"
 
-GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_zero_freq)
+GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_zero_freq, bool enable_sec_scale)
 {
   m_lower_x = lower_x;
   m_upper_x = upper_x;
@@ -33,6 +33,7 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
+  m_enable_sec_scale = enable_sec_scale;
   visible = false;
   
 }
@@ -159,17 +160,17 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point> &ref_point_vector, Gdk::Col
     }
 
     /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
-    if ( (*iter).get_y() < MAX_NEG_VALUE ) {
-      (*iter).set_y(MAX_NEG_VALUE);
-    } else if ((*iter).get_y() > MAX_POS_VALUE ) {
-      (*iter).set_y(MAX_POS_VALUE);
+    if ( (*iter).get_y() < m_lower_y ) {
+      (*iter).set_y(m_lower_y);
+    } else if ((*iter).get_y() > m_upper_y ) {
+      (*iter).set_y(m_upper_y);
     }
     /* Calculate y-coordinate */
     y = round( box_height + BOX_FRAME_SIZE - 
-               ( (double)(-MAX_NEG_VALUE) + (*iter).get_y() ) * 
-               ( box_height / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
+               ( (double)(-m_lower_y) + (*iter).get_y() ) * 
+               ( box_height / (double)( -m_lower_y + m_upper_y ) ) );
     /* Don't draw anything if we got zeros */
-    if ( (*iter).get_y() > MAX_NEG_VALUE ) {
+    if ( ((*iter).get_y() > m_lower_y ) && ((*iter).get_y() < m_upper_y )) {
       //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
       //	window.draw_line( gc, old_x, old_y, x, y );
       Gdk::Point p;
@@ -209,7 +210,7 @@ void GSpeakersPlot::remove_plot(int n)
 {
   int i = 0;
 #ifdef OUTPUT_DEBUG
-  cout << "n == " << n << endl;
+  //cout << "n == " << n << endl;
 #endif
   /* For some reason something goes wrong when we select the last row so we add a special case for that event */
   if (n == (int)(m_points.size() - 1)) {
@@ -336,13 +337,17 @@ void GSpeakersPlot::redraw()
   
   /* Draw some horizontal lines */
   //int inc_space_y = round( box_height /  (double)N_VERTICAL_LINES );
-  for (int i = MAX_NEG_VALUE; i < MAX_POS_VALUE; i = i + 5) {
+  for (int i = m_lower_y; i < m_upper_y; i = i + 5) {
     int y = round( box_height + BOX_FRAME_SIZE - 
-	       ( (double)(-MAX_NEG_VALUE) + (double)i ) * 
-	       ( box_height / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
+	       ( (double)(-m_lower_y) + (double)i ) * 
+	       ( box_height / (double)( -m_lower_y + m_upper_y ) ) );
     m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y, get_allocation().width - BOX_FRAME_SIZE + 3, y);
     m_refLayout->set_text(int_to_ustring3(i));
     m_refPixmap->draw_layout(m_refGC, BOX_FRAME_SIZE - 18, y - 6, m_refLayout);
+    if (m_enable_sec_scale == true) {
+      m_refLayout->set_text(int_to_ustring3(i - m_lower_y));
+      m_refPixmap->draw_layout(m_refGC, get_allocation().width - BOX_FRAME_SIZE + 5, y - 6, m_refLayout);
+    }
   }
 
   int total_space_x = get_allocation().width - (2 * BOX_FRAME_SIZE);
@@ -406,17 +411,17 @@ void GSpeakersPlot::redraw()
         }
   
         /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
-        if ( (*iter).get_y() < MAX_NEG_VALUE ) {
-          (*iter).set_y(MAX_NEG_VALUE);
-        } else if ((*iter).get_y() > MAX_POS_VALUE ) {
-          (*iter).set_y(MAX_POS_VALUE);
+        if ( (*iter).get_y() < m_lower_y ) {
+          (*iter).set_y(m_lower_y);
+        } else if ((*iter).get_y() > m_upper_y ) {
+          (*iter).set_y(m_upper_y);
         }
         /* Calculate y-coordinate */
         y = round( box_height + BOX_FRAME_SIZE - 
-                   ( (double)(-MAX_NEG_VALUE) + (*iter).get_y() ) * 
-                   ( box_height / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
+                   ( (double)(-m_lower_y) + (*iter).get_y() ) * 
+                   ( box_height / (double)( -m_lower_y + m_upper_y ) ) );
         /* Don't draw anything if we got zeros */
-        if ( (*iter).get_y() > MAX_NEG_VALUE ) {
+        if ( ((*iter).get_y() > m_lower_y) && ((*iter).get_y() < m_upper_y) ) {
           //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
           //	window.draw_line( gc, old_x, old_y, x, y );
           Gdk::Point p;

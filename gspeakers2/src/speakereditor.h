@@ -21,6 +21,7 @@
 #include <gtkmm.h>
 #include "speaker.h"
 #include "speakerlist.h"
+#include "driverfreqrespplot.h"
 
 using namespace SigC;
 using namespace std;
@@ -35,7 +36,8 @@ public:
   virtual ~Speaker_ListStore();
   Gtk::Widget& get_treeview_table();
   Gtk::Widget& get_editor_table();
-
+  Gtk::Widget& get_plot();
+  
 protected:
   /* callbacks */
   void on_cell_fixed_toggled(const Glib::ustring& path_string);
@@ -83,7 +85,8 @@ protected:
   
   /* Data container */
   SpeakerList *m_speaker_list;
-
+  DriverFreqRespPlot plot;
+  
   struct ModelColumns : public Gtk::TreeModelColumnRecord
   {
     Gtk::TreeModelColumn<int>           id;

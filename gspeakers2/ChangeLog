@@ -1,5 +1,16 @@
 GSpeakers ChangeLog
 
+2002-09-18
+
+* mainwindow.cc: added driverfreqplot to main window
+
+* speakereditor.cc/h: added handling of the driverfreqplot class
+
+* driverfreqrespplot.h/cc: added wrapper class for gspeakersplot which displays 
+    the frequency resp of a driver
+
+* gspeakersplot.cc: now we actually use m_lower_y and m_upper_y ctor args
+
 2002-09-17
 
 * speakereditor.cc: use freq resp editor

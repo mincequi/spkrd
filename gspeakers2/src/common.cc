@@ -53,4 +53,14 @@ namespace GSpeakers {
     g_string_printf(buffer, "%d", d);
     return Glib::ustring(buffer->str);
   }
+  
+  int round( double d ) {
+  if ( ( d - (int)d ) >= 0.5 ) {
+    return (int)( (int)d + 1 );
+  } else {
+    return (int)(d);
+  }
+  return 0;
+}
+
 }

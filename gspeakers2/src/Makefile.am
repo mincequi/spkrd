@@ -15,7 +15,7 @@ mainwindow.h mainwindow.cc crossoverwizard.h crossoverwizard.cc \
 filterlinkframe.h filterlinkframe.cc gspeakersfilterplot.h \
 gspeakersfilterplot.cc settingsdialog.h settingsdialog.cc \
 totalfilterplot.h totalfilterplot.cc tabwidget.h tabwidget.cc \
-freqrespeditor.h freqrespeditor.cc
+freqrespeditor.h freqrespeditor.cc driverfreqrespplot.h driverfreqrespplot.cc
 
 CXXFLAGS = @CXXFLAGS@ $(DEPS_CFLAGS) -Wall
 LDADD = $(DEPS_LIBS)

@@ -33,7 +33,7 @@ namespace GSpeakers {
   class Point;
   Glib::ustring double_to_ustring(double d);
   Glib::ustring int_to_ustring(int d);
-
+  int round(double d);
 }   
 
 class Box;

@@ -10,7 +10,7 @@ dnl Package name and version number (user defined)
 dnl -----------------------------------------------
 
 PACKAGE=gspeakers
-VERSION=0.6.0
+VERSION=0.7.0
 
 dnl -----------------------------------------------
 dnl Package name and version number (DO NOT MODIFY)

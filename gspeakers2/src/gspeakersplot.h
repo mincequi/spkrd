@@ -95,10 +95,11 @@ public:
    */
   GSpeakersPlot(int lower_x = 20, 
                 int upper_x = 1000, 
-                int lower_y = -50, 
+                int lower_y = -40, 
                 int upper_y = 10, 
                 bool logx = true, 
-                int y_zero_freq = 0);
+                int y_zero_freq = 0, 
+                bool enable_sec_scale = false);
   int add_plot(vector<GSpeakers::Point> &p, Gdk::Color& ref_color);
   void remove_plot(int n);
   void hide_plot(int n);
@@ -136,7 +137,7 @@ protected:
   void draw_horz_grid();
   int m_linesize;
   Gdk::LineStyle line_style;
-  int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq;
+  int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;
   bool m_logx, visible;
   int m_selected_plot;
   

@@ -13,7 +13,7 @@ the structure in the program, some are important due to the UI experience.
 * Find out how to right adjust text in labels attached to a table (for example
     in the SpeakerEditor)
 
-* Icons on the buttons in various dialogs
+* Icons on the buttons in various dialogs, maybe switch to toolbars...
 
 * Add "insert_column_with_data_func();" to various columns in treeviews, for 
     example: enclosure types
@@ -36,20 +36,22 @@ the structure in the program, some are important due to the UI experience.
 
 * Loudspeaker design with GSpeakers HOWTO (important)
 
-* All dialogs and windows should save its size and position 
-    (use global settings, see common.h)
-
 * Make id_string cell in CrossoverHistory editable
 
 * CrossoverTreeView: remove code for changing the unit for a part
 
 * Clear up and maybe rewrite BoxEditor
 
+* Box xml should save driver
+
+* Rewrite boxhistory, make it more intuitive to use
+
 * Internationalization, get_text support and more
 
 * Translate documentation
 
-* Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values
+* Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values, also improve 
+    this class and make it more general
 
 * Optimize the order the colors appear in GSpeakersColor.cc/h (an easy task 
     but it requires some thinking), consecutive colors coming out of 
@@ -58,9 +60,9 @@ the structure in the program, some are important due to the UI experience.
 
 * Reorder some columns in the treeviews to improve the user experience
 
-* Icons for the notebooks in the main window
+* Better icons in the main window notebook
 
-* Program icon for the main window
+* Better program icon, install icon to gnome menus...
 
 * Add tooltips to appropriate widgets
 
@@ -79,3 +81,5 @@ the structure in the program, some are important due to the UI experience.
 * SpeakerEditor: select next (or previous) listitem on remove
 
 * SpeakerEditor: code cleanup
+
+* SpeakerEditor: cache SPICE calculations and file reads
