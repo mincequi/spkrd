@@ -65,6 +65,10 @@ public:
   void remove_plot( int n );
   void remove_all_plots();
   void redraw();
+  
+  void set_font( string font );
+  void set_line_style( GdkLineStyle style );
+  void set_line_size( int size );
 
 protected:
   /* This is the function that draws the graphics */
@@ -90,7 +94,8 @@ protected:
 
  private:
   int round( double );
-
+  int line_size;
+  GdkLineStyle line_style;
 };
 
 #endif

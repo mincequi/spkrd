@@ -72,6 +72,7 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
      config-parameters with set-methods...example: plot->set_line_style( DASH )
   */ 
   GSpeakersPlot *d = manage( new GSpeakersPlot( ) );
+  d->set_font( cfg->get_font() );
   BoxList *l = manage( new BoxList( cfg ) );
   SimToolbar *simtoolbar = manage( new SimToolbar( stoolbar, btoolbar, d, l, cfg ) );
 
@@ -111,7 +112,6 @@ GnomeSpeakersApp::GnomeSpeakersApp() : Gnome::App("Gnome Speakers", "GnomeSpeake
 
 GnomeSpeakersApp::~GnomeSpeakersApp()
 {
-
 }
 
 gint 

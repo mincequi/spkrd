@@ -45,13 +45,15 @@ GSpeakersPlot::GSpeakersPlot() {
   colormap_.alloc(black_);
   colormap = colormap_;
   f = Gdk_Font( "-adobe-helvetica-medium-o-normal-*-*-*-*-*-*-*-*-*" );
+  line_size = 1;
+  line_style = GDK_LINE_SOLID;
 }
 
 /*
  * This is the function that does all the drawing on the window
  */
 gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
-  int x, y;
+  int x, y, old_x = 0, old_y = 0;
   int size_x, size_y;
   int box_x, box_y, box_size_x, box_size_y;
   int xaxis_y;
@@ -81,7 +83,7 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
     if ( ( i == 2 ) || ( i == 5 ) ) {
       char *buf = new char[3];
       sprintf( buf, "%3d", 10 * i);
-      window.draw_string( f, gc, x - 4, xaxis_y + 10, string( buf ) );
+      window.draw_string( f, gc, x - 4, xaxis_y + 15, string( buf ) );
     } 
   }
   for (int i = 1; i < 10; i++) {
@@ -90,12 +92,12 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
     if ( ( i == 2 ) || ( i == 5 ) || (i == 1) ) {
       char *buf = new char[3];
       sprintf( buf, "%3d", 100 * i);
-      window.draw_string( f, gc, half_space_x + x - 4, xaxis_y + 10, string( buf ) );
+      window.draw_string( f, gc, half_space_x + x - 4, xaxis_y + 15, string( buf ) );
     } 
   }
-  window.draw_string( f, gc, box_size_x - 20, xaxis_y + 10, "Frequency (Hz)" );
+  window.draw_string( f, gc, box_size_x - 20, xaxis_y + 15, "Frequency (Hz)" );
   
-  /* Draw vertical lines */
+  /* Draw horizontal lines */
   inc_space_y = round( box_size_y /  (double)N_VERTICAL_LINES );
   for (int i = MAX_NEG_VALUE; i < MAX_POS_VALUE; i = i + 5) {
     y = round( box_size_y + BOX_FRAME_SIZE - 
@@ -115,6 +117,9 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
   for ( int i = 0; i < n_plots; i++ ) {
     double *db_mag = dbmag[i];
     gc.set_foreground( *colors[i] );
+
+    gc.set_line_style( line_style );
+    gc.set_line_width( line_size );
 
     for ( int f = 10; f < UPPER_LIMIT; f++ ) {
 
@@ -144,10 +149,16 @@ gint GSpeakersPlot::expose_event_impl(GdkEventExpose* e) {
 		 ( box_size_y / (double)( -MAX_NEG_VALUE + MAX_POS_VALUE ) ) );
       /* Don't draw anything if we got zeros */
       if ( db_mag[f] > MAX_NEG_VALUE ) {
-	window.draw_rectangle( gc, true, x, y, 1, 1 );
+	if ( old_x == 0 ) { old_x = x; old_y = y; }
+	window.draw_line( gc, old_x, old_y, x, y );
+	//	window.draw_rectangle( gc, true, x, y, 1, 1 );
       }
+      old_x = x; old_y = y;
     }
   }
+  gc.set_line_style( GDK_LINE_SOLID );
+  gc.set_line_width( 1 );
+
   return true;
 }
 
@@ -234,4 +245,18 @@ int GSpeakersPlot::round( double x ) {
     return (int)(x);
   }
   return 0;
+}
+
+void GSpeakersPlot::set_font( string font ) {
+  f = Gdk_Font( font );  
+}
+
+void  GSpeakersPlot::set_line_style( GdkLineStyle style ) {
+  line_style = style;
+}
+
+void  GSpeakersPlot::set_line_size( int size ) {
+  if ( size > 0 ) {
+    line_size = size;
+  }
 }

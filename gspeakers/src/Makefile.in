@@ -93,7 +93,9 @@ gspeakersplot.cc\
 cconfig.h\
 cconfig.cc\
 gspeakerscfg.h\
-gspeakerscfg.cc
+gspeakerscfg.cc\
+gspeakerscfgbox.h\
+gspeakerscfgbox.cc
 
 gspeakers_LDADD = $(G_LIBS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -108,7 +110,7 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 gspeakers_OBJECTS =  main.o gnomespeakers.o speakertoolbar.o \
 boxtoolbar.o boxlist.o simtoolbar.o gspeakersplot.o cconfig.o \
-gspeakerscfg.o
+gspeakerscfg.o gspeakerscfgbox.o
 gspeakers_DEPENDENCIES = 
 gspeakers_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -125,8 +127,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/boxlist.P .deps/boxtoolbar.P .deps/cconfig.P \
-.deps/gnomespeakers.P .deps/gspeakerscfg.P .deps/gspeakersplot.P \
-.deps/main.P .deps/simtoolbar.P .deps/speakertoolbar.P
+.deps/gnomespeakers.P .deps/gspeakerscfg.P .deps/gspeakerscfgbox.P \
+.deps/gspeakersplot.P .deps/main.P .deps/simtoolbar.P \
+.deps/speakertoolbar.P
 SOURCES = $(gspeakers_SOURCES)
 OBJECTS = $(gspeakers_OBJECTS)
 

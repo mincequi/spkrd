@@ -19,5 +19,7 @@ gspeakersplot.cc\
 cconfig.h\
 cconfig.cc\
 gspeakerscfg.h\
-gspeakerscfg.cc
+gspeakerscfg.cc\
+gspeakerscfgbox.h\
+gspeakerscfgbox.cc
 gspeakers_LDADD = $(G_LIBS)

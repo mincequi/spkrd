@@ -1,4 +1,10 @@
-2001-12-28 14.10 sumpan
+2001-12-28 15.30 sumpan
+
+	* src/gspeakersplot.cc src/gspeakersplot.h:
+	  Prepared set_font, set_line_size and set_line_style
+	  Moved from draw_rectangle to draw_line
+	
+2001-12-27 14.10 sumpan
         
 	* Added config-class to all classes that needs it
 	

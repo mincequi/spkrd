@@ -24,12 +24,17 @@
 #ifndef __GSPEAKERSCFG_H
 #define __GSPEAKERSCFG_H
 
+#include <string>
 #include "cconfig.h"
 
 class GSpeakersCFG : public CConfig {
  public:
   GSpeakersCFG();
-
+  string get_font();
+  int get_line_style();
+  int get_line_size();
+  
+  void set_font( string newfont );
  private:
 };
 

@@ -29,6 +29,7 @@
 #include <gtk--/box.h>
 #include <gdk--/color.h>
 #include "gspeakerscfg.h"
+#include "gspeakerscfgbox.h"
 #include "speakertoolbar.h"
 #include "boxtoolbar.h"
 #include "gspeakersplot.h"
@@ -59,9 +60,6 @@ class SimToolbar : public Gtk::HandleBox {
   void rem_all_clicked();
   void cfg_clicked();
   
-  void on_cfg_ok();
-  void on_cfg_cancel();
-
   SpeakerToolbar *sbar;
   BoxToolbar *bbar;
   GSpeakersPlot *plot;
@@ -80,13 +78,8 @@ class SimToolbar : public Gtk::HandleBox {
   int color_i, color_j, color_k;
   int last_color;
   GSpeakersCFG *cfg;
-
+  GSpeakersCFGBox *cfgbox;
   double *calc_dbmag( Box *, Speaker * );
 }; 
-
-
-
-
-
 
 #endif

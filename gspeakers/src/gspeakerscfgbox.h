@@ -1,5 +1,5 @@
 /* 
- * gspeakerscfg.cc
+ * gspeakerscfgbox.h
  *
  * Copyright (C) 2001 Daniel Sundberg <dss@home.se>
  *
@@ -21,33 +21,36 @@
  * USA
  */
 
+#ifndef __GSPEAKERSCFGBOX_H
+#define __GSPEAKERSCFGBOX_H
 #include <string>
+#include <gnome--/propertybox.h>
+#include <gtk--/entry.h>
+#include <gtk--/button.h>
+#include <gtk--/table.h>
+#include <gtk--/fontselection.h>
 #include "gspeakerscfg.h"
 
-string cfg_file = string( getenv("HOME") ) + string("/.gspeakers/gspeakers.conf");
+class GSpeakersCFGBox : public Gnome::PropertyBox {
+ public:
+  GSpeakersCFGBox( GSpeakersCFG *icfg );
 
-GSpeakersCFG::GSpeakersCFG() : CConfig( (char *)cfg_file.c_str() ) {
+ protected:
+  /* Callbacks */
+  virtual void apply_impl( gint page_num );
+  virtual void close_impl( gint page_num );
+  
+  void browse_font();
+  void browse_font_ok();
+  void browse_font_cancel();
 
-};
+ private:
+  string oldfont;
+  GSpeakersCFG *cfg;
+  Gtk::Entry *font_entry;
+  Gtk::Button *select_font_button;
+  Gtk::Table *table;
+  Gtk::FontSelectionDialog *font_dialog;
+}; 
 
-string GSpeakersCFG::get_font() {
-  string s = string( getConfigKey( "plotfont" ) );
-  if ( s.size() > 0 ) {
-    return s;
-  } else {
-    /* Default font */
-    return "-adobe-helvetica-medium-o-normal-*-*-*-*-*-*-*-*-*";
-  }
-}
-
-int GSpeakersCFG::get_line_style() {
-  return 0;
-}
-
-int GSpeakersCFG::get_line_size() {
-  return 0;
-}
-
-void GSpeakersCFG::set_font( string newfont ) {
-  writeConfigKey( (char *)("plotfont"), (char *)(newfont.c_str()) );
-}
+#endif
