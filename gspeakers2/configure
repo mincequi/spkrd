@@ -1285,7 +1285,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 PACKAGE=gspeakers
-VERSION=0.11.0
+VERSION=0.11.1
 
 
 am__api_version="1.7"

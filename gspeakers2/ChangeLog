@@ -1,5 +1,17 @@
 GSpeakers ChangeLog
 
+2004-06-29
+
+* enclosurepaned.cc: UI cleanup + some tooltips
+	
+* crossoverpaned.cc: use gtk stock pixmaps
+	
+* enclosurepaned.cc: use gtk stock pixmaps
+	
+* speakereditor.cc: use gtk stock pixmaps
+	
+* mainwindow.cc: some remove debug output
+
 2004-06-22
 
 * GSpeakers-0.11

@@ -79,7 +79,7 @@ namespace GSpeakers {
     return 0;
   }
   
-  Gtk::Widget& image_widget(string filename)
+  Gtk::Widget& image_widget(const string& filename)
   {
     Gtk::Widget *im;
     try {
@@ -96,6 +96,13 @@ namespace GSpeakers {
     }
     return *im;
   }
+
+//   Gtk::Widget& image_widget(const Gtk::StockID& stockid)
+//   {
+//     Gtk::Widget *im;
+
+//     return *im;
+//   }
   
   Glib::ustring short_filename(const Glib::ustring& filename)
   {

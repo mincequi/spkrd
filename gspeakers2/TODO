@@ -89,10 +89,10 @@ GSpeakers TODO-list
 
 * Phase response on crossover tab
 
-* Use standard pixmaps
-
 * Crossover edit redesign
 
 * Native KDE, Windows and MacOSX (file) dialogs
 
 * Ask if you want to continue when saving over a file
+
+* Maybe do something about "delete plot icon"?

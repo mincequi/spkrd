@@ -26,6 +26,7 @@
 #include <glibmm/ustring.h>
 #include <gdkmm/color.h>
 #include <gtkmm/tooltips.h>
+#include <gtkmm/stock.h>
 #include <vector>
 #include <iostream>
 #include <libintl.h>
@@ -45,7 +46,8 @@ namespace GSpeakers {
   Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
   Glib::ustring int_to_ustring(int d);
   int round(double d);
-  Gtk::Widget& image_widget(string filename);
+  Gtk::Widget& image_widget(const string& filename);
+  //  Gtk::Widget& image_widget(const Gtk::StockID& stockid);
   Glib::ustring short_filename(const Glib::ustring& filename);
   Gtk::Tooltips& tooltips();
   bool& driverlist_modified();

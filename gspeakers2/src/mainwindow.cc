@@ -97,7 +97,7 @@ MainWindow::MainWindow()
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), m_file_menu) );
   m_file_menu.signal_expose_event().connect(mem_fun(*this, &MainWindow::on_edit_menu_expose_event));
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Edit"), m_edit_menu) );
-  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Drivers"), speaker_editor.get_menu() ) );
+  m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Driver"), speaker_editor.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("E_nclosure"), enclosure_paned.get_menu() ) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Crossover"), crossover_paned.get_menu()) );
   m_menubar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Help"), m_help_menu) );
@@ -142,9 +142,9 @@ MainWindow::MainWindow()
 
 bool MainWindow::on_delete_event(GdkEventAny *event)
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << endl;  
-#endif
+// #ifdef OUTPUT_DEBUG
+//   cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << endl;  
+// #endif
   using namespace GSpeakers;
 
   /* Popup dialog and ask if user want to save changes */
@@ -205,9 +205,9 @@ bool MainWindow::on_delete_event(GdkEventAny *event)
 
 void MainWindow::on_quit()
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_quit: do you want to save unsaved documents?" << endl;  
-#endif
+// #ifdef OUTPUT_DEBUG
+//   cout << "MainWindow::on_quit: do you want to save unsaved documents?" << endl;  
+// #endif
   
   using namespace GSpeakers;
 
@@ -306,9 +306,6 @@ void MainWindow::on_save_all()
 
 bool MainWindow::on_edit_menu_expose_event(GdkEventExpose *event)
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_filemenu_popup" << endl;
-#endif
   /* Check whether to ungrey "save all" menuitem or not */
   using namespace GSpeakers;
   if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() || meassurementlist_modified()) {
@@ -323,9 +320,9 @@ bool MainWindow::on_edit_menu_expose_event(GdkEventExpose *event)
 
 void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_switch_page" << endl;
-#endif
+// #ifdef OUTPUT_DEBUG
+//   cout << "MainWindow::on_switch_page" << endl;
+// #endif
   if (in_quit_phase == false) {
     switch (page_num) {
       case NOTEBOOK_PAGE_DRIVERS:
@@ -367,9 +364,6 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num)
 
 void MainWindow::on_about()
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::about" << endl;
-#endif
   Gtk::MessageDialog m(*this, "GSpeakers-" + string(VERSION) + 
                        "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net", false, 
                        Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
@@ -378,9 +372,6 @@ void MainWindow::on_about()
 
 void MainWindow::on_edit_settings()
 {
-#ifdef OUTPUT_DEBUG
-  cout << "MainWindow::on_edit_settings" << endl;
-#endif
   SettingsDialog *d = new SettingsDialog();
   d->run();
   delete d;

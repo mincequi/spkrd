@@ -98,8 +98,8 @@ protected:
   Gtk::Entry m_ImpEntry, m_SensEntry, m_FreqRespFileEntry, m_ImpRespFileEntry;
   Gtk::CheckButton m_BassCheckButton, m_MidrangeCheckButton, m_TweeterCheckButton;
   Gtk::Entry m_MmdEntry, m_AdEntry, m_BlEntry, m_RmsEntry, m_CmsEntry;
-  Gtk::VBox m_vbox, m_treeview_vbox, m_inner_vbox, m_inner_treeview_vbox;
-  Gtk::Frame m_treeview_frame, m_editor_frame;
+  Gtk::VBox m_vbox, m_treeview_vbox, m_inner_treeview_vbox;
+  Gtk::Frame m_treeview_frame;
   
   Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
   Gtk::Menu m_menu;
@@ -130,11 +130,11 @@ protected:
     Gtk::TreeModelColumn<double>        bl;
     Gtk::TreeModelColumn<double>        rms;
     Gtk::TreeModelColumn<double>        cms;
-    
+    Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
 
     ModelColumns() { add(id); add(type); add(id_string); add(qts); add(fs); add(vas); 
                      add(rdc); add(lvc); add(qms); add(qes); add(imp); add(sens); 
-                     add(mmd); add(ad);  add(bl); add(rms); add(cms); }
+                     add(mmd); add(ad);  add(bl); add(rms); add(cms); add(freq_resp_file); }
   };
   
   /* vaious helper varaibles */

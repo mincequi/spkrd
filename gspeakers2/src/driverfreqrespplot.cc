@@ -28,7 +28,7 @@ DriverFreqRespPlot::DriverFreqRespPlot() :
   plot(1, 20000, 50, 110, true, 0, true)
 {
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Driver frequency response and impedance")) + "</b>");
+  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Frequency response and impedance")) + "</b>");
   set_border_width(5);
   sw.add(plot);
   sw.set_border_width(12);

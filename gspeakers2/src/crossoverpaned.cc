@@ -81,58 +81,83 @@ Gtk::Menu& CrossoverPaned::get_menu()
   Gtk::Menu::MenuList& sub_menulist = new_crossover_submenu->items();
   
   /* New crossover submenu */
-  //sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Driver"), GSpeakers::image_widget("stock_new_driver_16.png"), 
-  //                  mem_fun(*this, &CrossoverHistory::on_new) ) );
-  //sub_menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _lowpass crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"), 
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_LOWPASS) ) );
+			    *im, 
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_LOWPASS) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _subsonic crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action) , CROSSOVER_TYPE_SUBSONIC) ) );
+                            *im,
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action) , 
+				      CROSSOVER_TYPE_SUBSONIC) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _highpass crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_HIGHPASS) ) );
+                            *im,
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_HIGHPASS) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _2-way crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_TWOWAY) ) );
+                            *im,
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_TWOWAY) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New 2._5-way crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
+                            *im,
                             bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
 				      CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _3-way crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_THREEWAY) ) );
+                            *im,
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_THREEWAY) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _4-way crossover"), 
-                            GSpeakers::image_widget("stock_new_crossover_16.png"),
-                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), CROSSOVER_TYPE_FOURWAY) ) );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Crossover"), GSpeakers::image_widget("stock_new_crossover_16.png"), 
-                                                       *new_crossover_submenu) );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New _Copy"), GSpeakers::image_widget("stock_new_crossover_copy_16.png"), 
-                                                       mem_fun(crossover_history, &CrossoverHistory::on_new_copy)) );
-  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New"), GSpeakers::image_widget("stock_new_crossover_xml_16.png"), 
-                                                       mem_fun(crossover_history, &CrossoverHistory::on_new_xml)) );
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend to Crossover Xml..."), mem_fun(crossover_history, 
-											 &CrossoverHistory::on_append_xml)) );
+                            *im,
+                            bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action), 
+				      CROSSOVER_TYPE_FOURWAY) ) );
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_New crossover"), *new_crossover_submenu) );
 
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), GSpeakers::image_widget("open_xml_16.png"),  
+  im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Copy"), *im, 
+                                                       mem_fun(crossover_history, &CrossoverHistory::on_new_copy)) );
+
+  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+
+  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("New"), *im, 
+                                                       mem_fun(crossover_history, &CrossoverHistory::on_new_xml)) );
+
+  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Crossover Xml..."), 
+						  mem_fun(crossover_history, &CrossoverHistory::on_append_xml)) );
+
+  im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open"), *im,  
                                                         mem_fun(crossover_history, &CrossoverHistory::on_open_xml)) );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"), GSpeakers::image_widget("save_xml_16.png"),  
+
+  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+
+  im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"), *im,  
                                                         mem_fun(crossover_history, &CrossoverHistory::on_save)) );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As"), GSpeakers::image_widget("save_as_xml_16.png"),  
+
+  im = manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As"), *im,  
                                                         mem_fun(crossover_history, &CrossoverHistory::on_save_as)) );
+
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Delete"), GSpeakers::image_widget("delete_crossover_16.png"),  
-                                                        mem_fun(crossover_history, &CrossoverHistory::on_remove)) );
+
+  im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Delete"), *im,  
+						       mem_fun(crossover_history, &CrossoverHistory::on_remove)) );
+
   menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Plot"), GSpeakers::image_widget("stock_plot_crossover_16.png"), 
+
+  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Plot"), 
+						       GSpeakers::image_widget("stock_plot_crossover_16.png"), 
                                                        mem_fun(*this, &CrossoverPaned::on_plot_crossover)) );
   
-  //menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("Update crossover"), mem_fun(*this, &MainWindow::on_update_crossover)) );
-  //menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_Plot crossover"), mem_fun(*this, &MainWindow::on_plot_crossover)) );
-
-
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
   //menulist[MENU_INDEX_DELETE].set_sensitive(false);
   return m_menu;
@@ -145,44 +170,39 @@ Gtk::Widget& CrossoverPaned::get_toolbar()
   if (m_tbar == NULL) {
     m_tbar = manage(new Gtk::Toolbar());
     
-    Gtk::ToolButton *t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_new_crossover_copy_24.png"), _("Copy")));
+    Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    Gtk::ToolButton *t = manage(new Gtk::ToolButton(*im, _("Copy")));
     t->signal_clicked().connect(mem_fun(crossover_history, &CrossoverHistory::on_new_copy));
     m_tbar->append( *t );    
+
     Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
     m_tbar->append( *s );
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("open_xml_24.png"), _("Open")));
+
+    im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = manage(new Gtk::ToolButton(*im, _("Open")));
     t->signal_clicked().connect(mem_fun(crossover_history, &CrossoverHistory::on_open_xml));
     m_tbar->append( *t );    
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("save_xml_24.png"), _("Save")));
+
+    im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = manage(new Gtk::ToolButton(*im, _("Save")));
     t->signal_clicked().connect(mem_fun(crossover_history, &CrossoverHistory::on_save));
     m_tbar->append( *t );    
+
     s = manage(new Gtk::SeparatorToolItem() );
     m_tbar->append( *s );
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_crossover_24.png"), _("Delete")));
+
+    im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = manage(new Gtk::ToolButton(*im, _("Delete")));
     t->signal_clicked().connect(mem_fun(crossover_history, &CrossoverHistory::on_remove));
     m_tbar->append( *t );    
+
     s = manage(new Gtk::SeparatorToolItem() );
     m_tbar->append( *s );
+
     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("stock_plot_crossover_24.png"), _("Plot")));
     t->signal_clicked().connect(mem_fun(*this, &CrossoverPaned::on_plot_crossover));
     m_tbar->append( *t );    
     
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Copy"), GSpeakers::image_widget("stock_new_crossover_copy_24.png"), 
-//                             mem_fun(crossover_history, &CrossoverHistory::on_new_copy), _("Create new crossover copy")) );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("New"), GSpeakers::image_widget("stock_new_crossover_xml_24.png"), 
-//                             mem_fun(crossover_history, &CrossoverHistory::on_new_xml), _("Create new crossover xml (list)")) );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Open"), GSpeakers::image_widget("open_xml_24.png"),
-//                             mem_fun(crossover_history, &CrossoverHistory::on_open_xml), _("Open crossover xml (list)")) );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Save"), GSpeakers::image_widget("save_xml_24.png"),   
-//                             mem_fun(crossover_history, &CrossoverHistory::on_save), _("Save crossover xml (list)")) );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Delete"), GSpeakers::image_widget("delete_crossover_24.png"),
- //                            mem_fun(crossover_history, &CrossoverHistory::on_remove), _("Delete currently selected crossover")) );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::Space() );
-//    m_tbar->tools().push_back( Gtk::Toolbar_Helpers::ButtonElem(_("Plot"), GSpeakers::image_widget("stock_plot_crossover_24.png"), 
-//                             mem_fun(*this, &CrossoverPaned::on_plot_crossover), _("Plot frequency response for currently selected crossover")) );
-
     m_toolbar.add(*m_tbar);
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);

@@ -1,3 +1,9 @@
+GSpeakers-0.11.1
+
+* UI cleanups in the Speaker editor
+
+* Use gtk+ icons
+
 GSpeakers-0.11
 
 * GSpeakers can now build and run on Windows and Mac-OSX
