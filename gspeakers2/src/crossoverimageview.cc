@@ -31,7 +31,11 @@ CrossoverImageView::CrossoverImageView()
   
   visible = false;
   crossover = NULL;
+  g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
+  scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
+  g_settings.settings_changed.connect(slot(*this, &CrossoverImageView::on_settings_changed));
   signal_crossover_selected.connect(slot(*this, &CrossoverImageView::on_crossover_selected));
+  signal_net_modified_by_wizard.connect(slot(*this, &CrossoverImageView::on_net_modified));
   signal_speakerlist_loaded.connect(slot(*this, &CrossoverImageView::on_speakerlist_selected));
 }
 
@@ -138,12 +142,15 @@ void CrossoverImageView::redraw()
         if (net_vector[i].get_has_imp_corr() == true) net_horz_devider++;
         if (net_vector[i].get_has_damp() == true)     net_horz_devider += 2;
         int part_width = GSpeakers::round(double(window_width) / double(net_horz_devider));
-        if ((part_width > (1.5 * part_height)) && (net_vector[i].parts()->size() <= 4)) {
-          part_width = part_height;
-        } else if (part_width > 3 * part_height) {
-          part_width = GSpeakers::round(1.7 * part_height);
+        
+        if (scale_image_parts == true) {
+          if ((part_width > (1.5 * part_height)) && (net_vector[i].parts()->size() <= 4)) {
+            part_width = part_height;
+          } else if (part_width > 3 * part_height) {
+            part_width = GSpeakers::round(1.7 * part_height);
+          }
+          //if ((part_height > (1.5 * part_width)) || (net_vector[i].parts()->size() > 4)) part_height = part_width;
         }
-        //if ((part_height > (1.5 * part_width)) || (net_vector[i].parts()->size() > 4)) part_height = part_width;
         
         draw_connector(0, i * vert_space_per_net, part_width, part_height, true);
         draw_connector(0, i * vert_space_per_net + 2 * part_height, part_width, part_height, false);
@@ -196,6 +203,18 @@ void CrossoverImageView::redraw()
   }
 }
 
+void CrossoverImageView::on_settings_changed(const std::string& s)
+{
+  if (s == "ScaleCrossoverImageParts") {
+    scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
+    if (visible == true) {
+      redraw();
+      Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
+      get_window()->invalidate_rect(update_rect, true);
+    }
+  }
+}
+
 void CrossoverImageView::on_crossover_selected(Crossover *selected_crossover)
 {
   crossover = selected_crossover;
@@ -204,6 +223,11 @@ void CrossoverImageView::on_crossover_selected(Crossover *selected_crossover)
     Gdk::Rectangle update_rect(0, 0, get_allocation().width, get_allocation().height);
     get_window()->invalidate_rect(update_rect, true);
   }
+}
+
+void CrossoverImageView::on_net_modified()
+{
+  if (crossover != NULL) on_crossover_selected(crossover);
 }
 
 void CrossoverImageView::on_speakerlist_selected(SpeakerList *selected_speaker_list)

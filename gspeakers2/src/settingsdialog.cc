@@ -30,6 +30,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_disable_filter_amp(_("Disable filter amplification")), 
   m_save_mainwindow_size(_("Save main window size")),
   m_save_mainwindow_position(_("Save main window position")),
+  m_scale_crossover_image_parts(_("Scale components in crossover visual view")),
   m_toolbar_style()
 {
   m_file_selection = NULL;
@@ -80,6 +81,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   Gtk::Table *crossover_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 1, true));
   crossover_table->attach(m_autoupdate_filter_plots, 0, 3, 0, 1);  
   crossover_table->attach(m_disable_filter_amp, 0, 3, 1, 2);
+  crossover_table->attach(m_scale_crossover_image_parts, 0, 3, 2, 3);
   m_main_notebook.append_page(*crossover_table, _("Crossovers"));
       
   show_all();
@@ -92,6 +94,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog(_("GSpeakers settings..."), true,
   m_save_mainwindow_size.set_active(g_settings.getValueBool("SetMainWindowSize"));
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
   m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
+  m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
 }
 
 SettingsDialog::~SettingsDialog() 
@@ -114,6 +117,7 @@ void SettingsDialog::on_apply()
   g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
   g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
   g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
+  g_settings.setValue("ScaleCrossoverImageParts", m_scale_crossover_image_parts.get_active());
   
   try {
     g_settings.save();

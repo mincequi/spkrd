@@ -1,5 +1,51 @@
 GSpeakers ChangeLog
 
+2003-01-25
+
+* More 0.9 preparations
+
+* speakereditor.cc: changed from 4 to 3 decimals on vsa display
+
+* settingsdialog.h/cc, crossoverimageview.h/cc: config option for parts 
+    autoscale
+
+2003-01-24
+
+* Prepared for 0.9 release
+
+2003-01-23
+
+* crossoverimageview.h/cc: draw_highpass done, some small adjustments and 
+    a few new methods: draw_imp_corr_net, draw_damp_net and draw_driver, 
+    implementation of scaling crossover image view is now done
+
+2003-01-22
+
+* crossoverimageview.h/cc: various small fixes in the component drawing
+
+2003-01-21
+
+* crossoverimageview.h/cc: added lowpassfilter drawing method
+
+2003-01-20
+
+* crossoverimageview.h/cc: midrange, tweeter and resistor done, added corner 
+    and t-cross segment
+
+2003-01-18
+
+* crossoverimageview.h/cc: inductor done, added draw_connector (done), woofer 
+    (done), midrange and tweeter
+
+2003-01-16
+
+* crossoverimageview.h/cc: added horizontal view of inductor
+
+2003-01-15
+
+* crossoverimageview.h/cc: added a few methods, implemented scalable and 
+    rotatable draw_capacitor method
+
 2003-01-14
 
 * crossoverimageview.h/cc: added crossover image view class, a visual view 

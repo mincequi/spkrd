@@ -30,6 +30,7 @@
 #include <pangomm/layout.h>
 #include <gdkmm/color.h>
 #include <vector>
+#include <string>
 #include "crossover.h"
 #include "speakerlist.h"
 
@@ -47,7 +48,9 @@ private:
 
   void on_crossover_selected(Crossover *selected_crossover);
   void on_speakerlist_selected(SpeakerList *selected_speaker_list);
-  
+  void on_net_modified();
+  void on_settings_changed(const std::string& s);
+
   void redraw();
 
   /*
@@ -82,6 +85,7 @@ private:
 
 
   bool visible;
+  bool scale_image_parts;
 
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;

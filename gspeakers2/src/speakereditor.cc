@@ -426,7 +426,7 @@ void Speaker_ListStore::on_selection_changed()
       m_QtsEntry.set_text(Glib::ustring(buffer->str));
       g_string_printf(buffer, "%1.0f", s.get_fs());
       m_FsEntry.set_text(Glib::ustring(buffer->str));
-      g_string_printf(buffer, "%1.4f", s.get_vas());
+      g_string_printf(buffer, "%1.3f", s.get_vas());
       m_VasEntry.set_text(Glib::ustring(buffer->str));
       g_string_printf(buffer, "%1.1f", s.get_rdc());
       m_RdcEntry.set_text(Glib::ustring(buffer->str));
@@ -1139,7 +1139,7 @@ void Speaker_ListStore::fs_cell_data_func(Gtk::CellRenderer *cell, const Gtk::Tr
 void Speaker_ListStore::vas_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter)
 {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vas], 3, 4) + " l";
+  renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vas], 3, 3) + " l";
 	renderer.property_xalign() = 1.0;	
 }
 

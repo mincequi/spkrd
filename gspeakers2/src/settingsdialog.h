@@ -38,7 +38,7 @@ private:
   Gtk::CheckButton m_autoupdate_filter_plots;
   Gtk::CheckButton m_draw_driver_imp_plot, m_draw_driver_freq_resp_plot, m_disable_filter_amp;
   Gtk::CheckButton m_save_mainwindow_size, m_save_mainwindow_position;
-  
+  Gtk::CheckButton m_scale_crossover_image_parts;
 
   Gtk::OptionMenu m_toolbar_style;
 
