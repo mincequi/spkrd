@@ -56,7 +56,13 @@ CrossoverPaned::~CrossoverPaned()
   g_settings.setValue("CrossoverPaned1Position", get_position());
   g_settings.setValue("CrossoverPaned2Position", m_hpaned2.get_position());
   g_settings.setValue("CrossoverPlotVPanedPosition", m_vpaned.get_position());
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "CrossoverPaned::~CrossoverPaned: " << e.what() << endl;
+#endif
+  }
 }
 
 Gtk::Menu& CrossoverPaned::get_menu()
@@ -161,7 +167,14 @@ void CrossoverPaned::on_plot_crossover()
 void CrossoverPaned::on_settings_changed(const string& s)
 {
   if (s == "ToolbarStyle") {
+#ifndef TARGET_WIN32  
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+#endif
+  }
+  if (s == "AutoUpdateFilterPlots") {
+    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+      on_plot_crossover();
+    }
   }
 }
 

@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
     cout << "Main: " << e.what() << endl;
 #endif
 #ifdef TARGET_WIN32
-    Gtk::MessageDialog md("No configuration file found!\n\n" + "gspeakers2.conf created in current directory", 
+    Gtk::MessageDialog md("No configuration file found!\n\ngspeakers2.conf created in current directory", 
                           Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
 #else
     Gtk::MessageDialog md("No configuration file found!\n\n" + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf created", 
@@ -50,7 +50,7 @@ int main (int argc, char *argv[])
     md.run();
 #ifdef TARGET_WIN32
     // Is touch a valid windows command???
-    s = "touch gspeakers2.conf";
+    string s = "touch gspeakers2.conf";
     system(s.c_str());
     g_settings.load("gspeakers2.conf");
 #else
@@ -79,7 +79,13 @@ int main (int argc, char *argv[])
   kit.run(mw);
 //  cout << c1;
   /* save settings */
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "Main: " << e.what() << endl;
+#endif
+  }
 
   //Net n;
   //n.set_has_imp_corr(true);

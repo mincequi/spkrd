@@ -65,7 +65,13 @@ EnclosurePaned::~EnclosurePaned()
   g_settings.setValue("BoxMainPanedPosition", get_position());
   g_settings.setValue("BoxEditPanedPosition", m_edit_vpaned.get_position());
   g_settings.setValue("BoxPlotPanedPosition", m_plot_vpaned.get_position());
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "Main: " << e.what() << endl;
+#endif
+  }
 }
 
 Gtk::Menu& EnclosurePaned::get_menu()
@@ -145,7 +151,9 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
 void EnclosurePaned::on_settings_changed(const string& s)
 {
   if (s == "ToolbarStyle") {
+#ifndef TARGET_WIN32
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+#endif
   }
 }
 

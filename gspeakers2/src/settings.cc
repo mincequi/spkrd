@@ -19,6 +19,7 @@
  */
 
 #include "settings.h"
+#include "../config.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -96,6 +97,9 @@ void Settings::save(const string& filename)
   of.close();
 
   // swap over temporary file to real file
+#ifdef TARGET_WIN32
+  remove( filename.c_str() );
+#endif
   if ( rename( tempfilename.c_str(), filename.c_str() ) == -1 ) {
     ostringstream ostr;
     ostr << "Settings::save: Failed renaming temporary file to replace old file: "
@@ -138,6 +142,9 @@ void Settings::save()
   of.close();
 
   // swap over temporary file to real file
+#ifdef TARGET_WIN32
+  remove( m_filename.c_str() );
+#endif
   if ( rename( tempfilename.c_str(), m_filename.c_str() ) == -1 ) {
     ostringstream ostr;
     ostr << "Settings::save: Failed renaming temporary file to replace old file: "

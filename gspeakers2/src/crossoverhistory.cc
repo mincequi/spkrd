@@ -35,7 +35,11 @@ CrossoverHistory::CrossoverHistory() :
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   
+#ifdef TARGET_WIN32
+  g_settings.defaultValueString("CrossoverListXml", "crossover1.xml");
+#else
   g_settings.defaultValueString("CrossoverListXml", string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
+#endif
   m_filename = g_settings.getValueString("CrossoverListXml");
   
   m_crossover_list = CrossoverList(m_filename); 
@@ -95,7 +99,14 @@ void CrossoverHistory::on_part_modified() {
 CrossoverHistory::~CrossoverHistory()
 {
   g_settings.setValue("CrossoverListXml", m_filename);
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << e.what() << endl;
+#endif
+  }
+
 }
 
 void CrossoverHistory::on_open_xml()
@@ -210,7 +221,9 @@ void CrossoverHistory::on_selection_changed()
       index = indices[0];
       signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));
       /* Plot the crossover immediately after we selected it */
-      signal_plot_crossover();
+      if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+        signal_plot_crossover();
+      }
     }
   } 
 }

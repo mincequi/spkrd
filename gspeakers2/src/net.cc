@@ -417,8 +417,12 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
 string Net::to_SPICE(Speaker& s)
 {
   string tmp_dir = Glib::get_tmp_dir();
+#ifdef TARGET_WIN32
+  string tmp_file = tmp_dir + "\\net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
+#else
   string tmp_file = tmp_dir + "/net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
-  
+#endif
+
   int node_counter = 0;
   int part_index = 0;
   int next_node_cnt_inc = 1;

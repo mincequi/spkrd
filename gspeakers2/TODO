@@ -98,3 +98,6 @@ the structure in the program, some are important due to the UI experience.
 * Settings dialog should apply changes "on the fly"
 
 * GSpeakers should ask if you want to save changes
+
+* Maybe a configurable (on/off) splash screen, since loading the program takes 
+    a little while

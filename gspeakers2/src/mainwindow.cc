@@ -59,7 +59,7 @@ MainWindow::MainWindow()
   g_settings.defaultValueBool("SetMainWindowPosition", false);
   g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
   g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
-  g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
+  g_settings.defaultValueBool("AutoUpdateFilterPlots", false);
   g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
   g_settings.defaultValueString("SPICECmdLine", "spice3");  
   
@@ -208,7 +208,13 @@ void MainWindow::on_quit()
   g_settings.setValue("MainNotebookPage", m_main_notebook.get_current_page());
 
   /* finally save settings */
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "MainWindow::on_quit " << e.what() << endl;
+#endif
+  }
 }
 
 void MainWindow::on_about()

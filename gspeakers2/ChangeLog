@@ -1,6 +1,20 @@
 GSpeakers ChangeLog
 
+2002-10-03
+
+* Prepared for 0.8.1 bugfix release
+
+* Fixed a couple of minor bugs, reconnected callback to two buttons in the 
+    speaker editor, added some win32 #ifdef stuff
+
 2002-10-02
+
+* crossoverhistory.cc: check for "AutoUpdateFilterPlots" config before drawing 
+    plot when a new crossover is selected
+
+* added try/catch around Settings::save
+
+* settings.cc: added remove before rename when compiling on windows
 
 * Removed intl stuff from configure.in, added --enable-win32 configure time option
 

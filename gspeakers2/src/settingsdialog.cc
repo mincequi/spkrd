@@ -26,6 +26,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   m_spice_browse_button("Browse..."),
   m_autoupdate_filter_plots("Automaticly update crossover plots when a parameter has changed"),
   m_draw_driver_imp_plot("Draw driver impedance plot"),
+  m_draw_driver_freq_resp_plot("Draw driver frequency response plot"), 
   m_disable_filter_amp("Disable filter amplification"), 
   m_save_mainwindow_size("Save main window size"),
   m_save_mainwindow_position("Save main window position"),
@@ -71,8 +72,8 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
 
   /* Driver page */
   Gtk::Table *driver_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 1, true));
-  g_settings.defaultValueBool("DrawDriverImpPlot", true);
   driver_table->attach(m_draw_driver_imp_plot, 0, 3, 0, 1);
+  driver_table->attach(m_draw_driver_freq_resp_plot, 0, 3, 1, 2);
   m_main_notebook.append_page(*driver_table, "Drivers");
   
   /* Crossover page */
@@ -86,6 +87,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   m_spice_path_entry->set_text(g_settings.getValueString("SPICECmdLine"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
+  m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
   m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
   m_save_mainwindow_size.set_active(g_settings.getValueBool("SetMainWindowSize"));
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
@@ -108,11 +110,18 @@ void SettingsDialog::on_apply()
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
   g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
   g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
+  g_settings.setValue("DrawDriverFreqRespPlot", m_draw_driver_freq_resp_plot.get_active());
   g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
   g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
   g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
   
-  g_settings.save();
+  try {
+    g_settings.save();
+  } catch (std::runtime_error e) {
+#ifdef OUTPUT_DEBUG
+    cout << "SettingsDialog::on_apply " << e.what() << endl;
+#endif
+  }
 }
 
 void SettingsDialog::on_close()

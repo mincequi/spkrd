@@ -33,8 +33,12 @@ BoxHistory::BoxHistory() :
     
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-  
+
+#ifdef TARGET_WIN32
+  g_settings.defaultValueString("BoxListXml", "box1.xml");
+#else
   g_settings.defaultValueString("BoxListXml", string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
+#endif
   m_filename = g_settings.getValueString("BoxListXml");
 #ifdef __OUTPUT_DEBUG
   cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << endl;
