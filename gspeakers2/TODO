@@ -77,3 +77,5 @@ the structure in the program, some are important due to the UI experience.
 * Clean up temp dir after SPICE execution
 
 * SpeakerEditor: select next (or previous) listitem on remove
+
+* SpeakerEditor: code cleanup

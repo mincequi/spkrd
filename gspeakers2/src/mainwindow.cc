@@ -29,9 +29,12 @@ MainWindow::MainWindow() :
   m_box_hpaned(),
   m_box_edit_vpaned(),
   m_box_plot_vpaned(),
+  m_driver_hpaned(),
+  m_driver_vpaned(),
   m_crossover_hpaned1(),
   m_crossover_hpaned2(),
   m_crossover_vpaned(),
+
   m_crossover_plot_notebook(),
   
   box_editor(),
@@ -42,9 +45,9 @@ MainWindow::MainWindow() :
   
   crossover_wizard(),
   
-  speaker_list_selector(),
   //filter_plot(),
   box_plot(),
+  speaker_editor(),
   crossover_treeview(),
   
   crossover_history(),
@@ -106,7 +109,7 @@ MainWindow::MainWindow() :
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action) , CROSSOVER_TYPE_SUBSONIC) ) );
     menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _highpass crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_HIGHPASS) ) );
-        menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _2-way crossover", 
+    menulist.push_back( Gtk::Menu_Helpers::MenuElem("New _2-way crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_TWOWAY) ) );
     menulist.push_back( Gtk::Menu_Helpers::MenuElem("New 2._5-way crossover", 
                         bind<int>(slot(*this, &MainWindow::on_crossover_menu_action), CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY) ) );
@@ -131,12 +134,18 @@ MainWindow::MainWindow() :
   //Add the MenuBar to the window:
   m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
   
-  m_main_vbox.pack_start(speaker_list_selector, Gtk::PACK_SHRINK, Gtk::PACK_SHRINK);
-  
   m_main_vbox.pack_start(m_main_notebook);
   
   /* Driver tab */
-  m_main_notebook.append_page(*manage(new Gtk::Button), *manage(new TabWidget("driver_small.png", "Drivers")));
+  m_main_notebook.append_page(m_driver_hpaned, *manage(new TabWidget("driver_small.png", "Drivers")));
+  m_driver_hpaned.add1(speaker_editor.get_editor_table());
+  g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
+  g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
+  m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPosition"));
+  m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPosition"));
+  m_driver_hpaned.add2(m_driver_vpaned);
+  m_driver_vpaned.add1(*manage(new Gtk::Button()));
+  m_driver_vpaned.add2(speaker_editor.get_treeview_table());
   
   /* Enclosure etab */
   
@@ -223,6 +232,9 @@ void MainWindow::on_quit()
   g_settings.setValue("CrossoverPaned1Position", m_crossover_hpaned1.get_position());
   g_settings.setValue("CrossoverPaned2Position", m_crossover_hpaned2.get_position());
   g_settings.setValue("CrossoverPlotVPanedPosition", m_crossover_vpaned.get_position());
+  g_settings.setValue("DriverMainPanedPosition", m_driver_hpaned.get_position());
+  g_settings.setValue("DriverPlotPanedPosition", m_driver_vpaned.get_position());
+
 
   int width, height;
   get_size(width, height);

@@ -28,11 +28,13 @@ using namespace std;
 /* Prepare for future features */
 #define ENABLE_BROWSE_FILES 1
 
-class Speaker_ListStore : public Gtk::Window
+class Speaker_ListStore : public SigC::Object
 {
 public:
-  Speaker_ListStore(SpeakerList *speaker_list, const string &filename);
+  Speaker_ListStore();
   virtual ~Speaker_ListStore();
+  Gtk::Widget& get_treeview_table();
+  Gtk::Widget& get_editor_table();
 
 protected:
   /* callbacks */
@@ -51,7 +53,9 @@ protected:
   void on_save_as_ok(Gtk::FileSelection *f);
   void on_remove();
   void on_close();
-
+  void on_edit_freq_resp();
+  void on_browse_freq_resp();
+    
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();
@@ -59,20 +63,21 @@ protected:
   virtual void liststore_add_item(Speaker foo);
 
   //Member widgets:
-  Gtk::VBox m_VBox;
-  Gtk::HBox m_HBox;
+  Gtk::Table m_TreeViewTable;
   Gtk::Table m_Table;
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::Label m_Label;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::Button m_NewButton, m_NewXmlButton, m_AppendXmlButton, m_OpenXmlButton, m_CloseButton;
-  Gtk::Button m_BrowseFreqRespButton, m_BrowseImpRespButton, m_SaveButton, m_SaveAsButton, m_RemoveButton;
+  Gtk::Button m_BrowseImpRespButton, m_SaveButton, m_SaveAsButton, m_RemoveButton, 
+              m_EditFreqRespButton, m_BrowseFreqRespButton;
   Gtk::Entry m_IdStringEntry, m_QtsEntry, m_FsEntry, m_VasEntry, m_RdcEntry, m_LvcEntry, m_QmsEntry, m_QesEntry;
   Gtk::Entry m_ImpEntry, m_SensEntry, m_FreqRespFileEntry, m_ImpRespFileEntry;
   Gtk::CheckButton m_BassCheckButton, m_MidrangeCheckButton, m_TweeterCheckButton;
   Gtk::Entry m_MmdEntry, m_AdEntry, m_BlEntry, m_RmsEntry, m_CmsEntry;
-  
+  Gtk::VBox m_vbox, m_treeview_vbox, m_inner_vbox, m_inner_treeview_vbox;
+  Gtk::Frame m_treeview_frame, m_editor_frame;
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
   

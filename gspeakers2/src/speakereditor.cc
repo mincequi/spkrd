@@ -18,10 +18,9 @@
 #include "speakereditor.h"
 #include "common.h"
 
-Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& filename)
-: m_VBox(false, 8), 
-  m_HBox(false, 8), 
-  m_Table(20, 8, true), 
+Speaker_ListStore::Speaker_ListStore()
+: m_TreeViewTable(10, 4, true),
+  m_Table(20, 2, true), 
   m_NewButton("New speaker"), 
   m_NewXmlButton("New Xml"), 
   m_AppendXmlButton("Append xml..."), 
@@ -30,7 +29,11 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_SaveButton("Save"),
   m_SaveAsButton("Save as..."),
   m_RemoveButton("Remove"),
+  m_EditFreqRespButton("Edit..."),
+  m_BrowseFreqRespButton("..."),
+
   m_IdStringEntry(), 
+  
   m_QtsEntry(), 
   m_FsEntry(), 
   m_VasEntry(), 
@@ -40,6 +43,7 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_QesEntry(),
   m_ImpEntry(), 
   m_SensEntry(),
+  m_FreqRespFileEntry(),
   m_BassCheckButton("Bass"), 
   m_MidrangeCheckButton("Midrange"), 
   m_TweeterCheckButton("Tweeter"),
@@ -47,73 +51,109 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_AdEntry(),
   m_BlEntry(),
   m_RmsEntry(),
-  m_CmsEntry()
+  m_CmsEntry(),
+  m_vbox()
+
 #ifdef ENABLE_BROWSE_FILE
   m_FreqRespFileEntry(), 
   m_ImpRespFileEntry(),
 #endif  
   
-{ 
-  m_filename = filename;
+{
+  g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  m_filename = g_settings.getValueString("SpeakerListXml");
+  signal_speakerlist_loaded(m_filename);
   index = 0;
   changed = false;
-  m_speaker_list = speaker_list;
-  set_title("Speakereditor");
-  set_border_width(8);
-  set_default_size(600, 400);
-  set_modal();
-  add(m_Table);
+  m_speaker_list = new SpeakerList(m_filename);
+  m_treeview_vbox.set_border_width(5);
+  m_treeview_vbox.pack_start(m_treeview_frame);
+  m_treeview_frame.add(m_inner_treeview_vbox);
+  m_inner_treeview_vbox.set_border_width(5);
+  m_inner_treeview_vbox.pack_start(m_TreeViewTable);
+  m_treeview_frame.set_label(m_filename);
+  
+  //m_vbox.pack_start(m_Table);
+  m_vbox.set_border_width(5);
   m_Table.set_spacings(4);
+  m_vbox.pack_start(m_editor_frame);
+  m_editor_frame.add(m_inner_vbox);
+  m_inner_vbox.set_border_width(5);
+  m_inner_vbox.pack_start(m_Table);
+  m_editor_frame.set_label("Currently selected driver");
+  
+  /*
+  Gtk::Toolbar *toolbar = manage(new Gtk::Toolbar());
+  Gtk::HandleBox *handlebox = manage(new Gtk::HandleBox());
+  toolbar->tools().push_back(Gtk::Toolbar_Helpers::ButtonElem("New driver", 
+                                                              *manage(new Gtk::Image(Gdk::Pixbuf::create_from_file("../pixmaps/driver_small.png"))), 
+                                                              slot(*this, &Speaker_ListStore::on_new), "New driver", ""));
+  toolbar->tools().push_back(Gtk::Toolbar_Helpers::Space());
+  toolbar->tools().push_back(Gtk::Toolbar_Helpers::ButtonElem("New xml", 
+                                                              *manage(new Gtk::Image(Gdk::Pixbuf::create_from_file("../pixmaps/driver_small.png"))), 
+                                                              slot(*this, &Speaker_ListStore::on_new), "New driver xml", ""));
+  toolbar->set_toolbar_style(Gtk::TOOLBAR_ICONS);
+  handlebox->add(*toolbar);
+  m_TreeViewTable.attach(*handlebox, 0, 4, 8, 9);
+  */
   /* Setup the table */
-  m_Table.attach(m_ScrolledWindow, 0, 4, 0, 20);
+  m_TreeViewTable.set_spacings(4);
+  m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 8);
 
-  m_Table.attach(m_NewButton       , 4, 5, 18, 19);
-  m_Table.attach(m_NewXmlButton    , 5, 6, 18, 19);
-  m_Table.attach(m_AppendXmlButton , 6, 7, 18, 19);
-  m_Table.attach(m_OpenXmlButton   , 7, 8, 18, 19);
-  m_Table.attach(m_RemoveButton    , 4, 5, 19, 20);
-  m_Table.attach(m_SaveButton      , 5, 6, 19, 20);
-  m_Table.attach(m_SaveAsButton    , 6, 7, 19, 20);
-  m_Table.attach(m_CloseButton     , 7, 8, 19, 20);
+  m_TreeViewTable.attach(m_NewButton       , 0, 1, 8, 9);
+  m_TreeViewTable.attach(m_NewXmlButton    , 1, 2, 8, 9);
+  m_TreeViewTable.attach(m_AppendXmlButton , 2, 3, 8, 9);
+  m_TreeViewTable.attach(m_OpenXmlButton   , 3, 4, 8, 9);
+  m_TreeViewTable.attach(m_RemoveButton    , 0, 1, 9, 10);
+  m_TreeViewTable.attach(m_SaveButton      , 1, 2, 9, 10);
+  m_TreeViewTable.attach(m_SaveAsButton    , 2, 3, 9, 10);
+  //m_TreeViewTable.attach(m_CloseButton     , 3, 4, 9, 10);
   
   /* All the entries and stuff */
-  m_Table.attach(*manage(new Gtk::Label("Speaker name:", Gtk::ALIGN_LEFT)), 4, 5, 0, 1);
-  m_Table.attach(m_IdStringEntry, 5, 8, 0, 1);
-  m_Table.attach(*manage(new Gtk::Label("Qts:", Gtk::ALIGN_LEFT)), 4, 5, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
-  m_Table.attach(m_QtsEntry, 5, 8, 1, 2);
-  m_Table.attach(*manage(new Gtk::Label("Fs:", Gtk::ALIGN_LEFT)), 4, 5, 2, 3);
-  m_Table.attach(m_FsEntry, 5, 8, 2, 3);
-  m_Table.attach(*manage(new Gtk::Label("Vas: (l)", Gtk::ALIGN_LEFT)), 4, 5, 3, 4);
-  m_Table.attach(m_VasEntry, 5, 8, 3, 4);
-  m_Table.attach(*manage(new Gtk::Label("Rdc:", Gtk::ALIGN_LEFT)), 4, 5, 4, 5);
-  m_Table.attach(m_RdcEntry, 5, 8, 4, 5);
-  m_Table.attach(*manage(new Gtk::Label("Lvc:", Gtk::ALIGN_LEFT)), 4, 5, 5, 6);
-  m_Table.attach(m_LvcEntry, 5, 8, 5, 6);
-  m_Table.attach(*manage(new Gtk::Label("Qms:", Gtk::ALIGN_LEFT)), 4, 5, 6, 7);
-  m_Table.attach(m_QmsEntry, 5, 8, 6, 7);
-  m_Table.attach(*manage(new Gtk::Label("Qes:", Gtk::ALIGN_LEFT)), 4, 5, 7, 8);
-  m_Table.attach(m_QesEntry, 5, 8, 7, 8);
-  m_Table.attach(*manage(new Gtk::Label("Impedance:", Gtk::ALIGN_LEFT)), 4, 5, 8, 9);
-  m_Table.attach(m_ImpEntry, 5, 8, 8, 9);
-  m_Table.attach(*manage(new Gtk::Label("Sensitivity:", Gtk::ALIGN_LEFT)), 4, 5, 9, 10);
-  m_Table.attach(m_SensEntry, 5, 8, 9, 10);
+  m_Table.attach(*manage(new Gtk::Label("Speaker name:", Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
+  m_Table.attach(*manage(new Gtk::Label("Qts:", Gtk::ALIGN_LEFT)), 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND|Gtk::SHRINK);
+  m_Table.attach(m_QtsEntry, 1, 3, 1, 2);
+  m_Table.attach(*manage(new Gtk::Label("Fs:", Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
+  m_Table.attach(m_FsEntry, 1, 3, 2, 3);
+  m_Table.attach(*manage(new Gtk::Label("Vas: (l)", Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
+  m_Table.attach(m_VasEntry, 1, 3, 3, 4);
+  m_Table.attach(*manage(new Gtk::Label("Rdc:", Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
+  m_Table.attach(m_RdcEntry, 1, 3, 4, 5);
+  m_Table.attach(*manage(new Gtk::Label("Lvc:", Gtk::ALIGN_LEFT)), 0, 1, 5, 6);
+  m_Table.attach(m_LvcEntry, 1, 3, 5, 6);
+  m_Table.attach(*manage(new Gtk::Label("Qms:", Gtk::ALIGN_LEFT)), 0, 1, 6, 7);
+  m_Table.attach(m_QmsEntry, 1, 3, 6, 7);
+  m_Table.attach(*manage(new Gtk::Label("Qes:", Gtk::ALIGN_LEFT)), 0, 1, 7, 8);
+  m_Table.attach(m_QesEntry, 1, 3, 7, 8);
+  m_Table.attach(*manage(new Gtk::Label("Impedance:", Gtk::ALIGN_LEFT)), 0, 1, 8, 9);
+  m_Table.attach(m_ImpEntry, 1, 3, 8, 9);
+  m_Table.attach(*manage(new Gtk::Label("Sensitivity:", Gtk::ALIGN_LEFT)), 0, 1, 9, 10);
+  m_Table.attach(m_SensEntry, 1, 3, 9, 10);
 
-  m_Table.attach(*manage(new Gtk::Label("Cone mass: (kg)", Gtk::ALIGN_LEFT)), 4, 5, 10, 11);
-  m_Table.attach(m_MmdEntry, 5, 8, 10, 11);
-  m_Table.attach(*manage(new Gtk::Label("Effective radius: (m)", Gtk::ALIGN_LEFT)), 4, 5, 11, 12);
-  m_Table.attach(m_AdEntry, 5, 8, 11, 12);
-  m_Table.attach(*manage(new Gtk::Label("Force factor:", Gtk::ALIGN_LEFT)), 4, 5, 12, 13);
-  m_Table.attach(m_BlEntry, 5, 8, 12, 13);
-  m_Table.attach(*manage(new Gtk::Label("Susp. resistance:", Gtk::ALIGN_LEFT)), 4, 5, 13, 14);
-  m_Table.attach(m_RmsEntry, 5, 8, 13, 14);
-  m_Table.attach(*manage(new Gtk::Label("Susp. compleance:", Gtk::ALIGN_LEFT)), 4, 5, 14, 15);
-  m_Table.attach(m_CmsEntry, 5, 8, 14, 15);
+  m_Table.attach(*manage(new Gtk::Label("Cone mass: (kg)", Gtk::ALIGN_LEFT)), 0, 1, 10, 11);
+  m_Table.attach(m_MmdEntry, 1, 3, 10, 11);
+  m_Table.attach(*manage(new Gtk::Label("Effective radius: (m)", Gtk::ALIGN_LEFT)), 0, 1, 11, 12);
+  m_Table.attach(m_AdEntry, 1, 3, 11, 12);
+  m_Table.attach(*manage(new Gtk::Label("Force factor:", Gtk::ALIGN_LEFT)), 0, 1, 12, 13);
+  m_Table.attach(m_BlEntry, 1, 3, 12, 13);
+  m_Table.attach(*manage(new Gtk::Label("Susp. resistance:", Gtk::ALIGN_LEFT)), 0, 1, 13, 14);
+  m_Table.attach(m_RmsEntry, 1, 3, 13, 14);
+  m_Table.attach(*manage(new Gtk::Label("Susp. compleance:", Gtk::ALIGN_LEFT)), 0, 1, 14, 15);
+  m_Table.attach(m_CmsEntry, 1, 3, 14, 15);
 
-  m_Table.attach(m_BassCheckButton, 4, 8, 15, 16);
-  m_Table.attach(m_MidrangeCheckButton, 4, 8, 16, 17);
-  m_Table.attach(m_TweeterCheckButton, 4, 8, 17, 18);
+  m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
+  m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
+  m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
-
+  m_Table.attach(*manage(new Gtk::Label("Freq resp file:", Gtk::ALIGN_LEFT)), 0, 1, 18, 19);
+  m_Table.attach(m_FreqRespFileEntry, 1, 2, 18, 19);
+  Gtk::HBox *vbox = manage(new Gtk::HBox());
+  vbox->pack_start(m_BrowseFreqRespButton);
+  vbox->pack_start(m_EditFreqRespButton);
+  vbox->set_spacing(3);
+  m_Table.attach(*vbox, 2, 3, 18, 19);
+  
   m_NewXmlButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_new_xml));
   m_NewButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_new));
   m_AppendXmlButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_append_xml));
@@ -122,6 +162,8 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   m_SaveButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_save));
   m_SaveAsButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_save_as));
   m_RemoveButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_remove));
+  m_BrowseFreqRespButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_browse_freq_resp));
+  m_EditFreqRespButton.signal_clicked().connect(slot(*this, &Speaker_ListStore::on_edit_freq_resp));
   
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -168,19 +210,26 @@ Speaker_ListStore::Speaker_ListStore(SpeakerList *speaker_list, const string& fi
   f_append = NULL;
   f_open = NULL;
   f_save_as = NULL;
-  show_all();
   new_xml_pressed = false;
-  
 }
 
 Speaker_ListStore::~Speaker_ListStore()
 {
 }
 
+Gtk::Widget& Speaker_ListStore::get_treeview_table()
+{
+  return m_treeview_vbox;
+}
+
+Gtk::Widget& Speaker_ListStore::get_editor_table()
+{
+  return m_vbox;
+}
+
 void Speaker_ListStore::on_close()
 {
   signal_speakerlist_loaded(m_filename);
-  hide();
 }
 
 void Speaker_ListStore::set_entries_sensitive(bool value)
@@ -621,6 +670,21 @@ void Speaker_ListStore::on_open_ok(Gtk::FileSelection *f)
     m.run();
   }
 
+}
+
+void Speaker_ListStore::on_edit_freq_resp()
+{
+#ifdef OUTPUT_DEBUG
+  cout << "SpeakerEditor::on_edit_freq_resp" << endl;
+#endif
+
+}
+
+void Speaker_ListStore::on_browse_freq_resp()
+{
+#ifdef OUTPUT_DEBUG
+  cout << "SpeakerEditor::on_browse_freq_resp" << endl;
+#endif
 }
 
 

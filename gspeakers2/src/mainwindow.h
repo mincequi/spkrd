@@ -21,7 +21,6 @@
 #include <gtkmm.h>
 #include "common.h"
 #include "settings.h"
-#include "speakerlistselector.h"
 #include "gspeakersboxplot.h"
 #include "boxeditor.h"
 #include "plothistory.h"
@@ -31,6 +30,7 @@
 #include "crossoverwizard.h"
 #include "gspeakersfilterplot.h"
 #include "totalfilterplot.h"
+#include "speakereditor.h"
 
 class MainWindow : public Gtk::Window
 {
@@ -44,6 +44,8 @@ private:
   Gtk::HPaned m_box_hpaned;
   Gtk::VPaned m_box_edit_vpaned;
   Gtk::VPaned m_box_plot_vpaned;
+  Gtk::HPaned m_driver_hpaned;
+  Gtk::VPaned m_driver_vpaned;
 
   Gtk::HPaned m_crossover_hpaned1;
   Gtk::HPaned m_crossover_hpaned2;
@@ -64,10 +66,10 @@ private:
   PlotHistory plot_history;
   
   CrossoverWizard crossover_wizard;
-  SpeakerListSelector speaker_list_selector;
-  
 
   GSpeakersBoxPlot box_plot;
+
+  Speaker_ListStore speaker_editor;
 
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;  

@@ -105,7 +105,7 @@ crossoverlist.cc speaker.h speaker.cc speakerlist.h speakerlist.cc box.h \
 box.cc boxlist.h boxlist.cc speakereditor.h speakereditor.cc \
 cellitemcrossover.h cellitemcrossover.cc crossovertreeview.h \
 crossovertreeview.cc crossoverhistory.h crossoverhistory.cc \
-speakerlistselector.h speakerlistselector.cc boxeditor.h boxeditor.cc \
+boxeditor.h boxeditor.cc \
 boxhistory.h boxhistory.cc gspeakerscolor.h gspeakerscolor.cc \
 plothistory.h plothistory.cc gspeakersplot.h gspeakersplot.cc \
 gspeakersboxplot.h gspeakersboxplot.cc settings.h settings.cc \
@@ -130,10 +130,10 @@ LIBS = @LIBS@
 gspeakers_OBJECTS =  main.o common.o gspeakersobject.o part.o net.o \
 crossover.o crossoverlist.o speaker.o speakerlist.o box.o boxlist.o \
 speakereditor.o cellitemcrossover.o crossovertreeview.o \
-crossoverhistory.o speakerlistselector.o boxeditor.o boxhistory.o \
-gspeakerscolor.o plothistory.o gspeakersplot.o gspeakersboxplot.o \
-settings.o mainwindow.o crossoverwizard.o filterlinkframe.o \
-gspeakersfilterplot.o settingsdialog.o totalfilterplot.o tabwidget.o
+crossoverhistory.o boxeditor.o boxhistory.o gspeakerscolor.o \
+plothistory.o gspeakersplot.o gspeakersboxplot.o settings.o \
+mainwindow.o crossoverwizard.o filterlinkframe.o gspeakersfilterplot.o \
+settingsdialog.o totalfilterplot.o tabwidget.o
 gspeakers_LDADD = $(LDADD)
 gspeakers_DEPENDENCIES = 
 gspeakers_LDFLAGS = 
@@ -160,8 +160,7 @@ DEP_FILES =  .deps/box.P .deps/boxeditor.P .deps/boxhistory.P \
 .deps/gspeakersplot.P .deps/main.P .deps/mainwindow.P .deps/net.P \
 .deps/part.P .deps/plothistory.P .deps/settings.P \
 .deps/settingsdialog.P .deps/speaker.P .deps/speakereditor.P \
-.deps/speakerlist.P .deps/speakerlistselector.P .deps/tabwidget.P \
-.deps/totalfilterplot.P
+.deps/speakerlist.P .deps/tabwidget.P .deps/totalfilterplot.P
 SOURCES = $(gspeakers_SOURCES)
 OBJECTS = $(gspeakers_OBJECTS)
 
