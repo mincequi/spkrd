@@ -38,7 +38,8 @@
 #include "speakertoolbar.h"
 
 #define BOX_FRAME_SIZE 20
-#define N_VERTICAL_LINES 11
+#define N_VERTICAL_LINES 9
+#define UPPER_LIMIT 1000
 
 class GSpeakersPlot : public Gtk::DrawingArea {
   Gdk_GC       gc;
@@ -47,8 +48,9 @@ class GSpeakersPlot : public Gtk::DrawingArea {
   Gdk_Colormap colormap;
 public:
   GSpeakersPlot();
-  void add_plot(Box *b, Speaker *s, Gdk_Color *c);
+  void add_plot(double *dbmag, Gdk_Color *c);
   void remove_plot( int n );
+  void remove_all_plots();
   void redraw();
 
 protected:
@@ -72,6 +74,9 @@ protected:
      the corresponding colors (colors) */
   vector<double *> dbmag;
   vector<Gdk_Color *> colors;
+
+ private:
+  int round( double );
 
 };
 

@@ -55,6 +55,7 @@ class SimToolbar : public Gtk::HandleBox {
   void opt_box_clicked();
   void set_new_color();
   void about_clicked();
+  void rem_all_clicked();
 
   SpeakerToolbar *sbar;
   BoxToolbar *bbar;
@@ -66,6 +67,7 @@ class SimToolbar : public Gtk::HandleBox {
   Gtk::Button *rem_plot_button;
   Gtk::Button *opt_box_button;
   Gtk::Button *about_button;
+  Gtk::Button *rem_all_button;
  private:
   Gdk_Color *color;
   double red, green, blue;

@@ -65,3 +65,7 @@ int BoxList::remove_selected_row() {
 
   return r;
 }
+
+void BoxList::clear() {
+  clist->clear();
+}

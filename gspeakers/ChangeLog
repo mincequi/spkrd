@@ -1,5 +1,20 @@
-2001-12-13 23:28 sumpan
+2001-12-25 17:00 sumpan
 
+	* src/gspeakersplot.cc src/gspeakersplot.h: 
+	  added "remove all plots" and fixed crash on remove 
+	  last element in list
+	
+        * src/gspeakersplot.cc: cleaning up and generalisation
+	
+        * Removed some warnings in header-files
+	
+	* Moved frequency response calculations from GSpeakersPlot to
+	  SimToolbar
+	  src/simtoolbar.h src/simtoolbar.cc
+	  src/gspeakersplot.h src/gspeakersplot.cc
+
+2001-12-13 23:28 sumpan
+	
 	* Added installation stuff
 	  src/gnomespeakers.cc: Load config from ~/.gspeakers instead of ./
 

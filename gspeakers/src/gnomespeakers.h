@@ -58,4 +58,4 @@ protected:
   gint delete_event_impl(GdkEventAny* e);
 };
 
-#endif __GNOMESPEAKERSAPP
+#endif

@@ -30,7 +30,7 @@
 int 
 main(int argc, char* argv[])
 {
-  poptContext pctx;
+  //  poptContext pctx;
 
   Gnome::Main gnomeMain("Jagsmm", "0.1", argc, argv);
 

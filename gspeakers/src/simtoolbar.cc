@@ -43,7 +43,7 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   last_color = COLOR_BLUE;
 
   color = new Gdk_Color();
-  color->set_rgb( red, green, blue );
+  color->set_rgb_p( red, green, blue );
   blist = iblist;
 
   /* Toolbar buttons */
@@ -51,17 +51,20 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   sim_button->clicked.connect( slot( this, &SimToolbar::sim_clicked ) );
   rem_plot_button = manage( new Gtk::Button( "Remove Plot" ) );
   rem_plot_button->clicked.connect( slot( this, &SimToolbar::rem_plot_clicked ) );
+  rem_all_button = manage( new Gtk::Button( "Remove All Plots" ) );
+  rem_all_button->clicked.connect( slot( this, &SimToolbar::rem_all_clicked ) );
+
   opt_box_button = manage( new Gtk::Button( "Opt box" ) );
   opt_box_button->clicked.connect( slot( this, &SimToolbar::opt_box_clicked ) );
   about_button = manage( new Gtk::Button( "About" ) );
   about_button->clicked.connect( slot( this, &SimToolbar::about_clicked ) );
-
 
   /* The horizontal box */
   hbox = manage( new Gtk::HBox() );
   add( *hbox );
   hbox->pack_start( *sim_button, false, true );
   hbox->pack_start( *rem_plot_button, false, true );
+  hbox->pack_start( *rem_all_button, false, true );
   hbox->pack_start( *opt_box_button, false, true );
   hbox->pack_start( *about_button, false, true );
 }
@@ -74,18 +77,49 @@ SimToolbar::~SimToolbar() {
  * Plot a curve with current enclosure and speaker
  */
 void SimToolbar::sim_clicked() {
-  Box *box = bbar->get_box();
-  Speaker *speaker = sbar->get_speaker();
+  double *db_mag = new double[UPPER_LIMIT];
+  double A, B, C, D, fn2, fn4, fr, vr, qr, qb;
+
+  Box *b = bbar->get_box();
+  Speaker *s = sbar->get_speaker();
   set_new_color();
-  plot->add_plot( box, speaker, color );
+
+  /* Calculate the frequency response for the supplied speaker and box */
+  if ( b->type == PORTED ) {
+    
+    for (int f = 1; f < UPPER_LIMIT; f++) {
+      A = pow( ( b->fb1 / s->fs ), 2 );
+      B = A / s->qts + b->fb1 / ( 7 * s->fs * s->qts );
+      C = 1 + A + ( s->vas / b->vol1 ) + b->fb1 / ( 7 * s->fs * s->qts );
+      D = 1 / s->qts + b->fb1 / ( 7 * s->fs );
+      fn2 = pow( ( f / s->fs ), 2 );
+      fn4 = pow( fn2, 2 );
+      db_mag[f] = 10 * log10( pow( fn4, 2 ) / ( pow( ( fn4 - C * fn2 + A ), 2 ) + 
+					       fn2 * pow( ( D * fn2 - B), 2 ) ) );
+//        if (f < 200)
+//  	cout << db_mag[f] << ", ";
+    }
+
+  } else if ( b->type == SEALED ) {
+    for (int f = 1; f < UPPER_LIMIT; f++) {
+      fr = pow( ( f / b->fb1 ), 2 );
+      vr = s->vas / b->vol1;
+      qr = sqrt( vr + 1 );
+      qb = 1 / ( ( 1 / s->qts ) / qr + 0.1 );
+      db_mag[f] = 10 * log10( pow( fr, 2 ) / ( pow( ( fr - 1 ), 2 ) + fr / ( pow( qb, 2 ) ) ) );
+//        if (f < 200)
+//  	cout << db_mag[f] << ", ";
+    }
+  }
+  plot->add_plot( db_mag, color );
   
   /* Setup vector for clist-row */
   vector<string> v;
   /* First clist entry should be blank */
   v.push_back( "" );
-  v.push_back( box->name );
-  v.push_back( g_strdup_printf("%5.2f", box->vol1 ) );
-  v.push_back( g_strdup_printf("%5.2f", box->fb1 ) );
+  v.push_back( b->name );
+  v.push_back( g_strdup_printf("%5.2f", b->vol1 ) );
+  v.push_back( g_strdup_printf("%5.2f", b->fb1 ) );
 
   blist->add_row( v, color );
 }
@@ -97,6 +131,14 @@ void SimToolbar::rem_plot_clicked() {
   /* Get plot index from clist */
   int plot_nr = blist->remove_selected_row();
   plot->remove_plot( plot_nr );
+}
+
+/*
+ * Remove all plots from graph
+ */
+void SimToolbar::rem_all_clicked() {
+  blist->clear();
+  plot->remove_all_plots();
 }
 
 /*
