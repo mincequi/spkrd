@@ -34,6 +34,7 @@
 #include <gtk--/box.h>
 #include <gtk--/fileselection.h>
 #include <gtk--/eventbox.h>
+#include <gtk--/dialog.h>
 #include <libxml/tree.h>
 #include "gspeakerscfg.h"
 
@@ -77,6 +78,11 @@ class SpeakerToolbar : public Gtk::HandleBox {
   void set_toolbar_style( int style );
   vector<Speaker> get_all_speakers() { return spk_list; }
   void changed();
+  void import();
+  void import_ok_clicked();
+  void import_cancel_clicked();
+  void import_browse_ok();
+  void import_browse_cancel();
 
  private:
   void open_action( Gtk::FileSelection *s );

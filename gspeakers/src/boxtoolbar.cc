@@ -217,7 +217,7 @@ void BoxToolbar::open_action( Gtk::FileSelection *s ) {
   if ( i != string::npos ) {
     filename_entry->set_text( current_file.substr( i + 1 ) );
   }
-  cfg->tooltips->set_tip( *filename_entry, current_file );
+  cfg->tooltips->set_tip( *evbox, current_file );
 }
 
 /*

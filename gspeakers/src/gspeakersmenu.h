@@ -37,6 +37,7 @@
 #define SPEAKER_SAVE                   13
 #define SPEAKER_SAVE_AS                14
 #define SPEAKER_REMOVE                 15
+#define SPEAKER_IMPORT                 16
 
 #define BOX_NEW                        20
 #define BOX_NEW_XML                    21

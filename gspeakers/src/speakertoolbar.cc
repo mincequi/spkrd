@@ -498,3 +498,29 @@ void SpeakerToolbar::set_toolbar_style( int style ) {
 void SpeakerToolbar::changed() {
   save_button->set_sensitive( true );
 }
+
+void SpeakerToolbar::import() {
+//    if ( import_dialog != NULL ) {
+//      /* Create the dialog */
+//      cout << "import" << endl;
+//    }
+  
+  
+  
+}
+
+void SpeakerToolbar::import_ok_clicked() {
+  /* Import the file */
+}
+
+void SpeakerToolbar::import_cancel_clicked() {
+  /* Hide the dialog */
+}
+
+void SpeakerToolbar::import_browse_ok() {
+
+}
+
+void SpeakerToolbar::import_browse_cancel() {
+
+}

@@ -53,6 +53,8 @@ GSpeakersMenu::GSpeakersMenu( SpeakerToolbar *isbar, BoxToolbar *ibbar,
     list_speaker.push_back( MenuElem( "_Save", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SPEAKER_SAVE ) ) );
     list_speaker.push_back( MenuElem( "Save _as...", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SPEAKER_SAVE_AS ) ) );
     list_speaker.push_back( MenuElem( "_Delete", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SPEAKER_REMOVE ) ) );
+    list_speaker.push_back( SeparatorElem() );
+    list_speaker.push_back( MenuElem( "_Import...", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SPEAKER_IMPORT ) ) );
 
     /* Box/Enclosure menu */
     Menu *menu_box         = manage( new Menu());
@@ -64,6 +66,7 @@ GSpeakersMenu::GSpeakersMenu( SpeakerToolbar *isbar, BoxToolbar *ibbar,
     list_box.push_back( MenuElem( "Save _as...", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), BOX_SAVE_AS ) ) );
     list_box.push_back( MenuElem( "_Delete", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), BOX_REMOVE ) ) );
 
+    /* Plot menu */
     Menu *menu_simulate         = manage( new Menu());
     MenuList& list_simulate     = menu_simulate->items();
     list_simulate.push_back( MenuElem( "_Plot current speaker in current enclsure", "<control>p", bind<int>( slot( this, &GSpeakersMenu::item_activated_cb ), SIMULATE_PLOT ) ) );
