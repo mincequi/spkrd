@@ -58,6 +58,17 @@ private:
    * rotate = rotate this component 90 degrees
    */
   void draw_capacitor(int id, int x, int y, int width, int height, bool rotate = false);
+  void draw_inductor(int id, int x, int y, int width, int height, bool rotate = false);
+  void draw_resistor(int id, int x, int y, int width, int height, bool rotate = false);
+  void draw_connector(int x, int y, int width, int height, bool positive = true);
+  
+  void draw_t_cross(int x, int y, int width, int height, bool upper = true);
+  void draw_corner(int x, int y, int width, int height, bool upper = true);
+
+  void draw_woofer(int x, int y, int width, int height, bool positive_up = true);
+  void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
+  void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
+  
 
   bool visible;
 
@@ -67,6 +78,8 @@ private:
 
   Glib::RefPtr<Pango::Layout> m_refLayout;
   Gdk::Color black, white;
+  
+  Crossover *crossover;
 };
 
 #endif
