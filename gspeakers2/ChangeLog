@@ -1,5 +1,19 @@
 GSpeakers ChangeLog
 
+2002-09-10
+
+* settingsdialog.h/cc, mainwindow.cc: added config option 
+    use_advanced_speaker_model
+
+* speakereditor.h/cc: now we handle the new member variables in the speaker class
+
+* common.h: removed exception dependency
+
+2002-09-09
+
+* speaker.h/cc: added member variabled ad, bl, mmd, rms and cms, for 
+    speaker impedance calculations
+
 2002-09-08
 
 * Prepared for GSpeakers-0.5 release

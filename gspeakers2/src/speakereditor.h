@@ -71,6 +71,8 @@ protected:
   Gtk::Entry m_IdStringEntry, m_QtsEntry, m_FsEntry, m_VasEntry, m_RdcEntry, m_LvcEntry, m_QmsEntry, m_QesEntry;
   Gtk::Entry m_ImpEntry, m_SensEntry, m_FreqRespFileEntry, m_ImpRespFileEntry;
   Gtk::CheckButton m_BassCheckButton, m_MidrangeCheckButton, m_TweeterCheckButton;
+  Gtk::Entry m_MmdEntry, m_AdEntry, m_BlEntry, m_RmsEntry, m_CmsEntry;
+  
   
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
   
@@ -91,9 +93,16 @@ protected:
     Gtk::TreeModelColumn<double>        qes;
     Gtk::TreeModelColumn<double>        imp;
     Gtk::TreeModelColumn<double>        sens;
+    Gtk::TreeModelColumn<double>        mmd;
+    Gtk::TreeModelColumn<double>        ad;
+    Gtk::TreeModelColumn<double>        bl;
+    Gtk::TreeModelColumn<double>        rms;
+    Gtk::TreeModelColumn<double>        cms;
+    
 
     ModelColumns() { add(id); add(type); add(id_string); add(qts); add(fs); add(vas); 
-                     add(rdc); add(lvc); add(qms); add(qes); add(imp); add(sens); }
+                     add(rdc); add(lvc); add(qms); add(qes); add(imp); add(sens); 
+                     add(mmd); add(ad);  add(bl); add(rms); add(cms); }
   };
   
   /* vaious helper varaibles */

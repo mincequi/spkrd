@@ -20,7 +20,6 @@
 
 #include <string>
 #include <sigc++/sigc++.h>
-#include <exception>
 #include <gtkmm.h>
 #include <vector>
 #include <iostream>
@@ -44,7 +43,7 @@ class Net;
  *  We define a Exception class for our program just for fun (and consistancy)
  *
  */
-class GSpeakersException : public exception {
+class GSpeakersException {
   string _what;
 public:
   GSpeakersException(const string& what_arg): _what (what_arg) { }

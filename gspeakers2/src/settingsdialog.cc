@@ -22,6 +22,7 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   m_spice_browse_button("Browse..."),
   m_spice_path_entry(),
   m_autoupdate_filter_plots("Automaticly update crossover plots"),
+  m_use_advanced_speaker_model("Use advanced speaker SPICE model"),
   m_vbox()
 
 {
@@ -42,15 +43,16 @@ SettingsDialog::SettingsDialog() : Gtk::Dialog("GSpeakers settings...", true, tr
   hbox->pack_start(m_spice_path_entry);
   hbox->pack_start(m_spice_browse_button);
   m_vbox.pack_start(m_autoupdate_filter_plots);  
+  m_vbox.pack_start(m_use_advanced_speaker_model);
   m_spice_browse_button.signal_clicked().connect(slot(*this, &SettingsDialog::on_spice_browse));
   
   show_all();
   
   //g_settings.defaultValueString("SPICECmdLine", "spice3");
-  g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
-  
+    
   m_spice_path_entry.set_text(g_settings.getValueString("SPICECmdLine"));
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
+  m_use_advanced_speaker_model.set_active(g_settings.getValueBool("UseAdvancedSpeakerModel"));
 }
 
 SettingsDialog::~SettingsDialog() 
@@ -63,6 +65,7 @@ void SettingsDialog::on_apply()
   cout << "SettingsDialog::on_apply" << endl;
   g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
   g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
+  g_settings.setValue("UseAdvancedSpeakerModel", m_use_advanced_speaker_model.get_active());
   g_settings.save();
 }
 

@@ -105,6 +105,7 @@ CrossoverHistory::CrossoverHistory() :
   signal_new_crossover.connect(slot(*this, &CrossoverHistory::on_new_from_menu));
   signal_net_modified_by_wizard.connect(slot(*this, &CrossoverHistory::on_net_modified_by_user));
   signal_net_modified_by_user.connect(slot(*this, &CrossoverHistory::on_net_modified_by_wizard));
+  //on_selection_changed();
 }
 
 void CrossoverHistory::on_net_modified_by_wizard(Net *net)
@@ -247,6 +248,8 @@ void CrossoverHistory::on_selection_changed()
     {
       index = indices[0];
       signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));
+      /* Plot the crossover immediately after we selected it */
+      signal_plot_crossover();
     }
   } 
 }

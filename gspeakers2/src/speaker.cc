@@ -22,7 +22,8 @@
 
 Speaker::Speaker(string id_string, int type, double qts, double vas, double fs, double rdc, 
                  double lvc, double qms, double qes, double imp, double sens, 
-                 string freq_resp_filename, string imp_resp_filename) : GSpeakersObject()
+                 string freq_resp_filename, string imp_resp_filename, double mmd, 
+                 double ad, double bl, double rms, double cms) : GSpeakersObject()
 {
   m_id_string = id_string;
   m_type = type;
@@ -35,6 +36,11 @@ Speaker::Speaker(string id_string, int type, double qts, double vas, double fs, 
   m_qes = qes;
   m_imp = imp;
   m_sens = sens;
+  m_mmd = mmd;
+  m_ad = ad;
+  m_bl = bl;
+  m_rms = rms;
+  m_cms = cms;
   
   m_freq_resp_filename = freq_resp_filename;
   m_imp_resp_filename = imp_resp_filename;
@@ -97,6 +103,21 @@ xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
 
   child = xmlNewChild( speaker, NULL, (xmlChar *)("imp_resp_filename"), NULL );
   xmlNodeSetContent( child, (xmlChar *)m_imp_resp_filename.c_str());
+
+  child = xmlNewChild( speaker, NULL, (xmlChar *)("mmd"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_mmd));
+
+  child = xmlNewChild( speaker, NULL, (xmlChar *)("ad"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_ad));
+
+  child = xmlNewChild( speaker, NULL, (xmlChar *)("bl"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_bl));
+
+  child = xmlNewChild( speaker, NULL, (xmlChar *)("rms"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_rms));
+
+  child = xmlNewChild( speaker, NULL, (xmlChar *)("cms"), NULL );
+  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%f", m_cms));
 
   return speaker;
 }
@@ -182,6 +203,31 @@ void Speaker::set_id_string(string id_string)
   m_id_string = id_string;
 }
   
+void Speaker::set_mmd(double mmd)
+{
+  m_mmd = mmd;
+}
+
+void Speaker::set_ad(double ad)
+{
+  m_ad = ad;
+}
+
+void Speaker::set_bl(double bl)
+{
+  m_bl = bl;
+}
+
+void Speaker::set_rms(double rms)
+{
+  m_rms = rms;
+}
+
+void Speaker::set_cms(double cms)
+{
+  m_cms = cms;
+}  
+  
 double Speaker::get_qts()
 {
   return m_qts;
@@ -250,6 +296,31 @@ map<double, double> *Speaker::get_imp_resp()
 string Speaker::get_id_string()
 {
   return m_id_string;
+}
+
+double Speaker::get_mmd()
+{
+  return m_mmd;
+}
+
+double Speaker::get_ad()
+{
+  return m_ad;
+}
+
+double Speaker::get_bl()
+{
+  return m_bl;
+}
+
+double Speaker::get_rms()
+{
+  return m_rms;
+}
+
+double Speaker::get_cms()
+{
+  return m_cms;
 }
 
 void Speaker::parse_id_string(xmlNodePtr node)
@@ -415,7 +486,6 @@ void Speaker::parse_sens(xmlNodePtr node)
   } else {
     throw GSpeakersException("Speaker: sens node not found");
   }
-
 }
 
 void Speaker::parse_freq_resp_filename(xmlNodePtr node)
@@ -430,15 +500,83 @@ void Speaker::parse_freq_resp_filename(xmlNodePtr node)
   } else {
     throw GSpeakersException("Speaker: freq_resp_filename node not found");
   }
-
 }
 
 void Speaker::parse_imp_resp_filename(xmlNodePtr node)
 {
   if (( node != NULL ) && ( string( (char *)node->name) == string( "imp_resp_filename" ))) {
     m_imp_resp_filename = string((char *)xmlNodeGetContent(node));
+    try {
+      parse_mmd(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
   } else {
     throw GSpeakersException("Speaker: imp_resp_filename node not found");
   }
+}
 
+void Speaker::parse_mmd(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "mmd" ))) {
+    istringstream((char *)xmlNodeGetContent(node)) >> m_mmd;
+    try {
+      parse_ad(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+  } else {
+    throw GSpeakersException("Speaker: mmd node not found");
+  }
+}
+
+void Speaker::parse_ad(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "ad" ))) {
+    istringstream((char *)xmlNodeGetContent(node)) >> m_ad;
+    try {
+      parse_bl(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+  } else {
+    throw GSpeakersException("Speaker: ad node not found");
+  }
+}
+
+void Speaker::parse_bl(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "bl" ))) {
+    istringstream((char *)xmlNodeGetContent(node)) >> m_bl;
+    try {
+      parse_rms(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+  } else {
+    throw GSpeakersException("Speaker: bl node not found");
+  }
+}
+
+void Speaker::parse_rms(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "rms" ))) {
+    istringstream((char *)xmlNodeGetContent(node)) >> m_rms;
+    try {
+      parse_cms(node->next);
+    } catch (GSpeakersException e) {
+      throw e;
+    }
+  } else {
+    throw GSpeakersException("Speaker: rms node not found");
+  }
+}
+
+void Speaker::parse_cms(xmlNodePtr node)
+{
+  if (( node != NULL ) && ( string( (char *)node->name) == string( "cms" ))) {
+    istringstream((char *)xmlNodeGetContent(node)) >> m_cms;
+  } else {
+    throw GSpeakersException("Speaker: mmd node not found");
+  }
 }

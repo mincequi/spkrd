@@ -44,7 +44,8 @@ public:
   Speaker(string id_string = "Vifa P21-20-08", int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE, 
           double qts = 0.33, double vas = 113, double fs = 28, double rdc = 5.6, double lvc = 0.9, 
           double qms = 1.6, double qes = 0.41, double imp = 8, double sens = 91, 
-          string freq_resp_filename = "", string imp_resp_filename = "");
+          string freq_resp_filename = "", string imp_resp_filename = "", double mmd = 0.04, 
+          double ad = 0.0837, double bl = 11, double rms = 1.7, double cms = 0.0012);
   
   /* Construct a speaker from an xml node, throws an exception on error in xml */
   Speaker(xmlNodePtr parent);
@@ -69,7 +70,12 @@ public:
   void set_imp_resp_filename(string filename);
   void set_imp_resp(map<double, double> imp_resp);
   void set_id_string(string id_string);
-  
+  void set_mmd(double mmd);
+  void set_ad(double ad);
+  void set_bl(double bl);
+  void set_rms(double rms);
+  void set_cms(double cms);
+
   double get_qts();
   double get_vas();
   double get_fs();
@@ -84,6 +90,11 @@ public:
   string get_imp_resp_filename();
   map<double, double> *get_imp_resp();
   string get_id_string();
+  double get_mmd();
+  double get_ad();
+  double get_bl();
+  double get_rms();
+  double get_cms();
   
 protected:
   double m_qts;     // total Q
@@ -96,6 +107,12 @@ protected:
   double m_imp;     // nominal impedance
   double m_sens;    // sensitivity
   
+  double m_mmd;     // cone mass, kg
+  double m_ad;      // effective radius, m
+  double m_bl;      // force factor
+  double m_rms;     // suspension mechanical resistance, Ns/m
+  double m_cms;     // suspension compliance, m/N
+
   string m_freq_resp_filename;
   map<double, double> m_freq_resp;
   string m_imp_resp_filename;
@@ -118,6 +135,11 @@ private:
   void parse_freq_resp_filename(xmlNodePtr node);
   void parse_imp_resp_filename(xmlNodePtr node);
   void parse_id_string(xmlNodePtr node);
+  void parse_mmd(xmlNodePtr node);
+  void parse_ad(xmlNodePtr node);
+  void parse_bl(xmlNodePtr node);
+  void parse_rms(xmlNodePtr node);
+  void parse_cms(xmlNodePtr node);
 
 };
 

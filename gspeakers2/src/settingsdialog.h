@@ -33,7 +33,7 @@ private:
   Gtk::Notebook m_main_notebook;
   Gtk::Button m_spice_browse_button;
   Gtk::Entry m_spice_path_entry;
-  Gtk::CheckButton m_autoupdate_filter_plots;
+  Gtk::CheckButton m_autoupdate_filter_plots, m_use_advanced_speaker_model;
   Gtk::VBox m_vbox;
   
   Gtk::FileSelection *m_file_selection;

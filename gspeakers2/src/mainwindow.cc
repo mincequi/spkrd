@@ -61,6 +61,8 @@ MainWindow::MainWindow() :
   g_settings.defaultValueBool("SetMainWindowSize", true);
   g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
   g_settings.defaultValueUnsignedInt("MainWindowHeight", 480);
+  g_settings.defaultValueBool("UseAdvancedSpeakerModel", true);
+  g_settings.defaultValueBool("AutoUpdateFilterPlots", true);
   
   /* You should be able to specify this in the settings dialog, if the window manager can set the size of the window
      it may as well do it, at least sawfish can do this */
@@ -155,6 +157,7 @@ MainWindow::MainWindow() :
   g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
   m_crossover_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
 
+  
 
   /* Setup the paned widget for the box plot tab */
   //g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);

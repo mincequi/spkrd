@@ -93,9 +93,6 @@
 /* Define if you have the <argz.h> header file.  */
 #undef HAVE_ARGZ_H
 
-/* Define if you have the <exception> header file.  */
-#undef HAVE_EXCEPTION
-
 /* Define if you have the <fstream> header file.  */
 #undef HAVE_FSTREAM
 
