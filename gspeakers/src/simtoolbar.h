@@ -61,6 +61,8 @@ class SimToolbar : public Gtk::HandleBox {
   void rem_all_clicked();
   void cfg_clicked();
   void sim_all_boxes_clicked();
+  void sim_all_speakers_clicked();
+  void all_boxes_all_speakers_clicked();
   
   SpeakerToolbar *sbar;
   BoxToolbar *bbar;
@@ -70,6 +72,8 @@ class SimToolbar : public Gtk::HandleBox {
   Gtk::HBox *hbox;
   Gtk::Button *sim_button;
   Gtk::Button *all_boxes_button;
+  Gtk::Button *all_speakers_button;
+  Gtk::Button *all_boxes_all_speakers_button;
   Gtk::Button *rem_plot_button;
   Gtk::Button *rem_all_button;
   Gtk::Button *opt_box_button;

@@ -63,6 +63,16 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   all_boxes_button->set_relief( GTK_RELIEF_NONE );
   all_boxes_button->clicked.connect( slot( this, &SimToolbar::sim_all_boxes_clicked ) );
 
+  all_speakers_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *all_speakers_button, "Make plots for all speakers in xml-file in current enclosure" );
+  all_speakers_button->set_relief( GTK_RELIEF_NONE );
+  all_speakers_button->clicked.connect( slot( this, &SimToolbar::sim_all_speakers_clicked ) );
+
+  all_boxes_all_speakers_button = manage( new Gtk::Button() );
+  cfg->tooltips->set_tip( *all_boxes_all_speakers_button, "One plot for each speaker and corresponding box" );
+  all_boxes_all_speakers_button->set_relief( GTK_RELIEF_NONE );
+  all_boxes_all_speakers_button->clicked.connect( slot( this, &SimToolbar::all_boxes_all_speakers_clicked ) );
+
   rem_plot_button = manage( new Gtk::Button() );
   cfg->tooltips->set_tip( *rem_plot_button, "Remove selected plot" );
   rem_plot_button->set_relief( GTK_RELIEF_NONE );
@@ -90,6 +100,8 @@ SimToolbar::SimToolbar(SpeakerToolbar *stoolbar, BoxToolbar *btoolbar,
   add( *hbox );
   hbox->pack_start( *sim_button, false, true );
   hbox->pack_start( *all_boxes_button, false, true );
+  hbox->pack_start( *all_speakers_button, false, true );
+  hbox->pack_start( *all_boxes_all_speakers_button, false, true );
   hbox->pack_start( *rem_plot_button, false, true );
   hbox->pack_start( *rem_all_button, false, true );
   hbox->pack_start( *opt_box_button, false, true );
@@ -111,7 +123,6 @@ void SimToolbar::cfg_clicked() {
  * Plot a curve with current enclosure and speaker
  */
 void SimToolbar::sim_clicked() {
-
   Box *b = bbar->get_box();
   Speaker *s = sbar->get_speaker();
   add_plot( b, s );
@@ -131,6 +142,48 @@ void SimToolbar::sim_all_boxes_clicked() {
   }
 }
 
+/*
+ * Plot frequency response for all speakers in currently selected enclosure
+ */
+void SimToolbar::sim_all_speakers_clicked() {
+  vector<Speaker> spk_list = sbar->get_all_speakers();
+  Box *b = bbar->get_box();
+  int n_speakers = spk_list.size();
+  
+  for ( int i = 0; i < n_speakers; i++ ) {
+    add_plot( b, &spk_list[i] );
+  }
+
+}
+
+/*
+ * Simulate one speaker with the corresponding box in the box list
+ * 
+ * If number of boxes != number of speakers we only plot as long as we 
+ * have both a box and a speaker with the same index
+ */
+void SimToolbar::all_boxes_all_speakers_clicked() {
+  vector<Box> box_list = bbar->get_all_boxes();
+  vector<Speaker> spk_list = sbar->get_all_speakers();
+  int n_speakers = spk_list.size();
+  int n_boxes = box_list.size();
+  int n_iters;
+
+  if ( n_speakers >= n_boxes ) {
+    n_iters = n_boxes;
+  } else {
+    n_iters = n_speakers;
+  }
+
+  for ( int i = 0; i < n_iters; i++ ) {
+    add_plot( &box_list[i], &spk_list[i] );
+  }
+
+}
+
+/*
+ * Adds a plot of one Box and one Speaker to the plot-widget
+ */
 void SimToolbar::add_plot( Box *b, Speaker *s ) {
   set_new_color();
   
@@ -321,6 +374,12 @@ void SimToolbar::set_toolbar_style( int style ) {
     il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "multiple_boxes.xpm" );
     all_boxes_button->add_pixmap( il1->pix(), il1->bit() );
     delete il1;
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "multiple_speakers.xpm" );
+    all_speakers_button->add_pixmap( il1->pix(), il1->bit() );
+    delete il1;
+    il1 = new Gtk::ImageLoader( cfg->get_xpm_path() + "mspeakers_mboxes.xpm" );
+    all_boxes_all_speakers_button->add_pixmap( il1->pix(), il1->bit() );
+    delete il1;
     il2 = new Gtk::ImageLoader( cfg->get_xpm_path() + "remove_plot.xpm" );
     rem_plot_button->add_pixmap( il2->pix(), il2->bit() );
     delete il2;
@@ -338,6 +397,8 @@ void SimToolbar::set_toolbar_style( int style ) {
   case TEXT_ONLY:
     sim_button->add_label( "Plot" );
     all_boxes_button->add_label( "Plot all boxes" );
+    all_boxes_button->add_label( "Plot all speakers" );
+    all_boxes_button->add_label( "All boxes, all speakers" );
     rem_plot_button->add_label( "Remove plot" );
     rem_all_button->add_label( "Remove all plots" );
     opt_box_button->add_label( "Optimize box" );
@@ -356,6 +417,20 @@ void SimToolbar::set_toolbar_style( int style ) {
     vbox = manage( new Gtk::VBox() );
     l = manage( new Gtk::Label( "Plot all\nboxes" ) );
     all_boxes_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "multiple_speakers.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Plot all\nspeakers" ) );
+    all_speakers_button->add( *vbox );
+    vbox->pack_start( *gtk_pixmap );
+    vbox->pack_start( *l );
+
+    gtk_pixmap = manage( new Gtk::Pixmap( cfg->get_xpm_path() + "mspeakers_mboxes.xpm" ) );
+    vbox = manage( new Gtk::VBox() );
+    l = manage( new Gtk::Label( "Plot boxes\nAll speakers" ) );
+    all_boxes_all_speakers_button->add( *vbox );
     vbox->pack_start( *gtk_pixmap );
     vbox->pack_start( *l );
 
