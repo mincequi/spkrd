@@ -1,5 +1,7 @@
 2001-12-28 14.10 sumpan
-
+        
+	* Added config-class to all classes that needs it
+	
         * src/simtoolbar.cc src/boxlist.cc: 
           Added some fields to the clist + code cleanup
 	
