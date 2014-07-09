@@ -74,6 +74,22 @@ namespace GSpeakers {
       m_y = y;
     }
     
+    static struct _CompareX
+    {
+		bool operator() (const Point & left, const Point & right)
+		{
+			return left.m_x <= right.m_x;
+		}
+		bool operator() (const Point & left, int right)
+		{
+			return left.m_x <= right;
+		}
+		bool operator() (int left, const Point & right)
+		{
+			return left <= right.m_x;
+		}
+    } _CompareX;
+
   private:
     int m_x;
     double m_y;

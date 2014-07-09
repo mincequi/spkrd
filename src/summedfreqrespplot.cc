@@ -24,8 +24,6 @@
 #include "summedfreqrespplot.h"
 #include "net.h"
 
-#define NOF_POINTS 30
-
 SummedFreqRespPlot::SummedFreqRespPlot() :
 		plot(1, 20000, 50, 110, true, 0) {
 	using namespace sigc;
@@ -52,6 +50,21 @@ SummedFreqRespPlot::~SummedFreqRespPlot() {
 
 }
 
+double lerp(vector<GSpeakers::Point> freq_resp_points, double x) {
+	std::vector< GSpeakers::Point >::iterator first_i = std::lower_bound(freq_resp_points.begin(), freq_resp_points.end(), x, GSpeakers::Point::_CompareX);
+    if (first_i != freq_resp_points.begin()) { first_i = first_i - 1; }
+	std::vector< GSpeakers::Point >::iterator second_i = std::upper_bound(freq_resp_points.begin(), freq_resp_points.end(), x, GSpeakers::Point::_CompareX);
+
+	if(first_i == second_i) { return first_i->get_y(); }
+	double x0 = first_i->get_x();
+	double x1 = second_i->get_x();
+	double y0 = first_i->get_y();
+	double y1 = second_i->get_y();
+
+	return y0 + ((y1 - y0) * ((x - x0)/(x1 - x0)));
+}
+
+
 int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points,
 		Gdk::Color& color, int *i, Net *n) {
 #ifdef OUTPUT_DEBUG
@@ -68,7 +81,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points,
 		cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = "
 				<< s.get_freq_resp_filename() << endl;
 		if (fin.good()) {
-			for (int j = 0; j < NOF_POINTS; j++) {
+			while (!fin.eof()) {
 				char *buffer = new char[100];
 				fin.getline(buffer, 100, '\n');
 
@@ -88,21 +101,21 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points,
 			return -1;
 		}
 	} else {
-		for (int i = 0; i < NOF_POINTS; i++) {
-			GSpeakers::Point p(0, 0);
-			freq_resp_points.push_back(p);
-		}
+		GSpeakers::Point p1(0, 0);
+		freq_resp_points.push_back(p1);
+		GSpeakers::Point p2(20000, 0);
+		freq_resp_points.push_back(p2);
 	}
 	vector<GSpeakers::Point> points;
-	for (int j = 0; j < NOF_POINTS; j++) {
-		double filter_point = filter_points[j].get_y();
+	for (unsigned int j = 0; j < filter_points.size(); j++) {
+		double filter_y = filter_points[j].get_y();
 		if (g_settings.getValueBool("DisableFilterAmp") == true) {
-			if (filter_point > 0.0) {
-				filter_point = 0.0;
+			if (filter_y > 0.0) {
+				filter_y = 0.0;
 			}
 		}
-		GSpeakers::Point p(filter_points[j].get_x(),
-				freq_resp_points[j].get_y() + filter_point);
+		double resp_y = lerp(freq_resp_points, filter_points[j].get_x());
+		GSpeakers::Point p(filter_points[j].get_x(), resp_y + filter_y);
 		points.push_back(p);
 	}
 
