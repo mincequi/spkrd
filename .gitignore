@@ -1,2 +1,15 @@
 .cproject
 .project
+Makefile
+autom4te.cache
+config.h
+config.log
+config.status
+gspeakers.desktop
+gspeakers.spec
+.deps
+stamp-h1
+*.o
+src/gspeakers
+.settings
+*~
