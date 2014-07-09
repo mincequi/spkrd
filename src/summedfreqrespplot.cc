@@ -145,7 +145,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points,
 
 	plot.remove_all_plots();
 	vector<GSpeakers::Point> pnts;
-	if (m_points.size() > 1) {
+	if (m_points.size()) {
 		pnts = m_points[0];
 		plot.add_plot(m_points[0], c2);
 		for (unsigned j = 1; j < m_points.size(); j++) {
