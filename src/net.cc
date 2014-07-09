@@ -572,9 +572,9 @@ string Net::to_SPICE(Speaker& s, bool use_gnucap)
     
     if (use_gnucap == true) {
       of << ".print ac vdb(" << spk_node << ")" << endl;
-      of << ".ac DEC 10 20 20k" << endl;
+      of << ".ac DEC 30 20 20k" << endl;
     } else {
-      of << ".ac DEC 10 20 20k" << endl;
+      of << ".ac DEC 30 20 20k" << endl;
       of << ".print ac db(v(" << spk_node << "))" << endl;
     }
     of << ".end" << endl;
