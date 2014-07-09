@@ -55,9 +55,9 @@ double lerp(vector<GSpeakers::Point> freq_resp_points, double x) {
     if (first_i != freq_resp_points.begin()) { first_i = first_i - 1; }
 	std::vector< GSpeakers::Point >::iterator second_i = std::upper_bound(freq_resp_points.begin(), freq_resp_points.end(), x, GSpeakers::Point::_CompareX);
 
-	if(first_i == second_i) { return first_i->get_y(); }
 	double x0 = first_i->get_x();
 	double x1 = second_i->get_x();
+	if(x0 == x1) { return first_i->get_y(); }
 	double y0 = first_i->get_y();
 	double y1 = second_i->get_y();
 
@@ -92,8 +92,10 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points,
 				substr_ptr = strtok(NULL, ",");
 				f2 = g_ascii_strtod(substr_ptr, NULL);
 
-				GSpeakers::Point p(GSpeakers::round(f1), f2);
-				freq_resp_points.push_back(p);
+				if ((f1 != 0) && (f2 != 0)) { // Skip potential column headers
+					GSpeakers::Point p(GSpeakers::round(f1), f2);
+					freq_resp_points.push_back(p);
+				}
 				delete buffer;
 			}
 		} else {

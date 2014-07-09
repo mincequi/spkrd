@@ -615,12 +615,10 @@ void Speaker_ListStore::on_selection_changed() {
 
 				/* Plot freq resp if it exists */
 				if (s.get_freq_resp_filename() != "") {
-					//cout << "opening file" << endl;
 					ifstream fin(s.get_freq_resp_filename().c_str());
 					if (fin.good()) {
-						//cout << "reading file" << endl;
 						vector<GSpeakers::Point> points;
-						for (int i = 0; i < 30; i++) {
+						while (!fin.eof()) {
 							char *buffer = new char[100];
 							fin.getline(buffer, 100, '\n');
 
