@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib/gstrfuncs.h>
+#include <glib.h>
 #include <sstream>
 #include <fstream>
 #include "net.h"
@@ -107,7 +107,7 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr,
 
 Net::Net(xmlNodePtr parent) 
 {
-  if ((parent != NULL) && (g_strcasecmp( (char *)parent->name, "net" ) == 0)) {  
+  if ((parent != NULL) && (g_ascii_strncasecmp( (char *)parent->name, "net", 3 ) == 0)) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException e) {
@@ -120,7 +120,7 @@ Net::Net(xmlNodePtr parent)
 
 void Net::parse_type(xmlNodePtr node) 
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "type" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "type", 4 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_lowpass_order(node->next);
@@ -134,7 +134,7 @@ void Net::parse_type(xmlNodePtr node)
 
 void Net::parse_lowpass_order(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "lowpass_order" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "lowpass_order", 13 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_lowpass_order;
     try {
       parse_highpass_order(node->next);
@@ -148,7 +148,7 @@ void Net::parse_lowpass_order(xmlNodePtr node)
 
 void Net::parse_highpass_order(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "highpass_order" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "highpass_order", 14 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_highpass_order;
     try {
       parse_has_imp_corr(node->next);
@@ -162,8 +162,8 @@ void Net::parse_highpass_order(xmlNodePtr node)
 
 void Net::parse_has_imp_corr(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "has_imp_corr" ) == 0)) {  
-    if (g_strcasecmp( (char *)xmlNodeGetContent(node), "1" ) == 0) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "has_imp_corr", 12 ) == 0)) {
+    if (g_ascii_strncasecmp( (char *)xmlNodeGetContent(node), "1", 1 ) == 0) {
       m_has_imp_corr = true;
     } else {
       m_has_imp_corr = false;
@@ -180,8 +180,8 @@ void Net::parse_has_imp_corr(xmlNodePtr node)
 
 void Net::parse_has_damp(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "has_damp" ) == 0)) {  
-    if (g_strcasecmp( (char *)xmlNodeGetContent(node), "1" ) == 0) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "has_damp", 8 ) == 0)) {
+    if (g_ascii_strncasecmp( (char *)xmlNodeGetContent(node), "1", 1 ) == 0) {
       m_has_damp = true;
     } else {
       m_has_damp = false;
@@ -198,8 +198,8 @@ void Net::parse_has_damp(xmlNodePtr node)
 
 void Net::parse_has_res(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "has_res" ) == 0)) {  
-    if (g_strcasecmp( (char *)xmlNodeGetContent(node), "1" ) == 0) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "has_res", 7 ) == 0)) {
+    if (g_ascii_strncasecmp( (char *)xmlNodeGetContent(node), "1", 1 ) == 0) {
       m_has_res = true;
     } else {
       m_has_res = false;
@@ -218,7 +218,7 @@ void Net::parse_has_res(xmlNodePtr node)
 void Net::parse_parts(xmlNodePtr node)
 {
   xmlNodePtr child;
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "parts" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "parts", 5 ) == 0)) {
     /* Iterate over node->children, first comes the imp corr and damping network */
     child = node->children;
     /* Impedance correction parts */
@@ -294,7 +294,7 @@ void Net::parse_parts(xmlNodePtr node)
 
 void Net::parse_lowpass_family(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "lowpass_family" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "lowpass_family", 14 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_lowpass_family;
     try {
       parse_highpass_family(node->next);
@@ -308,7 +308,7 @@ void Net::parse_lowpass_family(xmlNodePtr node)
 
 void Net::parse_highpass_family(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "highpass_family" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "highpass_family", 15 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_highpass_family;
     try {
       parse_speaker(node->next);
@@ -322,7 +322,7 @@ void Net::parse_highpass_family(xmlNodePtr node)
 
 void Net::parse_speaker(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "speaker" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "speaker", 7 ) == 0)) {
     m_speaker = string((char *)xmlNodeGetContent(node));
     try {
       parse_adv_imp_model(node->next);
@@ -336,7 +336,7 @@ void Net::parse_speaker(xmlNodePtr node)
 
 void Net::parse_adv_imp_model(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "adv_imp_model" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "adv_imp_model", 13 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_adv_imp_model;
     try {
       parse_inv_pol(node->next);
@@ -350,7 +350,7 @@ void Net::parse_adv_imp_model(xmlNodePtr node)
 
 void Net::parse_inv_pol(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "inv_pol" ) == 0)) {  
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "inv_pol", 7 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_inv_pol;
   } else {
     throw GSpeakersException(_("Net::parse_inv_pol: inv_pol node expected"));

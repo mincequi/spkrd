@@ -24,6 +24,11 @@
 #include "sidebarnotebook.h"
 #include "common.h"
 
+
+void on_button_clicked1(GtkWidget *widget, SidebarNotebook *me);
+void on_button_clicked2(GtkWidget *widget, SidebarNotebook *me);
+void on_button_clicked3(GtkWidget *widget, SidebarNotebook *me);
+
 SidebarNotebook::SidebarNotebook() : Gtk::HBox()
 {
 	m_notebook = manage(new Gtk::Notebook());

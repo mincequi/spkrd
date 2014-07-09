@@ -15,7 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib/gstrfuncs.h>
+#include <glib.h>
 #include <sstream>
 #include "crossover.h"
 
@@ -52,7 +52,7 @@ Crossover::Crossover(int type, string id_string) : GSpeakersObject()
 
 Crossover::Crossover(xmlNodePtr parent)
 {
-  if ((parent != NULL) && (g_strcasecmp( (char *)parent->name, "crossover" ) == 0)) {
+  if ((parent != NULL) && (g_ascii_strncasecmp( (char *)parent->name, "crossover", 9 ) == 0)) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException e) {
@@ -65,7 +65,7 @@ Crossover::Crossover(xmlNodePtr parent)
 
 void Crossover::parse_type(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "type" ) == 0)) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "type", 4 ) == 0)) {
     istringstream((char *)xmlNodeGetContent(node)) >> m_type;
     //m_type = atoi((char *)xmlNodeGetContent(node));
     try {
@@ -82,7 +82,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 {
   xmlNodePtr child;
   
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "networks" ) == 0)) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "networks", 8 ) == 0)) {
     child = node->children;
     while (child != NULL) {
       try {
@@ -102,7 +102,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 
 void Crossover::parse_id_string(xmlNodePtr node)
 {
-  if ((node != NULL) && (g_strcasecmp( (char *)node->name, "id_string" ) == 0)) {
+  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "id_string", 9 ) == 0)) {
     m_id_string = string((char *)xmlNodeGetContent(node));
     //m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
