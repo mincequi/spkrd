@@ -656,7 +656,7 @@ void FilterLinkFrame::on_plot_crossover()
     bool output = false;
     int id;
     float f_id;
-    float f1, f2, f3;
+    float freq, db, f3;
     points.erase(points.begin(), points.end());
     while (!fin.eof()) {
       char *buffer = new char[100];
@@ -679,13 +679,13 @@ void FilterLinkFrame::on_plot_crossover()
 	    /* Check if we got a freq more than 10kHz */
 	    char *substr_ptr = strstr(buffer, "K");
 	    if (substr_ptr != NULL) {
-	      f1 = f_id * 1000;
+	      freq = f_id * 1000;
 	    } else {
-	      f1 = f_id;
+	      freq = f_id;
 	    }
 	    substr_ptr = strtok(buffer, " ");
 	    substr_ptr = strtok(NULL, " ");
-	    f2 = g_ascii_strtod(substr_ptr, NULL);
+	    db = g_ascii_strtod(substr_ptr, NULL);
 // 	    if (strstr(substr_ptr, "m")) {
 // 	      f2 = f2 / 1000.;
 // 	    } else if (strstr(substr_ptr, "u")) {
@@ -696,7 +696,7 @@ void FilterLinkFrame::on_plot_crossover()
 // 	      f2 = f2 / 1000000000000.;
 // 	    }
 	    //	    cout << f1 << '\t' << endl;
-	    GSpeakers::Point p(GSpeakers::round(f1), f2);
+	    GSpeakers::Point p(GSpeakers::round(freq), db);
 	    points.push_back(p);
 	  }
 
@@ -709,13 +709,11 @@ void FilterLinkFrame::on_plot_crossover()
 	  strtok(buffer, "\t");
 	  char *substr_ptr = strtok(NULL, "\t");
           
-	  f1 = g_ascii_strtod(substr_ptr, NULL);
+	  freq = g_ascii_strtod(substr_ptr, NULL);
 	  substr_ptr = strtok(NULL, "\t");
-	  f2 = g_ascii_strtod(substr_ptr, NULL);
-	  substr_ptr = strtok(NULL, "\t");
-	  f3 = g_ascii_strtod(substr_ptr, NULL);
+	  db = g_ascii_strtod(substr_ptr, NULL);
 	  
-	  GSpeakers::Point p(GSpeakers::round(f1), f3);
+	  GSpeakers::Point p(GSpeakers::round(freq), db);
 	  points.push_back(p);
 	}
       }
