@@ -690,9 +690,9 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 					<< endl;
 			if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
 				of << ".print ac ir(vamp) ii(vamp)" << endl;
-				of << ".ac DEC 10 20 20k" << endl;
+				of << ".ac DEC 50 20 20k" << endl;
 			} else {
-				of << ".ac DEC 10 20 20k" << endl;
+				of << ".ac DEC 50 20 20k" << endl;
 				of << ".print ac real(i(vamp)) im(i(vamp))" << endl;
 			}
 
@@ -780,28 +780,27 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 								points.push_back(p);
 							}
 						} else {
-							/* Locale safe implementation of the following fscanf */
-							//sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
-							id = atoi(buffer);
+							if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
+								/* Locale safe implementation of the following fscanf */
+								//sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
+								id = atoi(buffer);
 
-							strtok(buffer, "\t");
-							char *substr_ptr = strtok(NULL, "\t");
+								strtok(buffer, "\t");
+								char *substr_ptr = strtok(NULL, "\t");
 
-							f1 = g_ascii_strtod(substr_ptr, NULL);
-							substr_ptr = strtok(NULL, "\t");
-							substr_ptr = strtok(NULL, "\t");
-							f2 = g_ascii_strtod(substr_ptr, NULL);
-							substr_ptr = strtok(NULL, "\t");
-							f3 = g_ascii_strtod(substr_ptr, NULL);
+								f1 = g_ascii_strtod(substr_ptr, NULL);
+								substr_ptr = strtok(NULL, "\t");
+								substr_ptr = strtok(NULL, "\t");
+								f2 = g_ascii_strtod(substr_ptr, NULL);
+								substr_ptr = strtok(NULL, "\t");
+								f3 = g_ascii_strtod(substr_ptr, NULL);
 
-							//cout << f1 << "\t" << f2 << "\t" << f3 << endl;
-							GSpeakers::Point p(GSpeakers::round(f1),
-									50 + (1 / hypot(f2, f3)));
-							points.push_back(p);
+								//cout << f1 << "\t" << f2 << "\t" << f3 << endl;
+								GSpeakers::Point p(GSpeakers::round(f1),
+										50 + (1 / hypot(f2, f3)));
+								points.push_back(p);
+							}
 						}
-					}
-					if ((buffer[0] == '3') && (buffer[1] == '0')) {
-						output = false;
 					}
 					delete buffer;
 				}
