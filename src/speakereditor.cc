@@ -693,7 +693,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 				of << ".ac DEC 50 20 20k" << endl;
 			} else {
 				of << ".ac DEC 50 20 20k" << endl;
-				of << ".print ac real(i(vamp)) im(i(vamp))" << endl;
+				of << ".print ac 1/mag(i(vamp))" << endl;
 			}
 
 			of << ".end" << endl;
@@ -781,8 +781,6 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 							}
 						} else {
 							if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
-								/* Locale safe implementation of the following fscanf */
-								//sscanf(buffer, "%d\t%e,\t%e\t%e", &id, &f1, &f2, &f3);
 								id = atoi(buffer);
 
 								strtok(buffer, "\t");
@@ -791,12 +789,8 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 								f1 = g_ascii_strtod(substr_ptr, NULL);
 								substr_ptr = strtok(NULL, "\t");
 								f2 = g_ascii_strtod(substr_ptr, NULL);
-								substr_ptr = strtok(NULL, "\t");
-								f3 = g_ascii_strtod(substr_ptr, NULL);
 
-								//cout << f1 << "\t" << f2 << "\t" << f3 << endl;
-								GSpeakers::Point p(GSpeakers::round(f1),
-										50 + (1 / hypot(f2, f3)));
+								GSpeakers::Point p(GSpeakers::round(f1), 50+f2);
 								points.push_back(p);
 							}
 						}
