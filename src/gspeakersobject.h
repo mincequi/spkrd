@@ -18,7 +18,7 @@
 #ifndef __GSPEAKERSOBJECT_H
 #define __GSPEAKERSOBJECT_H
 
-#include <sigc++/object.h>
+#include <sigc++/sigc++.h>
 
 /*
  * This is a base object for data-containers in this project

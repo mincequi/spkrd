@@ -21,7 +21,8 @@
  */
 
 #include "gspeakersstock.h"
-#include "config.h"
+#include "../config.h"
+
 #include <gtk/gtk.h>
 
 static GtkStockItem stock_items[] = {{GSPEAKERS_STOCK_DRIVER, NULL},

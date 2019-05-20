@@ -18,14 +18,14 @@
 */
 
 #include "freqrespeditor.h"
-#include <fstream>
+
 #include <gtkmm/fileselection.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
-#include <stdio.h>
 
-using namespace sigc;
+#include <cstdio>
+#include <fstream>
 
 FreqRespEditor::FreqRespEditor(string filename)
     : m_table(15, 4, false), m_save_button(Gtk::Stock::SAVE), m_saveas_button(Gtk::Stock::SAVE_AS),
@@ -123,7 +123,7 @@ FreqRespEditor::FreqRespEditor(string filename)
 
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(
-            bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+            sigc::bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
 
         delete buffer;
       }
@@ -155,7 +155,7 @@ void FreqRespEditor::on_save() {
     of.close();
     for (int i = 0; i < 30; i++) {
       dbmag_entries[i]->signal_changed().connect(
-          bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+          sigc::bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
     }
 
   } else {

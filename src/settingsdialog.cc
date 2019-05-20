@@ -25,8 +25,6 @@
 
 #define NOF_TABLE_ROWS 10
 
-using namespace sigc;
-
 SettingsDialog::SettingsDialog()
     : Gtk::Dialog(_("GSpeakers settings..."), true, true), m_main_notebook(),
       m_spice_browse_button(_("Browse...")), m_spice_use_berkley(_("Berkley SPICE3f5")),
@@ -170,35 +168,35 @@ SettingsDialog::SettingsDialog()
   m_use_driver_impedance.set_active(g_settings.getValueBool("UseDriverImpedance"));
 
   /* Setup configuration option change handlers */
-  m_save_mainwindow_size.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_save_mainwindow_size.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SAVE_MAIN_WINDOW_SIZE));
-  m_save_mainwindow_position.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_save_mainwindow_position.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SAVE_MAIN_WINDOW_SIZE));
 
   m_autoupdate_filter_plots.signal_clicked().connect(
-      bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change),
-                                GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT));
-  m_draw_driver_imp_plot.signal_clicked().connect(bind<GSpeakers::Settings>(
+      sigc::bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change),
+                                      GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT));
+  m_draw_driver_imp_plot.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::DRAW_DRIVER_IMP_PLOT));
   m_draw_driver_freq_resp_plot.signal_clicked().connect(
-      bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change),
-                                GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT));
-  m_disable_filter_amp.signal_clicked().connect(bind<GSpeakers::Settings>(
+      sigc::bind<GSpeakers::Settings>(mem_fun(*this, &SettingsDialog::on_config_option_change),
+                                      GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT));
+  m_disable_filter_amp.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::DISABLE_FILTER_AMP));
-  m_scale_crossover_image_parts.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_scale_crossover_image_parts.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SCALE_FILTER_PARTS));
-  m_use_driver_impedance.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_use_driver_impedance.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::USE_DRIVER_IMPEDANCE));
-  m_spice_path_entry.signal_changed().connect(bind<GSpeakers::Settings>(
+  m_spice_path_entry.signal_changed().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SPICE_PATH));
-  m_spice_use_ngspice.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_spice_use_ngspice.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SPICE_TYPE));
-  m_spice_use_berkley.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_spice_use_berkley.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SPICE_TYPE));
-  m_spice_use_gnucap.signal_clicked().connect(bind<GSpeakers::Settings>(
+  m_spice_use_gnucap.signal_clicked().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::SPICE_TYPE));
 
-  m_toolbar_style.signal_changed().connect(bind<GSpeakers::Settings>(
+  m_toolbar_style.signal_changed().connect(sigc::bind<GSpeakers::Settings>(
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::TOOLBAR_STYLE));
 }
 

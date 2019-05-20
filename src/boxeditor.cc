@@ -31,8 +31,6 @@
 #define VB2_ENTRY_CHANGED 5
 #define FB2_ENTRY_CHANGED 6
 
-using namespace sigc;
-
 BoxEditor::BoxEditor()
     : Gtk::Frame(_("Enclosure editor")), m_table(5, 5, true), m_vbox(), m_hbox(),
       m_bass_speaker_combo(), m_speaker_qts_label("", Gtk::ALIGN_LEFT),
@@ -90,20 +88,22 @@ BoxEditor::BoxEditor()
       mem_fun(*this, &BoxEditor::on_combo_entry_changed));
 
   m_id_string_entry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
+      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
   m_vb1_entry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
+      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
   m_fb1_entry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
+      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
   signal_speakerlist_loaded.connect(mem_fun(*this, &BoxEditor::on_speaker_list_loaded));
 
   /* Setup option menu */
   Gtk::Menu::MenuList& menulist = m_option_menu.items();
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-      _("Sealed"), bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED)));
+      _("Sealed"),
+      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED)));
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-      _("Ported"), bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED)));
+      _("Ported"),
+      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED)));
   m_box_type_optionmenu.set_menu(m_option_menu);
 
   signal_box_selected.connect(mem_fun(*this, &BoxEditor::on_box_selected));

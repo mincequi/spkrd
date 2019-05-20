@@ -41,7 +41,7 @@ Settings::Settings() { defaultSettings(); }
 
 Settings::~Settings() {}
 
-void Settings::load(const string& filename) throw(runtime_error) {
+void Settings::load(const string& filename) noexcept(false) {
 
   ifstream inf(filename.c_str());
   if (!inf) {
@@ -64,7 +64,7 @@ void Settings::load(const string& filename) throw(runtime_error) {
   m_filename = filename;
 }
 
-void Settings::save(const string& filename) throw(runtime_error) {
+void Settings::save(const string& filename) noexcept(false) {
   /* save to a temporary file first, then switch over, that way we
      should behave better on systems run by muppets have let their
      filesystem run down to no space left  */
@@ -104,7 +104,7 @@ void Settings::save(const string& filename) throw(runtime_error) {
   m_filename = filename;
 }
 
-void Settings::save() throw(runtime_error) {
+void Settings::save() noexcept(false) {
 
   /* save to a temporary file first, then switch over, that way we
      should behave better on systems run by muppets have let their

@@ -19,7 +19,9 @@
 
 #include "box.h"
 #include "common.h"
+
 #include <glib.h>
+
 #include <sstream>
 
 Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2, string speaker)

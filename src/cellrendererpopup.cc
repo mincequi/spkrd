@@ -23,9 +23,11 @@
 
 #include "cellrendererpopup.h"
 #include "popupentry.h"
-#include <algorithm>
+
 #include <gdkmm/general.h>
 #include <gtk/gtkmain.h>
+
+#include <algorithm>
 #include <iostream>
 #include <memory>
 
@@ -112,7 +114,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
   if (!property_editable())
     return 0;
 
-  std::auto_ptr<PopupEntry> popup_entry(new PopupEntry(path));
+  std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
 
   popup_entry->signal_editing_done().connect(mem_fun(*this, &Self::on_popup_editing_done));
   // popup_entry->signal_arrow_clicked().connect(mem_fun(*this, &Self::on_popup_arrow_clicked));

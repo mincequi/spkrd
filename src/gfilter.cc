@@ -16,6 +16,9 @@
 */
 
 #include "gfilter.h"
+
+#include <sigc++/slot.h>
+
 #include <iostream>
 
 GFilter::GFilter() : m_Button1(gettext("Click Me")), m_Button2(gettext("Click me also")) {
@@ -23,7 +26,7 @@ GFilter::GFilter() : m_Button1(gettext("Click Me")), m_Button2(gettext("Click me
   set_border_width(10);
 
   // Connect the button's "clicked" signal to the on_button_clicked() signal handler:
-  m_Button1.signal_clicked().connect(slot(*this, &GFilter::on_button_clicked));
+  m_Button1.signal_clicked().connect(sigc::slot(*this, &GFilter::on_button_clicked));
 
   add(m_Button1);
   show_all();

@@ -22,8 +22,6 @@
 #define MENU_INDEX_SAVE 6
 #define TOOLBAR_INDEX_SAVE 3
 
-using namespace sigc;
-
 CrossoverPaned::CrossoverPaned() {
   m_tbar = NULL;
   g_settings.settings_changed.connect(mem_fun(*this, &CrossoverPaned::on_settings_changed));
@@ -82,38 +80,38 @@ Gtk::Menu& CrossoverPaned::get_menu() {
   Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _lowpass crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_LOWPASS)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_LOWPASS)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _subsonic crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_SUBSONIC)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_SUBSONIC)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _highpass crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_HIGHPASS)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_HIGHPASS)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _2-way crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_TWOWAY)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_TWOWAY)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New 2._5-way crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _3-way crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_THREEWAY)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_THREEWAY)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   sub_menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("New _4-way crossover"), *im,
-      bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-                CROSSOVER_TYPE_FOURWAY)));
+      sigc::bind<int>(mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                      CROSSOVER_TYPE_FOURWAY)));
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("_New crossover"), *new_crossover_submenu));
 

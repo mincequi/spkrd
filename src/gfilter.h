@@ -20,6 +20,7 @@
 
 #include <gtkmm/button.h>
 #include <gtkmm/window.h>
+
 #include <libintl.h>
 
 class GFilter : public Gtk::Window {

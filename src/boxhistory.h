@@ -22,17 +22,16 @@
 
 #include "boxlist.h"
 #include "common.h"
+
 #include <gdkmm/event.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/fileselection.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 #include <sigc++/signal.h>
-
-using namespace sigc;
-using namespace std;
 
 extern signal1<void, bool> signal_enclosure_set_save_state;
 
@@ -116,7 +115,7 @@ protected:
   ModelColumns m_columns;
 
   /* Additional member variables */
-  string m_filename;
+  std::string m_filename;
   bool new_xml_pressed;
   int index;
   int selected_plot;

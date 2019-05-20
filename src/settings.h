@@ -46,9 +46,9 @@ public:
   Settings();
   virtual ~Settings();
 
-  void load(const string& filename) throw(std::runtime_error);
-  void save(const string& filename) throw(std::runtime_error);
-  void save() throw(std::runtime_error);
+  void load(const string& filename) noexcept(false);
+  void save(const string& filename) noexcept(false);
+  void save() noexcept(false);
 
   string getValueString(const string& k);
   int getValueInt(const string& k);

@@ -21,7 +21,8 @@
 #include "common.h"
 #include "gspeakersplot.h"
 #include "sstream_fix.h"
-#include <math.h>
+
+#include <cmath>
 
 GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx,
                              int y_zero_freq) {

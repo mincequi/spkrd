@@ -24,7 +24,8 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
-#include <libegg/eggsidebar.h>
+
+#include "libegg/eggsidebar.h"
 
 class SidebarNotebook : public Gtk::HBox {
 public:

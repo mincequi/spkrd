@@ -38,7 +38,6 @@ Speaker_ListStore::Speaker_ListStore()
       m_BrowseFreqRespButton(_("...")), m_BassCheckButton(_("Bass")),
       m_MidrangeCheckButton(_("Midrange")), m_TweeterCheckButton(_("Tweeter")),
       m_treeview_frame("") {
-  using namespace sigc;
 
   m_modified = false;
   updating_entries = false;
@@ -164,45 +163,45 @@ Speaker_ListStore::Speaker_ListStore()
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
   m_IdStringEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 0));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 0));
   m_QtsEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 1));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 1));
   m_FsEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 2));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 2));
   m_VasEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 3));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 3));
   m_RdcEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 4));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 4));
   m_LvcEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 5));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 5));
   m_QmsEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 6));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 6));
   m_QesEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 7));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 7));
   m_ImpEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 8));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 8));
   m_SensEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 9));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 9));
   m_MmdEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 13));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 13));
   m_AdEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 14));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 14));
   m_BlEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 15));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 15));
   m_RmsEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 16));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 16));
   m_CmsEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 17));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 17));
   m_FreqRespFileEntry.signal_changed().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 18));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 18));
   m_FreqRespFileEntry.set_editable(false);
 
   m_BassCheckButton.signal_toggled().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 10));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 10));
   m_MidrangeCheckButton.signal_toggled().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 11));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 11));
   m_TweeterCheckButton.signal_toggled().connect(
-      bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 12));
+      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 12));
 
   m_EditFreqRespButton.signal_clicked().connect(
       mem_fun(*this, &Speaker_ListStore::on_edit_freq_resp));

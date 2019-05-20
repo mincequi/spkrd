@@ -20,9 +20,10 @@
 #include "boxhistory.h"
 #include "../config.h"
 #include "gspeakersfilechooser.h"
-#include <gtkmm/liststore.h>
+
 #include <gtkmm/messagedialog.h>
-#include <time.h>
+
+#include <ctime>
 
 using namespace sigc;
 

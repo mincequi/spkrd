@@ -24,6 +24,7 @@
 #define __GSPEAKERS_PLOT_H
 
 #include <gtkmm.h>
+
 #include <iostream>
 #include <string>
 #include <vector>

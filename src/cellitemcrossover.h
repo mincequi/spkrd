@@ -21,8 +21,10 @@
 #define __GSPEAKERS_CELLITEM_CROSSOVER
 
 #include "part.h"
-#include <glib/gstring.h>
+
+#include <glib.h>
 #include <glibmm/ustring.h>
+
 #include <vector>
 
 /*

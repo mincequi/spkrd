@@ -22,10 +22,13 @@
 
 #include "driverfreqrespplot.h"
 #include "speakerlist.h"
+
 #include <glibmm/ustring.h>
+
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/widget.h>
-#include <sigc++/object.h>
+
+#include <sigc++/sigc++.h>
 
 using namespace sigc;
 using namespace std;

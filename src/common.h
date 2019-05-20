@@ -22,14 +22,17 @@
 
 #include "../config.h"
 #include "settings.h"
+
 #include <gdkmm/color.h>
 #include <glibmm/ustring.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/tooltips.h>
 #include <gtkmm/widget.h>
-#include <iostream>
+
 #include <libintl.h>
 #include <sigc++/sigc++.h>
+
+#include <iostream>
 #include <string>
 #include <vector>
 

@@ -2,12 +2,14 @@
 #include "common.h"
 #include "gspeakersstock.h"
 #include "mainwindow.h"
+
 #include <gtkmm/main.h>
 #include <iostream>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <locale.h>
-#include <stdlib.h>
+
+#include <clocale>
+#include <cstdlib>
 
 int main(int argc, char* argv[]) {
   /* Initialize gettext */
