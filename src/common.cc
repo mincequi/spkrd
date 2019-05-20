@@ -25,22 +25,22 @@
 
 Settings g_settings;
 
-signal1<void, Crossover*> signal_crossover_selected;
-signal1<void, SpeakerList*> signal_speakerlist_loaded;
-signal1<void, Box*> signal_box_selected;
-signal1<void, Box*> signal_add_to_boxlist;
-signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
-signal1<void, Box*> signal_box_modified;
-signal2<int, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
-signal1<void, int> signal_remove_box_plot;
-signal1<void, int> signal_hide_box_plot;
-signal1<void, int> signal_select_plot;
-signal0<void> signal_net_modified_by_wizard;
-signal1<void, Net*> signal_net_modified_by_user;
-signal1<void, int> signal_new_crossover;
-signal0<void> signal_plot_crossover;
-signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*> signal_add_crossover_plot;
-signal0<void> signal_save_open_files;
+sigc::signal1<void, Crossover*> signal_crossover_selected;
+sigc::signal1<void, SpeakerList*> signal_speakerlist_loaded;
+sigc::signal1<void, Box*> signal_box_selected;
+sigc::signal1<void, Box*> signal_add_to_boxlist;
+sigc::signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
+sigc::signal1<void, Box*> signal_box_modified;
+sigc::signal2<int,std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
+sigc::signal1<void, int> signal_remove_box_plot;
+sigc::signal1<void, int> signal_hide_box_plot;
+sigc::signal1<void, int> signal_select_plot;
+sigc::signal0<void> signal_net_modified_by_wizard;
+sigc::signal1<void, Net*> signal_net_modified_by_user;
+sigc::signal1<void, int> signal_new_crossover;
+sigc::signal0<void> signal_plot_crossover;
+sigc::signal4<int,std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*> signal_add_crossover_plot;
+sigc::signal0<void> signal_save_open_files;
 
 namespace GSpeakers {
 Glib::ustring double_to_ustring(double d) {
@@ -76,14 +76,14 @@ int round(double d) {
   return 0;
 }
 
-Gtk::Widget& image_widget(const string& filename) {
+Gtk::Widget& image_widget(const std::string& filename) {
   Gtk::Widget* im;
   try {
 #ifdef TARGET_WIN32
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(filename);
 #else
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(
-        string(GSPEAKERS_PREFIX) + string("/share/pixmaps/") + filename);
+       std::string(GSPEAKERS_PREFIX) +std::string("/share/pixmaps/") + filename);
 #endif
     im = manage(new Gtk::Image(pixbuf));
   } catch (Glib::FileError fe) {

@@ -22,7 +22,6 @@
 #include <math.h>
 
 TotalFilterPlot::TotalFilterPlot() : plot(1, 20000) {
-  using namespace sigc;
 
   add(plot);
   // signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
@@ -55,10 +54,8 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
     l++;
   }
 
-  // cout << "TotalFilterPlot::on_add_plot: position, *i = " << position << ", " << *i << endl;
-
   /* Om *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
-   * of the vector */
+   * of thestd::vector */
   if ((position != -1) && (m_points.size() > 0)) {
     m_points[position] = points;
   } else {
@@ -71,7 +68,7 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
 
   /* sum the plots into one great plot */
   Gdk::Color c("red");
-  vector<GSpeakers::Point> pnts;
+ std::vector<GSpeakers::Point> pnts;
   plot.remove_all_plots();
   if (m_points.size() > 1) {
     pnts = m_points[0];
@@ -86,8 +83,8 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   }
 
   // kolla om *i finns i grafen
-  // om *i finns, dra bort den och lägg sedan till den nya
-  // om *i inte finns, lägg till den och spara vektorn
+  // om *i finns, dra bort den och lï¿½gg sedan till den nya
+  // om *i inte finns, lï¿½gg till den och spara vektorn
   // rita om plotten
 
   // if (position != -1) {

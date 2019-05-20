@@ -26,14 +26,14 @@
 using namespace sigc;
 using namespace std;
 
-Part::Part(int type, double value, string unit) : GSpeakersObject() {
+Part::Part(int type, double value,std::string unit) : GSpeakersObject() {
   m_type = type;
   m_value = value;
   m_unit = unit;
 }
 
 Part::Part(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (string((char*)parent->name) == string("part"))) {
+  if ((parent != NULL) && (string((char*)parent->name) ==std::string("part"))) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException e) {
@@ -45,7 +45,7 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject() {
 }
 
 void Part::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("type"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("type"))) {
     istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_value(node->next);
@@ -58,7 +58,7 @@ void Part::parse_type(xmlNodePtr node) {
 }
 
 void Part::parse_value(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("value"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("value"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_value;
     m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
@@ -72,8 +72,8 @@ void Part::parse_value(xmlNodePtr node) {
 }
 
 void Part::parse_unit(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("unit"))) {
-    m_unit = string((char*)xmlNodeGetContent(node));
+  if ((node != NULL) && (string((char*)node->name) ==std::string("unit"))) {
+    m_unit =std::string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Part: unit node not found"));
   }
@@ -104,7 +104,7 @@ void Part::set_unit(string unit) { m_unit = unit; }
 
 double Part::get_value() { return m_value; }
 
-string Part::get_unit() { return m_unit; }
+std::string Part::get_unit() { return m_unit; }
 
 void Part::on_part_value_changed(int id, double new_value) {
   if (id == get_id()) {

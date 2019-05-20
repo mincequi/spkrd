@@ -43,7 +43,7 @@ public:
   Speaker(string id_string = "Vifa P21-20-08", int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
           double qts = 0.33, double vas = 113, double fs = 28, double rdc = 5.6, double lvc = 0.9,
           double qms = 1.6, double qes = 0.41, double imp = 8, double sens = 91,
-          string freq_resp_filename = "", string imp_resp_filename = "", double mmd = 0.04,
+         std::string freq_resp_filename = "",std::string imp_resp_filename = "", double mmd = 0.04,
           double ad = 0.0837, double bl = 11, double rms = 1.7, double cms = 0.0012);
 
   /* Construct a speaker from an xml node, throws an exception on error in xml */
@@ -84,11 +84,11 @@ public:
   double get_qes();
   double get_imp();
   double get_sens();
-  string get_freq_resp_filename();
+ std::string get_freq_resp_filename();
   map<double, double>* get_freq_resp();
-  string get_imp_resp_filename();
+ std::string get_imp_resp_filename();
   map<double, double>* get_imp_resp();
-  string get_id_string();
+ std::string get_id_string();
   double get_mmd();
   double get_ad();
   double get_bl();
@@ -112,12 +112,12 @@ protected:
   double m_rms; // suspension mechanical resistance, Ns/m
   double m_cms; // suspension compliance, m/N
 
-  string m_freq_resp_filename;
+ std::string m_freq_resp_filename;
   map<double, double> m_freq_resp;
-  string m_imp_resp_filename;
+ std::string m_imp_resp_filename;
   map<double, double> m_imp_resp;
 
-  string m_id_string;
+ std::string m_id_string;
 
 private:
   /* xml parsing helper functions */

@@ -83,10 +83,10 @@ public:
   friend std::ostream& operator<<(std::ostream& o, const Net& net);
 
   /* Maybe we should add a toSPICE function here */
-  string to_SPICE(Speaker& s, bool use_gnucap = false);
+ std::string to_SPICE(Speaker& s, bool use_gnucap = false);
 
   /* Use this to get the parts or add part to the net */
-  vector<Part>* parts();
+ std::vector<Part>* parts();
 
   int get_highpass_order();
   int get_lowpass_order();
@@ -95,7 +95,7 @@ public:
   bool get_has_res();
   int get_lowpass_family();
   int get_highpass_family();
-  string get_speaker();
+ std::string get_speaker();
   int get_adv_imp_model();
   bool get_inv_pot();
 
@@ -155,10 +155,10 @@ protected:
   Part m_res_R;
   Part m_res_C;
   Part m_res_L;
-  vector<Part> m_parts;
+ std::vector<Part> m_parts;
   int m_lowpass_family;
   int m_highpass_family;
-  string m_speaker;
+ std::string m_speaker;
   int m_adv_imp_model;
   bool m_inv_pol;
 

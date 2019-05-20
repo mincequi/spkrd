@@ -137,7 +137,7 @@ void FreqRespEditor::on_save() {
 #ifdef OUTPUT_DEBUG
   cout << "FreqRespEditor::on_save" << endl;
 #endif
-  vector<double> v = get_x_vector();
+ std::vector<double> v = get_x_vector();
   ofstream of(m_filename.c_str());
   if (of.good()) {
     gchar* buffer = new char[8];
@@ -160,7 +160,7 @@ void FreqRespEditor::on_save() {
 
   } else {
     Gtk::MessageDialog* d =
-        new Gtk::MessageDialog(*this, string(_("Could not open file: ")) + m_filename, false,
+        new Gtk::MessageDialog(*this,std::string(_("Could not open file: ")) + m_filename, false,
                                Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d->run();
     delete d;
@@ -197,8 +197,8 @@ FreqRespEditor::~FreqRespEditor() {
 #endif
 }
 
-vector<double> FreqRespEditor::get_x_vector() {
-  vector<double> v;
+std::vector<double> FreqRespEditor::get_x_vector() {
+ std::vector<double> v;
   v.push_back(20.0);
   v.push_back(25.2);
   v.push_back(31.7);

@@ -41,9 +41,9 @@ public:
 
 private:
   GSpeakersPlot plot;
-  vector<int> m_nets;
+ std::vector<int> m_nets;
   Gdk::Color* m_color;
-  vector<vector<GSpeakers::Point>> m_points;
+ std::vector<vector<GSpeakers::Point>> m_points;
   SpeakerList* m_speakerlist;
 
   void on_crossover_selected(Crossover*);

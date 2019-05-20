@@ -48,7 +48,7 @@ MainWindow::MainWindow() {
     cout << fe.code() << endl;
 #endif
   }
-  set_title("GSpeakers Redux-" + string(VERSION));
+  set_title("GSpeakers Redux-" +std::string(VERSION));
 
   /* add a vbox to the window */
   add(m_main_vbox);
@@ -370,7 +370,7 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num) {
 
 void MainWindow::on_about() {
   Gtk::MessageDialog m(*this,
-                       "GSpeakers Redux-" + string(VERSION) +
+                       "GSpeakers Redux-" +std::string(VERSION) +
                            "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net",
                        false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
   m.run();

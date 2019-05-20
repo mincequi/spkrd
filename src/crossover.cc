@@ -19,7 +19,7 @@
 #include <glib.h>
 #include <sstream>
 
-Crossover::Crossover(int type, string id_string) : GSpeakersObject() {
+Crossover::Crossover(int type,std::string id_string) : GSpeakersObject() {
   m_type = type;
 
   if (m_type & CROSSOVER_TYPE_SUBSONIC) {
@@ -98,7 +98,7 @@ void Crossover::parse_networks(xmlNodePtr node) {
 
 void Crossover::parse_id_string(xmlNodePtr node) {
   if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
-    m_id_string = string((char*)xmlNodeGetContent(node));
+    m_id_string =std::string((char*)xmlNodeGetContent(node));
     // m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Crossover: id_string node expected"));
@@ -136,8 +136,8 @@ ostream& operator<<(ostream& o, const Crossover& crossover) {
   return o;
 }
 
-vector<Net>* Crossover::networks() { return &m_networks; }
+std::vector<Net>* Crossover::networks() { return &m_networks; }
 
-string Crossover::get_id_string() { return m_id_string; }
+std::string Crossover::get_id_string() { return m_id_string; }
 
 void Crossover::set_id_string(string id_string) { m_id_string = id_string; }

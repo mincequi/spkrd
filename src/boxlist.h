@@ -44,15 +44,15 @@ public:
   /* Print part data to stdout */
   friend ostream& operator<<(ostream& o, const BoxList& box_list);
 
-  /* Return the box_list vector */
-  vector<Box>* box_list();
+  /* Return the box_liststd::vector */
+ std::vector<Box>* box_list();
 
   /* Clear all items in the list */
   void clear();
 
 protected:
   /* Member variables */
-  vector<Box> m_box_list;
+ std::vector<Box> m_box_list;
 };
 
 #endif

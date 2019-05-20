@@ -103,7 +103,7 @@ void CrossoverImageView::redraw() {
           GSpeakers::round(double(window_height) / double(vert_space_per_net_devider));
 
       /* Draw first net here */
-      vector<Net>& net_vector = *crossover->networks();
+     std::vector<Net>& net_vector = *crossover->networks();
       for (unsigned i = 0; i < net_vector.size(); i++) {
 
         int net_vert_devider = 3;
@@ -162,16 +162,16 @@ void CrossoverImageView::redraw() {
         draw_connector(0, i * vert_space_per_net + 2 * part_height, part_width, part_height, false);
 
         /* lowpass part */
-        vector<Part>& part_vector = *net_vector[i].parts();
+       std::vector<Part>& part_vector = *net_vector[i].parts();
         if (lowpass_order > 0) {
-          vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + lowpass_order);
+         std::vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + lowpass_order);
           draw_lowpass_net(part_width, i * vert_space_per_net, part_width, part_height,
                            lowpass_parts);
         }
 
         /* highpass part */
         if (highpass_order > 0) {
-          vector<Part> highpass_parts(part_vector.begin() + lowpass_order,
+         std::vector<Part> highpass_parts(part_vector.begin() + lowpass_order,
                                       part_vector.begin() + lowpass_order + highpass_order);
           draw_highpass_net(part_width + lowpass_order * part_width, i * vert_space_per_net,
                             part_width, part_height, highpass_parts);
@@ -190,7 +190,7 @@ void CrossoverImageView::redraw() {
                         net_vector[i].get_damp_R1(), net_vector[i].get_damp_R2());
           driver_offset += 2;
         }
-        string spk = net_vector[i].get_speaker();
+       std::string spk = net_vector[i].get_speaker();
         Speaker speaker;
         if (speaker_list != NULL) {
           speaker = speaker_list->get_speaker_by_id_string(spk);

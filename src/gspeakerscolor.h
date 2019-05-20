@@ -27,13 +27,13 @@ class GSpeakersColor {
 public:
   GSpeakersColor();
   ~GSpeakersColor();
-  string get_color_string();
+ std::string get_color_string();
   void unget_color_string(string s);
 
 private:
-  vector<string> m_colors;
+ std::vector<string> m_colors;
   int m_counter;
-  vector<string>::iterator get_iterator_from_string(string s);
+ std::vector<string>::iterator get_iterator_from_string(string s);
 };
 
 #endif

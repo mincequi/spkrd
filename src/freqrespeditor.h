@@ -32,20 +32,20 @@ class FreqRespEditor : public Gtk::Dialog {
 public:
   FreqRespEditor(string filename = "");
   ~FreqRespEditor();
-  string get_filename() { return m_filename; }
+ std::string get_filename() { return m_filename; }
 
 private:
   Gtk::Table m_table;
-  vector<Gtk::Entry*> dbmag_entries;
+ std::vector<Gtk::Entry*> dbmag_entries;
   Gtk::Button m_save_button, m_saveas_button, m_close_button;
 
-  string m_filename;
+ std::string m_filename;
 
   /* callbacks */
   void on_save();
   void on_save_as();
   void on_close();
-  vector<double> get_x_vector();
+ std::vector<double> get_x_vector();
 };
 
 #endif

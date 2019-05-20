@@ -192,7 +192,7 @@ Gtk::Widget& EnclosurePaned::get_toolbar() {
   return m_toolbar;
 }
 
-void EnclosurePaned::on_settings_changed(const string& s) {
+void EnclosurePaned::on_settings_changed(const std::string& s) {
   if (s == "ToolbarStyle") {
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }

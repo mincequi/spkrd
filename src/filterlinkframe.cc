@@ -29,7 +29,7 @@
 
 using namespace sigc;
 
-FilterLinkFrame::FilterLinkFrame(Net* net, const string& description, SpeakerList* speaker_list)
+FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list)
     : Gtk::Frame(""), adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0), m_speaker_combo(),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
       m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
@@ -45,11 +45,11 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const string& description, SpeakerLis
   m_net = net;
   m_description = description;
   m_speaker_list = speaker_list;
-  string speaker_name = m_net->get_speaker();
+ std::string speaker_name = m_net->get_speaker();
 
   /* Setup the speaker combo box */
   m_vbox.set_border_width(5);
-  vector<string> popdown_strings;
+ std::vector<string> popdown_strings;
   if (speaker_name != "") {
     popdown_strings.push_back(speaker_name);
   }
@@ -279,7 +279,7 @@ void FilterLinkFrame::on_order_selected(int which, int order) {
   }
 }
 
-void FilterLinkFrame::on_settings_changed(const string& s) {
+void FilterLinkFrame::on_settings_changed(const std::string& s) {
   if (s == "DisableFilterAmp") {
     on_param_changed();
   }
@@ -298,7 +298,7 @@ void FilterLinkFrame::on_param_changed() {
     m_net->set_speaker(speaker.get_id_string());
 
     int index = 0;
-    vector<double> num_params;
+   std::vector<double> num_params;
     if (m_net->get_type() & NET_TYPE_LOWPASS) {
       m_net->set_lowpass_order(m_lower_order_optionmenu->get_history() + 1);
       double cutoff = m_lower_co_freq_spinbutton->get_value();
@@ -609,9 +609,9 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   m_speaker_list = speaker_list;
   //}
 
-  string speaker_name = m_net->get_speaker();
+ std::string speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */
-  vector<string> popdown_strings;
+ std::vector<string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
   if (m_speaker_list != NULL) {
     for (vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
@@ -636,7 +636,7 @@ void FilterLinkFrame::on_plot_crossover() {
   if (m_speaker_list != NULL) {
     speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
   }
-  string spice_filename;
+ std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (GSpeakersException e) {
@@ -649,7 +649,7 @@ void FilterLinkFrame::on_plot_crossover() {
   }
 
   /* run spice with created file */
-  string cmd;
+ std::string cmd;
   if ((g_settings.getValueBool("SPICEUseNGSPICE") == true) ||
       (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
     cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + " > " +
@@ -666,8 +666,8 @@ void FilterLinkFrame::on_plot_crossover() {
   cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
 #endif
 
-  /* extract spice output into a vector */
-  string spice_output_file = spice_filename + ".out";
+  /* extract spice output into astd::vector */
+ std::string spice_output_file = spice_filename + ".out";
   ifstream fin(spice_output_file.c_str());
   if (fin.good()) {
     bool output = false;
@@ -793,8 +793,8 @@ void FilterLinkFrame::on_plot_crossover() {
 /*
  * Numerical coefficients for the filter principles
  */
-vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type) {
-  vector<double> nums;
+std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type) {
+ std::vector<double> nums;
   switch (net_order) {
   case NET_ORDER_1ST:
     switch (net_type) {

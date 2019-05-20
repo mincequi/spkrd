@@ -45,7 +45,8 @@ Speaker_ListStore::Speaker_ListStore()
 #ifdef TARGET_WIN32
   g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
 #else
-  g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  g_settings.defaultValueString("SpeakerListXml",
+                                std::string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
 #endif
   m_filename = g_settings.getValueString("SpeakerListXml");
 
@@ -103,7 +104,7 @@ Speaker_ListStore::Speaker_ListStore()
   m_Table.attach(*manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
   m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
   GSpeakers::tooltips().set_tip(m_IdStringEntry,
-                                _("The name or identification string for the driver"));
+                                _("The name or identificationstd::string for the driver"));
   m_Table.attach(*manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_LEFT)), 0, 2, 1, 2,
                  Gtk::FILL | Gtk::EXPAND | Gtk::SHRINK);
   m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
@@ -337,7 +338,7 @@ void Speaker_ListStore::on_save_open_files() {
   }
 }
 
-void Speaker_ListStore::on_settings_changed(const string& s) {
+void Speaker_ListStore::on_settings_changed(const std::string& s) {
   if (s == "ToolbarStyle") {
     tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }
@@ -550,7 +551,7 @@ void Speaker_ListStore::on_selection_changed() {
         if (s.get_freq_resp_filename() != "") {
           ifstream fin(s.get_freq_resp_filename().c_str());
           if (fin.good()) {
-            vector<GSpeakers::Point> points;
+            std::vector<GSpeakers::Point> points;
             while (!fin.eof()) {
               char* buffer = new char[100];
               fin.getline(buffer, 100, '\n');
@@ -590,13 +591,13 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
   gchar* buffer = new gchar[8];
 
   if (g_settings.getValueBool("DrawDriverImpPlot") == true) {
-    vector<GSpeakers::Point> points;
+    std::vector<GSpeakers::Point> points;
     /* Produce SPICE input-file */
 #ifdef TARGET_WIN32
-    string tmp_file =
+    std::string tmp_file =
         Glib::get_tmp_dir() + "\\speaker" + GSpeakers::int_to_ustring(s.get_id()) + ".tmp";
 #else
-    string tmp_file =
+    std::string tmp_file =
         Glib::get_tmp_dir() + "/speaker" + GSpeakers::int_to_ustring(s.get_id()) + ".tmp";
 #endif
 
@@ -626,7 +627,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 
       of << ".end" << endl;
       of.close();
-      string cmd;
+      std::string cmd;
       if ((g_settings.getValueBool("SPICEUseNGSPICE")) == true ||
           (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
         cmd = g_settings.getValueString("SPICECmdLine") + " -b " + tmp_file + " > " + tmp_file +
@@ -642,7 +643,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 #ifdef OUTPUT_DEBUG
       cout << "Speaker_ListStore::draw_imp_plot: SPICE done" << endl;
 #endif
-      string spice_output_file = tmp_file + ".out";
+      std::string spice_output_file = tmp_file + ".out";
       ifstream fin(spice_output_file.c_str());
       if (fin.good()) {
         bool output = false;
@@ -1253,7 +1254,7 @@ void Speaker_ListStore::add_columns() {
 void Speaker_ListStore::type_cell_data_func(Gtk::CellRenderer* cell,
                                             const Gtk::TreeModel::iterator& iter) {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  string s = "";
+  std::string s = "";
   if ((*iter)[m_columns.type] & SPEAKER_TYPE_BASS) {
     s = _("Woofer");
   }

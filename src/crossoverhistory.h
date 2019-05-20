@@ -27,7 +27,7 @@
 using namespace sigc;
 using namespace std;
 
-extern signal1<void, bool> signal_crossover_set_save_state;
+extern sigc::signal1<void, bool> signal_crossover_set_save_state;
 
 /*
  * This class implements a TreeView connected with a ListStore
@@ -102,7 +102,7 @@ protected:
   ModelColumns m_columns;
 
   /* Additional member variables */
-  string m_filename;
+ std::string m_filename;
   bool new_xml_pressed;
   int index;
 };

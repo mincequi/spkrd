@@ -81,6 +81,6 @@ ostream& operator<<(ostream& o, const BoxList& box_list) {
   return o;
 }
 
-vector<Box>* BoxList::box_list() { return &m_box_list; }
+std::vector<Box>* BoxList::box_list() { return &m_box_list; }
 
 void BoxList::clear() { m_box_list.erase(m_box_list.begin(), m_box_list.end()); }

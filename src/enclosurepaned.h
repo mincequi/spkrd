@@ -39,7 +39,7 @@ public:
 
 protected:
   /* Callbacks */
-  void on_settings_changed(const string&);
+  void on_settings_changed(const std::string&);
   void set_save_state(bool b);
 
   void on_plot_selected(int);

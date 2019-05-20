@@ -74,7 +74,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   if (m_speakerlist != NULL) {
     s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
   }
-  vector<GSpeakers::Point> freq_resp_points;
+ std::vector<GSpeakers::Point> freq_resp_points;
   if (s.get_freq_resp_filename() != "") {
     ifstream fin(s.get_freq_resp_filename().c_str());
     cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename()
@@ -107,7 +107,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
     GSpeakers::Point p2(20000, 0);
     freq_resp_points.push_back(p2);
   }
-  vector<GSpeakers::Point> points;
+ std::vector<GSpeakers::Point> points;
   for (unsigned int j = 0; j < filter_points.size(); j++) {
     double filter_y = filter_points[j].get_y();
     if (g_settings.getValueBool("DisableFilterAmp") == true) {
@@ -134,7 +134,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   }
 
   /* If *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
-   * of the vector */
+   * of thestd::vector */
   if ((position != -1) && (m_points.size() > 0)) {
     m_points[position] = points;
   } else {
@@ -143,7 +143,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   }
 
   plot.remove_all_plots();
-  vector<GSpeakers::Point> pnts;
+ std::vector<GSpeakers::Point> pnts;
   if (m_points.size()) {
     pnts = m_points[0];
     plot.add_plot(m_points[0], c2);

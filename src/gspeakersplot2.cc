@@ -107,11 +107,11 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   box_width = get_allocation().width - (2 * BOX_FRAME_SIZE);
   box_height = get_allocation().height - (2 * BOX_FRAME_SIZE);
 
-  vector<Gdk::Point> points;
+  std::vector<Gdk::Point> points;
   double f_div, f_mapped;
   int x, y;
 
-  vector<GSpeakers::Point>::iterator iter;
+  std::vector<GSpeakers::Point>::iterator iter;
   for (iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter) {
     if (m_upper_x == 20000) {
       if ((*iter).get_x() < 100) {
@@ -191,7 +191,8 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   return m_colors.size() - 1;
 }
 
-void GSpeakersPlot::replace_plot(int index, vector<GSpeakers::Point>& p, Gdk::Color& ref_color) {
+void GSpeakersPlot::replace_plot(int index, std::vector<GSpeakers::Point>& p,
+                                 Gdk::Color& ref_color) {
   m_points[index] = p;
   m_colors[index] = ref_color;
 
@@ -252,11 +253,11 @@ void GSpeakersPlot::remove_all_plots() {
   //  for (unsigned i = m_points.size(); i > 0; --i) {
   //    remove_plot((int)i);
   //  }
-  // cout << "number of point vectors: " << m_points.size() << endl;
+  // cout << "number of pointstd::vectors: " << m_points.size() << endl;
   m_points.erase(m_points.begin(), m_points.end());
   m_colors.erase(m_colors.begin(), m_colors.end());
   m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
-  //  for (vector< vector<GSpeakers::Point> >::iterator iter = m_points.begin();
+  //  for (vector<std::vector<GSpeakers::Point> >::iterator iter = m_points.begin();
   //       iter != m_points.end();
   //       ++iter)
   //  {
@@ -342,11 +343,11 @@ void GSpeakersPlot::redraw() {
     if (m_visible_plots[i] == true) {
       m_refGC->set_rgb_fg_color(m_colors[i]);
 
-      vector<Gdk::Point> points;
+      std::vector<Gdk::Point> points;
       double f_div, f_mapped;
       int x, y;
 
-      vector<GSpeakers::Point>::iterator iter;
+      std::vector<GSpeakers::Point>::iterator iter;
       for (iter = m_points[i].begin(); iter != m_points[i].end(); ++iter) {
 
         if (m_upper_x == 20000) {
@@ -525,7 +526,7 @@ void GSpeakersPlot::draw_lin_grid() {
 
 void GSpeakersPlot::draw_horz_grid() {}
 
-// void GSpeakersPlot::set_font( const string& font )
+// void GSpeakersPlot::set_font( const std::string& font )
 //{
 
 //}

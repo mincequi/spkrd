@@ -65,7 +65,7 @@ protected:
   void on_edit_freq_resp();
   void on_browse_freq_resp();
   void on_save_open_files();
-  void on_settings_changed(const string&);
+  void on_settings_changed(const std::string&);
   void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
   void qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
   void fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
@@ -164,7 +164,7 @@ protected:
   ModelColumns m_columns;
   // Glib::RefPtr<Gtk::TreeSelection> old_refSelection;
   void set_entries_sensitive(bool value);
-  string m_filename;
+  std::string m_filename;
   bool m_modified;
 };
 

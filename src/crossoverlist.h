@@ -50,14 +50,14 @@ public:
   friend ostream& operator<<(ostream& o, const CrossoverList& crossover_list);
 
   /* return a pointer to the crossover list */
-  vector<Crossover>* crossover_list();
+ std::vector<Crossover>* crossover_list();
 
   /* Remove all items from the corssover list */
   void clear();
 
 protected:
   /* Member variables */
-  vector<Crossover> m_crossover_list;
+ std::vector<Crossover> m_crossover_list;
 };
 
 #endif

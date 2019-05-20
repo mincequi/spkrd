@@ -24,7 +24,7 @@
 
 #include <sstream>
 
-Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2, string speaker)
+Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2,std::string speaker)
     : GSpeakersObject() {
   m_id_string = id_string;
   m_type = type;
@@ -36,7 +36,7 @@ Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double 
 }
 
 Box::Box(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (string((char*)parent->name) == string("box"))) {
+  if ((parent != NULL) && (string((char*)parent->name) ==std::string("box"))) {
     try {
       parse_id_string(parent->children);
     } catch (GSpeakersException e) {
@@ -92,9 +92,9 @@ void Box::set_vb2(double vb2) { m_vb2 = vb2; }
 
 void Box::set_fb2(double fb2) { m_fb2 = fb2; }
 
-void Box::set_speaker(const string& speaker) { m_speaker = speaker; }
+void Box::set_speaker(const std::string& speaker) { m_speaker = speaker; }
 
-string Box::get_id_string() { return m_id_string; }
+std::string Box::get_id_string() { return m_id_string; }
 
 double Box::get_vb1() { return m_vb1; }
 
@@ -104,11 +104,11 @@ double Box::get_vb2() { return m_vb2; }
 
 double Box::get_fb2() { return m_fb2; }
 
-const string& Box::get_speaker() { return m_speaker; }
+const std::string& Box::get_speaker() { return m_speaker; }
 
 void Box::parse_id_string(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("id_string"))) {
-    m_id_string = string((char*)xmlNodeGetContent(node));
+  if ((node != NULL) && (string((char*)node->name) ==std::string("id_string"))) {
+    m_id_string =std::string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
     } catch (GSpeakersException e) {
@@ -120,7 +120,7 @@ void Box::parse_id_string(xmlNodePtr node) {
 }
 
 void Box::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("type"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("type"))) {
     istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_vb1(node->next);
@@ -133,7 +133,7 @@ void Box::parse_type(xmlNodePtr node) {
 }
 
 void Box::parse_vb1(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("vb1"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("vb1"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_vb1;
     m_vb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
@@ -147,7 +147,7 @@ void Box::parse_vb1(xmlNodePtr node) {
 }
 
 void Box::parse_fb1(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("fb1"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("fb1"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_fb1;
     m_fb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
@@ -161,7 +161,7 @@ void Box::parse_fb1(xmlNodePtr node) {
 }
 
 void Box::parse_vb2(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("vb2"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("vb2"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_vb2;
     m_vb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
@@ -175,7 +175,7 @@ void Box::parse_vb2(xmlNodePtr node) {
 }
 
 void Box::parse_fb2(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("fb2"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("fb2"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
     m_fb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
@@ -189,9 +189,9 @@ void Box::parse_fb2(xmlNodePtr node) {
 }
 
 void Box::parse_speaker(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) == string("speaker"))) {
+  if ((node != NULL) && (string((char*)node->name) ==std::string("speaker"))) {
     // istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
-    m_speaker = string((char*)xmlNodeGetContent(node));
+    m_speaker =std::string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Box: speaker node not found"));
   }

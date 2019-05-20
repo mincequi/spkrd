@@ -307,7 +307,7 @@ void Net::parse_highpass_family(xmlNodePtr node) {
 
 void Net::parse_speaker(xmlNodePtr node) {
   if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0)) {
-    m_speaker = string((char*)xmlNodeGetContent(node));
+    m_speaker =std::string((char*)xmlNodeGetContent(node));
     try {
       parse_adv_imp_model(node->next);
     } catch (GSpeakersException e) {
@@ -391,12 +391,12 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent) {
   return net;
 }
 
-string Net::to_SPICE(Speaker& s, bool use_gnucap) {
-  string tmp_dir = Glib::get_tmp_dir();
+std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
+ std::string tmp_dir = Glib::get_tmp_dir();
 #ifdef TARGET_WIN32
-  string tmp_file = tmp_dir + "\\net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
+ std::string tmp_file = tmp_dir + "\\net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
 #else
-  string tmp_file = tmp_dir + "/net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
+ std::string tmp_file = tmp_dir + "/net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
 #endif
 
   int node_counter = 0;
@@ -608,9 +608,9 @@ std::ostream& operator<<(std::ostream& o, const Net& net) {
   return o << _("********* ******") << endl;
 }
 
-vector<Part>* Net::parts() { return &m_parts; }
+std::vector<Part>* Net::parts() { return &m_parts; }
 
-string Net::get_speaker() { return m_speaker; }
+std::string Net::get_speaker() { return m_speaker; }
 
 int Net::get_lowpass_family() { return m_lowpass_family; }
 
@@ -712,7 +712,7 @@ void Net::set_inv_pol(bool pol) { m_inv_pol = pol; }
  *
  */
 void Net::setup_net_by_order(int new_order, int which_net) {
-  vector<Part>::iterator iter = m_parts.begin();
+ std::vector<Part>::iterator iter = m_parts.begin();
 
   if (which_net == NET_TYPE_LOWPASS) {
     /* Find out how much we should increase (or decrease) filter order */
@@ -738,7 +738,7 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_lowpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Since we're inserting the parts...last one comes first in the vector, we insert them
+          /* Since we're inserting the parts...last one comes first in thestd::vector, we insert them
              in reversed order */
           iter = m_parts.insert(iter + m_lowpass_order, Part(PART_TYPE_CAPACITOR));
           iter = m_parts.insert(iter, Part(PART_TYPE_INDUCTOR));
@@ -786,7 +786,7 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_highpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Here we use push_back since we're always adding parts to the end of the m_parts vector
+          /* Here we use push_back since we're always adding parts to the end of the m_partsstd::vector
            */
           m_parts.push_back(Part(PART_TYPE_CAPACITOR));
           break;

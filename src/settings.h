@@ -34,53 +34,50 @@
 #include <stdexcept>
 #include <string>
 
-using std::map;
-using std::string;
-
 class Settings : public sigc::trackable {
 private:
-  std::map<const string, string> m_map;
+  std::map<const std::string, std::string> m_map;
   std::string m_filename;
 
 public:
   Settings();
   virtual ~Settings();
 
-  void load(const string& filename) noexcept(false);
-  void save(const string& filename) noexcept(false);
+  void load(const std::string& filename) noexcept(false);
+  void save(const std::string& filename) noexcept(false);
   void save() noexcept(false);
 
-  string getValueString(const string& k);
-  int getValueInt(const string& k);
-  unsigned int getValueUnsignedInt(const string& k);
-  unsigned short getValueUnsignedShort(const string& k);
-  unsigned char getValueUnsignedChar(const string& k);
-  bool getValueBool(const string& k);
+  std::string getValueString(const std::string& k);
+  int getValueInt(const std::string& k);
+  unsigned int getValueUnsignedInt(const std::string& k);
+  unsigned short getValueUnsignedShort(const std::string& k);
+  unsigned char getValueUnsignedChar(const std::string& k);
+  bool getValueBool(const std::string& k);
 
-  void setValue(const string& k, const string& v);
-  void setValue(const string& k, int v);
-  void setValue(const string& k, unsigned int v);
-  void setValue(const string& k, unsigned short v);
-  void setValue(const string& k, unsigned char v);
-  void setValue(const string& k, bool v);
+  void setValue(const std::string& k, const std::string& v);
+  void setValue(const std::string& k, int v);
+  void setValue(const std::string& k, unsigned int v);
+  void setValue(const std::string& k, unsigned short v);
+  void setValue(const std::string& k, unsigned char v);
+  void setValue(const std::string& k, bool v);
 
-  void defaultValueUnsignedInt(const string& k, unsigned int dflt, unsigned int lower = 0,
+  void defaultValueUnsignedInt(const std::string& k, unsigned int dflt, unsigned int lower = 0,
                                unsigned int upper = 0xffffffff);
-  void defaultValueUnsignedShort(const string& k, unsigned short dflt, unsigned short lower = 0,
-                                 unsigned short upper = 0xffff);
-  void defaultValueUnsignedChar(const string& k, unsigned char dflt, unsigned char lower = 0,
+  void defaultValueUnsignedShort(const std::string& k, unsigned short dflt,
+                                 unsigned short lower = 0, unsigned short upper = 0xffff);
+  void defaultValueUnsignedChar(const std::string& k, unsigned char dflt, unsigned char lower = 0,
                                 unsigned char upper = 0xff);
-  void defaultValueBool(const string& k, bool dflt);
-  void defaultValueString(const string& k, const string& dflt);
+  void defaultValueBool(const std::string& k, bool dflt);
+  void defaultValueString(const std::string& k, const std::string& dflt);
 
-  bool exists(const string& k);
+  bool exists(const std::string& k);
 
   virtual void defaultSettings();
 
-  static string Escape(const string& t);
-  static string Unescape(const string& t);
+  static std::string Escape(const std::string& t);
+  static std::string Unescape(const std::string& t);
 
-  sigc::signal1<void, const string&> settings_changed;
+  sigc::signal1<void, const std::string&> settings_changed;
 };
 
 #endif

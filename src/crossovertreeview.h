@@ -61,7 +61,7 @@ protected:
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
-  vector<CellItem_Crossover> m_vecItems;
+ std::vector<CellItem_Crossover> m_vecItems;
 
   /* Pointer to currently selected crossover */
   Crossover* cover;

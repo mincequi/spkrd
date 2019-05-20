@@ -211,7 +211,7 @@ void CrossoverPaned::on_plot_crossover() {
   signal_plot_crossover();
 }
 
-void CrossoverPaned::on_settings_changed(const string& s) {
+void CrossoverPaned::on_settings_changed(const std::string& s) {
   if (s == "ToolbarStyle") {
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }

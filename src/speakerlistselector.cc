@@ -48,7 +48,7 @@ SpeakerListSelector::SpeakerListSelector()
   /* Fix some initstuff since we don't have any settings */
   f_open = new Gtk::FileSelection(_("Open speaker xml"));
 
-  g_settings.defaultValueString("SpeakerListXml", string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+  g_settings.defaultValueString("SpeakerListXml",std::string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
   f_open->set_filename(g_settings.getValueString("SpeakerListXml"));
   f_open->get_ok_button()->signal_clicked().connect(
       bind<Gtk::FileSelection*>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));

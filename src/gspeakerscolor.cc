@@ -61,8 +61,8 @@ GSpeakersColor::GSpeakersColor() {
 
 GSpeakersColor::~GSpeakersColor() {}
 
-string GSpeakersColor::get_color_string() {
-  string s = m_colors[m_counter];
+std::string GSpeakersColor::get_color_string() {
+ std::string s = m_colors[m_counter];
   m_counter = (m_counter + 1) % m_colors.size();
   return s;
 }
@@ -72,7 +72,7 @@ void GSpeakersColor::unget_color_string(string s) {
   m_colors.insert(m_colors.begin() + m_counter, s);
 }
 
-vector<string>::iterator GSpeakersColor::get_iterator_from_string(string s) {
+std::vector<string>::iterator GSpeakersColor::get_iterator_from_string(string s) {
   for (vector<string>::iterator from = m_colors.begin(); from != m_colors.end(); ++from) {
     if (string(*from) == s) {
       return from;

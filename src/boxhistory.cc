@@ -28,7 +28,7 @@
 using namespace sigc;
 
 /* Use this to signal parent when to gray/ungray save-buttons */
-signal1<void, bool> signal_enclosure_set_save_state;
+sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
 BoxHistory::BoxHistory() : Gtk::Frame("") {
   bool boxlist_found = false;
@@ -47,7 +47,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
 #ifdef TARGET_WIN32
   g_settings.defaultValueString("BoxListXml", "box1.xml");
 #else
-  g_settings.defaultValueString("BoxListXml", string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
+  g_settings.defaultValueString("BoxListXml",std::string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
 #endif
   m_filename = g_settings.getValueString("BoxListXml");
 #ifdef __OUTPUT_DEBUG
@@ -235,7 +235,7 @@ void BoxHistory::on_new_copy() {
         time_t t;
         time(&t);
         /* convert to nice time format */
-        string s = string(ctime(&t));
+       std::string s =std::string(ctime(&t));
         int length = s.length();
         s[length - 1] = '\0';
         b.set_id_string(_("Box: ") + s);
@@ -262,7 +262,7 @@ void BoxHistory::on_new() {
   time_t t;
   time(&t);
   /* convert to nice time format */
-  string s = string(ctime(&t));
+ std::string s =std::string(ctime(&t));
   int length = s.length();
   s[length - 1] = '\0';
   b.set_id_string(_("Box: ") + s);

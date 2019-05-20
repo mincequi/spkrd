@@ -84,4 +84,4 @@ ostream& operator<<(ostream& o, const CrossoverList& crossover_list) {
   return o;
 }
 
-vector<Crossover>* CrossoverList::crossover_list() { return &m_crossover_list; }
+std::vector<Crossover>* CrossoverList::crossover_list() { return &m_crossover_list; }

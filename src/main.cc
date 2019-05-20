@@ -63,12 +63,12 @@ int main(int argc, char* argv[]) {
 #endif
     md.run();
 #ifdef TARGET_WIN32
-    string s = "echo "
-               " > gspeakers2.conf";
+    std::string s = "echo "
+                    " > gspeakers2.conf";
     system(s.c_str());
     g_settings.load("gspeakers2.conf");
 #else
-    string s = "mkdir " + Glib::get_home_dir() + "/.gspeakers";
+    std::string s = "mkdir " + Glib::get_home_dir() + "/.gspeakers";
     system(s.c_str());
     s = "touch " + Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf";
     system(s.c_str());
@@ -133,15 +133,15 @@ Net n1;
 */
 
 /*
-  vector<string> v;
+ std::vector<string> v;
   v.push_back("hejsan");
   v.push_back("halloe");
   v.push_back("halihalo");
 
-  vector<string>::iterator iter = v.begin();
+ std::vector<string>::iterator iter = v.begin();
 
   for(
-      vector<string>::iterator from = v.begin();
+     std::vector<string>::iterator from = v.begin();
       from != v.end();
       ++from
      )
@@ -150,7 +150,7 @@ Net n1;
   }
   v.erase(iter + 1);
   for(
-      vector<string>::iterator from = v.begin();
+     std::vector<string>::iterator from = v.begin();
       from != v.end();
       ++from
      )
@@ -158,15 +158,15 @@ Net n1;
     cout << *from << endl;
   }
 
-  vector<string> v;
+ std::vector<string> v;
   v.push_back("hejsan");
   v.push_back("halloe");
   v.push_back("halihalo");
 
-  vector<string>::iterator iter = v.begin();
+ std::vector<string>::iterator iter = v.begin();
 
   for(
-      vector<string>::iterator from = v.begin();
+     std::vector<string>::iterator from = v.begin();
       from != v.end();
       ++from
      )
@@ -178,7 +178,7 @@ Net n1;
   iter = v.insert(iter, "hej2");
   v.insert(iter, "hej3");
   for(
-      vector<string>::iterator from = v.begin();
+     std::vector<string>::iterator from = v.begin();
       from != v.end();
       ++from
      )

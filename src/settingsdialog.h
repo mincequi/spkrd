@@ -73,7 +73,7 @@ private:
 
   Gtk::Button* close_button;
 
-  string m_filename;
+ std::string m_filename;
 
   void on_close();
   void on_spice_browse();

@@ -24,6 +24,7 @@
 #include "common.h"
 #include "gspeakersplot.h"
 #include <gtkmm.h>
+
 #include <vector>
 
 /*
@@ -42,9 +43,9 @@ public:
 
 private:
   GSpeakersPlot plot;
-  vector<int> m_nets;
+  std::vector<int> m_nets;
   Gdk::Color* m_color;
-  vector<vector<GSpeakers::Point>> m_points;
+  std::vector<vector<GSpeakers::Point>> m_points;
   bool on_delete_event(GdkEventAny* event);
   void on_crossover_selected(Crossover*);
   void on_plot_crossover();

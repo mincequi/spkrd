@@ -105,15 +105,15 @@ public:
 
   void redraw();
 
-  void set_font(const string& font);
+  void set_font(const std::string& font);
   void set_line_style(Gdk::LineStyle& style);
   void set_line_size(int size);
 
   void select_plot(int index);
 
-  void replace_plot(int index, vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
-  void set_y_label(const string& text);
-  void set_y_label2(const string& text);
+  void replace_plot(int index,std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
+  void set_y_label(const std::string& text);
+  void set_y_label2(const std::string& text);
 
 protected:
   /* This is the function that draws the graphics */
@@ -122,11 +122,11 @@ protected:
   // void on_show();
   bool on_configure_event(GdkEventConfigure* event);
 
-  /* Vectors that hold the y magnitude points for the plots (dbmag) and
+  /*std::vectors that hold the y magnitude points for the plots (dbmag) and
      the corresponding colors (colors) */
-  vector<vector<GSpeakers::Point>> m_points;
-  vector<Gdk::Color> m_colors;
-  vector<bool> m_visible_plots;
+ std::vector<vector<GSpeakers::Point>> m_points;
+ std::vector<Gdk::Color> m_colors;
+ std::vector<bool> m_visible_plots;
 
 private:
   Glib::ustring int_to_ustring(int d);
@@ -140,7 +140,7 @@ private:
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;
   bool m_logx, visible;
   int m_selected_plot;
-  string m_y_label1, m_y_label2;
+ std::string m_y_label1, m_y_label2;
 
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;

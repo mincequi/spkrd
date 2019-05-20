@@ -109,7 +109,7 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
-  vector<Gdk::Point> points;
+ std::vector<Gdk::Point> points;
   double f_div, f_mapped;
   int x, y;
 
@@ -118,7 +118,7 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   //  cout << (*iter).get_x() << ":" << (*iter).get_y() << endl;
   //}
 
-  vector<GSpeakers::Point>::iterator iter;
+ std::vector<GSpeakers::Point>::iterator iter;
 
   for (iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter) {
     if (m_upper_x == 20000) {
@@ -202,7 +202,7 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   return m_colors.size() - 1;
 }
 
-void GSpeakersPlot::replace_plot(int index, vector<GSpeakers::Point>& p, Gdk::Color& ref_color) {
+void GSpeakersPlot::replace_plot(int index,std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color) {
   m_points[index] = p;
   m_colors[index] = ref_color;
 
@@ -349,11 +349,11 @@ void GSpeakersPlot::redraw() {
     if (m_visible_plots[i] == true) {
       m_refGC->set_rgb_fg_color(m_colors[i]);
 
-      vector<Gdk::Point> points;
+     std::vector<Gdk::Point> points;
       double f_div, f_mapped;
       int x, y;
 
-      vector<GSpeakers::Point>::iterator iter;
+     std::vector<GSpeakers::Point>::iterator iter;
       for (iter = m_points[i].begin(); iter != m_points[i].end(); ++iter) {
 
         if (m_upper_x == 20000) {
@@ -538,7 +538,7 @@ void GSpeakersPlot::draw_lin_grid() {
 
 void GSpeakersPlot::draw_horz_grid() {}
 
-// void GSpeakersPlot::set_font( const string& font )
+// void GSpeakersPlot::set_font( const std::string& font )
 //{
 
 //}
@@ -547,7 +547,7 @@ void GSpeakersPlot::set_line_style(Gdk::LineStyle& style) {}
 
 void GSpeakersPlot::set_line_size(int size) {}
 
-void GSpeakersPlot::set_y_label(const string& text) {
+void GSpeakersPlot::set_y_label(const std::string& text) {
   m_y_label1 = text;
 
   if (visible == true) {
@@ -557,7 +557,7 @@ void GSpeakersPlot::set_y_label(const string& text) {
   }
 }
 
-void GSpeakersPlot::set_y_label2(const string& text) {
+void GSpeakersPlot::set_y_label2(const std::string& text) {
   m_y_label2 = text;
 
   if (visible == true) {

@@ -40,7 +40,7 @@ public:
   void select_first_crossover();
 
 protected:
-  void on_settings_changed(const string&);
+  void on_settings_changed(const std::string&);
   void on_plot_crossover();
   void on_new_crossover_menu_action(int);
   void set_save_state(bool b);

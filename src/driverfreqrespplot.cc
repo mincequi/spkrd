@@ -45,6 +45,6 @@ void DriverFreqRespPlot::add_plot(vector<GSpeakers::Point>& points, Gdk::Color& 
   plot.add_plot(points, color);
 }
 
-void DriverFreqRespPlot::replace_plot(int i, vector<GSpeakers::Point>& points, Gdk::Color& color) {
+void DriverFreqRespPlot::replace_plot(int i,std::vector<GSpeakers::Point>& points, Gdk::Color& color) {
   plot.replace_plot(i, points, color);
 }

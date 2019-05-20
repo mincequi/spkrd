@@ -41,7 +41,7 @@ using namespace std;
 
 class Crossover : public GSpeakersObject {
 public:
-  Crossover(int type = CROSSOVER_TYPE_TWOWAY, string id_string = "Crossover");
+  Crossover(int type = CROSSOVER_TYPE_TWOWAY,std::string id_string = "Crossover");
 
   /* Construct a part from an xml node */
   Crossover(xmlNodePtr parent);
@@ -53,18 +53,18 @@ public:
   friend ostream& operator<<(ostream& o, const Crossover& crossover);
 
   /* Use this to get the parts or add part to the net */
-  vector<Net>* networks();
+ std::vector<Net>* networks();
 
   /* return id_string for this crossover */
-  string get_id_string();
+ std::string get_id_string();
   void set_id_string(string id_string);
 
 protected:
   /* Member variables */
-  vector<Net> m_networks;
+ std::vector<Net> m_networks;
   // int m_id; /* from GSpeakersObject */
   // int m_type; /* from GSpeakersObject, we don't really need this one here... */
-  string m_id_string;
+ std::string m_id_string;
 
   /* Member functions, used to parse xml */
   void parse_type(xmlNodePtr node);

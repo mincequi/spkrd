@@ -86,7 +86,7 @@ signal5<void, const Glib::ustring&, int, int, int, int>& CellRendererPopup::sign
   return signal_show_popup_;
 }
 
-signal0<void>& CellRendererPopup::signal_hide_popup() { return signal_hide_popup_; }
+sigc::signal0<void>& CellRendererPopup::signal_hide_popup() { return signal_hide_popup_; }
 
 void CellRendererPopup::hide_popup() { signal_hide_popup_(); }
 

@@ -43,7 +43,7 @@ public:
   /* Print part data to stdout */
   friend ostream& operator<<(ostream& o, const SpeakerList& speaker_list);
 
-  vector<Speaker>* speaker_list();
+ std::vector<Speaker>* speaker_list();
 
   Speaker get_speaker_by_id_string(string id_string);
 
@@ -52,7 +52,7 @@ public:
 
 protected:
   /* Member variables */
-  vector<Speaker> m_speaker_list;
+ std::vector<Speaker> m_speaker_list;
 };
 
 #endif

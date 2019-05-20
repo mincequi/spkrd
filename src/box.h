@@ -37,7 +37,7 @@ using namespace std;
 class Box : public GSpeakersObject {
 public:
   Box(string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40,
-      double vb2 = 0, double fb2 = 0, string speaker = "");
+      double vb2 = 0, double fb2 = 0,std::string speaker = "");
   /* Construct box object from an xmlNode */
   Box(xmlNodePtr parent);
 
@@ -52,22 +52,22 @@ public:
   void set_fb1(double fb1);
   void set_vb2(double vb2);
   void set_fb2(double fb2);
-  void set_speaker(const string& speaker);
+  void set_speaker(const std::string& speaker);
 
-  string get_id_string();
+ std::string get_id_string();
   double get_vb1();
   double get_fb1();
   double get_vb2();
   double get_fb2();
-  const string& get_speaker();
+  const std::string& get_speaker();
 
 protected:
-  string m_id_string;
+ std::string m_id_string;
   double m_vb1;
   double m_fb1;
   double m_vb2;
   double m_fb2;
-  string m_speaker;
+ std::string m_speaker;
 
 private:
   /* various helper functions for the xml parsing routine */

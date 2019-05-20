@@ -25,7 +25,7 @@
 #include <unistd.h>
 
 #include "common.h"
-#include "sstream_fix.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -41,7 +41,7 @@ Settings::Settings() { defaultSettings(); }
 
 Settings::~Settings() {}
 
-void Settings::load(const string& filename) noexcept(false) {
+void Settings::load(const std::string& filename) noexcept(false) {
 
   ifstream inf(filename.c_str());
   if (!inf) {
@@ -51,7 +51,7 @@ void Settings::load(const string& filename) noexcept(false) {
   }
 
   while (inf) {
-    string k, t, v;
+    std::string k, t, v;
     inf >> k >> t;
     if (t == "=") {
       while (inf.peek() == ' ')
@@ -64,11 +64,11 @@ void Settings::load(const string& filename) noexcept(false) {
   m_filename = filename;
 }
 
-void Settings::save(const string& filename) noexcept(false) {
+void Settings::save(const std::string& filename) noexcept(false) {
   /* save to a temporary file first, then switch over, that way we
      should behave better on systems run by muppets have let their
      filesystem run down to no space left  */
-  string tempfilename = filename + ".temp";
+  std::string tempfilename = filename + ".temp";
 
   ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
   if (!of) {
@@ -78,7 +78,7 @@ void Settings::save(const string& filename) noexcept(false) {
     throw runtime_error(ostr.str());
   }
 
-  map<const string, string>::iterator curr = m_map.begin();
+  map<const std::string, std::string>::iterator curr = m_map.begin();
   while (curr != m_map.end()) {
     of << (*curr).first << " = " << Escape((*curr).second) << endl;
     if (!of) {
@@ -109,7 +109,7 @@ void Settings::save() noexcept(false) {
   /* save to a temporary file first, then switch over, that way we
      should behave better on systems run by muppets have let their
      filesystem run down to no space left  */
-  string tempfilename = m_filename + ".temp";
+  std::string tempfilename = m_filename + ".temp";
 
   ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
   if (!of) {
@@ -119,7 +119,7 @@ void Settings::save() noexcept(false) {
     throw runtime_error(ostr.str());
   }
 
-  map<const string, string>::iterator curr = m_map.begin();
+  map<const std::string, std::string>::iterator curr = m_map.begin();
   while (curr != m_map.end()) {
     of << (*curr).first << " = " << Escape((*curr).second) << endl;
     if (!of) {
@@ -144,9 +144,9 @@ void Settings::save() noexcept(false) {
   }
 }
 
-string Settings::Escape(const string& s) {
+std::string Settings::Escape(const std::string& s) {
   ostringstream ostr;
-  string::const_iterator curr = s.begin();
+  std::string::const_iterator curr = s.begin();
   while (curr != s.end()) {
     switch (*curr) {
     case '\n':
@@ -167,9 +167,9 @@ string Settings::Escape(const string& s) {
   return ostr.str();
 }
 
-string Settings::Unescape(const string& s) {
+std::string Settings::Unescape(const std::string& s) {
   ostringstream ostr;
-  string::const_iterator curr = s.begin();
+  std::string::const_iterator curr = s.begin();
   while (curr != s.end()) {
     if (*curr == '\\') {
       ++curr;
@@ -197,14 +197,14 @@ string Settings::Unescape(const string& s) {
   return ostr.str();
 }
 
-string Settings::getValueString(const string& k) {
+std::string Settings::getValueString(const std::string& k) {
   if (exists(k))
     return m_map[k];
   else
-    return string();
+    return std::string();
 }
 
-int Settings::getValueInt(const string& k) {
+int Settings::getValueInt(const std::string& k) {
   int ret = 0;
   if (exists(k)) {
     istringstream istr(m_map[k]);
@@ -213,7 +213,7 @@ int Settings::getValueInt(const string& k) {
   return ret;
 }
 
-unsigned int Settings::getValueUnsignedInt(const string& k) {
+unsigned int Settings::getValueUnsignedInt(const std::string& k) {
   unsigned int v = 0;
   if (exists(k)) {
     istringstream istr(m_map[k]);
@@ -222,7 +222,7 @@ unsigned int Settings::getValueUnsignedInt(const string& k) {
   return v;
 }
 
-unsigned short Settings::getValueUnsignedShort(const string& k) {
+unsigned short Settings::getValueUnsignedShort(const std::string& k) {
   unsigned short v = 0;
   if (exists(k)) {
     istringstream istr(m_map[k]);
@@ -231,7 +231,7 @@ unsigned short Settings::getValueUnsignedShort(const string& k) {
   return v;
 }
 
-unsigned char Settings::getValueUnsignedChar(const string& k) {
+unsigned char Settings::getValueUnsignedChar(const std::string& k) {
   unsigned char v = 0;
   if (exists(k)) {
     unsigned int vi = 0;
@@ -242,9 +242,9 @@ unsigned char Settings::getValueUnsignedChar(const string& k) {
   return v;
 }
 
-bool Settings::getValueBool(const string& k) { return !(getValueUnsignedShort(k) == 0); }
+bool Settings::getValueBool(const std::string& k) { return !(getValueUnsignedShort(k) == 0); }
 
-void Settings::defaultValueUnsignedInt(const string& k, unsigned int dflt, unsigned int lower,
+void Settings::defaultValueUnsignedInt(const std::string& k, unsigned int dflt, unsigned int lower,
                                        unsigned int upper) {
   unsigned int v;
   if (exists(k)) {
@@ -259,8 +259,8 @@ void Settings::defaultValueUnsignedInt(const string& k, unsigned int dflt, unsig
   setValue(k, v);
 }
 
-void Settings::defaultValueUnsignedShort(const string& k, unsigned short dflt, unsigned short lower,
-                                         unsigned short upper) {
+void Settings::defaultValueUnsignedShort(const std::string& k, unsigned short dflt,
+                                         unsigned short lower, unsigned short upper) {
   unsigned short v;
   if (exists(k)) {
     v = getValueUnsignedShort(k);
@@ -274,8 +274,8 @@ void Settings::defaultValueUnsignedShort(const string& k, unsigned short dflt, u
   setValue(k, v);
 }
 
-void Settings::defaultValueUnsignedChar(const string& k, unsigned char dflt, unsigned char lower,
-                                        unsigned char upper) {
+void Settings::defaultValueUnsignedChar(const std::string& k, unsigned char dflt,
+                                        unsigned char lower, unsigned char upper) {
   unsigned char v;
   if (exists(k)) {
     v = getValueUnsignedChar(k);
@@ -289,22 +289,22 @@ void Settings::defaultValueUnsignedChar(const string& k, unsigned char dflt, uns
   setValue(k, v);
 }
 
-void Settings::defaultValueBool(const string& k, bool dflt) {
+void Settings::defaultValueBool(const std::string& k, bool dflt) {
   if (!exists(k))
     setValue(k, dflt);
 }
 
-void Settings::defaultValueString(const string& k, const string& dflt) {
+void Settings::defaultValueString(const std::string& k, const std::string& dflt) {
   if (!exists(k))
     setValue(k, dflt);
 }
 
-void Settings::setValue(const string& k, const string& v) {
+void Settings::setValue(const std::string& k, const std::string& v) {
   m_map[k] = v;
   settings_changed.emit(k);
 }
 
-void Settings::setValue(const string& k, int v) {
+void Settings::setValue(const std::string& k, int v) {
   ostringstream ostr;
   ostr << v;
   if (m_map[k] != ostr.str()) {
@@ -313,7 +313,7 @@ void Settings::setValue(const string& k, int v) {
   }
 }
 
-void Settings::setValue(const string& k, unsigned int v) {
+void Settings::setValue(const std::string& k, unsigned int v) {
   ostringstream ostr;
   ostr << v;
   if (m_map[k] != ostr.str()) {
@@ -322,14 +322,14 @@ void Settings::setValue(const string& k, unsigned int v) {
   }
 }
 
-void Settings::setValue(const string& k, unsigned short v) {
+void Settings::setValue(const std::string& k, unsigned short v) {
   ostringstream ostr;
   ostr << v;
   m_map[k] = ostr.str();
   settings_changed.emit(k);
 }
 
-void Settings::setValue(const string& k, unsigned char v) {
+void Settings::setValue(const std::string& k, unsigned char v) {
   ostringstream ostr;
   ostr << (unsigned int)v;
   if (m_map[k] != ostr.str()) {
@@ -338,14 +338,14 @@ void Settings::setValue(const string& k, unsigned char v) {
   }
 }
 
-void Settings::setValue(const string& k, bool v) {
+void Settings::setValue(const std::string& k, bool v) {
   if (m_map[k] != (v ? "1" : "0")) {
     m_map[k] = (v ? "1" : "0");
     settings_changed.emit(k);
   }
 }
 
-bool Settings::exists(const string& k) { return (m_map.count(k) != 0); }
+bool Settings::exists(const std::string& k) { return (m_map.count(k) != 0); }
 
 void Settings::defaultSettings() {
   // virtual

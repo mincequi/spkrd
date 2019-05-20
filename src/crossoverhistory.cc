@@ -25,7 +25,7 @@
 #define MENU_INDEX_SAVE 6
 #define TOOLBAR_INDEX_SAVE 4
 
-signal1<void, bool> signal_crossover_set_save_state;
+sigc::signal1<void, bool> signal_crossover_set_save_state;
 using namespace sigc;
 
 CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
@@ -40,7 +40,7 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
   g_settings.defaultValueString("CrossoverListXml", "crossover1.xml");
 #else
   g_settings.defaultValueString("CrossoverListXml",
-                                string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
+                               std::string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
 #endif
   m_filename = g_settings.getValueString("CrossoverListXml");
 
@@ -250,7 +250,7 @@ void CrossoverHistory::on_new_copy() {
         time_t t;
         time(&t);
         /* convert to nice time format */
-        string s = string(ctime(&t));
+       std::string s =std::string(ctime(&t));
         int length = s.length();
         s[length - 1] = '\0';
         c.set_id_string(_("Crossover: ") + s);
@@ -280,7 +280,7 @@ void CrossoverHistory::on_new_from_menu(int type) {
   time_t t;
   time(&t);
   /* convert to nice time format */
-  string s = string(ctime(&t));
+ std::string s =std::string(ctime(&t));
   int length = s.length();
   s[length - 1] = '\0';
 
@@ -310,7 +310,7 @@ void CrossoverHistory::on_new() {
   time_t t;
   time(&t);
   /* convert to nice time format */
-  string s = string(ctime(&t));
+ std::string s =std::string(ctime(&t));
   int length = s.length();
   s[length - 1] = '\0';
   c.set_id_string(_("Crossover: ") + s);
@@ -463,7 +463,7 @@ void CrossoverHistory::add_columns() {
 void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  string s = "";
+ std::string s = "";
   if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
     s = s + _("lowpass");
   }

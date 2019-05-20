@@ -33,7 +33,7 @@
 #include <gtkmm/treeview.h>
 #include <sigc++/signal.h>
 
-extern signal1<void, bool> signal_enclosure_set_save_state;
+extern sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
 /*
  * This class implements a TreeView connected with a ListStore
