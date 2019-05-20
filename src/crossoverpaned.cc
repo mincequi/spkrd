@@ -66,7 +66,7 @@ CrossoverPaned::~CrossoverPaned() {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "CrossoverPaned::~CrossoverPaned: " << e.what() << endl;
+    std::cout << "CrossoverPaned::~CrossoverPaned: " << e.what() << std::endl;
 #endif
   }
 }

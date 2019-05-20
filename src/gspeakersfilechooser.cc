@@ -67,7 +67,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
       break;
     }
   }
-  //  cout << "Got a filename: " << m_filename << endl;
+  //  std::cout << "Got a filename: " << m_filename << std::endl;
 }
 
 Glib::ustring& GSpeakersFileChooserDialog::get_filename() { return m_filename; }

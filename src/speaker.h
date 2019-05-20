@@ -40,7 +40,7 @@ using namespace std;
 class Speaker : public GSpeakersObject {
 public:
   /* Default values from Vifa P21WO-20-08 */
-  Speaker(string id_string = "Vifa P21-20-08", int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
+  Speaker(std::string id_string = "Vifa P21-20-08", int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
           double qts = 0.33, double vas = 113, double fs = 28, double rdc = 5.6, double lvc = 0.9,
           double qms = 1.6, double qes = 0.41, double imp = 8, double sens = 91,
          std::string freq_resp_filename = "",std::string imp_resp_filename = "", double mmd = 0.04,
@@ -53,7 +53,7 @@ public:
   xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend ostream& operator<<(ostream& o, const Speaker& speaker);
+  friend std::ostream& operator<<(std::ostream& o, const Speaker& speaker);
 
   void set_qts(double qts);
   void set_vas(double vas);
@@ -64,11 +64,11 @@ public:
   void set_qes(double qes);
   void set_imp(double imp);
   void set_sens(double sens);
-  void set_freq_resp_filename(string filename);
+  void set_freq_resp_filename(std::string filename);
   void set_freq_resp(map<double, double> freq_resp);
-  void set_imp_resp_filename(string filename);
+  void set_imp_resp_filename(std::string filename);
   void set_imp_resp(map<double, double> imp_resp);
-  void set_id_string(string id_string);
+  void set_id_string(std::string id_string);
   void set_mmd(double mmd);
   void set_ad(double ad);
   void set_bl(double bl);

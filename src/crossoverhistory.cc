@@ -47,7 +47,7 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
   try {
     m_crossover_list = CrossoverList(m_filename);
   } catch (GSpeakersException e) {
-    cout << "CrossoverHistory::CrossoverHistory: " << e.what() << endl;
+    std::cout << "CrossoverHistory::CrossoverHistory: " << e.what() << std::endl;
   }
   set_shadow_type(Gtk::SHADOW_NONE);
 
@@ -118,7 +118,7 @@ CrossoverHistory::~CrossoverHistory() {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << e.what() << endl;
+    std::cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << e.what() << std::endl;
 #endif
   }
 }
@@ -185,7 +185,7 @@ void CrossoverHistory::open_xml(const std::string& filename) {
 
 void CrossoverHistory::append_xml(const std::string& filename) {
 #ifdef OUTPUT_DEBUG
-  cout << "append xml ok: " << filename << endl;
+  std::cout << "append xml ok: " << filename << std::endl;
 #endif
   CrossoverList temp_crossover_list;
   try {
@@ -274,7 +274,7 @@ void CrossoverHistory::on_new_copy() {
 
 void CrossoverHistory::on_new_from_menu(int type) {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverHistory::on_new_from_menu: " << type << endl;
+  std::cout << "CrossoverHistory::on_new_from_menu: " << type << std::endl;
 #endif
   /* add new crossover of appropriate type here */
   time_t t;
@@ -344,7 +344,7 @@ void CrossoverHistory::on_new_xml() {
 
 void CrossoverHistory::on_save() {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverHistory::on_save" << endl;
+  std::cout << "CrossoverHistory::on_save" << std::endl;
 #endif
   if (new_xml_pressed == true) {
     on_save_as();
@@ -362,7 +362,7 @@ void CrossoverHistory::on_save() {
 
 void CrossoverHistory::on_save_as() {
 #ifdef OUTPUT_DEBUG
-  cout << "save as" << endl;
+  std::cout << "save as" << std::endl;
 #endif
   GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(
       _("Save crossover xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
@@ -374,7 +374,7 @@ void CrossoverHistory::on_save_as() {
 
 void CrossoverHistory::save_as_xml(const std::string& filename) {
 #ifdef OUTPUT_DEBUG
-  cout << _("save as ok") << endl;
+  std::cout << _("save as ok") << std::endl;
 #endif
   try {
     m_crossover_list.to_xml(filename);

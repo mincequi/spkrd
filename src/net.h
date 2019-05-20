@@ -135,7 +135,7 @@ public:
 
   void set_lowpass_family(int family);
   void set_highpass_family(int family);
-  void set_speaker(string speaker);
+  void set_speaker(std::string speaker);
   void set_adv_imp_model(int model);
   void set_inv_pol(bool pol);
 

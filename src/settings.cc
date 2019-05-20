@@ -80,7 +80,7 @@ void Settings::save(const std::string& filename) noexcept(false) {
 
   map<const std::string, std::string>::iterator curr = m_map.begin();
   while (curr != m_map.end()) {
-    of << (*curr).first << " = " << Escape((*curr).second) << endl;
+    of << (*curr).first << " = " << Escape((*curr).second) << std::endl;
     if (!of) {
       of.close();
       unlink(tempfilename.c_str());
@@ -121,7 +121,7 @@ void Settings::save() noexcept(false) {
 
   map<const std::string, std::string>::iterator curr = m_map.begin();
   while (curr != m_map.end()) {
-    of << (*curr).first << " = " << Escape((*curr).second) << endl;
+    of << (*curr).first << " = " << Escape((*curr).second) << std::endl;
     if (!of) {
       of.close();
       unlink(tempfilename.c_str());
@@ -207,7 +207,7 @@ std::string Settings::getValueString(const std::string& k) {
 int Settings::getValueInt(const std::string& k) {
   int ret = 0;
   if (exists(k)) {
-    istringstream istr(m_map[k]);
+    std::istringstream istr(m_map[k]);
     istr >> ret;
   }
   return ret;
@@ -216,7 +216,7 @@ int Settings::getValueInt(const std::string& k) {
 unsigned int Settings::getValueUnsignedInt(const std::string& k) {
   unsigned int v = 0;
   if (exists(k)) {
-    istringstream istr(m_map[k]);
+    std::istringstream istr(m_map[k]);
     istr >> v;
   }
   return v;
@@ -225,7 +225,7 @@ unsigned int Settings::getValueUnsignedInt(const std::string& k) {
 unsigned short Settings::getValueUnsignedShort(const std::string& k) {
   unsigned short v = 0;
   if (exists(k)) {
-    istringstream istr(m_map[k]);
+    std::istringstream istr(m_map[k]);
     istr >> v;
   }
   return v;
@@ -235,7 +235,7 @@ unsigned char Settings::getValueUnsignedChar(const std::string& k) {
   unsigned char v = 0;
   if (exists(k)) {
     unsigned int vi = 0;
-    istringstream istr(m_map[k]);
+    std::istringstream istr(m_map[k]);
     istr >> vi;
     v = (unsigned char)vi;
   }

@@ -33,7 +33,7 @@ Part::Part(int type, double value,std::string unit) : GSpeakersObject() {
 }
 
 Part::Part(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (string((char*)parent->name) ==std::string("part"))) {
+  if ((parent != NULL) && (std::string((char*)parent->name) ==std::string("part"))) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException e) {
@@ -45,8 +45,8 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject() {
 }
 
 void Part::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) ==std::string("type"))) {
-    istringstream((char*)xmlNodeGetContent(node)) >> m_type;
+  if ((node != NULL) && (std::string((char*)node->name) ==std::string("type"))) {
+    std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_value(node->next);
     } catch (GSpeakersException e) {
@@ -58,8 +58,8 @@ void Part::parse_type(xmlNodePtr node) {
 }
 
 void Part::parse_value(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) ==std::string("value"))) {
-    // istringstream((char *)xmlNodeGetContent(node)) >> m_value;
+  if ((node != NULL) && (std::string((char*)node->name) ==std::string("value"))) {
+    // std::istringstream((char *)xmlNodeGetContent(node)) >> m_value;
     m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_unit(node->next);
@@ -72,7 +72,7 @@ void Part::parse_value(xmlNodePtr node) {
 }
 
 void Part::parse_unit(xmlNodePtr node) {
-  if ((node != NULL) && (string((char*)node->name) ==std::string("unit"))) {
+  if ((node != NULL) && (std::string((char*)node->name) ==std::string("unit"))) {
     m_unit =std::string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Part: unit node not found"));
@@ -97,10 +97,10 @@ xmlNodePtr Part::to_xml_node(xmlNodePtr parent) {
 void Part::set_value(double value) {
 
   m_value = value;
-  // cout << "Part.id: " << get_id() << "...value set to " << m_value << endl;
+  // std::cout << "Part.id: " << get_id() << "...value set to " << m_value << std::endl;
 }
 
-void Part::set_unit(string unit) { m_unit = unit; }
+void Part::set_unit(std::string unit) { m_unit = unit; }
 
 double Part::get_value() { return m_value; }
 
@@ -108,29 +108,29 @@ std::string Part::get_unit() { return m_unit; }
 
 void Part::on_part_value_changed(int id, double new_value) {
   if (id == get_id()) {
-    // cout << "Signal emitted in: " << get_id() << endl;
+    // std::cout << "Signal emitted in: " << get_id() << std::endl;
     m_value = new_value;
   }
 }
 
 void Part::on_part_unit_changed(int id, std::string new_unit) {
   if (id == get_id()) {
-    // cout << "Signal emitted in: " << get_id() << endl;
+    // std::cout << "Signal emitted in: " << get_id() << std::endl;
     m_unit = new_unit;
   }
 }
 
 void Part::on_part_type_changed(int id, int new_type) {
   if (id == get_id()) {
-    // cout << "Signal emitted in: " << get_id() << endl;
+    // std::cout << "Signal emitted in: " << get_id() << std::endl;
     m_type = new_type;
   }
 }
 
 std::ostream& operator<<(std::ostream& o, const Part& part) {
-  return o << _("***Part***") << endl
-           << _("Id   : ") << part.m_id << endl
-           << _("Type : ") << part.m_type << endl
-           << _("Value: ") << part.m_value << endl
-           << _("Unit : ") << part.m_unit << endl;
+  return o << _("***Part***") << std::endl
+           << _("Id   : ") << part.m_id << std::endl
+           << _("Type : ") << part.m_type << std::endl
+           << _("Value: ") << part.m_value << std::endl
+           << _("Unit : ") << part.m_unit << std::endl;
 }

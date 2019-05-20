@@ -23,7 +23,7 @@
 
 BoxList::BoxList() {}
 
-BoxList::BoxList(string filename) {
+BoxList::BoxList(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
 
@@ -50,7 +50,7 @@ BoxList::BoxList(string filename) {
   }
 }
 
-void BoxList::to_xml(string filename) {
+void BoxList::to_xml(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
 
@@ -60,7 +60,7 @@ void BoxList::to_xml(string filename) {
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all boxes */
-  for (vector<Box>::iterator from = m_box_list.begin(); from != m_box_list.end(); ++from) {
+  for (auto from = m_box_list.begin(); from != m_box_list.end(); ++from) {
     ((Box)(*from)).to_xml_node(node);
   }
 
@@ -70,14 +70,12 @@ void BoxList::to_xml(string filename) {
   }
 }
 
-ostream& operator<<(ostream& o, const BoxList& box_list) {
-  o << "Box List" << endl;
+std::ostream& operator<<(std::ostream& o, const BoxList& box_list) {
+  o << "Box List" << std::endl;
 
-  for (vector<Box>::iterator from = ((vector<Box>)(box_list.m_box_list)).begin();
-       from != ((vector<Box>)(box_list.m_box_list)).end(); ++from) {
+  for (auto from = box_list.m_box_list.begin(); from != box_list.m_box_list.end(); ++from) {
     o << *from;
   }
-
   return o;
 }
 

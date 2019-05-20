@@ -20,9 +20,11 @@
 
 #include "gspeakersobject.h"
 #include "speaker.h"
-#include <iostream>
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -35,24 +37,24 @@ public:
   SpeakerList();
 
   /* Construct a part from an xml file */
-  SpeakerList(string filename);
+  SpeakerList(std::string filename);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(string filename); // Maybe this one should throw an exception
+  void to_xml(std::string filename); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend ostream& operator<<(ostream& o, const SpeakerList& speaker_list);
+  friend std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list);
 
- std::vector<Speaker>* speaker_list();
+  std::vector<Speaker>* speaker_list();
 
-  Speaker get_speaker_by_id_string(string id_string);
+  Speaker get_speaker_by_id_string(std::string id_string);
 
   /* Remove all items from the speakerlist */
   void clear();
 
 protected:
   /* Member variables */
- std::vector<Speaker> m_speaker_list;
+  std::vector<Speaker> m_speaker_list;
 };
 
 #endif

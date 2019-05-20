@@ -40,7 +40,7 @@ protected:
   void on_open();
   void on_edit_speakers();
   void on_open_ok(Gtk::FileSelection* f);
-  void on_speakerlist_loaded(string speaker_list_filename);
+  void on_speakerlist_loaded(std::string speaker_list_filename);
 
   /* Member widgets */
   Gtk::Entry m_SpeakerXmlFilenameEntry;

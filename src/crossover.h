@@ -50,14 +50,14 @@ public:
   xmlNodePtr to_xml_node(xmlNodePtr parent);
 
   /* Print part data to stdout */
-  friend ostream& operator<<(ostream& o, const Crossover& crossover);
+  friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
   /* Use this to get the parts or add part to the net */
  std::vector<Net>* networks();
 
   /* return id_string for this crossover */
  std::string get_id_string();
-  void set_id_string(string id_string);
+  void set_id_string(std::string id_string);
 
 protected:
   /* Member variables */

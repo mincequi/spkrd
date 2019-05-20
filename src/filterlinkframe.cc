@@ -234,11 +234,11 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, Speak
   enable_edit = true;
 }
 
-FilterLinkFrame::~FilterLinkFrame() { cout << "FilterLinkFrame: dtor" << endl; }
+FilterLinkFrame::~FilterLinkFrame() { std::cout << "FilterLinkFrame: dtor" << std::endl; }
 
 void FilterLinkFrame::on_order_selected(int which, int order) {
 #ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << endl;
+  std::cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << std::endl;
 #endif
   Gtk::Menu::MenuList* menulist; // = &(m_lower_type_menu->items());
   if (which == 0) {
@@ -288,7 +288,7 @@ void FilterLinkFrame::on_settings_changed(const std::string& s) {
 void FilterLinkFrame::on_param_changed() {
   if (enable_edit == true) {
 #ifdef OUTPUT_DEBUG
-    cout << "FilterLinkFrame::on_param_changed" << endl;
+    std::cout << "FilterLinkFrame::on_param_changed" << std::endl;
 #endif
     enable_edit = false;
     Speaker speaker;
@@ -543,7 +543,7 @@ void FilterLinkFrame::on_param_changed() {
 void FilterLinkFrame::on_net_updated(Net* net) {
   if (m_net->get_id() == net->get_id()) {
 #ifdef OUPUTDEBUG
-    cout << "FilterLinkFrame::on_net_updated" << endl;
+    std::cout << "FilterLinkFrame::on_net_updated" << std::endl;
 #endif
     // enable_edit = false;
 
@@ -603,7 +603,7 @@ void FilterLinkFrame::on_clear_and_plot() {
 
 void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::on_speakerlist_loaded" << endl;
+  std::cout << "FilterLinkFrame::on_speakerlist_loaded" << std::endl;
 #endif
   // if (speaker_list != NULL) {
   m_speaker_list = speaker_list;
@@ -641,7 +641,7 @@ void FilterLinkFrame::on_plot_crossover() {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (GSpeakersException e) {
 #ifdef OUTPUT_DEBUG
-    cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << endl;
+    std::cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << std::endl;
 #endif
     Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()),
                          false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
@@ -659,11 +659,11 @@ void FilterLinkFrame::on_plot_crossover() {
           spice_filename;
   }
 #ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << endl;
+  std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << std::endl;
 #endif
   system(cmd.c_str());
 #ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << endl;
+  std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << std::endl;
 #endif
 
   /* extract spice output into astd::vector */
@@ -710,7 +710,7 @@ void FilterLinkFrame::on_plot_crossover() {
             // 	    } else if (strstr(substr_ptr, "p")) {
             // 	      f2 = f2 / 1000000000000.;
             // 	    }
-            //	    cout << f1 << '\t' << endl;
+            //	    std::cout << f1 << '\t' << std::endl;
             GSpeakers::Point p(GSpeakers::round(freq), db);
             points.push_back(p);
           }
@@ -995,7 +995,7 @@ std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int ne
 
 void FilterLinkFrame::set_family(Gtk::OptionMenu* option_menu, int order, int family) {
 #ifdef OUTPUT_DEBUG
-  cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family << endl;
+  std::cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family << std::endl;
 #endif
   switch (order) {
   case NET_ORDER_2ND:

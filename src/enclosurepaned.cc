@@ -60,7 +60,7 @@ EnclosurePaned::EnclosurePaned() {
 
 EnclosurePaned::~EnclosurePaned() {
 #ifdef OUTPUT_DEBUG
-  cout << "EnclosurePaned::~EnclosurePaned" << endl;
+  std::cout << "EnclosurePaned::~EnclosurePaned" << std::endl;
 #endif
   g_settings.setValue("BoxMainPanedPosition", get_position());
   g_settings.setValue("BoxEditPanedPosition", m_edit_vpaned.get_position());
@@ -69,7 +69,7 @@ EnclosurePaned::~EnclosurePaned() {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "Main: " << e.what() << endl;
+    std::cout << "Main: " << e.what() << std::endl;
 #endif
   }
 }
@@ -210,7 +210,7 @@ void EnclosurePaned::set_save_state(bool b) {
 
 void EnclosurePaned::on_plot_selected(int) {
 #ifdef OUTPUT_DEBUG
-  cout << "EnclsourePaned::on_plot_selected" << endl;
+  std::cout << "EnclsourePaned::on_plot_selected" << std::endl;
 #endif
   plot_selected = true;
   m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(true);
@@ -219,7 +219,7 @@ void EnclosurePaned::on_plot_selected(int) {
 
 void EnclosurePaned::on_remove_boxplot(int) {
 #ifdef OUTPUT_DEBUG
-  cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << endl;
+  std::cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << std::endl;
 #endif
   if (nof_plots > 0) {
     nof_plots--;
@@ -232,7 +232,7 @@ void EnclosurePaned::on_remove_boxplot(int) {
 
 void EnclosurePaned::on_add_plot(Box* b, Speaker* s, Gdk::Color& c) {
 #ifdef OUTPUT_DEBUG
-  cout << "EnclsourePaned::on_add_plot" << endl;
+  std::cout << "EnclsourePaned::on_add_plot" << std::endl;
 #endif
   nof_plots++;
 }

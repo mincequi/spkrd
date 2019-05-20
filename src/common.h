@@ -23,8 +23,9 @@
 #include "../config.h"
 #include "settings.h"
 
-#include <gdkmm/color.h>
 #include <glibmm/ustring.h>
+
+#include <gdkmm/color.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/tooltips.h>
 #include <gtkmm/widget.h>
@@ -36,9 +37,9 @@
 #include <string>
 #include <vector>
 
-#define _(String) gettext(String)
-#define gettext_noop(String) std::string
-#define N_(String) gettext_noop(String)
+#define _(string) gettext(string)
+#define gettext_noop(string) string
+#define N_(string) gettext_noop(string)
 
 namespace GSpeakers {
 class Point;

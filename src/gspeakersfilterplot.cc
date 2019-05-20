@@ -39,7 +39,7 @@ GSpeakersFilterPlot::~GSpeakersFilterPlot() {}
 int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                      Net* n) {
 #ifdef OUTPUT_DEBUG
-  cout << "GSpeakersFilterPlot::on_add_plot" << endl;
+  std::cout << "GSpeakersFilterPlot::on_add_plot" << std::endl;
 #endif
   if (*i == -1) {
     *i = plot.add_plot(points, color);

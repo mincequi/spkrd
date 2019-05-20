@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 #endif
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "Main: " << e.what() << endl;
+    std::cout << "Main: " << e.what() << std::endl;
 #endif
 #ifdef TARGET_WIN32
     Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") +
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
   // PlotHistory ph;
 
   // GSpeakersBoxPlot gsbp;
-  cout << _("Testing gettext") << endl;
+  std::cout << _("Testing gettext") << std::endl;
   // SpeakerListSelector sls;
   gspeakers_stock_init();
   MainWindow mw;
@@ -93,13 +93,13 @@ int main(int argc, char* argv[]) {
   // signal_plot_crossover();
 
   kit.run(mw);
-  //  cout << c1;
+  //  std::cout << c1;
   /* save settings */
   try {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "Main: " << e.what() << endl;
+    std::cout << "Main: " << e.what() << std::endl;
 #endif
   }
 
@@ -107,28 +107,28 @@ int main(int argc, char* argv[]) {
   // n.set_has_imp_corr(true);
   // n.set_has_damp(true);
   // Speaker s;
-  // cout << n.to_SPICE(s) << endl;
+  // std::cout << n.to_SPICE(s) << std::endl;
   // printf("%e\n", 3.0);
   return 0;
 }
 /*
 // test net
 Net n1;
-//  cout << n1 << "--------" << endl;
+//  std::cout << n1 << "--------" << std::endl;
   n1.set_highpass_order(NET_ORDER_1ST);
   n1.set_lowpass_order(NET_ORDER_3RD);
   (*n1.parts())[0].set_value(4.7);
   (*n1.parts())[1].set_value(6.8);
   (*n1.parts())[2].set_value(3.3);
   (*n1.parts())[n1.get_lowpass_order() + 0].set_value(4.7);
-  cout << n1 << "--------" << endl;
+  std::cout << n1 << "--------" << std::endl;
   n1.set_lowpass_order(NET_ORDER_1ST);
-  cout << n1 << "--------" << endl;
+  std::cout << n1 << "--------" << std::endl;
   n1.set_highpass_order(NET_NOT_PRESENT);
   n1.set_lowpass_order(NET_NOT_PRESENT);
   n1.set_lowpass_order(NET_ORDER_2ND);
   (*n1.parts())[1].set_value(6.8);
-  cout << n1;
+  std::cout << n1;
 
 */
 
@@ -146,7 +146,7 @@ Net n1;
       ++from
      )
   {
-    cout << *from << endl;
+    std::cout << *from << std::endl;
   }
   v.erase(iter + 1);
   for(
@@ -155,7 +155,7 @@ Net n1;
       ++from
      )
   {
-    cout << *from << endl;
+    std::cout << *from << std::endl;
   }
 
  std::vector<string> v;
@@ -171,9 +171,9 @@ Net n1;
       ++from
      )
   {
-    cout << *from << endl;
+    std::cout << *from << std::endl;
   }
-  cout << "---" << endl;
+  std::cout << "---" << std::endl;
   iter = v.insert(iter + 1, "hej1");
   iter = v.insert(iter, "hej2");
   v.insert(iter, "hej3");
@@ -183,7 +183,7 @@ Net n1;
       ++from
      )
   {
-    cout << *from << endl;
+    std::cout << *from << std::endl;
   }
 
 

@@ -36,13 +36,13 @@ public:
   BoxList();
 
   /* Construct a part from an xml file */
-  BoxList(string filename);
+  BoxList(std::string filename);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(string filename);
+  void to_xml(std::string filename);
 
   /* Print part data to stdout */
-  friend ostream& operator<<(ostream& o, const BoxList& box_list);
+  friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
   /* Return the box_liststd::vector */
  std::vector<Box>* box_list();

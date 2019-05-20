@@ -37,7 +37,7 @@ using namespace sigc;
 namespace {
 
 bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time) {
-  cout << "grab_on_window" << endl;
+  std::cout << "grab_on_window" << std::endl;
   /*
     if(gdk_pointer_grab(
           Glib::unwrap(window), true,
@@ -60,7 +60,7 @@ CellRendererPopup::CellRendererPopup()
     : Glib::ObjectBase(typeid(CellRendererPopup)), Gtk::CellRendererText(), button_width_(-1),
       popup_window_(Gtk::WINDOW_POPUP), focus_widget_(0), popup_entry_(0), shown_(false),
       editing_canceled_(false) {
-  cout << "CellRendererPopup::CellRendererPopup" << endl;
+  std::cout << "CellRendererPopup::CellRendererPopup" << std::endl;
 
   signal_show_popup_.connect(mem_fun(*this, &Self::on_show_popup));
   signal_hide_popup_.connect(mem_fun(*this, &Self::on_hide_popup));
@@ -92,7 +92,7 @@ void CellRendererPopup::hide_popup() { signal_hide_popup_(); }
 
 void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area,
                                        int* x_offset, int* y_offset, int* width, int* height) {
-  // cout << "CellRendererPopup::get_size_vfunc" << endl;
+  // std::cout << "CellRendererPopup::get_size_vfunc" << std::endl;
   Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
 
   // We cache this becuase it takes really long to get the width.
@@ -108,7 +108,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
                                                           const Gdk::Rectangle&,
                                                           const Gdk::Rectangle&,
                                                           Gtk::CellRendererState) {
-  cout << "CellRendererPopup::start_editing_vfunc" << endl;
+  std::cout << "CellRendererPopup::start_editing_vfunc" << std::endl;
 
   // If the cell isn't editable we return 0.
   if (!property_editable())
@@ -120,7 +120,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
   // popup_entry->signal_arrow_clicked().connect(mem_fun(*this, &Self::on_popup_arrow_clicked));
   popup_entry->signal_hide().connect(mem_fun(*this, &Self::on_popup_hide));
 
-  cout << property_text() << endl;
+  std::cout << property_text() << std::endl;
 
   popup_entry->set_text(property_text());
   popup_entry->show();
@@ -132,7 +132,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
 }
 
 void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2) {
-  cout << "CellRendererPopup::on_show_popup" << endl;
+  std::cout << "CellRendererPopup::on_show_popup" << std::endl;
   // I'm not sure this is ok to do, but we need to show the window to be
   // able to get the allocation right.
   popup_window_.move(-500, -500);
@@ -180,7 +180,7 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
 }
 
 void CellRendererPopup::on_hide_popup() {
-  cout << "CellRendererPopup::on_hide_popup" << endl;
+  std::cout << "CellRendererPopup::on_hide_popup" << std::endl;
   gtk_grab_remove(popup_window_.Gtk::Widget::gobj());
   popup_window_.hide();
 
@@ -197,7 +197,7 @@ void CellRendererPopup::on_hide_popup() {
 }
 
 bool CellRendererPopup::on_button_press_event(GdkEventButton* event) {
-  cout << "CellRendererPopup::on_button_press" << endl;
+  std::cout << "CellRendererPopup::on_button_press" << std::endl;
 
   if (event->button != 1)
     return false;
@@ -231,7 +231,7 @@ bool CellRendererPopup::on_button_press_event(GdkEventButton* event) {
 }
 
 bool CellRendererPopup::on_key_press_event(GdkEventKey* event) {
-  cout << "CellRendererPopup::on_key_press" << endl;
+  std::cout << "CellRendererPopup::on_key_press" << std::endl;
   switch (event->keyval) {
   case GDK_Escape:
     editing_canceled_ = true;
@@ -259,7 +259,7 @@ void CellRendererPopup::on_style_changed(const Glib::RefPtr<Gtk::Style>&) {
 }
 
 void CellRendererPopup::on_popup_editing_done() {
-  cout << "CellRendererPopup::on_popup_editing_done" << endl;
+  std::cout << "CellRendererPopup::on_popup_editing_done" << std::endl;
   if (editing_canceled_ || popup_entry_->get_editing_canceled())
     return;
 
@@ -267,7 +267,7 @@ void CellRendererPopup::on_popup_editing_done() {
 }
 
 void CellRendererPopup::on_popup_arrow_clicked() {
-  cout << "CellRendererPopup::on_popup_arrow_clicked" << endl;
+  std::cout << "CellRendererPopup::on_popup_arrow_clicked" << std::endl;
   if (shown_) {
     editing_canceled_ = true;
     signal_hide_popup_();
@@ -288,6 +288,6 @@ void CellRendererPopup::on_popup_arrow_clicked() {
 }
 
 void CellRendererPopup::on_popup_hide() {
-  cout << "CellRendererPopup::on_popup_hide" << endl;
+  std::cout << "CellRendererPopup::on_popup_hide" << std::endl;
   popup_entry_ = 0;
 }

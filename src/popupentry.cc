@@ -32,7 +32,7 @@ using namespace std;
 PopupEntry::PopupEntry(const Glib::ustring& path)
     : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(), path_(path),
       entry_(0), editing_canceled_(false) {
-  cout << "PopupEntry::PopupEntry" << endl;
+  std::cout << "PopupEntry::PopupEntry" << std::endl;
 
   // Gtk::HBox *const hbox = new Gtk::HBox(false, 0);
   // add(*Gtk::manage(hbox));
@@ -65,13 +65,13 @@ void PopupEntry::select_region(int start_pos, int end_pos) {
 }
 
 bool PopupEntry::get_editing_canceled() const {
-  cout << "PopupEntry::get_editing_canceled" << endl;
+  std::cout << "PopupEntry::get_editing_canceled" << std::endl;
   return editing_canceled_;
 }
 
 // static
 int PopupEntry::get_button_width() {
-  cout << "PopupEntry::get_button_width" << endl;
+  std::cout << "PopupEntry::get_button_width" << std::endl;
   Gtk::Window window(Gtk::WINDOW_POPUP);
 
   Gtk::Button* const button = new Gtk::Button();
@@ -92,7 +92,7 @@ int PopupEntry::get_button_width() {
 sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return signal_arrow_clicked_; }
 
 bool PopupEntry::on_key_press_event(GdkEventKey* event) {
-  cout << "PopupEntry::on_key_press_event" << endl;
+  std::cout << "PopupEntry::on_key_press_event" << std::endl;
   if (event->keyval == GDK_Escape) {
     editing_canceled_ = true;
 
@@ -119,12 +119,12 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
 /*
 bool PopupEntry::on_button_press_event(GdkEventButton *event)
 {
-  cout << "PopupEntry::on_button_press_event" << endl;
+  std::cout << "PopupEntry::on_button_press_event" << std::endl;
   return true;
 }
 */
 void PopupEntry::start_editing_vfunc(GdkEvent* event) {
-  cout << "PopupEntry::start_editing_vfunc" << endl;
+  std::cout << "PopupEntry::start_editing_vfunc" << std::endl;
   using sigc::mem_fun;
 
   entry_->select_region(0, -1);
@@ -134,13 +134,13 @@ void PopupEntry::start_editing_vfunc(GdkEvent* event) {
 }
 
 void PopupEntry::on_entry_activate() {
-  cout << "PopupEntry::on_entry_activate" << endl;
+  std::cout << "PopupEntry::on_entry_activate" << std::endl;
   editing_done();
   // remove_widget(); // TODO: this line causes the widget to be removed twice -- dunno why
 }
 
 bool PopupEntry::on_entry_key_press_event(GdkEventKey* event) {
-  cout << "PopupEntry::on_entry_key_press_event" << endl;
+  std::cout << "PopupEntry::on_entry_key_press_event" << std::endl;
   if (event->keyval == GDK_Escape) {
     editing_canceled_ = true;
 

@@ -36,16 +36,16 @@ MainWindow::MainWindow() {
     Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
 #else
     Glib::RefPtr<Gdk::Pixbuf> main_icon =
-        Gdk::Pixbuf::create_from_file(string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+        Gdk::Pixbuf::create_from_file(std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
 #endif
     set_icon(main_icon);
   } catch (Gdk::PixbufError e) {
 #ifdef OUTPUT_DEBUG
-    cout << e.code() << endl;
+    std::cout << e.code() << std::endl;
 #endif
   } catch (Glib::FileError fe) {
 #ifdef OUTPUT_DEBUG
-    cout << fe.code() << endl;
+    std::cout << fe.code() << std::endl;
 #endif
   }
   set_title("GSpeakers Redux-" +std::string(VERSION));
@@ -147,14 +147,14 @@ MainWindow::MainWindow() {
 
 bool MainWindow::on_delete_event(GdkEventAny* event) {
   // #ifdef OUTPUT_DEBUG
-  //   cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << endl;
+  //   std::cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << std::endl;
   // #endif
   using namespace GSpeakers;
 
   /* Popup dialog and ask if user want to save changes */
   if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() ||
       meassurementlist_modified()) {
-    cout << "MainWindow::on_quit: opening confirmation dialog" << endl;
+    std::cout << "MainWindow::on_quit: opening confirmation dialog" << std::endl;
     Gtk::Dialog* d = new Gtk::Dialog("", true);
     d->set_border_width(6);
     d->get_vbox()->set_spacing(12);
@@ -213,7 +213,7 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
 
 void MainWindow::on_quit() {
   // #ifdef OUTPUT_DEBUG
-  //   cout << "MainWindow::on_quit: do you want to save unsaved documents?" << endl;
+  //   std::cout << "MainWindow::on_quit: do you want to save unsaved documents?" << std::endl;
   // #endif
 
   using namespace GSpeakers;
@@ -221,7 +221,7 @@ void MainWindow::on_quit() {
   /* Popup dialog and ask if user want to save changes */
   if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() ||
       meassurementlist_modified()) {
-    cout << "MainWindow::on_quit: opening confirmation dialog" << endl;
+    std::cout << "MainWindow::on_quit: opening confirmation dialog" << std::endl;
     Gtk::Dialog* d = new Gtk::Dialog("", true);
     d->set_border_width(6);
     d->get_vbox()->set_spacing(12);
@@ -305,7 +305,7 @@ void MainWindow::on_quit_common() {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "MainWindow::on_delete_event: could not save settings" << endl;
+    std::cout << "MainWindow::on_delete_event: could not save settings" << std::endl;
 #endif
   }
 }
@@ -327,7 +327,7 @@ bool MainWindow::on_edit_menu_expose_event(GdkEventExpose* event) {
 
 void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num) {
   // #ifdef OUTPUT_DEBUG
-  //   cout << "MainWindow::on_switch_page" << endl;
+  //   std::cout << "MainWindow::on_switch_page" << std::endl;
   // #endif
   if (in_quit_phase == false) {
     switch (page_num) {

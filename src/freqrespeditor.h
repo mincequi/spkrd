@@ -30,7 +30,7 @@ using namespace sigc;
 
 class FreqRespEditor : public Gtk::Dialog {
 public:
-  FreqRespEditor(string filename = "");
+  FreqRespEditor(std::string filename = "");
   ~FreqRespEditor();
  std::string get_filename() { return m_filename; }
 

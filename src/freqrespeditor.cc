@@ -27,7 +27,7 @@
 #include <cstdio>
 #include <fstream>
 
-FreqRespEditor::FreqRespEditor(string filename)
+FreqRespEditor::FreqRespEditor(std::string filename)
     : m_table(15, 4, false), m_save_button(Gtk::Stock::SAVE), m_saveas_button(Gtk::Stock::SAVE_AS),
       m_close_button(Gtk::Stock::CLOSE) {
   m_filename = filename;
@@ -135,7 +135,7 @@ FreqRespEditor::FreqRespEditor(string filename)
 
 void FreqRespEditor::on_save() {
 #ifdef OUTPUT_DEBUG
-  cout << "FreqRespEditor::on_save" << endl;
+  std::cout << "FreqRespEditor::on_save" << std::endl;
 #endif
  std::vector<double> v = get_x_vector();
   ofstream of(m_filename.c_str());
@@ -145,11 +145,11 @@ void FreqRespEditor::on_save() {
       of << v[2 * j] << ","
          << g_ascii_dtostr(buffer, 8,
                            g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), NULL))
-         << endl;
+         << std::endl;
       of << v[2 * j + 1] << ","
          << g_ascii_dtostr(buffer, 8,
                            g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), NULL))
-         << endl;
+         << std::endl;
     }
     delete buffer;
     of.close();
@@ -170,7 +170,7 @@ void FreqRespEditor::on_save() {
 
 void FreqRespEditor::on_save_as() {
 #ifdef OUTPUT_DEBUG
-  cout << "FreqRespEditor::on_save_as" << endl;
+  std::cout << "FreqRespEditor::on_save_as" << std::endl;
 #endif
   Gtk::FileSelection* f = new Gtk::FileSelection(_("Enter filename..."));
   f->set_modal();
@@ -185,7 +185,7 @@ void FreqRespEditor::on_save_as() {
 
 void FreqRespEditor::on_close() {
 #ifdef OUTPUT_DEBUG
-  cout << "FreqRespEditor::on_close" << endl;
+  std::cout << "FreqRespEditor::on_close" << std::endl;
 #endif
   response(0);
   hide();
@@ -193,7 +193,7 @@ void FreqRespEditor::on_close() {
 
 FreqRespEditor::~FreqRespEditor() {
 #ifdef OUTPUT_DEBUG
-  cout << "FreqRespEditor::~FreqRespEditor" << endl;
+  std::cout << "FreqRespEditor::~FreqRespEditor" << std::endl;
 #endif
 }
 

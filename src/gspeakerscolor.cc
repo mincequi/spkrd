@@ -67,14 +67,14 @@ std::string GSpeakersColor::get_color_string() {
   return s;
 }
 
-void GSpeakersColor::unget_color_string(string s) {
+void GSpeakersColor::unget_color_string(std::string s) {
   m_colors.erase(get_iterator_from_string(s));
   m_colors.insert(m_colors.begin() + m_counter, s);
 }
 
-std::vector<string>::iterator GSpeakersColor::get_iterator_from_string(string s) {
+std::vector<string>::iterator GSpeakersColor::get_iterator_from_string(std::string s) {
   for (vector<string>::iterator from = m_colors.begin(); from != m_colors.end(); ++from) {
-    if (string(*from) == s) {
+    if (std::string(*from) == s) {
       return from;
     }
   }

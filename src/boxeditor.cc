@@ -186,7 +186,7 @@ void BoxEditor::on_optimize_button_clicked() {
  */
 void BoxEditor::on_append_to_plot_clicked() {
 #ifdef OUTPUT_DEBUG
-  cout << "BoxEditor::on_append_to_plot_clicked" << endl;
+  std::cout << "BoxEditor::on_append_to_plot_clicked" << std::endl;
 #endif
   m_box = new Box();
   m_box->set_id_string(m_id_string_entry.get_text());
@@ -240,7 +240,7 @@ void BoxEditor::on_calc_port_clicked() {}
 
 void BoxEditor::on_append_to_boxlist_clicked() {
 #ifdef OUTPUT_DEBUG
-  cout << "BoxEditor::append_to_boxlist_clicked" << endl;
+  std::cout << "BoxEditor::append_to_boxlist_clicked" << std::endl;
 #endif
   signal_add_to_boxlist(m_box);
 }
@@ -249,7 +249,7 @@ void BoxEditor::on_box_selected(Box* b) {
   if (disable_signals == false) {
     disable_signals = true;
 #ifdef OUTPUT_DEBUG
-    cout << "Boxeditor::on_box_selected" << endl;
+    std::cout << "Boxeditor::on_box_selected" << std::endl;
 #endif
     if (b != NULL) {
       m_box = b;
@@ -260,7 +260,7 @@ void BoxEditor::on_box_selected(Box* b) {
       /* Set combo to proper speaker */
 
       if (speaker_list_is_loaded == true) {
-        cout << b << endl;
+        std::cout << b << std::endl;
         m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
        std::vector<Glib::ustring> popdown_strings;
         for (vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
@@ -287,7 +287,7 @@ void BoxEditor::on_box_selected(Box* b) {
       }
     } else {
 #ifdef OUTPUT_DEBUG
-      cout << "BoxEditor::on_box_selected: Box ptr = NULL" << endl;
+      std::cout << "BoxEditor::on_box_selected: Box ptr = NULL" << std::endl;
 #endif
       b = new Box(); // Maybe we don't really need this one */
     }
@@ -297,7 +297,7 @@ void BoxEditor::on_box_selected(Box* b) {
 
 void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
-  cout << "BoxEditor::on_speaker_list_loaded: " << endl;
+  std::cout << "BoxEditor::on_speaker_list_loaded: " << std::endl;
 #endif
   if (disable_signals == false) {
     disable_signals = true;
@@ -324,7 +324,7 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
           popdown_strings.push_back((*from).get_id_string());
         }
       }
-      cout << popdown_strings.size() << endl;
+      std::cout << popdown_strings.size() << std::endl;
       m_bass_speaker_combo.set_popdown_strings(popdown_strings);
     }
     speaker_list_is_loaded = true;
@@ -334,8 +334,8 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
 
 void BoxEditor::on_combo_entry_changed() {
 #ifdef OUTPUT_DEBUG
-  cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text()
-       << endl;
+  std::cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text()
+       << std::endl;
 #endif
 
   if (disable_signals == false) {
@@ -358,7 +358,7 @@ void BoxEditor::on_box_data_changed(int i) {
   if (disable_signals == false) {
     disable_signals = true;
 #ifdef OUTPUT_DEBUG
-    cout << "BoxEditor::on_box_data_changed";
+    std::cout << "BoxEditor::on_box_data_changed";
 #endif
     double qr;
     // char *str = NULL;
@@ -367,7 +367,7 @@ void BoxEditor::on_box_data_changed(int i) {
     switch (i) {
     case SEALED_SELECTED:
 #ifdef OUTPUT_DEBUG
-      cout << "BoxEditor::on_box_data_changed: sealed enclosure" << endl;
+      std::cout << "BoxEditor::on_box_data_changed: sealed enclosure" << std::endl;
 #endif
       m_box->set_type(BOX_TYPE_SEALED);
       m_fb1_entry.set_sensitive(false);
@@ -380,7 +380,7 @@ void BoxEditor::on_box_data_changed(int i) {
       break;
     case PORTED_SELECTED:
 #ifdef OUTPUT_DEBUG
-      cout << "BoxEditor::on_box_data_changed: ported enclosure" << endl;
+      std::cout << "BoxEditor::on_box_data_changed: ported enclosure" << std::endl;
 #endif
       m_box->set_type(BOX_TYPE_PORTED);
       m_fb1_entry.set_sensitive(true);

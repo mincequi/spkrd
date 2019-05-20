@@ -50,7 +50,7 @@ bool GSpeakersPlot::on_expose_event(GdkEventExpose* event) {
                               event->area.x, event->area.y, event->area.x, event->area.y,
                               event->area.width, event->area.height);
   m_selected_plot = -1;
-  // cout << "GSpeakersPlot: on_expose" << endl;
+  // std::cout << "GSpeakersPlot: on_expose" << std::endl;
 
   return false;
 }
@@ -61,7 +61,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   /* Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap, will probably be
      faster than redrawing the entire thing every time */
 #ifdef OUTPUT_DEBUG
-  cout << "GSpeakersPlot::on_configure_event" << endl;
+  std::cout << "GSpeakersPlot::on_configure_event" << std::endl;
 #endif
   visible = true;
   m_refPixmap =
@@ -90,7 +90,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
 
 int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color) {
 #ifdef OUTPUT_DEBUG
-  cout << "GSpeakersPlot: on add plot" << endl;
+  std::cout << "GSpeakersPlot: on add plot" << std::endl;
 #endif
   if (visible == true) {
     m_refGC->set_rgb_fg_color(ref_color);
@@ -206,12 +206,12 @@ void GSpeakersPlot::replace_plot(int index, std::vector<GSpeakers::Point>& p,
 void GSpeakersPlot::remove_plot(int n) {
   int i = 0;
 #ifdef OUTPUT_DEBUG
-  cout << "n == " << n << endl;
+  std::cout << "n == " << n << std::endl;
 #endif
   /* For some reason something goes wrong when we select the last row so we add a special case for
    * that event */
   if (n == (int)(m_points.size() - 1)) {
-    //    cout << "GSpeakersPlot: last list item" << endl;
+    //    std::cout << "GSpeakersPlot: last list item" << std::endl;
     m_points.erase(m_points.begin() + m_points.size());
     m_colors.erase(m_colors.begin() + m_colors.size());
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
@@ -239,7 +239,7 @@ void GSpeakersPlot::remove_plot(int n) {
       }
     }
   }
-  // cout << "loop 3" << endl;
+  // std::cout << "loop 3" << std::endl;
   m_selected_plot = -1;
 
   if (visible == true) {
@@ -253,7 +253,7 @@ void GSpeakersPlot::remove_all_plots() {
   //  for (unsigned i = m_points.size(); i > 0; --i) {
   //    remove_plot((int)i);
   //  }
-  // cout << "number of pointstd::vectors: " << m_points.size() << endl;
+  // std::cout << "number of pointstd::vectors: " << m_points.size() << std::endl;
   m_points.erase(m_points.begin(), m_points.end());
   m_colors.erase(m_colors.begin(), m_colors.end());
   m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
@@ -418,14 +418,14 @@ void GSpeakersPlot::redraw() {
         m_linesize = m_linesize + 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
-        // cout << "select plot" << endl;
+        // std::cout << "select plot" << std::endl;
       }
       m_refPixmap->draw_lines(m_refGC, points);
       if (i == m_selected_plot) {
         m_linesize = m_linesize - 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
-        // cout << "select plot" << endl;
+        // std::cout << "select plot" << std::endl;
       }
     }
   }

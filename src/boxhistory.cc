@@ -47,20 +47,21 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
 #ifdef TARGET_WIN32
   g_settings.defaultValueString("BoxListXml", "box1.xml");
 #else
-  g_settings.defaultValueString("BoxListXml",std::string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
+  g_settings.defaultValueString("BoxListXml",
+                                std::string(GSPEAKERS_PREFIX) + "/share/xml/box1.xml");
 #endif
   m_filename = g_settings.getValueString("BoxListXml");
 #ifdef __OUTPUT_DEBUG
-  cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << endl;
+  std::cout << "BoxHistory::BoxHistory: m_filename = " << m_filename << std::endl;
 #endif
 
   try {
     m_box_list = BoxList(m_filename);
     boxlist_found = true;
   } catch (GSpeakersException e) {
-    cout << "BoxHistory::BoxHistory: " << e.what() << endl;
+    std::cout << "BoxHistory::BoxHistory: " << e.what() << std::endl;
   }
-  cout << "boxlist_found = " << boxlist_found << endl;
+  std::cout << "boxlist_found = " << boxlist_found << std::endl;
   static_cast<Gtk::Label*>(get_label_widget())
       ->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
                    GSpeakers::short_filename(m_filename) + "]</b>");
@@ -118,7 +119,7 @@ bool BoxHistory::on_delete_event(GdkEventAny* event) {
   /* handle this since we don't want to close the window */
   g_settings.setValue("BoxListXml", m_filename);
 #ifdef OUTPUT_DEBUG
-  cout << "BoxHistory: on_delete_event" << endl;
+  std::cout << "BoxHistory: on_delete_event" << std::endl;
 #endif
   return true;
 }
@@ -152,8 +153,8 @@ void BoxHistory::open_xml(const std::string& filename) {
     /* Delete items in box_list */
     m_box_list.box_list()->erase(m_box_list.box_list()->begin(), m_box_list.box_list()->end());
 
-    for (vector<Box>::iterator from = temp_box_list.box_list()->begin();
-         from != temp_box_list.box_list()->end(); ++from) {
+    for (auto from = temp_box_list.box_list()->begin(); from != temp_box_list.box_list()->end();
+         ++from) {
       m_box_list.box_list()->push_back(*from);
     }
 
@@ -183,8 +184,8 @@ void BoxHistory::append_xml(const std::string& filename) {
     temp_box_list = BoxList(filename);
     for_each(temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
              mem_fun(*this, &BoxHistory::liststore_add_item));
-    for (vector<Box>::iterator from = temp_box_list.box_list()->begin();
-         from != temp_box_list.box_list()->end(); ++from) {
+    for (auto from = temp_box_list.box_list()->begin(); from != temp_box_list.box_list()->end();
+         ++from) {
       m_box_list.box_list()->push_back(*from);
     }
     m_box_list.box_list()->size();
@@ -235,7 +236,7 @@ void BoxHistory::on_new_copy() {
         time_t t;
         time(&t);
         /* convert to nice time format */
-       std::string s =std::string(ctime(&t));
+        std::string s = std::string(ctime(&t));
         int length = s.length();
         s[length - 1] = '\0';
         b.set_id_string(_("Box: ") + s);
@@ -262,7 +263,7 @@ void BoxHistory::on_new() {
   time_t t;
   time(&t);
   /* convert to nice time format */
- std::string s =std::string(ctime(&t));
+  std::string s = std::string(ctime(&t));
   int length = s.length();
   s[length - 1] = '\0';
   b.set_id_string(_("Box: ") + s);
@@ -361,7 +362,7 @@ void BoxHistory::on_remove() {
 }
 
 void BoxHistory::on_box_modified(Box* b) {
-  // cout << "BoxHistory: box modified: " << b << endl;
+  // std::cout << "BoxHistory: box modified: " << b << std::endl;
   // get the row from selection
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -485,7 +486,7 @@ void BoxHistory::add_columns() {
 /* This function will execute when a type cell is shown */
 void BoxHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                      const Gtk::TreeModel::iterator& iter) {
-  // cout << "BoxHistory::type_cell_data_func" << endl;
+  // std::cout << "BoxHistory::type_cell_data_func" << std::endl;
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
   case BOX_TYPE_SEALED:

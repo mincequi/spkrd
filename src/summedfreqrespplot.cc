@@ -67,7 +67,7 @@ double lerp(vector<GSpeakers::Point> freq_resp_points, double x) {
 int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk::Color& color,
                                     int* i, Net* n) {
 #ifdef OUTPUT_DEBUG
-  cout << "SummedFreqRespPlot::on_add_plot" << endl;
+  std::cout << "SummedFreqRespPlot::on_add_plot" << std::endl;
 #endif
 
   Speaker s;
@@ -77,8 +77,8 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
  std::vector<GSpeakers::Point> freq_resp_points;
   if (s.get_freq_resp_filename() != "") {
     ifstream fin(s.get_freq_resp_filename().c_str());
-    cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename()
-         << endl;
+    std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename()
+         << std::endl;
     if (fin.good()) {
       while (!fin.eof()) {
         char* buffer = new char[100];
@@ -98,7 +98,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
         delete buffer;
       }
     } else {
-      cout << _("Could not open ") << s.get_freq_resp_filename() << endl;
+      std::cout << _("Could not open ") << s.get_freq_resp_filename() << std::endl;
       return -1;
     }
   } else {
@@ -169,13 +169,13 @@ void SummedFreqRespPlot::clear() {
 }
 
 void SummedFreqRespPlot::on_crossover_selected(Crossover*) {
-  cout << "SummedFreqRespPlot::on_crossover_selected" << endl;
+  std::cout << "SummedFreqRespPlot::on_crossover_selected" << std::endl;
   clear();
 }
 
 void SummedFreqRespPlot::on_speakerlist_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
-  cout << "SummedFreqRespPlot::on_speakerlist_loaded" << endl;
+  std::cout << "SummedFreqRespPlot::on_speakerlist_loaded" << std::endl;
 #endif
   m_speakerlist = speaker_list;
 }

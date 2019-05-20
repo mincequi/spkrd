@@ -37,7 +37,7 @@ CrossoverWizard::~CrossoverWizard() {}
 
 void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverWizard::on_crossover_selected" << endl;
+  std::cout << "CrossoverWizard::on_crossover_selected" << std::endl;
 #endif
   //  delete m_vbox.children()[0].get_widget();
 
@@ -99,7 +99,7 @@ void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 
 void CrossoverWizard::on_speaker_list_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverWizard::on_speaker_list_loaded" << endl;
+  std::cout << "CrossoverWizard::on_speaker_list_loaded" << std::endl;
 #endif
   // m_speaker_list = SpeakerList(speaker_list_filename);
   m_speaker_list = speaker_list;
@@ -107,12 +107,12 @@ void CrossoverWizard::on_speaker_list_loaded(SpeakerList* speaker_list) {
 
 void CrossoverWizard::on_button_plot_clicked() {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverWiard::on_button_plot_cliecked" << endl;
+  std::cout << "CrossoverWiard::on_button_plot_cliecked" << std::endl;
 #endif
 }
 
 void CrossoverWizard::on_button_update_clicked() {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverWiard::on_button_update_cliecked" << endl;
+  std::cout << "CrossoverWiard::on_button_update_cliecked" << std::endl;
 #endif
 }

@@ -57,7 +57,7 @@ CrossoverTreeView::~CrossoverTreeView() {}
 
 void CrossoverTreeView::on_net_modified_by_wizard() {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverTreeView::on_net_modified_by_wizard" << endl;
+  std::cout << "CrossoverTreeView::on_net_modified_by_wizard" << std::endl;
 #endif
   on_crossover_selected(cover);
 }
@@ -65,8 +65,8 @@ void CrossoverTreeView::on_net_modified_by_wizard() {
 void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
                                              const Glib::ustring& new_text) {
 #ifdef OUTPUT_DEBUG
-  cout << "CrossoverTreeView::on_cell_edited_value" << endl;
-  cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string << endl;
+  std::cout << "CrossoverTreeView::on_cell_edited_value" << std::endl;
+  std::cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string << std::endl;
 #endif
 
   GtkTreePath* gpath = gtk_tree_path_new_from_string(path_string.c_str());
@@ -81,8 +81,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
     row[m_columns.value] = atof(new_text.c_str());
 
 #ifdef OUTPUT_DEBUG
-    cout << "CrossoverTreeView::on_cell_edited_value: indices[0:1:2:4] = " << indices[0] << ":"
-         << indices[1] << ":" << indices[2] << ":" << indices[3] << endl;
+    std::cout << "CrossoverTreeView::on_cell_edited_value: indices[0:1:2:4] = " << indices[0] << ":"
+         << indices[1] << ":" << indices[2] << ":" << indices[3] << std::endl;
 #endif
     /* Since the stupid signals doesn't seem to work we have to go through the data-containers
        and update values for the particular part we change... */
@@ -157,7 +157,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
       }
     }
 #ifdef OUTPUT_DEBUG
-    cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id] << endl;
+    std::cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id] << std::endl;
 #endif
     /* Tell others that we have modified a part */
     signal_net_modified_by_user(n);

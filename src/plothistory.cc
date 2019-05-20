@@ -83,7 +83,7 @@ void PlotHistory::on_selection_changed() {
 
       index = indices[0];
 #ifdef OUTPUT_DEBUG
-      cout << "PlotHistory: selection changed" << endl;
+      std::cout << "PlotHistory: selection changed" << std::endl;
 #endif
 
       // signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
@@ -93,7 +93,7 @@ void PlotHistory::on_selection_changed() {
 
 void PlotHistory::on_remove() {
 #ifdef OUTPUT_DEBUG
-  cout << "PlotHistory: on_remove" << endl;
+  std::cout << "PlotHistory: on_remove" << std::endl;
 #endif
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -109,9 +109,9 @@ void PlotHistory::on_remove() {
       /* Signal to the plot */
       /* We got the plot index to remove in indices[0] */
 #ifdef OUTPUT_DEBUG
-      // cout << "PlotHistory: plot to remove = " << indices[0] << endl;
-      cout << "Path: " << path[0] << endl;
-      cout << "PlotHistory: plot to remove = " << indices[0] << endl;
+      // std::cout << "PlotHistory: plot to remove = " << indices[0] << std::endl;
+      std::cout << "Path: " << path[0] << std::endl;
+      std::cout << "PlotHistory: plot to remove = " << indices[0] << std::endl;
 #endif
       signal_remove_box_plot(indices[0]);
 
@@ -147,7 +147,7 @@ void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
     m_speaker_list.speaker_list()->push_back(*s);
     liststore_add_item(*b, *s, color);
 #ifdef OUTPUT_DEBUG
-    cout << "PlotHistory: plot added" << endl;
+    std::cout << "PlotHistory: plot added" << std::endl;
 #endif
   }
   nof_plots++;
@@ -155,7 +155,7 @@ void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
 #ifdef OUTPUT_DEBUG
-  cout << "PlotHistory: toggle plot" << endl;
+  std::cout << "PlotHistory: toggle plot" << std::endl;
 #endif
 
   GtkTreePath* gpath = gtk_tree_path_new_from_string(path_string.c_str());
@@ -174,7 +174,7 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
   std::vector<int> indices = path.get_indices();
   if (indices.size() > 0) {
 #ifdef OUTPUT_DEBUG
-    cout << "PlotHistory: hide" << endl;
+    std::cout << "PlotHistory: hide" << std::endl;
 #endif
     signal_hide_box_plot(indices[0]);
   }
@@ -184,7 +184,7 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
 
 // bool BoxHistory::on_close(GdkEventAny *event)
 //{
-//  cout << "close" << endl;
+//  std::cout << "close" << std::endl;
 //  hide();
 //  return false;
 //}
@@ -330,7 +330,7 @@ void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color) {
   g = (int)((color.get_green_p()) * 255);
   b = (int)((color.get_blue_p()) * 255);
 #ifdef OUTPUT_DEBUG
-  cout << "color: " << r << ", " << g << ", " << b << endl;
+  std::cout << "color: " << r << ", " << g << ", " << b << std::endl;
 #endif
   char* str = NULL;
   GString* buffer = g_string_new(str);
@@ -342,7 +342,7 @@ void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color) {
   row[m_columns.id] = box.get_id();
   row[m_columns.id_string] = box.get_id_string();
 #ifdef OUTPUT_DEBUG
-  cout << box.get_id_string() << endl;
+  std::cout << box.get_id_string() << std::endl;
 #endif
   row[m_columns.speaker_string] = spk.get_id_string();
   row[m_columns.type] = box.get_type();

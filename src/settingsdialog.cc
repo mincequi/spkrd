@@ -202,12 +202,12 @@ SettingsDialog::SettingsDialog()
 
 SettingsDialog::~SettingsDialog() {
 #ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::~SettingsDialog" << endl;
+  std::cout << "SettingsDialog::~SettingsDialog" << std::endl;
 #endif
 }
 
 void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
-  cout << "SettingsDialog::on_config_option_chage: " << setting << endl;
+  std::cout << "SettingsDialog::on_config_option_chage: " << setting << std::endl;
   switch (setting) {
   case GSpeakers::SAVE_MAIN_WINDOW_SIZE:
     g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
@@ -262,7 +262,7 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
     g_settings.save();
   } catch (std::runtime_error e) {
 #ifdef OUTPUT_DEBUG
-    cout << "SettingsDialog::on_config_option_change: " << e.what() << endl;
+    std::cout << "SettingsDialog::on_config_option_change: " << e.what() << std::endl;
 //#else
 // Popup messagebox here ?
 #endif
@@ -271,14 +271,14 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
 
 void SettingsDialog::on_close() {
 #ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::on_close" << endl;
+  std::cout << "SettingsDialog::on_close" << std::endl;
 #endif
   hide();
 }
 
 void SettingsDialog::on_spice_browse() {
 #ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::on_spice_browse" << endl;
+  std::cout << "SettingsDialog::on_spice_browse" << std::endl;
 #endif
   GSpeakersFileChooserDialog* fc =
       new GSpeakersFileChooserDialog(_("Select SPICE executable"), Gtk::FILE_CHOOSER_ACTION_OPEN);
@@ -288,6 +288,6 @@ void SettingsDialog::on_spice_browse() {
     m_spice_path_entry.set_text(m_filename);
   }
 #ifdef OUTPUT_DEBUG
-  cout << "SettingsDialog::on_spice_browse: " << m_filename << endl;
+  std::cout << "SettingsDialog::on_spice_browse: " << m_filename << std::endl;
 #endif
 }

@@ -42,7 +42,7 @@ TotalFilterPlot::~TotalFilterPlot() {}
 int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                  Net* n) {
 #ifdef OUTPUT_DEBUG
-  cout << "TotalFilterPlot::on_add_plot" << endl;
+  std::cout << "TotalFilterPlot::on_add_plot" << std::endl;
 #endif
   /* Search for *i in the graph */
   int position = -1;
@@ -63,12 +63,13 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
     m_nets.push_back(*i);
   }
 
-  // cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size() <<
-  // ", " << m_points.size() << endl;
+  // std::cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size()
+  // <<
+  // ", " << m_points.size() << std::endl;
 
   /* sum the plots into one great plot */
   Gdk::Color c("red");
- std::vector<GSpeakers::Point> pnts;
+  std::vector<GSpeakers::Point> pnts;
   plot.remove_all_plots();
   if (m_points.size() > 1) {
     pnts = m_points[0];
@@ -88,19 +89,19 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   // rita om plotten
 
   // if (position != -1) {
-  //  cout << "TotalFilterPlot::on_add_plot: replace plot" << endl;
+  //  std::cout << "TotalFilterPlot::on_add_plot: replace plot" << std::endl;
 
   plot.select_plot(plot.add_plot(pnts, *m_color));
   //} else {
   //  plot.add_plot(pnts, *m_color);
-  //  cout << "TotalFilterPlot::on_add_plot: add plot" << endl;
+  //  std::cout << "TotalFilterPlot::on_add_plot: add plot" << std::endl;
   //}
   //  if (*i == -1) {
   //    *i = plot.add_plot(points, color);
   //  } else {
   //    plot.replace_plot(*i, points, color);
   //  }
-  // cout << "TotalFilterPlot::on_add_plot: after add plot" << endl;
+  // std::cout << "TotalFilterPlot::on_add_plot: after add plot" << std::endl;
   return 0;
 }
 

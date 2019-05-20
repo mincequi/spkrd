@@ -28,12 +28,12 @@ public:
   GSpeakersColor();
   ~GSpeakersColor();
  std::string get_color_string();
-  void unget_color_string(string s);
+  void unget_color_string(std::string s);
 
 private:
  std::vector<string> m_colors;
   int m_counter;
- std::vector<string>::iterator get_iterator_from_string(string s);
+ std::vector<string>::iterator get_iterator_from_string(std::string s);
 };
 
 #endif

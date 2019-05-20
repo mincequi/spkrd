@@ -41,13 +41,13 @@ public:
   CrossoverList();
 
   /* Construct a part from an xml node */
-  CrossoverList(string filename);
+  CrossoverList(std::string filename);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(string filename); // Maybe this one should throw an exception
+  void to_xml(std::string filename); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend ostream& operator<<(ostream& o, const CrossoverList& crossover_list);
+  friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
 
   /* return a pointer to the crossover list */
  std::vector<Crossover>* crossover_list();

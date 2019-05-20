@@ -20,7 +20,7 @@
 
 CrossoverList::CrossoverList() {}
 
-CrossoverList::CrossoverList(string filename) {
+CrossoverList::CrossoverList(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
 
@@ -51,7 +51,7 @@ void CrossoverList::clear() {
   m_crossover_list.erase(m_crossover_list.begin(), m_crossover_list.end());
 }
 
-void CrossoverList::to_xml(string filename) {
+void CrossoverList::to_xml(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
 
@@ -72,8 +72,8 @@ void CrossoverList::to_xml(string filename) {
   }
 }
 
-ostream& operator<<(ostream& o, const CrossoverList& crossover_list) {
-  o << "Crossover List" << endl;
+std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list) {
+  o << "Crossover List" << std::endl;
 
   for (vector<Crossover>::iterator from =
            ((vector<Crossover>)(crossover_list.m_crossover_list)).begin();
