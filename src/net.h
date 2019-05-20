@@ -20,18 +20,18 @@
 #ifndef __GFILTER_NET_H
 #define __GFILTER_NET_H
 
-#include <vector>
-#include <libxml/tree.h>
-#include <libxml/parser.h>
+#include "common.h"
 #include "gspeakersobject.h"
 #include "part.h"
-#include "common.h"
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <vector>
 
 /* Net types */
-#define NET_TYPE_LOWPASS  1
+#define NET_TYPE_LOWPASS 1
 #define NET_TYPE_HIGHPASS 2
 #define NET_TYPE_BANDPASS 3
-#define NET_NOT_PRESENT   0
+#define NET_NOT_PRESENT 0
 
 /* Filter # */
 #define NET_ORDER_1ST 1
@@ -40,13 +40,13 @@
 #define NET_ORDER_4TH 4
 
 /* filter family */
-#define NET_BESSEL        1
-#define NET_BUTTERWORTH   2
-#define NET_CHEBYCHEV     3
+#define NET_BESSEL 1
+#define NET_BUTTERWORTH 2
+#define NET_CHEBYCHEV 3
 #define NET_LINKWITZRILEY 4
-#define NET_GAUSSIAN      5
-#define NET_LEGENDRE      6
-#define NET_LINEARPHASE   7
+#define NET_GAUSSIAN 5
+#define NET_LEGENDRE 6
+#define NET_LINEARPHASE 7
 
 using namespace std;
 
@@ -58,8 +58,7 @@ using namespace std;
  *
  * TODO: Use c++ streams for input in Part(xmlNodePtr)
  */
-class Net : public GSpeakersObject
-{
+class Net : public GSpeakersObject {
 public:
   /*
    * Construct new net object
@@ -68,24 +67,26 @@ public:
    * type = NET_TYPE_HIGHPASS                       // highpass filter
    * type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
    */
-  Net(int type = NET_TYPE_LOWPASS, int lowpass_order = NET_ORDER_1ST, int highpass_order = NET_NOT_PRESENT, 
-      bool has_imp_corr = false, bool has_damp = false, bool has_res = false, int family = NET_BUTTERWORTH, 
-      int adv_imp_model = 0, bool inv_pol = false);
+  Net(int type = NET_TYPE_LOWPASS, int lowpass_order = NET_ORDER_1ST,
+      int highpass_order = NET_NOT_PRESENT, bool has_imp_corr = false, bool has_damp = false,
+      bool has_res = false, int family = NET_BUTTERWORTH, int adv_imp_model = 0,
+      bool inv_pol = false);
 
   /* Construct a part from an xml node */
-  Net(xmlNodePtr parent); //or create_from_xml(xmlNodePtr); depending on excetions and stuff like that
-  
+  Net(xmlNodePtr
+          parent); // or create_from_xml(xmlNodePtr); depending on excetions and stuff like that
+
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  xmlNodePtr to_xml_node(xmlNodePtr parent);   // Maybe this one should throw an exception
+  xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend std::ostream& operator<< (std::ostream& o, const Net& net);
+  friend std::ostream& operator<<(std::ostream& o, const Net& net);
 
   /* Maybe we should add a toSPICE function here */
   string to_SPICE(Speaker& s, bool use_gnucap = false);
 
   /* Use this to get the parts or add part to the net */
-  vector<Part> *parts();
+  vector<Part>* parts();
 
   int get_highpass_order();
   int get_lowpass_order();
@@ -97,15 +98,15 @@ public:
   string get_speaker();
   int get_adv_imp_model();
   bool get_inv_pot();
-  
-  /* 
+
+  /*
    * We return parts by ref to so that we not copy these parts.
    * For example, if we have:
    * Net n = net;
    * n.get_imp_corr_R().set_value(0.2);
    *
-   * we don't access the part stored in n, we get a copy of that 
-   * part that we modify, but if we return a ref we modify the 
+   * we don't access the part stored in n, we get a copy of that
+   * part that we modify, but if we return a ref we modify the
    * part stored in Net
    */
   Part& get_imp_corr_R();
@@ -115,13 +116,13 @@ public:
   Part& get_res_R();
   Part& get_res_C();
   Part& get_res_L();
-  
+
   void set_highpass_order(int order);
   void set_lowpass_order(int order);
   void set_has_imp_corr(bool has_imp_corr);
   void set_has_damp(bool has_damp);
 
-  /* Here we don't want to use the ref since we want this class to have 
+  /* Here we don't want to use the ref since we want this class to have
    * a unique copy of the part.
    */
   void set_imp_corr_R(Part p);
@@ -131,13 +132,13 @@ public:
   void set_res_R(Part p);
   void set_res_C(Part p);
   void set_res_L(Part p);
-  
+
   void set_lowpass_family(int family);
   void set_highpass_family(int family);
   void set_speaker(string speaker);
   void set_adv_imp_model(int model);
   void set_inv_pol(bool pol);
-  
+
 protected:
   /* Member variables */
   // int m_id; /* from GSpeakersObject */
@@ -160,19 +161,18 @@ protected:
   string m_speaker;
   int m_adv_imp_model;
   bool m_inv_pol;
-  
+
 private:
-  
   /*
    * This function will set a new order in one subfilter
    * It will also remove or add parts to fit the new order of the filter
-   * 
+   *
    * new order: the new order for selected filter, NET_ORDER_1ST, ...
    * which filter: filter link to work on, NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
    *
    */
   void setup_net_by_order(int new_order, int which_net);
-  
+
   /* xml parsing functions */
   void parse_type(xmlNodePtr node);
   void parse_highpass_order(xmlNodePtr node);
@@ -183,7 +183,7 @@ private:
   void parse_parts(xmlNodePtr node);
   void parse_lowpass_family(xmlNodePtr node);
   void parse_highpass_family(xmlNodePtr node);
-  void parse_speaker(xmlNodePtr node);  
+  void parse_speaker(xmlNodePtr node);
   void parse_adv_imp_model(xmlNodePtr node);
   void parse_inv_pol(xmlNodePtr node);
 };

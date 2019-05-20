@@ -18,23 +18,22 @@
 #ifndef __GFILTER_PART_H
 #define __GFILTER_PART_H
 
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <string>
-#include <iostream>
 #include "gspeakersobject.h"
+#include <iostream>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <string>
 
 /* Part types */
 #define PART_TYPE_CAPACITOR 1
-#define PART_TYPE_INDUCTOR  2
-#define PART_TYPE_RESISTOR  3
+#define PART_TYPE_INDUCTOR 2
+#define PART_TYPE_RESISTOR 3
 
 /*
  * Part is an electronic component, for example a inductor or capacitor
  *
  */
-class Part : public GSpeakersObject
-{
+class Part : public GSpeakersObject {
 public:
   /* Create a new part
    *
@@ -46,17 +45,17 @@ public:
    */
   Part(int type = PART_TYPE_CAPACITOR, double value = 1.0, std::string unit = "m");
 
-  /* Create new part from an xml node 
+  /* Create new part from an xml node
    *
    * This functions throws an exception if parsing of the xml fails
    */
-  Part(xmlNodePtr fields); 
-  
+  Part(xmlNodePtr fields);
+
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  xmlNodePtr to_xml_node(xmlNodePtr parent);   // Maybe this one should throw an exception
+  xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend std::ostream& operator<< (std::ostream& o, const Part& part);
+  friend std::ostream& operator<<(std::ostream& o, const Part& part);
 
   void set_value(double value);
   void set_unit(std::string unit);
@@ -68,13 +67,13 @@ public:
   void on_part_value_changed(int id, double new_value);
   void on_part_unit_changed(int id, std::string new_unit);
   void on_part_type_changed(int id, int new_type);
-  
+
 protected:
   /* Member variables */
-  /* int m_id; */ // from GSpeakersObject
-  /* int m_type; */ // from GSpeakersObject
-  double      m_value;      // Part value, for example 4.7 (used in SPICE)
-  std::string m_unit;       // Value unit, for example u (used in SPICE)
+  /* int m_id; */     // from GSpeakersObject
+  /* int m_type; */   // from GSpeakersObject
+  double m_value;     // Part value, for example 4.7 (used in SPICE)
+  std::string m_unit; // Value unit, for example u (used in SPICE)
 
   /* xml parsing */
   void parse_type(xmlNodePtr node);

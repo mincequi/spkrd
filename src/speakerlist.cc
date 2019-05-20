@@ -15,24 +15,20 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib.h>
 #include "speakerlist.h"
 #include "common.h"
+#include <glib.h>
 
-SpeakerList::SpeakerList()
-{
+SpeakerList::SpeakerList() {}
 
-}
-
-SpeakerList::SpeakerList(string filename)
-{
+SpeakerList::SpeakerList(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
-  
-  doc = xmlParseFile( filename.c_str() );
+
+  doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
     node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp( (char *)node->name, "speakerlist" ) == 0)) {
+    if ((node != NULL) && (g_strcasecmp((char*)node->name, "speakerlist") == 0)) {
       if (node->children) {
         children = node->children;
         while (children != NULL) {
@@ -52,64 +48,45 @@ SpeakerList::SpeakerList(string filename)
   }
 }
 
-void SpeakerList::clear()
-{
-  m_speaker_list.erase(m_speaker_list.begin(), m_speaker_list.end());
-}
+void SpeakerList::clear() { m_speaker_list.erase(m_speaker_list.begin(), m_speaker_list.end()); }
 
-void SpeakerList::to_xml(string filename)
-{
+void SpeakerList::to_xml(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
-  
-  doc = xmlNewDoc( (xmlChar *)("1.0") );
-  
-  node = xmlNewDocNode( doc, NULL, (xmlChar *)("speakerlist"), NULL );
+
+  doc = xmlNewDoc((xmlChar*)("1.0"));
+
+  node = xmlNewDocNode(doc, NULL, (xmlChar*)("speakerlist"), NULL);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all speakers */
-  for(
-    vector<Speaker>::iterator from = m_speaker_list.begin();
-    from != m_speaker_list.end();
-    ++from)
-  { 
+  for (vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
+       ++from) {
     ((Speaker)(*from)).to_xml_node(node);
   }
 
   /* Save xml file */
-  if (xmlSaveFile(filename.c_str(), doc)  == -1) {
+  if (xmlSaveFile(filename.c_str(), doc) == -1) {
     throw GSpeakersException(_("SpeakerList: Could not save to ") + filename);
   }
 }
 
-
-ostream& operator<< (ostream& o, const SpeakerList& speaker_list)
-{
+ostream& operator<<(ostream& o, const SpeakerList& speaker_list) {
   o << _("Speaker List") << endl;
 
-  for(
-    vector<Speaker>::iterator from = ((vector<Speaker>)(speaker_list.m_speaker_list)).begin();
-    from != ((vector<Speaker>)(speaker_list.m_speaker_list)).end();
-    ++from)
-  {
+  for (vector<Speaker>::iterator from = ((vector<Speaker>)(speaker_list.m_speaker_list)).begin();
+       from != ((vector<Speaker>)(speaker_list.m_speaker_list)).end(); ++from) {
     o << *from;
   }
-  
+
   return o;
 }
 
-vector<Speaker> *SpeakerList::speaker_list()
-{
-  return &m_speaker_list;
-}
+vector<Speaker>* SpeakerList::speaker_list() { return &m_speaker_list; }
 
-Speaker SpeakerList::get_speaker_by_id_string(string id_string)
-{
-  for (
-    vector<Speaker>::iterator from = m_speaker_list.begin();
-    from != m_speaker_list.end();
-    ++from)
-  {
+Speaker SpeakerList::get_speaker_by_id_string(string id_string) {
+  for (vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
+       ++from) {
     if ((*from).get_id_string() == id_string) {
       return *from;
     }

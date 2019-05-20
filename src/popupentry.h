@@ -2,9 +2,9 @@
   $Id$
 
   Copyright (C) 1998-2002 The gtkmm Development Team & Daniel Sundberg
-  
-  The file is pretty much ripped right out of the gtkmm-2.0 
-  example custom cellrenderer with small modifications by 
+
+  The file is pretty much ripped right out of the gtkmm-2.0
+  example custom cellrenderer with small modifications by
   Daniel Sundberg <dss@home.se>.
 
   This program is free software; you can redistribute it and/or modify
@@ -24,16 +24,15 @@
 #ifndef __POPUPENTRY_H
 #define __POPUPENTRY_H
 
+#include <gtkmm/adjustment.h>
 #include <gtkmm/button.h>
 #include <gtkmm/celleditable.h>
 #include <gtkmm/editable.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/adjustment.h>
 
-class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable
-{
+class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
 public:
   explicit PopupEntry(const Glib::ustring& path);
   virtual ~PopupEntry();
@@ -54,7 +53,7 @@ public:
 protected:
   virtual bool on_key_press_event(GdkEventKey* event);
   virtual void start_editing_vfunc(GdkEvent* event);
-  //virtual bool on_button_press_event(GdkEventButton *event);
+  // virtual bool on_button_press_event(GdkEventButton *event);
 private:
   typedef PopupEntry Self;
 
@@ -62,10 +61,9 @@ private:
   bool on_entry_key_press_event(GdkEventKey* event);
 
   Glib::ustring path_;
-  Gtk::Entry*   entry_;
-  Gtk::SpinButton *spin_button_;
-  bool          editing_canceled_;
-  
+  Gtk::Entry* entry_;
+  Gtk::SpinButton* spin_button_;
+  bool editing_canceled_;
 
   sigc::signal0<void> signal_arrow_clicked_;
 };

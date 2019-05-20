@@ -20,41 +20,41 @@
 #ifndef __GFILTER_COMMON_H
 #define __GFILTER_COMMON_H
 
-#include <string>
-#include <sigc++/sigc++.h>
-#include <gtkmm/widget.h>
-#include <glibmm/ustring.h>
+#include "../config.h"
+#include "settings.h"
 #include <gdkmm/color.h>
-#include <gtkmm/tooltips.h>
+#include <glibmm/ustring.h>
 #include <gtkmm/stock.h>
-#include <vector>
+#include <gtkmm/tooltips.h>
+#include <gtkmm/widget.h>
 #include <iostream>
 #include <libintl.h>
-#include "settings.h"
-#include "../config.h"
+#include <sigc++/sigc++.h>
+#include <string>
+#include <vector>
 
-#define _(String) gettext (String)
+#define _(String) gettext(String)
 #define gettext_noop(String) String
-#define N_(String) gettext_noop (String)
+#define N_(String) gettext_noop(String)
 
 using namespace sigc;
 using namespace std;
 
 namespace GSpeakers {
-  class Point;
-  Glib::ustring double_to_ustring(double d);
-  Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
-  Glib::ustring int_to_ustring(int d);
-  int round(double d);
-  Gtk::Widget& image_widget(const string& filename);
-  //  Gtk::Widget& image_widget(const Gtk::StockID& stockid);
-  Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
-  Gtk::Tooltips& tooltips();
-  bool& driverlist_modified();
-  bool& enclosurelist_modified();
-  bool& crossoverlist_modified();
-  bool& meassurementlist_modified();
-}   
+class Point;
+Glib::ustring double_to_ustring(double d);
+Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
+Glib::ustring int_to_ustring(int d);
+int round(double d);
+Gtk::Widget& image_widget(const string& filename);
+//  Gtk::Widget& image_widget(const Gtk::StockID& stockid);
+Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
+Gtk::Tooltips& tooltips();
+bool& driverlist_modified();
+bool& enclosurelist_modified();
+bool& crossoverlist_modified();
+bool& meassurementlist_modified();
+} // namespace GSpeakers
 
 class Box;
 class Speaker;
@@ -68,10 +68,11 @@ class SpeakerList;
  */
 class GSpeakersException {
   string _what;
+
 public:
-  GSpeakersException(const string& what_arg): _what (what_arg) { }
+  GSpeakersException(const string& what_arg) : _what(what_arg) {}
   virtual ~GSpeakersException() {}
-  virtual const char* what () const { return _what.c_str (); }
+  virtual const char* what() const { return _what.c_str(); }
 };
 
 extern Settings g_settings;
@@ -83,8 +84,8 @@ extern Settings g_settings;
  *
  * SigC::Object is the new crossover
  */
-//extern Signal1<void, SigC::Object *> signal_crossover_selected;
-extern signal1<void, Crossover *> signal_crossover_selected;
+// extern Signal1<void, SigC::Object *> signal_crossover_selected;
+extern signal1<void, Crossover*> signal_crossover_selected;
 
 /*
  * signal_speakerlist_loaded
@@ -93,31 +94,30 @@ extern signal1<void, Crossover *> signal_crossover_selected;
  *
  * SpeakerList arg is the new SpeakerList
  */
-//extern Signal1<void, string> signal_speakerlist_loaded;
-extern signal1<void, SpeakerList *> signal_speakerlist_loaded;
+// extern Signal1<void, string> signal_speakerlist_loaded;
+extern signal1<void, SpeakerList*> signal_speakerlist_loaded;
 
 /*
  * signal_box_selected
- * 
+ *
  * Emit this signal when you want to change the current box
  *
  * Box * is a ptr to the new box
  */
-extern signal1<void, Box *> signal_box_selected;
-extern signal1<void, Box *> signal_box_modified;
-extern signal1<void, Box *> signal_add_to_boxlist;
-extern signal3<void, Box *, Speaker *, Gdk::Color&> signal_add_plot;
+extern signal1<void, Box*> signal_box_selected;
+extern signal1<void, Box*> signal_box_modified;
+extern signal1<void, Box*> signal_add_to_boxlist;
+extern signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
 extern signal2<int, vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 extern signal1<void, int> signal_remove_box_plot;
 extern signal1<void, int> signal_hide_box_plot;
 extern signal1<void, int> signal_select_plot;
 /* Define two signals for crossover parts updates */
-extern signal0<void> signal_net_modified_by_wizard;  // listen to this in crossover treeview
-extern signal1<void, Net *> signal_net_modified_by_user;    // listan to this in filter wizard
+extern signal0<void> signal_net_modified_by_wizard;     // listen to this in crossover treeview
+extern signal1<void, Net*> signal_net_modified_by_user; // listan to this in filter wizard
 extern signal1<void, int> signal_new_crossover;
 extern signal0<void> signal_plot_crossover;
-extern signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *> signal_add_crossover_plot;
+extern signal4<int, vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*> signal_add_crossover_plot;
 extern signal0<void> signal_save_open_files;
-
 
 #endif //__GFILTER_COMMON_H

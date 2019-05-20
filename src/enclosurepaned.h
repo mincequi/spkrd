@@ -1,6 +1,6 @@
 /*
   $Id$
-  
+
   enclosurepaned Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -20,18 +20,17 @@
 #ifndef __ENCLOSURE_PANED_H
 #define __ENCLOSURE_PANED_H
 
-#include <gtkmm.h>
 #include "boxeditor.h"
-#include "common.h"
 #include "boxhistory.h"
-#include "plothistory.h"
+#include "common.h"
 #include "gspeakersboxplot.h"
+#include "plothistory.h"
+#include <gtkmm.h>
 
 using namespace std;
 using namespace sigc;
 
-class EnclosurePaned : public Gtk::HPaned
-{
+class EnclosurePaned : public Gtk::HPaned {
 public:
   EnclosurePaned();
   virtual ~EnclosurePaned();
@@ -42,24 +41,24 @@ protected:
   /* Callbacks */
   void on_settings_changed(const string&);
   void set_save_state(bool b);
-  
+
   void on_plot_selected(int);
   void on_remove_boxplot(int);
-  void on_add_plot(Box *, Speaker *, Gdk::Color&);
-  
+  void on_add_plot(Box*, Speaker*, Gdk::Color&);
+
 private:
   BoxEditor box_editor;
   BoxHistory box_history;
   PlotHistory plot_history;
   GSpeakersBoxPlot box_plot;
-  
+
   Gtk::VPaned m_edit_vpaned;
   Gtk::VPaned m_plot_vpaned;
 
   Gtk::Menu m_menu;
   Gtk::HandleBox m_toolbar;
-  Gtk::Toolbar *m_tbar;
-  
+  Gtk::Toolbar* m_tbar;
+
   int nof_plots;
   bool plot_selected;
 };

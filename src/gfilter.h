@@ -18,23 +18,22 @@
 #ifndef GFILTER_H
 #define GFILTER_H
 
-#include <gtkmm/window.h>
 #include <gtkmm/button.h>
+#include <gtkmm/window.h>
 #include <libintl.h>
 
-class GFilter : public Gtk::Window
-{
+class GFilter : public Gtk::Window {
 public:
   GFilter();
   virtual ~GFilter();
 
-  //Signal handlers:
+  // Signal handlers:
   virtual void on_button_clicked();
 
 protected:
-  //Member widgets:
+  // Member widgets:
   Gtk::Button m_Button1;
   Gtk::Button m_Button2;
 };
 
-#endif //GFILTER_H
+#endif // GFILTER_H

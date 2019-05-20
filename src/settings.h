@@ -1,5 +1,5 @@
 /* $Id$
- * 
+ *
  * Handle loading/parsing/saving of settings to
  * a configuration file
  *
@@ -29,33 +29,33 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <string>
 #include <map>
 #include <sigc++/sigc++.h>
 #include <stdexcept>
+#include <string>
 
-using std::string;
 using std::map;
+using std::string;
 
 class Settings : public sigc::trackable {
- private:
-  std::map<const string,string> m_map;
+private:
+  std::map<const string, string> m_map;
   std::string m_filename;
-  
- public:
+
+public:
   Settings();
   virtual ~Settings();
-  
+
   void load(const string& filename) throw(std::runtime_error);
   void save(const string& filename) throw(std::runtime_error);
-  void save() throw (std::runtime_error);
-  
-  string         getValueString       (const string& k);
-  int            getValueInt          (const string& k);
-  unsigned int   getValueUnsignedInt  (const string& k);
+  void save() throw(std::runtime_error);
+
+  string getValueString(const string& k);
+  int getValueInt(const string& k);
+  unsigned int getValueUnsignedInt(const string& k);
   unsigned short getValueUnsignedShort(const string& k);
-  unsigned char  getValueUnsignedChar (const string& k);
-  bool           getValueBool         (const string& k);
+  unsigned char getValueUnsignedChar(const string& k);
+  bool getValueBool(const string& k);
 
   void setValue(const string& k, const string& v);
   void setValue(const string& k, int v);
@@ -64,11 +64,14 @@ class Settings : public sigc::trackable {
   void setValue(const string& k, unsigned char v);
   void setValue(const string& k, bool v);
 
-  void defaultValueUnsignedInt  (const string& k, unsigned int dflt, unsigned int lower = 0, unsigned int upper = 0xffffffff);
-  void defaultValueUnsignedShort(const string& k, unsigned short dflt, unsigned short lower = 0, unsigned short upper = 0xffff);
-  void defaultValueUnsignedChar (const string& k, unsigned char dflt, unsigned char lower = 0, unsigned char upper = 0xff);
-  void defaultValueBool         (const string& k, bool dflt);
-  void defaultValueString       (const string& k, const string& dflt);
+  void defaultValueUnsignedInt(const string& k, unsigned int dflt, unsigned int lower = 0,
+                               unsigned int upper = 0xffffffff);
+  void defaultValueUnsignedShort(const string& k, unsigned short dflt, unsigned short lower = 0,
+                                 unsigned short upper = 0xffff);
+  void defaultValueUnsignedChar(const string& k, unsigned char dflt, unsigned char lower = 0,
+                                unsigned char upper = 0xff);
+  void defaultValueBool(const string& k, bool dflt);
+  void defaultValueString(const string& k, const string& dflt);
 
   bool exists(const string& k);
 
@@ -77,8 +80,7 @@ class Settings : public sigc::trackable {
   static string Escape(const string& t);
   static string Unescape(const string& t);
 
-  sigc::signal1<void,const string &> settings_changed;
+  sigc::signal1<void, const string&> settings_changed;
 };
 
 #endif
-

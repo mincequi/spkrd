@@ -20,14 +20,14 @@
 #ifndef __GSPEAKERS_CROSSOVERTREEVIEW
 #define __GSPEAKERS_CROSSOVERTREEVIEW
 
-#include <gtkmm/frame.h>
+#include "cellitemcrossover.h"
+#include "crossover.h"
 #include <gtkmm/box.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
-#include "crossover.h"
-#include "cellitemcrossover.h"
 
 using namespace sigc;
 using namespace std;
@@ -40,46 +40,44 @@ public:
   CrossoverTreeView();
   virtual ~CrossoverTreeView();
   /* Callback */
-  void on_crossover_selected(Crossover *new_crossover);
-  
+  void on_crossover_selected(Crossover* new_crossover);
+
 protected:
-  //vfunc overrides:
+  // vfunc overrides:
   virtual void on_realize();
-  
+
   /* callbacks */
   void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
   void on_net_modified_by_wizard();
-  void value_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
+  void value_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
   /* Helper functions */
   virtual void create_model();
   virtual void add_columns();
   virtual void treestore_add_item(const CellItem_Crossover& foo);
-  
-  //Member widgets:
+
+  // Member widgets:
   Gtk::VBox m_VBox;
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
   vector<CellItem_Crossover> m_vecItems;
-  
-  /* Pointer to currently selected crossover */
-  Crossover *cover;
 
-  struct ModelColumns : public Gtk::TreeModelColumnRecord
-  {
-    Gtk::TreeModelColumn<Glib::ustring>  id_string;
-    Gtk::TreeModelColumn<int>            id;
-    Gtk::TreeModelColumn<int>            type;
-    Gtk::TreeModelColumn<double>         value;
-    Gtk::TreeModelColumn<Glib::ustring>  unit;
-    Gtk::TreeModelColumn<bool>           editable;
-    Gtk::TreeModelColumn<bool>           visible;
+  /* Pointer to currently selected crossover */
+  Crossover* cover;
+
+  struct ModelColumns : public Gtk::TreeModelColumnRecord {
+    Gtk::TreeModelColumn<Glib::ustring> id_string;
+    Gtk::TreeModelColumn<int> id;
+    Gtk::TreeModelColumn<int> type;
+    Gtk::TreeModelColumn<double> value;
+    Gtk::TreeModelColumn<Glib::ustring> unit;
+    Gtk::TreeModelColumn<bool> editable;
+    Gtk::TreeModelColumn<bool> visible;
     ModelColumns();
   };
 
   const ModelColumns m_columns;
-
 };
 
 #endif

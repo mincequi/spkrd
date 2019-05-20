@@ -29,6 +29,7 @@ public:
   ~GSpeakersColor();
   string get_color_string();
   void unget_color_string(string s);
+
 private:
   vector<string> m_colors;
   int m_counter;

@@ -2,9 +2,9 @@
   $Id$
 
   Copyright (C) 1998-2002 The gtkmm Development Team & Daniel Sundberg
-  
-  The file is pretty much ripped right out of the gtkmm-2.0 
-  example custom cellrenderer with small modifications by 
+
+  The file is pretty much ripped right out of the gtkmm-2.0
+  example custom cellrenderer with small modifications by
   Daniel Sundberg <dss@home.se>.
 
   This program is free software; you can redistribute it and/or modify
@@ -30,31 +30,27 @@
 
 class PopupEntry;
 
-class CellRendererPopup : public Gtk::CellRendererText
-{
+class CellRendererPopup : public Gtk::CellRendererText {
 public:
   CellRendererPopup();
   virtual ~CellRendererPopup();
 
-  PopupEntry*  get_popup_entry();
+  PopupEntry* get_popup_entry();
   Gtk::Window* get_popup_window();
 
   void set_focus_widget(Gtk::Widget& focus_widget);
   Gtk::Widget* get_focus_widget();
 
-  sigc::signal5<void,const Glib::ustring&,int,int,int,int>& signal_show_popup();
-  sigc::signal0<void>&                                      signal_hide_popup();
+  sigc::signal5<void, const Glib::ustring&, int, int, int, int>& signal_show_popup();
+  sigc::signal0<void>& signal_hide_popup();
 
   void hide_popup();
 
 protected:
-  virtual void get_size_vfunc(Gtk::Widget& widget,
-                              const Gdk::Rectangle* cell_area,
-                              int* x_offset, int* y_offset,
-                              int* width,    int* height);
+  virtual void get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area, int* x_offset,
+                              int* y_offset, int* width, int* height);
 
-  virtual Gtk::CellEditable* start_editing_vfunc(GdkEvent* event,
-                                                 Gtk::Widget& widget,
+  virtual Gtk::CellEditable* start_editing_vfunc(GdkEvent* event, Gtk::Widget& widget,
                                                  const Glib::ustring& path,
                                                  const Gdk::Rectangle& background_area,
                                                  const Gdk::Rectangle& cell_area,
@@ -66,15 +62,15 @@ protected:
 private:
   typedef CellRendererPopup Self;
 
-  sigc::signal5<void,const Glib::ustring&,int,int,int,int>  signal_show_popup_;
-  sigc::signal0<void>                                       signal_hide_popup_;
+  sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;
+  sigc::signal0<void> signal_hide_popup_;
 
-  int           button_width_;
-  Gtk::Window   popup_window_;
-  Gtk::Widget*  focus_widget_;
-  PopupEntry*   popup_entry_;
-  bool          shown_;
-  bool          editing_canceled_;
+  int button_width_;
+  Gtk::Window popup_window_;
+  Gtk::Widget* focus_widget_;
+  PopupEntry* popup_entry_;
+  bool shown_;
+  bool editing_canceled_;
 
   bool on_button_press_event(GdkEventButton* event);
   bool on_key_press_event(GdkEventKey* event);

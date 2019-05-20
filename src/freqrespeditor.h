@@ -1,6 +1,6 @@
 /*
   $Id$
-  
+
   freqrespeditor Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -21,26 +21,26 @@
 #define __FREQ_RESPONSE_EDITOR_H
 
 #include "common.h"
-#include <gtkmm/table.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/table.h>
 
 using namespace std;
 using namespace sigc;
 
-class FreqRespEditor : public Gtk::Dialog
-{
+class FreqRespEditor : public Gtk::Dialog {
 public:
   FreqRespEditor(string filename = "");
   ~FreqRespEditor();
   string get_filename() { return m_filename; }
+
 private:
   Gtk::Table m_table;
   vector<Gtk::Entry*> dbmag_entries;
   Gtk::Button m_save_button, m_saveas_button, m_close_button;
-  
+
   string m_filename;
-  
+
   /* callbacks */
   void on_save();
   void on_save_as();

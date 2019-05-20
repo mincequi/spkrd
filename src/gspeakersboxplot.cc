@@ -2,8 +2,8 @@
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -20,15 +20,13 @@
 
 #include "gspeakersboxplot.h"
 
-GSpeakersBoxPlot::GSpeakersBoxPlot() : 
-  Gtk::Frame(""),
-  plot(1, 1000)
-{
+GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), plot(1, 1000) {
   using namespace sigc;
 
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Enclosure frequency response")) + "</b>");
+  static_cast<Gtk::Label*>(get_label_widget())
+      ->set_markup("<b>" + Glib::ustring(_("Enclosure frequency response")) + "</b>");
   m_vbox.set_border_width(12);
   m_vbox.pack_start(sw);
   sw.add(plot);
@@ -43,7 +41,4 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() :
   show_all();
 }
 
-GSpeakersBoxPlot::~GSpeakersBoxPlot()
-{
-
-}
+GSpeakersBoxPlot::~GSpeakersBoxPlot() {}

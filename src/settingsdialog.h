@@ -20,43 +20,43 @@
 #ifndef __GSPEAKERS_SETTINGSDLG_H
 #define __GSPEAKERS_SETTINGSDLG_H
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/optionmenu.h>
-#include <gtkmm/fileselection.h>
-#include <gtkmm/radiobutton.h>
 #include "common.h"
+#include <gtkmm/dialog.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/fileselection.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/optionmenu.h>
+#include <gtkmm/radiobutton.h>
 
 using namespace std;
 using namespace sigc;
 
 namespace GSpeakers {
-  enum Settings { 
-    SAVE_MAIN_WINDOW_SIZE, 
-    SAVE_MAIN_WINDOW_POSITION, 
-    TOOLBAR_STYLE, 
-    SPICE_PATH, 
-    DRAW_DRIVER_IMP_PLOT, 
-    DRAW_DRIVER_FREQ_RESP_PLOT,
-    AUTO_UPDATE_CROSSOVER_PLOT,
-    DISABLE_FILTER_AMP,
-    SCALE_FILTER_PARTS, 
-    USE_DRIVER_IMPEDANCE, 
-    SPICE_TYPE
-  }; 
+enum Settings {
+  SAVE_MAIN_WINDOW_SIZE,
+  SAVE_MAIN_WINDOW_POSITION,
+  TOOLBAR_STYLE,
+  SPICE_PATH,
+  DRAW_DRIVER_IMP_PLOT,
+  DRAW_DRIVER_FREQ_RESP_PLOT,
+  AUTO_UPDATE_CROSSOVER_PLOT,
+  DISABLE_FILTER_AMP,
+  SCALE_FILTER_PARTS,
+  USE_DRIVER_IMPEDANCE,
+  SPICE_TYPE
+};
 }
 
-class SettingsDialog : public Gtk::Dialog
-{
+class SettingsDialog : public Gtk::Dialog {
 public:
   SettingsDialog();
   virtual ~SettingsDialog();
+
 private:
   Gtk::Notebook m_main_notebook;
   Gtk::Button m_spice_browse_button;
   Gtk::Entry m_spice_path_entry;
- 
+
   Gtk::RadioButton m_spice_use_berkley;
   Gtk::RadioButton m_spice_use_ngspice;
   Gtk::RadioButton m_spice_use_gnucap;
@@ -69,12 +69,12 @@ private:
 
   Gtk::OptionMenu m_toolbar_style;
 
-  Gtk::FileSelection *m_file_selection;
-  
-  Gtk::Button *close_button;
+  Gtk::FileSelection* m_file_selection;
+
+  Gtk::Button* close_button;
 
   string m_filename;
-  
+
   void on_close();
   void on_spice_browse();
   void on_config_option_change(GSpeakers::Settings setting);

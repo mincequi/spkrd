@@ -17,14 +17,13 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-
 #ifndef __GSPEAKERS_CELLITEM_CROSSOVER
 #define __GSPEAKERS_CELLITEM_CROSSOVER
 
-#include <glibmm/ustring.h>
-#include <glib/gstring.h>
-#include <vector>
 #include "part.h"
+#include <glib/gstring.h>
+#include <glibmm/ustring.h>
+#include <vector>
 
 /*
  * This is a cellitem for a crossover used in the current crossover treeview
@@ -32,28 +31,27 @@
  * CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
  *
  */
-class CellItem_Crossover
-{
+class CellItem_Crossover {
 public:
   CellItem_Crossover();
-  
+
   /* Construct a cellitem from a part */
   CellItem_Crossover(Part part);
-  
+
   CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
-  
+
   /* Use this constructor to construct a cellitem with children */
   CellItem_Crossover(Glib::ustring label, const std::vector<CellItem_Crossover>& children);
-  
+
   CellItem_Crossover(const CellItem_Crossover& src);
   CellItem_Crossover& operator=(const CellItem_Crossover& src);
   virtual ~CellItem_Crossover();
-  
+
   /* Member variables */
   Glib::ustring m_label;
-  int           m_id;
-  int           m_type;
-  double        m_value;
+  int m_id;
+  int m_type;
+  double m_value;
   Glib::ustring m_unit;
   Glib::ustring m_type_str;
   Glib::ustring m_value_str;

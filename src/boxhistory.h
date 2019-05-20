@@ -20,16 +20,16 @@
 #ifndef __GSPEAKERS_BOXHISTORY
 #define __GSPEAKERS_BOXHISTORY
 
-#include <sigc++/signal.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/fileselection.h>
-#include <gtkmm/cellrenderer.h>
-#include <gtkmm/treemodel.h>
-#include <gdkmm/event.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/treeview.h>
-#include "common.h"
 #include "boxlist.h"
+#include "common.h"
+#include <gdkmm/event.h>
+#include <gtkmm/cellrenderer.h>
+#include <gtkmm/fileselection.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treeview.h>
+#include <sigc++/signal.h>
 
 using namespace sigc;
 using namespace std;
@@ -38,15 +38,14 @@ extern signal1<void, bool> signal_enclosure_set_save_state;
 
 /*
  * This class implements a TreeView connected with a ListStore
- * It is pretty much ripped off the liststore example in the 
- * gtk-demo program so you can study this example to learn a 
+ * It is pretty much ripped off the liststore example in the
+ * gtk-demo program so you can study this example to learn a
  * little bit more about how to use the TreeView.
  *
- * The list contains a list of all enclosures...you can select 
+ * The list contains a list of all enclosures...you can select
  * to plot, not plot or whatever for each enclosure.
  */
-class BoxHistory : public Gtk::Frame
-{
+class BoxHistory : public Gtk::Frame {
 public:
   BoxHistory();
   virtual ~BoxHistory();
@@ -61,29 +60,29 @@ public:
   void on_save_as();
   void on_remove();
   void on_delete_plot();
-  
+
 protected:
   /* callbacks */
   void open_xml(const std::string& filename);
   void append_xml(const std::string& filename);
   void on_selection_changed();
   void save_as_xml(const std::string& filename);
-  void on_box_modified(Box *box);  
-  void on_add_plot(Box *box, Speaker *speaker);
-  void on_append_box(Box *box);
-  void on_add_to_boxlist(Box *b);
+  void on_box_modified(Box* box);
+  void on_add_plot(Box* box, Speaker* speaker);
+  void on_append_box(Box* box);
+  void on_add_to_boxlist(Box* b);
   bool on_delete_event(GdkEventAny* event);
   void on_plot_selected(int i);
   void on_save_open_files();
-  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void vb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void fb1_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  
+  void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
   virtual void liststore_add_item(Box box);
-  
+
   /* Member widgets */
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
@@ -95,20 +94,27 @@ protected:
   BoxList m_box_list;
 
   /* This is used in the treemodel */
-  struct ModelColumns : public Gtk::TreeModelColumnRecord
-  {
-    Gtk::TreeModelColumn<int>           type;
+  struct ModelColumns : public Gtk::TreeModelColumnRecord {
+    Gtk::TreeModelColumn<int> type;
     Gtk::TreeModelColumn<Glib::ustring> id_string;
     Gtk::TreeModelColumn<Glib::ustring> speaker;
-    Gtk::TreeModelColumn<double>        vb1;
-    Gtk::TreeModelColumn<double>        fb1;
-    Gtk::TreeModelColumn<double>        vb2;
-    Gtk::TreeModelColumn<double>        fb2;
-    
-    ModelColumns() { add(type); add(id_string); add(speaker); add(vb1); add(vb2); add(fb1); add(fb2); }
+    Gtk::TreeModelColumn<double> vb1;
+    Gtk::TreeModelColumn<double> fb1;
+    Gtk::TreeModelColumn<double> vb2;
+    Gtk::TreeModelColumn<double> fb2;
+
+    ModelColumns() {
+      add(type);
+      add(id_string);
+      add(speaker);
+      add(vb1);
+      add(vb2);
+      add(fb1);
+      add(fb2);
+    }
   };
   ModelColumns m_columns;
-  
+
   /* Additional member variables */
   string m_filename;
   bool new_xml_pressed;

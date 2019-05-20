@@ -2,8 +2,8 @@
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -20,29 +20,24 @@
 
 #include "gspeakersfilterplot.h"
 
-GSpeakersFilterPlot::GSpeakersFilterPlot() : 
-  plot(1, 20000)
-{
+GSpeakersFilterPlot::GSpeakersFilterPlot() : plot(1, 20000) {
   using namespace sigc;
 
   add(plot);
-  //signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
-  //signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
-  //signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
-  //signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
+  // signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
+  // signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
+  // signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
+  // signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
   signal_add_crossover_plot.connect(mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
   signal_crossover_selected.connect(mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
   plot.set_y_label(_("Magnitude / dB"));
   show_all();
 }
 
-GSpeakersFilterPlot::~GSpeakersFilterPlot()
-{
+GSpeakersFilterPlot::~GSpeakersFilterPlot() {}
 
-}
-
-int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int *i, Net *n)
-{
+int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
+                                     Net* n) {
 #ifdef OUTPUT_DEBUG
   cout << "GSpeakersFilterPlot::on_add_plot" << endl;
 #endif
@@ -55,18 +50,11 @@ int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Colo
   return 0;
 }
 
-void GSpeakersFilterPlot::clear()
-{
-  plot.remove_all_plots();
-}
+void GSpeakersFilterPlot::clear() { plot.remove_all_plots(); }
 
-void GSpeakersFilterPlot::on_crossover_selected(Crossover *)
-{
-  clear();
-}
+void GSpeakersFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 
-bool GSpeakersFilterPlot::on_delete_event(GdkEventAny *event)
-{
+bool GSpeakersFilterPlot::on_delete_event(GdkEventAny* event) {
   /* Don't wanna delete this window */
   return true;
 }

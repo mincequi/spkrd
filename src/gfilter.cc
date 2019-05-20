@@ -18,25 +18,17 @@
 #include "gfilter.h"
 #include <iostream>
 
-GFilter::GFilter()
-  : m_Button1(gettext("Click Me")), m_Button2(gettext("Click me also"))
-{
+GFilter::GFilter() : m_Button1(gettext("Click Me")), m_Button2(gettext("Click me also")) {
   set_title("gtkmm_hello");
   set_border_width(10);
 
-  //Connect the button's "clicked" signal to the on_button_clicked() signal handler:
-  m_Button1.signal_clicked().connect(slot(*this, &GFilter::on_button_clicked) );
-  
+  // Connect the button's "clicked" signal to the on_button_clicked() signal handler:
+  m_Button1.signal_clicked().connect(slot(*this, &GFilter::on_button_clicked));
+
   add(m_Button1);
   show_all();
 }
 
-GFilter::~GFilter()
-{
-}
+GFilter::~GFilter() {}
 
-void GFilter::on_button_clicked()
-{
-    std::cout << gettext("The button was clicked.") << std::endl;
-}
-
+void GFilter::on_button_clicked() { std::cout << gettext("The button was clicked.") << std::endl; }

@@ -17,14 +17,13 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <iostream>
-#include <gtkmm/stock.h>
 #include "gspeakersfilechooser.h"
+#include <gtkmm/stock.h>
+#include <iostream>
 
-GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title, 
-						       Gtk::FileChooserAction action, 
-						       const std::string& default_filename)
-{
+GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title,
+                                                       Gtk::FileChooserAction action,
+                                                       const std::string& default_filename) {
   using namespace std;
 
   bool flag = false;
@@ -46,8 +45,8 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   if (default_filename.length() > 0) {
     m_file_chooser->set_filename(default_filename);
   }
-  
-  int r; 
+
+  int r;
   while (flag == false) {
     r = m_file_chooser->run();
     switch (r) {
@@ -56,12 +55,12 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
       m_filename = m_file_chooser->get_filename();
       m_file_chooser->hide();
       if (m_filename.length() > 0) {
-	flag = true;
+        flag = true;
       }
       break;
     default:
       if (action == Gtk::FILE_CHOOSER_ACTION_SAVE) {
-	m_filename = "";
+        m_filename = "";
       }
       m_file_chooser->hide();
       flag = true;
@@ -71,7 +70,4 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   //  cout << "Got a filename: " << m_filename << endl;
 }
 
-Glib::ustring& GSpeakersFileChooserDialog::get_filename()
-{
-  return m_filename;
-}
+Glib::ustring& GSpeakersFileChooserDialog::get_filename() { return m_filename; }

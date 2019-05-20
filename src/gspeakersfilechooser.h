@@ -22,17 +22,17 @@
 
 #include <gtkmm/filechooserdialog.h>
 
-class GSpeakersFileChooserDialog
-{
- public:
-  enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL};
-  GSpeakersFileChooserDialog(const Glib::ustring& title, 
-			     Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN, 
-			     const std::string& default_filename = "");
+class GSpeakersFileChooserDialog {
+public:
+  enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL };
+  GSpeakersFileChooserDialog(const Glib::ustring& title,
+                             Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
+                             const std::string& default_filename = "");
   Glib::ustring& get_filename();
- private:
+
+private:
   Glib::ustring m_filename;
-  Gtk::FileChooserDialog *m_file_chooser;
+  Gtk::FileChooserDialog* m_file_chooser;
 };
 
 #endif

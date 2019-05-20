@@ -2,8 +2,8 @@
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -21,28 +21,28 @@
 #ifndef __GSPEAKERS_FILTER_PLOT
 #define __GSPEAKERS_FILTER_PLOT
 
-#include <gtkmm.h>
-#include "gspeakersplot.h"
 #include "common.h"
+#include "gspeakersplot.h"
+#include <gtkmm.h>
 
 /*
  * This is a wrapper class for GSpeakersPlot
- * 
- * The reason why we have this class is that we want 
- * an extra layer (where we can connect signals and so on) 
+ *
+ * The reason why we have this class is that we want
+ * an extra layer (where we can connect signals and so on)
  * between the program and the plot widget.
  */
-class GSpeakersFilterPlot : public Gtk::Frame 
-{
+class GSpeakersFilterPlot : public Gtk::Frame {
 public:
   GSpeakersFilterPlot();
   ~GSpeakersFilterPlot();
   void clear();
-  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int *, Net *);
-private: 
+  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
+
+private:
   GSpeakersPlot plot;
-  bool on_delete_event(GdkEventAny *event);
-  void on_crossover_selected(Crossover *);
+  bool on_delete_event(GdkEventAny* event);
+  void on_crossover_selected(Crossover*);
 };
 
 #endif

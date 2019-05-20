@@ -17,13 +17,13 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib.h>
-#include <sstream>
 #include "box.h"
 #include "common.h"
+#include <glib.h>
+#include <sstream>
 
-Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2, string speaker) : GSpeakersObject()
-{
+Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double fb2, string speaker)
+    : GSpeakersObject() {
   m_id_string = id_string;
   m_type = type;
   m_vb1 = vb1;
@@ -33,9 +33,8 @@ Box::Box(string id_string, int type, double vb1, double fb1, double vb2, double 
   m_speaker = speaker;
 }
 
-Box::Box(xmlNodePtr parent) : GSpeakersObject()
-{
-  if (( parent != NULL ) && ( string( (char *)parent->name) == string( "box" ))) {
+Box::Box(xmlNodePtr parent) : GSpeakersObject() {
+  if ((parent != NULL) && (string((char*)parent->name) == string("box"))) {
     try {
       parse_id_string(parent->children);
     } catch (GSpeakersException e) {
@@ -45,108 +44,69 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject()
     throw GSpeakersException(_("Box: box node not found"));
   }
 }
-  
-xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
-{
-  xmlNodePtr box, child;
-  gchar *buffer = new char[8];
-  
-  box = xmlNewChild( parent, NULL, (xmlChar *)("box"), NULL );
 
-  child = xmlNewChild( box, NULL, (xmlChar *)("id_string"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)m_id_string.c_str());
-  child = xmlNewChild( box, NULL, (xmlChar *)("type"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)g_strdup_printf("%d", m_type));
-  child = xmlNewChild( box, NULL, (xmlChar *)("vb1"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_vb1));
-  child = xmlNewChild( box, NULL, (xmlChar *)("fb1"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_fb1));
-  child = xmlNewChild( box, NULL, (xmlChar *)("vb2"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_vb2));
-  child = xmlNewChild( box, NULL, (xmlChar *)("fb2"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)g_ascii_dtostr(buffer, 8, m_fb2));
-  child = xmlNewChild( box, NULL, (xmlChar *)("speaker"), NULL );
-  xmlNodeSetContent( child, (xmlChar *)m_speaker.c_str());
+xmlNodePtr Box::to_xml_node(xmlNodePtr parent) {
+  xmlNodePtr box, child;
+  gchar* buffer = new char[8];
+
+  box = xmlNewChild(parent, NULL, (xmlChar*)("box"), NULL);
+
+  child = xmlNewChild(box, NULL, (xmlChar*)("id_string"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)m_id_string.c_str());
+  child = xmlNewChild(box, NULL, (xmlChar*)("type"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)g_strdup_printf("%d", m_type));
+  child = xmlNewChild(box, NULL, (xmlChar*)("vb1"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vb1));
+  child = xmlNewChild(box, NULL, (xmlChar*)("fb1"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fb1));
+  child = xmlNewChild(box, NULL, (xmlChar*)("vb2"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vb2));
+  child = xmlNewChild(box, NULL, (xmlChar*)("fb2"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fb2));
+  child = xmlNewChild(box, NULL, (xmlChar*)("speaker"), NULL);
+  xmlNodeSetContent(child, (xmlChar*)m_speaker.c_str());
 
   return box;
 }
 
-ostream& operator<< (ostream& o, const Box& box)
-{
-  o << _("Box") << endl <<
-       _("Id:        ") << box.m_id << endl <<
-       _("Id-string: ") << box.m_id_string << endl <<
-       _("Type:      ") << box.m_type << endl <<
-       _("Vb1:       ") << box.m_vb1 << endl <<
-       _("Fb1:       ") << box.m_fb1 << endl <<
-       _("Speaker:   ") << box.m_speaker << endl;
+ostream& operator<<(ostream& o, const Box& box) {
+  o << _("Box") << endl
+    << _("Id:        ") << box.m_id << endl
+    << _("Id-string: ") << box.m_id_string << endl
+    << _("Type:      ") << box.m_type << endl
+    << _("Vb1:       ") << box.m_vb1 << endl
+    << _("Fb1:       ") << box.m_fb1 << endl
+    << _("Speaker:   ") << box.m_speaker << endl;
   return o;
 }
 
-void Box::set_id_string(string id_string)
-{
-  m_id_string = id_string;
-}
+void Box::set_id_string(string id_string) { m_id_string = id_string; }
 
-void Box::set_vb1(double vb1)
-{
-  m_vb1 = vb1;
-}
+void Box::set_vb1(double vb1) { m_vb1 = vb1; }
 
-void Box::set_fb1(double fb1)
-{
-  m_fb1 = fb1;
-}
+void Box::set_fb1(double fb1) { m_fb1 = fb1; }
 
-void Box::set_vb2(double vb2)
-{
-  m_vb2 = vb2;
-}
+void Box::set_vb2(double vb2) { m_vb2 = vb2; }
 
-void Box::set_fb2(double fb2)
-{
-  m_fb2 = fb2;
-}
+void Box::set_fb2(double fb2) { m_fb2 = fb2; }
 
-void Box::set_speaker(const string& speaker)
-{
-  m_speaker = speaker;
-}
+void Box::set_speaker(const string& speaker) { m_speaker = speaker; }
 
-string Box::get_id_string()
-{
-  return m_id_string;
-}
+string Box::get_id_string() { return m_id_string; }
 
-double Box::get_vb1()
-{
-  return m_vb1;
-}
+double Box::get_vb1() { return m_vb1; }
 
-double Box::get_fb1()
-{
-  return m_fb1;
-}
+double Box::get_fb1() { return m_fb1; }
 
-double Box::get_vb2()
-{
-  return m_vb2;
-}
+double Box::get_vb2() { return m_vb2; }
 
-double Box::get_fb2()
-{
-  return m_fb2;
-}
- 
-const string& Box::get_speaker()
-{
-  return m_speaker;
-} 
- 
-void Box::parse_id_string(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "id_string" ))) {
-    m_id_string = string((char *)xmlNodeGetContent(node));
+double Box::get_fb2() { return m_fb2; }
+
+const string& Box::get_speaker() { return m_speaker; }
+
+void Box::parse_id_string(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("id_string"))) {
+    m_id_string = string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
     } catch (GSpeakersException e) {
@@ -157,10 +117,9 @@ void Box::parse_id_string(xmlNodePtr node)
   }
 }
 
-void Box::parse_type(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "type" ))) {
-    istringstream((char *)xmlNodeGetContent(node)) >> m_type;
+void Box::parse_type(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("type"))) {
+    istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_vb1(node->next);
     } catch (GSpeakersException e) {
@@ -171,11 +130,10 @@ void Box::parse_type(xmlNodePtr node)
   }
 }
 
-void Box::parse_vb1(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "vb1" ))) {
-    //istringstream((char *)xmlNodeGetContent(node)) >> m_vb1;
-    m_vb1 = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
+void Box::parse_vb1(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("vb1"))) {
+    // istringstream((char *)xmlNodeGetContent(node)) >> m_vb1;
+    m_vb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_fb1(node->next);
     } catch (GSpeakersException e) {
@@ -186,11 +144,10 @@ void Box::parse_vb1(xmlNodePtr node)
   }
 }
 
-void Box::parse_fb1(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "fb1" ))) {
-    //istringstream((char *)xmlNodeGetContent(node)) >> m_fb1;
-    m_fb1 = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
+void Box::parse_fb1(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("fb1"))) {
+    // istringstream((char *)xmlNodeGetContent(node)) >> m_fb1;
+    m_fb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_vb2(node->next);
     } catch (GSpeakersException e) {
@@ -201,11 +158,10 @@ void Box::parse_fb1(xmlNodePtr node)
   }
 }
 
-void Box::parse_vb2(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "vb2" ))) {
-    //istringstream((char *)xmlNodeGetContent(node)) >> m_vb2;
-    m_vb2 = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
+void Box::parse_vb2(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("vb2"))) {
+    // istringstream((char *)xmlNodeGetContent(node)) >> m_vb2;
+    m_vb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_fb2(node->next);
     } catch (GSpeakersException e) {
@@ -216,11 +172,10 @@ void Box::parse_vb2(xmlNodePtr node)
   }
 }
 
-void Box::parse_fb2(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "fb2" ))) {
-    //istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
-    m_fb2 = g_ascii_strtod((gchar *)xmlNodeGetContent(node), NULL);
+void Box::parse_fb2(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("fb2"))) {
+    // istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
+    m_fb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_speaker(node->next);
     } catch (GSpeakersException e) {
@@ -231,11 +186,10 @@ void Box::parse_fb2(xmlNodePtr node)
   }
 }
 
-void Box::parse_speaker(xmlNodePtr node)
-{
-  if (( node != NULL ) && ( string( (char *)node->name) == string( "speaker" ))) {
-    //istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
-    m_speaker = string((char *)xmlNodeGetContent(node));
+void Box::parse_speaker(xmlNodePtr node) {
+  if ((node != NULL) && (string((char*)node->name) == string("speaker"))) {
+    // istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
+    m_speaker = string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Box: speaker node not found"));
   }

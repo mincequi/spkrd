@@ -2,8 +2,8 @@
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -21,25 +21,25 @@
 #ifndef __GSPEAKERS_BOX_PLOT
 #define __GSPEAKERS_BOX_PLOT
 
-#include <gtkmm/frame.h>
-#include <gtkmm/box.h>
-#include <gtkmm/scrolledwindow.h>
-#include "gspeakersplot.h"
 #include "common.h"
+#include "gspeakersplot.h"
+#include <gtkmm/box.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
 
 /*
  * This is a wrapper class for GSpeakersPlot
- * 
- * The reason why we have this class is that we want 
- * an extra layer (where we can connect signals and so on) 
+ *
+ * The reason why we have this class is that we want
+ * an extra layer (where we can connect signals and so on)
  * between the program and the plot widget.
  */
-class GSpeakersBoxPlot : public Gtk::Frame 
-{
+class GSpeakersBoxPlot : public Gtk::Frame {
 public:
   GSpeakersBoxPlot();
   ~GSpeakersBoxPlot();
-private: 
+
+private:
   Gtk::VBox m_vbox;
   Gtk::ScrolledWindow sw;
   GSpeakersPlot plot;

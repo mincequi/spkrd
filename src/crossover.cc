@@ -15,14 +15,13 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
+#include "crossover.h"
 #include <glib.h>
 #include <sstream>
-#include "crossover.h"
 
-Crossover::Crossover(int type, string id_string) : GSpeakersObject()
-{
+Crossover::Crossover(int type, string id_string) : GSpeakersObject() {
   m_type = type;
-  
+
   if (m_type & CROSSOVER_TYPE_SUBSONIC) {
     m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
   }
@@ -50,9 +49,8 @@ Crossover::Crossover(int type, string id_string) : GSpeakersObject()
   m_id_string = id_string;
 }
 
-Crossover::Crossover(xmlNodePtr parent)
-{
-  if ((parent != NULL) && (g_ascii_strncasecmp( (char *)parent->name, "crossover", 9 ) == 0)) {
+Crossover::Crossover(xmlNodePtr parent) {
+  if ((parent != NULL) && (g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException e) {
@@ -63,11 +61,10 @@ Crossover::Crossover(xmlNodePtr parent)
   }
 }
 
-void Crossover::parse_type(xmlNodePtr node)
-{
-  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "type", 4 ) == 0)) {
-    istringstream((char *)xmlNodeGetContent(node)) >> m_type;
-    //m_type = atoi((char *)xmlNodeGetContent(node));
+void Crossover::parse_type(xmlNodePtr node) {
+  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
+    istringstream((char*)xmlNodeGetContent(node)) >> m_type;
+    // m_type = atoi((char *)xmlNodeGetContent(node));
     try {
       parse_networks(node->next);
     } catch (GSpeakersException e) {
@@ -78,11 +75,10 @@ void Crossover::parse_type(xmlNodePtr node)
   }
 }
 
-void Crossover::parse_networks(xmlNodePtr node) 
-{
+void Crossover::parse_networks(xmlNodePtr node) {
   xmlNodePtr child;
-  
-  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "networks", 8 ) == 0)) {
+
+  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)) {
     child = node->children;
     while (child != NULL) {
       try {
@@ -97,69 +93,51 @@ void Crossover::parse_networks(xmlNodePtr node)
     } catch (GSpeakersException e) {
       throw e;
     }
-  } 
+  }
 }
 
-void Crossover::parse_id_string(xmlNodePtr node)
-{
-  if ((node != NULL) && (g_ascii_strncasecmp( (char *)node->name, "id_string", 9 ) == 0)) {
-    m_id_string = string((char *)xmlNodeGetContent(node));
-    //m_type = atoi((char *)xmlNodeGetContent(node));
+void Crossover::parse_id_string(xmlNodePtr node) {
+  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
+    m_id_string = string((char*)xmlNodeGetContent(node));
+    // m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Crossover: id_string node expected"));
   }
 }
 
-
-xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
-{
+xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent) {
 
   xmlNodePtr crossover, field;
-  
-  crossover = xmlNewChild( parent, NULL, (xmlChar *)("crossover"), NULL );
 
-  field = xmlNewChild( crossover, NULL, (xmlChar *)("type"), NULL );
-  xmlNodeSetContent( field, (xmlChar *)g_strdup_printf("%d", m_type));
-  field = xmlNewChild( crossover, NULL, (xmlChar *)("networks"), NULL );
+  crossover = xmlNewChild(parent, NULL, (xmlChar*)("crossover"), NULL);
 
-  for(
-    vector<Net>::iterator from = m_networks.begin();
-    from != m_networks.end();
-    ++from)
-  {
+  field = xmlNewChild(crossover, NULL, (xmlChar*)("type"), NULL);
+  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
+  field = xmlNewChild(crossover, NULL, (xmlChar*)("networks"), NULL);
+
+  for (vector<Net>::iterator from = m_networks.begin(); from != m_networks.end(); ++from) {
     ((Net)(*from)).to_xml_node(field);
   }
-  field = xmlNewChild( crossover, NULL, (xmlChar *)("id_string"), NULL );
-  xmlNodeSetContent( field, (xmlChar *)m_id_string.c_str());
+  field = xmlNewChild(crossover, NULL, (xmlChar*)("id_string"), NULL);
+  xmlNodeSetContent(field, (xmlChar*)m_id_string.c_str());
 
   return crossover;
 }
 
-ostream& operator<< (ostream& o, const Crossover& crossover)
-{
-  o << _("Crossover type:") << crossover.m_type << endl << "Id: " << crossover.m_id << endl << "---Nets----" << endl;
-  for(
-    vector<Net>::iterator from = ((vector<Net>)(crossover.m_networks)).begin();
-    from != ((vector<Net>)(crossover.m_networks)).end();
-    ++from)
-  {
+ostream& operator<<(ostream& o, const Crossover& crossover) {
+  o << _("Crossover type:") << crossover.m_type << endl
+    << "Id: " << crossover.m_id << endl
+    << "---Nets----" << endl;
+  for (vector<Net>::iterator from = ((vector<Net>)(crossover.m_networks)).begin();
+       from != ((vector<Net>)(crossover.m_networks)).end(); ++from) {
     o << *from;
   }
-  
+
   return o;
 }
 
-vector<Net> *Crossover::networks()
-{
-  return &m_networks;
-}
+vector<Net>* Crossover::networks() { return &m_networks; }
 
-string Crossover::get_id_string()
-{
-  return m_id_string;
-}
+string Crossover::get_id_string() { return m_id_string; }
 
-void Crossover::set_id_string(string id_string)
-{
-  m_id_string = id_string;
-}
+void Crossover::set_id_string(string id_string) { m_id_string = id_string; }

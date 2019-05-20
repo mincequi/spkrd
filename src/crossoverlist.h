@@ -18,40 +18,39 @@
 #ifndef __GFILTER_CROSSOVERLIST_H
 #define __GFILTER_CROSSOVERLIST_H
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include "crossover.h"
 #include "common.h"
+#include "crossover.h"
+#include <iostream>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <string>
+#include <vector>
 
 using namespace std;
 
 /*
  * This is a class that pretty much just contains a list of crossovers.
  *
- * All operations on the list will be made on the list, maybe this class 
+ * All operations on the list will be made on the list, maybe this class
  * will provide some conveniance methods...
  *
  * The class also contains some xml-writing functions
  */
-class CrossoverList
-{
+class CrossoverList {
 public:
   CrossoverList();
 
   /* Construct a part from an xml node */
   CrossoverList(string filename);
-  
+
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(string filename);   // Maybe this one should throw an exception
+  void to_xml(string filename); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
-  friend ostream& operator<< (ostream& o, const CrossoverList& crossover_list);
+  friend ostream& operator<<(ostream& o, const CrossoverList& crossover_list);
 
   /* return a pointer to the crossover list */
-  vector<Crossover> *crossover_list();
+  vector<Crossover>* crossover_list();
 
   /* Remove all items from the corssover list */
   void clear();

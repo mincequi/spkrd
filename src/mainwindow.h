@@ -20,17 +20,16 @@
 #ifndef __GSPEAKERS_MAINWINDOW
 #define __GSPEAKERS_MAINWINDOW
 
-#include <gtkmm/window.h>
-#include <gtkmm/menu.h>
 #include "common.h"
-#include "settings.h"
-#include "enclosurepaned.h"
-#include "speakereditor.h"
 #include "crossoverpaned.h"
+#include "enclosurepaned.h"
+#include "settings.h"
 #include "sidebarnotebook.h"
+#include "speakereditor.h"
+#include <gtkmm/menu.h>
+#include <gtkmm/window.h>
 
-class MainWindow : public Gtk::Window
-{
+class MainWindow : public Gtk::Window {
 public:
   MainWindow();
 
@@ -53,13 +52,13 @@ private:
 
   /* Callbacks */
   void on_quit();
-  virtual bool on_delete_event(GdkEventAny *event);
+  virtual bool on_delete_event(GdkEventAny* event);
   void on_quit_common();
   void on_about();
   void on_save_all();
   void on_edit_settings();
   void on_switch_page(GtkNotebookPage* page, guint page_num);
-  bool on_edit_menu_expose_event(GdkEventExpose *event);
+  bool on_edit_menu_expose_event(GdkEventExpose* event);
 };
 
 #endif

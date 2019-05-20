@@ -1,12 +1,12 @@
-/* 
+/*
  * $Id$
  *
  * driverfreqrespplot
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
@@ -24,24 +24,24 @@
 #ifndef __DRIVER_FREQ_RESP_PLOT_H
 #define __DRIVER_FREQ_RESP_PLOT_H
 
+#include "common.h"
+#include "gspeakersplot.h"
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
-#include "gspeakersplot.h"
-#include "common.h"
 
 /*
  * This is a wrapper class for GSpeakersPlot
- * 
+ *
  */
-class DriverFreqRespPlot : public Gtk::Frame 
-{
+class DriverFreqRespPlot : public Gtk::Frame {
 public:
   DriverFreqRespPlot();
   ~DriverFreqRespPlot();
   void clear();
   void add_plot(vector<GSpeakers::Point>&, Gdk::Color&);
   void replace_plot(int, vector<GSpeakers::Point>&, Gdk::Color&);
-private: 
+
+private:
   GSpeakersPlot plot;
   Gtk::ScrolledWindow sw;
 };

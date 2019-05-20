@@ -18,29 +18,28 @@
 #ifndef __GSPEAKERS_SPEAKERLISTSELECTOR
 #define __GSPEAKERS_SPEAKERLISTSELECTOR
 
-#include <gtkmm.h>
-#include "speakerlist.h"
 #include "speakereditor.h"
+#include "speakerlist.h"
+#include <gtkmm.h>
 
 using namespace std;
 using namespace sigc;
 
 /*
- * This is a class that will contain an entry displaying the currently 
- * selected speaker xml file. This window also contains button to open 
+ * This is a class that will contain an entry displaying the currently
+ * selected speaker xml file. This window also contains button to open
  * a new speakerlist xml and a button that launched the speakereditor.
  */
-class SpeakerListSelector : public Gtk::Frame
-{
+class SpeakerListSelector : public Gtk::Frame {
 public:
   SpeakerListSelector();
   ~SpeakerListSelector();
-  
+
 protected:
   /* Callbacks */
   void on_open();
   void on_edit_speakers();
-  void on_open_ok(Gtk::FileSelection *f);
+  void on_open_ok(Gtk::FileSelection* f);
   void on_speakerlist_loaded(string speaker_list_filename);
 
   /* Member widgets */
@@ -48,13 +47,12 @@ protected:
   Gtk::Button m_OpenButton, m_EditButton;
   Gtk::Table m_Table;
   Gtk::VBox m_vbox;
-  
-  Gtk::FileSelection *f_open;
-  
-  
+
+  Gtk::FileSelection* f_open;
+
 private:
   SpeakerList m_speaker_list;
-  Speaker_ListStore *speaker_liststore;
+  Speaker_ListStore* speaker_liststore;
 };
 
 #endif

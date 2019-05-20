@@ -1,6 +1,6 @@
 /*
     $Id$
-  
+
   boxlist Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -17,24 +17,20 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib.h>
 #include "boxlist.h"
 #include "common.h"
+#include <glib.h>
 
-BoxList::BoxList()
-{
+BoxList::BoxList() {}
 
-}
-
-BoxList::BoxList(string filename)
-{
+BoxList::BoxList(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
-  
-  doc = xmlParseFile( filename.c_str() );
+
+  doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
     node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp( (char *)node->name, "boxlist" ) == 0)) {
+    if ((node != NULL) && (g_strcasecmp((char*)node->name, "boxlist") == 0)) {
       if (node->children) {
         children = node->children;
         while (children != NULL) {
@@ -53,23 +49,18 @@ BoxList::BoxList(string filename)
     throw GSpeakersException(_("BoxList: Xml file not found"));
   }
 }
-  
-void BoxList::to_xml(string filename)
-{
+
+void BoxList::to_xml(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
-  
-  doc = xmlNewDoc( (xmlChar *)("1.0") );
-  
-  node = xmlNewDocNode( doc, NULL, (xmlChar *)("boxlist"), NULL );
+
+  doc = xmlNewDoc((xmlChar*)("1.0"));
+
+  node = xmlNewDocNode(doc, NULL, (xmlChar*)("boxlist"), NULL);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all boxes */
-  for(
-    vector<Box>::iterator from = m_box_list.begin();
-    from != m_box_list.end();
-    ++from)
-  { 
+  for (vector<Box>::iterator from = m_box_list.begin(); from != m_box_list.end(); ++from) {
     ((Box)(*from)).to_xml_node(node);
   }
 
@@ -79,28 +70,17 @@ void BoxList::to_xml(string filename)
   }
 }
 
-
-ostream& operator<< (ostream& o, const BoxList& box_list)
-{
+ostream& operator<<(ostream& o, const BoxList& box_list) {
   o << "Box List" << endl;
 
-  for(
-    vector<Box>::iterator from = ((vector<Box>)(box_list.m_box_list)).begin();
-    from != ((vector<Box>)(box_list.m_box_list)).end();
-    ++from)
-  {
+  for (vector<Box>::iterator from = ((vector<Box>)(box_list.m_box_list)).begin();
+       from != ((vector<Box>)(box_list.m_box_list)).end(); ++from) {
     o << *from;
   }
-  
+
   return o;
 }
 
-vector<Box> *BoxList::box_list()
-{
-  return &m_box_list;
-}
+vector<Box>* BoxList::box_list() { return &m_box_list; }
 
-void BoxList::clear()
-{
-  m_box_list.erase(m_box_list.begin(), m_box_list.end());
-}
+void BoxList::clear() { m_box_list.erase(m_box_list.begin(), m_box_list.end()); }

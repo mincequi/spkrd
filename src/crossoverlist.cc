@@ -15,23 +15,19 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include <glib.h>
 #include "crossoverlist.h"
+#include <glib.h>
 
-CrossoverList::CrossoverList()
-{
+CrossoverList::CrossoverList() {}
 
-}
-
-CrossoverList::CrossoverList(string filename)
-{
+CrossoverList::CrossoverList(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
-  
-  doc = xmlParseFile( filename.c_str() );
+
+  doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
     node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp( (char *)node->name, "crossoverlist" ) == 0)) {
+    if ((node != NULL) && (g_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
       if (node->children) {
         children = node->children;
         while (children != NULL) {
@@ -51,27 +47,22 @@ CrossoverList::CrossoverList(string filename)
   }
 }
 
-void CrossoverList::clear() 
-{
+void CrossoverList::clear() {
   m_crossover_list.erase(m_crossover_list.begin(), m_crossover_list.end());
 }
 
-void CrossoverList::to_xml(string filename)
-{
+void CrossoverList::to_xml(string filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
-  
-  doc = xmlNewDoc( (xmlChar *)("1.0") );
-  
-  node = xmlNewDocNode( doc, NULL, (xmlChar *)("crossoverlist"), NULL );
+
+  doc = xmlNewDoc((xmlChar*)("1.0"));
+
+  node = xmlNewDocNode(doc, NULL, (xmlChar*)("crossoverlist"), NULL);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all crossovers */
-  for(
-    vector<Crossover>::iterator from = m_crossover_list.begin();
-    from != m_crossover_list.end();
-    ++from)
-  { 
+  for (vector<Crossover>::iterator from = m_crossover_list.begin(); from != m_crossover_list.end();
+       ++from) {
     ((Crossover)(*from)).to_xml_node(node);
   }
 
@@ -81,23 +72,16 @@ void CrossoverList::to_xml(string filename)
   }
 }
 
-
-ostream& operator<< (ostream& o, const CrossoverList& crossover_list)
-{
+ostream& operator<<(ostream& o, const CrossoverList& crossover_list) {
   o << "Crossover List" << endl;
 
-  for(
-    vector<Crossover>::iterator from = ((vector<Crossover>)(crossover_list.m_crossover_list)).begin();
-    from != ((vector<Crossover>)(crossover_list.m_crossover_list)).end();
-    ++from)
-  {
+  for (vector<Crossover>::iterator from =
+           ((vector<Crossover>)(crossover_list.m_crossover_list)).begin();
+       from != ((vector<Crossover>)(crossover_list.m_crossover_list)).end(); ++from) {
     o << *from;
   }
-  
+
   return o;
 }
 
-vector<Crossover> *CrossoverList::crossover_list()
-{
-  return &m_crossover_list;
-}
+vector<Crossover>* CrossoverList::crossover_list() { return &m_crossover_list; }

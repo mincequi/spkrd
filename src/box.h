@@ -20,12 +20,12 @@
 #ifndef __GFILTER_BOX
 #define __GFILTER_BOX
 
-#include <string>
 #include <iostream>
 #include <map>
+#include <string>
 
-#include <libxml/tree.h>
 #include <libxml/parser.h>
+#include <libxml/tree.h>
 
 #include "gspeakersobject.h"
 
@@ -34,19 +34,18 @@
 
 using namespace std;
 
-class Box : public GSpeakersObject
-{
+class Box : public GSpeakersObject {
 public:
-  Box(string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40, 
+  Box(string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40,
       double vb2 = 0, double fb2 = 0, string speaker = "");
   /* Construct box object from an xmlNode */
   Box(xmlNodePtr parent);
-  
+
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
   xmlNodePtr to_xml_node(xmlNodePtr parent);
 
   /* Print part data to stdout */
-  friend ostream& operator<< (ostream& o, const Box& box);
+  friend ostream& operator<<(ostream& o, const Box& box);
 
   void set_id_string(string id_string);
   void set_vb1(double vb1);
@@ -54,14 +53,14 @@ public:
   void set_vb2(double vb2);
   void set_fb2(double fb2);
   void set_speaker(const string& speaker);
-  
+
   string get_id_string();
   double get_vb1();
   double get_fb1();
   double get_vb2();
   double get_fb2();
   const string& get_speaker();
-  
+
 protected:
   string m_id_string;
   double m_vb1;

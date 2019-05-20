@@ -1,6 +1,6 @@
 /*
   $Id$
-  
+
   enclosurepaned Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
@@ -19,17 +19,16 @@
 
 #include "enclosurepaned.h"
 
-#define MENU_INDEX_SAVE                 6
-#define MENU_INDEX_DELETE               8
-#define MENU_INDEX_DELETE_BOXPLOT       13
-#define TOOLBAR_INDEX_SAVE              4
-#define TOOLBAR_INDEX_DELETE            5
-#define TOOLBAR_INDEX_DELETE_BOXPLOT    10
+#define MENU_INDEX_SAVE 6
+#define MENU_INDEX_DELETE 8
+#define MENU_INDEX_DELETE_BOXPLOT 13
+#define TOOLBAR_INDEX_SAVE 4
+#define TOOLBAR_INDEX_DELETE 5
+#define TOOLBAR_INDEX_DELETE_BOXPLOT 10
 
 using namespace sigc;
 
-EnclosurePaned::EnclosurePaned()
-{
+EnclosurePaned::EnclosurePaned() {
   nof_plots = 0;
   plot_selected = false;
   m_tbar = NULL;
@@ -53,14 +52,13 @@ EnclosurePaned::EnclosurePaned()
   g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
   m_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
 
-  signal_enclosure_set_save_state.connect( mem_fun(*this, &EnclosurePaned::set_save_state) );
+  signal_enclosure_set_save_state.connect(mem_fun(*this, &EnclosurePaned::set_save_state));
   signal_remove_box_plot.connect(mem_fun(*this, &EnclosurePaned::on_remove_boxplot));
   signal_select_plot.connect(mem_fun(*this, &EnclosurePaned::on_plot_selected));
   signal_add_plot.connect(mem_fun(*this, &EnclosurePaned::on_add_plot));
 }
 
-EnclosurePaned::~EnclosurePaned()
-{
+EnclosurePaned::~EnclosurePaned() {
 #ifdef OUTPUT_DEBUG
   cout << "EnclosurePaned::~EnclosurePaned" << endl;
 #endif
@@ -76,115 +74,115 @@ EnclosurePaned::~EnclosurePaned()
   }
 }
 
-Gtk::Menu& EnclosurePaned::get_menu()
-{
+Gtk::Menu& EnclosurePaned::get_menu() {
   Gtk::Menu::MenuList& menulist = m_menu.items();
 
-  Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_New Enclosure"), *im, 
-						       mem_fun(box_history, &BoxHistory::on_new) ) );
+  Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(_("_New Enclosure"), *im,
+                                                      mem_fun(box_history, &BoxHistory::on_new)));
 
   im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Copy"), *im, 
-						       mem_fun(box_history, &BoxHistory::on_new_copy) ) );
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("_Copy"), *im, mem_fun(box_history, &BoxHistory::on_new_copy)));
 
-  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
   im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("N_ew"), *im, 
-						       mem_fun(box_history, &BoxHistory::on_new_xml) ) ); 
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("N_ew"), *im, mem_fun(box_history, &BoxHistory::on_new_xml)));
 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("A_ppend Enclosure Xml..."), 
-                      mem_fun(box_history, &BoxHistory::on_append_xml) ) );
+  menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("A_ppend Enclosure Xml..."),
+                                                 mem_fun(box_history, &BoxHistory::on_append_xml)));
 
   im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Open..."), *im,   
-						       mem_fun(box_history, &BoxHistory::on_open_xml) ) );
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("_Open..."), *im, mem_fun(box_history, &BoxHistory::on_open_xml)));
 
-  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
   im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Save"), *im,   
-						       mem_fun(box_history, &BoxHistory::on_save) ) );
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(_("_Save"), *im,
+                                                      mem_fun(box_history, &BoxHistory::on_save)));
 
   im = manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Save _As..."), *im,   
-						       mem_fun(box_history, &BoxHistory::on_save_as) ) );
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("Save _As..."), *im, mem_fun(box_history, &BoxHistory::on_save_as)));
 
-  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
+  menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Optimize Enclosure"), 
-						       GSpeakers::image_widget("opt_enclosure_16.png"), 
-						       mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked) ) ); 
-  menulist.push_back( Gtk::Menu_Helpers::MenuElem(_("_Plot"), 
-						  mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked) ) ); 
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("_Optimize Enclosure"), GSpeakers::image_widget("opt_enclosure_16.png"),
+      mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked)));
+  menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+      _("_Plot"), mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked)));
 
   im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("_Delete"), *im,  
-						       mem_fun(box_history, &BoxHistory::on_remove) ) ); 
-  
-  menulist.push_back( Gtk::Menu_Helpers::SeparatorElem() );
-  
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("_Delete"), *im, mem_fun(box_history, &BoxHistory::on_remove)));
+
+  menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
+
   im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
-  menulist.push_back( Gtk::Menu_Helpers::ImageMenuElem(_("Delete Plot"), *im, 
-						       mem_fun(plot_history, &PlotHistory::on_remove) ) ); 
-  
+  menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
+      _("Delete Plot"), *im, mem_fun(plot_history, &PlotHistory::on_remove)));
+
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
   menulist[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(false);
   return m_menu;
 }
 
-Gtk::Widget& EnclosurePaned::get_toolbar()
-{
+Gtk::Widget& EnclosurePaned::get_toolbar() {
   if (m_tbar == NULL) {
     m_tbar = manage(new Gtk::Toolbar());
 
-    Gtk::Widget *im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    Gtk::ToolButton *t = manage(new Gtk::ToolButton(*im, _("New")));
+    Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    Gtk::ToolButton* t = manage(new Gtk::ToolButton(*im, _("New")));
     t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_new));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
     im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     t = manage(new Gtk::ToolButton(*im, _("Copy")));
     t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_new_copy));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
-    Gtk::SeparatorToolItem *s = manage(new Gtk::SeparatorToolItem() );
-    m_tbar->append( *s );
+    Gtk::SeparatorToolItem* s = manage(new Gtk::SeparatorToolItem());
+    m_tbar->append(*s);
 
     im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     t = manage(new Gtk::ToolButton(*im, _("Open")));
     t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_open_xml));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
     im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     t = manage(new Gtk::ToolButton(*im, _("Save")));
     t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_save));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
-    s = manage(new Gtk::SeparatorToolItem() );
-    m_tbar->append( *s );
+    s = manage(new Gtk::SeparatorToolItem());
+    m_tbar->append(*s);
 
     im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     t = manage(new Gtk::ToolButton(*im, _("Delete")));
     t->signal_clicked().connect(mem_fun(box_history, &BoxHistory::on_remove));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Optimize")));
     t->signal_clicked().connect(mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked));
-    m_tbar->append( *t );    
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("append_plot_enclosure_24.png"), _("Plot")));
+    m_tbar->append(*t);
+    t = manage(
+        new Gtk::ToolButton(GSpeakers::image_widget("append_plot_enclosure_24.png"), _("Plot")));
     t->signal_clicked().connect(mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
-    s = manage(new Gtk::SeparatorToolItem() );
-    m_tbar->append( *s );
+    s = manage(new Gtk::SeparatorToolItem());
+    m_tbar->append(*s);
 
     im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     t = manage(new Gtk::ToolButton(*im, _("Delete Plot")));
-//     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_plot_24.png"), _("Delete Plot")));
+    //     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_plot_24.png"), _("Delete
+    //     Plot")));
     t->signal_clicked().connect(mem_fun(plot_history, &PlotHistory::on_remove));
-    m_tbar->append( *t );    
+    m_tbar->append(*t);
 
     m_toolbar.add(*m_tbar);
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
@@ -194,15 +192,13 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
   return m_toolbar;
 }
 
-void EnclosurePaned::on_settings_changed(const string& s)
-{
+void EnclosurePaned::on_settings_changed(const string& s) {
   if (s == "ToolbarStyle") {
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }
 }
 
-void EnclosurePaned::set_save_state(bool b)
-{
+void EnclosurePaned::set_save_state(bool b) {
   if (m_tbar != NULL) {
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
   }
@@ -212,8 +208,7 @@ void EnclosurePaned::set_save_state(bool b)
   }
 }
 
-void EnclosurePaned::on_plot_selected(int)
-{
+void EnclosurePaned::on_plot_selected(int) {
 #ifdef OUTPUT_DEBUG
   cout << "EnclsourePaned::on_plot_selected" << endl;
 #endif
@@ -222,8 +217,7 @@ void EnclosurePaned::on_plot_selected(int)
   m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(true);
 }
 
-void EnclosurePaned::on_remove_boxplot(int)
-{
+void EnclosurePaned::on_remove_boxplot(int) {
 #ifdef OUTPUT_DEBUG
   cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << endl;
 #endif
@@ -236,8 +230,7 @@ void EnclosurePaned::on_remove_boxplot(int)
   }
 }
 
-void EnclosurePaned::on_add_plot(Box *b, Speaker *s, Gdk::Color& c)
-{
+void EnclosurePaned::on_add_plot(Box* b, Speaker* s, Gdk::Color& c) {
 #ifdef OUTPUT_DEBUG
   cout << "EnclsourePaned::on_add_plot" << endl;
 #endif

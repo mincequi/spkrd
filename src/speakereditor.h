@@ -20,18 +20,17 @@
 #ifndef __GSPEAKERS_SPEAKEREDITOR
 #define __GSPEAKERS_SPEAKEREDITOR
 
-#include <sigc++/object.h>
-#include <gtkmm/widget.h>
-#include <gtkmm/filechooserdialog.h>
-#include <glibmm/ustring.h>
-#include "speakerlist.h"
 #include "driverfreqrespplot.h"
+#include "speakerlist.h"
+#include <glibmm/ustring.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/widget.h>
+#include <sigc++/object.h>
 
 using namespace sigc;
 using namespace std;
 
-class Speaker_ListStore : public sigc::trackable
-{
+class Speaker_ListStore : public sigc::trackable {
 public:
   Speaker_ListStore();
   virtual ~Speaker_ListStore();
@@ -40,7 +39,7 @@ public:
   Gtk::Widget& get_plot();
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();
-  
+
 protected:
   bool updating_entries;
 
@@ -64,29 +63,29 @@ protected:
   void on_browse_freq_resp();
   void on_save_open_files();
   void on_settings_changed(const string&);
-  void type_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void qts_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void fs_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void vas_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void rdc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void lvc_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void qms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void qes_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void imp_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void sens_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void mmd_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void ad_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);	
-  void bl_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void rms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);
-  void cms_cell_data_func(Gtk::CellRenderer *cell, const Gtk::TreeModel::iterator& iter);	
+  void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void vas_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void rdc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void lvc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void qms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void qes_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void imp_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void sens_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void ad_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void bl_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void rms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+  void cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();
   virtual void liststore_add_item(Speaker foo);
   void draw_imp_plot(Speaker& s, bool update = false);
-  
-  //Member widgets:
+
+  // Member widgets:
   Gtk::Table m_TreeViewTable;
   Gtk::Table m_Table;
   Gtk::ScrolledWindow m_ScrolledWindow;
@@ -94,56 +93,73 @@ protected:
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::Button m_EditFreqRespButton, m_BrowseFreqRespButton;
-  Gtk::Entry m_IdStringEntry, m_QtsEntry, m_FsEntry, m_VasEntry, m_RdcEntry, m_LvcEntry, m_QmsEntry, m_QesEntry;
+  Gtk::Entry m_IdStringEntry, m_QtsEntry, m_FsEntry, m_VasEntry, m_RdcEntry, m_LvcEntry, m_QmsEntry,
+      m_QesEntry;
   Gtk::Entry m_ImpEntry, m_SensEntry, m_FreqRespFileEntry, m_ImpRespFileEntry;
   Gtk::CheckButton m_BassCheckButton, m_MidrangeCheckButton, m_TweeterCheckButton;
   Gtk::Entry m_MmdEntry, m_AdEntry, m_BlEntry, m_RmsEntry, m_CmsEntry;
   Gtk::VBox m_vbox, m_treeview_vbox, m_inner_treeview_vbox;
   Gtk::Frame m_treeview_frame;
-  
-  Gtk::Widget *m_evbox;
-  Gtk::Label *m_frame_label;
+
+  Gtk::Widget* m_evbox;
+  Gtk::Label* m_frame_label;
   Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
   Gtk::Menu m_menu;
-  
+
   Gtk::HandleBox toolbar;
-  Gtk::Toolbar *tbar;
-  
+  Gtk::Toolbar* tbar;
+
   /* Data container */
-  SpeakerList *m_speaker_list;
+  SpeakerList* m_speaker_list;
   DriverFreqRespPlot plot;
-  
-  struct ModelColumns : public Gtk::TreeModelColumnRecord
-  {
-    Gtk::TreeModelColumn<int>           id;
-    Gtk::TreeModelColumn<int>           type;
+
+  struct ModelColumns : public Gtk::TreeModelColumnRecord {
+    Gtk::TreeModelColumn<int> id;
+    Gtk::TreeModelColumn<int> type;
     Gtk::TreeModelColumn<Glib::ustring> id_string;
-    Gtk::TreeModelColumn<double>        qts;
-    Gtk::TreeModelColumn<double>        fs;
-    Gtk::TreeModelColumn<double>        vas;
-    Gtk::TreeModelColumn<double>        rdc;
-    Gtk::TreeModelColumn<double>        lvc;
-    Gtk::TreeModelColumn<double>        qms;
-    Gtk::TreeModelColumn<double>        qes;
-    Gtk::TreeModelColumn<double>        imp;
-    Gtk::TreeModelColumn<double>        sens;
-    Gtk::TreeModelColumn<double>        mmd;
-    Gtk::TreeModelColumn<double>        ad;
-    Gtk::TreeModelColumn<double>        bl;
-    Gtk::TreeModelColumn<double>        rms;
-    Gtk::TreeModelColumn<double>        cms;
+    Gtk::TreeModelColumn<double> qts;
+    Gtk::TreeModelColumn<double> fs;
+    Gtk::TreeModelColumn<double> vas;
+    Gtk::TreeModelColumn<double> rdc;
+    Gtk::TreeModelColumn<double> lvc;
+    Gtk::TreeModelColumn<double> qms;
+    Gtk::TreeModelColumn<double> qes;
+    Gtk::TreeModelColumn<double> imp;
+    Gtk::TreeModelColumn<double> sens;
+    Gtk::TreeModelColumn<double> mmd;
+    Gtk::TreeModelColumn<double> ad;
+    Gtk::TreeModelColumn<double> bl;
+    Gtk::TreeModelColumn<double> rms;
+    Gtk::TreeModelColumn<double> cms;
     Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
 
-    ModelColumns() { add(id); add(type); add(id_string); add(qts); add(fs); add(vas); 
-                     add(rdc); add(lvc); add(qms); add(qes); add(imp); add(sens); 
-                     add(mmd); add(ad);  add(bl); add(rms); add(cms); add(freq_resp_file); }
+    ModelColumns() {
+      add(id);
+      add(type);
+      add(id_string);
+      add(qts);
+      add(fs);
+      add(vas);
+      add(rdc);
+      add(lvc);
+      add(qms);
+      add(qes);
+      add(imp);
+      add(sens);
+      add(mmd);
+      add(ad);
+      add(bl);
+      add(rms);
+      add(cms);
+      add(freq_resp_file);
+    }
   };
-  
+
   /* vaious helper varaibles */
   bool changed, new_xml_pressed;
   int index;
   ModelColumns m_columns;
-  //Glib::RefPtr<Gtk::TreeSelection> old_refSelection;
+  // Glib::RefPtr<Gtk::TreeSelection> old_refSelection;
   void set_entries_sensitive(bool value);
   string m_filename;
   bool m_modified;

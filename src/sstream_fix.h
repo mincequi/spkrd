@@ -23,15 +23,15 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "../config.h"
+#include "../config.h"
 #endif
 
 #ifdef HAVE_SSTREAM
-# include <sstream>
+#include <sstream>
 #elif HAVE_STRSTREAM
-# define USE_STRSTREAM_WRAPPERS
+#define USE_STRSTREAM_WRAPPERS
 #else
-# error "No sstream/strstream implementation"
+#error "No sstream/strstream implementation"
 #endif
 
 #if defined(USE_STRSTREAM_WRAPPERS) && !defined(SSTREAM_FIX_H)
@@ -40,33 +40,32 @@
 #include <string>
 #include <strstream>
 
-namespace std
-{
+namespace std {
 
-  /*
-   * Only limited functionality from ostringstream
-   * is implemented
-   */
-  class ostringstream : public ostrstream {
-   public:
-    string str() {
-      char *cstr = ostrstream::str();
-      freeze(0);
-      if (cstr == 0) return string();
-      return string(cstr,pcount());
-    }
-  };
+/*
+ * Only limited functionality from ostringstream
+ * is implemented
+ */
+class ostringstream : public ostrstream {
+public:
+  string str() {
+    char* cstr = ostrstream::str();
+    freeze(0);
+    if (cstr == 0)
+      return string();
+    return string(cstr, pcount());
+  }
+};
 
-  /*
-   * Only limited functionality from istringstream
-   * is implemented
-   */
-  class istringstream : public istrstream {
-   public:
-    istringstream(const string& str)
-      : istrstream(str.c_str()) { }
-  };
+/*
+ * Only limited functionality from istringstream
+ * is implemented
+ */
+class istringstream : public istrstream {
+public:
+  istringstream(const string& str) : istrstream(str.c_str()) {}
+};
 
-}
+} // namespace std
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Copyright (C) 2004 Daniel Sundberg <dss@home.se>
  * Copyright (C) 2003 Imendio HB
  *
@@ -20,41 +20,35 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gtk/gtk.h>
 #include "gspeakersstock.h"
 #include "config.h"
+#include <gtk/gtk.h>
 
-static GtkStockItem stock_items[] = {
-	{ GSPEAKERS_STOCK_DRIVER, NULL },    
-	{ GSPEAKERS_STOCK_SPEAKER, NULL },
-	{ GSPEAKERS_STOCK_FILTER, NULL }
-};
+static GtkStockItem stock_items[] = {{GSPEAKERS_STOCK_DRIVER, NULL},
+                                     {GSPEAKERS_STOCK_SPEAKER, NULL},
+                                     {GSPEAKERS_STOCK_FILTER, NULL}};
 
-void
-gspeakers_stock_init (void)
-{
-       GtkIconFactory *icon_factory;
-       GtkIconSet     *icon_set;
-       GdkPixbuf      *pixbuf;
-       gint            i;
-       gchar          *filename;
-       
-       gtk_stock_add (stock_items, G_N_ELEMENTS (stock_items));
-       
-       icon_factory = gtk_icon_factory_new ();
-       gtk_icon_factory_add_default (icon_factory);
-       
-       for (i = 0; i < G_N_ELEMENTS (stock_items); i++) {
-	       filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
-	       pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-	       g_free (filename);
+void gspeakers_stock_init(void) {
+  GtkIconFactory* icon_factory;
+  GtkIconSet* icon_set;
+  GdkPixbuf* pixbuf;
+  gint i;
+  gchar* filename;
 
-	       icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
-	       
-	       gtk_icon_factory_add (icon_factory,
-				     stock_items[i].stock_id,
-				     icon_set);
+  gtk_stock_add(stock_items, G_N_ELEMENTS(stock_items));
 
-	       g_object_unref (pixbuf);
-       }
+  icon_factory = gtk_icon_factory_new();
+  gtk_icon_factory_add_default(icon_factory);
+
+  for (i = 0; i < G_N_ELEMENTS(stock_items); i++) {
+    filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
+    pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+    g_free(filename);
+
+    icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
+
+    gtk_icon_factory_add(icon_factory, stock_items[i].stock_id, icon_set);
+
+    g_object_unref(pixbuf);
+  }
 }

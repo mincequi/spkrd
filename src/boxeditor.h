@@ -20,26 +20,25 @@
 #ifndef __GSPEAKERS_BOXEDITOR
 #define __GSPEAKERS_BOXEDITOR
 
-#include <gtkmm/frame.h>
-#include <gtkmm/table.h>
+#include "box.h"
+#include "gspeakerscolor.h"
+#include "speakerlist.h"
 #include <gtkmm/box.h>
 #include <gtkmm/combo.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/label.h>
-#include <gtkmm/optionmenu.h>
 #include <gtkmm/menu.h>
-#include "box.h"
-#include "speakerlist.h"
-#include "gspeakerscolor.h"
+#include <gtkmm/optionmenu.h>
+#include <gtkmm/table.h>
 
 using namespace std;
 using namespace sigc;
 
 /*
- * This class will contain the control panel where you can adjust 
+ * This class will contain the control panel where you can adjust
  * settings for the enclosure you're working with.
  */
-class BoxEditor : public Gtk::Frame
-{
+class BoxEditor : public Gtk::Frame {
 public:
   BoxEditor();
   virtual ~BoxEditor();
@@ -49,12 +48,11 @@ public:
   void on_calc_port_clicked();
   void append_and_plot();
   void on_vb1_entry_activated();
-  
-protected:
 
+protected:
   /* Callbacks */
-  void on_box_selected(Box *b);
-  void on_speaker_list_loaded(SpeakerList *);
+  void on_box_selected(Box* b);
+  void on_speaker_list_loaded(SpeakerList*);
   void on_combo_entry_changed();
   void on_box_data_changed(int i);
 
@@ -68,9 +66,9 @@ protected:
   Gtk::OptionMenu m_box_type_optionmenu;
   Gtk::Menu m_option_menu;
 
-private: 
-  Box *m_box;
-  SpeakerList *m_speaker_list;
+private:
+  Box* m_box;
+  SpeakerList* m_speaker_list;
   Speaker m_current_speaker;
   bool disable_signals;
   GSpeakersColor m_color_list;
