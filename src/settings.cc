@@ -39,8 +39,6 @@ using std::runtime_error;
 
 Settings::Settings() { defaultSettings(); }
 
-Settings::~Settings() {}
-
 void Settings::load(const std::string& filename) noexcept(false) {
 
   ifstream inf(filename.c_str());

@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 #else
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
 #endif
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "Main: " << e.what() << std::endl;
 #endif
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
   /* save settings */
   try {
     g_settings.save();
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "Main: " << e.what() << std::endl;
 #endif

@@ -559,49 +559,6 @@ void FilterLinkFrame::on_net_updated(Net* net) {
     if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
       on_plot_crossover();
     }
-    /*
-     if (m_net->get_type() & NET_TYPE_LOWPASS) {
-     int i = 0, index1 = 0;
-     for (std::vector<GSpeakers::Point>::iterator iter = points.begin();
-     iter != points.end();
-     ++iter)
-     {
-     if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
-     index1 = i;
-     }
-     i++;
-     }
-     points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
-     points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
-
-     double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
-     int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
-     double ytodbdiff = points[index1].get_y() + 3;
-     m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index1 +
-     1].get_x());
-     }
-     if (m_net->get_type() & NET_TYPE_HIGHPASS) {
-     int i = 0, index2 = 0;
-     for (std::vector<GSpeakers::Point>::iterator iter = points.begin();
-     iter != points.end();
-     ++iter)
-     {
-     if ((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) {
-     index2 = i;
-     }
-     i++;
-     }
-     index2++;
-     points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
-     points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
-
-     double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
-     int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
-     double ytodbdiff = points[index2].get_y() + 3;
-     m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff + points[index2].get_x());
-     }
-     */
-    // enable_edit = true;
   }
 }
 
@@ -614,9 +571,7 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
   std::cout << "FilterLinkFrame::on_speakerlist_loaded" << std::endl;
 #endif
-  // if (speaker_list != NULL) {
   m_speaker_list = speaker_list;
-  //}
 
   std::string speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */

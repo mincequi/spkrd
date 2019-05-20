@@ -41,7 +41,6 @@ private:
 
 public:
   Settings();
-  virtual ~Settings();
 
   void load(const std::string& filename) noexcept(false);
   void save(const std::string& filename) noexcept(false);
