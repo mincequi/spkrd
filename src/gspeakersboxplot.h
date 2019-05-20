@@ -23,6 +23,7 @@
 
 #include "common.h"
 #include "gspeakersplot.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
@@ -37,7 +38,6 @@
 class GSpeakersBoxPlot : public Gtk::Frame {
 public:
   GSpeakersBoxPlot();
-  ~GSpeakersBoxPlot();
 
 private:
   Gtk::VBox m_vbox;

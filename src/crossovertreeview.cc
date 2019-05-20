@@ -22,8 +22,6 @@
 #include "common.h"
 #include "popupentry.h"
 
-using namespace sigc;
-
 CrossoverTreeView::CrossoverTreeView() : Gtk::Frame("") {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
@@ -66,7 +64,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
                                              const Glib::ustring& new_text) {
 #ifdef OUTPUT_DEBUG
   std::cout << "CrossoverTreeView::on_cell_edited_value" << std::endl;
-  std::cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string << std::endl;
+  std::cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string
+            << std::endl;
 #endif
 
   GtkTreePath* gpath = gtk_tree_path_new_from_string(path_string.c_str());
@@ -82,7 +81,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
 
 #ifdef OUTPUT_DEBUG
     std::cout << "CrossoverTreeView::on_cell_edited_value: indices[0:1:2:4] = " << indices[0] << ":"
-         << indices[1] << ":" << indices[2] << ":" << indices[3] << std::endl;
+              << indices[1] << ":" << indices[2] << ":" << indices[3] << std::endl;
 #endif
     /* Since the stupid signals doesn't seem to work we have to go through the data-containers
        and update values for the particular part we change... */
@@ -179,17 +178,17 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover) {
   m_vecItems.erase(m_vecItems.begin(), m_vecItems.end());
 
   cover = new_crossover; // Crossover((Crossover&)new_crossover);
- std::vector<Net> networks = *(cover->networks());
+  std::vector<Net> networks = *(cover->networks());
 
   for (vector<Net>::iterator from = cover->networks()->begin(); from != cover->networks()->end();
        ++from) {
     Net n = *from;
-   std::vector<CellItem_Crossover> crossover_elements;
-   std::vector<CellItem_Crossover> filter;
-   std::vector<CellItem_Crossover> lowpass_filter;
-   std::vector<CellItem_Crossover> highpass_filter;
-   std::vector<CellItem_Crossover> imp_corr;
-   std::vector<CellItem_Crossover> damp;
+    std::vector<CellItem_Crossover> crossover_elements;
+    std::vector<CellItem_Crossover> filter;
+    std::vector<CellItem_Crossover> lowpass_filter;
+    std::vector<CellItem_Crossover> highpass_filter;
+    std::vector<CellItem_Crossover> imp_corr;
+    std::vector<CellItem_Crossover> damp;
 
     if (n.get_has_imp_corr() == true) {
       imp_corr.push_back(CellItem_Crossover(n.get_imp_corr_C()));
@@ -205,7 +204,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover) {
     /* The rest of the parts */
     int type = n.get_type();
 
-   std::vector<Part> parts = *n.parts();
+    std::vector<Part> parts = *n.parts();
     int counter = 0;
     if (type & NET_TYPE_LOWPASS) {
       int nof_lowpass_parts = n.get_lowpass_order();

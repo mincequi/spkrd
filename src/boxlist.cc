@@ -21,8 +21,6 @@
 #include "common.h"
 #include <glib.h>
 
-BoxList::BoxList() {}
-
 BoxList::BoxList(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;
@@ -36,7 +34,7 @@ BoxList::BoxList(std::string filename) {
         while (children != NULL) {
           try {
             m_box_list.push_back(Box(children));
-          } catch (GSpeakersException e) {
+          } catch (GSpeakersException const& e) {
             throw e;
           }
           children = children->next;

@@ -25,9 +25,6 @@
 #include "speakerlist.h"
 #include <gtkmm.h>
 
-using namespace std;
-using namespace sigc;
-
 class FilterLinkFrame : public Gtk::Frame {
 public:
   FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list);
@@ -68,16 +65,16 @@ private:
 
   /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
    * NET_TYPE_HIGHPASS */
- std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
+  std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
 
   Net* m_net;
- std::string m_description;
+  std::string m_description;
   SpeakerList* m_speaker_list;
   bool enable_edit;
   bool init;
 
   int my_filter_plot_index;
- std::vector<GSpeakers::Point> points;
+  std::vector<GSpeakers::Point> points;
   /* Helper function */
   void set_family(Gtk::OptionMenu* option_menu, int order, int family);
 };

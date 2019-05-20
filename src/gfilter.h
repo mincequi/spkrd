@@ -26,7 +26,6 @@
 class GFilter : public Gtk::Window {
 public:
   GFilter();
-  virtual ~GFilter();
 
   // Signal handlers:
   virtual void on_button_clicked();

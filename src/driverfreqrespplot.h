@@ -36,10 +36,10 @@
 class DriverFreqRespPlot : public Gtk::Frame {
 public:
   DriverFreqRespPlot();
-  ~DriverFreqRespPlot();
+
   void clear();
   void add_plot(vector<GSpeakers::Point>&, Gdk::Color&);
-  void replace_plot(int,std::vector<GSpeakers::Point>&, Gdk::Color&);
+  void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color&);
 
 private:
   GSpeakersPlot plot;

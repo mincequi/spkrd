@@ -35,7 +35,7 @@
  */
 class BoxList {
 public:
-  BoxList();
+  BoxList() = default;
 
   /* Construct a part from an xml file */
   BoxList(std::string filename);

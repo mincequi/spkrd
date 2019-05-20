@@ -48,6 +48,7 @@ extern sigc::signal1<void, bool> signal_enclosure_set_save_state;
 class BoxHistory : public Gtk::Frame {
 public:
   BoxHistory();
+
   virtual ~BoxHistory();
 
   /* public callbacks, used in container classes from toolbar/menu events */

@@ -32,6 +32,4 @@ GFilter::GFilter() : m_Button1(gettext("Click Me")), m_Button2(gettext("Click me
   show_all();
 }
 
-GFilter::~GFilter() {}
-
 void GFilter::on_button_clicked() { std::cout << gettext("The button was clicked.") << std::endl; }

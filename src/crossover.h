@@ -21,12 +21,12 @@
 #include "common.h"
 #include "gspeakersobject.h"
 #include "net.h"
-#include <iostream>
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <vector>
 
-using namespace std;
+#include <iostream>
+#include <vector>
 
 /* You should be able to use one or more of the type properties */
 #define CROSSOVER_TYPE_LOWPASS 1
@@ -41,7 +41,7 @@ using namespace std;
 
 class Crossover : public GSpeakersObject {
 public:
-  Crossover(int type = CROSSOVER_TYPE_TWOWAY,std::string id_string = "Crossover");
+  Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
 
   /* Construct a part from an xml node */
   Crossover(xmlNodePtr parent);
@@ -53,18 +53,18 @@ public:
   friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
   /* Use this to get the parts or add part to the net */
- std::vector<Net>* networks();
+  std::vector<Net>* networks();
 
   /* return id_string for this crossover */
- std::string get_id_string();
+  std::string get_id_string();
   void set_id_string(std::string id_string);
 
 protected:
   /* Member variables */
- std::vector<Net> m_networks;
+  std::vector<Net> m_networks;
   // int m_id; /* from GSpeakersObject */
   // int m_type; /* from GSpeakersObject, we don't really need this one here... */
- std::string m_id_string;
+  std::string m_id_string;
 
   /* Member functions, used to parse xml */
   void parse_type(xmlNodePtr node);

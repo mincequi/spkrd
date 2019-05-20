@@ -22,15 +22,13 @@
 
 #include "cellitemcrossover.h"
 #include "crossover.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
-
-using namespace sigc;
-using namespace std;
 
 /*
  * This is a TreeView that displays the currently selected crossover
@@ -61,7 +59,7 @@ protected:
   Gtk::ScrolledWindow m_ScrolledWindow;
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
- std::vector<CellItem_Crossover> m_vecItems;
+  std::vector<CellItem_Crossover> m_vecItems;
 
   /* Pointer to currently selected crossover */
   Crossover* cover;

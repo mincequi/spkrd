@@ -24,9 +24,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
 
-using namespace std;
-using namespace sigc;
-
 class CrossoverWizard : public Gtk::ScrolledWindow {
 public:
   CrossoverWizard();

@@ -18,8 +18,6 @@
 #include "crossoverlist.h"
 #include <glib.h>
 
-CrossoverList::CrossoverList() {}
-
 CrossoverList::CrossoverList(std::string filename) {
   xmlDocPtr doc;
   xmlNodePtr node, children;

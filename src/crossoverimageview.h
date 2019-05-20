@@ -41,7 +41,6 @@
 class CrossoverImageView : public Gtk::DrawingArea {
 public:
   CrossoverImageView();
-  ~CrossoverImageView();
 
 private:
   bool on_expose_event(GdkEventExpose* event);

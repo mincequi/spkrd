@@ -21,7 +21,6 @@
 #include "gspeakersboxplot.h"
 
 GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), plot(1, 1000) {
-  using namespace sigc;
 
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
@@ -33,12 +32,10 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), plot(1, 1000) {
   sw.set_shadow_type(Gtk::SHADOW_IN);
   sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
   add(m_vbox);
-  signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
-  signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
-  signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
-  signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
+  signal_add_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::add_plot));
+  signal_remove_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::remove_plot));
+  signal_hide_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::hide_plot));
+  signal_select_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::select_plot));
   plot.set_y_label(_("Magnitude / dB"));
   show_all();
 }
-
-GSpeakersBoxPlot::~GSpeakersBoxPlot() {}

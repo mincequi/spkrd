@@ -20,13 +20,13 @@
 
 #include "common.h"
 #include "crossover.h"
-#include <iostream>
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
+#include <iostream>
 #include <string>
 #include <vector>
-
-using namespace std;
 
 /*
  * This is a class that pretty much just contains a list of crossovers.
@@ -38,7 +38,7 @@ using namespace std;
  */
 class CrossoverList {
 public:
-  CrossoverList();
+  CrossoverList() = default;
 
   /* Construct a part from an xml node */
   CrossoverList(std::string filename);
@@ -50,14 +50,14 @@ public:
   friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
 
   /* return a pointer to the crossover list */
- std::vector<Crossover>* crossover_list();
+  std::vector<Crossover>* crossover_list();
 
   /* Remove all items from the corssover list */
   void clear();
 
 protected:
   /* Member variables */
- std::vector<Crossover> m_crossover_list;
+  std::vector<Crossover> m_crossover_list;
 };
 
 #endif

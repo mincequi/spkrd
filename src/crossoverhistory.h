@@ -22,10 +22,8 @@
 
 #include "common.h"
 #include "crossoverlist.h"
-#include <gtkmm.h>
 
-using namespace sigc;
-using namespace std;
+#include <gtkmm.h>
 
 extern sigc::signal1<void, bool> signal_crossover_set_save_state;
 
@@ -102,7 +100,7 @@ protected:
   ModelColumns m_columns;
 
   /* Additional member variables */
- std::string m_filename;
+  std::string m_filename;
   bool new_xml_pressed;
   int index;
 };

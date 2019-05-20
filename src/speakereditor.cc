@@ -59,7 +59,7 @@ Speaker_ListStore::Speaker_ListStore()
   try {
     m_speaker_list = new SpeakerList(m_filename);
     signal_speakerlist_loaded(m_speaker_list);
-  } catch (GSpeakersException e) {
+  } catch (GSpeakersException const& e) {
     m_speaker_list = new SpeakerList();
     std::cout << "Speaker_ListStore::Speaker_ListStore: " << e.what() << std::endl;
   }
@@ -393,7 +393,7 @@ void Speaker_ListStore::on_new() {
 
   char* str = NULL;
   GString* buffer = g_string_new(str);
-  g_string_printf(buffer, "%d", m_speaker_list->speaker_list()->size() - 1);
+  g_string_printf(buffer, "%lu", m_speaker_list->speaker_list()->size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -454,7 +454,7 @@ void Speaker_ListStore::on_save() {
       tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
       GSpeakers::driverlist_modified() = false;
       m_modified = false;
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
     }
@@ -474,7 +474,7 @@ void Speaker_ListStore::save_as(const std::string& filename) {
   try {
     m_speaker_list->to_xml(filename);
     m_filename = filename;
-  } catch (GSpeakersException e) {
+  } catch (GSpeakersException const& e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -649,7 +649,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
       ifstream fin(spice_output_file.c_str());
       if (fin.good()) {
         bool output = false;
-        int id;
+
         float f_id;
         float f1, f2, f3;
         while (!fin.eof()) {
@@ -708,7 +708,6 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
               }
             } else {
               if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
-                id = atoi(buffer);
 
                 strtok(buffer, "\t");
                 char* substr_ptr = strtok(NULL, "\t");
@@ -941,7 +940,7 @@ void Speaker_ListStore::append_xml(const std::string& filename) {
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-  } catch (GSpeakersException e) {
+  } catch (GSpeakersException const& e) {
     Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -995,7 +994,7 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
 
       signal_speakerlist_loaded(m_speaker_list);
       m_modified = true;
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
       m.run();
       return false;

@@ -21,15 +21,15 @@
 #include "../config.h"
 #include "common.h"
 #include "gspeakersplot.h"
+
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <fstream>
-#include <math.h>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
 
-using namespace sigc;
-
-FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list)
+FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
+                                 SpeakerList* speaker_list)
     : Gtk::Frame(""), adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0), m_speaker_combo(),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
       m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
@@ -45,11 +45,11 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, Speak
   m_net = net;
   m_description = description;
   m_speaker_list = speaker_list;
- std::string speaker_name = m_net->get_speaker();
+  std::string speaker_name = m_net->get_speaker();
 
   /* Setup the speaker combo box */
   m_vbox.set_border_width(5);
- std::vector<string> popdown_strings;
+  std::vector<string> popdown_strings;
   if (speaker_name != "") {
     popdown_strings.push_back(speaker_name);
   }
@@ -238,7 +238,8 @@ FilterLinkFrame::~FilterLinkFrame() { std::cout << "FilterLinkFrame: dtor" << st
 
 void FilterLinkFrame::on_order_selected(int which, int order) {
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order << std::endl;
+  std::cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order
+            << std::endl;
 #endif
   Gtk::Menu::MenuList* menulist; // = &(m_lower_type_menu->items());
   if (which == 0) {
@@ -298,7 +299,7 @@ void FilterLinkFrame::on_param_changed() {
     m_net->set_speaker(speaker.get_id_string());
 
     int index = 0;
-   std::vector<double> num_params;
+    std::vector<double> num_params;
     if (m_net->get_type() & NET_TYPE_LOWPASS) {
       m_net->set_lowpass_order(m_lower_order_optionmenu->get_history() + 1);
       double cutoff = m_lower_co_freq_spinbutton->get_value();
@@ -609,9 +610,9 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   m_speaker_list = speaker_list;
   //}
 
- std::string speaker_name = m_net->get_speaker();
+  std::string speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */
- std::vector<string> popdown_strings;
+  std::vector<string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
   if (m_speaker_list != NULL) {
     for (vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
@@ -636,7 +637,7 @@ void FilterLinkFrame::on_plot_crossover() {
   if (m_speaker_list != NULL) {
     speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
   }
- std::string spice_filename;
+  std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (GSpeakersException e) {
@@ -649,7 +650,7 @@ void FilterLinkFrame::on_plot_crossover() {
   }
 
   /* run spice with created file */
- std::string cmd;
+  std::string cmd;
   if ((g_settings.getValueBool("SPICEUseNGSPICE") == true) ||
       (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
     cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + " > " +
@@ -659,7 +660,8 @@ void FilterLinkFrame::on_plot_crossover() {
           spice_filename;
   }
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"" << std::endl;
+  std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\""
+            << std::endl;
 #endif
   system(cmd.c_str());
 #ifdef OUTPUT_DEBUG
@@ -667,7 +669,7 @@ void FilterLinkFrame::on_plot_crossover() {
 #endif
 
   /* extract spice output into astd::vector */
- std::string spice_output_file = spice_filename + ".out";
+  std::string spice_output_file = spice_filename + ".out";
   ifstream fin(spice_output_file.c_str());
   if (fin.good()) {
     bool output = false;
@@ -793,8 +795,9 @@ void FilterLinkFrame::on_plot_crossover() {
 /*
  * Numerical coefficients for the filter principles
  */
-std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type) {
- std::vector<double> nums;
+std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order,
+                                                       int net_type) {
+  std::vector<double> nums;
   switch (net_order) {
   case NET_ORDER_1ST:
     switch (net_type) {
@@ -995,7 +998,8 @@ std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int ne
 
 void FilterLinkFrame::set_family(Gtk::OptionMenu* option_menu, int order, int family) {
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family << std::endl;
+  std::cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family
+            << std::endl;
 #endif
   switch (order) {
   case NET_ORDER_2ND:

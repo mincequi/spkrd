@@ -27,13 +27,12 @@
 #include "plothistory.h"
 #include <gtkmm.h>
 
-using namespace std;
-using namespace sigc;
-
 class EnclosurePaned : public Gtk::HPaned {
 public:
   EnclosurePaned();
+
   virtual ~EnclosurePaned();
+
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();
 

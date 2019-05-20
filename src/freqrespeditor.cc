@@ -107,19 +107,16 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
   if (m_filename != "") {
     /* Open file and fill in the values */
-    ifstream fin(m_filename.c_str());
+    std::ifstream fin(m_filename.c_str());
     if (fin.good()) {
       for (int i = 0; i < 30; i++) {
         char* buffer = new char[100];
         fin.getline(buffer, 100, '\n');
 
-        float f1, f2;
-        // sscanf(buffer, "%f,%f", &f1, &f2);
-
         char* substr_ptr = strtok(buffer, ",");
-        f1 = g_ascii_strtod(substr_ptr, NULL);
+        g_ascii_strtod(substr_ptr, NULL);
         substr_ptr = strtok(NULL, ",");
-        f2 = g_ascii_strtod(substr_ptr, NULL);
+        float const f2 = g_ascii_strtod(substr_ptr, NULL);
 
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(
@@ -137,8 +134,8 @@ void FreqRespEditor::on_save() {
 #ifdef OUTPUT_DEBUG
   std::cout << "FreqRespEditor::on_save" << std::endl;
 #endif
- std::vector<double> v = get_x_vector();
-  ofstream of(m_filename.c_str());
+  std::vector<double> v = get_x_vector();
+  std::ofstream of(m_filename.c_str());
   if (of.good()) {
     gchar* buffer = new char[8];
     for (int j = 0; j < 15; j++) {
@@ -160,7 +157,7 @@ void FreqRespEditor::on_save() {
 
   } else {
     Gtk::MessageDialog* d =
-        new Gtk::MessageDialog(*this,std::string(_("Could not open file: ")) + m_filename, false,
+        new Gtk::MessageDialog(*this, std::string(_("Could not open file: ")) + m_filename, false,
                                Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d->run();
     delete d;
@@ -198,7 +195,7 @@ FreqRespEditor::~FreqRespEditor() {
 }
 
 std::vector<double> FreqRespEditor::get_x_vector() {
- std::vector<double> v;
+  std::vector<double> v;
   v.push_back(20.0);
   v.push_back(25.2);
   v.push_back(31.7);

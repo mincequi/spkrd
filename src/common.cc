@@ -31,7 +31,7 @@ sigc::signal1<void, Box*> signal_box_selected;
 sigc::signal1<void, Box*> signal_add_to_boxlist;
 sigc::signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
 sigc::signal1<void, Box*> signal_box_modified;
-sigc::signal2<int,std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
+sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 sigc::signal1<void, int> signal_remove_box_plot;
 sigc::signal1<void, int> signal_hide_box_plot;
 sigc::signal1<void, int> signal_select_plot;
@@ -39,7 +39,8 @@ sigc::signal0<void> signal_net_modified_by_wizard;
 sigc::signal1<void, Net*> signal_net_modified_by_user;
 sigc::signal1<void, int> signal_new_crossover;
 sigc::signal0<void> signal_plot_crossover;
-sigc::signal4<int,std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*> signal_add_crossover_plot;
+sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*>
+    signal_add_crossover_plot;
 sigc::signal0<void> signal_save_open_files;
 
 namespace GSpeakers {
@@ -83,7 +84,7 @@ Gtk::Widget& image_widget(const std::string& filename) {
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(filename);
 #else
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(
-       std::string(GSPEAKERS_PREFIX) +std::string("/share/pixmaps/") + filename);
+        std::string(GSPEAKERS_PREFIX) + std::string("/share/pixmaps/") + filename);
 #endif
     im = manage(new Gtk::Image(pixbuf));
   } catch (Glib::FileError fe) {
@@ -94,14 +95,7 @@ Gtk::Widget& image_widget(const std::string& filename) {
   return *im;
 }
 
-//   Gtk::Widget& image_widget(const Gtk::StockID& stockid)
-//   {
-//     Gtk::Widget *im;
-
-//     return *im;
-//   }
 Glib::ustring short_filename(const Glib::ustring& filename, unsigned length) {
-  using namespace std;
 
   Glib::ustring shorted_filename;
   if (filename.length() >= length) {

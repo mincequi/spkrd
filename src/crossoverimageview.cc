@@ -39,8 +39,6 @@ CrossoverImageView::CrossoverImageView() {
   signal_speakerlist_loaded.connect(mem_fun(*this, &CrossoverImageView::on_speakerlist_selected));
 }
 
-CrossoverImageView::~CrossoverImageView() {}
-
 bool CrossoverImageView::on_expose_event(GdkEventExpose* event) {
   get_window()->draw_drawable(get_style()->get_fg_gc(get_state()), m_refPixmap,
                               /* Only copy the area that was exposed. */
@@ -103,7 +101,7 @@ void CrossoverImageView::redraw() {
           GSpeakers::round(double(window_height) / double(vert_space_per_net_devider));
 
       /* Draw first net here */
-     std::vector<Net>& net_vector = *crossover->networks();
+      std::vector<Net>& net_vector = *crossover->networks();
       for (unsigned i = 0; i < net_vector.size(); i++) {
 
         int net_vert_devider = 3;
@@ -162,17 +160,17 @@ void CrossoverImageView::redraw() {
         draw_connector(0, i * vert_space_per_net + 2 * part_height, part_width, part_height, false);
 
         /* lowpass part */
-       std::vector<Part>& part_vector = *net_vector[i].parts();
+        std::vector<Part>& part_vector = *net_vector[i].parts();
         if (lowpass_order > 0) {
-         std::vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + lowpass_order);
+          std::vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + lowpass_order);
           draw_lowpass_net(part_width, i * vert_space_per_net, part_width, part_height,
                            lowpass_parts);
         }
 
         /* highpass part */
         if (highpass_order > 0) {
-         std::vector<Part> highpass_parts(part_vector.begin() + lowpass_order,
-                                      part_vector.begin() + lowpass_order + highpass_order);
+          std::vector<Part> highpass_parts(part_vector.begin() + lowpass_order,
+                                           part_vector.begin() + lowpass_order + highpass_order);
           draw_highpass_net(part_width + lowpass_order * part_width, i * vert_space_per_net,
                             part_width, part_height, highpass_parts);
         }
@@ -190,7 +188,7 @@ void CrossoverImageView::redraw() {
                         net_vector[i].get_damp_R1(), net_vector[i].get_damp_R2());
           driver_offset += 2;
         }
-       std::string spk = net_vector[i].get_speaker();
+        std::string spk = net_vector[i].get_speaker();
         Speaker speaker;
         if (speaker_list != NULL) {
           speaker = speaker_list->get_speaker_by_id_string(spk);
@@ -199,19 +197,6 @@ void CrossoverImageView::redraw() {
                     i * vert_space_per_net, part_width, part_height, speaker);
       }
     }
-
-    // draw_capacitor(13, 10, 10, width, height, false);
-    //    draw_inductor(15, 200, 200, 49, 87, false);
-    //    draw_capacitor(14, 300, 200, 49, 87, true);
-    // draw_inductor(15, 100, 10, width, height, false);
-    // draw_inductor(16, 100, 100, width, height, true);
-    // draw_connector(200, 10, width, height, true);
-    // draw_connector(200, 100, width, height, false);
-    // draw_resistor(18, 10, 200, width, height, false);
-    // draw_corner(100, 200, width, height, true);
-    // draw_corner(300, 10, width, height, false);
-    // draw_t_cross(300, 100, width, height, true);
-    // draw_t_cross(300, 200, width, height, false);
   }
 }
 

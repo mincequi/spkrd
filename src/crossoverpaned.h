@@ -28,6 +28,7 @@
 #include "gspeakersfilterplot.h"
 #include "summedfreqrespplot.h"
 #include "totalfilterplot.h"
+
 #include <gtkmm/menu.h>
 #include <gtkmm/notebook.h>
 
