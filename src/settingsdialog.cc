@@ -19,6 +19,7 @@
 
 #include "settingsdialog.h"
 #include "gspeakersfilechooser.h"
+
 #include <gtkmm/frame.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/table.h>

@@ -22,9 +22,11 @@
 
 #include "box.h"
 #include "gspeakersobject.h"
-#include <iostream>
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -45,14 +47,14 @@ public:
   friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
   /* Return the box_liststd::vector */
- std::vector<Box>* box_list();
+  std::vector<Box>* box_list();
 
   /* Clear all items in the list */
   void clear();
 
 protected:
   /* Member variables */
- std::vector<Box> m_box_list;
+  std::vector<Box> m_box_list;
 };
 
 #endif
