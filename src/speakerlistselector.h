@@ -22,8 +22,8 @@
 #include "speakerlist.h"
 #include <gtkmm.h>
 
-using namespace std;
-using namespace sigc;
+
+
 
 /*
  * This is a class that will contain an entry displaying the currently

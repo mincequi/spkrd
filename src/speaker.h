@@ -32,19 +32,18 @@
 #define SPEAKER_TYPE_MIDRANGE 2
 #define SPEAKER_TYPE_TWEETER 4
 
-using namespace std;
-
 /*
  * This class contains data for a speaker
  */
 class Speaker : public GSpeakersObject {
 public:
   /* Default values from Vifa P21WO-20-08 */
-  Speaker(std::string id_string = "Vifa P21-20-08", int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
-          double qts = 0.33, double vas = 113, double fs = 28, double rdc = 5.6, double lvc = 0.9,
-          double qms = 1.6, double qes = 0.41, double imp = 8, double sens = 91,
-         std::string freq_resp_filename = "",std::string imp_resp_filename = "", double mmd = 0.04,
-          double ad = 0.0837, double bl = 11, double rms = 1.7, double cms = 0.0012);
+  Speaker(std::string id_string = "Vifa P21-20-08",
+          int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE, double qts = 0.33, double vas = 113,
+          double fs = 28, double rdc = 5.6, double lvc = 0.9, double qms = 1.6, double qes = 0.41,
+          double imp = 8, double sens = 91, std::string freq_resp_filename = "",
+          std::string imp_resp_filename = "", double mmd = 0.04, double ad = 0.0837, double bl = 11,
+          double rms = 1.7, double cms = 0.0012);
 
   /* Construct a speaker from an xml node, throws an exception on error in xml */
   Speaker(xmlNodePtr parent);
@@ -65,9 +64,9 @@ public:
   void set_imp(double imp);
   void set_sens(double sens);
   void set_freq_resp_filename(std::string filename);
-  void set_freq_resp(map<double, double> freq_resp);
+  void set_freq_resp(std::map<double, double> freq_resp);
   void set_imp_resp_filename(std::string filename);
-  void set_imp_resp(map<double, double> imp_resp);
+  void set_imp_resp(std::map<double, double> imp_resp);
   void set_id_string(std::string id_string);
   void set_mmd(double mmd);
   void set_ad(double ad);
@@ -75,25 +74,25 @@ public:
   void set_rms(double rms);
   void set_cms(double cms);
 
-  double get_qts();
-  double get_vas();
-  double get_fs();
-  double get_rdc();
-  double get_lvc();
-  double get_qms();
-  double get_qes();
-  double get_imp();
-  double get_sens();
- std::string get_freq_resp_filename();
-  map<double, double>* get_freq_resp();
- std::string get_imp_resp_filename();
-  map<double, double>* get_imp_resp();
- std::string get_id_string();
-  double get_mmd();
-  double get_ad();
-  double get_bl();
-  double get_rms();
-  double get_cms();
+  double get_qts() const;
+  double get_vas() const;
+  double get_fs() const;
+  double get_rdc() const;
+  double get_lvc() const;
+  double get_qms() const;
+  double get_qes() const;
+  double get_imp() const;
+  double get_sens() const;
+  std::string get_freq_resp_filename() const;
+  std::map<double, double> const* get_freq_resp() const;
+  std::string get_imp_resp_filename() const;
+  std::map<double, double> const* get_imp_resp() const;
+  std::string const& get_id_string() const;
+  double get_mmd() const;
+  double get_ad() const;
+  double get_bl() const;
+  double get_rms() const;
+  double get_cms() const;
 
 protected:
   double m_qts; // total Q
@@ -112,12 +111,12 @@ protected:
   double m_rms; // suspension mechanical resistance, Ns/m
   double m_cms; // suspension compliance, m/N
 
- std::string m_freq_resp_filename;
-  map<double, double> m_freq_resp;
- std::string m_imp_resp_filename;
-  map<double, double> m_imp_resp;
+  std::string m_freq_resp_filename;
+  std::map<double, double> m_freq_resp;
+  std::string m_imp_resp_filename;
+  std::map<double, double> m_imp_resp;
 
- std::string m_id_string;
+  std::string m_id_string;
 
 private:
   /* xml parsing helper functions */

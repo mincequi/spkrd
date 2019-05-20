@@ -19,13 +19,12 @@
 
 #include "gspeakersfilechooser.h"
 #include <gtkmm/stock.h>
+
 #include <iostream>
 
 GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title,
                                                        Gtk::FileChooserAction action,
                                                        const std::string& default_filename) {
-  using namespace std;
-
   bool flag = false;
   m_filename = "";
 

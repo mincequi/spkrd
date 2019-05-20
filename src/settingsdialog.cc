@@ -261,7 +261,7 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
   }
   try {
     g_settings.save();
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "SettingsDialog::on_config_option_change: " << e.what() << std::endl;
 //#else

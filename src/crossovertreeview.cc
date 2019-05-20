@@ -180,8 +180,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover) {
   cover = new_crossover; // Crossover((Crossover&)new_crossover);
   std::vector<Net> networks = *(cover->networks());
 
-  for (vector<Net>::iterator from = cover->networks()->begin(); from != cover->networks()->end();
-       ++from) {
+  for (auto from = cover->networks()->begin(); from != cover->networks()->end(); ++from) {
     Net n = *from;
     std::vector<CellItem_Crossover> crossover_elements;
     std::vector<CellItem_Crossover> filter;
@@ -191,14 +190,14 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover) {
     std::vector<CellItem_Crossover> damp;
 
     if (n.get_has_imp_corr() == true) {
-      imp_corr.push_back(CellItem_Crossover(n.get_imp_corr_C()));
-      imp_corr.push_back(CellItem_Crossover(n.get_imp_corr_R()));
-      crossover_elements.push_back(CellItem_Crossover(_("Impedace correction"), imp_corr));
+      imp_corr.emplace_back(CellItem_Crossover(n.get_imp_corr_C()));
+      imp_corr.emplace_back(CellItem_Crossover(n.get_imp_corr_R()));
+      crossover_elements.emplace_back(CellItem_Crossover(_("Impedace correction"), imp_corr));
     }
     if (n.get_has_damp() == true) {
-      damp.push_back(CellItem_Crossover(n.get_damp_R1()));
-      damp.push_back(CellItem_Crossover(n.get_damp_R2()));
-      crossover_elements.push_back(CellItem_Crossover(_("Damping network"), damp));
+      damp.emplace_back(CellItem_Crossover(n.get_damp_R1()));
+      damp.emplace_back(CellItem_Crossover(n.get_damp_R2()));
+      crossover_elements.emplace_back(CellItem_Crossover(_("Damping network"), damp));
     }
 
     /* The rest of the parts */
@@ -259,18 +258,14 @@ void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo) {
   row[m_columns.id] = 0;
   row[m_columns.visible] = false;
 
-  for (vector<CellItem_Crossover>::const_iterator iter = foo.m_children.begin();
-       iter != foo.m_children.end(); ++iter) {
-    const CellItem_Crossover& child = *iter;
+  for (CellItem_Crossover const& child : foo.m_children) {
 
     Gtk::TreeRow child_row = *(m_refTreeStore->append(row.children()));
     child_row[m_columns.id_string] = child.m_label;
     child_row[m_columns.id] = 0;
     child_row[m_columns.visible] = false;
     child_row[m_columns.editable] = false;
-    for (vector<CellItem_Crossover>::const_iterator from = child.m_children.begin();
-         from != child.m_children.end(); ++from) {
-      const CellItem_Crossover& child2 = *from;
+    for (CellItem_Crossover const& child2 : child.m_children) {
 
       Gtk::TreeRow child_row2 = *(m_refTreeStore->append(child_row.children()));
       /* If this is the filter parts node */
@@ -282,9 +277,7 @@ void CrossoverTreeView::treestore_add_item(const CellItem_Crossover& foo) {
         child_row2[m_columns.editable] = false;
 
         /* Then insert the parts */
-        for (vector<CellItem_Crossover>::const_iterator from2 = child2.m_children.begin();
-             from2 != child2.m_children.end(); ++from2) {
-          const CellItem_Crossover& child3 = *from2;
+        for (const CellItem_Crossover& child3 : child2.m_children) {
 
           Gtk::TreeRow child_row3 = *(m_refTreeStore->append(child_row2.children()));
           child_row3[m_columns.id_string] = child3.m_label;

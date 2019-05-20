@@ -24,8 +24,8 @@ GSpeakersObject::GSpeakersObject() : sigc::trackable() {
   next_id = next_id + 1;
 }
 
-int GSpeakersObject::get_id() { return m_id; }
+int GSpeakersObject::get_id() const { return m_id; }
 
 void GSpeakersObject::set_type(int type) { m_type = type; }
 
-int GSpeakersObject::get_type() { return m_type; }
+int GSpeakersObject::get_type() const { return m_type; }

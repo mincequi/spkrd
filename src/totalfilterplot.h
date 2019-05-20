@@ -39,13 +39,13 @@ public:
   TotalFilterPlot();
   ~TotalFilterPlot();
   void clear();
-  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
+  int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
   GSpeakersPlot plot;
   std::vector<int> m_nets;
   Gdk::Color* m_color;
-  std::vector<vector<GSpeakers::Point>> m_points;
+  std::vector<std::vector<GSpeakers::Point>> m_points;
   bool on_delete_event(GdkEventAny* event);
   void on_crossover_selected(Crossover*);
   void on_plot_crossover();

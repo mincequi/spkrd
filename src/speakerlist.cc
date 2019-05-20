@@ -28,13 +28,13 @@ SpeakerList::SpeakerList(std::string filename) {
   doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
     node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp((char*)node->name, "speakerlist") == 0)) {
+    if ((node != NULL) && (g_ascii_strcasecmp((char*)node->name, "speakerlist") == 0)) {
       if (node->children) {
         children = node->children;
         while (children != NULL) {
           try {
             m_speaker_list.push_back(Speaker(children));
-          } catch (GSpeakersException e) {
+          } catch (GSpeakersException const& e) {
             throw e;
           }
           children = children->next;
@@ -60,7 +60,7 @@ void SpeakerList::to_xml(std::string filename) {
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all speakers */
-  for (vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
+  for (std::vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
        ++from) {
     ((Speaker)(*from)).to_xml_node(node);
   }
@@ -74,8 +74,9 @@ void SpeakerList::to_xml(std::string filename) {
 std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list) {
   o << _("Speaker List") << std::endl;
 
-  for (vector<Speaker>::iterator from = ((vector<Speaker>)(speaker_list.m_speaker_list)).begin();
-       from != ((vector<Speaker>)(speaker_list.m_speaker_list)).end(); ++from) {
+  for (std::vector<Speaker>::iterator from =
+           ((std::vector<Speaker>)(speaker_list.m_speaker_list)).begin();
+       from != ((std::vector<Speaker>)(speaker_list.m_speaker_list)).end(); ++from) {
     o << *from;
   }
 
@@ -85,7 +86,7 @@ std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list) {
 std::vector<Speaker>* SpeakerList::speaker_list() { return &m_speaker_list; }
 
 Speaker SpeakerList::get_speaker_by_id_string(std::string id_string) {
-  for (vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
+  for (std::vector<Speaker>::iterator from = m_speaker_list.begin(); from != m_speaker_list.end();
        ++from) {
     if ((*from).get_id_string() == id_string) {
       return *from;

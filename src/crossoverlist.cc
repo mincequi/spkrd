@@ -16,22 +16,21 @@
 */
 
 #include "crossoverlist.h"
+
 #include <glib.h>
 
 CrossoverList::CrossoverList(std::string filename) {
-  xmlDocPtr doc;
-  xmlNodePtr node, children;
 
-  doc = xmlParseFile(filename.c_str());
+  xmlDocPtr doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
-    node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
+    xmlNodePtr node = xmlDocGetRootElement(doc);
+    if ((node != NULL) && (g_ascii_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
       if (node->children) {
-        children = node->children;
+        xmlNodePtr children = node->children;
         while (children != NULL) {
           try {
             m_crossover_list.push_back(Crossover(children));
-          } catch (GSpeakersException e) {
+          } catch (GSpeakersException const& e) {
             throw e;
           }
           children = children->next;
@@ -50,17 +49,14 @@ void CrossoverList::clear() {
 }
 
 void CrossoverList::to_xml(std::string filename) {
-  xmlDocPtr doc;
-  xmlNodePtr node;
 
-  doc = xmlNewDoc((xmlChar*)("1.0"));
+  xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  node = xmlNewDocNode(doc, NULL, (xmlChar*)("crossoverlist"), NULL);
+  xmlNodePtr node = xmlNewDocNode(doc, NULL, (xmlChar*)("crossoverlist"), NULL);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all crossovers */
-  for (vector<Crossover>::iterator from = m_crossover_list.begin(); from != m_crossover_list.end();
-       ++from) {
+  for (auto from = m_crossover_list.begin(); from != m_crossover_list.end(); ++from) {
     ((Crossover)(*from)).to_xml_node(node);
   }
 
@@ -73,12 +69,10 @@ void CrossoverList::to_xml(std::string filename) {
 std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list) {
   o << "Crossover List" << std::endl;
 
-  for (vector<Crossover>::iterator from =
-           ((vector<Crossover>)(crossover_list.m_crossover_list)).begin();
-       from != ((vector<Crossover>)(crossover_list.m_crossover_list)).end(); ++from) {
+  for (auto from = crossover_list.m_crossover_list.begin();
+       from != crossover_list.m_crossover_list.end(); ++from) {
     o << *from;
   }
-
   return o;
 }
 

@@ -35,20 +35,20 @@ MainWindow::MainWindow() {
 #ifdef TARGET_WIN32
     Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
 #else
-    Glib::RefPtr<Gdk::Pixbuf> main_icon =
-        Gdk::Pixbuf::create_from_file(std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+    Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(
+        std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
 #endif
     set_icon(main_icon);
-  } catch (Gdk::PixbufError e) {
+  } catch (Gdk::PixbufError const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << e.code() << std::endl;
 #endif
-  } catch (Glib::FileError fe) {
+  } catch (Glib::FileError const& fe) {
 #ifdef OUTPUT_DEBUG
     std::cout << fe.code() << std::endl;
 #endif
   }
-  set_title("GSpeakers Redux-" +std::string(VERSION));
+  set_title("GSpeakers Redux-" + std::string(VERSION));
 
   /* add a vbox to the window */
   add(m_main_vbox);
@@ -147,7 +147,8 @@ MainWindow::MainWindow() {
 
 bool MainWindow::on_delete_event(GdkEventAny* event) {
   // #ifdef OUTPUT_DEBUG
-  //   std::cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" << std::endl;
+  //   std::cout << "MainWindow::on_delete_event: do you want to save unsaved documents?" <<
+  //   std::endl;
   // #endif
   using namespace GSpeakers;
 
@@ -303,7 +304,7 @@ void MainWindow::on_quit_common() {
   /* finally save settings */
   try {
     g_settings.save();
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "MainWindow::on_delete_event: could not save settings" << std::endl;
 #endif
@@ -370,7 +371,7 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num) {
 
 void MainWindow::on_about() {
   Gtk::MessageDialog m(*this,
-                       "GSpeakers Redux-" +std::string(VERSION) +
+                       "GSpeakers Redux-" + std::string(VERSION) +
                            "\n\n(C) Daniel Sundberg <sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net",
                        false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
   m.run();

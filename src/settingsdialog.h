@@ -28,8 +28,8 @@
 #include <gtkmm/optionmenu.h>
 #include <gtkmm/radiobutton.h>
 
-using namespace std;
-using namespace sigc;
+
+
 
 namespace GSpeakers {
 enum Settings {

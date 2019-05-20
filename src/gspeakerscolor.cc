@@ -17,9 +17,9 @@
 
 #include "gspeakerscolor.h"
 
-GSpeakersColor::GSpeakersColor() {
-  m_counter = 0;
+#include <algorithm>
 
+GSpeakersColor::GSpeakersColor() {
   m_colors.push_back("black");   // 0, 0, 0
   m_colors.push_back("red");     // 255   0   0
   m_colors.push_back("blue");    // 0, 0, 255
@@ -59,10 +59,8 @@ GSpeakersColor::GSpeakersColor() {
   m_colors.push_back("coral");         // 255 127  80
 }
 
-GSpeakersColor::~GSpeakersColor() {}
-
 std::string GSpeakersColor::get_color_string() {
- std::string s = m_colors[m_counter];
+  std::string s = m_colors[m_counter];
   m_counter = (m_counter + 1) % m_colors.size();
   return s;
 }
@@ -72,11 +70,9 @@ void GSpeakersColor::unget_color_string(std::string s) {
   m_colors.insert(m_colors.begin() + m_counter, s);
 }
 
-std::vector<string>::iterator GSpeakersColor::get_iterator_from_string(std::string s) {
-  for (vector<string>::iterator from = m_colors.begin(); from != m_colors.end(); ++from) {
-    if (std::string(*from) == s) {
-      return from;
-    }
-  }
-  return m_colors.begin();
+std::vector<std::string>::iterator GSpeakersColor::get_iterator_from_string(std::string s) {
+
+  auto const location = std::find(begin(m_colors), end(m_colors), s);
+
+  return location == end(m_colors) ? location : begin(m_colors);
 }

@@ -37,7 +37,7 @@ public:
   GSpeakersFilterPlot();
   ~GSpeakersFilterPlot();
   void clear();
-  int on_add_plot(vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
+  int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
   GSpeakersPlot plot;

@@ -27,7 +27,7 @@
 #include <gtkmm.h>
 #include <iostream>
 
-using namespace std;
+
 
 PopupEntry::PopupEntry(const Glib::ustring& path)
     : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(), path_(path),

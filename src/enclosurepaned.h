@@ -25,6 +25,7 @@
 #include "common.h"
 #include "gspeakersboxplot.h"
 #include "plothistory.h"
+
 #include <gtkmm.h>
 
 class EnclosurePaned : public Gtk::HPaned {

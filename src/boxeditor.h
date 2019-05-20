@@ -31,9 +31,6 @@
 #include <gtkmm/optionmenu.h>
 #include <gtkmm/table.h>
 
-using namespace std;
-using namespace sigc;
-
 /*
  * This class will contain the control panel where you can adjust
  * settings for the enclosure you're working with.

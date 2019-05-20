@@ -90,7 +90,7 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color) {
+int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color) {
 #ifdef OUTPUT_DEBUG
   // std::cout << "GSpeakersPlot: on add plot" << std::endl;
 #endif
@@ -113,7 +113,7 @@ int GSpeakersPlot::add_plot(vector<GSpeakers::Point>& ref_point_vector, Gdk::Col
   double f_div, f_mapped;
   int x, y;
 
-  // for (vector<GSpeakers::Point>::iterator iter = ref_point_vector.begin(); iter !=
+  // for (std::vector<GSpeakers::Point>::iterator iter = ref_point_vector.begin(); iter !=
   // ref_point_vector.end(); ++iter) {
   //  std::cout << (*iter).get_x() << ":" << (*iter).get_y() << std::endl;
   //}
@@ -228,7 +228,7 @@ void GSpeakersPlot::remove_plot(int n) {
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
   } else {
 
-    for (vector<vector<GSpeakers::Point>>::iterator iter = m_points.begin(); iter != m_points.end();
+    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin(); iter != m_points.end();
          ++iter, i++) {
       if (n == i) {
         m_points.erase(iter);
@@ -236,14 +236,14 @@ void GSpeakersPlot::remove_plot(int n) {
     }
 
     i = 0;
-    for (vector<Gdk::Color>::iterator iter = m_colors.begin(); iter != m_colors.end();
+    for (std::vector<Gdk::Color>::iterator iter = m_colors.begin(); iter != m_colors.end();
          ++iter, i++) {
       if (n == i) {
         m_colors.erase(iter);
       }
     }
     i = 0;
-    for (vector<bool>::iterator iter = m_visible_plots.begin(); iter != m_visible_plots.end();
+    for (std::vector<bool>::iterator iter = m_visible_plots.begin(); iter != m_visible_plots.end();
          ++iter, i++) {
       if (n == i) {
         m_visible_plots.erase(iter);

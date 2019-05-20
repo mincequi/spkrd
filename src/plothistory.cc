@@ -22,7 +22,7 @@
 #include <math.h>
 #include <time.h>
 
-using namespace sigc;
+
 
 PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   set_border_width(2);

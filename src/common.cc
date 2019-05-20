@@ -87,9 +87,9 @@ Gtk::Widget& image_widget(const std::string& filename) {
         std::string(GSPEAKERS_PREFIX) + std::string("/share/pixmaps/") + filename);
 #endif
     im = manage(new Gtk::Image(pixbuf));
-  } catch (Glib::FileError fe) {
+  } catch (Glib::FileError const& fe) {
     im = manage(new Gtk::Label());
-  } catch (Gdk::PixbufError pe) {
+  } catch (Gdk::PixbufError const& pe) {
     im = manage(new Gtk::Label());
   }
   return *im;

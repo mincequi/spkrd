@@ -31,9 +31,6 @@
 #include <iostream>
 #include <memory>
 
-using namespace std;
-using namespace sigc;
-
 namespace {
 
 bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time) {
@@ -82,7 +79,7 @@ void CellRendererPopup::set_focus_widget(Gtk::Widget& focus_widget) {
 
 Gtk::Widget* CellRendererPopup::get_focus_widget() { return focus_widget_; }
 
-signal5<void, const Glib::ustring&, int, int, int, int>& CellRendererPopup::signal_show_popup() {
+sigc::signal5<void, const Glib::ustring&, int, int, int, int>& CellRendererPopup::signal_show_popup() {
   return signal_show_popup_;
 }
 

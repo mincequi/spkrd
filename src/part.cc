@@ -23,20 +23,17 @@
 #include <sstream>
 #include <stdlib.h>
 
-using namespace sigc;
-using namespace std;
-
-Part::Part(int type, double value,std::string unit) : GSpeakersObject() {
+Part::Part(int type, double value, std::string unit) : GSpeakersObject() {
   m_type = type;
   m_value = value;
   m_unit = unit;
 }
 
 Part::Part(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (std::string((char*)parent->name) ==std::string("part"))) {
+  if ((parent != NULL) && (std::string((char*)parent->name) == std::string("part"))) {
     try {
       parse_type(parent->children);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -45,11 +42,11 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject() {
 }
 
 void Part::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) ==std::string("type"))) {
+  if ((node != NULL) && (std::string((char*)node->name) == std::string("type"))) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_value(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -58,12 +55,12 @@ void Part::parse_type(xmlNodePtr node) {
 }
 
 void Part::parse_value(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) ==std::string("value"))) {
+  if ((node != NULL) && (std::string((char*)node->name) == std::string("value"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_value;
     m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
     try {
       parse_unit(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -72,8 +69,8 @@ void Part::parse_value(xmlNodePtr node) {
 }
 
 void Part::parse_unit(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) ==std::string("unit"))) {
-    m_unit =std::string((char*)xmlNodeGetContent(node));
+  if ((node != NULL) && (std::string((char*)node->name) == std::string("unit"))) {
+    m_unit = std::string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Part: unit node not found"));
   }

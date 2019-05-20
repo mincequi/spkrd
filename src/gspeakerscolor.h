@@ -21,19 +21,19 @@
 #include <gtkmm.h>
 #include <string>
 
-using namespace std;
-
 class GSpeakersColor {
 public:
   GSpeakersColor();
-  ~GSpeakersColor();
- std::string get_color_string();
+
+  std::string get_color_string();
   void unget_color_string(std::string s);
 
 private:
- std::vector<string> m_colors;
-  int m_counter;
- std::vector<string>::iterator get_iterator_from_string(std::string s);
+  std::vector<std::string>::iterator get_iterator_from_string(std::string s);
+
+private:
+  std::vector<std::string> m_colors;
+  int m_counter = 0;
 };
 
 #endif

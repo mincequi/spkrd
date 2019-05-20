@@ -40,8 +40,6 @@
 /* Upper frequency limit */
 #define UPPER_LIMIT 1000
 
-using namespace std;
-
 /*
  * Declare my own Point class which i can use to exchange
  * plot coordinates between classes.
@@ -98,7 +96,7 @@ public:
    */
   GSpeakersPlot(int lower_x = 20, int upper_x = 1000, int lower_y = -40, int upper_y = 10,
                 bool logx = true, int y_zero_freq = 0, bool enable_sec_scale = false);
-  int add_plot(vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
+  int add_plot(std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
   void remove_plot(int n);
   void hide_plot(int n);
   void remove_all_plots();
@@ -111,7 +109,7 @@ public:
 
   void select_plot(int index);
 
-  void replace_plot(int index,std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
+  void replace_plot(int index, std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
   void set_y_label(const std::string& text);
   void set_y_label2(const std::string& text);
 
@@ -124,9 +122,9 @@ protected:
 
   /*std::vectors that hold the y magnitude points for the plots (dbmag) and
      the corresponding colors (colors) */
- std::vector<vector<GSpeakers::Point>> m_points;
- std::vector<Gdk::Color> m_colors;
- std::vector<bool> m_visible_plots;
+  std::vector<std::vector<GSpeakers::Point>> m_points;
+  std::vector<Gdk::Color> m_colors;
+  std::vector<bool> m_visible_plots;
 
 private:
   Glib::ustring int_to_ustring(int d);
@@ -140,7 +138,7 @@ private:
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;
   bool m_logx, visible;
   int m_selected_plot;
- std::string m_y_label1, m_y_label2;
+  std::string m_y_label1, m_y_label2;
 
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;

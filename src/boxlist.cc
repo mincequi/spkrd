@@ -22,13 +22,12 @@
 #include <glib.h>
 
 BoxList::BoxList(std::string filename) {
-  xmlDocPtr doc;
-  xmlNodePtr node, children;
+  xmlNodePtr children;
 
-  doc = xmlParseFile(filename.c_str());
+  xmlDocPtr doc = xmlParseFile(filename.c_str());
   if (doc != NULL) {
-    node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_strcasecmp((char*)node->name, "boxlist") == 0)) {
+    xmlNodePtr node = xmlDocGetRootElement(doc);
+    if ((node != NULL) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0)) {
       if (node->children) {
         children = node->children;
         while (children != NULL) {

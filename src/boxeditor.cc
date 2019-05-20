@@ -21,7 +21,8 @@
 #include "common.h"
 #include "gspeakerscolor.h"
 #include "gspeakersplot.h"
-#include <math.h>
+
+#include <cmath>
 
 #define SEALED_SELECTED 0
 #define PORTED_SELECTED 1
@@ -98,6 +99,7 @@ BoxEditor::BoxEditor()
 
   /* Setup option menu */
   Gtk::Menu::MenuList& menulist = m_option_menu.items();
+
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
       _("Sealed"),
       sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED)));
@@ -194,11 +196,11 @@ void BoxEditor::on_append_to_plot_clicked() {
   m_box->set_fb1(atof(m_fb1_entry.get_text().c_str()));
   m_box->set_type(m_box_type_optionmenu.get_history() + 1);
 
- std::string str = m_color_list.get_color_string();
+  std::string str = m_color_list.get_color_string();
   Gdk::Color color = Gdk::Color(str);
 
   /* Calculate the frequency response graph */
- std::vector<GSpeakers::Point> points;
+  std::vector<GSpeakers::Point> points;
   double A, B, C, D, fn2, fn4, fr, vr, qr, qb;
 
   /* Calculate the frequency response for current enclosure and the current speaker */
@@ -262,14 +264,15 @@ void BoxEditor::on_box_selected(Box* b) {
       if (speaker_list_is_loaded == true) {
         std::cout << b << std::endl;
         m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
-       std::vector<Glib::ustring> popdown_strings;
-        for (vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
-             from != m_speaker_list->speaker_list()->end(); ++from) {
-          if (((*from).get_type() & SPEAKER_TYPE_BASS) &&
-              (m_current_speaker.get_id_string() != (*from).get_id_string())) {
-            popdown_strings.push_back((*from).get_id_string());
+        std::vector<Glib::ustring> popdown_strings;
+
+        for (auto const& speaker : *m_speaker_list->speaker_list()) {
+          if ((speaker.get_type() & SPEAKER_TYPE_BASS) &&
+              (m_current_speaker.get_id_string() != speaker.get_id_string())) {
+            popdown_strings.push_back(speaker.get_id_string());
           }
         }
+
         popdown_strings.insert(popdown_strings.begin(), m_current_speaker.get_id_string());
         m_bass_speaker_combo.set_popdown_strings(popdown_strings);
       }
@@ -302,26 +305,24 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
   if (disable_signals == false) {
     disable_signals = true;
     m_speaker_list = speaker_list;
-   std::vector<Glib::ustring> popdown_strings;
+    std::vector<Glib::ustring> popdown_strings;
 
     /* If we have got a selected box, insert the items with the driver belonging to the current
        speaker at the top position, if we havn't got a selected box: insert all drivers and don't
        care about the sort */
     if (m_box != NULL) {
-      for (vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
-           from != m_speaker_list->speaker_list()->end(); ++from) {
-        if (((*from).get_type() & SPEAKER_TYPE_BASS) &&
-            (m_box->get_speaker() != (*from).get_id_string())) {
-          popdown_strings.push_back((*from).get_id_string());
+      for (auto const& speaker : *m_speaker_list->speaker_list()) {
+        if ((speaker.get_type() & SPEAKER_TYPE_BASS) &&
+            (m_box->get_speaker() != speaker.get_id_string())) {
+          popdown_strings.push_back(speaker.get_id_string());
         }
       }
       popdown_strings.insert(popdown_strings.begin(), m_box->get_speaker());
       m_bass_speaker_combo.set_popdown_strings(popdown_strings);
     } else {
-      for (vector<Speaker>::iterator from = m_speaker_list->speaker_list()->begin();
-           from != m_speaker_list->speaker_list()->end(); ++from) {
-        if ((*from).get_type() & SPEAKER_TYPE_BASS) {
-          popdown_strings.push_back((*from).get_id_string());
+      for (auto const& speaker : *m_speaker_list->speaker_list()) {
+        if (speaker.get_type() & SPEAKER_TYPE_BASS) {
+          popdown_strings.push_back(speaker.get_id_string());
         }
       }
       std::cout << popdown_strings.size() << std::endl;
@@ -335,7 +336,7 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
 void BoxEditor::on_combo_entry_changed() {
 #ifdef OUTPUT_DEBUG
   std::cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_entry()->get_text()
-       << std::endl;
+            << std::endl;
 #endif
 
   if (disable_signals == false) {

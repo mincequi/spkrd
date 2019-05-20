@@ -32,9 +32,6 @@
 #include <gtkmm/table.h>
 #include <gtkmm/treemodel.h>
 
-using namespace sigc;
-using namespace std;
-
 /*
  * This class implements a TreeView connected with a ListStore
  * It is pretty much ripped off the liststore example in the
@@ -86,7 +83,7 @@ protected:
     Gtk::TreeModelColumn<int> type;
     Gtk::TreeModelColumn<Glib::ustring> id_string;
     Gtk::TreeModelColumn<Glib::ustring> speaker_string;
-    Gtk::TreeModelColumn<string> color;
+    Gtk::TreeModelColumn<std::string> color;
     Gtk::TreeModelColumn<bool> view_plot;
     Gtk::TreeModelColumn<double> vb1;
     Gtk::TreeModelColumn<double> fb1;

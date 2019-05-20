@@ -49,13 +49,13 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
 
   /* Setup the speaker combo box */
   m_vbox.set_border_width(5);
-  std::vector<string> popdown_strings;
-  if (speaker_name != "") {
+  std::vector<std::string> popdown_strings;
+  if (!speaker_name.empty()) {
     popdown_strings.push_back(speaker_name);
   }
 
   if (m_speaker_list != NULL) {
-    for (vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
+    for (auto iter = m_speaker_list->speaker_list()->begin();
          iter != m_speaker_list->speaker_list()->end(); ++iter) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != (*iter).get_id_string()) {
@@ -115,13 +115,17 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
     m_higher_order_menu = manage(new Gtk::Menu());
     Gtk::Menu::MenuList& menulist = m_higher_order_menu->items();
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "1", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 1)));
+        "1",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 1)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "2", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
+        "2",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "3", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
+        "3",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "4", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
+        "4",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
     m_higher_order_optionmenu->set_menu(*m_higher_order_menu);
     m_higher_type_optionmenu = manage(new Gtk::OptionMenu());
     m_higher_type_menu = manage(new Gtk::Menu());
@@ -165,13 +169,17 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
     m_lower_order_menu = manage(new Gtk::Menu());
     Gtk::Menu::MenuList& menulist = m_lower_order_menu->items();
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "1", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
+        "1",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "2", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
+        "2",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "3", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
+        "3",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
     menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "4", bind<int, int>(mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
+        "4",
+        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
     m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
     m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
     m_lower_type_menu = manage(new Gtk::Menu());
@@ -200,35 +208,35 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   show_all();
 
   m_speaker_combo.get_entry()->signal_changed().connect(
-      mem_fun(*this, &FilterLinkFrame::on_param_changed));
+      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   if (net->get_type() & NET_TYPE_LOWPASS) {
     m_lower_type_optionmenu->signal_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_lower_co_freq_spinbutton->signal_value_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_lower_order_optionmenu->signal_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
   if (net->get_type() & NET_TYPE_HIGHPASS) {
     m_higher_order_optionmenu->signal_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_higher_co_freq_spinbutton->signal_value_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_higher_type_optionmenu->signal_changed().connect(
-        mem_fun(*this, &FilterLinkFrame::on_param_changed));
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
   m_imp_corr_checkbutton.signal_toggled().connect(
-      mem_fun(*this, &FilterLinkFrame::on_param_changed));
+      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   m_damp_spinbutton.signal_value_changed().connect(
-      mem_fun(*this, &FilterLinkFrame::on_param_changed));
+      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   m_adv_imp_model_checkbutton.signal_toggled().connect(
-      mem_fun(*this, &FilterLinkFrame::on_param_changed));
-  signal_net_modified_by_user.connect(mem_fun(*this, &FilterLinkFrame::on_net_updated));
-  signal_plot_crossover.connect(mem_fun(*this, &FilterLinkFrame::on_clear_and_plot));
+      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+  signal_net_modified_by_user.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_net_updated));
+  signal_plot_crossover.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_clear_and_plot));
   g_settings.defaultValueString("SPICECmdLine", "gnucap");
   my_filter_plot_index = -1;
-  signal_speakerlist_loaded.connect(mem_fun(*this, &FilterLinkFrame::on_speakerlist_loaded));
-  g_settings.settings_changed.connect(mem_fun(*this, &FilterLinkFrame::on_settings_changed));
+  signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_speakerlist_loaded));
+  g_settings.settings_changed.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_settings_changed));
   //  on_net_updated(m_net);
   init = false;
   enable_edit = true;
@@ -554,7 +562,7 @@ void FilterLinkFrame::on_net_updated(Net* net) {
     /*
      if (m_net->get_type() & NET_TYPE_LOWPASS) {
      int i = 0, index1 = 0;
-     for (vector<GSpeakers::Point>::iterator iter = points.begin();
+     for (std::vector<GSpeakers::Point>::iterator iter = points.begin();
      iter != points.end();
      ++iter)
      {
@@ -574,7 +582,7 @@ void FilterLinkFrame::on_net_updated(Net* net) {
      }
      if (m_net->get_type() & NET_TYPE_HIGHPASS) {
      int i = 0, index2 = 0;
-     for (vector<GSpeakers::Point>::iterator iter = points.begin();
+     for (std::vector<GSpeakers::Point>::iterator iter = points.begin();
      iter != points.end();
      ++iter)
      {
@@ -612,10 +620,10 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 
   std::string speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */
-  std::vector<string> popdown_strings;
+  std::vector<std::string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
   if (m_speaker_list != NULL) {
-    for (vector<Speaker>::iterator iter = m_speaker_list->speaker_list()->begin();
+    for (auto iter = m_speaker_list->speaker_list()->begin();
          iter != m_speaker_list->speaker_list()->end(); ++iter) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != (*iter).get_id_string()) {
@@ -640,7 +648,7 @@ void FilterLinkFrame::on_plot_crossover() {
   std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
-  } catch (GSpeakersException e) {
+  } catch (GSpeakersException const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << std::endl;
 #endif
@@ -670,7 +678,7 @@ void FilterLinkFrame::on_plot_crossover() {
 
   /* extract spice output into astd::vector */
   std::string spice_output_file = spice_filename + ".out";
-  ifstream fin(spice_output_file.c_str());
+  std::ifstream fin(spice_output_file.c_str());
   if (fin.good()) {
     bool output = false;
     float f_id;
@@ -749,7 +757,7 @@ void FilterLinkFrame::on_plot_crossover() {
       enable_edit = false;
       if (m_net->get_type() & NET_TYPE_LOWPASS) {
         int i = 0, index1 = 0;
-        for (vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
+        for (std::vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
              ++iter) {
           if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
             index1 = i;
@@ -768,7 +776,7 @@ void FilterLinkFrame::on_plot_crossover() {
       if (m_net->get_type() & NET_TYPE_HIGHPASS) {
         bool done = false;
         int i = 0, index2 = 0;
-        for (vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
+        for (std::vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
              ++iter) {
           if (((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) && (done == false)) {
             index2 = i;

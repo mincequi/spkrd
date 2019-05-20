@@ -21,22 +21,22 @@
 #include "gspeakersfilterplot.h"
 
 GSpeakersFilterPlot::GSpeakersFilterPlot() : plot(1, 20000) {
-  using namespace sigc;
 
   add(plot);
-  // signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
-  // signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
-  // signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
-  // signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
-  signal_add_crossover_plot.connect(mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
-  signal_crossover_selected.connect(mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
+  // signal_add_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::add_plot));
+  // signal_remove_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::remove_plot));
+  // signal_hide_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::hide_plot));
+  // signal_select_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::select_plot));
+  signal_add_crossover_plot.connect(sigc::mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
+  signal_crossover_selected.connect(
+      sigc::mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
   plot.set_y_label(_("Magnitude / dB"));
   show_all();
 }
 
 GSpeakersFilterPlot::~GSpeakersFilterPlot() {}
 
-int GSpeakersFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
+int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                      Net* n) {
 #ifdef OUTPUT_DEBUG
   std::cout << "GSpeakersFilterPlot::on_add_plot" << std::endl;

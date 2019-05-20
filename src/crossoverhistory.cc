@@ -115,7 +115,7 @@ CrossoverHistory::~CrossoverHistory() {
   g_settings.setValue("CrossoverListXml", m_filename);
   try {
     g_settings.save();
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << e.what()
               << std::endl;
@@ -152,16 +152,13 @@ void CrossoverHistory::open_xml(const std::string& filename) {
              mem_fun(*this, &CrossoverHistory::liststore_add_item));
 
     /* Delete items in crossover_list */
-    m_crossover_list.crossover_list()->erase(m_crossover_list.crossover_list()->begin(),
-                                             m_crossover_list.crossover_list()->end());
-
-    for (vector<Crossover>::iterator from = temp_crossover_list.crossover_list()->begin();
-         from != temp_crossover_list.crossover_list()->end(); ++from) {
-      m_crossover_list.crossover_list()->push_back(*from);
-    }
+    m_crossover_list.crossover_list()->clear();
+    m_crossover_list.crossover_list()->insert(begin(*m_crossover_list.crossover_list()),
+                                              temp_crossover_list.crossover_list()->begin(),
+                                              temp_crossover_list.crossover_list()->end());
 
     /* Select the first item in the list */
-    if (m_crossover_list.crossover_list()->size() > 0) {
+    if (!m_crossover_list.crossover_list()->empty()) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
       char* str = NULL;
       GString* buffer = g_string_new(str);
@@ -193,8 +190,8 @@ void CrossoverHistory::append_xml(const std::string& filename) {
 
     for_each(temp_crossover_list.crossover_list()->begin(),
              temp_crossover_list.crossover_list()->end(),
-             mem_fun(*this, &CrossoverHistory::liststore_add_item));
-    for (vector<Crossover>::iterator from = temp_crossover_list.crossover_list()->begin();
+             sigc::mem_fun(*this, &CrossoverHistory::liststore_add_item));
+    for (auto from = temp_crossover_list.crossover_list()->begin();
          from != temp_crossover_list.crossover_list()->end(); ++from) {
       m_crossover_list.crossover_list()->push_back(*from);
     }
@@ -212,7 +209,7 @@ void CrossoverHistory::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
+    std::vector<int> const& indices = path.get_indices();
     if (indices.size() > 0) {
       index = indices[0];
       signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));

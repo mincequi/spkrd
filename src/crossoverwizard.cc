@@ -50,8 +50,8 @@ void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 
   int index = 0;
   int type = crossover->get_type();
-  for (vector<Net>::iterator iter = crossover->networks()->begin();
-       iter != crossover->networks()->end(); ++iter, index++) {
+  for (auto iter = crossover->networks()->begin(); iter != crossover->networks()->end();
+       ++iter, index++) {
     /* The following code is here because we want pretty labels for what was each subfilter is there
      * for */
     if (type == CROSSOVER_TYPE_TWOWAY) {

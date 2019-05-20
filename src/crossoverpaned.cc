@@ -64,7 +64,7 @@ CrossoverPaned::~CrossoverPaned() {
   //  g_settings.setValue("CrossoverPlotVPanedPosition", m_vpaned.get_position());
   try {
     g_settings.save();
-  } catch (std::runtime_error e) {
+  } catch (std::runtime_error const& e) {
 #ifdef OUTPUT_DEBUG
     std::cout << "CrossoverPaned::~CrossoverPaned: " << e.what() << std::endl;
 #endif

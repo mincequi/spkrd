@@ -48,7 +48,7 @@
 #define NET_LEGENDRE 6
 #define NET_LINEARPHASE 7
 
-using namespace std;
+
 
 /*
  * Net is a part of a crossover: one part of the crossover we want to simulate in SPICE

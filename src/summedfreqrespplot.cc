@@ -25,7 +25,6 @@
 #include <math.h>
 
 SummedFreqRespPlot::SummedFreqRespPlot() : plot(1, 20000, 50, 110, true, 0) {
-  using namespace sigc;
 
   m_speakerlist = NULL;
 
@@ -44,7 +43,7 @@ SummedFreqRespPlot::SummedFreqRespPlot() : plot(1, 20000, 50, 110, true, 0) {
 
 SummedFreqRespPlot::~SummedFreqRespPlot() {}
 
-double lerp(vector<GSpeakers::Point> freq_resp_points, double x) {
+double lerp(std::vector<GSpeakers::Point> freq_resp_points, double x) {
   std::vector<GSpeakers::Point>::iterator first_i = std::lower_bound(
       freq_resp_points.begin(), freq_resp_points.end(), x, GSpeakers::Point::_CompareX);
   if (first_i != freq_resp_points.begin()) {
@@ -64,7 +63,7 @@ double lerp(vector<GSpeakers::Point> freq_resp_points, double x) {
   return y0 + ((y1 - y0) * ((x - x0) / (x1 - x0)));
 }
 
-int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk::Color& color,
+int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point>& filter_points, Gdk::Color& color,
                                     int* i, Net* n) {
 #ifdef OUTPUT_DEBUG
   std::cout << "SummedFreqRespPlot::on_add_plot" << std::endl;
@@ -74,11 +73,11 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   if (m_speakerlist != NULL) {
     s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
   }
- std::vector<GSpeakers::Point> freq_resp_points;
+  std::vector<GSpeakers::Point> freq_resp_points;
   if (s.get_freq_resp_filename() != "") {
-    ifstream fin(s.get_freq_resp_filename().c_str());
+    std::ifstream fin(s.get_freq_resp_filename().c_str());
     std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename()
-         << std::endl;
+              << std::endl;
     if (fin.good()) {
       while (!fin.eof()) {
         char* buffer = new char[100];
@@ -107,7 +106,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
     GSpeakers::Point p2(20000, 0);
     freq_resp_points.push_back(p2);
   }
- std::vector<GSpeakers::Point> points;
+  std::vector<GSpeakers::Point> points;
   for (unsigned int j = 0; j < filter_points.size(); j++) {
     double filter_y = filter_points[j].get_y();
     if (g_settings.getValueBool("DisableFilterAmp") == true) {
@@ -126,7 +125,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   /* Search for *i in the graph */
   int position = -1;
   int l = 0;
-  for (vector<int>::iterator iter = m_nets.begin(); iter != m_nets.end(); ++iter) {
+  for (std::vector<int>::iterator iter = m_nets.begin(); iter != m_nets.end(); ++iter) {
     if (*i == *iter) {
       position = l;
     }
@@ -143,7 +142,7 @@ int SummedFreqRespPlot::on_add_plot(vector<GSpeakers::Point>& filter_points, Gdk
   }
 
   plot.remove_all_plots();
- std::vector<GSpeakers::Point> pnts;
+  std::vector<GSpeakers::Point> pnts;
   if (m_points.size()) {
     pnts = m_points[0];
     plot.add_plot(m_points[0], c2);

@@ -39,7 +39,7 @@ TotalFilterPlot::TotalFilterPlot() : plot(1, 20000) {
 
 TotalFilterPlot::~TotalFilterPlot() {}
 
-int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
+int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                  Net* n) {
 #ifdef OUTPUT_DEBUG
   std::cout << "TotalFilterPlot::on_add_plot" << std::endl;
@@ -47,7 +47,7 @@ int TotalFilterPlot::on_add_plot(vector<GSpeakers::Point>& points, Gdk::Color& c
   /* Search for *i in the graph */
   int position = -1;
   int l = 0;
-  for (vector<int>::iterator iter = m_nets.begin(); iter != m_nets.end(); ++iter) {
+  for (std::vector<int>::iterator iter = m_nets.begin(); iter != m_nets.end(); ++iter) {
     if (*i == *iter) {
       position = l;
     }

@@ -39,7 +39,7 @@ DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), plot(1, 20000, 50, 11
 
 void DriverFreqRespPlot::clear() { plot.remove_all_plots(); }
 
-void DriverFreqRespPlot::add_plot(vector<GSpeakers::Point>& points, Gdk::Color& color) {
+void DriverFreqRespPlot::add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color) {
   plot.add_plot(points, color);
 }
 

@@ -105,7 +105,7 @@ Net::Net(xmlNodePtr parent) {
   if ((parent != NULL) && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
     try {
       parse_type(parent->children);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -118,7 +118,7 @@ void Net::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_lowpass_order(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -131,7 +131,7 @@ void Net::parse_lowpass_order(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_order;
     try {
       parse_highpass_order(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -144,7 +144,7 @@ void Net::parse_highpass_order(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_order;
     try {
       parse_has_imp_corr(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -161,7 +161,7 @@ void Net::parse_has_imp_corr(xmlNodePtr node) {
     }
     try {
       parse_has_damp(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -178,7 +178,7 @@ void Net::parse_has_damp(xmlNodePtr node) {
     }
     try {
       parse_has_res(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -195,7 +195,7 @@ void Net::parse_has_res(xmlNodePtr node) {
     }
     try {
       parse_parts(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -212,13 +212,13 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_imp_corr == true) {
       try {
         m_imp_corr_R = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_imp_corr_C = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
@@ -227,13 +227,13 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_damp == true) {
       try {
         m_damp_R1 = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_damp_R2 = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
@@ -242,19 +242,19 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_res == true) {
       try {
         m_res_R = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_res_C = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_res_L = Part(child);
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
@@ -264,14 +264,14 @@ void Net::parse_parts(xmlNodePtr node) {
     while (child != NULL) {
       try {
         m_parts.push_back(Part(child));
-      } catch (GSpeakersException e) {
+      } catch (GSpeakersException const& e) {
         throw e;
       }
       child = child->next;
     }
     try {
       parse_lowpass_family(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -284,7 +284,7 @@ void Net::parse_lowpass_family(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_family;
     try {
       parse_highpass_family(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -297,7 +297,7 @@ void Net::parse_highpass_family(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_family;
     try {
       parse_speaker(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -307,10 +307,10 @@ void Net::parse_highpass_family(xmlNodePtr node) {
 
 void Net::parse_speaker(xmlNodePtr node) {
   if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0)) {
-    m_speaker =std::string((char*)xmlNodeGetContent(node));
+    m_speaker = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_adv_imp_model(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -323,7 +323,7 @@ void Net::parse_adv_imp_model(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_adv_imp_model;
     try {
       parse_inv_pol(node->next);
-    } catch (GSpeakersException e) {
+    } catch (GSpeakersException const& e) {
       throw e;
     }
   } else {
@@ -374,7 +374,7 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent) {
     m_res_L.to_xml_node(field);
   }
 
-  for (vector<Part>::iterator from = m_parts.begin(); from != m_parts.end(); ++from) {
+  for (std::vector<Part>::iterator from = m_parts.begin(); from != m_parts.end(); ++from) {
     ((Part)(*from)).to_xml_node(field);
   }
   field = xmlNewChild(net, NULL, (xmlChar*)("lowpass_family"), NULL);
@@ -392,11 +392,11 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent) {
 }
 
 std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
- std::string tmp_dir = Glib::get_tmp_dir();
+  std::string tmp_dir = Glib::get_tmp_dir();
 #ifdef TARGET_WIN32
- std::string tmp_file = tmp_dir + "\\net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
+  std::string tmp_file = tmp_dir + "\\net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
 #else
- std::string tmp_file = tmp_dir + "/net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
+  std::string tmp_file = tmp_dir + "/net" + GSpeakers::int_to_ustring(m_id) + ".tmp";
 #endif
 
   int node_counter = 0;
@@ -404,7 +404,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
   int next_node_cnt_inc = 1;
   gchar* buffer = new gchar[8];
 
-  ofstream of(tmp_file.c_str());
+  std::ofstream of(tmp_file.c_str());
   if (of.good()) {
     of << "Crossover network SPICE code generated by GSpeakers Redux-" << VERSION << std::endl;
     of << "vamp " << ++node_counter << " " << 0 << " dc 0 ac 1" << std::endl;
@@ -529,7 +529,8 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
       of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " " << node_counter + 1 << " "
          << g_ascii_dtostr(buffer, 8, m_imp_corr_R.get_value()) << std::endl;
       of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0 << " "
-         << g_ascii_dtostr(buffer, 8, m_imp_corr_C.get_value()) << m_imp_corr_C.get_unit() << std::endl;
+         << g_ascii_dtostr(buffer, 8, m_imp_corr_C.get_value()) << m_imp_corr_C.get_unit()
+         << std::endl;
       next_node_cnt_inc = 2;
     } else {
       next_node_cnt_inc = 1;
@@ -565,7 +566,8 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
          << std::endl;
       of << "cmes " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmes) << "uF"
          << std::endl;
-      of << "res " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, res) << std::endl;
+      of << "res " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, res)
+         << std::endl;
       of << "cmef " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmef) << "uF"
          << std::endl;
     } else {
@@ -601,8 +603,8 @@ std::ostream& operator<<(std::ostream& o, const Net& net) {
   o << _("Parts:") << std::endl;
 
   /* Print every part in this net */
-  for (vector<Part>::iterator from = ((vector<Part>)(net.m_parts)).begin();
-       from != ((vector<Part>)(net.m_parts)).end(); ++from) {
+  for (std::vector<Part>::iterator from = ((std::vector<Part>)(net.m_parts)).begin();
+       from != ((std::vector<Part>)(net.m_parts)).end(); ++from) {
     o << *from;
   }
   return o << _("********* ******") << std::endl;
@@ -712,7 +714,7 @@ void Net::set_inv_pol(bool pol) { m_inv_pol = pol; }
  *
  */
 void Net::setup_net_by_order(int new_order, int which_net) {
- std::vector<Part>::iterator iter = m_parts.begin();
+  std::vector<Part>::iterator iter = m_parts.begin();
 
   if (which_net == NET_TYPE_LOWPASS) {
     /* Find out how much we should increase (or decrease) filter order */
@@ -738,8 +740,8 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_lowpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Since we're inserting the parts...last one comes first in thestd::vector, we insert them
-             in reversed order */
+          /* Since we're inserting the parts...last one comes first in thestd::vector, we insert
+             them in reversed order */
           iter = m_parts.insert(iter + m_lowpass_order, Part(PART_TYPE_CAPACITOR));
           iter = m_parts.insert(iter, Part(PART_TYPE_INDUCTOR));
           break;
@@ -786,7 +788,8 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_highpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Here we use push_back since we're always adding parts to the end of the m_partsstd::vector
+          /* Here we use push_back since we're always adding parts to the end of the
+           * m_partsstd::vector
            */
           m_parts.push_back(Part(PART_TYPE_CAPACITOR));
           break;

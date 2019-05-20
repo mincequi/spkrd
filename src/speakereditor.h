@@ -30,8 +30,7 @@
 
 #include <sigc++/sigc++.h>
 
-using namespace sigc;
-using namespace std;
+
 
 class Speaker_ListStore : public sigc::trackable {
 public:
