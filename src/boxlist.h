@@ -46,7 +46,7 @@ public:
   /* Print part data to stdout */
   friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
-  /* Return the box_liststd::vector */
+  /* Return the box_list vector */
   std::vector<Box>* box_list();
 
   /* Clear all items in the list */

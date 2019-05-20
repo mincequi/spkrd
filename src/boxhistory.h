@@ -31,6 +31,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
+
 #include <sigc++/signal.h>
 
 extern sigc::signal1<void, bool> signal_enclosure_set_save_state;

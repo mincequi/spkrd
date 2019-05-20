@@ -81,8 +81,6 @@ CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
 
 CellItem_Crossover::CellItem_Crossover(const CellItem_Crossover& src) { operator=(src); }
 
-CellItem_Crossover::~CellItem_Crossover() {}
-
 CellItem_Crossover& CellItem_Crossover::operator=(const CellItem_Crossover& src) {
   m_label = src.m_label;
   m_type = src.m_type;

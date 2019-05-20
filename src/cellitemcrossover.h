@@ -47,7 +47,6 @@ public:
 
   CellItem_Crossover(const CellItem_Crossover& src);
   CellItem_Crossover& operator=(const CellItem_Crossover& src);
-  virtual ~CellItem_Crossover();
 
   /* Member variables */
   Glib::ustring m_label;

@@ -25,8 +25,6 @@
 
 #include <ctime>
 
-using namespace sigc;
-
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
 

@@ -1,15 +1,15 @@
-// // #include "gfilter.h"
+
 #include "common.h"
 #include "gspeakersstock.h"
 #include "mainwindow.h"
 
 #include <gtkmm/main.h>
-#include <iostream>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
 #include <clocale>
 #include <cstdlib>
+#include <iostream>
 
 int main(int argc, char* argv[]) {
   /* Initialize gettext */
