@@ -33,7 +33,6 @@
 class SpeakerListSelector : public Gtk::Frame {
 public:
   SpeakerListSelector();
-  ~SpeakerListSelector();
 
 protected:
   /* Callbacks */
@@ -42,6 +41,7 @@ protected:
   void on_open_ok(Gtk::FileSelection* f);
   void on_speakerlist_loaded(std::string speaker_list_filename);
 
+protected:
   /* Member widgets */
   Gtk::Entry m_SpeakerXmlFilenameEntry;
   Gtk::Button m_OpenButton, m_EditButton;
@@ -52,7 +52,7 @@ protected:
 
 private:
   SpeakerList m_speaker_list;
-  Speaker_ListStore* speaker_liststore;
+  std::unique_ptr<Speaker_ListStore> speaker_liststore = nullptr;
 };
 
 #endif

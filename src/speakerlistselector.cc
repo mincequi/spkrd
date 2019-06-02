@@ -55,11 +55,6 @@ SpeakerListSelector::SpeakerListSelector()
   on_open_ok(f_open);
 }
 
-SpeakerListSelector::~SpeakerListSelector() {
-  if (speaker_liststore != nullptr)
-    delete speaker_liststore;
-}
-
 void SpeakerListSelector::on_open() {
 #ifdef OUTPUT_DEBUG
   std::cout << "on open" << std::endl;
@@ -100,5 +95,6 @@ void SpeakerListSelector::on_edit_speakers() {
 #ifdef OUTPUT_DEBUG
   std::cout << "SpeakerListSelector::on_edit_speakers" << std::endl;
 #endif
-  speaker_liststore = new Speaker_ListStore(&m_speaker_list, m_SpeakerXmlFilenameEntry.get_text());
+  speaker_liststore =
+      std::make_unique<Speaker_ListStore>(&m_speaker_list, m_SpeakerXmlFilenameEntry.get_text());
 }
