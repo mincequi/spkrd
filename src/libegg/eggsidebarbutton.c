@@ -19,14 +19,6 @@
  *  $Id$
  */
 
-#include <gtk/gtkdnd.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkeventbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkitemfactory.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkvbox.h>
 #include <string.h>
 
 #include <libintl.h>

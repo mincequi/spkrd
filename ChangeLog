@@ -13,68 +13,68 @@ GSpeakers ChangeLog
 * use sidebarnotebook in GSpeakers
 
 * added icons for the sidebar
-	
+
 2004-07-03
 
-* settingsdialog.h/cc: added config option "UseDriverImpedance", 
+* settingsdialog.h/cc: added config option "UseDriverImpedance",
 	use GSpeakersFileChooser
-	
+
 2004-06-30
 
 * speakereditor.cc: use modified short_filename
-	
+
 * crossoverhistory.h/cc: tooltip on filename label
-	
+
 * crossoverwizard.h/cc: removed the outer frame
-	
+
 * crossoverpaned.h/cc: put crossover, wizard and history in notebook
-	
+
 2004-06-29
 
 * enclosurepaned.cc: UI cleanup + some tooltips
-	
+
 * crossoverpaned.cc: use gtk stock pixmaps
-	
+
 * enclosurepaned.cc: use gtk stock pixmaps
-	
+
 * speakereditor.cc: use gtk stock pixmaps
-	
+
 * mainwindow.cc: remove some debug output
 
 2004-06-22
 
 * GSpeakers-0.11
-	
+
 * crossoverhistory.h/cc: use FileChooser
-	
+
 * boxhistory.h/cc: use the FileChooser
-	
+
 * gspeakersfilechooser.h/cc: Implemented GSpeakersFileChooserDialog
 
 * speakereditor.h/cc: converted to GSpeakersFileChooser
-	
+
 2004-06-21
 
 * gspeakersfilechooser.h/cc: added files
-	
+
 * mainwindow.cc: made gnucap default SPICE interpreter
-	
+
 * speakereditor.cc: use gnucap if specified
-	 
+
 * filterlinkframe.cc: use gnucap if specified
-	
+
 * net.h/cc: added use_gnucap property to Net::to_spice
-	
+
 * mainwindow.cc, speakereditor.cc: added gnucap config option
-	
+
 2004-06-19
 
-* filterlinkframe.cc, speakereditor.cc: added ngspice 
+* filterlinkframe.cc, speakereditor.cc: added ngspice
 
 2004-06-19
 
 * mainwindow.cc, settingsdialog.h/cc: added use ngspice checkbox
-	
+
 2004-05-10
 
 * speakereditor.h/cc: started to use the FileChooserDialog
@@ -83,22 +83,22 @@ GSpeakers ChangeLog
 
 2003-09-08
 
-* mainwindow.cc: in previous versions of gtkmm there seem to have been a 
-    bug causing Notebook::insert_page to append pages on the wrong end of 
+* mainwindow.cc: in previous versions of gtkmm there seem to have been a
+    bug causing Notebook::insert_page to append pages on the wrong end of
     the notebook, GSpeakers was modified to use this function properly.
-	
-* crossoverimageview.cc: fixed a bug that caused GSpeakers to display a 
+
+* crossoverimageview.cc: fixed a bug that caused GSpeakers to display a
     wrong schematic in some cases
-	
+
 * crossoverpaned.cc: typo highpass->lowpass
 
 
 2003-03-11
 
 * Gspeakers-0.10.1 was released
-	
 
-2003-03-11 
+
+2003-03-11
 
 * gspeakersplot.cc: changed 1000->1k on plot x-axis
 
@@ -111,10 +111,10 @@ GSpeakers ChangeLog
 
 * mainwindow.cc/h: added "save all open files" menuitem
 
-* speakereditor.h/cc, boxhistory.h/cc, crossoverhistory.h/cc: added 
+* speakereditor.h/cc, boxhistory.h/cc, crossoverhistory.h/cc: added
     signalhandlers for signal_save_open_files
 
-* mainwindow.h/cc: implemented "save changes" dialog if there is unsaved 
+* mainwindow.h/cc: implemented "save changes" dialog if there is unsaved
     changes
 
 * common.h/cc: added signal_save_open_files
@@ -122,10 +122,10 @@ GSpeakers ChangeLog
 
 2003-02-27
 
-* speakereditor.cc, enclosurepaned.cc, crossoverpaned.cc: set modified in 
+* speakereditor.cc, enclosurepaned.cc, crossoverpaned.cc: set modified in
     corresponding functions
 
-* common.h/common.cc: added *modified accessor functions so that i can mark 
+* common.h/common.cc: added *modified accessor functions so that i can mark
     a *list for "ask if you want to save"
 
 
@@ -136,13 +136,13 @@ GSpeakers ChangeLog
 
 2003-02-18
 
-* The changes 02-17 and 02-18 fix seg-faults that occur if the file names 
+* The changes 02-17 and 02-18 fix seg-faults that occur if the file names
     in the config-file do not exist or is invalid
 
-* crossoverhistory.cc: only select first crossover if we have got a 
+* crossoverhistory.cc: only select first crossover if we have got a
     crossover list with more than zero elements
 
-* filterlinkframe.cc, summedfreqrespplot.cc, crossoverimageview.cc: check if 
+* filterlinkframe.cc, summedfreqrespplot.cc, crossoverimageview.cc: check if
     speakerlist ptr equals NULL
 
 * crossoverwizard.cc: init speakerlist member ptr to NULL
@@ -152,28 +152,28 @@ GSpeakers ChangeLog
 
 2003-02-17
 
-* boxeditor.cc, boxhistory.cc: fixed so that GSpeakers can start with a 
+* boxeditor.cc, boxhistory.cc: fixed so that GSpeakers can start with a
     faulty boxlist-config option without segfaults
 
-* speakereditor.cc, crossoverhistory.cc, boxhistory.cc: added try/catch around 
-    loading files in contructors, this prevents gspeakers from segfaulting if 
+* speakereditor.cc, crossoverhistory.cc, boxhistory.cc: added try/catch around
+    loading files in contructors, this prevents gspeakers from segfaulting if
     you try to start gspeakers with an invalid xml file in the config
 
 
 2003-02-15
 
-* filterlinkframe.cc, speakereditor.cc: check so that we have a valid output 
+* filterlinkframe.cc, speakereditor.cc: check so that we have a valid output
     file before reading spice output
 
 * Vaious files: use GSpeakers::round everywhere
 
-* main.cc: added #include <locale.h> which might fix compilation errors on 
+* main.cc: added #include <locale.h> which might fix compilation errors on
     some systems
 
 
 2003-02-12
 
-* Prepared for 0.10 release, just waiting for a more detailed bugreport from 
+* Prepared for 0.10 release, just waiting for a more detailed bugreport from
     a user
 
 
@@ -181,26 +181,26 @@ GSpeakers ChangeLog
 
 * Various files: removed <b>-tags from gettext strings
 
-* freqrespeditor.h/cc: cleaned up from unused headers, adjusted the dialog to 
+* freqrespeditor.h/cc: cleaned up from unused headers, adjusted the dialog to
     follow more of the Gnome HIG
 
-* settingsdialog.h/cc: cleaned up the files from unused headers, adjusted the 
-    settingsdialog ui to follow the gnome HIG a little bit better, implemended 
+* settingsdialog.h/cc: cleaned up the files from unused headers, adjusted the
+    settingsdialog ui to follow the gnome HIG a little bit better, implemended
     "instant apply" and removed the apply-button
 
-* enclosurepaned.cc: removed append toolbar button since you don't want to 
+* enclosurepaned.cc: removed append toolbar button since you don't want to
     do this, you probably want to click new instead
 
 * boxeditor.cc: fixed on_activate functionality in vb1 entry
 
-* boxhistory.cc: select appended box in boxhistory, this fixed a segfault 
+* boxhistory.cc: select appended box in boxhistory, this fixed a segfault
     caused by an invalid pointer
 
 
 2003-02-10
 
-* speakereditor.cc, crossoverpaned.cc, enclosurepaned.cc: removed some toolbar 
-    buttons, changed some toolbar labels, made corresponding changes to the 
+* speakereditor.cc, crossoverpaned.cc, enclosurepaned.cc: removed some toolbar
+    buttons, changed some toolbar labels, made corresponding changes to the
     menus, thanks to Daniel Elstner for the discussion we had on this topic,
     also some menus were reordered
 
@@ -214,7 +214,7 @@ GSpeakers ChangeLog
 
 2003-02-03
 
-* common.h/cc: added global tooltips accessor function, now we just have to add 
+* common.h/cc: added global tooltips accessor function, now we just have to add
     tooltips where we need it
 
 
@@ -226,15 +226,15 @@ GSpeakers ChangeLog
 
 * crossoverhistory.h/cc: Gnome HIG adjustments
 
-* common.h/cc: added short_filename utillity function, this functions is used 
+* common.h/cc: added short_filename utillity function, this functions is used
     to short a given filename to a <=40 chracter string
 
 * driverfreqrespplot.h/cc: adjusted to follow Gnome HIG, removed unused headers
 
-* gspeakersboxplot.h/cc: adjusted to follow Gnome HIG, removed header files we 
+* gspeakersboxplot.h/cc: adjusted to follow Gnome HIG, removed header files we
     don't need
 
-* plothistory.h/cc: adjusted to Gnome HIG, removed unneccessary header file 
+* plothistory.h/cc: adjusted to Gnome HIG, removed unneccessary header file
     dependencies
 
 * boxeditor.cc, boxhistory.cc: adjusted these parts to fit Gnome HIG
@@ -242,18 +242,18 @@ GSpeakers ChangeLog
 
 2003-01-29
 
-* boxeditor.cc: set speaker in member box when a new speaker is selected in 
+* boxeditor.cc: set speaker in member box when a new speaker is selected in
     the combo
 
-* boxhistory.h/cc: only include headers we need, added speaker column to the 
+* boxhistory.h/cc: only include headers we need, added speaker column to the
     listview
 
-* crossoverpaned.cc, enclosurepaned.cc: in function set_save_state we should 
+* crossoverpaned.cc, enclosurepaned.cc: in function set_save_state we should
     check if m_toolbar and m_menu has been initialized
 
-* box.h/cc: added speaker string member variable, added public methods to read 
-    and modified this variable and added it to the xml, sorry to break the xml 
-    files but i consider the box editor broken so please look at this in a 
+* box.h/cc: added speaker string member variable, added public methods to read
+    and modified this variable and added it to the xml, sorry to break the xml
+    files but i consider the box editor broken so please look at this in a
     positive way
 
 * gspeakersobject.h/cc: only include sigc++/object.h instead of entire sigc++
@@ -272,7 +272,7 @@ GSpeakers ChangeLog
 
 * speakereditor.cc: changed from 4 to 3 decimals on vsa display
 
-* settingsdialog.h/cc, crossoverimageview.h/cc: config option for parts 
+* settingsdialog.h/cc, crossoverimageview.h/cc: config option for parts
     autoscale
 
 
@@ -283,8 +283,8 @@ GSpeakers ChangeLog
 
 2003-01-23
 
-* crossoverimageview.h/cc: draw_highpass done, some small adjustments and 
-    a few new methods: draw_imp_corr_net, draw_damp_net and draw_driver, 
+* crossoverimageview.h/cc: draw_highpass done, some small adjustments and
+    a few new methods: draw_imp_corr_net, draw_damp_net and draw_driver,
     implementation of scaling crossover image view is now done
 
 
@@ -298,12 +298,12 @@ GSpeakers ChangeLog
 
 2003-01-20
 
-* crossoverimageview.h/cc: midrange, tweeter and resistor done, added corner 
+* crossoverimageview.h/cc: midrange, tweeter and resistor done, added corner
     and t-cross segment
 
 2003-01-18
 
-* crossoverimageview.h/cc: inductor done, added draw_connector (done), woofer 
+* crossoverimageview.h/cc: inductor done, added draw_connector (done), woofer
     (done), midrange and tweeter
 
 2003-01-16
@@ -312,33 +312,33 @@ GSpeakers ChangeLog
 
 2003-01-15
 
-* crossoverimageview.h/cc: added a few methods, implemented scalable and 
+* crossoverimageview.h/cc: added a few methods, implemented scalable and
     rotatable draw_capacitor method
 
 2003-01-14
 
-* crossoverimageview.h/cc: added crossover image view class, a visual view 
+* crossoverimageview.h/cc: added crossover image view class, a visual view
     of the crossover network to this project
 
 2003-01-13
 
-The updates today means we now require gtkmm-2.2, however, i think this is much 
+The updates today means we now require gtkmm-2.2, however, i think this is much
 better than depending on changing locales inside the program...
 
 * filterlinkframe.cc, summedfreqrespplot.cc: same as the below
 
-* freqrespeditor.cc: changed sscanf:s like below, fixed the same possible 
+* freqrespeditor.cc: changed sscanf:s like below, fixed the same possible
     memory leak
 
-* speakereditor.cc: added g_ascii_dtostr/strtod on spice stuff, 
-    changed sscanf:s to something locale independent and fixed a 
+* speakereditor.cc: added g_ascii_dtostr/strtod on spice stuff,
+    changed sscanf:s to something locale independent and fixed a
     couple of possible memory leaks (added "delete buffer")
 
 * box.cc: added g_ascii_dtostr/strtod around xml read-write float
 
 * net.cc: added g_ascii_dtostr in spice file generation
 
-* speaker.cc: added g_ascii_dtostr/strtod around xml-read/write floating 
+* speaker.cc: added g_ascii_dtostr/strtod around xml-read/write floating
     point values
 
 * mainwindow.cc: added a few translation strings
@@ -353,15 +353,15 @@ better than depending on changing locales inside the program...
 
 2003-01-04
 
-* Copied the actual file "depcomp" to source dir instead of a symlink, now you 
+* Copied the actual file "depcomp" to source dir instead of a symlink, now you
     don't need automake-1.6 to compile
 
 2003-01-03
 
-* summedfreqrespplot.cc: fixed a bug that caused a seg-fault if a frf not was 
+* summedfreqrespplot.cc: fixed a bug that caused a seg-fault if a frf not was
     found
 
-* speakereditor.cc: save a loaded filename on exit and display the correct 
+* speakereditor.cc: save a loaded filename on exit and display the correct
     filename in the frame
 
 2002-12-20
@@ -378,14 +378,14 @@ better than depending on changing locales inside the program...
 
 * freqrespeditor.cc: tune nof decimals displayed
 
-* speakereditor.cc: tune cell_data_func's and sprintfs	
+* speakereditor.cc: tune cell_data_func's and sprintfs
 
-* gspeakersplot.h/cc: increased BOX_FRAME_SIZE to make room for aa fonts in plots, 
+* gspeakersplot.h/cc: increased BOX_FRAME_SIZE to make room for aa fonts in plots,
 		tuned the text placement a little bit
 
 2002-11-18
 
-* crossovertreeview.h/cc, boxhistory.h/cc, speakereditor.h/cc: 
+* crossovertreeview.h/cc, boxhistory.h/cc, speakereditor.h/cc:
 	  more set_cell_data_func-stuff
 
 2002-11-14
@@ -402,50 +402,50 @@ better than depending on changing locales inside the program...
 
 2002-11-05
 
-* common.cc: added GSpeakers::double_to_ustring(double, int, int) which can 
+* common.cc: added GSpeakers::double_to_ustring(double, int, int) which can
     format the output string as you want it
 
-* boxhistory.h/cc: added formatting callback on the vb1, fb1 and type columns 
+* boxhistory.h/cc: added formatting callback on the vb1, fb1 and type columns
      using insert_data_with_func
 
 2002-10-18
 
-* crossovertreeview.cc: use the new cellrendererpopup instead of a plain 
+* crossovertreeview.cc: use the new cellrendererpopup instead of a plain
     text renderer
 
-* popupentry.h/cc cellrendererpopup.h/cc: added files which handles enable a 
+* popupentry.h/cc cellrendererpopup.h/cc: added files which handles enable a
     cell to have a spinbutton as renderer, not quite done but it works...
 
 2002-10-15
 
-* crossoverwizard.cc: prettier labels on most common filters in crossover wizard 
+* crossoverwizard.cc: prettier labels on most common filters in crossover wizard
     panel
 
-* crossovertreeview.cc: add an extra level to the filter treeview so that the 
-    user can see which components that are used in lowpass and highpass filters 
+* crossovertreeview.cc: add an extra level to the filter treeview so that the
+    user can see which components that are used in lowpass and highpass filters
     and code cleanup
 
-* crossovertreeview.cc: removed on_unit_cell_edited since we do not let the 
+* crossovertreeview.cc: removed on_unit_cell_edited since we do not let the
     user edit this cell
 
 * common.h/cc, crossovertreeview.cc: removed unused signal_part_modifed
 
-* filterlinkframe.cc: fixed a bug that saved bessel instead of butterworth in 
+* filterlinkframe.cc: fixed a bug that saved bessel instead of butterworth in
     2nd order filters
 
 2002-10-14
 
 * Prepared for 0.8.3 bugfix release
 
-* main.cc/mainwindow.cc: fixed a segfault which appeared upon first startup 
+* main.cc/mainwindow.cc: fixed a segfault which appeared upon first startup
     since the toolbars wanted a config option not present at the time
 
-* crossoverwizard.cc: work around bug (or something?) in gtkmm-1.3.24 which 
+* crossoverwizard.cc: work around bug (or something?) in gtkmm-1.3.24 which
     cause a dtor not to be called when using erase on vbox.children()
 
 2002-10-12
 
-* speakereditor.cc: redraw freq plot on browse too, ungrey toolbar and menu save 
+* speakereditor.cc: redraw freq plot on browse too, ungrey toolbar and menu save
     after you had changed the freq resp file
 
 2002-10-11
@@ -458,22 +458,22 @@ better than depending on changing locales inside the program...
 
 * speakereditor.cc: draw frequency response plot when freq resp editor is closed
 
-* speakereditor.cc: fixed a bug which caused a segfault when you enter a new 
+* speakereditor.cc: fixed a bug which caused a segfault when you enter a new
     rdc, obvously we had hardcoded the index of the impedance plot
 
-* filterlinkframe.h/cc: fixed the infinite loop bug when co freq was changed, 
+* filterlinkframe.h/cc: fixed the infinite loop bug when co freq was changed,
     this was probably introduced in the bugfix release last week
 
 2002-10-03
 
 * Prepared for 0.8.1 bugfix release
 
-* Fixed a couple of minor bugs, reconnected callback to two buttons in the 
+* Fixed a couple of minor bugs, reconnected callback to two buttons in the
     speaker editor, added some win32 #ifdef stuff
 
 2002-10-02
 
-* crossoverhistory.cc: check for "AutoUpdateFilterPlots" config before drawing 
+* crossoverhistory.cc: check for "AutoUpdateFilterPlots" config before drawing
     plot when a new crossover is selected
 
 * added try/catch around Settings::save
@@ -491,25 +491,25 @@ better than depending on changing locales inside the program...
 
 2002-09-30
 
-* summedfreqrespplot.h/cc: added new class which displayes the estimated 
+* summedfreqrespplot.h/cc: added new class which displayes the estimated
     frequency response of the loudspeaker
 
-* common.h/cc and filterplot classes: added Net* parameter to 
+* common.h/cc and filterplot classes: added Net* parameter to
     signal_add_filter_plot
 
-* settingsdialog.h/cc, mainwindow.cc: remove "use advanced driver model" 
+* settingsdialog.h/cc, mainwindow.cc: remove "use advanced driver model"
     config option, reorder options on new pages
 
 * filterlinkframe.h/cc: handle the new net class members
 
-* net.h/cc: added new members, "use advanced driver impedance model" and 
+* net.h/cc: added new members, "use advanced driver impedance model" and
     "invert driver polarity"
 
 * Prepared for 0.8 release
 
 2002-09-27
 
-* gspeakersplot.h/cc: added set_y_label method, also use this in plot container 
+* gspeakersplot.h/cc: added set_y_label method, also use this in plot container
     classes
 
 * boxeditor.h/cc: removed the buttons, use enter in fb entry or toolbar or menu
@@ -522,7 +522,7 @@ better than depending on changing locales inside the program...
 
 2002-09-25
 
-* All classes that uses SpeakerList: Prepared for better handling of new 
+* All classes that uses SpeakerList: Prepared for better handling of new
     SpeakerList loaded signal
 
 * mainwindow.cc, settingsdialog.h/cc: config options: save size, save position
@@ -541,7 +541,7 @@ better than depending on changing locales inside the program...
 
 * Prepared for GSpeakers-0.7 release
 
-* mainwindow.h/cc, crossoverhistory.h/cc, boxhistory.h/cc: move toolbars and 
+* mainwindow.h/cc, crossoverhistory.h/cc, boxhistory.h/cc: move toolbars and
     menus to *paned-classes
 
 * crossoverpaned.h/cc: added class
@@ -555,10 +555,10 @@ better than depending on changing locales inside the program...
 
 * crossoverhistory.h/cc: added menu and toolbar, added new icons as usual
 
-* net.cc: fixed some issues with ++-operator, this operator seems to change 
+* net.cc: fixed some issues with ++-operator, this operator seems to change
     with -O level used by the compiler...?
 
-* boxhistory.h/cc, mainwindow.cc: added enclosure menu and toolbar, added some 
+* boxhistory.h/cc, mainwindow.cc: added enclosure menu and toolbar, added some
     new icons
 
 2002-09-21
@@ -571,7 +571,7 @@ better than depending on changing locales inside the program...
 
 2002-09-19
 
-* settingsdialog.h/cc: removed evil "gtk-critical", changed from Gtk::Entry -> 
+* settingsdialog.h/cc: removed evil "gtk-critical", changed from Gtk::Entry ->
     Gtk::Entry*
 
 2002-09-18
@@ -580,7 +580,7 @@ better than depending on changing locales inside the program...
 
 * speakereditor.cc/h: added handling of the driverfreqplot class
 
-* driverfreqrespplot.h/cc: added wrapper class for gspeakersplot which displays 
+* driverfreqrespplot.h/cc: added wrapper class for gspeakersplot which displays
     the frequency resp of a driver
 
 * gspeakersplot.cc: now we actually use m_lower_y and m_upper_y ctor args
@@ -589,7 +589,7 @@ better than depending on changing locales inside the program...
 
 * speakereditor.cc: use freq resp editor
 
-* freqrespeditor.h/cc: added freq resp editor class, this class can now handle 
+* freqrespeditor.h/cc: added freq resp editor class, this class can now handle
     30 dbmag values
 
 2002-09-16
@@ -598,7 +598,7 @@ better than depending on changing locales inside the program...
 
 2002-09-15
 
-* mainwindow.cc: added some pixmaps to notebook tabs and added icon for the 
+* mainwindow.cc: added some pixmaps to notebook tabs and added icon for the
     main window, makes the app look a little bit nicer
 
 2002-09-14
@@ -611,10 +611,10 @@ better than depending on changing locales inside the program...
 
 * Added #ifdef OUTPUT_DEBUG around all cout statements
 
-* totalfilterplot.cc: fixed a bug that sometimes caused two plots to be drawn 
+* totalfilterplot.cc: fixed a bug that sometimes caused two plots to be drawn
     in this graph
 
-* gspeakersplot.h/cc: added visible member variable which knows if the widget is 
+* gspeakersplot.h/cc: added visible member variable which knows if the widget is
     visible or not, this way we don't draw to the window unless it's visible
 
 * verfied that we compile on gcc-2.95, 2.96 and 3.2
@@ -625,26 +625,26 @@ better than depending on changing locales inside the program...
 
 2002-09-12
 
-* totalfilterplot.cc: added plot of total filter response, except for the 
+* totalfilterplot.cc: added plot of total filter response, except for the
     configure event that does not get called until the widget is shown
 
-* configure.in, config.h.in: added --enable-no-output-debug option to be able 
+* configure.in, config.h.in: added --enable-no-output-debug option to be able
     to disable console debug output
 
 2002-09-11
 
 * mainwindow.h/cc: added totalfilterplot to main window
 
-* totalfilterplot.h/cc: added new class to handle plots of total filter 
+* totalfilterplot.h/cc: added new class to handle plots of total filter
     frequency response
 
-* net.cc: now generates advanced speaker model too, fixed a bug: of course 
-    the resistance in zobel network should have the resistor value...not 
+* net.cc: now generates advanced speaker model too, fixed a bug: of course
+    the resistance in zobel network should have the resistor value...not
     the capacitor value...
 
 2002-09-10
 
-* settingsdialog.h/cc, mainwindow.cc: added config option 
+* settingsdialog.h/cc, mainwindow.cc: added config option
     use_advanced_speaker_model
 
 * speakereditor.h/cc: now we handle the new member variables in the speaker class
@@ -653,7 +653,7 @@ better than depending on changing locales inside the program...
 
 2002-09-09
 
-* speaker.h/cc: added member variabled ad, bl, mmd, rms and cms, for 
+* speaker.h/cc: added member variabled ad, bl, mmd, rms and cms, for
     speaker impedance calculations
 
 2002-09-08
@@ -664,73 +664,73 @@ better than depending on changing locales inside the program...
 
 2002-09-07
 
-* settingsdialog.h/cc, filterlinkframe.h/cc: added config options for path 
+* settingsdialog.h/cc, filterlinkframe.h/cc: added config options for path
     to spice executable and wheter automaticly update the filter plots
 
 * mainwindow.h/cc, settingsdialog.h/cc: added settingsdialog to the menu
 
-* filterlinkfram.cc: fixed backword calculation of -3dB when a damping network 
+* filterlinkfram.cc: fixed backword calculation of -3dB when a damping network
     is used
 
-* filterlinkfram.h/cc: set net family (butterworth, bessel, ..) on init (new 
+* filterlinkfram.h/cc: set net family (butterworth, bessel, ..) on init (new
     crossover selected)
 
 2002-09-06
 
-* net.h/cc: added net family type, butterworth, bessel, ... class members for 
+* net.h/cc: added net family type, butterworth, bessel, ... class members for
     lowpas and highpass network
 
-* filterlinkframe.cc: verified backwords calculations of cutoff freq 
+* filterlinkframe.cc: verified backwords calculations of cutoff freq
 
 2002-09-05
 
 * net.cc: added spice generation for 2nd, 3rd and 4th order filters
 
-* filterlinkframe.h/cc, gspeakersfilterplot.h/cc: update plot when user change 
+* filterlinkframe.h/cc, gspeakersfilterplot.h/cc: update plot when user change
     something in the filter
 
 2002-09-03
 
 * filterlinkframe.cc: add SPICE parsing routines
 
-* mainwindow.cc, speakerlistselector.cc, filterlinkframe.cc: ui tweaks, added 
+* mainwindow.cc, speakerlistselector.cc, filterlinkframe.cc: ui tweaks, added
     simple filter plot for 1st order crossover networks
 
 2002-09-02
 
 * common.h/cc: new signals, add_crossover_plot and plot_crossover
 
-* gspeakersfilterplot.h/cc: add two files, handle the gspeakersplot for 
+* gspeakersfilterplot.h/cc: add two files, handle the gspeakersplot for
     crossover network frequency plots
 
-* crossoverwizard.h/cc: added two buttons (plot and update) and corresponding 
+* crossoverwizard.h/cc: added two buttons (plot and update) and corresponding
     callbacks
 
 * mainwindow.h/cc: UI changes
 
 2002-09-01
 
-* net.h/cc: added to_SPICE-function, print spice-file to tempfile for 1st order 
+* net.h/cc: added to_SPICE-function, print spice-file to tempfile for 1st order
     crossover networks
 
 2002-08-31
 
 * Prepared for GSpeakers-0.4 release
 
-* crossoverhistory.h/cc: added callbacks for signal_net_modified*, ungrey 
+* crossoverhistory.h/cc: added callbacks for signal_net_modified*, ungrey
     save-button when you change something in a filter
 
 * filterlinkframe.h/cc: impedance correction and damping network calculations
 
-* speakerlist.cc, boxlist.cc, crossoverlist.cc: throw exception if xmlSaveFile 
+* speakerlist.cc, boxlist.cc, crossoverlist.cc: throw exception if xmlSaveFile
     fails
 
-* speakereditor.cc, boxhistory.cc, crossoverhistory.cc: catch exception if 
+* speakereditor.cc, boxhistory.cc, crossoverhistory.cc: catch exception if
     xmlSaveFile failed, display error message
 
 2002-08-30
 
-* mainwindow.cc, crossoverhistory.h/cc: Added crossovermenu and corresponding 
+* mainwindow.cc, crossoverhistory.h/cc: Added crossovermenu and corresponding
     new_from_menu-function in crossoverhistory.
 
 * common.h/cc: new signal: new_crossover_from_menu
@@ -741,7 +741,7 @@ better than depending on changing locales inside the program...
 
 2002-08-28
 
-* filterlinkframe.cc/h: Finished filter-calculations for 1st and 2nd order 
+* filterlinkframe.cc/h: Finished filter-calculations for 1st and 2nd order
     filters, added backword calculation of first order filters
 
 2002-08-25
@@ -752,19 +752,19 @@ better than depending on changing locales inside the program...
 
 2002-08-24
 
-* gspeakersplot.cc, gspeakersboxplot.cc, plothistory.cc, common.h/cc: when 
-    you click on a row in plot history we draw the plot with an extra think 
-    line in the graph, makes it easier to see which plot that corresponds 
+* gspeakersplot.cc, gspeakersboxplot.cc, plothistory.cc, common.h/cc: when
+    you click on a row in plot history we draw the plot with an extra think
+    line in the graph, makes it easier to see which plot that corresponds
     to a row in the list
 
 * crossovertreeview.h/cc, crossoverhistory.h/cc: Gtk::Window -> Gtk::Frame
 
-* mainwindow.h/cc: Added all frames to new mainwindow, save window size and 
+* mainwindow.h/cc: Added all frames to new mainwindow, save window size and
     paned positions to settings, added a menu and about-dialog
 
 2002-08-23
 
-* speakerlistselector.h/cc, gspeakersboxplot.h/cc, boxeditor.h/cc, 
+* speakerlistselector.h/cc, gspeakersboxplot.h/cc, boxeditor.h/cc,
     boxhistory.h/cc, plothistory.h/cc: base class Gtk::Window -> Gtk::Frame
 
 * mainwindow.h/cc: Added main window class
@@ -773,13 +773,13 @@ better than depending on changing locales inside the program...
 
 * settings.h/cc: Made the settings class remember config file name
 
-* speakerlistselector.cc, boxhistory.cc: write opened file 
+* speakerlistselector.cc, boxhistory.cc: write opened file
     to config file
 
 2002-08-22
 
-* settings.cc/h, sstream_fix.h: Merged the excellent Settings-class from ickle 
-    into my source tree, thanks to Barnaby Gray, ickle maintainer. 
+* settings.cc/h, sstream_fix.h: Merged the excellent Settings-class from ickle
+    into my source tree, thanks to Barnaby Gray, ickle maintainer.
 
 2002-08-21
 
@@ -787,12 +787,12 @@ better than depending on changing locales inside the program...
 
 * Disable close button on all windows but speakerlistselector.
 
-* boxhistory.cc, speakerlistselector.cc, boxhistory.cc: Load xml from path 
+* boxhistory.cc, speakerlistselector.cc, boxhistory.cc: Load xml from path
     GSPEAKERS_PREFIX/share/xml, GSPEAKERS_PREFIX is specified in config.h
 
 2002-08-20
 
-* plothistory.cc, gspeakersboxplot.cc, gspeakersplot.cc: Implemented remove_plot 
+* plothistory.cc, gspeakersboxplot.cc, gspeakersplot.cc: Implemented remove_plot
     and hide_plot so that you can toggle the visibility of a plot in plothistory
 
 * common.cc/h: Added signal_box_plot_remove, signal_box_plot_hide

@@ -1,7 +1,7 @@
 GSpeakers TODO-list
 -------------------
 
-1) The tasks does not appear in any specific order. If you want more 
+1) The tasks does not appear in any specific order. If you want more
     information about the tasks, mail dss@home.se
 
 2) Tasks that should be done before 1.0 is marked "pre 1.0"
@@ -11,12 +11,12 @@ GSpeakers TODO-list
 
 * Translations
 
-* Rpm, deb and tgz binary packages, i will need maintainer for different 
+* Rpm, deb and tgz binary packages, i will need maintainer for different
     packages too (pre-1.0)
 
 * Windows installer (maybe pre-1.0)
 
-* Loudspeaker design with GSpeakers HOWTO (important, will increase user 
+* Loudspeaker design with GSpeakers HOWTO (important, will increase user
     base, pre-1.0)
 
 * Make id_string cell in CrossoverHistory editable (pre 1.0)
@@ -25,12 +25,12 @@ GSpeakers TODO-list
 
 * Translate documentation
 
-* Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values, also improve 
+* Make GSpeakersPlot (gspeakersplot.h/cc) handle >20k x-values, also improve
     this class and make it more general
 
-* Optimize the order the colors appear in GSpeakersColor.cc/h (an easy task 
-    but it requires some thinking), consecutive colors coming out of 
-    GSpeakersColor should not be similar, the colors should also be clear and 
+* Optimize the order the colors appear in GSpeakersColor.cc/h (an easy task
+    but it requires some thinking), consecutive colors coming out of
+    GSpeakersColor should not be similar, the colors should also be clear and
     easy to distinguish from each other, use the 32 Basic Gnome colors
 
 * Better icons in the main window notebook
@@ -43,25 +43,25 @@ GSpeakers TODO-list
 
 * FilterLinkFrame: only recalc affected part values
 
-* Check that the spice executable selected in setting dialog really is a 
+* Check that the spice executable selected in setting dialog really is a
     valid spice-program (maybe pre 1.0)
 
-* Maybe we should remove the need for an external SPICE-interpreter...or call 
+* Maybe we should remove the need for an external SPICE-interpreter...or call
     a SPICE-interpreter from a lib or something like that
 
 * Clean up temp dir after SPICE execution (pre 1.0)
 
-* SpeakerEditor: select next (or previous) listitem on remove, you should be 
+* SpeakerEditor: select next (or previous) listitem on remove, you should be
     able to undo "delete driver" (important)
 
 * SpeakerEditor: code cleanup
 
-* SpeakerEditor: cache SPICE calculations and file reads (may be important on 
+* SpeakerEditor: cache SPICE calculations and file reads (may be important on
     slow systems)
 
 * Add "autoupdate SPICE calculations" on drivers tab too (maybe pre 1.0)
 
-* UI should look the same on each tab and follow Gnome HIG (most of this is 
+* UI should look the same on each tab and follow Gnome HIG (most of this is
     done, pre 1.0)
 
 * Support nonmetric units
@@ -74,12 +74,12 @@ GSpeakers TODO-list
 
 * Drag'n'drop reorder listviews
 
-* Tree with woofer/midrange/tweeter in driver list, will make it easier if we 
+* Tree with woofer/midrange/tweeter in driver list, will make it easier if we
     we have a lot of drivers, this should be configurable
 
 * show/edit Q for a sealed enclosure (pre 1.0)
 
-* Meassurement tab
+* Measurement tab
 
 * Calculate enclosure dimensions
 

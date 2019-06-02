@@ -25,56 +25,48 @@
 #ifndef __EGG_SIDEBAR_H
 #define __EGG_SIDEBAR_H
 
-#include <gtk/gtkframe.h>
+#include <gtk/gtk.h>
 
 #include "eggsidebarbutton.h"
 
 G_BEGIN_DECLS
 
-#define EGG_TYPE_SIDEBAR		   (egg_sidebar_get_type ())
-#define EGG_SIDEBAR(obj)		   (G_TYPE_CHECK_INSTANCE_CAST ((obj), EGG_TYPE_SIDEBAR, EggSidebar))
-#define EGG_SIDEBAR_CLASS(klass)	   (G_TYPE_CHECK_CLASS_CAST ((klass), EGG_TYPE_SIDEBAR, EggSidebarClass))
-#define EGG_IS_SIDEBAR(obj)	   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EGG_TYPE_SIDEBAR))
-#define EGG_IS_SIDEBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EGG_TYPE_SIDEBAR))
-#define EGG_SIDEBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), EGG_TYPE_SIDEBAR, EggSidebarClass))
+#define EGG_TYPE_SIDEBAR (egg_sidebar_get_type())
+#define EGG_SIDEBAR(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), EGG_TYPE_SIDEBAR, EggSidebar))
+#define EGG_SIDEBAR_CLASS(klass)                                                                   \
+  (G_TYPE_CHECK_CLASS_CAST((klass), EGG_TYPE_SIDEBAR, EggSidebarClass))
+#define EGG_IS_SIDEBAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), EGG_TYPE_SIDEBAR))
+#define EGG_IS_SIDEBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((obj), EGG_TYPE_SIDEBAR))
+#define EGG_SIDEBAR_GET_CLASS(obj)                                                                 \
+  (G_TYPE_INSTANCE_GET_CLASS((obj), EGG_TYPE_SIDEBAR, EggSidebarClass))
 
-typedef struct _EggSidebar           EggSidebar;
-typedef struct _EggSidebarClass      EggSidebarClass;
-typedef struct _EggSidebarPriv       EggSidebarPriv;
+typedef struct _EggSidebar EggSidebar;
+typedef struct _EggSidebarClass EggSidebarClass;
+typedef struct _EggSidebarPriv EggSidebarPriv;
 
-struct _EggSidebar
-{
-	GtkFrame parent;
+struct _EggSidebar {
+  GtkFrame parent;
 
-	EggSidebarPriv *priv;
+  EggSidebarPriv* priv;
 };
 
-struct _EggSidebarClass
-{
-	GtkFrameClass parent_class;
+struct _EggSidebarClass {
+  GtkFrameClass parent_class;
 };
 
-typedef enum
-{
-	EGG_SIDEBAR_DND_TYPE_NEW_BUTTON,
-	EGG_SIDEBAR_DND_TYPE_BUTTON
-} EggSidebarDNDType;
+typedef enum { EGG_SIDEBAR_DND_TYPE_NEW_BUTTON, EGG_SIDEBAR_DND_TYPE_BUTTON } EggSidebarDNDType;
 
-GType      egg_sidebar_get_type        (void);
+GType egg_sidebar_get_type(void);
 
-GtkWidget *egg_sidebar_new             (void);
+GtkWidget* egg_sidebar_new(void);
 
-void       egg_sidebar_append          (EggSidebar *sidebar,
-				       EggSidebarButton *button);
+void egg_sidebar_append(EggSidebar* sidebar, EggSidebarButton* button);
 
-void       egg_sidebar_remove          (EggSidebar *sidebar,
-				       EggSidebarButton *button);
+void egg_sidebar_remove(EggSidebar* sidebar, EggSidebarButton* button);
 
-void       egg_sidebar_save_layout     (EggSidebar *sidebar,
-				       const char *filename);
+void egg_sidebar_save_layout(EggSidebar* sidebar, const char* filename);
 
-void       egg_sidebar_load_layout     (EggSidebar *sidebar,
-				       const char *filename);
+void egg_sidebar_load_layout(EggSidebar* sidebar, const char* filename);
 
 G_END_DECLS
 

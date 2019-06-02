@@ -23,7 +23,6 @@
  */
 
 #include "eggsidebar.h"
-#include <gtk/gtk.h>
 #include <libxml/tree.h>
 #include <math.h>
 

@@ -26,7 +26,7 @@ top_builddir = ..
 
 prefix = /usr/local
 exec_prefix = ${prefix}
-datadir = $(prefix)/
+datadir = $(prefix)/share
 localedir = $(datadir)/locale
 gnulocaledir = $(prefix)/share/locale
 gettextsrcdir = $(prefix)/share/glib-2.0/gettext/po
@@ -38,9 +38,9 @@ MKINSTALLDIRS = $(top_srcdir)/./mkinstalldirs
 
 CC = gcc
 GENCAT = @GENCAT@
-GMSGFMT = PATH=../src:$$PATH 
-MSGFMT = no
-XGETTEXT = PATH=../src:$$PATH :
+GMSGFMT = PATH=../src:$$PATH /usr/bin/msgfmt
+MSGFMT = /usr/bin/msgfmt
+XGETTEXT = PATH=../src:$$PATH /usr/bin/xgettext
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
@@ -149,9 +149,9 @@ src/totalfilterplot.cc \
 src/totalfilterplot.h \
 gspeakers.desktop.in
 
-CATALOGS = 
-CATOBJEXT = NONE
-INSTOBJEXT = 
+CATALOGS =  sv.gmo
+CATOBJEXT = .gmo
+INSTOBJEXT = .mo
 
 .SUFFIXES:
 .SUFFIXES: .c .o .po .pox .gmo .mo .msg .cat
