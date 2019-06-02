@@ -43,28 +43,33 @@ SummedFreqRespPlot::SummedFreqRespPlot() : plot(1, 20000, 50, 110, true, 0) {
 
 SummedFreqRespPlot::~SummedFreqRespPlot() = default;
 
-double lerp(std::vector<GSpeakers::Point> freq_resp_points, double x) {
+double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x) {
+
   auto first_i = std::lower_bound(freq_resp_points.begin(), freq_resp_points.end(), x,
                                   GSpeakers::Point::_CompareX);
-  if (first_i != freq_resp_points.begin()) {
-    first_i = first_i - 1;
+
+  if (first_i != begin(freq_resp_points)) {
+    std::advance(first_i, -1);
   }
+
   auto second_i = std::upper_bound(freq_resp_points.begin(), freq_resp_points.end(), x,
                                    GSpeakers::Point::_CompareX);
 
   double x0 = first_i->get_x();
   double x1 = second_i->get_x();
+
   if (x0 == x1) {
     return first_i->get_y();
   }
+
   double y0 = first_i->get_y();
   double y1 = second_i->get_y();
 
-  return y0 + ((y1 - y0) * ((x - x0) / (x1 - x0)));
+  return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point>& filter_points, Gdk::Color& color,
-                                    int* i, Net* n) {
+int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
+                                    Gdk::Color& color, int* i, Net* n) {
 #ifdef OUTPUT_DEBUG
   std::cout << "SummedFreqRespPlot::on_add_plot" << std::endl;
 #endif
