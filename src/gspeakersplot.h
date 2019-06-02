@@ -25,7 +25,6 @@
 
 #include <gtkmm.h>
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -48,34 +47,34 @@
  * in the conversion to axis mappes coordinates
  */
 namespace GSpeakers {
+
 class Point {
 public:
   Point() = default;
-  ;
 
-  Point(int x, double y) {
-    m_x = x;
-    m_y = y;
-  }
+  Point(int x, double y) : m_x(x), m_y(y) {}
 
-  int get_x() { return m_x; }
+  int get_x() const { return m_x; }
 
-  double get_y() { return m_y; }
+  double get_y() const { return m_y; }
 
   void set_x(int x) { m_x = x; }
 
   void set_y(double y) { m_y = y; }
 
-  static struct _CompareX {
-    bool operator()(const Point& left, const Point& right) { return left.m_x <= right.m_x; }
-    bool operator()(const Point& left, int right) { return left.m_x <= right; }
-    bool operator()(int left, const Point& right) { return left <= right.m_x; }
-  } _CompareX;
-
 private:
   int m_x;
   double m_y;
 };
+
+struct comparison {
+  bool operator()(const Point& left, const Point& right) const {
+    return left.get_x() <= right.get_x();
+  }
+  bool operator()(const Point& left, int right) const { return left.get_x() <= right; }
+  bool operator()(int left, const Point& right) const { return left <= right.get_x(); }
+};
+
 } // namespace GSpeakers
 
 /*
@@ -121,6 +120,7 @@ protected:
   // void on_show();
   bool on_configure_event(GdkEventConfigure* event) override;
 
+protected:
   /*std::vectors that hold the y magnitude points for the plots (dbmag) and
      the corresponding colors (colors) */
   std::vector<std::vector<GSpeakers::Point>> m_points;
@@ -134,6 +134,8 @@ private:
   void draw_log_grid();
   void draw_lin_grid();
   void draw_horz_grid();
+
+private:
   int m_linesize;
   Gdk::LineStyle line_style;
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;

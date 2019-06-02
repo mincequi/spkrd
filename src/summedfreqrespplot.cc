@@ -46,14 +46,14 @@ SummedFreqRespPlot::~SummedFreqRespPlot() = default;
 double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x) {
 
   auto first_i = std::lower_bound(freq_resp_points.begin(), freq_resp_points.end(), x,
-                                  GSpeakers::Point::_CompareX);
+                                  GSpeakers::comparison{});
 
   if (first_i != begin(freq_resp_points)) {
     std::advance(first_i, -1);
   }
 
   auto second_i = std::upper_bound(freq_resp_points.begin(), freq_resp_points.end(), x,
-                                   GSpeakers::Point::_CompareX);
+                                   GSpeakers::comparison{});
 
   double x0 = first_i->get_x();
   double x1 = second_i->get_x();
@@ -95,7 +95,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
       fin.getline(buffer.data(), 100, '\n');
 
       // sscanf(buffer, "%f,%f", &f1, &f2);
-      char* substr_ptr = strtok(buffer, ",");
+      char* substr_ptr = strtok(buffer.data(), ",");
       float f1 = g_ascii_strtod(substr_ptr, nullptr);
       substr_ptr = strtok(nullptr, ",");
       float f2 = g_ascii_strtod(substr_ptr, nullptr);
