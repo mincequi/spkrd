@@ -22,9 +22,6 @@
 #include "speakerlist.h"
 #include <gtkmm.h>
 
-
-
-
 /*
  * This is a class that will contain an entry displaying the currently
  * selected speaker xml file. This window also contains button to open
