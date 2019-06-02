@@ -881,9 +881,9 @@ void Speaker_ListStore::on_entry_changed(int i) {
 }
 
 void Speaker_ListStore::on_append_xml() {
-  GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Append speaker xml"));
-  std::string filename = fc->get_filename();
-  if (filename.length() > 0) {
+  GSpeakersFileChooserDialog fc(_("Append speaker xml"));
+  std::string const& filename = fc.get_filename();
+  if (!filename.empty()) {
     append_xml(filename);
   }
 }

@@ -67,7 +67,7 @@ BoxEditor::BoxEditor()
   m_table.attach(*manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_START)), 0, 1, 2, 3);
   m_table.attach(m_speaker_fs_label, 1, 2, 2, 3);
 
-  m_table.attach(*manage(new Gtk::Label(_("Idstd::string: "), Gtk::ALIGN_START)), 0, 1, 3, 4);
+  m_table.attach(*manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_START)), 0, 1, 3, 4);
   m_table.attach(m_id_string_entry, 1, 3, 3, 4);
   m_table.attach(*manage(new Gtk::Label(_("  Type: "), Gtk::ALIGN_END)), 3, 4, 3, 4);
   m_table.attach(m_box_type_optionmenu, 4, 5, 3, 4);
