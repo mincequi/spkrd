@@ -34,6 +34,17 @@ public:
   MainWindow();
 
 private:
+  /* Callbacks */
+  void on_quit();
+  bool on_delete_event(GdkEventAny* event) override;
+  void on_quit_common();
+  void on_about();
+  void on_save_all();
+  void on_edit_settings();
+  void on_switch_page(GtkNotebookPage* page, guint page_num);
+  bool on_edit_menu_expose_event(GdkEventExpose* event);
+
+private:
   Gtk::VBox m_main_vbox;
   SidebarNotebook m_main_notebook;
   Gtk::HPaned m_driver_hpaned;
@@ -49,16 +60,6 @@ private:
   Speaker_ListStore speaker_editor;
 
   bool in_quit_phase;
-
-  /* Callbacks */
-  void on_quit();
-  bool on_delete_event(GdkEventAny* event) override;
-  void on_quit_common();
-  void on_about();
-  void on_save_all();
-  void on_edit_settings();
-  void on_switch_page(GtkNotebookPage* page, guint page_num);
-  bool on_edit_menu_expose_event(GdkEventExpose* event);
 };
 
 #endif
