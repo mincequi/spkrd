@@ -108,75 +108,66 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
   auto const box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
   std::vector<Gdk::Point> points;
+
   double f_div, f_mapped;
+
   int x, y;
 
-  std::vector<GSpeakers::Point>::iterator iter;
-
-  for (iter = ref_point_vector.begin(); iter != ref_point_vector.end(); ++iter) {
+  for (auto& point : ref_point_vector) {
     if (m_upper_x == 20000) {
-      if ((*iter).get_x() < 100) {
-        /* Devide by 10 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 10;
-        f_mapped = log10(f_div);
+      if (point.get_x() < 100) {
+        /* Divide by 10 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 10.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
-      } else if ((*iter).get_x() >= 100) {
-        /* Devide by 100 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 100;
-        f_mapped = log10(f_div);
+      } else if (point.get_x() >= 100) {
+        /* Divide by 100 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 100.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
-        x = std::round(BOX_FRAME_SIZE + half_space_x / 2 +
-                             std::round(half_space_x / 2 * f_mapped));
-      } else if ((*iter).get_x() >= 1000) {
-        /* Devide by 1000 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 1000;
-        f_mapped = log10(f_div);
+        x = std::round(BOX_FRAME_SIZE + half_space_x / 2 + std::round(half_space_x / 2 * f_mapped));
+      } else if (point.get_x() >= 1000) {
+        /* Divide by 1000 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 1000.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
-      } else if ((*iter).get_x() >= 10000) {
-        /* Devide by 1000 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 10000;
-        f_mapped = log10(f_div);
+      } else if (point.get_x() >= 10000) {
+        /* Divide by 1000 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 10000.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
-                             std::round((half_space_x / 2) * f_mapped));
+                       std::round((half_space_x / 2) * f_mapped));
       }
 
     } else {
-      if ((*iter).get_x() < 100) {
-        /* Devide by 10 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 10;
-        f_mapped = log10(f_div);
+      if (point.get_x() < 100) {
+        /* Divide by 10 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 10.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
-      } else if ((*iter).get_x() >= 100) {
-        /* Devide by 100 to only log numbers 0 < number < 10 */
-        f_div = (double)((*iter).get_x()) / 100;
-        f_mapped = log10(f_div);
+      } else if (point.get_x() >= 100) {
+        /* Divide by 100 to only log numbers 0 < number < 10 */
+        f_div = point.get_x() / 100.0;
+        f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
       }
     }
 
-    /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
-    if ((*iter).get_y() < m_lower_y) {
-      (*iter).set_y(m_lower_y);
-    } else if ((*iter).get_y() > m_upper_y) {
-      (*iter).set_y(m_upper_y);
-    }
+    // Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale
+    point.set_y(point.get_y() < m_lower_y ? m_lower_y : m_upper_y);
+
     /* Calculate y-coordinate */
     y = std::round(box_height + BOX_FRAME_SIZE -
-                         ((double)(-m_lower_y) + (*iter).get_y()) *
-                             (box_height / (double)(-m_lower_y + m_upper_y)));
+                   ((double)(-m_lower_y) + point.get_y()) *
+                       (box_height / (double)(-m_lower_y + m_upper_y)));
     /* Don't draw anything if we got zeros */
-    if (((*iter).get_y() > m_lower_y) && ((*iter).get_y() < m_upper_y)) {
-      //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
-      //	window.draw_line( gc, old_x, old_y, x, y );
-      Gdk::Point p;
-      p.set_x(x);
-      p.set_y(y);
-      points.push_back(p);
+    if (point.get_y() > m_lower_y && point.get_y() < m_upper_y) {
+      points.emplace_back(x, y);
     }
   }
   if (visible) {
@@ -209,9 +200,7 @@ void GSpeakersPlot::replace_plot(int index, std::vector<GSpeakers::Point>& p,
 
 void GSpeakersPlot::remove_plot(int n) {
   int i = 0;
-#ifdef OUTPUT_DEBUG
-  // std::cout << "n == " << n << std::endl;
-#endif
+
   /* For some reason something goes wrong when we select the last row so we add a special case for
    * that event */
   if (n == (int)(m_points.size() - 1)) {
@@ -240,7 +229,6 @@ void GSpeakersPlot::remove_plot(int n) {
       }
     }
   }
-  // std::cout << "loop 3" << std::endl;
   m_selected_plot = -1;
 
   if (visible) {
@@ -286,11 +274,10 @@ void GSpeakersPlot::redraw() {
                               get_allocation().get_height());
 
   /* Calc coordinates for a rectangular box */
-  int box_x, box_y, box_width, box_height;
-  box_x = BOX_FRAME_SIZE;
-  box_y = BOX_FRAME_SIZE;
-  box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
+  auto const box_x = BOX_FRAME_SIZE;
+  auto const box_y = BOX_FRAME_SIZE;
+  auto const box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
+  auto const box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
   /* Draw the box */
   m_refGC->set_rgb_fg_color(black);
@@ -306,8 +293,8 @@ void GSpeakersPlot::redraw() {
   // int inc_space_y = std::round( box_height /  (double)N_VERTICAL_LINES );
   for (int i = m_lower_y; i < m_upper_y; i = i + 5) {
     int y = std::round(box_height + BOX_FRAME_SIZE -
-                             ((double)(-m_lower_y) + (double)i) *
-                                 (box_height / (double)(-m_lower_y + m_upper_y)));
+                       ((double)(-m_lower_y) + (double)i) *
+                           (box_height / (double)(-m_lower_y + m_upper_y)));
     m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y,
                            get_allocation().get_width() - BOX_FRAME_SIZE + 3, y);
     m_refLayout->set_text(int_to_ustring3(i));
@@ -341,90 +328,85 @@ void GSpeakersPlot::redraw() {
       m_refGC->set_rgb_fg_color(m_colors[i]);
 
       std::vector<Gdk::Point> points;
+
       double f_div, f_mapped;
       int x, y;
 
-      std::vector<GSpeakers::Point>::iterator iter;
-      for (iter = m_points[i].begin(); iter != m_points[i].end(); ++iter) {
+      for (auto& point : m_points[i]) {
 
         if (m_upper_x == 20000) {
-          if ((*iter).get_x() < 100) {
-            /* Devide by 10 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 10;
-            f_mapped = log10(f_div);
+          if (point.get_x() < 100) {
+            /* Divide by 10 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 10.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
-          } else if ((*iter).get_x() >= 100) {
-            /* Devide by 100 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 100;
-            f_mapped = log10(f_div);
+          } else if (point.get_x() >= 100) {
+            /* Divide by 100 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 100.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = std::round(BOX_FRAME_SIZE + half_space_x / 2 +
-                                 std::round(half_space_x / 2 * f_mapped));
-          } else if ((*iter).get_x() >= 1000) {
-            /* Devide by 1000 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 1000;
-            f_mapped = log10(f_div);
+                           std::round(half_space_x / 2 * f_mapped));
+          } else if (point.get_x() >= 1000) {
+            /* Divide by 1000 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 1000.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
-          } else if ((*iter).get_x() >= 10000) {
-            /* Devide by 1000 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 10000;
-            f_mapped = log10(f_div);
+          } else if (point.get_x() >= 10000) {
+            /* Divide by 1000 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 10000.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
-                                 std::round((half_space_x / 2) * f_mapped));
+                           std::round((half_space_x / 2) * f_mapped));
           }
 
         } else {
-          if ((*iter).get_x() < 100) {
-            /* Devide by 10 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 10;
-            f_mapped = log10(f_div);
+          if (point.get_x() < 100) {
+            /* Divide by 10 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 10.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
-          } else if ((*iter).get_x() >= 100) {
-            /* Devide by 100 to only log numbers 0 < number < 10 */
-            f_div = (double)((*iter).get_x()) / 100;
-            f_mapped = log10(f_div);
+          } else if (point.get_x() >= 100) {
+            /* Divide by 100 to only log numbers 0 < number < 10 */
+            f_div = point.get_x() / 100.0;
+            f_mapped = std::log10(f_div);
             /* This is the x coordinate */
             x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
           }
         }
 
         /* Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale  */
-        if ((*iter).get_y() < m_lower_y) {
-          (*iter).set_y(m_lower_y);
-        } else if ((*iter).get_y() > m_upper_y) {
-          (*iter).set_y(m_upper_y);
+        if (point.get_y() < m_lower_y) {
+          point.set_y(m_lower_y);
+        } else if (point.get_y() > m_upper_y) {
+          point.set_y(m_upper_y);
         }
         /* Calculate y-coordinate */
         y = std::round(box_height + BOX_FRAME_SIZE -
-                             ((double)(-m_lower_y) + (*iter).get_y()) *
-                                 (box_height / (double)(-m_lower_y + m_upper_y)));
+                       ((double)(-m_lower_y) + point.get_y()) *
+                           (box_height / (double)(-m_lower_y + m_upper_y)));
         /* Don't draw anything if we got zeros */
-        if (((*iter).get_y() > m_lower_y) && ((*iter).get_y() < m_upper_y)) {
-          //	if ( ( old_x == 0 ) || ( old_y == 0 ) ) { old_x = x; old_y = y; }
-          //	window.draw_line( gc, old_x, old_y, x, y );
-          Gdk::Point p;
-          p.set_x(x);
-          p.set_y(y);
-          points.push_back(p);
+        if ((point.get_y() > m_lower_y) && (point.get_y() < m_upper_y)) {
+
+          points.emplace_back(x, y);
         }
       }
+
       /* Don't draw the line until we have it all done */
       if (i == m_selected_plot) {
         m_linesize = m_linesize + 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
-        // std::cout << "select plot" << std::endl;
       }
       m_refPixmap->draw_lines(m_refGC, points);
       if (i == m_selected_plot) {
         m_linesize = m_linesize - 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
-        // std::cout << "select plot" << std::endl;
       }
     }
   }
@@ -444,7 +426,7 @@ void GSpeakersPlot::draw_log_grid() {
     half_space_x = quarter_space_x;
   }
   for (int i = 0; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
+    int x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
     m_refPixmap->draw_line(m_refGC, x, BOX_FRAME_SIZE, x, xaxis_y_position + 3);
     /* Draw text below some vertical lines */
     if ((i == 2) || (i == 5)) {
@@ -454,7 +436,7 @@ void GSpeakersPlot::draw_log_grid() {
   }
 
   for (int i = 1; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
+    int x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
     m_refPixmap->draw_line(m_refGC, half_space_x + x, BOX_FRAME_SIZE, half_space_x + x,
                            xaxis_y_position + 3);
     // Special case: draw 1k instead of 1000
@@ -470,7 +452,7 @@ void GSpeakersPlot::draw_log_grid() {
   /* Draw some more vertical lines if upper limit is 20000 Hz */
   if (m_upper_x == 20000) {
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
+      int x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
       m_refPixmap->draw_line(m_refGC, 2 * half_space_x + x, BOX_FRAME_SIZE, 2 * half_space_x + x,
                              xaxis_y_position + 3);
 
@@ -483,7 +465,7 @@ void GSpeakersPlot::draw_log_grid() {
     }
 
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
+      int x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
       m_refPixmap->draw_line(m_refGC, 3 * half_space_x + x, BOX_FRAME_SIZE, 3 * half_space_x + x,
                              xaxis_y_position + 3);
       if ((i == 2) || (i == 5) || (i == 10)) {

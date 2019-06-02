@@ -203,12 +203,6 @@ SettingsDialog::SettingsDialog()
       mem_fun(*this, &SettingsDialog::on_config_option_change), GSpeakers::TOOLBAR_STYLE));
 }
 
-SettingsDialog::~SettingsDialog() {
-#ifdef OUTPUT_DEBUG
-  std::cout << "SettingsDialog::~SettingsDialog" << std::endl;
-#endif
-}
-
 void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
   std::cout << "SettingsDialog::on_config_option_change: " << setting << std::endl;
   switch (setting) {
