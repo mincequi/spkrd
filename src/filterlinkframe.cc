@@ -313,8 +313,8 @@ void FilterLinkFrame::on_param_changed() {
       switch (m_net->get_lowpass_order()) {
       case NET_ORDER_1ST:
         num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_1ST, NET_TYPE_LOWPASS);
-        (*m_net->parts())[index].set_value((speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value((speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
+        m_net->parts()[index++].set_unit("m");
         m_net->set_lowpass_family(NET_BUTTERWORTH);
         break;
       case NET_ORDER_2ND:
@@ -337,12 +337,11 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* inductor */
-        (*m_net->parts())[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         break;
       case NET_ORDER_3RD:
         switch (m_lower_type_optionmenu->get_history()) {
@@ -356,15 +355,14 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* inductor */
-        (*m_net->parts())[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value(((speaker.get_rdc() * num_params[2]) / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[2]) / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         break;
       case NET_ORDER_4TH:
         switch (m_lower_type_optionmenu->get_history()) {
@@ -394,19 +392,17 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* inductor */
-        (*m_net->parts())[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value(((speaker.get_rdc() * num_params[2]) / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[2]) / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[3] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[3] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         break;
       }
     }
@@ -416,8 +412,8 @@ void FilterLinkFrame::on_param_changed() {
       switch (m_net->get_highpass_order()) {
       case NET_ORDER_1ST:
         num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_1ST, NET_TYPE_HIGHPASS);
-        (*m_net->parts())[index].set_value(num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value(num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         m_net->set_highpass_family(NET_BUTTERWORTH);
         break;
       case NET_ORDER_2ND:
@@ -440,12 +436,11 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         break;
       case NET_ORDER_3RD:
         switch (m_higher_type_optionmenu->get_history()) {
@@ -459,16 +454,14 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[2] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         break;
       case NET_ORDER_4TH:
         switch (m_higher_type_optionmenu->get_history()) {
@@ -498,19 +491,17 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value((num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        (*m_net->parts())[index].set_value((num_params[2] / (speaker.get_rdc() * cutoff)) *
-                                           1000000);
-        (*m_net->parts())[index++].set_unit("u");
+        m_net->parts()[index].set_value((num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index++].set_unit("u");
         /* inductor */
-        (*m_net->parts())[index].set_value((num_params[3] * speaker.get_rdc() / cutoff) * 1000);
-        (*m_net->parts())[index++].set_unit("m");
+        m_net->parts()[index].set_value((num_params[3] * speaker.get_rdc() / cutoff) * 1000);
+        m_net->parts()[index++].set_unit("m");
         break;
       }
     }

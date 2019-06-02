@@ -67,6 +67,10 @@ private:
    * NET_TYPE_HIGHPASS */
   std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
 
+  /* Helper function */
+  void set_family(Gtk::OptionMenu* option_menu, int order, int family);
+
+private:
   Net* m_net;
   std::string m_description;
   SpeakerList* m_speaker_list;
@@ -75,8 +79,6 @@ private:
 
   int my_filter_plot_index;
   std::vector<GSpeakers::Point> points;
-  /* Helper function */
-  void set_family(Gtk::OptionMenu* option_menu, int order, int family);
 };
 
 #endif

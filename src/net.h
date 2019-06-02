@@ -48,8 +48,6 @@
 #define NET_LEGENDRE 6
 #define NET_LINEARPHASE 7
 
-
-
 /*
  * Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
  *
@@ -72,21 +70,22 @@ public:
       bool has_res = false, int family = NET_BUTTERWORTH, int adv_imp_model = 0,
       bool inv_pol = false);
 
-  /* Construct a part from an xml node */
-  Net(xmlNodePtr
-          parent); // or create_from_xml(xmlNodePtr); depending on excetions and stuff like that
+  /// Construct a part from an xml node or create_from_xml(xmlNodePtr) depending on exceptions and
+  /// stuff like that
+  Net(xmlNodePtr parent);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
+  /// Convert data for a part to an xml node, throws GSpeakersException on failure
+  /// Maybe this one should throw an exception
+  xmlNodePtr to_xml_node(xmlNodePtr parent);
 
   /* Print part data to stdout */
   friend std::ostream& operator<<(std::ostream& o, const Net& net);
 
-  /* Maybe we should add a toSPICE function here */
- std::string to_SPICE(Speaker& s, bool use_gnucap = false);
+  std::string to_SPICE(Speaker& s, bool use_gnucap = false);
 
   /* Use this to get the parts or add part to the net */
- std::vector<Part>* parts();
+  std::vector<Part>& parts();
+  std::vector<Part> const& parts() const;
 
   int get_highpass_order();
   int get_lowpass_order();
@@ -95,7 +94,7 @@ public:
   bool get_has_res();
   int get_lowpass_family();
   int get_highpass_family();
- std::string get_speaker();
+  std::string get_speaker();
   int get_adv_imp_model();
   bool get_inv_pot();
 
@@ -155,10 +154,10 @@ protected:
   Part m_res_R;
   Part m_res_C;
   Part m_res_L;
- std::vector<Part> m_parts;
+  std::vector<Part> m_parts;
   int m_lowpass_family;
   int m_highpass_family;
- std::string m_speaker;
+  std::string m_speaker;
   int m_adv_imp_model;
   bool m_inv_pol;
 

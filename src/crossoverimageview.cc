@@ -147,7 +147,7 @@ void CrossoverImageView::redraw() {
         int part_width = GSpeakers::round(double(window_width) / double(net_horz_devider));
 
         if (scale_image_parts) {
-          if ((part_width > (1.5 * part_height)) && (net_vector[i].parts()->size() <= 4)) {
+          if (part_width > (1.5 * part_height) && net_vector[i].parts().size() <= 4) {
             part_width = part_height;
           } else if (part_width > 3 * part_height) {
             part_width = GSpeakers::round(1.7 * part_height);
@@ -160,7 +160,7 @@ void CrossoverImageView::redraw() {
         draw_connector(0, i * vert_space_per_net + 2 * part_height, part_width, part_height, false);
 
         /* lowpass part */
-        std::vector<Part>& part_vector = *net_vector[i].parts();
+        std::vector<Part> const& part_vector = net_vector[i].parts();
         if (lowpass_order > 0) {
           std::vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() + lowpass_order);
           draw_lowpass_net(part_width, i * vert_space_per_net, part_width, part_height,

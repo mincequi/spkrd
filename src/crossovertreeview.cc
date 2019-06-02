@@ -71,7 +71,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
   GtkTreePath* gpath = gtk_tree_path_new_from_string(path_string.c_str());
   Gtk::TreePath path(gpath);
 
-  std::vector<int> indices = path.get_indices();
+  std::vector<int> const& indices = path.get_indices();
   if (!indices.empty()) {
     // int i = indices[0];
     // m_vecItems[i].m_number = atoi(new_text.c_str());
@@ -150,9 +150,9 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
          if indices[2] = 1 we have a bandpassfilter and we should add an offset of the lowpassfilter
          order to indices[3] which is the index of the highpass part to change */
       if (indices[2] == 0) {
-        (*(n->parts()))[indices[3]].set_value(row[m_columns.value]);
+        n->parts()[indices[3]].set_value(row[m_columns.value]);
       } else if (indices[2] == 1) {
-        (*(n->parts()))[indices[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
+        n->parts()[indices[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
       }
     }
 #ifdef OUTPUT_DEBUG
@@ -202,7 +202,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover) {
     /* The rest of the parts */
     int type = n.get_type();
 
-    std::vector<Part> parts = *n.parts();
+    std::vector<Part> const& parts = n.parts();
     int counter = 0;
     if ((type & NET_TYPE_LOWPASS) != 0) {
       int nof_lowpass_parts = n.get_lowpass_order();

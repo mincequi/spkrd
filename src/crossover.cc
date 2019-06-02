@@ -65,7 +65,6 @@ Crossover::Crossover(xmlNodePtr parent) {
 void Crossover::parse_type(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
-    // m_type = atoi((char *)xmlNodeGetContent(node));
     try {
       parse_networks(node->next);
     } catch (GSpeakersException const& e) {
@@ -100,7 +99,6 @@ void Crossover::parse_networks(xmlNodePtr node) {
 void Crossover::parse_id_string(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
-    // m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Crossover: id_string node expected"));
   }

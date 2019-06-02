@@ -607,7 +607,9 @@ std::ostream& operator<<(std::ostream& o, const Net& net) {
   return o << _("********* ******") << std::endl;
 }
 
-std::vector<Part>* Net::parts() { return &m_parts; }
+std::vector<Part>& Net::parts() { return m_parts; }
+
+std::vector<Part> const& Net::parts() const { return m_parts; }
 
 std::string Net::get_speaker() { return m_speaker; }
 
@@ -647,11 +649,7 @@ void Net::set_highpass_order(int order) {
   if ((order >= 0) && (order <= 4)) {
     setup_net_by_order(order, NET_TYPE_HIGHPASS);
     m_highpass_order = order;
-    if (order > 0) {
-      m_type = m_type | NET_TYPE_HIGHPASS;
-    } else {
-      m_type = m_type & ~NET_TYPE_HIGHPASS;
-    }
+    m_type = order > 0 ? m_type | NET_TYPE_HIGHPASS : m_type & ~NET_TYPE_HIGHPASS;
   }
 }
 
@@ -659,11 +657,7 @@ void Net::set_lowpass_order(int order) {
   if ((order >= 0) && (order <= 4)) {
     setup_net_by_order(order, NET_TYPE_LOWPASS);
     m_lowpass_order = order;
-    if (order > 0) {
-      m_type = m_type | NET_TYPE_LOWPASS;
-    } else {
-      m_type = m_type & ~NET_TYPE_LOWPASS;
-    }
+    m_type = order > 0 ? m_type | NET_TYPE_LOWPASS : m_type & ~NET_TYPE_LOWPASS;
   }
 }
 
@@ -737,7 +731,7 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_lowpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Since we're inserting the parts...last one comes first in thestd::vector, we insert
+          /* Since we're inserting the parts...last one comes first in the std::vector, we insert
              them in reversed order */
           iter = m_parts.insert(iter + m_lowpass_order, Part(PART_TYPE_CAPACITOR));
           iter = m_parts.insert(iter, Part(PART_TYPE_INDUCTOR));
@@ -777,17 +771,14 @@ void Net::setup_net_by_order(int new_order, int which_net) {
       m_parts.erase(iter + new_order, iter + m_lowpass_order);
     }
   } else {
-    int diff = new_order - m_highpass_order;
-    if (diff > 0) { // if (new_order > m_lowpass_order
+    auto const difference = new_order - m_highpass_order;
+    if (difference > 0) {
       /* add parts */
-      switch (diff) {
+      switch (difference) {
       case 1:
         switch (m_highpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          /* Here we use push_back since we're always adding parts to the end of the
-           * m_partsstd::vector
-           */
           m_parts.emplace_back(PART_TYPE_CAPACITOR);
           break;
         case NET_ORDER_1ST:
@@ -832,7 +823,7 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         }
         break;
       }
-    } else if (diff < 0) {
+    } else if (difference < 0) {
       /* Remove parts */
       m_parts.erase(iter + m_lowpass_order + new_order, iter + m_lowpass_order + m_highpass_order);
     }
