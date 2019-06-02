@@ -146,18 +146,18 @@ void BoxHistory::open_xml(const std::string& filename) {
     m_refListStore->clear();
 
     m_filename = filename;
-    for_each(temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
+    for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
              mem_fun(*this, &BoxHistory::liststore_add_item));
 
     /* Delete items in box_list */
-    m_box_list.box_list()->erase(m_box_list.box_list()->begin(), m_box_list.box_list()->end());
+    m_box_list.box_list().erase(m_box_list.box_list().begin(), m_box_list.box_list().end());
 
-    for (auto& from : *temp_box_list.box_list()) {
-      m_box_list.box_list()->push_back(from);
+    for (auto& from : temp_box_list.box_list()) {
+      m_box_list.box_list().push_back(from);
     }
 
     /* Select the first item in the list */
-    if (!m_box_list.box_list()->empty()) {
+    if (!m_box_list.box_list().empty()) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
       GtkTreePath* gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(0).c_str());
@@ -183,12 +183,12 @@ void BoxHistory::append_xml(const std::string& filename) {
   BoxList temp_box_list;
   try {
     temp_box_list = BoxList(filename);
-    for_each(temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
+    for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
              mem_fun(*this, &BoxHistory::liststore_add_item));
-    for (auto& from : *temp_box_list.box_list()) {
-      m_box_list.box_list()->push_back(from);
+    for (auto& from : temp_box_list.box_list()) {
+      m_box_list.box_list().push_back(from);
     }
-    m_box_list.box_list()->size();
+    m_box_list.box_list().size();
   } catch (GSpeakersException const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
@@ -205,7 +205,7 @@ void BoxHistory::on_selection_changed() {
     std::vector<int> const& indices = path.get_indices();
     if (!indices.empty()) {
       index = indices[0];
-      signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
+      signal_box_selected(&(m_box_list.box_list()[indices[0]]));
     }
   }
 }
@@ -213,7 +213,7 @@ void BoxHistory::on_selection_changed() {
 void BoxHistory::on_new_copy() {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-  if (!m_box_list.box_list()->empty()) {
+  if (!m_box_list.box_list().empty()) {
     /* Find out which row we selected */
 
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
@@ -229,7 +229,7 @@ void BoxHistory::on_new_copy() {
            Quick and easy solution...use the to_xml function which gets rid of the id */
 
         xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
-        ((*m_box_list.box_list())[indices[0]]).to_xml_node(node);
+        m_box_list.box_list()[indices[0]].to_xml_node(node);
         Box b = Box(node->children);
 
         /* Set time of day as this crossovers id_string */
@@ -243,13 +243,13 @@ void BoxHistory::on_new_copy() {
 
         /* the usual adding of items to the liststore and data-container */
         liststore_add_item(b);
-        m_box_list.box_list()->push_back(b);
+        m_box_list.box_list().push_back(b);
       }
     }
   }
   /* Select the last crossover in the list: the new crossover */
   GtkTreePath* gpath = gtk_tree_path_new_from_string(
-      GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
+      GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
@@ -270,12 +270,12 @@ void BoxHistory::on_new() {
   b.set_id_string(_("Box: ") + s);
 
   liststore_add_item(b);
-  m_box_list.box_list()->push_back(b);
+  m_box_list.box_list().push_back(b);
 
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   GtkTreePath* gpath = gtk_tree_path_new_from_string(
-      GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
+      GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
@@ -343,8 +343,8 @@ void BoxHistory::on_remove() {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
-      if (index < (int)m_box_list.box_list()->size())
-        m_box_list.box_list()->erase(m_box_list.box_list()->begin() + index);
+      if (index < (int)m_box_list.box_list().size())
+        m_box_list.box_list().erase(m_box_list.box_list().begin() + index);
     }
   }
 
@@ -382,13 +382,13 @@ void BoxHistory::on_box_modified(Box* b) {
       row[m_columns.vb2] = b->get_vb2();
       row[m_columns.fb2] = b->get_fb2();
       /* Update the boxlist */
-      (*m_box_list.box_list())[indices[0]].set_type(b->get_type());
-      (*m_box_list.box_list())[indices[0]].set_id_string(b->get_id_string());
-      (*m_box_list.box_list())[indices[0]].set_speaker(b->get_speaker());
-      (*m_box_list.box_list())[indices[0]].set_vb1(b->get_vb1());
-      (*m_box_list.box_list())[indices[0]].set_fb1(b->get_fb1());
-      (*m_box_list.box_list())[indices[0]].set_vb2(b->get_vb2());
-      (*m_box_list.box_list())[indices[0]].set_fb2(b->get_fb2());
+      m_box_list.box_list()[indices[0]].set_type(b->get_type());
+      m_box_list.box_list()[indices[0]].set_id_string(b->get_id_string());
+      m_box_list.box_list()[indices[0]].set_speaker(b->get_speaker());
+      m_box_list.box_list()[indices[0]].set_vb1(b->get_vb1());
+      m_box_list.box_list()[indices[0]].set_fb1(b->get_fb1());
+      m_box_list.box_list()[indices[0]].set_vb2(b->get_vb2());
+      m_box_list.box_list()[indices[0]].set_fb2(b->get_fb2());
       signal_enclosure_set_save_state(true);
     }
   }
@@ -397,10 +397,10 @@ void BoxHistory::on_box_modified(Box* b) {
 void BoxHistory::on_add_to_boxlist(Box* b) {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
   liststore_add_item(*b);
-  m_box_list.box_list()->push_back(*b);
+  m_box_list.box_list().push_back(*b);
   /* Select the last crossover in the list: the added crossover */
   GtkTreePath* gpath = gtk_tree_path_new_from_string(
-      GSpeakers::int_to_ustring(m_box_list.box_list()->size() - 1).c_str());
+      GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
@@ -408,13 +408,13 @@ void BoxHistory::on_add_to_boxlist(Box* b) {
 
 void BoxHistory::on_add_plot(Box* b, Speaker* s) {
   liststore_add_item(*b);
-  m_box_list.box_list()->push_back(*b);
+  m_box_list.box_list().push_back(*b);
 }
 
 void BoxHistory::create_model() {
   m_refListStore = Gtk::ListStore::create(m_columns);
 
-  for_each(m_box_list.box_list()->begin(), m_box_list.box_list()->end(),
+  for_each(m_box_list.box_list().begin(), m_box_list.box_list().end(),
            mem_fun(*this, &BoxHistory::liststore_add_item));
 }
 

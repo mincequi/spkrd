@@ -47,7 +47,8 @@ public:
   friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
   /* Return the box_list vector */
-  std::vector<Box>* box_list();
+  std::vector<Box>& box_list();
+  std::vector<Box> const& box_list() const;
 
   /* Clear all items in the list */
   void clear();

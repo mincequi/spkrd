@@ -19,6 +19,7 @@
 
 #include "boxlist.h"
 #include "common.h"
+
 #include <glib.h>
 
 BoxList::BoxList(const std::string& filename) {
@@ -48,12 +49,10 @@ BoxList::BoxList(const std::string& filename) {
 }
 
 void BoxList::to_xml(const std::string& filename) {
-  xmlDocPtr doc;
-  xmlNodePtr node;
 
-  doc = xmlNewDoc((xmlChar*)("1.0"));
+  xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
+  xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all boxes */
@@ -68,7 +67,7 @@ void BoxList::to_xml(const std::string& filename) {
 }
 
 std::ostream& operator<<(std::ostream& o, const BoxList& box_list) {
-  o << "Box List" << std::endl;
+  o << "Box List\n";
 
   for (const auto& from : box_list.m_box_list) {
     o << from;
@@ -76,6 +75,8 @@ std::ostream& operator<<(std::ostream& o, const BoxList& box_list) {
   return o;
 }
 
-std::vector<Box>* BoxList::box_list() { return &m_box_list; }
+std::vector<Box>& BoxList::box_list() { return m_box_list; }
+
+std::vector<Box> const& BoxList::box_list() const { return m_box_list; }
 
 void BoxList::clear() { m_box_list.erase(m_box_list.begin(), m_box_list.end()); }

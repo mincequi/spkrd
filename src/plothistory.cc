@@ -141,7 +141,7 @@ void PlotHistory::on_box_modified(Box* b) {}
 void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
   // liststore_add_item(*b);
   if ((b != nullptr) && (s != nullptr)) {
-    m_box_list.box_list()->push_back(*b);
+    m_box_list.box_list().push_back(*b);
     m_speaker_list.speaker_list().emplace_back(*s);
     liststore_add_item(*b, *s, color);
 #ifdef OUTPUT_DEBUG

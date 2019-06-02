@@ -391,26 +391,24 @@ void GSpeakersPlot::redraw() {
                            (box_height / (double)(-m_lower_y + m_upper_y)));
         /* Don't draw anything if we got zeros */
         if ((point.get_y() > m_lower_y) && (point.get_y() < m_upper_y)) {
-
           points.emplace_back(x, y);
         }
       }
 
       /* Don't draw the line until we have it all done */
       if (i == m_selected_plot) {
-        m_linesize = m_linesize + 2;
+        m_linesize += 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
       }
       m_refPixmap->draw_lines(m_refGC, points);
       if (i == m_selected_plot) {
-        m_linesize = m_linesize - 2;
+        m_linesize -= 2;
         m_refGC->set_line_attributes(m_linesize, Gdk::LINE_SOLID, Gdk::CAP_NOT_LAST,
                                      Gdk::JOIN_MITER);
       }
     }
   }
-
   /* Reset rgb fg color */
   m_refGC->set_rgb_fg_color(black);
 }

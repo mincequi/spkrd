@@ -32,13 +32,10 @@
 #include <memory>
 
 namespace {
-
 bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time) {
-  std::cout << "grab_on_window" << std::endl;
-
+  std::cout << "grab_on_window\n";
   return true;
 }
-
 } // anonymous namespace
 
 CellRendererPopup::CellRendererPopup()
