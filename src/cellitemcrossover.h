@@ -35,24 +35,20 @@
  */
 class CellItem_Crossover {
 public:
-  CellItem_Crossover();
+  CellItem_Crossover() = default;
 
-  /* Construct a cellitem from a part */
   CellItem_Crossover(Part part);
 
   CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
 
-  /* Use this constructor to construct a cellitem with children */
-  CellItem_Crossover(Glib::ustring label, const std::vector<CellItem_Crossover>& children);
+  /* Construct a cellitem with children */
+  CellItem_Crossover(Glib::ustring label, std::vector<CellItem_Crossover> const& children);
 
-  CellItem_Crossover(const CellItem_Crossover& src);
-  CellItem_Crossover& operator=(const CellItem_Crossover& src);
-
-  /* Member variables */
+public:
   Glib::ustring m_label;
-  int m_id;
-  int m_type;
-  double m_value;
+  int m_id = 0;
+  int m_type = 0;
+  double m_value = 0.0;
   Glib::ustring m_unit;
   Glib::ustring m_type_str;
   Glib::ustring m_value_str;

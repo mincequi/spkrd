@@ -21,66 +21,37 @@
 
 #include <utility>
 
-CellItem_Crossover::CellItem_Crossover() {
-  m_label = "";
-  m_type = 0;
-  m_value = 0.0;
-  m_unit = "";
-  m_id = 0;
-  m_value_str = "";
-  m_type_str = "";
-}
-
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label, int type, double value,
-                                       Glib::ustring unit, int id) {
-  m_label = std::move(label);
-  m_type = type;
-  m_value = value;
-  m_unit = std::move(unit);
-  m_id = id;
-  m_value_str = "";
-  m_type_str = "";
-}
+                                       Glib::ustring unit, int id)
+    : m_label(std::move(label)), m_id(id), m_type(type), m_value(value), m_unit(std::move(unit)) {}
 
-CellItem_Crossover::CellItem_Crossover(Part part) {
-  int id = part.get_id();
-  m_id = part.get_id();
-  m_type = part.get_type();
-  m_value = part.get_value();
-  m_unit = part.get_unit();
+CellItem_Crossover::CellItem_Crossover(Part part)
+    : m_id(part.get_id()), m_type(part.get_type()), m_value(part.get_value()),
+      m_unit(part.get_unit()) {
+
   char* str = nullptr;
   GString* buffer = g_string_new(str);
 
   switch (m_type) {
   case PART_TYPE_CAPACITOR:
-    g_string_printf(buffer, "C%d", id);
+    g_string_printf(buffer, "C%d", m_id);
     m_unit = m_unit + "F";
     break;
   case PART_TYPE_INDUCTOR:
-    g_string_printf(buffer, "L%d", id);
+    g_string_printf(buffer, "L%d", m_id);
     m_unit = m_unit + "H";
     break;
   case PART_TYPE_RESISTOR:
-    g_string_printf(buffer, "R%d", id);
+    g_string_printf(buffer, "R%d", m_id);
     m_unit = m_unit + "Ohm";
     break;
   default:
-    g_string_printf(buffer, "%d", id);
+    g_string_printf(buffer, "%d", m_id);
     break;
   }
   m_label = Glib::ustring(buffer->str);
 }
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
-                                       const std::vector<CellItem_Crossover>& children) {
-  m_label = std::move(label);
-  m_children = children;
-  m_type = 0;
-  m_value = 0;
-  m_unit = "";
-  m_id = 0;
-}
-
-CellItem_Crossover::CellItem_Crossover(const CellItem_Crossover& src) { operator=(src); }
-
-CellItem_Crossover& CellItem_Crossover::operator=(const CellItem_Crossover& src) = default;
+                                       const std::vector<CellItem_Crossover>& children)
+    : m_label(std::move(label)), m_children(children) {}
