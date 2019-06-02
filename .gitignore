@@ -1,6 +1,6 @@
 .cproject
 .project
-Makefile
+*Makefile*
 autom4te.cache
 config.h
 config.log
@@ -13,3 +13,4 @@ stamp-h1
 src/gspeakers
 .settings
 *~
+build
