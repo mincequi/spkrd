@@ -31,7 +31,6 @@
 using std::endl;
 using std::ifstream;
 using std::istringstream;
-using std::map;
 using std::ofstream;
 using std::ostringstream;
 using std::runtime_error;

@@ -702,7 +702,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
                 }
 
                 // std::cout << f1 << "\t" << f2 << "\t" << f3 << std::endl;
-                GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / hypot(f2, f3)));
+                GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / std::hypot(f2, f3)));
                 points.push_back(p);
               }
             } else {
