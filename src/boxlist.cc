@@ -57,7 +57,7 @@ void BoxList::to_xml(const std::string& filename) {
 
   /* Iterate through all boxes */
   for (auto& from : m_box_list) {
-    ((Box)from).to_xml_node(node);
+    from.to_xml_node(node);
   }
 
   /* Save xml file */

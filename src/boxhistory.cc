@@ -133,7 +133,7 @@ void BoxHistory::on_open_xml() {
 
 void BoxHistory::on_append_xml() {
   GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Append box xml"));
-  std::string filename = fc->get_filename();
+  std::string const& filename = fc->get_filename();
   if (filename.length() > 0) {
     append_xml(filename);
   }

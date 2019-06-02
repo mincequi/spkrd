@@ -30,11 +30,6 @@ CrossoverPaned::CrossoverPaned() {
   g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
   set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
   add2(m_plot_notebook);
-  //  m_hpaned2.add1(crossover_treeview);
-
-  //  m_notebook_vbox.pack_start(m_plot_notebook);
-  //  m_notebook_vbox.set_border_width(2);
-  //  m_vpaned.add1(m_notebook_vbox);
 
   m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
   m_crossover_notebook.append_page(crossover_treeview, _("Filter"));
@@ -46,12 +41,6 @@ CrossoverPaned::CrossoverPaned() {
   m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));
 
   m_plot_notebook.set_scrollable();
-  //  m_vpaned.add2(crossover_history);
-  //  m_hpaned2.add2(m_vpaned);
-  //  g_settings.defaultValueUnsignedInt("CrossoverPaned2Position", 220);
-  //  m_hpaned2.set_position(g_settings.getValueUnsignedInt("CrossoverPaned2Position"));
-  //  g_settings.defaultValueUnsignedInt("CrossoverPlotVPanedPosition", 220);
-  //  m_vpaned.set_position(g_settings.getValueUnsignedInt("CrossoverPlotVPanedPosition"));
 
   signal_crossover_set_save_state.connect(mem_fun(*this, &CrossoverPaned::set_save_state));
 }
@@ -155,7 +144,7 @@ Gtk::Menu& CrossoverPaned::get_menu() {
       mem_fun(*this, &CrossoverPaned::on_plot_crossover)));
 
   menulist[MENU_INDEX_SAVE].set_sensitive(false);
-  // menulist[MENU_INDEX_DELETE].set_sensitive(false);
+
   return m_menu;
 }
 
@@ -215,10 +204,8 @@ void CrossoverPaned::on_settings_changed(const std::string& s) {
   if (s == "ToolbarStyle") {
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }
-  if (s == "AutoUpdateFilterPlots") {
-    if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
-      on_plot_crossover();
-    }
+  if (s == "AutoUpdateFilterPlots" && g_settings.getValueBool("AutoUpdateFilterPlots")) {
+    on_plot_crossover();
   }
 }
 

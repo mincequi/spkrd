@@ -48,7 +48,7 @@ public:
 
 protected:
   virtual void get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area, int* x_offset,
-                              int* y_offset, int* width, int* height);
+                              int* y_offset, int* width, int* height) const override;
 
   Gtk::CellEditable* start_editing_vfunc(GdkEvent* event, Gtk::Widget& widget,
                                          const Glib::ustring& path,
@@ -65,7 +65,9 @@ private:
   sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;
   sigc::signal0<void> signal_hide_popup_;
 
-  int button_width_{-1};
+  // Cached button width
+  mutable int button_width_{-1};
+
   Gtk::Window popup_window_;
   Gtk::Widget* focus_widget_{nullptr};
   PopupEntry* popup_entry_{nullptr};

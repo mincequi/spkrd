@@ -36,6 +36,7 @@ class CrossoverPaned : public Gtk::HPaned {
 public:
   CrossoverPaned();
   ~CrossoverPaned() override;
+
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();
   void select_first_crossover();
@@ -47,7 +48,6 @@ protected:
   void set_save_state(bool b);
 
 private:
-  //  Gtk::VBox m_notebook_vbox;
   Gtk::Notebook m_crossover_notebook, m_plot_notebook;
   CrossoverWizard crossover_wizard;
   CrossoverTreeView crossover_treeview;
@@ -56,9 +56,6 @@ private:
   TotalFilterPlot total_filter_plot;
   SummedFreqRespPlot summed_freq_resp_plot;
   CrossoverImageView crossover_image_view;
-
-  //  Gtk::HPaned m_hpaned2;
-  //  Gtk::VPaned m_vpaned;
 
   Gtk::Menu m_menu;
   Gtk::HandleBox m_toolbar;

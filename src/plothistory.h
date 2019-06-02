@@ -24,8 +24,11 @@
 #include "common.h"
 #include "gspeakerscolor.h"
 #include "speakerlist.h"
+
 #include <gdkmm/event.h>
+
 #include <glibmm/ustring.h>
+
 #include <gtkmm/box.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/frame.h>
@@ -44,6 +47,7 @@
 class PlotHistory : public Gtk::Frame {
 public:
   PlotHistory();
+
   ~PlotHistory() override;
   void on_remove();
 

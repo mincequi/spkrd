@@ -46,14 +46,8 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
 
-  // signal_delete_event().connect(mem_fun(*this, &BoxHistory::on_close));
-
-  // m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  // selection->set_mode(Gtk::SELECTION_MULTIPLE);
   selection->signal_changed().connect(mem_fun(*this, &PlotHistory::on_selection_changed));
-
-  // m_RemoveButton.signal_clicked().connect(mem_fun(*this, &PlotHistory::on_remove));
 
   signal_box_modified.connect(mem_fun(*this, &PlotHistory::on_box_modified));
   signal_add_plot.connect(mem_fun(*this, &PlotHistory::on_add_plot));
@@ -98,7 +92,7 @@ void PlotHistory::on_remove() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
+    std::vector<int> const& indices = path.get_indices();
 
     if (!indices.empty()) {
       // Remove item from ListStore:
@@ -107,14 +101,10 @@ void PlotHistory::on_remove() {
       /* Signal to the plot */
       /* We got the plot index to remove in indices[0] */
 #ifdef OUTPUT_DEBUG
-      // std::cout << "PlotHistory: plot to remove = " << indices[0] << std::endl;
       std::cout << "Path: " << path[0] << std::endl;
       std::cout << "PlotHistory: plot to remove = " << indices[0] << std::endl;
 #endif
       signal_remove_box_plot(indices[0]);
-
-      // if(index < (int)m_box_list.box_list()->size())
-      //  m_box_list.box_list()->erase(m_box_list.box_list()->begin() + index);
     }
   }
   if (nof_plots > 0) {
@@ -139,7 +129,6 @@ void PlotHistory::on_remove() {
 void PlotHistory::on_box_modified(Box* b) {}
 
 void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
-  // liststore_add_item(*b);
   if ((b != nullptr) && (s != nullptr)) {
     m_box_list.box_list().push_back(*b);
     m_speaker_list.speaker_list().emplace_back(*s);
@@ -180,22 +169,7 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
   row[m_columns.view_plot] = view_plot;
 }
 
-// bool BoxHistory::on_close(GdkEventAny *event)
-//{
-//  std::cout << "close" << std::endl;
-//  hide();
-//  return false;
-//}
-
-void PlotHistory::create_model() {
-  m_refListStore = Gtk::ListStore::create(m_columns);
-
-  // add_items(m_box_list);
-
-  // for_each(
-  //    m_box_list.box_list()->begin(), m_box_list.box_list()->end(),
-  //    mem_fun(*this, &BoxHistory::liststore_add_item));
-}
+void PlotHistory::create_model() { m_refListStore = Gtk::ListStore::create(m_columns); }
 
 void PlotHistory::add_columns() {
   {

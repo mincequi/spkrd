@@ -73,16 +73,19 @@ sigc::signal0<void>& CellRendererPopup::signal_hide_popup() { return signal_hide
 void CellRendererPopup::hide_popup() { signal_hide_popup_(); }
 
 void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area,
-                                       int* x_offset, int* y_offset, int* width, int* height) {
-  // std::cout << "CellRendererPopup::get_size_vfunc\n";
+                                       int* x_offset, int* y_offset, int* width,
+                                       int* height) const {
+
   Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
 
-  // We cache this becuase it takes really long to get the width.
-  if (button_width_ < 0)
+  // We cache this because it takes really long to get the width.
+  if (button_width_ < 0) {
     button_width_ = PopupEntry::get_button_width();
+  }
 
-  if (width != nullptr)
+  if (width != nullptr) {
     *width += button_width_;
+  }
 }
 
 Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget&,

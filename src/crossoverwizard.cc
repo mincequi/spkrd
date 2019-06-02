@@ -20,10 +20,6 @@
 CrossoverWizard::CrossoverWizard() : Gtk::ScrolledWindow(), m_vbox() {
 
   m_speaker_list = nullptr;
-  // set_border_width(2);
-  //  set_shadow_type(Gtk::SHADOW_NONE);
-  //  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover
-  //  wizard")) + "</b>");
   signal_crossover_selected.connect(sigc::mem_fun(*this, &CrossoverWizard::on_crossover_selected));
   set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
   set_border_width(2);
@@ -38,7 +34,6 @@ void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 #endif
 
   /* We want to make sure the content of m_vbox get deleted */
-  // m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
   if (!m_vbox.children().empty()) {
     for (int i = m_vbox.children().size() - 1; i >= 0; i--) {
       delete m_vbox.children()[i].get_widget();
@@ -97,7 +92,6 @@ void CrossoverWizard::on_speaker_list_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
   std::cout << "CrossoverWizard::on_speaker_list_loaded" << std::endl;
 #endif
-  // m_speaker_list = SpeakerList(speaker_list_filename);
   m_speaker_list = speaker_list;
 }
 

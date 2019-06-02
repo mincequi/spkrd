@@ -21,6 +21,7 @@
 #include "common.h"
 #include "filterlinkframe.h"
 #include "speakerlist.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
 
@@ -37,7 +38,6 @@ private:
   void on_crossover_selected(Crossover* crossover);
 
 private:
-  //  Gtk::ScrolledWindow m_scrolled_window;
   Gtk::VBox m_vbox;
 
   SpeakerList* m_speaker_list = nullptr;
