@@ -20,6 +20,7 @@
 #include "net.h"
 
 #include "speaker.h"
+
 #include <fstream>
 #include <glib.h>
 #include <sstream>
@@ -172,11 +173,9 @@ void Net::parse_has_imp_corr(xmlNodePtr node) {
 
 void Net::parse_has_damp(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_damp", 8) == 0)) {
-    if (g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0) {
-      m_has_damp = true;
-    } else {
-      m_has_damp = false;
-    }
+
+    m_has_damp = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
+
     try {
       parse_has_res(node->next);
     } catch (GSpeakersException const& e) {
@@ -189,11 +188,9 @@ void Net::parse_has_damp(xmlNodePtr node) {
 
 void Net::parse_has_res(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_res", 7) == 0)) {
-    if (g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0) {
-      m_has_res = true;
-    } else {
-      m_has_res = false;
-    }
+
+    m_has_res = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
+
     try {
       parse_parts(node->next);
     } catch (GSpeakersException const& e) {
@@ -376,7 +373,7 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent) {
   }
 
   for (auto& m_part : m_parts) {
-    ((Part)m_part).to_xml_node(field);
+    m_part.to_xml_node(field);
   }
   field = xmlNewChild(net, nullptr, (xmlChar*)("lowpass_family"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_lowpass_family));
