@@ -20,30 +20,22 @@
 
 #include "settings.h"
 
-#include <cstdio>
-#include <unistd.h>
-
 #include "common.h"
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-
-using std::endl;
-using std::ifstream;
-using std::istringstream;
-using std::ofstream;
-using std::ostringstream;
-using std::runtime_error;
+#include <unistd.h>
 
 Settings::Settings() { defaultSettings(); }
 
 void Settings::load(const std::string& filename) noexcept(false) {
 
-  ifstream inf(filename.c_str());
+  std::ifstream inf(filename.c_str());
   if (!inf) {
-    ostringstream ostr;
+    std::ostringstream ostr;
     ostr << _("Settings::load: Could not open file for reading: ") << filename;
-    throw runtime_error(ostr.str());
+    throw std::runtime_error(ostr.str());
   }
 
   while (inf) {
@@ -66,12 +58,12 @@ void Settings::save(const std::string& filename) noexcept(false) {
      filesystem run down to no space left  */
   std::string tempfilename = filename + ".temp";
 
-  ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
+  std::ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
   if (!of) {
-    ostringstream ostr;
+    std::ostringstream ostr;
     ostr << _("Settings::save: Could not open temporary settings file to save to: ")
          << tempfilename;
-    throw runtime_error(ostr.str());
+    throw std::runtime_error(ostr.str());
   }
 
   auto curr = m_map.begin();
@@ -80,9 +72,9 @@ void Settings::save(const std::string& filename) noexcept(false) {
     if (!of) {
       of.close();
       unlink(tempfilename.c_str());
-      ostringstream ostr;
+      std::ostringstream ostr;
       ostr << _("Settings::save: Failed writing to temporary file: ") << tempfilename;
-      throw runtime_error(ostr.str());
+      throw std::runtime_error(ostr.str());
     }
     ++curr;
   }
@@ -93,9 +85,9 @@ void Settings::save(const std::string& filename) noexcept(false) {
   remove(filename.c_str());
 #endif
   if (rename(tempfilename.c_str(), filename.c_str()) == -1) {
-    ostringstream ostr;
+    std::ostringstream ostr;
     ostr << _("Settings::save: Failed renaming temporary file to replace old file: ") << filename;
-    throw runtime_error(ostr.str());
+    throw std::runtime_error(ostr.str());
   }
   m_filename = filename;
 }
@@ -107,12 +99,12 @@ void Settings::save() noexcept(false) {
      filesystem run down to no space left  */
   std::string tempfilename = m_filename + ".temp";
 
-  ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
+  std::ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);
   if (!of) {
-    ostringstream ostr;
+    std::ostringstream ostr;
     ostr << _("Settings::save: Could not open temporary settings file to save to: ")
          << tempfilename;
-    throw runtime_error(ostr.str());
+    throw std::runtime_error(ostr.str());
   }
 
   auto curr = m_map.begin();
@@ -121,9 +113,9 @@ void Settings::save() noexcept(false) {
     if (!of) {
       of.close();
       unlink(tempfilename.c_str());
-      ostringstream ostr;
+      std::ostringstream ostr;
       ostr << _("Settings::save: Failed writing to temporary file: ") << tempfilename;
-      throw runtime_error(ostr.str());
+      throw std::runtime_error(ostr.str());
     }
     ++curr;
   }
@@ -134,14 +126,14 @@ void Settings::save() noexcept(false) {
   remove(m_filename.c_str());
 #endif
   if (rename(tempfilename.c_str(), m_filename.c_str()) == -1) {
-    ostringstream ostr;
+    std::ostringstream ostr;
     ostr << _("Settings::save: Failed renaming temporary file to replace old file: ") << m_filename;
-    throw runtime_error(ostr.str());
+    throw std::runtime_error(ostr.str());
   }
 }
 
 std::string Settings::Escape(const std::string& s) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   std::string::const_iterator curr = s.begin();
   while (curr != s.end()) {
     switch (*curr) {
@@ -164,7 +156,7 @@ std::string Settings::Escape(const std::string& s) {
 }
 
 std::string Settings::Unescape(const std::string& s) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   std::string::const_iterator curr = s.begin();
   while (curr != s.end()) {
     if (*curr == '\\') {
@@ -301,7 +293,7 @@ void Settings::setValue(const std::string& k, const std::string& v) {
 }
 
 void Settings::setValue(const std::string& k, int v) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   ostr << v;
   if (m_map[k] != ostr.str()) {
     m_map[k] = ostr.str();
@@ -310,7 +302,7 @@ void Settings::setValue(const std::string& k, int v) {
 }
 
 void Settings::setValue(const std::string& k, unsigned int v) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   ostr << v;
   if (m_map[k] != ostr.str()) {
     m_map[k] = ostr.str();
@@ -319,14 +311,14 @@ void Settings::setValue(const std::string& k, unsigned int v) {
 }
 
 void Settings::setValue(const std::string& k, unsigned short v) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   ostr << v;
   m_map[k] = ostr.str();
   settings_changed.emit(k);
 }
 
 void Settings::setValue(const std::string& k, unsigned char v) {
-  ostringstream ostr;
+  std::ostringstream ostr;
   ostr << (unsigned int)v;
   if (m_map[k] != ostr.str()) {
     m_map[k] = ostr.str();

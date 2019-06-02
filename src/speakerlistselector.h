@@ -20,7 +20,10 @@
 
 #include "speakereditor.h"
 #include "speakerlist.h"
+
 #include <gtkmm.h>
+
+#include <memory>
 
 /*
  * This is a class that will contain an entry displaying the currently
@@ -45,7 +48,7 @@ protected:
   Gtk::Table m_Table;
   Gtk::VBox m_vbox;
 
-  Gtk::FileSelection* f_open;
+  std::unique_ptr<Gtk::FileSelection> f_open;
 
 private:
   SpeakerList m_speaker_list;

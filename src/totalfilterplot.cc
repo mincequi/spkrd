@@ -21,20 +21,15 @@
 #include "totalfilterplot.h"
 #include <cmath>
 
-TotalFilterPlot::TotalFilterPlot() : plot(1, 20000) {
+TotalFilterPlot::TotalFilterPlot() : plot(1, 20000), m_color(std::make_unique<Gdk::Color>("blue")) {
 
   add(plot);
-  // signal_add_box_plot.connect(mem_fun(plot, &GSpeakersPlot::add_plot));
-  // signal_remove_box_plot.connect(mem_fun(plot, &GSpeakersPlot::remove_plot));
-  // signal_hide_box_plot.connect(mem_fun(plot, &GSpeakersPlot::hide_plot));
-  // signal_select_plot.connect(mem_fun(plot, &GSpeakersPlot::select_plot));
+
   signal_plot_crossover.connect(mem_fun(*this, &TotalFilterPlot::on_plot_crossover));
   signal_add_crossover_plot.connect(mem_fun(*this, &TotalFilterPlot::on_add_plot));
-  //  signal_crossover_selected.connect(mem_fun(*this, &TotalFilterPlot::on_crossover_selected));
 
   plot.set_y_label(_("Magnitude / dB"));
   show_all();
-  m_color = new Gdk::Color("blue");
 }
 
 TotalFilterPlot::~TotalFilterPlot() = default;
@@ -45,63 +40,34 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Col
   std::cout << "TotalFilterPlot::on_add_plot" << std::endl;
 #endif
   /* Search for *i in the graph */
-  int position = -1;
-  int l = 0;
-  for (int& m_net : m_nets) {
-    if (*i == m_net) {
-      position = l;
-    }
-    l++;
-  }
+  auto const position = std::find(begin(m_nets), end(m_nets), *i);
 
-  /* Om *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
-   * of thestd::vector */
-  if ((position != -1) && (!m_points.empty())) {
-    m_points[position] = points;
+  /* If *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
+   * of the vector */
+  if (position != end(m_nets) && !m_points.empty()) {
+    m_points[std::distance(begin(m_nets), position)] = points;
   } else {
     m_points.push_back(points);
     m_nets.push_back(*i);
   }
 
-  // std::cout << "TotalFilterPlot::on_add_plot: m_nets.size(), m_points.size() = " << m_nets.size()
-  // <<
-  // ", " << m_points.size() << std::endl;
-
-  /* sum the plots into one great plot */
+  // sum the plots into one great plot
   Gdk::Color c("red");
   std::vector<GSpeakers::Point> pnts;
   plot.remove_all_plots();
   if (m_points.size() > 1) {
     pnts = m_points[0];
     plot.add_plot(m_points[0], c);
-    for (unsigned j = 1; j < m_points.size(); j++) {
-      for (unsigned k = 0; k < m_points[j].size(); k++) {
-        pnts[k].set_y(
-            10 * log10(pow(10, pnts[k].get_y() / 10) + pow(10, (m_points[j])[k].get_y() / 10)));
+    for (std::size_t j = 1; j < m_points.size(); j++) {
+      for (std::size_t k = 0; k < m_points[j].size(); k++) {
+        pnts[k].set_y(10 * std::log10(std::pow(10, pnts[k].get_y() / 10) +
+                                      std::pow(10, (m_points[j])[k].get_y() / 10)));
       }
       plot.add_plot(m_points[j], c);
     }
   }
-
-  // kolla om *i finns i grafen
-  // om *i finns, dra bort den och l�gg sedan till den nya
-  // om *i inte finns, l�gg till den och spara vektorn
-  // rita om plotten
-
-  // if (position != -1) {
-  //  std::cout << "TotalFilterPlot::on_add_plot: replace plot" << std::endl;
-
   plot.select_plot(plot.add_plot(pnts, *m_color));
-  //} else {
-  //  plot.add_plot(pnts, *m_color);
-  //  std::cout << "TotalFilterPlot::on_add_plot: add plot" << std::endl;
-  //}
-  //  if (*i == -1) {
-  //    *i = plot.add_plot(points, color);
-  //  } else {
-  //    plot.replace_plot(*i, points, color);
-  //  }
-  // std::cout << "TotalFilterPlot::on_add_plot: after add plot" << std::endl;
+
   return 0;
 }
 
@@ -113,12 +79,10 @@ void TotalFilterPlot::clear() {
 
 void TotalFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 
-void TotalFilterPlot::on_plot_crossover() {
-  // clear();
-}
+void TotalFilterPlot::on_plot_crossover() {}
 
 bool TotalFilterPlot::on_delete_event(GdkEventAny* event) {
-  delete m_color;
+  m_color.release();
   /* Don't wanna delete this window */
   return true;
 }

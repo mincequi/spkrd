@@ -61,7 +61,7 @@ Speaker::Speaker(xmlNodePtr parent) {
 
 xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent) {
   xmlNodePtr speaker, child;
-  auto* buffer = new gchar[10];
+  std::array<gchar, 10> buffer;
 
   speaker = xmlNewChild(parent, nullptr, (xmlChar*)("speaker"), nullptr);
 
@@ -72,31 +72,31 @@ xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent) {
   xmlNodeSetContent(child, (xmlChar*)g_strdup_printf("%d", m_type));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("qts"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qts));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_qts));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("vas"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vas));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_vas));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("fs"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fs));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_fs));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("rdc"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_rdc));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_rdc));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("lvc"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_lvc));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_lvc));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("qms"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qms));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_qms));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("qes"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qes));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_qes));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("imp"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_imp));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_imp));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("sens"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_sens));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_sens));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("freq_resp_filename"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_freq_resp_filename.c_str());
@@ -105,21 +105,19 @@ xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent) {
   xmlNodeSetContent(child, (xmlChar*)m_imp_resp_filename.c_str());
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("mmd"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_mmd));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_mmd));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("ad"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_ad));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_ad));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("bl"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_bl));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_bl));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("rms"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_rms));
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_rms));
 
   child = xmlNewChild(speaker, nullptr, (xmlChar*)("cms"), nullptr);
-  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_cms));
-
-  delete buffer;
+  xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_cms));
 
   return speaker;
 }

@@ -157,7 +157,7 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
   if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() ||
       meassurementlist_modified()) {
     std::cout << "MainWindow::on_quit: opening confirmation dialog" << std::endl;
-    Gtk::Dialog* d = new Gtk::Dialog("", true);
+    auto d = std::make_unique<Gtk::Dialog>("", true);
     d->set_border_width(6);
     d->get_vbox()->set_spacing(12);
     Gtk::HBox* hbox = manage(new Gtk::HBox());
@@ -206,7 +206,6 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
     default:
       break;
     }
-    delete d;
   }
   on_quit_common();
 
@@ -221,7 +220,7 @@ void MainWindow::on_quit() {
   if (driverlist_modified() || enclosurelist_modified() || crossoverlist_modified() ||
       meassurementlist_modified()) {
     std::cout << "MainWindow::on_quit: opening confirmation dialog" << std::endl;
-    Gtk::Dialog* d = new Gtk::Dialog("", true);
+    auto d = std::make_unique<Gtk::Dialog>("", true);
     d->set_border_width(6);
     d->get_vbox()->set_spacing(12);
     Gtk::HBox* hbox = manage(new Gtk::HBox());
@@ -270,7 +269,6 @@ void MainWindow::on_quit() {
     default:
       break;
     }
-    delete d;
   }
 
   on_quit_common();
@@ -375,8 +373,4 @@ void MainWindow::on_about() {
   m.run();
 }
 
-void MainWindow::on_edit_settings() {
-  auto* d = new SettingsDialog();
-  d->run();
-  delete d;
-}
+void MainWindow::on_edit_settings() { std::make_unique<SettingsDialog>()->run(); }

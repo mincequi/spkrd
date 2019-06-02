@@ -42,9 +42,7 @@ FreqRespEditor::FreqRespEditor(std::string filename)
       ->set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
 
   // get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is
-  // not intended to provide an "
-  //                                                "exact estimation of the total frequency
-  //                                                response."))));
+  // not intended to provide an exact estimation of the total frequency response."))));
   // get_vbox()->set_border_width(10);
   get_vbox()->pack_start(*frame);
   m_table.set_spacings(5);
@@ -109,12 +107,13 @@ FreqRespEditor::FreqRespEditor(std::string filename)
   if (!m_filename.empty()) {
     /* Open file and fill in the values */
     std::ifstream fin(m_filename.c_str());
+
     if (fin.good()) {
       for (int i = 0; i < 30; i++) {
-        char* buffer = new char[100];
-        fin.getline(buffer, 100, '\n');
+        std::vector<char> buffer(100);
+        fin.getline(buffer.data(), 100, '\n');
 
-        char* substr_ptr = strtok(buffer, ",");
+        char* substr_ptr = strtok(buffer.data(), ",");
         g_ascii_strtod(substr_ptr, nullptr);
         substr_ptr = strtok(nullptr, ",");
         float const f2 = g_ascii_strtod(substr_ptr, nullptr);
@@ -122,12 +121,9 @@ FreqRespEditor::FreqRespEditor(std::string filename)
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(
             sigc::bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
-
-        delete buffer;
       }
     }
   }
-
   show_all();
 }
 
@@ -138,18 +134,17 @@ void FreqRespEditor::on_save() {
   std::vector<double> v = get_x_vector();
   std::ofstream of(m_filename.c_str());
   if (of.good()) {
-    auto* buffer = new char[8];
+    std::array<char, 8> buffer;
     for (int j = 0; j < 15; j++) {
       of << v[2 * j] << ","
-         << g_ascii_dtostr(buffer, 8,
+         << g_ascii_dtostr(buffer.data(), 8,
                            g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), nullptr))
-         << std::endl;
+         << "\n";
       of << v[2 * j + 1] << ","
-         << g_ascii_dtostr(buffer, 8,
+         << g_ascii_dtostr(buffer.data(), 8,
                            g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), nullptr))
-         << std::endl;
+         << "\n";
     }
-    delete buffer;
     of.close();
     for (int i = 0; i < 30; i++) {
       dbmag_entries[i]->signal_changed().connect(
@@ -157,20 +152,19 @@ void FreqRespEditor::on_save() {
     }
 
   } else {
-    Gtk::MessageDialog* d =
-        new Gtk::MessageDialog(*this, std::string(_("Could not open file: ")) + m_filename, false,
-                               Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+    auto d = std::make_unique<Gtk::MessageDialog>(
+        *this, std::string(_("Could not open file: ")) + m_filename, false, Gtk::MESSAGE_ERROR,
+        Gtk::BUTTONS_OK, true);
     d->run();
-    delete d;
   }
   m_save_button.set_sensitive(false);
 }
 
 void FreqRespEditor::on_save_as() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "FreqRespEditor::on_save_as" << std::endl;
+  std::cout << "FreqRespEditor::on_save_as\n";
 #endif
-  Gtk::FileSelection* f = new Gtk::FileSelection(_("Enter filename..."));
+  auto f = std::make_unique<Gtk::FileSelection>(_("Enter filename..."));
   f->set_modal();
   /* -5 == ok button clicked */
   if (f->run() == -5) {
@@ -178,7 +172,6 @@ void FreqRespEditor::on_save_as() {
     on_save();
   }
   f->hide();
-  delete f;
 }
 
 void FreqRespEditor::on_close() {

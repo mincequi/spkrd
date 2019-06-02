@@ -241,43 +241,39 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   enable_edit = true;
 }
 
-FilterLinkFrame::~FilterLinkFrame() { std::cout << "FilterLinkFrame: dtor" << std::endl; }
+FilterLinkFrame::~FilterLinkFrame() { std::cout << "FilterLinkFrame: dtor\n"; }
 
 void FilterLinkFrame::on_order_selected(int which, int order) {
 #ifdef OUTPUT_DEBUG
   std::cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order
             << std::endl;
 #endif
-  Gtk::Menu::MenuList* menulist; // = &(m_lower_type_menu->items());
-  if (which == 0) {
-    menulist = &m_lower_type_menu->items();
-  } else if (which == 1) {
-    menulist = &m_higher_type_menu->items();
-  }
-  if (menulist->size() > 0) {
-    menulist->erase(menulist->begin(), menulist->end());
-  }
+  Gtk::Menu::MenuList& menulist =
+      which == 0 ? m_lower_type_menu->items() : m_higher_type_menu->items();
+
+  menulist.clear();
+
   switch (order) {
   case NET_ORDER_1ST:
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
     break;
   case NET_ORDER_2ND:
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Chebychev"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Chebychev"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
     break;
   case NET_ORDER_3RD:
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
     break;
   case NET_ORDER_4TH:
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Gaussian"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Legendre"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Linear-Phase"));
-    menulist->push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Gaussian"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Legendre"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linear-Phase"));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
     break;
   }
   if (which == 0) {
@@ -624,12 +620,10 @@ void FilterLinkFrame::on_plot_crossover() {
   std::ifstream fin(spice_output_file.c_str());
   if (fin.good()) {
     bool output = false;
-    float f_id;
-    float freq, db;
-    points.erase(points.begin(), points.end());
+    points.clear();
     while (!fin.eof()) {
-      char* buffer = new char[100];
-      fin.getline(buffer, 100, '\n');
+      std::vector<char> buffer(100);
+      fin.getline(buffer.data(), 100, '\n');
       if (g_settings.getValueBool("SPICEUseGNUCAP")) {
         if (buffer[0] == ' ') {
           output = true;
@@ -642,47 +636,32 @@ void FilterLinkFrame::on_plot_crossover() {
 
       if (output) {
         if (g_settings.getValueBool("SPICEUseGNUCAP")) {
-          f_id = atof(buffer);
+          float const f_id = atof(buffer.data());
           if (f_id != 0) {
             /* Check if we got a freq more than 10kHz */
-            char* substr_ptr = strstr(buffer, "K");
-            if (substr_ptr != nullptr) {
-              freq = f_id * 1000;
-            } else {
-              freq = f_id;
-            }
-            substr_ptr = strtok(buffer, " ");
+            char* substr_ptr = strstr(buffer.data(), "K");
+            float const freq = substr_ptr != nullptr ? f_id * 1000 : f_id;
+
+            substr_ptr = strtok(buffer.data(), " ");
             substr_ptr = strtok(nullptr, " ");
-            db = g_ascii_strtod(substr_ptr, nullptr);
-            // 	    if (strstr(substr_ptr, "m")) {
-            // 	      f2 = f2 / 1000.;
-            // 	    } else if (strstr(substr_ptr, "u")) {
-            // 	      f2 = f2 / 1000000.;
-            // 	    } else if (strstr(substr_ptr, "n")) {
-            // 	      f2 = f2 / 1000000000.;
-            // 	    } else if (strstr(substr_ptr, "p")) {
-            // 	      f2 = f2 / 1000000000000.;
-            // 	    }
-            //	    std::cout << f1 << '\t' << std::endl;
-            GSpeakers::Point p(std::round(freq), db);
-            points.push_back(p);
+            float const db = g_ascii_strtod(substr_ptr, nullptr);
+            points.emplace_back(std::round(freq), db);
           }
 
         } else {
           if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
-            strtok(buffer, "\t");
+            strtok(buffer.data(), "\t");
             char* substr_ptr = strtok(nullptr, "\t");
 
-            freq = g_ascii_strtod(substr_ptr, nullptr);
-            substr_ptr = strtok(nullptr, "\t");
-            db = g_ascii_strtod(substr_ptr, nullptr);
+            float const freq = g_ascii_strtod(substr_ptr, nullptr);
 
-            GSpeakers::Point p(std::round(freq), db);
-            points.push_back(p);
+            substr_ptr = strtok(nullptr, "\t");
+
+            float const db = g_ascii_strtod(substr_ptr, nullptr);
+            points.emplace_back(std::round(freq), db);
           }
         }
       }
-      delete buffer;
     }
     /* send the spice data to the plot */
     /* TODO: improve color handling here */
@@ -699,6 +678,7 @@ void FilterLinkFrame::on_plot_crossover() {
     if (enable_edit) {
       enable_edit = false;
       if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
+        // TODO Use std::find_if
         int i = 0, index1 = 0;
         for (auto& point : points) {
           if (point.get_y() > (-3 - m_damp_spinbutton.get_value())) {
@@ -733,8 +713,7 @@ void FilterLinkFrame::on_plot_crossover() {
         double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
         int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
         double ytodbdiff = points[index2].get_y() + 3;
-        m_higher_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff +
-                                               points[index2].get_x());
+        m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff + points[index2].get_x());
       }
       enable_edit = true;
     }
