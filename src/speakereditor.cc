@@ -1049,7 +1049,7 @@ void Speaker_ListStore::create_model() {
            mem_fun(*this, &Speaker_ListStore::liststore_add_item));
 }
 
-void Speaker_ListStore::liststore_add_item(Speaker spk) {
+void Speaker_ListStore::liststore_add_item(Speaker const& spk) {
   Gtk::TreeRow row = *(m_refListStore->append());
 
   row[m_columns.id] = spk.get_id();

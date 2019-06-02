@@ -82,7 +82,7 @@ protected:
   /* Helper funtions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Speaker foo);
+  virtual void liststore_add_item(Speaker const& foo);
   void draw_imp_plot(Speaker& s, bool update = false);
 
   // Member widgets:
