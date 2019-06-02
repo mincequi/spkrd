@@ -1,6 +1,8 @@
 project(gspeakers LANGUAGES C CXX)
 cmake_minimum_required(VERSION 3.10)
 
+option(GSPK_ENABLE_PROFILE "Enable profiling flags" OFF)
+
 find_package(GTK2 REQUIRED COMPONENTS gtk gtkmm)
 find_package(LibXml2 REQUIRED)
 find_package(PkgConfig REQUIRED)

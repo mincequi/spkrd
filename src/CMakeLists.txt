@@ -21,5 +21,9 @@ target_include_directories(gspeaker_core
 target_compile_definitions(gspeaker_core
                            PRIVATE
                            GSPEAKERS_PREFIX="${CMAKE_INSTALL_PREFIX}"
-                       VERSION="0.13")
+                           VERSION="0.13")
 target_compile_options(gspeaker_core PRIVATE -Wall)
+
+if(GSPK_ENABLE_PROFILE)
+  set_target_properties(gspeaker_core PROPERTIES COMPILE_FLAGS "-fno-omit-frame-pointer")
+endif()
