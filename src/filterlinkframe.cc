@@ -18,7 +18,7 @@
  */
 
 #include "filterlinkframe.h"
-#include "../config.h"
+
 #include "common.h"
 #include "gspeakersplot.h"
 

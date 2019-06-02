@@ -18,6 +18,8 @@
  * USA
  */
 
+#include "common.h"
+
 #include "gspeakersboxplot.h"
 
 GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), plot(1, 1000) {

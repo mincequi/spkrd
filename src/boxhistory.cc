@@ -18,7 +18,7 @@
 */
 
 #include "boxhistory.h"
-#include "../config.h"
+
 #include "gspeakersfilechooser.h"
 
 #include <gtkmm/messagedialog.h>

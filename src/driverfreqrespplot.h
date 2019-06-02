@@ -24,10 +24,12 @@
 #ifndef __DRIVER_FREQ_RESP_PLOT_H
 #define __DRIVER_FREQ_RESP_PLOT_H
 
-#include "common.h"
 #include "gspeakersplot.h"
+
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
+
+#include <vector>
 
 /*
  * This is a wrapper class for GSpeakersPlot

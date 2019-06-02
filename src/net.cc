@@ -18,7 +18,7 @@
 */
 
 #include "net.h"
-#include "../config.h"
+
 #include "speaker.h"
 #include <fstream>
 #include <glib.h>

@@ -16,7 +16,7 @@
 */
 
 #include "speakerlistselector.h"
-#include "../config.h"
+
 #include "common.h"
 #include "speakereditor.h"
 

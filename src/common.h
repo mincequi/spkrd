@@ -20,7 +20,6 @@
 #ifndef __GFILTER_COMMON_H
 #define __GFILTER_COMMON_H
 
-#include "../config.h"
 #include "settings.h"
 
 #include <glibmm/ustring.h>

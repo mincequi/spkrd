@@ -18,7 +18,7 @@
 */
 
 #include "crossoverhistory.h"
-#include "../config.h"
+
 #include "gspeakersfilechooser.h"
 #include <time.h>
 

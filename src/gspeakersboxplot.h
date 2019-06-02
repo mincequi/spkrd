@@ -21,7 +21,6 @@
 #ifndef __GSPEAKERS_BOX_PLOT
 #define __GSPEAKERS_BOX_PLOT
 
-#include "common.h"
 #include "gspeakersplot.h"
 
 #include <gtkmm/box.h>

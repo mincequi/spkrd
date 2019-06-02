@@ -18,7 +18,7 @@
 */
 
 #include "mainwindow.h"
-#include "../config.h"
+
 #include "crossover.h"
 #include "settingsdialog.h"
 
