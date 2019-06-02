@@ -30,7 +30,6 @@
 
 /*
  * This is a wrapper class for GSpeakersPlot
- *
  */
 class SummedFreqRespPlot : public Gtk::Frame {
 public:
@@ -40,14 +39,15 @@ public:
   int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
+  void on_crossover_selected(Crossover*);
+  void on_speakerlist_loaded(SpeakerList* speaker_list);
+
+private:
   GSpeakersPlot plot;
   std::vector<int> m_nets;
   Gdk::Color* m_color;
   std::vector<std::vector<GSpeakers::Point>> m_points;
   SpeakerList* m_speakerlist;
-
-  void on_crossover_selected(Crossover*);
-  void on_speakerlist_loaded(SpeakerList* speaker_list);
 };
 
 #endif
