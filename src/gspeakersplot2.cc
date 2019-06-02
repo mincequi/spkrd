@@ -27,13 +27,10 @@
 GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx,
                              int y_zero_freq) {
   m_lower_x = lower_x;
-  m_upper_x = upper_x;
-  if (m_upper_x > 10000)
-    m_upper_x = 20000;
-  else
-    m_upper_x = 1000;
+  m_upper_x = upper_x > 10000 ? 20000 : 1000;
   m_lower_y = lower_y;
   m_upper_y = upper_y;
+
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
@@ -50,7 +47,6 @@ bool GSpeakersPlot::on_expose_event(GdkEventExpose* event) {
                               event->area.x, event->area.y, event->area.x, event->area.y,
                               event->area.width, event->area.height);
   m_selected_plot = -1;
-  // std::cout << "GSpeakersPlot: on_expose" << std::endl;
 
   return false;
 }
@@ -88,7 +84,8 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color) {
+int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
+                            Gdk::Color& ref_color) {
 #ifdef OUTPUT_DEBUG
   std::cout << "GSpeakersPlot: on add plot" << std::endl;
 #endif
@@ -217,8 +214,8 @@ void GSpeakersPlot::remove_plot(int n) {
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
   } else {
 
-    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin(); iter != m_points.end();
-         ++iter, i++) {
+    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin();
+         iter != m_points.end(); ++iter, i++) {
       if (n == i) {
         m_points.erase(iter);
       }

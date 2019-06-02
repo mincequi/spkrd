@@ -67,8 +67,8 @@ private:
 
   int button_width_{-1};
   Gtk::Window popup_window_;
-  Gtk::Widget* focus_widget_{0};
-  PopupEntry* popup_entry_{0};
+  Gtk::Widget* focus_widget_{nullptr};
+  PopupEntry* popup_entry_{nullptr};
   bool shown_{false};
   bool editing_canceled_{false};
 
