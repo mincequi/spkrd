@@ -29,7 +29,7 @@
 class FreqRespEditor : public Gtk::Dialog {
 public:
   FreqRespEditor(std::string filename = "");
-  ~FreqRespEditor();
+  ~FreqRespEditor() override;
   std::string get_filename() { return m_filename; }
 
 private:

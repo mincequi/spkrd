@@ -77,9 +77,9 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
-  f_append = NULL;
-  f_open = NULL;
-  f_save_as = NULL;
+  f_append = nullptr;
+  f_open = nullptr;
+  f_save_as = nullptr;
   show_all();
   index = 0;
 
@@ -87,8 +87,8 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   // selection->set_mode(Gtk::SELECTION_MULTIPLE);
   selection->signal_changed().connect(mem_fun(*this, &BoxHistory::on_selection_changed));
 
-  if (boxlist_found == true) {
-    char* str = NULL;
+  if (boxlist_found) {
+    char* str = nullptr;
     GString* buffer = g_string_new(str);
     g_string_printf(buffer, "%d", 0);
     GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -126,7 +126,7 @@ bool BoxHistory::on_delete_event(GdkEventAny* event) {
 void BoxHistory::on_open_xml() {
   GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Open box xml"));
   std::string filename = fc->get_filename();
-  if (filename.length()) {
+  if (filename.length() != 0u) {
     open_xml(filename);
   }
 }
@@ -152,9 +152,8 @@ void BoxHistory::open_xml(const std::string& filename) {
     /* Delete items in box_list */
     m_box_list.box_list()->erase(m_box_list.box_list()->begin(), m_box_list.box_list()->end());
 
-    for (auto from = temp_box_list.box_list()->begin(); from != temp_box_list.box_list()->end();
-         ++from) {
-      m_box_list.box_list()->push_back(*from);
+    for (auto& from : *temp_box_list.box_list()) {
+      m_box_list.box_list()->push_back(from);
     }
 
     /* Select the first item in the list */
@@ -186,9 +185,8 @@ void BoxHistory::append_xml(const std::string& filename) {
     temp_box_list = BoxList(filename);
     for_each(temp_box_list.box_list()->begin(), temp_box_list.box_list()->end(),
              mem_fun(*this, &BoxHistory::liststore_add_item));
-    for (auto from = temp_box_list.box_list()->begin(); from != temp_box_list.box_list()->end();
-         ++from) {
-      m_box_list.box_list()->push_back(*from);
+    for (auto& from : *temp_box_list.box_list()) {
+      m_box_list.box_list()->push_back(from);
     }
     m_box_list.box_list()->size();
   } catch (GSpeakersException const& e) {
@@ -230,7 +228,7 @@ void BoxHistory::on_new_copy() {
            same id and so on, as we would get if we used the operator = or something similar,
            Quick and easy solution...use the to_xml function which gets rid of the id */
 
-        xmlNodePtr node = xmlNewDocNode(NULL, NULL, (xmlChar*)("parent"), NULL);
+        xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
         ((*m_box_list.box_list())[indices[0]]).to_xml_node(node);
         Box b = Box(node->children);
 
@@ -295,7 +293,7 @@ void BoxHistory::on_new_xml() {
 }
 
 void BoxHistory::on_save() {
-  if (new_xml_pressed == true) {
+  if (new_xml_pressed) {
     on_save_as();
     new_xml_pressed = false;
   } else {
@@ -350,7 +348,7 @@ void BoxHistory::on_remove() {
     }
   }
 
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   if (index > 0) {
     g_string_printf(buffer, "%d", index - 1);
@@ -490,7 +488,7 @@ void BoxHistory::add_columns() {
 void BoxHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                      const Gtk::TreeModel::iterator& iter) {
   // std::cout << "BoxHistory::type_cell_data_func" << std::endl;
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
   case BOX_TYPE_SEALED:
     renderer.property_text() = _("Sealed");
@@ -506,7 +504,7 @@ void BoxHistory::type_cell_data_func(Gtk::CellRenderer* cell,
 }
 
 void BoxHistory::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   /* Ok i write litres with capital 'L', i know it's not standard but if you use arial or whatever
      serif (?) it doesn't look good */
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
@@ -514,7 +512,7 @@ void BoxHistory::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeMode
 }
 
 void BoxHistory::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
   renderer.property_xalign() = 1.0;
 }

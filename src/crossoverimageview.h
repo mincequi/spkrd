@@ -43,8 +43,8 @@ public:
   CrossoverImageView();
 
 private:
-  bool on_expose_event(GdkEventExpose* event);
-  bool on_configure_event(GdkEventConfigure* event);
+  bool on_expose_event(GdkEventExpose* event) override;
+  bool on_configure_event(GdkEventConfigure* event) override;
 
   void on_crossover_selected(Crossover* selected_crossover);
   void on_speakerlist_selected(SpeakerList* selected_speaker_list);

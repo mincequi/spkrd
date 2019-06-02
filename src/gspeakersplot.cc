@@ -36,7 +36,7 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
-  m_enable_sec_scale = enable_sec_scale;
+  m_enable_sec_scale = static_cast<int>(enable_sec_scale);
   visible = false;
   m_y_label1 = "";
   m_y_label2 = "";
@@ -92,7 +92,7 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
 #ifdef OUTPUT_DEBUG
   // std::cout << "GSpeakersPlot: on add plot" << std::endl;
 #endif
-  if (visible == true) {
+  if (visible) {
     m_refGC->set_rgb_fg_color(ref_color);
   }
   m_visible_plots.push_back(true);
@@ -179,7 +179,7 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
       points.push_back(p);
     }
   }
-  if (visible == true) {
+  if (visible) {
     /* Don't draw the line until we have it all done */
 
     m_refPixmap->draw_lines(m_refGC, points);
@@ -200,7 +200,7 @@ void GSpeakersPlot::replace_plot(int index, std::vector<GSpeakers::Point>& p,
   m_points[index] = p;
   m_colors[index] = ref_color;
 
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -221,23 +221,20 @@ void GSpeakersPlot::remove_plot(int n) {
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
   } else {
 
-    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin();
-         iter != m_points.end(); ++iter, i++) {
+    for (auto iter = m_points.begin(); iter != m_points.end(); ++iter, i++) {
       if (n == i) {
         m_points.erase(iter);
       }
     }
 
     i = 0;
-    for (std::vector<Gdk::Color>::iterator iter = m_colors.begin(); iter != m_colors.end();
-         ++iter, i++) {
+    for (auto iter = m_colors.begin(); iter != m_colors.end(); ++iter, i++) {
       if (n == i) {
         m_colors.erase(iter);
       }
     }
     i = 0;
-    for (std::vector<bool>::iterator iter = m_visible_plots.begin(); iter != m_visible_plots.end();
-         ++iter, i++) {
+    for (auto iter = m_visible_plots.begin(); iter != m_visible_plots.end(); ++iter, i++) {
       if (n == i) {
         m_visible_plots.erase(iter);
       }
@@ -246,7 +243,7 @@ void GSpeakersPlot::remove_plot(int n) {
   // std::cout << "loop 3" << std::endl;
   m_selected_plot = -1;
 
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -257,7 +254,7 @@ void GSpeakersPlot::remove_all_plots() {
   m_points.erase(m_points.begin(), m_points.end());
   m_colors.erase(m_colors.begin(), m_colors.end());
   m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -266,7 +263,7 @@ void GSpeakersPlot::remove_all_plots() {
 
 void GSpeakersPlot::hide_plot(int n) {
   m_visible_plots[n] = !m_visible_plots[n];
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -275,7 +272,7 @@ void GSpeakersPlot::hide_plot(int n) {
 
 void GSpeakersPlot::select_plot(int index) {
   m_selected_plot = index;
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -299,7 +296,7 @@ void GSpeakersPlot::redraw() {
   m_refGC->set_rgb_fg_color(black);
   m_refPixmap->draw_rectangle(m_refGC, false, box_x, box_y, box_width, box_height);
 
-  if (m_logx == true) {
+  if (m_logx) {
     draw_log_grid();
   } else {
     draw_lin_grid();
@@ -315,7 +312,7 @@ void GSpeakersPlot::redraw() {
                            get_allocation().get_width() - BOX_FRAME_SIZE + 3, y);
     m_refLayout->set_text(int_to_ustring3(i));
     m_refPixmap->draw_layout(m_refGC, BOX_FRAME_SIZE - 27, y - 8, m_refLayout);
-    if (m_enable_sec_scale == true) {
+    if (static_cast<bool>(m_enable_sec_scale)) {
       m_refLayout->set_text(int_to_ustring3(i - m_lower_y));
       m_refPixmap->draw_layout(m_refGC, get_allocation().get_width() - BOX_FRAME_SIZE + 5, y - 6,
                                m_refLayout);
@@ -340,7 +337,7 @@ void GSpeakersPlot::redraw() {
   /* Map points in m_points to screen points */
   int n_plots = m_points.size();
   for (int i = 0; i < n_plots; i++) {
-    if (m_visible_plots[i] == true) {
+    if (m_visible_plots[i]) {
       m_refGC->set_rgb_fg_color(m_colors[i]);
 
       std::vector<Gdk::Point> points;
@@ -544,7 +541,7 @@ void GSpeakersPlot::set_line_size(int size) {}
 void GSpeakersPlot::set_y_label(const std::string& text) {
   m_y_label1 = text;
 
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -554,7 +551,7 @@ void GSpeakersPlot::set_y_label(const std::string& text) {
 void GSpeakersPlot::set_y_label2(const std::string& text) {
   m_y_label2 = text;
 
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, false);
@@ -562,14 +559,14 @@ void GSpeakersPlot::set_y_label2(const std::string& text) {
 }
 
 Glib::ustring GSpeakersPlot::int_to_ustring(int d) {
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%d", d);
   return Glib::ustring(buffer->str);
 }
 
 Glib::ustring GSpeakersPlot::int_to_ustring3(int d) {
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%3d", d);
   return Glib::ustring(buffer->str);

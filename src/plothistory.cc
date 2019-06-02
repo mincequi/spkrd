@@ -19,10 +19,8 @@
 
 #include "plothistory.h"
 #include "gspeakersplot.h"
-#include <math.h>
-#include <time.h>
-
-
+#include <cmath>
+#include <ctime>
 
 PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   set_border_width(2);
@@ -66,7 +64,7 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   index = 0;
 }
 
-PlotHistory::~PlotHistory() {}
+PlotHistory::~PlotHistory() = default;
 
 bool PlotHistory::on_delete_event(GdkEventAny* event) { return true; }
 
@@ -124,7 +122,7 @@ void PlotHistory::on_remove() {
   }
   if (nof_plots > 0) {
     /* Select first row */
-    char* str = NULL;
+    char* str = nullptr;
     GString* buffer = g_string_new(str);
     if (index > 0) {
       g_string_printf(buffer, "%d", index - 1);
@@ -142,7 +140,7 @@ void PlotHistory::on_box_modified(Box* b) {}
 
 void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
   // liststore_add_item(*b);
-  if ((b != NULL) && (s != NULL)) {
+  if ((b != nullptr) && (s != nullptr)) {
     m_box_list.box_list()->push_back(*b);
     m_speaker_list.speaker_list()->push_back(*s);
     liststore_add_item(*b, *s, color);
@@ -295,7 +293,7 @@ pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
 
 void PlotHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                       const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
   case BOX_TYPE_SEALED:
     renderer.property_text() = _("Sealed");
@@ -312,14 +310,14 @@ void PlotHistory::type_cell_data_func(Gtk::CellRenderer* cell,
 
 void PlotHistory::vb1_cell_data_func(Gtk::CellRenderer* cell,
                                      const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
   renderer.property_xalign() = 1.0;
 }
 
 void PlotHistory::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                      const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";
   renderer.property_xalign() = 1.0;
 }
@@ -332,7 +330,7 @@ void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color) {
 #ifdef OUTPUT_DEBUG
   std::cout << "color: " << r << ", " << g << ", " << b << std::endl;
 #endif
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "#%.2X%.2X%.2X", r, g, b);
 

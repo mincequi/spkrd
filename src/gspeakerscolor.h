@@ -26,10 +26,10 @@ public:
   GSpeakersColor();
 
   std::string get_color_string();
-  void unget_color_string(std::string s);
+  void unget_color_string(const std::string& s);
 
 private:
-  std::vector<std::string>::iterator get_iterator_from_string(std::string s);
+  std::vector<std::string>::iterator get_iterator_from_string(const std::string& s);
 
 private:
   std::vector<std::string> m_colors;

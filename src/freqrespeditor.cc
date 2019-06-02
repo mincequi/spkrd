@@ -26,11 +26,12 @@
 
 #include <cstdio>
 #include <fstream>
+#include <utility>
 
 FreqRespEditor::FreqRespEditor(std::string filename)
     : m_table(15, 4, false), m_save_button(Gtk::Stock::SAVE), m_saveas_button(Gtk::Stock::SAVE_AS),
       m_close_button(Gtk::Stock::CLOSE) {
-  m_filename = filename;
+  m_filename = std::move(filename);
   set_modal();
 
   Gtk::Frame* frame = manage(new Gtk::Frame(""));
@@ -114,9 +115,9 @@ FreqRespEditor::FreqRespEditor(std::string filename)
         fin.getline(buffer, 100, '\n');
 
         char* substr_ptr = strtok(buffer, ",");
-        g_ascii_strtod(substr_ptr, NULL);
-        substr_ptr = strtok(NULL, ",");
-        float const f2 = g_ascii_strtod(substr_ptr, NULL);
+        g_ascii_strtod(substr_ptr, nullptr);
+        substr_ptr = strtok(nullptr, ",");
+        float const f2 = g_ascii_strtod(substr_ptr, nullptr);
 
         dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(
@@ -137,15 +138,15 @@ void FreqRespEditor::on_save() {
   std::vector<double> v = get_x_vector();
   std::ofstream of(m_filename.c_str());
   if (of.good()) {
-    gchar* buffer = new char[8];
+    auto* buffer = new char[8];
     for (int j = 0; j < 15; j++) {
       of << v[2 * j] << ","
          << g_ascii_dtostr(buffer, 8,
-                           g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), NULL))
+                           g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), nullptr))
          << std::endl;
       of << v[2 * j + 1] << ","
          << g_ascii_dtostr(buffer, 8,
-                           g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), NULL))
+                           g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), nullptr))
          << std::endl;
     }
     delete buffer;

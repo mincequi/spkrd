@@ -43,7 +43,7 @@ SettingsDialog::SettingsDialog()
       m_scale_crossover_image_parts(_("Scale components in crossover visual view")),
       m_use_driver_impedance(_("Use driver impedance instead of rdc when calculating crossover")),
       m_toolbar_style() {
-  m_file_selection = NULL;
+  m_file_selection = nullptr;
   close_button = manage(new Gtk::Button(Gtk::Stock::CLOSE));
   get_action_area()->pack_start(*close_button);
   close_button->signal_clicked().connect(mem_fun(*this, &SettingsDialog::on_close));

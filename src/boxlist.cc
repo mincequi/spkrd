@@ -21,18 +21,18 @@
 #include "common.h"
 #include <glib.h>
 
-BoxList::BoxList(std::string filename) {
+BoxList::BoxList(const std::string& filename) {
   xmlNodePtr children;
 
   xmlDocPtr doc = xmlParseFile(filename.c_str());
   if (doc != nullptr) {
     xmlNodePtr node = xmlDocGetRootElement(doc);
     if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0)) {
-      if (node->children) {
+      if (node->children != nullptr) {
         children = node->children;
         while (children != nullptr) {
           try {
-            m_box_list.push_back(Box(children));
+            m_box_list.emplace_back(children);
           } catch (GSpeakersException const& e) {
             throw e;
           }
@@ -47,18 +47,18 @@ BoxList::BoxList(std::string filename) {
   }
 }
 
-void BoxList::to_xml(std::string filename) {
+void BoxList::to_xml(const std::string& filename) {
   xmlDocPtr doc;
   xmlNodePtr node;
 
   doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  node = xmlNewDocNode(doc, NULL, (xmlChar*)("boxlist"), NULL);
+  node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all boxes */
-  for (auto from = m_box_list.begin(); from != m_box_list.end(); ++from) {
-    ((Box)(*from)).to_xml_node(node);
+  for (auto& from : m_box_list) {
+    ((Box)from).to_xml_node(node);
   }
 
   /* Save xml file */
@@ -70,8 +70,8 @@ void BoxList::to_xml(std::string filename) {
 std::ostream& operator<<(std::ostream& o, const BoxList& box_list) {
   o << "Box List" << std::endl;
 
-  for (auto from = box_list.m_box_list.begin(); from != box_list.m_box_list.end(); ++from) {
-    o << *from;
+  for (const auto& from : box_list.m_box_list) {
+    o << from;
   }
   return o;
 }

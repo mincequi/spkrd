@@ -52,7 +52,7 @@ private:
 
   /* Callbacks */
   void on_quit();
-  virtual bool on_delete_event(GdkEventAny* event);
+  bool on_delete_event(GdkEventAny* event) override;
   void on_quit_common();
   void on_about();
   void on_save_all();

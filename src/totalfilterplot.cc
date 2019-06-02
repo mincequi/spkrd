@@ -19,7 +19,7 @@
  */
 
 #include "totalfilterplot.h"
-#include <math.h>
+#include <cmath>
 
 TotalFilterPlot::TotalFilterPlot() : plot(1, 20000) {
 
@@ -37,7 +37,7 @@ TotalFilterPlot::TotalFilterPlot() : plot(1, 20000) {
   m_color = new Gdk::Color("blue");
 }
 
-TotalFilterPlot::~TotalFilterPlot() {}
+TotalFilterPlot::~TotalFilterPlot() = default;
 
 int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                  Net* n) {
@@ -47,8 +47,8 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Col
   /* Search for *i in the graph */
   int position = -1;
   int l = 0;
-  for (std::vector<int>::iterator iter = m_nets.begin(); iter != m_nets.end(); ++iter) {
-    if (*i == *iter) {
+  for (int& m_net : m_nets) {
+    if (*i == m_net) {
       position = l;
     }
     l++;

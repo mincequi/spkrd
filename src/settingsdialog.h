@@ -47,7 +47,7 @@ enum Settings {
 class SettingsDialog : public Gtk::Dialog {
 public:
   SettingsDialog();
-  virtual ~SettingsDialog();
+  ~SettingsDialog() override;
 
 private:
   Gtk::Notebook m_main_notebook;

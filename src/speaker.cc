@@ -19,13 +19,14 @@
 #include "common.h"
 #include <glib.h>
 #include <sstream>
+#include <utility>
 
 Speaker::Speaker(std::string id_string, int type, double qts, double vas, double fs, double rdc,
                  double lvc, double qms, double qes, double imp, double sens,
                  std::string freq_resp_filename, std::string imp_resp_filename, double mmd,
                  double ad, double bl, double rms, double cms)
     : GSpeakersObject() {
-  m_id_string = id_string;
+  m_id_string = std::move(id_string);
   m_type = type;
   m_qts = qts;
   m_vas = vas;
@@ -42,12 +43,12 @@ Speaker::Speaker(std::string id_string, int type, double qts, double vas, double
   m_rms = rms;
   m_cms = cms;
 
-  m_freq_resp_filename = freq_resp_filename;
-  m_imp_resp_filename = imp_resp_filename;
+  m_freq_resp_filename = std::move(freq_resp_filename);
+  m_imp_resp_filename = std::move(imp_resp_filename);
 }
 
 Speaker::Speaker(xmlNodePtr parent) {
-  if ((parent != NULL) && (std::string((char*)parent->name) == std::string("speaker"))) {
+  if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("speaker"))) {
     try {
       parse_id_string(parent->children);
     } catch (GSpeakersException const& e) {
@@ -60,62 +61,62 @@ Speaker::Speaker(xmlNodePtr parent) {
 
 xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent) {
   xmlNodePtr speaker, child;
-  gchar* buffer = new gchar[10];
+  auto* buffer = new gchar[10];
 
-  speaker = xmlNewChild(parent, NULL, (xmlChar*)("speaker"), NULL);
+  speaker = xmlNewChild(parent, nullptr, (xmlChar*)("speaker"), nullptr);
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("id_string"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("id_string"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_id_string.c_str());
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("type"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_strdup_printf("%d", m_type));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("qts"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("qts"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qts));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("vas"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("vas"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vas));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("fs"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("fs"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fs));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("rdc"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("rdc"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_rdc));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("lvc"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("lvc"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_lvc));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("qms"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("qms"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qms));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("qes"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("qes"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_qes));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("imp"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("imp"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_imp));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("sens"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("sens"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_sens));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("freq_resp_filename"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("freq_resp_filename"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_freq_resp_filename.c_str());
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("imp_resp_filename"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("imp_resp_filename"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_imp_resp_filename.c_str());
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("mmd"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("mmd"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_mmd));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("ad"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("ad"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_ad));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("bl"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("bl"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_bl));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("rms"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("rms"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_rms));
 
-  child = xmlNewChild(speaker, NULL, (xmlChar*)("cms"), NULL);
+  child = xmlNewChild(speaker, nullptr, (xmlChar*)("cms"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_cms));
 
   delete buffer;
@@ -151,15 +152,21 @@ void Speaker::set_imp(double imp) { m_imp = imp; }
 
 void Speaker::set_sens(double sens) { m_sens = sens; }
 
-void Speaker::set_freq_resp_filename(std::string filename) { m_freq_resp_filename = filename; }
+void Speaker::set_freq_resp_filename(std::string filename) {
+  m_freq_resp_filename = std::move(filename);
+}
 
-void Speaker::set_freq_resp(std::map<double, double> freq_resp) { m_freq_resp = freq_resp; }
+void Speaker::set_freq_resp(std::map<double, double> freq_resp) {
+  m_freq_resp = std::move(freq_resp);
+}
 
-void Speaker::set_imp_resp_filename(std::string filename) { m_imp_resp_filename = filename; }
+void Speaker::set_imp_resp_filename(std::string filename) {
+  m_imp_resp_filename = std::move(filename);
+}
 
-void Speaker::set_imp_resp(std::map<double, double> imp_resp) { m_imp_resp = imp_resp; }
+void Speaker::set_imp_resp(std::map<double, double> imp_resp) { m_imp_resp = std::move(imp_resp); }
 
-void Speaker::set_id_string(std::string id_string) { m_id_string = id_string; }
+void Speaker::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
 void Speaker::set_mmd(double mmd) { m_mmd = mmd; }
 
@@ -210,7 +217,7 @@ double Speaker::get_rms() const { return m_rms; }
 double Speaker::get_cms() const { return m_cms; }
 
 void Speaker::parse_id_string(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("id_string"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("id_string"))) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
@@ -223,7 +230,7 @@ void Speaker::parse_id_string(xmlNodePtr node) {
 }
 
 void Speaker::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("type"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("type"))) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_qts(node->next);
@@ -236,9 +243,9 @@ void Speaker::parse_type(xmlNodePtr node) {
 }
 
 void Speaker::parse_qts(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("qts"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("qts"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_qts;
-    m_qts = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_qts = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_vas(node->next);
     } catch (GSpeakersException const& e) {
@@ -250,8 +257,8 @@ void Speaker::parse_qts(xmlNodePtr node) {
 }
 
 void Speaker::parse_vas(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("vas"))) {
-    m_vas = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("vas"))) {
+    m_vas = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vas;
     try {
       parse_fs(node->next);
@@ -264,9 +271,9 @@ void Speaker::parse_vas(xmlNodePtr node) {
 }
 
 void Speaker::parse_fs(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("fs"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("fs"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_fs;
-    m_fs = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_fs = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_rdc(node->next);
     } catch (GSpeakersException const& e) {
@@ -278,9 +285,9 @@ void Speaker::parse_fs(xmlNodePtr node) {
 }
 
 void Speaker::parse_rdc(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("rdc"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("rdc"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_rdc;
-    m_rdc = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_rdc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_lcv(node->next);
     } catch (GSpeakersException const& e) {
@@ -292,9 +299,9 @@ void Speaker::parse_rdc(xmlNodePtr node) {
 }
 
 void Speaker::parse_lcv(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("lvc"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("lvc"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_lvc;
-    m_lvc = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_lvc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_qms(node->next);
     } catch (GSpeakersException const& e) {
@@ -306,9 +313,9 @@ void Speaker::parse_lcv(xmlNodePtr node) {
 }
 
 void Speaker::parse_qms(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("qms"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("qms"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_qms;
-    m_qms = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_qms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_qes(node->next);
     } catch (GSpeakersException const& e) {
@@ -320,9 +327,9 @@ void Speaker::parse_qms(xmlNodePtr node) {
 }
 
 void Speaker::parse_qes(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("qes"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("qes"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_qes;
-    m_qes = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_qes = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_imp(node->next);
     } catch (GSpeakersException const& e) {
@@ -334,9 +341,9 @@ void Speaker::parse_qes(xmlNodePtr node) {
 }
 
 void Speaker::parse_imp(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("imp"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("imp"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_imp;
-    m_imp = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_imp = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_sens(node->next);
     } catch (GSpeakersException const& e) {
@@ -348,9 +355,9 @@ void Speaker::parse_imp(xmlNodePtr node) {
 }
 
 void Speaker::parse_sens(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("sens"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("sens"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_sens;
-    m_sens = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_sens = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_freq_resp_filename(node->next);
     } catch (GSpeakersException const& e) {
@@ -362,7 +369,7 @@ void Speaker::parse_sens(xmlNodePtr node) {
 }
 
 void Speaker::parse_freq_resp_filename(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("freq_resp_filename"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("freq_resp_filename"))) {
     m_freq_resp_filename = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_imp_resp_filename(node->next);
@@ -375,7 +382,7 @@ void Speaker::parse_freq_resp_filename(xmlNodePtr node) {
 }
 
 void Speaker::parse_imp_resp_filename(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("imp_resp_filename"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("imp_resp_filename"))) {
     m_imp_resp_filename = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_mmd(node->next);
@@ -388,9 +395,9 @@ void Speaker::parse_imp_resp_filename(xmlNodePtr node) {
 }
 
 void Speaker::parse_mmd(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("mmd"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("mmd"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_mmd;
-    m_mmd = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_mmd = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_ad(node->next);
     } catch (GSpeakersException const& e) {
@@ -402,9 +409,9 @@ void Speaker::parse_mmd(xmlNodePtr node) {
 }
 
 void Speaker::parse_ad(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("ad"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("ad"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_ad;
-    m_ad = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_ad = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_bl(node->next);
     } catch (GSpeakersException const& e) {
@@ -416,9 +423,9 @@ void Speaker::parse_ad(xmlNodePtr node) {
 }
 
 void Speaker::parse_bl(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("bl"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("bl"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_bl;
-    m_bl = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_bl = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_rms(node->next);
     } catch (GSpeakersException const& e) {
@@ -430,9 +437,9 @@ void Speaker::parse_bl(xmlNodePtr node) {
 }
 
 void Speaker::parse_rms(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("rms"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("rms"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_rms;
-    m_rms = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_rms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_cms(node->next);
     } catch (GSpeakersException const& e) {
@@ -444,9 +451,9 @@ void Speaker::parse_rms(xmlNodePtr node) {
 }
 
 void Speaker::parse_cms(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("cms"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("cms"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_cms;
-    m_cms = g_ascii_strtod((char*)xmlNodeGetContent(node), NULL);
+    m_cms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
   } else {
     throw GSpeakersException(_("Speaker: mmd node not found"));
   }

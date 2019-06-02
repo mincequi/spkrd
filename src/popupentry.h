@@ -34,8 +34,8 @@
 
 class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
 public:
-  explicit PopupEntry(const Glib::ustring& path);
-  virtual ~PopupEntry();
+  explicit PopupEntry(Glib::ustring path);
+  ~PopupEntry() override;
 
   Glib::ustring get_path() const;
 
@@ -51,11 +51,11 @@ public:
   sigc::signal0<void>& signal_arrow_clicked();
 
 protected:
-  virtual bool on_key_press_event(GdkEventKey* event);
-  virtual void start_editing_vfunc(GdkEvent* event);
+  bool on_key_press_event(GdkEventKey* event) override;
+  void start_editing_vfunc(GdkEvent* event) override;
   // virtual bool on_button_press_event(GdkEventButton *event);
 private:
-  typedef PopupEntry Self;
+  using Self = PopupEntry;
 
   void on_entry_activate();
   bool on_entry_key_press_event(GdkEventKey* event);

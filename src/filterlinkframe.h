@@ -28,7 +28,7 @@
 class FilterLinkFrame : public Gtk::Frame {
 public:
   FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list);
-  virtual ~FilterLinkFrame();
+  ~FilterLinkFrame() override;
 
 private:
   /* callbacks */

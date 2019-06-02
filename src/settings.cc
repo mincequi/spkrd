@@ -20,8 +20,7 @@
 
 #include "settings.h"
 
-
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 #include "common.h"
@@ -76,7 +75,7 @@ void Settings::save(const std::string& filename) noexcept(false) {
     throw runtime_error(ostr.str());
   }
 
-  map<const std::string, std::string>::iterator curr = m_map.begin();
+  auto curr = m_map.begin();
   while (curr != m_map.end()) {
     of << (*curr).first << " = " << Escape((*curr).second) << std::endl;
     if (!of) {
@@ -117,7 +116,7 @@ void Settings::save() noexcept(false) {
     throw runtime_error(ostr.str());
   }
 
-  map<const std::string, std::string>::iterator curr = m_map.begin();
+  auto curr = m_map.begin();
   while (curr != m_map.end()) {
     of << (*curr).first << " = " << Escape((*curr).second) << std::endl;
     if (!of) {

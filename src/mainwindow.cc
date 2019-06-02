@@ -66,11 +66,11 @@ MainWindow::MainWindow() {
 
   /* You should be able to specify this in the settings dialog, if the window manager can set the
      size of the window it may as well do it, at least sawfish can do this */
-  if (g_settings.getValueBool("SetMainWindowSize") == true) {
+  if (g_settings.getValueBool("SetMainWindowSize")) {
     resize(g_settings.getValueUnsignedInt("MainWindowWidth"),
            g_settings.getValueUnsignedInt("MainWindowHeight"));
   }
-  if (g_settings.getValueBool("SetMainWindowPosition") == true) {
+  if (g_settings.getValueBool("SetMainWindowPosition")) {
     move(g_settings.getValueUnsignedInt("MainWindowPositionX"),
          g_settings.getValueUnsignedInt("MainWindowPositionY"));
   }
@@ -327,38 +327,38 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num) {
   // #ifdef OUTPUT_DEBUG
   //   std::cout << "MainWindow::on_switch_page" << std::endl;
   // #endif
-  if (in_quit_phase == false) {
+  if (!in_quit_phase) {
     switch (page_num) {
     case NOTEBOOK_PAGE_DRIVERS:
-      if (speaker_editor.get_toolbar().is_visible() == false) {
+      if (!speaker_editor.get_toolbar().is_visible()) {
         speaker_editor.get_toolbar().show();
       }
-      if (enclosure_paned.get_toolbar().is_visible() == true) {
+      if (enclosure_paned.get_toolbar().is_visible()) {
         enclosure_paned.get_toolbar().hide();
       }
-      if (crossover_paned.get_toolbar().is_visible() == true) {
+      if (crossover_paned.get_toolbar().is_visible()) {
         crossover_paned.get_toolbar().hide();
       }
       break;
     case NOTEBOOK_PAGE_ENCLOSURE:
-      if (speaker_editor.get_toolbar().is_visible() == true) {
+      if (speaker_editor.get_toolbar().is_visible()) {
         speaker_editor.get_toolbar().hide();
       }
-      if (enclosure_paned.get_toolbar().is_visible() == false) {
+      if (!enclosure_paned.get_toolbar().is_visible()) {
         enclosure_paned.get_toolbar().show();
       }
-      if (crossover_paned.get_toolbar().is_visible() == true) {
+      if (crossover_paned.get_toolbar().is_visible()) {
         crossover_paned.get_toolbar().hide();
       }
       break;
     case NOTEBOOK_PAGE_FILTER:
-      if (speaker_editor.get_toolbar().is_visible() == true) {
+      if (speaker_editor.get_toolbar().is_visible()) {
         speaker_editor.get_toolbar().hide();
       }
-      if (enclosure_paned.get_toolbar().is_visible() == true) {
+      if (enclosure_paned.get_toolbar().is_visible()) {
         enclosure_paned.get_toolbar().hide();
       }
-      if (crossover_paned.get_toolbar().is_visible() == false) {
+      if (!crossover_paned.get_toolbar().is_visible()) {
         crossover_paned.get_toolbar().show();
       }
       break;
@@ -375,7 +375,7 @@ void MainWindow::on_about() {
 }
 
 void MainWindow::on_edit_settings() {
-  SettingsDialog* d = new SettingsDialog();
+  auto* d = new SettingsDialog();
   d->run();
   delete d;
 }

@@ -34,7 +34,7 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() : plot(1, 20000) {
   show_all();
 }
 
-GSpeakersFilterPlot::~GSpeakersFilterPlot() {}
+GSpeakersFilterPlot::~GSpeakersFilterPlot() = default;
 
 int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color, int* i,
                                      Net* n) {

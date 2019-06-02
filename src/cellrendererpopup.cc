@@ -42,9 +42,8 @@ bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_ti
 } // anonymous namespace
 
 CellRendererPopup::CellRendererPopup()
-    : Glib::ObjectBase(typeid(CellRendererPopup)), Gtk::CellRendererText(), button_width_(-1),
-      popup_window_(Gtk::WINDOW_POPUP), focus_widget_(0), popup_entry_(0), shown_(false),
-      editing_canceled_(false) {
+    : Glib::ObjectBase(typeid(CellRendererPopup)), Gtk::CellRendererText(),
+      popup_window_(Gtk::WINDOW_POPUP) {
   std::cout << "CellRendererPopup::CellRendererPopup" << std::endl;
 
   signal_show_popup_.connect(mem_fun(*this, &Self::on_show_popup));
@@ -55,7 +54,7 @@ CellRendererPopup::CellRendererPopup()
   popup_window_.signal_style_changed().connect(mem_fun(*this, &Self::on_style_changed));
 }
 
-CellRendererPopup::~CellRendererPopup() {}
+CellRendererPopup::~CellRendererPopup() = default;
 
 PopupEntry* CellRendererPopup::get_popup_entry() { return popup_entry_; }
 
@@ -85,7 +84,7 @@ void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle
   if (button_width_ < 0)
     button_width_ = PopupEntry::get_button_width();
 
-  if (width)
+  if (width != nullptr)
     *width += button_width_;
 }
 
@@ -98,7 +97,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
 
   // If the cell isn't editable we return 0.
   if (!property_editable()) {
-    return 0;
+    return nullptr;
   }
 
   std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
@@ -160,7 +159,7 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
 
   shown_ = true;
 
-  if (focus_widget_)
+  if (focus_widget_ != nullptr)
     focus_widget_->grab_focus();
 
   grab_on_window(popup_window_.get_window(), gtk_get_current_event_time());
@@ -171,12 +170,12 @@ void CellRendererPopup::on_hide_popup() {
   gtk_grab_remove(popup_window_.Gtk::Widget::gobj());
   popup_window_.hide();
 
-  if (popup_entry_)
+  if (popup_entry_ != nullptr)
     popup_entry_->editing_done();
 
   // This may look weird (the test), but the weak pointer will actually
   // be nulled out for some cells, like the date cell.
-  if (popup_entry_)
+  if (popup_entry_ != nullptr)
     popup_entry_->remove_widget();
 
   shown_ = false;
@@ -276,5 +275,5 @@ void CellRendererPopup::on_popup_arrow_clicked() {
 
 void CellRendererPopup::on_popup_hide() {
   std::cout << "CellRendererPopup::on_popup_hide" << std::endl;
-  popup_entry_ = 0;
+  popup_entry_ = nullptr;
 }

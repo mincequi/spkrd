@@ -41,7 +41,7 @@ extern sigc::signal1<void, bool> signal_crossover_set_save_state;
 class CrossoverHistory : public Gtk::Frame {
 public:
   CrossoverHistory();
-  virtual ~CrossoverHistory();
+  ~CrossoverHistory() override;
   /* public callbacks, for use in container class */
   void on_open_xml();
   void on_append_xml();

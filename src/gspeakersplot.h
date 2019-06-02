@@ -50,7 +50,8 @@
 namespace GSpeakers {
 class Point {
 public:
-  Point(){};
+  Point() = default;
+  ;
 
   Point(int x, double y) {
     m_x = x;
@@ -116,9 +117,9 @@ public:
 protected:
   /* This is the function that draws the graphics */
 
-  bool on_expose_event(GdkEventExpose* event);
+  bool on_expose_event(GdkEventExpose* event) override;
   // void on_show();
-  bool on_configure_event(GdkEventConfigure* event);
+  bool on_configure_event(GdkEventConfigure* event) override;
 
   /*std::vectors that hold the y magnitude points for the plots (dbmag) and
      the corresponding colors (colors) */

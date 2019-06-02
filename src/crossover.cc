@@ -18,33 +18,35 @@
 #include "crossover.h"
 #include <glib.h>
 #include <sstream>
+#include <utility>
 
-Crossover::Crossover(int type, std::string id_string) : GSpeakersObject(), m_id_string(id_string) {
+Crossover::Crossover(int type, std::string id_string)
+    : GSpeakersObject(), m_id_string(std::move(id_string)) {
   m_type = type;
 
-  if (m_type & CROSSOVER_TYPE_SUBSONIC) {
-    m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
+  if ((m_type & CROSSOVER_TYPE_SUBSONIC) != 0) {
+    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
-  if (m_type & CROSSOVER_TYPE_LOWPASS) {
-    m_networks.push_back(Net(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT));
+  if ((m_type & CROSSOVER_TYPE_LOWPASS) != 0) {
+    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
   }
-  if (m_type & CROSSOVER_TYPE_HIGHPASS) {
-    m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
+  if ((m_type & CROSSOVER_TYPE_HIGHPASS) != 0) {
+    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
-  if (m_type & CROSSOVER_TYPE_TWOWAY) {
-    m_networks.push_back(Net(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT));
-    m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
+  if ((m_type & CROSSOVER_TYPE_TWOWAY) != 0) {
+    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
-  if (m_type & CROSSOVER_TYPE_THREEWAY) {
-    m_networks.push_back(Net(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT));
-    m_networks.push_back(Net(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST));
-    m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
+  if ((m_type & CROSSOVER_TYPE_THREEWAY) != 0) {
+    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
-  if (m_type & CROSSOVER_TYPE_FOURWAY) {
-    m_networks.push_back(Net(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT));
-    m_networks.push_back(Net(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST));
-    m_networks.push_back(Net(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST));
-    m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
+  if ((m_type & CROSSOVER_TYPE_FOURWAY) != 0) {
+    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
 }
 
@@ -61,7 +63,7 @@ Crossover::Crossover(xmlNodePtr parent) {
 }
 
 void Crossover::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     // m_type = atoi((char *)xmlNodeGetContent(node));
     try {
@@ -77,11 +79,11 @@ void Crossover::parse_type(xmlNodePtr node) {
 void Crossover::parse_networks(xmlNodePtr node) {
   xmlNodePtr child;
 
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)) {
     child = node->children;
-    while (child != NULL) {
+    while (child != nullptr) {
       try {
-        m_networks.push_back(Net(child));
+        m_networks.emplace_back(child);
       } catch (GSpeakersException const& e) {
         throw e;
       }
@@ -96,7 +98,7 @@ void Crossover::parse_networks(xmlNodePtr node) {
 }
 
 void Crossover::parse_id_string(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
     // m_type = atoi((char *)xmlNodeGetContent(node));
   } else {
@@ -108,16 +110,16 @@ xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent) {
 
   xmlNodePtr crossover, field;
 
-  crossover = xmlNewChild(parent, NULL, (xmlChar*)("crossover"), NULL);
+  crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
 
-  field = xmlNewChild(crossover, NULL, (xmlChar*)("type"), NULL);
+  field = xmlNewChild(crossover, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
-  field = xmlNewChild(crossover, NULL, (xmlChar*)("networks"), NULL);
+  field = xmlNewChild(crossover, nullptr, (xmlChar*)("networks"), nullptr);
 
   for (auto& network : m_networks) {
     network.to_xml_node(field);
   }
-  field = xmlNewChild(crossover, NULL, (xmlChar*)("id_string"), NULL);
+  field = xmlNewChild(crossover, nullptr, (xmlChar*)("id_string"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)m_id_string.c_str());
 
   return crossover;
@@ -137,4 +139,4 @@ std::vector<Net>* Crossover::networks() { return &m_networks; }
 
 std::string const& Crossover::get_id_string() const { return m_id_string; }
 
-void Crossover::set_id_string(std::string id_string) { m_id_string = id_string; }
+void Crossover::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }

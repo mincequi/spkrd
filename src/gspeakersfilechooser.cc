@@ -46,7 +46,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   }
 
   int r;
-  while (flag == false) {
+  while (!flag) {
     r = m_file_chooser->run();
     switch (r) {
     case FILE_CHOOSER_SAVE:

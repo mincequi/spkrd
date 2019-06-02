@@ -130,7 +130,7 @@ Gtk::Menu& EnclosurePaned::get_menu() {
 }
 
 Gtk::Widget& EnclosurePaned::get_toolbar() {
-  if (m_tbar == NULL) {
+  if (m_tbar == nullptr) {
     m_tbar = manage(new Gtk::Toolbar());
 
     Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
@@ -197,7 +197,7 @@ void EnclosurePaned::on_settings_changed(const std::string& s) {
 }
 
 void EnclosurePaned::set_save_state(bool b) {
-  if (m_tbar != NULL) {
+  if (m_tbar != nullptr) {
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
   }
   if (m_menu.items().size() > 0) {

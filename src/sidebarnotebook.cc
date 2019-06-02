@@ -32,7 +32,7 @@ SidebarNotebook::SidebarNotebook() : Gtk::HBox() {
   m_notebook = manage(new Gtk::Notebook());
   m_sidebar = egg_sidebar_new();
   GtkHBox* vbox = gobj();
-  gtk_box_pack_start(GTK_BOX(vbox), m_sidebar, false, true, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), m_sidebar, 0, 1, 0);
 
   button0 = egg_sidebar_button_new(GSPEAKERS_STOCK_DRIVER);
   egg_sidebar_button_set(button0, GSPEAKERS_STOCK_DRIVER, _("Driver"), TRUE);

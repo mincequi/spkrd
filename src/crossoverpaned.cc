@@ -23,7 +23,7 @@
 #define TOOLBAR_INDEX_SAVE 3
 
 CrossoverPaned::CrossoverPaned() {
-  m_tbar = NULL;
+  m_tbar = nullptr;
   g_settings.settings_changed.connect(mem_fun(*this, &CrossoverPaned::on_settings_changed));
 
   add1(m_crossover_notebook);
@@ -160,7 +160,7 @@ Gtk::Menu& CrossoverPaned::get_menu() {
 }
 
 Gtk::Widget& CrossoverPaned::get_toolbar() {
-  if (m_tbar == NULL) {
+  if (m_tbar == nullptr) {
     m_tbar = manage(new Gtk::Toolbar());
 
     Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
@@ -216,7 +216,7 @@ void CrossoverPaned::on_settings_changed(const std::string& s) {
     m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
   }
   if (s == "AutoUpdateFilterPlots") {
-    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+    if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
       on_plot_crossover();
     }
   }
@@ -225,7 +225,7 @@ void CrossoverPaned::on_settings_changed(const std::string& s) {
 void CrossoverPaned::on_new_crossover_menu_action(int i) { signal_new_crossover(i); }
 
 void CrossoverPaned::set_save_state(bool b) {
-  if (m_tbar != NULL) {
+  if (m_tbar != nullptr) {
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
   }
   if (m_menu.items().size() > 0) {

@@ -38,7 +38,7 @@
 class BoxEditor : public Gtk::Frame {
 public:
   BoxEditor();
-  virtual ~BoxEditor();
+  ~BoxEditor() override;
   void on_optimize_button_clicked();
   void on_append_to_boxlist_clicked();
   void on_append_to_plot_clicked();

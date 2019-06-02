@@ -26,12 +26,11 @@
 #include <gtk/gtkentry.h> /* see XXX below */
 #include <gtkmm.h>
 #include <iostream>
+#include <utility>
 
-
-
-PopupEntry::PopupEntry(const Glib::ustring& path)
-    : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(), path_(path),
-      entry_(0), editing_canceled_(false) {
+PopupEntry::PopupEntry(Glib::ustring path)
+    : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(),
+      path_(std::move(path)), entry_(nullptr), editing_canceled_(false) {
   std::cout << "PopupEntry::PopupEntry" << std::endl;
 
   // Gtk::HBox *const hbox = new Gtk::HBox(false, 0);
@@ -50,7 +49,7 @@ PopupEntry::PopupEntry(const Glib::ustring& path)
   show_all_children();
 }
 
-PopupEntry::~PopupEntry() {}
+PopupEntry::~PopupEntry() = default;
 
 Glib::ustring PopupEntry::get_path() const { return path_; }
 
@@ -74,7 +73,7 @@ int PopupEntry::get_button_width() {
   std::cout << "PopupEntry::get_button_width" << std::endl;
   Gtk::Window window(Gtk::WINDOW_POPUP);
 
-  Gtk::Button* const button = new Gtk::Button();
+  auto* const button = new Gtk::Button();
   window.add(*Gtk::manage(button));
 
   // Urgh.  Hackish :/
@@ -110,7 +109,7 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
   memcpy(&tmp_event, event, sizeof(GdkEventKey));
 
   tmp_event.key.window = Glib::unwrap(entry_->get_window()); // XXX
-  tmp_event.key.send_event = true;
+  tmp_event.key.send_event = 1;
 
   entry_->event(&tmp_event);
 

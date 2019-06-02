@@ -49,7 +49,7 @@ class BoxHistory : public Gtk::Frame {
 public:
   BoxHistory();
 
-  virtual ~BoxHistory();
+  ~BoxHistory() override;
 
   /* public callbacks, used in container classes from toolbar/menu events */
   void on_new();
@@ -72,7 +72,7 @@ protected:
   void on_add_plot(Box* box, Speaker* speaker);
   void on_append_box(Box* box);
   void on_add_to_boxlist(Box* b);
-  bool on_delete_event(GdkEventAny* event);
+  bool on_delete_event(GdkEventAny* event) override;
   void on_plot_selected(int i);
   void on_save_open_files();
   void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);

@@ -36,13 +36,13 @@
 class CrossoverTreeView : public Gtk::Frame {
 public:
   CrossoverTreeView();
-  virtual ~CrossoverTreeView();
+  ~CrossoverTreeView() override;
   /* Callback */
   void on_crossover_selected(Crossover* new_crossover);
 
 protected:
   // vfunc overrides:
-  virtual void on_realize();
+  void on_realize() override;
 
   /* callbacks */
   void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);

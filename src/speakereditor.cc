@@ -21,8 +21,8 @@
 #include "common.h"
 #include "freqrespeditor.h"
 #include "gspeakersfilechooser.h"
+#include <cmath>
 #include <fstream>
-#include <math.h>
 
 #define MENU_INDEX_SAVE 5
 #define MENU_INDEX_DELETE 8
@@ -41,7 +41,7 @@ Speaker_ListStore::Speaker_ListStore()
 
   m_modified = false;
   updating_entries = false;
-  tbar = NULL;
+  tbar = nullptr;
 #ifdef TARGET_WIN32
   g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
 #else
@@ -230,9 +230,9 @@ Speaker_ListStore::Speaker_ListStore()
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
-  f_append = NULL;
-  f_open = NULL;
-  f_save_as = NULL;
+  f_append = nullptr;
+  f_open = nullptr;
+  f_save_as = nullptr;
   new_xml_pressed = false;
   signal_save_open_files.connect(mem_fun(*this, &Speaker_ListStore::on_save_open_files));
 
@@ -245,7 +245,7 @@ Speaker_ListStore::Speaker_ListStore()
 }
 
 Speaker_ListStore::~Speaker_ListStore() {
-  if (m_modified == true) {
+  if (m_modified) {
 #ifdef OUTPUT_DEBUG
     // Insert dialog here that asks if we want to save changes
     std::cout << "Speaker_ListStore::~Speaker_ListStore: save changes?" << std::endl;
@@ -299,7 +299,7 @@ Gtk::Menu& Speaker_ListStore::get_menu() {
 }
 
 Gtk::Widget& Speaker_ListStore::get_toolbar() {
-  if (tbar == NULL) {
+  if (tbar == nullptr) {
     tbar = manage(new Gtk::Toolbar());
     // TODO: tooltips
     Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
@@ -333,7 +333,7 @@ Gtk::Widget& Speaker_ListStore::get_toolbar() {
 }
 
 void Speaker_ListStore::on_save_open_files() {
-  if (GSpeakers::driverlist_modified() == true) {
+  if (GSpeakers::driverlist_modified()) {
     on_save();
   }
 }
@@ -376,7 +376,7 @@ void Speaker_ListStore::set_entries_sensitive(bool value) {
   m_BrowseFreqRespButton.set_sensitive(value);
   m_EditFreqRespButton.set_sensitive(value);
 
-  if (value == false) {
+  if (!value) {
     m_BassCheckButton.set_active(false);
     m_MidrangeCheckButton.set_active(false);
     m_TweeterCheckButton.set_active(false);
@@ -391,7 +391,7 @@ void Speaker_ListStore::on_new() {
 
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%lu", m_speaker_list->speaker_list()->size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -441,7 +441,7 @@ void Speaker_ListStore::on_save() {
 #ifdef OUTPUT_DEBUG
   std::cout << "SpeakerEditor: save" << std::endl;
 #endif
-  if (new_xml_pressed == true) {
+  if (new_xml_pressed) {
     on_save_as();
     new_xml_pressed = false;
   } else {
@@ -492,7 +492,7 @@ void Speaker_ListStore::on_selection_changed() {
       Speaker s = (*(m_speaker_list->speaker_list()))[index];
 
       m_IdStringEntry.set_text(Glib::ustring(s.get_id_string()));
-      char* str = NULL;
+      char* str = nullptr;
       GString* buffer = g_string_new(str);
       g_string_printf(buffer, "%3.3f", s.get_qts());
       m_QtsEntry.set_text(Glib::ustring(buffer->str));
@@ -525,17 +525,17 @@ void Speaker_ListStore::on_selection_changed() {
       m_CmsEntry.set_text(Glib::ustring(buffer->str));
 
       /* Check buttons */
-      if (s.get_type() & SPEAKER_TYPE_BASS) {
+      if ((s.get_type() & SPEAKER_TYPE_BASS) != 0) {
         m_BassCheckButton.set_active(true);
       } else {
         m_BassCheckButton.set_active(false);
       }
-      if (s.get_type() & SPEAKER_TYPE_MIDRANGE) {
+      if ((s.get_type() & SPEAKER_TYPE_MIDRANGE) != 0) {
         m_MidrangeCheckButton.set_active(true);
       } else {
         m_MidrangeCheckButton.set_active(false);
       }
-      if (s.get_type() & SPEAKER_TYPE_TWEETER) {
+      if ((s.get_type() & SPEAKER_TYPE_TWEETER) != 0) {
         m_TweeterCheckButton.set_active(true);
       } else {
         m_TweeterCheckButton.set_active(false);
@@ -545,7 +545,7 @@ void Speaker_ListStore::on_selection_changed() {
       m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
       GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, s.get_freq_resp_filename());
       plot.clear();
-      if (g_settings.getValueBool("DrawDriverFreqRespPlot") == true) {
+      if (g_settings.getValueBool("DrawDriverFreqRespPlot")) {
 
         /* Plot freq resp if it exists */
         if (!s.get_freq_resp_filename().empty()) {
@@ -559,9 +559,9 @@ void Speaker_ListStore::on_selection_changed() {
               float f1, f2;
               // sscanf(buffer, "%f,%f", &f1, &f2);
               char* substr_ptr = strtok(buffer, ",");
-              f1 = g_ascii_strtod(substr_ptr, NULL);
-              substr_ptr = strtok(NULL, ",");
-              f2 = g_ascii_strtod(substr_ptr, NULL);
+              f1 = g_ascii_strtod(substr_ptr, nullptr);
+              substr_ptr = strtok(nullptr, ",");
+              f2 = g_ascii_strtod(substr_ptr, nullptr);
 
               // std::cout << f1 << ", " << f2 << std::endl;
               GSpeakers::Point p(GSpeakers::round(f1), f2);
@@ -588,9 +588,9 @@ void Speaker_ListStore::on_selection_changed() {
 }
 
 void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
-  gchar* buffer = new gchar[8];
+  auto* buffer = new gchar[8];
 
-  if (g_settings.getValueBool("DrawDriverImpPlot") == true) {
+  if (g_settings.getValueBool("DrawDriverImpPlot")) {
     std::vector<GSpeakers::Point> points;
     /* Produce SPICE input-file */
 #ifdef TARGET_WIN32
@@ -618,7 +618,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
       of << "cmes 3 0 " << g_ascii_dtostr(buffer, 8, cmes) << "uF" << std::endl;
       of << "res 3 0 " << g_ascii_dtostr(buffer, 8, res) << std::endl;
       of << "cmef 3 0 " << g_ascii_dtostr(buffer, 8, cmef) << "uF" << std::endl;
-      if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
+      if (g_settings.getValueBool("SPICEUseGNUCAP")) {
         of << ".print ac ir(vamp) ii(vamp)" << std::endl;
         of << ".ac DEC 50 20 20k" << std::endl;
       } else {
@@ -629,8 +629,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
       of << ".end" << std::endl;
       of.close();
       std::string cmd;
-      if ((g_settings.getValueBool("SPICEUseNGSPICE")) == true ||
-          (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
+      if (g_settings.getValueBool("SPICEUseNGSPICE") || g_settings.getValueBool("SPICEUseGNUCAP")) {
         cmd = g_settings.getValueString("SPICECmdLine") + " -b " + tmp_file + " > " + tmp_file +
               ".out";
       } else {
@@ -655,7 +654,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
         while (!fin.eof()) {
           char* buffer = new char[100];
           fin.getline(buffer, 100, '\n');
-          if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
+          if (g_settings.getValueBool("SPICEUseGNUCAP")) {
             if (buffer[0] == ' ') {
               output = true;
             }
@@ -665,40 +664,40 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
             }
           }
 
-          if (output == true) {
+          if (output) {
 
-            if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
+            if (g_settings.getValueBool("SPICEUseGNUCAP")) {
               f_id = atof(buffer);
               //	      std::cout << f_id << std::endl;
               if (f_id != 0) {
                 /* Check if we got a freq more than 10kHz */
                 char* substr_ptr = strstr(buffer, "K");
-                if (substr_ptr != NULL) {
+                if (substr_ptr != nullptr) {
                   f1 = f_id * 1000;
                 } else {
                   f1 = f_id;
                 }
                 substr_ptr = strtok(buffer, " ");
-                substr_ptr = strtok(NULL, " ");
-                f2 = g_ascii_strtod(substr_ptr, NULL);
-                if (strstr(substr_ptr, "m")) {
+                substr_ptr = strtok(nullptr, " ");
+                f2 = g_ascii_strtod(substr_ptr, nullptr);
+                if (strstr(substr_ptr, "m") != nullptr) {
                   f2 = f2 / 1000.;
-                } else if (strstr(substr_ptr, "u")) {
+                } else if (strstr(substr_ptr, "u") != nullptr) {
                   f2 = f2 / 1000000.;
-                } else if (strstr(substr_ptr, "n")) {
+                } else if (strstr(substr_ptr, "n") != nullptr) {
                   f2 = f2 / 1000000000.;
-                } else if (strstr(substr_ptr, "p")) {
+                } else if (strstr(substr_ptr, "p") != nullptr) {
                   f2 = f2 / 1000000000000.;
                 }
-                substr_ptr = strtok(NULL, " ");
-                f3 = g_ascii_strtod(substr_ptr, NULL);
-                if (strstr(substr_ptr, "m")) {
+                substr_ptr = strtok(nullptr, " ");
+                f3 = g_ascii_strtod(substr_ptr, nullptr);
+                if (strstr(substr_ptr, "m") != nullptr) {
                   f3 = f3 / 1000.;
-                } else if (strstr(substr_ptr, "u")) {
+                } else if (strstr(substr_ptr, "u") != nullptr) {
                   f3 = f3 / 1000000.;
-                } else if (strstr(substr_ptr, "n")) {
+                } else if (strstr(substr_ptr, "n") != nullptr) {
                   f3 = f3 / 1000000000.;
-                } else if (strstr(substr_ptr, "p")) {
+                } else if (strstr(substr_ptr, "p") != nullptr) {
                   f3 = f3 / 1000000000000.;
                 }
 
@@ -710,11 +709,11 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
               if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
 
                 strtok(buffer, "\t");
-                char* substr_ptr = strtok(NULL, "\t");
+                char* substr_ptr = strtok(nullptr, "\t");
 
-                f1 = g_ascii_strtod(substr_ptr, NULL);
-                substr_ptr = strtok(NULL, "\t");
-                f2 = g_ascii_strtod(substr_ptr, NULL);
+                f1 = g_ascii_strtod(substr_ptr, nullptr);
+                substr_ptr = strtok(nullptr, "\t");
+                f2 = g_ascii_strtod(substr_ptr, nullptr);
 
                 GSpeakers::Point p(GSpeakers::round(f1), 50 + f2);
                 points.push_back(p);
@@ -724,7 +723,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
           delete buffer;
         }
         Gdk::Color c2("red");
-        if (update == true) {
+        if (update) {
           int i;
           if ((s.get_freq_resp_filename().empty()) ||
               !(g_settings.getValueBool("DrawDriverFreqRespPlot"))) {
@@ -752,7 +751,7 @@ void Speaker_ListStore::on_clear() {
 void Speaker_ListStore::on_entry_changed(int i) {
   bool update_imp_plot = false;
 
-  if (updating_entries == false) {
+  if (!updating_entries) {
     /* This treeview stuff is kind of weird... */
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -822,7 +821,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         break;
       case 10:
         // std::cout << "bass" << std::endl;
-        if (m_BassCheckButton.get_active() == true) {
+        if (m_BassCheckButton.get_active()) {
           (*(m_speaker_list->speaker_list()))[index].set_type(
               (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_BASS);
         } else {
@@ -834,7 +833,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         break;
       case 11:
         // std::cout << "midrange" << std::endl;
-        if (m_MidrangeCheckButton.get_active() == true) {
+        if (m_MidrangeCheckButton.get_active()) {
           (*(m_speaker_list->speaker_list()))[index].set_type(
               (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_MIDRANGE);
         } else {
@@ -845,7 +844,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         break;
       case 12:
         // std::cout << "tweeter:" << m_TweeterCheckButton.get_state() << std::endl;
-        if (m_TweeterCheckButton.get_active() == true) {
+        if (m_TweeterCheckButton.get_active()) {
           (*(m_speaker_list->speaker_list()))[index].set_type(
               (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_TWEETER);
         } else {
@@ -895,7 +894,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         update_imp_plot = true;
         break;
       }
-      if (update_imp_plot == true) {
+      if (update_imp_plot) {
         /* update impedance plot */
         draw_imp_plot((*(m_speaker_list->speaker_list()))[index], true);
       }
@@ -930,9 +929,8 @@ void Speaker_ListStore::append_xml(const std::string& filename) {
 
     for_each(temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
              mem_fun(*this, &Speaker_ListStore::liststore_add_item));
-    for (std::vector<Speaker>::iterator from = temp_speaker_list.speaker_list()->begin();
-         from != temp_speaker_list.speaker_list()->end(); ++from) {
-      m_speaker_list->speaker_list()->push_back(*from);
+    for (auto& from : *temp_speaker_list.speaker_list()) {
+      m_speaker_list->speaker_list()->push_back(from);
     }
     m_speaker_list->speaker_list()->size();
     set_entries_sensitive(true);
@@ -966,16 +964,15 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
       m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(),
                                             m_speaker_list->speaker_list()->end());
 
-      for (std::vector<Speaker>::iterator from = temp_speaker_list.speaker_list()->begin();
-           from != temp_speaker_list.speaker_list()->end(); ++from) {
-        m_speaker_list->speaker_list()->push_back(*from);
+      for (auto& from : *temp_speaker_list.speaker_list()) {
+        m_speaker_list->speaker_list()->push_back(from);
       }
 
       /* Select the first item in the list */
       // std::cout << m_speaker_list.speaker_list()->size() << std::endl;
       if (!m_speaker_list->speaker_list()->empty()) {
         Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-        char* str = NULL;
+        char* str = nullptr;
         GString* buffer = g_string_new(str);
         g_string_printf(buffer, "%d", 0);
         GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -1254,19 +1251,19 @@ void Speaker_ListStore::add_columns() {
 
 void Speaker_ListStore::type_cell_data_func(Gtk::CellRenderer* cell,
                                             const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   std::string s;
-  if ((*iter)[m_columns.type] & SPEAKER_TYPE_BASS) {
+  if (((*iter)[m_columns.type] & SPEAKER_TYPE_BASS) != 0) {
     s = _("Woofer");
   }
-  if ((*iter)[m_columns.type] & SPEAKER_TYPE_MIDRANGE) {
+  if (((*iter)[m_columns.type] & SPEAKER_TYPE_MIDRANGE) != 0) {
     if (!s.empty()) {
       s = s + _(", Midrange");
     } else {
       s = _("Midrange");
     }
   }
-  if ((*iter)[m_columns.type] & SPEAKER_TYPE_TWEETER) {
+  if (((*iter)[m_columns.type] & SPEAKER_TYPE_TWEETER) != 0) {
     if (!s.empty()) {
       s = s + _(", Tweeter");
     } else {
@@ -1281,70 +1278,70 @@ void Speaker_ListStore::type_cell_data_func(Gtk::CellRenderer* cell,
 
 void Speaker_ListStore::qts_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qts], 3, 3);
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::fs_cell_data_func(Gtk::CellRenderer* cell,
                                           const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fs], 3, 0) + " Hz";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::vas_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vas], 3, 3) + " l";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::rdc_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rdc], 3, 1) + " Ohm";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::lvc_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.lvc], 3, 2) + " mH";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::qms_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qms], 3, 3);
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::qes_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qes], 3, 2);
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::imp_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.imp], 3, 1) + " Ohm";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::sens_cell_data_func(Gtk::CellRenderer* cell,
                                             const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.sens], 3, 1) + " dB";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::mmd_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() =
       GSpeakers::double_to_ustring((*iter)[m_columns.mmd] * 1000, 3, 2) + " g";
   renderer.property_xalign() = 1.0;
@@ -1352,28 +1349,28 @@ void Speaker_ListStore::mmd_cell_data_func(Gtk::CellRenderer* cell,
 
 void Speaker_ListStore::ad_cell_data_func(Gtk::CellRenderer* cell,
                                           const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.ad], 3, 3) + " m";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::bl_cell_data_func(Gtk::CellRenderer* cell,
                                           const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.bl], 3, 1) + " N/A";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::rms_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rms], 3, 2) + " Ns/m";
   renderer.property_xalign() = 1.0;
 }
 
 void Speaker_ListStore::cms_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.cms], 3, 4) + " m/N";
   renderer.property_xalign() = 1.0;
 }
@@ -1388,11 +1385,11 @@ void Speaker_ListStore::on_cell_fixed_toggled(const Glib::ustring& path_string) 
   /* get toggled iter */
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
-  bool fixed = row[m_columns.id];
+  bool fixed = row[m_columns.id] != 0;
 
   /* do something with the value */
   fixed = !fixed;
 
   /* set new value */
-  row[m_columns.id] = fixed;
+  row[m_columns.id] = static_cast<const int>(fixed);
 }

@@ -17,20 +17,21 @@
 
 #include "part.h"
 #include "common.h"
+#include <cstdlib>
 #include <glib/gstrfuncs.h>
 #include <iostream>
 #include <sigc++/sigc++.h>
 #include <sstream>
-#include <stdlib.h>
+#include <utility>
 
 Part::Part(int type, double value, std::string unit) : GSpeakersObject() {
   m_type = type;
   m_value = value;
-  m_unit = unit;
+  m_unit = std::move(unit);
 }
 
 Part::Part(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (std::string((char*)parent->name) == std::string("part"))) {
+  if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("part"))) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException const& e) {
@@ -42,7 +43,7 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject() {
 }
 
 void Part::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("type"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("type"))) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_value(node->next);
@@ -55,9 +56,9 @@ void Part::parse_type(xmlNodePtr node) {
 }
 
 void Part::parse_value(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("value"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("value"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_value;
-    m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
+    m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_unit(node->next);
     } catch (GSpeakersException const& e) {
@@ -69,7 +70,7 @@ void Part::parse_value(xmlNodePtr node) {
 }
 
 void Part::parse_unit(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("unit"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("unit"))) {
     m_unit = std::string((char*)xmlNodeGetContent(node));
   } else {
     throw GSpeakersException(_("Part: unit node not found"));
@@ -78,14 +79,14 @@ void Part::parse_unit(xmlNodePtr node) {
 
 xmlNodePtr Part::to_xml_node(xmlNodePtr parent) {
   xmlNodePtr part, field;
-  gchar* buffer = new gchar[8];
+  auto* buffer = new gchar[8];
 
-  part = xmlNewChild(parent, NULL, (xmlChar*)("part"), NULL);
-  field = xmlNewChild(part, NULL, (xmlChar*)("type"), NULL);
+  part = xmlNewChild(parent, nullptr, (xmlChar*)("part"), nullptr);
+  field = xmlNewChild(part, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
-  field = xmlNewChild(part, NULL, (xmlChar*)("value"), NULL);
+  field = xmlNewChild(part, nullptr, (xmlChar*)("value"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_ascii_dtostr(buffer, 8, m_value));
-  field = xmlNewChild(part, NULL, (xmlChar*)("unit"), NULL);
+  field = xmlNewChild(part, nullptr, (xmlChar*)("unit"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)(m_unit.c_str()));
 
   return part;
@@ -97,7 +98,7 @@ void Part::set_value(double value) {
   // std::cout << "Part.id: " << get_id() << "...value set to " << m_value << std::endl;
 }
 
-void Part::set_unit(std::string unit) { m_unit = unit; }
+void Part::set_unit(std::string unit) { m_unit = std::move(unit); }
 
 double Part::get_value() { return m_value; }
 
@@ -113,7 +114,7 @@ void Part::on_part_value_changed(int id, double new_value) {
 void Part::on_part_unit_changed(int id, std::string new_unit) {
   if (id == get_id()) {
     // std::cout << "Signal emitted in: " << get_id() << std::endl;
-    m_unit = new_unit;
+    m_unit = std::move(new_unit);
   }
 }
 

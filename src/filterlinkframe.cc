@@ -54,12 +54,11 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
     popdown_strings.push_back(speaker_name);
   }
 
-  if (m_speaker_list != NULL) {
-    for (auto iter = m_speaker_list->speaker_list()->begin();
-         iter != m_speaker_list->speaker_list()->end(); ++iter) {
+  if (m_speaker_list != nullptr) {
+    for (auto& iter : *m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
-      if (speaker_name != (*iter).get_id_string()) {
-        popdown_strings.push_back((*iter).get_id_string());
+      if (speaker_name != iter.get_id_string()) {
+        popdown_strings.push_back(iter.get_id_string());
       }
     }
   }
@@ -68,7 +67,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   m_vbox.pack_start(m_speaker_combo);
 
   m_vbox.pack_start(m_imp_corr_checkbutton);
-  if (m_net->get_has_imp_corr() == true) {
+  if (m_net->get_has_imp_corr()) {
     m_imp_corr_checkbutton.set_active(true);
   }
 
@@ -82,14 +81,14 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   hbox->pack_start((*manage(new Gtk::Label(_("Damping: ")))));
   hbox->pack_start(m_damp_spinbutton);
 
-  if (m_net->get_has_damp() == true) {
+  if (m_net->get_has_damp()) {
     /* Set damp value in dB here */
     double r_ser = m_net->get_damp_R1().get_value();
     Speaker speaker;
-    if (m_speaker_list != NULL) {
+    if (m_speaker_list != nullptr) {
       speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     }
-    if (g_settings.getValueBool("UseDriverImpedance") == true) {
+    if (g_settings.getValueBool("UseDriverImpedance")) {
       m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_imp() + 1)));
     } else {
       m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
@@ -98,7 +97,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
 
   Gtk::Label* label;
-  if (net->get_type() & NET_TYPE_HIGHPASS) {
+  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
     Gtk::Frame* frame = manage(new Gtk::Frame(""));
 
     frame->set_border_width(2);
@@ -152,7 +151,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
     set_family(m_higher_type_optionmenu, m_net->get_highpass_order(), m_net->get_highpass_family());
   }
 
-  if (m_net->get_type() & NET_TYPE_LOWPASS) {
+  if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
     Gtk::Frame* frame = manage(new Gtk::Frame(""));
     frame->set_border_width(2);
     frame->set_shadow_type(Gtk::SHADOW_NONE);
@@ -209,7 +208,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
 
   m_speaker_combo.get_entry()->signal_changed().connect(
       sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
-  if (net->get_type() & NET_TYPE_LOWPASS) {
+  if ((net->get_type() & NET_TYPE_LOWPASS) != 0) {
     m_lower_type_optionmenu->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_lower_co_freq_spinbutton->signal_value_changed().connect(
@@ -217,7 +216,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
     m_lower_order_optionmenu->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
-  if (net->get_type() & NET_TYPE_HIGHPASS) {
+  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
     m_higher_order_optionmenu->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_higher_co_freq_spinbutton->signal_value_changed().connect(
@@ -295,20 +294,20 @@ void FilterLinkFrame::on_settings_changed(const std::string& s) {
 }
 
 void FilterLinkFrame::on_param_changed() {
-  if (enable_edit == true) {
+  if (enable_edit) {
 #ifdef OUTPUT_DEBUG
     std::cout << "FilterLinkFrame::on_param_changed" << std::endl;
 #endif
     enable_edit = false;
     Speaker speaker;
-    if (m_speaker_list != NULL) {
+    if (m_speaker_list != nullptr) {
       speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     }
     m_net->set_speaker(speaker.get_id_string());
 
     int index = 0;
     std::vector<double> num_params;
-    if (m_net->get_type() & NET_TYPE_LOWPASS) {
+    if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
       m_net->set_lowpass_order(m_lower_order_optionmenu->get_history() + 1);
       double cutoff = m_lower_co_freq_spinbutton->get_value();
       switch (m_net->get_lowpass_order()) {
@@ -411,7 +410,7 @@ void FilterLinkFrame::on_param_changed() {
         break;
       }
     }
-    if (m_net->get_type() & NET_TYPE_HIGHPASS) {
+    if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0) {
       m_net->set_highpass_order(m_higher_order_optionmenu->get_history() + 1);
       double cutoff = m_higher_co_freq_spinbutton->get_value();
       switch (m_net->get_highpass_order()) {
@@ -515,7 +514,7 @@ void FilterLinkFrame::on_param_changed() {
         break;
       }
     }
-    if (m_imp_corr_checkbutton.get_active() == true) {
+    if (m_imp_corr_checkbutton.get_active()) {
       m_net->set_has_imp_corr(true);
       /* calc imp corr here */
       m_net->get_imp_corr_C().set_value((speaker.get_lvc() / 1000) / pow(speaker.get_rdc(), 2) *
@@ -525,7 +524,7 @@ void FilterLinkFrame::on_param_changed() {
     } else {
       m_net->set_has_imp_corr(false);
     }
-    if (m_adv_imp_model_checkbutton.get_active() == true) {
+    if (m_adv_imp_model_checkbutton.get_active()) {
       m_net->set_adv_imp_model(1);
     } else {
       m_net->set_adv_imp_model(0);
@@ -542,7 +541,7 @@ void FilterLinkFrame::on_param_changed() {
     }
     signal_net_modified_by_wizard();
 
-    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+    if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
       on_plot_crossover();
     }
     enable_edit = true;
@@ -556,7 +555,7 @@ void FilterLinkFrame::on_net_updated(Net* net) {
 #endif
     // enable_edit = false;
 
-    if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+    if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
       on_plot_crossover();
     }
   }
@@ -577,18 +576,17 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   /* Setup the speaker combo box */
   std::vector<std::string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
-  if (m_speaker_list != NULL) {
-    for (auto iter = m_speaker_list->speaker_list()->begin();
-         iter != m_speaker_list->speaker_list()->end(); ++iter) {
+  if (m_speaker_list != nullptr) {
+    for (auto& iter : *m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
-      if (speaker_name != (*iter).get_id_string()) {
-        popdown_strings.push_back((*iter).get_id_string());
+      if (speaker_name != iter.get_id_string()) {
+        popdown_strings.push_back(iter.get_id_string());
       } else {
         speaker_is_in_speakerlist = true;
       }
     }
   }
-  if (speaker_is_in_speakerlist == true) {
+  if (speaker_is_in_speakerlist) {
     popdown_strings.insert(popdown_strings.begin(), speaker_name);
   }
   m_speaker_combo.set_popdown_strings(popdown_strings);
@@ -597,7 +595,7 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 void FilterLinkFrame::on_plot_crossover() {
   /* Create spice code for this net */
   Speaker speaker;
-  if (m_speaker_list != NULL) {
+  if (m_speaker_list != nullptr) {
     speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
   }
   std::string spice_filename;
@@ -614,8 +612,7 @@ void FilterLinkFrame::on_plot_crossover() {
 
   /* run spice with created file */
   std::string cmd;
-  if ((g_settings.getValueBool("SPICEUseNGSPICE") == true) ||
-      (g_settings.getValueBool("SPICEUseGNUCAP") == true)) {
+  if ((g_settings.getValueBool("SPICEUseNGSPICE")) || (g_settings.getValueBool("SPICEUseGNUCAP"))) {
     cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + " > " +
           spice_filename + ".out";
   } else {
@@ -642,7 +639,7 @@ void FilterLinkFrame::on_plot_crossover() {
     while (!fin.eof()) {
       char* buffer = new char[100];
       fin.getline(buffer, 100, '\n');
-      if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
+      if (g_settings.getValueBool("SPICEUseGNUCAP")) {
         if (buffer[0] == ' ') {
           output = true;
         }
@@ -652,20 +649,20 @@ void FilterLinkFrame::on_plot_crossover() {
         }
       }
 
-      if (output == true) {
-        if (g_settings.getValueBool("SPICEUseGNUCAP") == true) {
+      if (output) {
+        if (g_settings.getValueBool("SPICEUseGNUCAP")) {
           f_id = atof(buffer);
           if (f_id != 0) {
             /* Check if we got a freq more than 10kHz */
             char* substr_ptr = strstr(buffer, "K");
-            if (substr_ptr != NULL) {
+            if (substr_ptr != nullptr) {
               freq = f_id * 1000;
             } else {
               freq = f_id;
             }
             substr_ptr = strtok(buffer, " ");
-            substr_ptr = strtok(NULL, " ");
-            db = g_ascii_strtod(substr_ptr, NULL);
+            substr_ptr = strtok(nullptr, " ");
+            db = g_ascii_strtod(substr_ptr, nullptr);
             // 	    if (strstr(substr_ptr, "m")) {
             // 	      f2 = f2 / 1000.;
             // 	    } else if (strstr(substr_ptr, "u")) {
@@ -683,11 +680,11 @@ void FilterLinkFrame::on_plot_crossover() {
         } else {
           if ((buffer[0] >= '0') && (buffer[0] <= '9')) {
             strtok(buffer, "\t");
-            char* substr_ptr = strtok(NULL, "\t");
+            char* substr_ptr = strtok(nullptr, "\t");
 
-            freq = g_ascii_strtod(substr_ptr, NULL);
-            substr_ptr = strtok(NULL, "\t");
-            db = g_ascii_strtod(substr_ptr, NULL);
+            freq = g_ascii_strtod(substr_ptr, nullptr);
+            substr_ptr = strtok(nullptr, "\t");
+            db = g_ascii_strtod(substr_ptr, nullptr);
 
             GSpeakers::Point p(GSpeakers::round(freq), db);
             points.push_back(p);
@@ -708,13 +705,12 @@ void FilterLinkFrame::on_plot_crossover() {
     }
     signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
 
-    if (enable_edit == true) {
+    if (enable_edit) {
       enable_edit = false;
-      if (m_net->get_type() & NET_TYPE_LOWPASS) {
+      if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
         int i = 0, index1 = 0;
-        for (std::vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
-             ++iter) {
-          if ((*iter).get_y() > (-3 - m_damp_spinbutton.get_value())) {
+        for (auto& point : points) {
+          if (point.get_y() > (-3 - m_damp_spinbutton.get_value())) {
             index1 = i;
           }
           i++;
@@ -728,12 +724,11 @@ void FilterLinkFrame::on_plot_crossover() {
         m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff +
                                               points[index1 + 1].get_x());
       }
-      if (m_net->get_type() & NET_TYPE_HIGHPASS) {
+      if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0) {
         bool done = false;
         int i = 0, index2 = 0;
-        for (std::vector<GSpeakers::Point>::iterator iter = points.begin(); iter != points.end();
-             ++iter) {
-          if (((*iter).get_y() < (-3 - m_damp_spinbutton.get_value())) && (done == false)) {
+        for (auto& point : points) {
+          if ((point.get_y() < (-3 - m_damp_spinbutton.get_value())) && (!done)) {
             index2 = i;
           } else {
             done = true;

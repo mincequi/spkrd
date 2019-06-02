@@ -36,15 +36,15 @@ void gspeakers_stock_init() {
   GtkIconFactory* icon_factory = gtk_icon_factory_new();
   gtk_icon_factory_add_default(icon_factory);
 
-  for (guint i = 0; i < G_N_ELEMENTS(stock_items); i++) {
+  for (const auto& stock_item : stock_items) {
     gchar* filename =
-        g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+        g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_item.stock_id);
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, nullptr);
     g_free(filename);
 
     GtkIconSet* icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
 
-    gtk_icon_factory_add(icon_factory, stock_items[i].stock_id, icon_set);
+    gtk_icon_factory_add(icon_factory, stock_item.stock_id, icon_set);
 
     g_object_unref(pixbuf);
   }

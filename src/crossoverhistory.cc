@@ -20,7 +20,7 @@
 #include "crossoverhistory.h"
 
 #include "gspeakersfilechooser.h"
-#include <time.h>
+#include <ctime>
 
 #define MENU_INDEX_SAVE 6
 #define TOOLBAR_INDEX_SAVE 4
@@ -72,9 +72,9 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
-  f_append = NULL;
-  f_open = NULL;
-  f_save_as = NULL;
+  f_append = nullptr;
+  f_open = nullptr;
+  f_save_as = nullptr;
   show_all();
   index = 0;
 
@@ -85,14 +85,14 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
 }
 
 void CrossoverHistory::on_save_open_files() {
-  if (GSpeakers::crossoverlist_modified() == true) {
+  if (GSpeakers::crossoverlist_modified()) {
     on_save();
   }
 }
 
 void CrossoverHistory::select_first_row() {
   if (!m_crossover_list.crossover_list()->empty()) {
-    char* str = NULL;
+    char* str = nullptr;
     GString* buffer = g_string_new(str);
     g_string_printf(buffer, "%d", 0);
     GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -160,7 +160,7 @@ void CrossoverHistory::open_xml(const std::string& filename) {
     /* Select the first item in the list */
     if (!m_crossover_list.crossover_list()->empty()) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-      char* str = NULL;
+      char* str = nullptr;
       GString* buffer = g_string_new(str);
       g_string_printf(buffer, "%d", 0);
       GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -191,9 +191,8 @@ void CrossoverHistory::append_xml(const std::string& filename) {
     for_each(temp_crossover_list.crossover_list()->begin(),
              temp_crossover_list.crossover_list()->end(),
              sigc::mem_fun(*this, &CrossoverHistory::liststore_add_item));
-    for (auto from = temp_crossover_list.crossover_list()->begin();
-         from != temp_crossover_list.crossover_list()->end(); ++from) {
-      m_crossover_list.crossover_list()->push_back(*from);
+    for (auto& from : *temp_crossover_list.crossover_list()) {
+      m_crossover_list.crossover_list()->push_back(from);
     }
     m_crossover_list.crossover_list()->size();
   } catch (GSpeakersException const& e) {
@@ -214,7 +213,7 @@ void CrossoverHistory::on_selection_changed() {
       index = indices[0];
       signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));
       /* Plot the crossover immediately after we selected it */
-      if (g_settings.getValueBool("AutoUpdateFilterPlots") == true) {
+      if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
         signal_plot_crossover();
       }
     }
@@ -239,7 +238,7 @@ void CrossoverHistory::on_new_copy() {
            same id and so on, as we would get if we used the operator = or something similar,
            Quick and easy solution...use the to_xml function which gets rid of the id */
 
-        xmlNodePtr node = xmlNewDocNode(NULL, NULL, (xmlChar*)("parent"), NULL);
+        xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
         ((*m_crossover_list.crossover_list())[indices[0]]).to_xml_node(node);
         Crossover c = Crossover(node->children);
 
@@ -259,7 +258,7 @@ void CrossoverHistory::on_new_copy() {
     }
   }
   /* Select the last crossover in the list: the new crossover */
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%lu", m_crossover_list.crossover_list()->size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -290,7 +289,7 @@ void CrossoverHistory::on_new_from_menu(int type) {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   /* make our new crossover the selected crossover */
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%lu", m_crossover_list.crossover_list()->size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -317,7 +316,7 @@ void CrossoverHistory::on_new() {
 
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%lu", m_crossover_list.crossover_list()->size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
@@ -343,7 +342,7 @@ void CrossoverHistory::on_save() {
 #ifdef OUTPUT_DEBUG
   std::cout << "CrossoverHistory::on_save" << std::endl;
 #endif
-  if (new_xml_pressed == true) {
+  if (new_xml_pressed) {
     on_save_as();
     new_xml_pressed = false;
   } else {
@@ -405,7 +404,7 @@ void CrossoverHistory::on_remove() {
     }
   }
 
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
   if (index > 0) {
     g_string_printf(buffer, "%d", index - 1);
@@ -459,40 +458,40 @@ void CrossoverHistory::add_columns() {
 
 void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
-  Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+  auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   std::string s;
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) != 0) {
     s = s + _("lowpass");
   }
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) != 0) {
     if (s.length() > 0) {
       s = s + _(", subsonic");
     } else {
       s = s + _("subsonic");
     }
   }
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) != 0) {
     if (s.length() > 0) {
       s = s + _(", highpass");
     } else {
       s = s + _("highpass");
     }
   }
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) != 0) {
     if (s.length() > 0) {
       s = s + _(", 2-way");
     } else {
       s = s + _("2-way");
     }
   }
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) != 0) {
     if (s.length() > 0) {
       s = s + _(", 3-way");
     } else {
       s = s + _("3-way");
     }
   }
-  if ((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) {
+  if (((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) != 0) {
     if (s.length() > 0) {
       s = s + _(", 4-way");
     } else {

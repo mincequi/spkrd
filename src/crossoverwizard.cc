@@ -19,7 +19,7 @@
 
 CrossoverWizard::CrossoverWizard() : Gtk::ScrolledWindow(), m_vbox() {
 
-  m_speaker_list = NULL;
+  m_speaker_list = nullptr;
   // set_border_width(2);
   //  set_shadow_type(Gtk::SHADOW_NONE);
   //  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + Glib::ustring(_("Crossover

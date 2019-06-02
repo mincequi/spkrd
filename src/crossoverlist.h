@@ -41,10 +41,10 @@ public:
   CrossoverList() = default;
 
   /* Construct a part from an xml node */
-  CrossoverList(std::string filename);
+  CrossoverList(const std::string& filename);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(std::string filename); // Maybe this one should throw an exception
+  void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
   /* Print part data to stdout */
   friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);

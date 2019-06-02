@@ -23,6 +23,7 @@
 #include <fstream>
 #include <glib.h>
 #include <sstream>
+#include <utility>
 
 Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, bool has_damp,
          bool has_res, int family, int adv_imp_model, bool inv_pol)
@@ -40,61 +41,61 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
   m_inv_pol = inv_pol;
 
   /* Init lowpass filter if present */
-  if (m_type & NET_TYPE_LOWPASS) {
+  if ((m_type & NET_TYPE_LOWPASS) != 0) {
     switch (lowpass_order) {
     case NET_ORDER_1ST:
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
       break;
     case NET_ORDER_2ND:
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
       break;
     case NET_ORDER_3RD:
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
       break;
     case NET_ORDER_4TH:
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
       break;
     }
   }
 
   /* Init highpass filter if present */
-  if (m_type & NET_TYPE_HIGHPASS) {
+  if ((m_type & NET_TYPE_HIGHPASS) != 0) {
     switch (highpass_order) {
     case NET_ORDER_1ST:
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
       break;
     case NET_ORDER_2ND:
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
       break;
     case NET_ORDER_3RD:
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
       break;
     case NET_ORDER_4TH:
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-      m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-      m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
+      m_parts.emplace_back(PART_TYPE_CAPACITOR);
+      m_parts.emplace_back(PART_TYPE_INDUCTOR);
       break;
     }
   }
-  if (has_imp_corr == true) {
+  if (has_imp_corr) {
     m_imp_corr_R = Part(PART_TYPE_RESISTOR, 5.6, "");
     m_imp_corr_C = Part(PART_TYPE_CAPACITOR);
   }
-  if (has_damp == true) {
+  if (has_damp) {
     m_damp_R1 = Part(PART_TYPE_RESISTOR, 1, "");
     m_damp_R2 = Part(PART_TYPE_RESISTOR, 1, "");
   }
-  if (has_res == true) {
+  if (has_res) {
     m_res_R = Part(PART_TYPE_RESISTOR, 1, "");
     m_res_C = Part(PART_TYPE_CAPACITOR, 1, "u");
     m_res_L = Part(PART_TYPE_INDUCTOR, 1, "m");
@@ -102,7 +103,7 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
 }
 
 Net::Net(xmlNodePtr parent) {
-  if ((parent != NULL) && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
+  if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException const& e) {
@@ -114,7 +115,7 @@ Net::Net(xmlNodePtr parent) {
 }
 
 void Net::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_lowpass_order(node->next);
@@ -127,7 +128,7 @@ void Net::parse_type(xmlNodePtr node) {
 }
 
 void Net::parse_lowpass_order(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_order;
     try {
       parse_highpass_order(node->next);
@@ -140,7 +141,7 @@ void Net::parse_lowpass_order(xmlNodePtr node) {
 }
 
 void Net::parse_highpass_order(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_order;
     try {
       parse_has_imp_corr(node->next);
@@ -153,7 +154,7 @@ void Net::parse_highpass_order(xmlNodePtr node) {
 }
 
 void Net::parse_has_imp_corr(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0)) {
     if (g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0) {
       m_has_imp_corr = true;
     } else {
@@ -170,7 +171,7 @@ void Net::parse_has_imp_corr(xmlNodePtr node) {
 }
 
 void Net::parse_has_damp(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "has_damp", 8) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_damp", 8) == 0)) {
     if (g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0) {
       m_has_damp = true;
     } else {
@@ -187,7 +188,7 @@ void Net::parse_has_damp(xmlNodePtr node) {
 }
 
 void Net::parse_has_res(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "has_res", 7) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_res", 7) == 0)) {
     if (g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0) {
       m_has_res = true;
     } else {
@@ -205,11 +206,11 @@ void Net::parse_has_res(xmlNodePtr node) {
 
 void Net::parse_parts(xmlNodePtr node) {
   xmlNodePtr child;
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "parts", 5) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "parts", 5) == 0)) {
     /* Iterate over node->children, first comes the imp corr and damping network */
     child = node->children;
     /* Impedance correction parts */
-    if (m_has_imp_corr == true) {
+    if (m_has_imp_corr) {
       try {
         m_imp_corr_R = Part(child);
       } catch (GSpeakersException const& e) {
@@ -224,7 +225,7 @@ void Net::parse_parts(xmlNodePtr node) {
       child = child->next;
     }
     /* Damping network parts */
-    if (m_has_damp == true) {
+    if (m_has_damp) {
       try {
         m_damp_R1 = Part(child);
       } catch (GSpeakersException const& e) {
@@ -239,7 +240,7 @@ void Net::parse_parts(xmlNodePtr node) {
       child = child->next;
     }
     /* Resonanse circuit */
-    if (m_has_res == true) {
+    if (m_has_res) {
       try {
         m_res_R = Part(child);
       } catch (GSpeakersException const& e) {
@@ -261,9 +262,9 @@ void Net::parse_parts(xmlNodePtr node) {
     }
 
     /* Other parts */
-    while (child != NULL) {
+    while (child != nullptr) {
       try {
-        m_parts.push_back(Part(child));
+        m_parts.emplace_back(child);
       } catch (GSpeakersException const& e) {
         throw e;
       }
@@ -280,7 +281,7 @@ void Net::parse_parts(xmlNodePtr node) {
 }
 
 void Net::parse_lowpass_family(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_family;
     try {
       parse_highpass_family(node->next);
@@ -293,7 +294,7 @@ void Net::parse_lowpass_family(xmlNodePtr node) {
 }
 
 void Net::parse_highpass_family(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_family;
     try {
       parse_speaker(node->next);
@@ -306,7 +307,7 @@ void Net::parse_highpass_family(xmlNodePtr node) {
 }
 
 void Net::parse_speaker(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0)) {
     m_speaker = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_adv_imp_model(node->next);
@@ -319,7 +320,7 @@ void Net::parse_speaker(xmlNodePtr node) {
 }
 
 void Net::parse_adv_imp_model(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_adv_imp_model;
     try {
       parse_inv_pol(node->next);
@@ -332,7 +333,7 @@ void Net::parse_adv_imp_model(xmlNodePtr node) {
 }
 
 void Net::parse_inv_pol(xmlNodePtr node) {
-  if ((node != NULL) && (g_ascii_strncasecmp((char*)node->name, "inv_pol", 7) == 0)) {
+  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "inv_pol", 7) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_inv_pol;
   } else {
     throw GSpeakersException(_("Net::parse_inv_pol: inv_pol node expected"));
@@ -342,51 +343,51 @@ void Net::parse_inv_pol(xmlNodePtr node) {
 xmlNodePtr Net::to_xml_node(xmlNodePtr parent) {
   xmlNodePtr net, field;
 
-  net = xmlNewChild(parent, NULL, (xmlChar*)("net"), NULL);
+  net = xmlNewChild(parent, nullptr, (xmlChar*)("net"), nullptr);
 
-  field = xmlNewChild(net, NULL, (xmlChar*)("type"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
-  field = xmlNewChild(net, NULL, (xmlChar*)("lowpass_order"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("lowpass_order"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_lowpass_order));
-  field = xmlNewChild(net, NULL, (xmlChar*)("highpass_order"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("highpass_order"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_highpass_order));
 
-  field = xmlNewChild(net, NULL, (xmlChar*)("has_imp_corr"), NULL);
-  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_has_imp_corr));
-  field = xmlNewChild(net, NULL, (xmlChar*)("has_damp"), NULL);
-  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_has_damp));
-  field = xmlNewChild(net, NULL, (xmlChar*)("has_res"), NULL);
-  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_has_res));
-  field = xmlNewChild(net, NULL, (xmlChar*)("parts"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("has_imp_corr"), nullptr);
+  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_imp_corr)));
+  field = xmlNewChild(net, nullptr, (xmlChar*)("has_damp"), nullptr);
+  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_damp)));
+  field = xmlNewChild(net, nullptr, (xmlChar*)("has_res"), nullptr);
+  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_res)));
+  field = xmlNewChild(net, nullptr, (xmlChar*)("parts"), nullptr);
 
   /* Insert impedance correction and damping network first in parts section */
-  if (m_has_imp_corr == true) {
+  if (m_has_imp_corr) {
     m_imp_corr_R.to_xml_node(field);
     m_imp_corr_C.to_xml_node(field);
   }
-  if (m_has_damp == true) {
+  if (m_has_damp) {
     m_damp_R1.to_xml_node(field);
     m_damp_R2.to_xml_node(field);
   }
-  if (m_has_res == true) {
+  if (m_has_res) {
     m_res_R.to_xml_node(field);
     m_res_C.to_xml_node(field);
     m_res_L.to_xml_node(field);
   }
 
-  for (std::vector<Part>::iterator from = m_parts.begin(); from != m_parts.end(); ++from) {
-    ((Part)(*from)).to_xml_node(field);
+  for (auto& m_part : m_parts) {
+    ((Part)m_part).to_xml_node(field);
   }
-  field = xmlNewChild(net, NULL, (xmlChar*)("lowpass_family"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("lowpass_family"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_lowpass_family));
-  field = xmlNewChild(net, NULL, (xmlChar*)("highpass_family"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("highpass_family"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_highpass_family));
-  field = xmlNewChild(net, NULL, (xmlChar*)("speaker"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("speaker"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)m_speaker.c_str());
-  field = xmlNewChild(net, NULL, (xmlChar*)("adv_imp_model"), NULL);
+  field = xmlNewChild(net, nullptr, (xmlChar*)("adv_imp_model"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_adv_imp_model));
-  field = xmlNewChild(net, NULL, (xmlChar*)("inv_pol"), NULL);
-  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_inv_pol));
+  field = xmlNewChild(net, nullptr, (xmlChar*)("inv_pol"), nullptr);
+  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_inv_pol)));
 
   return net;
 }
@@ -402,7 +403,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
   int node_counter = 0;
   int part_index = 0;
   int next_node_cnt_inc = 1;
-  gchar* buffer = new gchar[8];
+  auto* buffer = new gchar[8];
 
   std::ofstream of(tmp_file.c_str());
   if (of.good()) {
@@ -525,7 +526,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
       }
     }
 
-    if (m_has_imp_corr == true) {
+    if (m_has_imp_corr) {
       of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " " << node_counter + 1 << " "
          << g_ascii_dtostr(buffer, 8, m_imp_corr_R.get_value()) << std::endl;
       of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0 << " "
@@ -535,7 +536,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
     } else {
       next_node_cnt_inc = 1;
     }
-    if (m_has_damp == true) {
+    if (m_has_damp) {
       of << "R" << m_damp_R1.get_id() << " " << node_counter << " " << 0 << " "
          << g_ascii_dtostr(buffer, 8, m_damp_R1.get_value()) << std::endl;
       of << "R" << m_damp_R2.get_id() << " " << node_counter << " "
@@ -576,7 +577,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
          << g_ascii_dtostr(buffer, 8, s.get_rdc()) << std::endl;
     }
 
-    if (use_gnucap == true) {
+    if (use_gnucap) {
       of << ".print ac vdb(" << spk_node << ")" << std::endl;
       of << ".ac DEC 50 20 20k" << std::endl;
     } else {
@@ -603,9 +604,8 @@ std::ostream& operator<<(std::ostream& o, const Net& net) {
   o << _("Parts:") << std::endl;
 
   /* Print every part in this net */
-  for (std::vector<Part>::iterator from = ((std::vector<Part>)(net.m_parts)).begin();
-       from != ((std::vector<Part>)(net.m_parts)).end(); ++from) {
-    o << *from;
+  for (auto& from : ((std::vector<Part>)(net.m_parts))) {
+    o << from;
   }
   return o << _("********* ******") << std::endl;
 }
@@ -672,7 +672,7 @@ void Net::set_lowpass_order(int order) {
 
 void Net::set_has_imp_corr(bool has_imp_corr) {
   m_has_imp_corr = has_imp_corr;
-  if (has_imp_corr == true) {
+  if (has_imp_corr) {
     m_imp_corr_R = Part(PART_TYPE_RESISTOR, 5.6, "");
     m_imp_corr_C = Part(PART_TYPE_CAPACITOR);
   }
@@ -680,29 +680,29 @@ void Net::set_has_imp_corr(bool has_imp_corr) {
 
 void Net::set_has_damp(bool has_damp) {
   m_has_damp = has_damp;
-  if (has_damp == true) {
+  if (has_damp) {
     m_damp_R1 = Part(PART_TYPE_RESISTOR, 1, "");
     m_damp_R2 = Part(PART_TYPE_RESISTOR, 1, "");
   }
 }
 
-void Net::set_speaker(std::string speaker) { m_speaker = speaker; }
+void Net::set_speaker(std::string speaker) { m_speaker = std::move(speaker); }
 
 void Net::set_lowpass_family(int family) { m_lowpass_family = family; }
 
 void Net::set_highpass_family(int family) { m_highpass_family = family; }
 
-void Net::set_imp_corr_R(Part p) { m_imp_corr_R = p; }
+void Net::set_imp_corr_R(Part p) { m_imp_corr_R = std::move(p); }
 
-void Net::set_imp_corr_C(Part p) { m_imp_corr_C = p; }
+void Net::set_imp_corr_C(Part p) { m_imp_corr_C = std::move(p); }
 
-void Net::set_damp_R1(Part p) { m_damp_R1 = p; }
+void Net::set_damp_R1(Part p) { m_damp_R1 = std::move(p); }
 
-void Net::set_damp_R2(Part p) { m_damp_R2 = p; }
+void Net::set_damp_R2(Part p) { m_damp_R2 = std::move(p); }
 
-void Net::set_res_R(Part p) { m_res_R = p; }
-void Net::set_res_C(Part p) { m_res_C = p; }
-void Net::set_res_L(Part p) { m_res_L = p; }
+void Net::set_res_R(Part p) { m_res_R = std::move(p); }
+void Net::set_res_C(Part p) { m_res_C = std::move(p); }
+void Net::set_res_L(Part p) { m_res_L = std::move(p); }
 
 void Net::set_adv_imp_model(int model) { m_adv_imp_model = model; }
 
@@ -714,7 +714,7 @@ void Net::set_inv_pol(bool pol) { m_inv_pol = pol; }
  *
  */
 void Net::setup_net_by_order(int new_order, int which_net) {
-  std::vector<Part>::iterator iter = m_parts.begin();
+  auto iter = m_parts.begin();
 
   if (which_net == NET_TYPE_LOWPASS) {
     /* Find out how much we should increase (or decrease) filter order */
@@ -791,11 +791,11 @@ void Net::setup_net_by_order(int new_order, int which_net) {
           /* Here we use push_back since we're always adding parts to the end of the
            * m_partsstd::vector
            */
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
           break;
         case NET_ORDER_1ST:
         case NET_ORDER_3RD:
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
           break;
         }
         break;
@@ -803,35 +803,35 @@ void Net::setup_net_by_order(int new_order, int which_net) {
         switch (m_highpass_order) {
         case NET_NOT_PRESENT:
         case NET_ORDER_2ND:
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
           break;
         case NET_ORDER_1ST:
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
           break;
         }
         break;
       case 3:
         switch (m_highpass_order) {
         case NET_NOT_PRESENT:
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
           break;
         case NET_ORDER_1ST:
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
           break;
         }
         break;
       case 4:
         if (m_highpass_order == NET_NOT_PRESENT) {
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
-          m_parts.push_back(Part(PART_TYPE_CAPACITOR));
-          m_parts.push_back(Part(PART_TYPE_INDUCTOR));
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
+          m_parts.emplace_back(PART_TYPE_CAPACITOR);
+          m_parts.emplace_back(PART_TYPE_INDUCTOR);
         }
         break;
       }

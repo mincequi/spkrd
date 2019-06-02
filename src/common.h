@@ -33,6 +33,7 @@
 #include <sigc++/sigc++.h>
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #define _(string) gettext(string)
@@ -66,7 +67,7 @@ class GSpeakersException {
   std::string _what;
 
 public:
-  GSpeakersException(const std::string& what_arg) : _what(what_arg) {}
+  GSpeakersException(std::string what_arg) : _what(std::move(what_arg)) {}
 
   virtual const char* what() const { return _what.c_str(); }
 };

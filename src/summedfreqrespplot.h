@@ -35,7 +35,7 @@
 class SummedFreqRespPlot : public Gtk::Frame {
 public:
   SummedFreqRespPlot();
-  virtual ~SummedFreqRespPlot();
+  ~SummedFreqRespPlot() override;
   void clear();
   int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 

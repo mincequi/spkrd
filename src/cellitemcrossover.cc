@@ -19,6 +19,8 @@
 
 #include "cellitemcrossover.h"
 
+#include <utility>
+
 CellItem_Crossover::CellItem_Crossover() {
   m_label = "";
   m_type = 0;
@@ -31,10 +33,10 @@ CellItem_Crossover::CellItem_Crossover() {
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label, int type, double value,
                                        Glib::ustring unit, int id) {
-  m_label = label;
+  m_label = std::move(label);
   m_type = type;
   m_value = value;
-  m_unit = unit;
+  m_unit = std::move(unit);
   m_id = id;
   m_value_str = "";
   m_type_str = "";
@@ -46,7 +48,7 @@ CellItem_Crossover::CellItem_Crossover(Part part) {
   m_type = part.get_type();
   m_value = part.get_value();
   m_unit = part.get_unit();
-  char* str = NULL;
+  char* str = nullptr;
   GString* buffer = g_string_new(str);
 
   switch (m_type) {
@@ -71,7 +73,7 @@ CellItem_Crossover::CellItem_Crossover(Part part) {
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
                                        const std::vector<CellItem_Crossover>& children) {
-  m_label = label;
+  m_label = std::move(label);
   m_children = children;
   m_type = 0;
   m_value = 0;
@@ -81,15 +83,4 @@ CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
 
 CellItem_Crossover::CellItem_Crossover(const CellItem_Crossover& src) { operator=(src); }
 
-CellItem_Crossover& CellItem_Crossover::operator=(const CellItem_Crossover& src) {
-  m_label = src.m_label;
-  m_type = src.m_type;
-  m_value = src.m_value;
-  m_unit = src.m_unit;
-  m_children = src.m_children;
-  m_id = src.m_id;
-  m_type_str = src.m_type_str;
-  m_value_str = src.m_value_str;
-
-  return *this;
-}
+CellItem_Crossover& CellItem_Crossover::operator=(const CellItem_Crossover& src) = default;

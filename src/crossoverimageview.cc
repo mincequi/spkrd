@@ -29,8 +29,8 @@ CrossoverImageView::CrossoverImageView() {
   using sigc::mem_fun;
 
   visible = false;
-  crossover = NULL;
-  speaker_list = NULL;
+  crossover = nullptr;
+  speaker_list = nullptr;
   g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
   scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
   g_settings.settings_changed.connect(mem_fun(*this, &CrossoverImageView::on_settings_changed));
@@ -70,26 +70,26 @@ bool CrossoverImageView::on_configure_event(GdkEventConfigure* event) {
 }
 
 void CrossoverImageView::redraw() {
-  if (visible == true) {
+  if (visible) {
     /* Clear to white background color */
     m_refGC->set_rgb_fg_color(white);
     m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().get_width(),
                                 get_allocation().get_height());
     m_refGC->set_rgb_fg_color(black);
 
-    if (crossover != NULL) {
+    if (crossover != nullptr) {
       int vert_space_per_net_devider = 0;
-      if (crossover->get_type() & CROSSOVER_TYPE_LOWPASS)
+      if ((crossover->get_type() & CROSSOVER_TYPE_LOWPASS) != 0)
         vert_space_per_net_devider++;
-      if (crossover->get_type() & CROSSOVER_TYPE_SUBSONIC)
+      if ((crossover->get_type() & CROSSOVER_TYPE_SUBSONIC) != 0)
         vert_space_per_net_devider++;
-      if (crossover->get_type() & CROSSOVER_TYPE_HIGHPASS)
+      if ((crossover->get_type() & CROSSOVER_TYPE_HIGHPASS) != 0)
         vert_space_per_net_devider++;
-      if (crossover->get_type() & CROSSOVER_TYPE_TWOWAY)
+      if ((crossover->get_type() & CROSSOVER_TYPE_TWOWAY) != 0)
         vert_space_per_net_devider += 2;
-      if (crossover->get_type() & CROSSOVER_TYPE_THREEWAY)
+      if ((crossover->get_type() & CROSSOVER_TYPE_THREEWAY) != 0)
         vert_space_per_net_devider += 3;
-      if (crossover->get_type() & CROSSOVER_TYPE_FOURWAY)
+      if ((crossover->get_type() & CROSSOVER_TYPE_FOURWAY) != 0)
         vert_space_per_net_devider += 4;
 
       if (vert_space_per_net_devider == 0)
@@ -140,13 +140,13 @@ void CrossoverImageView::redraw() {
         int lowpass_order = net_vector[i].get_lowpass_order();
         int highpass_order = net_vector[i].get_highpass_order();
 
-        if (net_vector[i].get_has_imp_corr() == true)
+        if (net_vector[i].get_has_imp_corr())
           net_horz_devider++;
-        if (net_vector[i].get_has_damp() == true)
+        if (net_vector[i].get_has_damp())
           net_horz_devider += 2;
         int part_width = GSpeakers::round(double(window_width) / double(net_horz_devider));
 
-        if (scale_image_parts == true) {
+        if (scale_image_parts) {
           if ((part_width > (1.5 * part_height)) && (net_vector[i].parts()->size() <= 4)) {
             part_width = part_height;
           } else if (part_width > 3 * part_height) {
@@ -176,13 +176,13 @@ void CrossoverImageView::redraw() {
         }
 
         int driver_offset = 0;
-        if (net_vector[i].get_has_imp_corr() == true) {
+        if (net_vector[i].get_has_imp_corr()) {
           draw_imp_corr_net((1 + lowpass_order + highpass_order) * part_width,
                             i * vert_space_per_net, part_width, part_height,
                             net_vector[i].get_imp_corr_R(), net_vector[i].get_imp_corr_C());
           driver_offset++;
         }
-        if (net_vector[i].get_has_damp() == true) {
+        if (net_vector[i].get_has_damp()) {
           draw_damp_net((1 + lowpass_order + highpass_order + driver_offset) * part_width,
                         i * vert_space_per_net, part_width, part_height,
                         net_vector[i].get_damp_R1(), net_vector[i].get_damp_R2());
@@ -190,7 +190,7 @@ void CrossoverImageView::redraw() {
         }
         std::string spk = net_vector[i].get_speaker();
         Speaker speaker;
-        if (speaker_list != NULL) {
+        if (speaker_list != nullptr) {
           speaker = speaker_list->get_speaker_by_id_string(spk);
         }
         draw_driver((1 + lowpass_order + highpass_order + driver_offset) * part_width,
@@ -203,7 +203,7 @@ void CrossoverImageView::redraw() {
 void CrossoverImageView::on_settings_changed(const std::string& s) {
   if (s == "ScaleCrossoverImageParts") {
     scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
-    if (visible == true) {
+    if (visible) {
       redraw();
       Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
       get_window()->invalidate_rect(update_rect, true);
@@ -213,7 +213,7 @@ void CrossoverImageView::on_settings_changed(const std::string& s) {
 
 void CrossoverImageView::on_crossover_selected(Crossover* selected_crossover) {
   crossover = selected_crossover;
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, true);
@@ -221,13 +221,13 @@ void CrossoverImageView::on_crossover_selected(Crossover* selected_crossover) {
 }
 
 void CrossoverImageView::on_net_modified() {
-  if (crossover != NULL)
+  if (crossover != nullptr)
     on_crossover_selected(crossover);
 }
 
 void CrossoverImageView::on_speakerlist_selected(SpeakerList* selected_speaker_list) {
   speaker_list = selected_speaker_list;
-  if (visible == true) {
+  if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
     get_window()->invalidate_rect(update_rect, true);
@@ -289,9 +289,9 @@ void CrossoverImageView::draw_driver(int x, int y, int part_width, int part_heig
                                      Speaker& speaker) {
   draw_corner(x, y, part_width, part_height, true);
 
-  if (speaker.get_type() & SPEAKER_TYPE_MIDRANGE) {
+  if ((speaker.get_type() & SPEAKER_TYPE_MIDRANGE) != 0) {
     draw_midrange(x, y + part_height, part_width, part_height);
-  } else if (speaker.get_type() & SPEAKER_TYPE_BASS) {
+  } else if ((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) {
     draw_woofer(x, y + part_height, part_width, part_height);
   } else {
     draw_tweeter(x, y + part_height, part_width, part_height);
@@ -311,7 +311,7 @@ void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int hei
   m_refLayout->set_text("C" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
-  if (rotate == true) {
+  if (rotate) {
     /* Horizontal line in capacitor */
     m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x),
                            round(y + half_space_y - small_space_y));
@@ -354,7 +354,7 @@ void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int heig
   m_refLayout->set_text("L" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
-  if (rotate == true) {
+  if (rotate) {
     /* Horizontal line in inductor */
     m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x),
                            round(y + 2 * small_space_y));
@@ -395,7 +395,7 @@ void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int heig
   m_refLayout->set_text("R" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
-  if (rotate == true) {
+  if (rotate) {
     /* Horizontal line in resistor */
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + 3 * small_space_y);
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y + height - 3 * small_space_y,
@@ -427,7 +427,7 @@ void CrossoverImageView::draw_connector(int x, int y, int width, int height, boo
   int small_space_x = round(double(width) / 20);
   int small_space_y = round(double(height) / 20);
 
-  if (positive == true) {
+  if (positive) {
     m_refLayout->set_text("+");
   } else {
     m_refLayout->set_text("-");
@@ -452,7 +452,7 @@ void CrossoverImageView::draw_t_cross(int x, int y, int width, int height, bool 
 
   m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + width, y + half_space_y);
 
-  if (upper == true) {
+  if (upper) {
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y + half_space_y, x + half_space_x,
                            y + height);
   } else {
@@ -466,7 +466,7 @@ void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool u
 
   m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + half_space_x, y + half_space_y);
 
-  if (upper == true) {
+  if (upper) {
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y + half_space_y, x + half_space_x,
                            y + height);
   } else {
@@ -475,7 +475,7 @@ void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool u
 }
 
 void CrossoverImageView::draw_line(int x, int y, int width, int height, bool rotate) {
-  if (rotate == true) {
+  if (rotate) {
     int half_space_x = GSpeakers::round(double(width) / 2);
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + height);
   } else {
@@ -492,7 +492,7 @@ void CrossoverImageView::draw_woofer(int x, int y, int width, int height, bool p
   int small_space_x = round(double(width) / 20);
   int small_space_y = round(double(height) / 20);
 
-  if (positive_up == true) {
+  if (positive_up) {
     m_refLayout->set_text("+");
     m_refPixmap->draw_layout(m_refGC, x + 3 * small_space_x, y + small_space_y, m_refLayout);
   } else {
@@ -523,7 +523,7 @@ void CrossoverImageView::draw_midrange(int x, int y, int width, int height, bool
   int small_space_x = round(double(width) / 20);
   int small_space_y = round(double(height) / 20);
 
-  if (positive_up == true) {
+  if (positive_up) {
     m_refLayout->set_text("+");
     m_refPixmap->draw_layout(m_refGC, x + 5 * small_space_x, y + 3 * small_space_y, m_refLayout);
   } else {
@@ -557,7 +557,7 @@ void CrossoverImageView::draw_tweeter(int x, int y, int width, int height, bool 
   int small_space_x = round(double(width) / 20);
   int small_space_y = round(double(height) / 20);
 
-  if (positive_up == true) {
+  if (positive_up) {
     m_refLayout->set_text("+");
     m_refPixmap->draw_layout(m_refGC, x + 5 * small_space_x, y + 3 * small_space_y, m_refLayout);
   } else {

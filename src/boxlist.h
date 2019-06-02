@@ -38,10 +38,10 @@ public:
   BoxList() = default;
 
   /* Construct a part from an xml file */
-  BoxList(std::string filename);
+  BoxList(const std::string& filename);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */
-  void to_xml(std::string filename);
+  void to_xml(const std::string& filename);
 
   /* Print part data to stdout */
   friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);

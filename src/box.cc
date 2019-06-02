@@ -23,16 +23,18 @@
 #include <glib.h>
 
 #include <sstream>
+#include <utility>
 
 Box::Box(std::string id_string, int type, double vb1, double fb1, double vb2, double fb2,
          std::string speaker)
-    : GSpeakersObject(), m_vb1(vb1), m_fb1(fb1), m_vb2(vb2), m_fb2(fb2), m_speaker(speaker) {
-  m_id_string = id_string;
+    : GSpeakersObject(), m_vb1(vb1), m_fb1(fb1), m_vb2(vb2), m_fb2(fb2),
+      m_speaker(std::move(speaker)) {
+  m_id_string = std::move(id_string);
   m_type = type;
 }
 
 Box::Box(xmlNodePtr parent) : GSpeakersObject() {
-  if ((parent != NULL) && (std::string((char*)parent->name) == std::string("box"))) {
+  if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("box"))) {
     try {
       parse_id_string(parent->children);
     } catch (GSpeakersException const& e) {
@@ -45,23 +47,23 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject() {
 
 xmlNodePtr Box::to_xml_node(xmlNodePtr parent) {
   xmlNodePtr box, child;
-  gchar* buffer = new char[8];
+  auto* buffer = new char[8];
 
-  box = xmlNewChild(parent, NULL, (xmlChar*)("box"), NULL);
+  box = xmlNewChild(parent, nullptr, (xmlChar*)("box"), nullptr);
 
-  child = xmlNewChild(box, NULL, (xmlChar*)("id_string"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("id_string"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_id_string.c_str());
-  child = xmlNewChild(box, NULL, (xmlChar*)("type"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_strdup_printf("%d", m_type));
-  child = xmlNewChild(box, NULL, (xmlChar*)("vb1"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("vb1"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vb1));
-  child = xmlNewChild(box, NULL, (xmlChar*)("fb1"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("fb1"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fb1));
-  child = xmlNewChild(box, NULL, (xmlChar*)("vb2"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("vb2"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_vb2));
-  child = xmlNewChild(box, NULL, (xmlChar*)("fb2"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("fb2"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer, 8, m_fb2));
-  child = xmlNewChild(box, NULL, (xmlChar*)("speaker"), NULL);
+  child = xmlNewChild(box, nullptr, (xmlChar*)("speaker"), nullptr);
   xmlNodeSetContent(child, (xmlChar*)m_speaker.c_str());
 
   return box;
@@ -78,7 +80,7 @@ std::ostream& operator<<(std::ostream& o, const Box& box) {
   return o;
 }
 
-void Box::set_id_string(std::string id_string) { m_id_string = id_string; }
+void Box::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
 void Box::set_vb1(double vb1) { m_vb1 = vb1; }
 
@@ -103,7 +105,7 @@ double Box::get_fb2() const { return m_fb2; }
 const std::string& Box::get_speaker() const { return m_speaker; }
 
 void Box::parse_id_string(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("id_string"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("id_string"))) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
@@ -116,7 +118,7 @@ void Box::parse_id_string(xmlNodePtr node) {
 }
 
 void Box::parse_type(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("type"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("type"))) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_vb1(node->next);
@@ -129,9 +131,9 @@ void Box::parse_type(xmlNodePtr node) {
 }
 
 void Box::parse_vb1(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("vb1"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("vb1"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vb1;
-    m_vb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
+    m_vb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_fb1(node->next);
     } catch (GSpeakersException const& e) {
@@ -143,9 +145,9 @@ void Box::parse_vb1(xmlNodePtr node) {
 }
 
 void Box::parse_fb1(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("fb1"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("fb1"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_fb1;
-    m_fb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
+    m_fb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_vb2(node->next);
     } catch (GSpeakersException const& e) {
@@ -157,9 +159,9 @@ void Box::parse_fb1(xmlNodePtr node) {
 }
 
 void Box::parse_vb2(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("vb2"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("vb2"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vb2;
-    m_vb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
+    m_vb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_fb2(node->next);
     } catch (GSpeakersException const& e) {
@@ -171,9 +173,9 @@ void Box::parse_vb2(xmlNodePtr node) {
 }
 
 void Box::parse_fb2(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("fb2"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("fb2"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
-    m_fb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), NULL);
+    m_fb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_speaker(node->next);
     } catch (GSpeakersException const& e) {
@@ -185,7 +187,7 @@ void Box::parse_fb2(xmlNodePtr node) {
 }
 
 void Box::parse_speaker(xmlNodePtr node) {
-  if ((node != NULL) && (std::string((char*)node->name) == std::string("speaker"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == std::string("speaker"))) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
     m_speaker = std::string((char*)xmlNodeGetContent(node));
   } else {

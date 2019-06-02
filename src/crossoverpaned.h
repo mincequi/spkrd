@@ -35,7 +35,7 @@
 class CrossoverPaned : public Gtk::HPaned {
 public:
   CrossoverPaned();
-  virtual ~CrossoverPaned();
+  ~CrossoverPaned() override;
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();
   void select_first_crossover();

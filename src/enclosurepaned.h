@@ -32,7 +32,7 @@ class EnclosurePaned : public Gtk::HPaned {
 public:
   EnclosurePaned();
 
-  virtual ~EnclosurePaned();
+  ~EnclosurePaned() override;
 
   Gtk::Menu& get_menu();
   Gtk::Widget& get_toolbar();

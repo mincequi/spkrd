@@ -19,17 +19,17 @@
 
 #include <glib.h>
 
-CrossoverList::CrossoverList(std::string filename) {
+CrossoverList::CrossoverList(const std::string& filename) {
 
   xmlDocPtr doc = xmlParseFile(filename.c_str());
-  if (doc != NULL) {
+  if (doc != nullptr) {
     xmlNodePtr node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_ascii_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
-      if (node->children) {
+    if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
+      if (node->children != nullptr) {
         xmlNodePtr children = node->children;
-        while (children != NULL) {
+        while (children != nullptr) {
           try {
-            m_crossover_list.push_back(Crossover(children));
+            m_crossover_list.emplace_back(children);
           } catch (GSpeakersException const& e) {
             throw e;
           }
@@ -48,16 +48,16 @@ void CrossoverList::clear() {
   m_crossover_list.erase(m_crossover_list.begin(), m_crossover_list.end());
 }
 
-void CrossoverList::to_xml(std::string filename) {
+void CrossoverList::to_xml(const std::string& filename) {
 
   xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  xmlNodePtr node = xmlNewDocNode(doc, NULL, (xmlChar*)("crossoverlist"), NULL);
+  xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("crossoverlist"), nullptr);
   xmlDocSetRootElement(doc, node);
 
   /* Iterate through all crossovers */
-  for (auto from = m_crossover_list.begin(); from != m_crossover_list.end(); ++from) {
-    ((Crossover)(*from)).to_xml_node(node);
+  for (auto& from : m_crossover_list) {
+    ((Crossover)from).to_xml_node(node);
   }
 
   /* Save xml file */
@@ -69,9 +69,8 @@ void CrossoverList::to_xml(std::string filename) {
 std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list) {
   o << "Crossover List" << std::endl;
 
-  for (auto from = crossover_list.m_crossover_list.begin();
-       from != crossover_list.m_crossover_list.end(); ++from) {
-    o << *from;
+  for (const auto& from : crossover_list.m_crossover_list) {
+    o << from;
   }
   return o;
 }
