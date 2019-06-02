@@ -36,7 +36,7 @@ public:
   SummedFreqRespPlot();
   ~SummedFreqRespPlot() override;
   void clear();
-  int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
+  int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color&, int*, Net*);
 
 private:
   void on_crossover_selected(Crossover*);

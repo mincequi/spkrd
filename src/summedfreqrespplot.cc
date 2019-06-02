@@ -78,69 +78,60 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
   if (m_speakerlist != nullptr) {
     s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
   }
+
   std::vector<GSpeakers::Point> freq_resp_points;
   if (!s.get_freq_resp_filename().empty()) {
     std::ifstream fin(s.get_freq_resp_filename().c_str());
     std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = " << s.get_freq_resp_filename()
               << std::endl;
-    if (fin.good()) {
-      while (!fin.eof()) {
-        char* buffer = new char[100];
-        fin.getline(buffer, 100, '\n');
 
-        float f1, f2;
-        // sscanf(buffer, "%f,%f", &f1, &f2);
-        char* substr_ptr = strtok(buffer, ",");
-        f1 = g_ascii_strtod(substr_ptr, nullptr);
-        substr_ptr = strtok(nullptr, ",");
-        f2 = g_ascii_strtod(substr_ptr, nullptr);
-
-        // Skip potential column headers
-        if ((f1 != 0) && (f2 != 0)) {
-          freq_resp_points.emplace_back(std::round(f1), f2);
-        }
-        delete buffer;
-      }
-    } else {
+    if (!fin.good()) {
       std::cout << _("Could not open ") << s.get_freq_resp_filename() << std::endl;
       return -1;
     }
-  } else {
-    GSpeakers::Point p1(0, 0);
-    freq_resp_points.push_back(p1);
-    GSpeakers::Point p2(20000, 0);
-    freq_resp_points.push_back(p2);
-  }
-  std::vector<GSpeakers::Point> points;
-  for (auto& filter_point : filter_points) {
-    double filter_y = filter_point.get_y();
-    if (g_settings.getValueBool("DisableFilterAmp")) {
-      if (filter_y > 0.0) {
-        filter_y = 0.0;
+
+    while (!fin.eof()) {
+      std::vector<char> buffer(100);
+      fin.getline(buffer.data(), 100, '\n');
+
+      // sscanf(buffer, "%f,%f", &f1, &f2);
+      char* substr_ptr = strtok(buffer, ",");
+      float f1 = g_ascii_strtod(substr_ptr, nullptr);
+      substr_ptr = strtok(nullptr, ",");
+      float f2 = g_ascii_strtod(substr_ptr, nullptr);
+
+      // Skip potential column headers
+      if ((f1 != 0) && (f2 != 0)) {
+        freq_resp_points.emplace_back(std::round(f1), f2);
       }
     }
-    double resp_y = lerp(freq_resp_points, filter_point.get_x());
-    GSpeakers::Point p(filter_point.get_x(), resp_y + filter_y);
-    points.push_back(p);
+  } else {
+    freq_resp_points.emplace_back(0, 0);
+    freq_resp_points.emplace_back(20000, 0);
+  }
+  std::vector<GSpeakers::Point> points;
+
+  for (auto const& filter_point : filter_points) {
+
+    double filter_y = filter_point.get_y();
+
+    if (g_settings.getValueBool("DisableFilterAmp") && filter_y > 0.0) {
+      filter_y = 0.0;
+    }
+    points.emplace_back(filter_point.get_x(),
+                        lerp(freq_resp_points, filter_point.get_x()) + filter_y);
   }
 
   Gdk::Color c2("red");
   // plot.add_plot(points, c2);
 
   /* Search for *i in the graph */
-  int position = -1;
-  int l = 0;
-  for (int& m_net : m_nets) {
-    if (*i == m_net) {
-      position = l;
-    }
-    l++;
-  }
+  auto const location = std::find(begin(m_nets), end(m_nets), *i);
 
   /* If *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
-   * of thestd::vector */
-  if ((position != -1) && (!m_points.empty())) {
-    m_points[position] = points;
+   * of the vector */
+  if (location != end(m_nets) && !m_points.empty()) {
+    m_points[std::distance(begin(m_nets), location)] = points;
   } else {
     m_points.push_back(points);
     m_nets.push_back(*i);
@@ -148,13 +139,14 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
   plot.remove_all_plots();
   std::vector<GSpeakers::Point> pnts;
+
   if (!m_points.empty()) {
     pnts = m_points[0];
     plot.add_plot(m_points[0], c2);
-    for (unsigned j = 1; j < m_points.size(); j++) {
-      for (unsigned k = 0; k < m_points[j].size(); k++) {
-        pnts[k].set_y(
-            10 * log10(pow(10, pnts[k].get_y() / 10) + pow(10, (m_points[j])[k].get_y() / 10)));
+    for (std::size_t j = 1; j < m_points.size(); j++) {
+      for (std::size_t k = 0; k < m_points[j].size(); k++) {
+        pnts[k].set_y(10 * std::log10(std::pow(10, pnts[k].get_y() / 10) +
+                                      std::pow(10, (m_points[j])[k].get_y() / 10)));
       }
       plot.add_plot(m_points[j], c2);
     }
