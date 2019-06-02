@@ -322,7 +322,7 @@ void PlotHistory::fb1_cell_data_func(Gtk::CellRenderer* cell,
   renderer.property_xalign() = 1.0;
 }
 
-void PlotHistory::liststore_add_item(Box box, Speaker spk, Gdk::Color& color) {
+void PlotHistory::liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color& color) {
   gushort r, g, b;
   r = (int)((color.get_red_p()) * 255);
   g = (int)((color.get_green_p()) * 255);

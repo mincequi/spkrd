@@ -82,7 +82,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Box box);
+  virtual void liststore_add_item(Box const& box);
 
   /* Member widgets */
   Gtk::ScrolledWindow m_ScrolledWindow;

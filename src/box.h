@@ -20,14 +20,14 @@
 #ifndef __GFILTER_BOX
 #define __GFILTER_BOX
 
-#include <iosfwd>
-#include <map>
-#include <string>
+#include "gspeakersobject.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "gspeakersobject.h"
+#include <iosfwd>
+#include <map>
+#include <string>
 
 #define BOX_TYPE_SEALED 1
 #define BOX_TYPE_PORTED 2

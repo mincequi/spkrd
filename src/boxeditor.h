@@ -20,9 +20,6 @@
 #ifndef __GSPEAKERS_BOXEDITOR
 #define __GSPEAKERS_BOXEDITOR
 
-#include "box.h"
-#include "gspeakerscolor.h"
-#include "speakerlist.h"
 #include <gtkmm/box.h>
 #include <gtkmm/combo.h>
 #include <gtkmm/frame.h>
@@ -30,6 +27,10 @@
 #include <gtkmm/menu.h>
 #include <gtkmm/optionmenu.h>
 #include <gtkmm/table.h>
+
+#include "box.h"
+#include "gspeakerscolor.h"
+#include "speakerlist.h"
 
 /*
  * This class will contain the control panel where you can adjust

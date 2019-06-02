@@ -501,7 +501,7 @@ void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer* cell,
   renderer.property_text() = s;
 }
 
-void CrossoverHistory::liststore_add_item(Crossover foo) {
+void CrossoverHistory::liststore_add_item(Crossover const& foo) {
   Gtk::TreeRow row = *(m_refListStore->append());
   row[m_columns.id] = foo.get_id();
   row[m_columns.id_string] = foo.get_id_string();

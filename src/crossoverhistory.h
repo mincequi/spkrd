@@ -71,7 +71,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Crossover foo);
+  virtual void liststore_add_item(Crossover const& foo);
 
   // Member widgets:
   Gtk::Widget* m_evbox;

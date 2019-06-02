@@ -61,7 +61,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Box box, Speaker spk, Gdk::Color&);
+  virtual void liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color&);
 
   // Member widgets:
   Gtk::Table m_Table;

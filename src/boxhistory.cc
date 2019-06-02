@@ -517,7 +517,7 @@ void BoxHistory::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeMode
   renderer.property_xalign() = 1.0;
 }
 
-void BoxHistory::liststore_add_item(Box box) {
+void BoxHistory::liststore_add_item(Box const& box) {
   Gtk::TreeRow row = *(m_refListStore->append());
   row[m_columns.id_string] = box.get_id_string();
   row[m_columns.speaker] = box.get_speaker();
