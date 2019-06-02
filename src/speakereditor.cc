@@ -387,13 +387,13 @@ void Speaker_ListStore::on_new() {
   Speaker s(_("New Speaker"));
   s.set_id_string(s.get_id_string() + " " + GSpeakers::int_to_ustring(s.get_id()));
   liststore_add_item(s);
-  m_speaker_list->speaker_list()->push_back(s);
+  m_speaker_list->speaker_list().push_back(s);
 
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   char* str = nullptr;
   GString* buffer = g_string_new(str);
-  g_string_printf(buffer, "%lu", m_speaker_list->speaker_list()->size() - 1);
+  g_string_printf(buffer, "%lu", m_speaker_list->speaker_list().size() - 1);
   GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
   Gtk::TreePath path(gpath);
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -430,8 +430,8 @@ void Speaker_ListStore::on_remove() {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
-      if (index < (int)m_speaker_list->speaker_list()->size())
-        m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin() + index);
+      if (index < (int)m_speaker_list->speaker_list().size())
+        m_speaker_list->speaker_list().erase(m_speaker_list->speaker_list().begin() + index);
     }
   }
   m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
@@ -489,7 +489,7 @@ void Speaker_ListStore::on_selection_changed() {
     std::vector<int> indices = path.get_indices();
     if (!indices.empty()) {
       index = indices[0];
-      Speaker s = (*(m_speaker_list->speaker_list()))[index];
+      Speaker s = m_speaker_list->speaker_list()[index];
 
       m_IdStringEntry.set_text(Glib::ustring(s.get_id_string()));
       char* str = nullptr;
@@ -728,8 +728,8 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
 
 void Speaker_ListStore::on_clear() {
   m_refListStore->clear();
-  m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(),
-                                        m_speaker_list->speaker_list()->end());
+  m_speaker_list->speaker_list().erase(m_speaker_list->speaker_list().begin(),
+                                       m_speaker_list->speaker_list().end());
   m_modified = true;
 }
 
@@ -749,22 +749,22 @@ void Speaker_ListStore::on_entry_changed(int i) {
       switch (i) {
       case 0:
         row[m_columns.id_string] = m_IdStringEntry.get_text(); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_id_string(
+        m_speaker_list->speaker_list()[index].set_id_string(
             m_IdStringEntry.get_text()); // speaker_list
         break;
       case 1:
         row[m_columns.qts] = atof(m_QtsEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_qts(
+        m_speaker_list->speaker_list()[index].set_qts(
             atof(m_QtsEntry.get_text().c_str())); // speaker_list
         break;
       case 2:
         row[m_columns.fs] = atof(m_FsEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_fs(
+        m_speaker_list->speaker_list()[index].set_fs(
             atof(m_FsEntry.get_text().c_str())); // speaker_list
         break;
       case 3:
         row[m_columns.vas] = atof(m_VasEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_vas(
+        m_speaker_list->speaker_list()[index].set_vas(
             atof(m_VasEntry.get_text().c_str())); // speaker_list
         break;
       case 4:
@@ -773,7 +773,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         std::cout << "d = " << d << std::endl;
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_rdc(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_rdc(d); // speaker_list
         update_imp_plot = true;
         break;
       case 5:
@@ -781,69 +781,69 @@ void Speaker_ListStore::on_entry_changed(int i) {
         row[m_columns.lvc] = d;
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_lvc(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_lvc(d); // speaker_list
         break;
         update_imp_plot = true;
       case 6:
         row[m_columns.qms] = atof(m_QmsEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_qms(
+        m_speaker_list->speaker_list()[index].set_qms(
             atof(m_QmsEntry.get_text().c_str())); // speaker_list
         break;
       case 7:
         row[m_columns.qes] = atof(m_QesEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_qes(
+        m_speaker_list->speaker_list()[index].set_qes(
             atof(m_QesEntry.get_text().c_str())); // speaker_list
         break;
       case 8:
         row[m_columns.imp] = atof(m_ImpEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_imp(
+        m_speaker_list->speaker_list()[index].set_imp(
             atof(m_ImpEntry.get_text().c_str())); // speaker_list
         break;
       case 9:
         row[m_columns.sens] = atof(m_SensEntry.get_text().c_str()); // the treestore
-        (*(m_speaker_list->speaker_list()))[index].set_sens(
+        m_speaker_list->speaker_list()[index].set_sens(
             atof(m_SensEntry.get_text().c_str())); // speaker_list
         break;
       case 10:
         // std::cout << "bass" << std::endl;
         if (m_BassCheckButton.get_active()) {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_BASS);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() | SPEAKER_TYPE_BASS);
         } else {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() & ~SPEAKER_TYPE_BASS);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() & ~SPEAKER_TYPE_BASS);
         }
-        row[m_columns.type] = (*(m_speaker_list->speaker_list()))[index].get_type();
+        row[m_columns.type] = m_speaker_list->speaker_list()[index].get_type();
         signal_speakerlist_loaded(m_speaker_list);
         break;
       case 11:
         // std::cout << "midrange" << std::endl;
         if (m_MidrangeCheckButton.get_active()) {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_MIDRANGE);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() | SPEAKER_TYPE_MIDRANGE);
         } else {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() & ~SPEAKER_TYPE_MIDRANGE);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() & ~SPEAKER_TYPE_MIDRANGE);
         }
-        row[m_columns.type] = (*(m_speaker_list->speaker_list()))[index].get_type();
+        row[m_columns.type] = m_speaker_list->speaker_list()[index].get_type();
         break;
       case 12:
         // std::cout << "tweeter:" << m_TweeterCheckButton.get_state() << std::endl;
         if (m_TweeterCheckButton.get_active()) {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() | SPEAKER_TYPE_TWEETER);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() | SPEAKER_TYPE_TWEETER);
         } else {
-          (*(m_speaker_list->speaker_list()))[index].set_type(
-              (*(m_speaker_list->speaker_list()))[index].get_type() & ~SPEAKER_TYPE_TWEETER);
+          m_speaker_list->speaker_list()[index].set_type(
+              m_speaker_list->speaker_list()[index].get_type() & ~SPEAKER_TYPE_TWEETER);
         }
-        row[m_columns.type] = (*(m_speaker_list->speaker_list()))[index].get_type();
+        row[m_columns.type] = m_speaker_list->speaker_list()[index].get_type();
         break;
       case 13:
         d = atof(m_MmdEntry.get_text().c_str());
         row[m_columns.mmd] = d; // the treestore
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_mmd(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_mmd(d); // speaker_list
         update_imp_plot = true;
         break;
       case 14:
@@ -851,7 +851,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         row[m_columns.ad] = d; // the treestore
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_ad(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_ad(d); // speaker_list
         update_imp_plot = true;
         break;
       case 15:
@@ -859,7 +859,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         row[m_columns.bl] = d; // the treestore
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_bl(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_bl(d); // speaker_list
         update_imp_plot = true;
         break;
       case 16:
@@ -867,7 +867,7 @@ void Speaker_ListStore::on_entry_changed(int i) {
         row[m_columns.rms] = d; // the treestore
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_rms(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_rms(d); // speaker_list
         update_imp_plot = true;
         break;
       case 17:
@@ -875,13 +875,13 @@ void Speaker_ListStore::on_entry_changed(int i) {
         row[m_columns.cms] = d; // the treestore
         if (d == 0.0)
           d = 1.0;
-        (*(m_speaker_list->speaker_list()))[index].set_cms(d); // speaker_list
+        m_speaker_list->speaker_list()[index].set_cms(d); // speaker_list
         update_imp_plot = true;
         break;
       }
       if (update_imp_plot) {
         /* update impedance plot */
-        draw_imp_plot((*(m_speaker_list->speaker_list()))[index], true);
+        draw_imp_plot(m_speaker_list->speaker_list()[index], true);
       }
     }
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
@@ -908,16 +908,15 @@ void Speaker_ListStore::on_open_xml() {
 }
 
 void Speaker_ListStore::append_xml(const std::string& filename) {
-  SpeakerList temp_speaker_list;
   try {
-    temp_speaker_list = SpeakerList(filename);
+    auto const& temp_speaker_list = SpeakerList(filename);
 
-    for_each(temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
+    for_each(temp_speaker_list.speaker_list().begin(), temp_speaker_list.speaker_list().end(),
              mem_fun(*this, &Speaker_ListStore::liststore_add_item));
-    for (auto& from : *temp_speaker_list.speaker_list()) {
-      m_speaker_list->speaker_list()->push_back(from);
+    for (auto& from : temp_speaker_list.speaker_list()) {
+      m_speaker_list->speaker_list().push_back(from);
     }
-    m_speaker_list->speaker_list()->size();
+    m_speaker_list->speaker_list().size();
     set_entries_sensitive(true);
     m_modified = true;
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
@@ -930,11 +929,9 @@ void Speaker_ListStore::append_xml(const std::string& filename) {
 }
 
 bool Speaker_ListStore::open_xml(const std::string& filename) {
-  SpeakerList temp_speaker_list;
-
   if (filename.length() > 0) {
     try {
-      temp_speaker_list = SpeakerList(filename);
+      SpeakerList const& temp_speaker_list = SpeakerList(filename);
       m_refListStore->clear();
 
       m_filename = filename;
@@ -942,20 +939,20 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
       m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) +
                                 GSpeakers::short_filename(m_filename, 40) + "]</b>");
       GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
-      for_each(temp_speaker_list.speaker_list()->begin(), temp_speaker_list.speaker_list()->end(),
+      for_each(temp_speaker_list.speaker_list().begin(), temp_speaker_list.speaker_list().end(),
                mem_fun(*this, &Speaker_ListStore::liststore_add_item));
 
       /* Delete items in speaker_list */
-      m_speaker_list->speaker_list()->erase(m_speaker_list->speaker_list()->begin(),
-                                            m_speaker_list->speaker_list()->end());
+      m_speaker_list->speaker_list().erase(m_speaker_list->speaker_list().begin(),
+                                           m_speaker_list->speaker_list().end());
 
-      for (auto& from : *temp_speaker_list.speaker_list()) {
-        m_speaker_list->speaker_list()->push_back(from);
+      for (auto& from : temp_speaker_list.speaker_list()) {
+        m_speaker_list->speaker_list().push_back(from);
       }
 
       /* Select the first item in the list */
-      // std::cout << m_speaker_list.speaker_list()->size() << std::endl;
-      if (!m_speaker_list->speaker_list()->empty()) {
+      // std::cout << m_speaker_list.speaker_list().size() << std::endl;
+      if (!m_speaker_list->speaker_list().empty()) {
         Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
         char* str = nullptr;
         GString* buffer = g_string_new(str);
@@ -999,7 +996,7 @@ void Speaker_ListStore::on_edit_freq_resp() {
 
   GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
 
-  (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(f->get_filename());
+  m_speaker_list->speaker_list()[index].set_freq_resp_filename(f->get_filename());
 
   on_selection_changed();
   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
@@ -1020,7 +1017,7 @@ void Speaker_ListStore::on_browse_freq_resp() {
     /* TODO: Check that selected file exists */
     m_FreqRespFileEntry.set_text(m_filename);
     GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
-    (*m_speaker_list->speaker_list())[index].set_freq_resp_filename(filename);
+    m_speaker_list->speaker_list()[index].set_freq_resp_filename(filename);
 
     on_selection_changed();
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
@@ -1033,7 +1030,7 @@ void Speaker_ListStore::on_browse_freq_resp() {
 void Speaker_ListStore::create_model() {
   m_refListStore = Gtk::ListStore::create(m_columns);
 
-  for_each(m_speaker_list->speaker_list()->begin(), m_speaker_list->speaker_list()->end(),
+  for_each(m_speaker_list->speaker_list().begin(), m_speaker_list->speaker_list().end(),
            mem_fun(*this, &Speaker_ListStore::liststore_add_item));
 }
 

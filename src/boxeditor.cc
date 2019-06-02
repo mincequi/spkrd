@@ -266,7 +266,7 @@ void BoxEditor::on_box_selected(Box* b) {
         m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
         std::vector<Glib::ustring> popdown_strings;
 
-        for (auto const& speaker : *m_speaker_list->speaker_list()) {
+        for (auto const& speaker : m_speaker_list->speaker_list()) {
           if (((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) &&
               (m_current_speaker.get_id_string() != speaker.get_id_string())) {
             popdown_strings.emplace_back(speaker.get_id_string());
@@ -311,7 +311,7 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
        speaker at the top position, if we havn't got a selected box: insert all drivers and don't
        care about the sort */
     if (m_box != nullptr) {
-      for (auto const& speaker : *m_speaker_list->speaker_list()) {
+      for (auto const& speaker : m_speaker_list->speaker_list()) {
         if (((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) &&
             (m_box->get_speaker() != speaker.get_id_string())) {
           popdown_strings.emplace_back(speaker.get_id_string());
@@ -320,12 +320,12 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
       popdown_strings.insert(popdown_strings.begin(), m_box->get_speaker());
       m_bass_speaker_combo.set_popdown_strings(popdown_strings);
     } else {
-      for (auto const& speaker : *m_speaker_list->speaker_list()) {
+      for (auto const& speaker : m_speaker_list->speaker_list()) {
         if ((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) {
           popdown_strings.emplace_back(speaker.get_id_string());
         }
       }
-      std::cout << popdown_strings.size() << std::endl;
+      std::cout << popdown_strings.size() << "\n";
       m_bass_speaker_combo.set_popdown_strings(popdown_strings);
     }
     speaker_list_is_loaded = true;

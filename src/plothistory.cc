@@ -142,7 +142,7 @@ void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
   // liststore_add_item(*b);
   if ((b != nullptr) && (s != nullptr)) {
     m_box_list.box_list()->push_back(*b);
-    m_speaker_list.speaker_list()->push_back(*s);
+    m_speaker_list.speaker_list().emplace_back(*s);
     liststore_add_item(*b, *s, color);
 #ifdef OUTPUT_DEBUG
     std::cout << "PlotHistory: plot added" << std::endl;
@@ -169,7 +169,7 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
 
   path = m_refListStore->get_path(row);
 
-  std::vector<int> indices = path.get_indices();
+  std::vector<int> const& indices = path.get_indices();
   if (!indices.empty()) {
 #ifdef OUTPUT_DEBUG
     std::cout << "PlotHistory: hide" << std::endl;

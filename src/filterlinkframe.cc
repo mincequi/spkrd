@@ -55,7 +55,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   }
 
   if (m_speaker_list != nullptr) {
-    for (auto& iter : *m_speaker_list->speaker_list()) {
+    for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
         popdown_strings.push_back(iter.get_id_string());
@@ -564,7 +564,7 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   std::vector<std::string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
   if (m_speaker_list != nullptr) {
-    for (auto& iter : *m_speaker_list->speaker_list()) {
+    for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
         popdown_strings.push_back(iter.get_id_string());

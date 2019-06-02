@@ -79,7 +79,9 @@ std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list) {
   return o;
 }
 
-std::vector<Speaker>* SpeakerList::speaker_list() { return &m_speaker_list; }
+std::vector<Speaker>& SpeakerList::speaker_list() { return m_speaker_list; }
+
+std::vector<Speaker> const& SpeakerList::speaker_list() const { return m_speaker_list; }
 
 Speaker SpeakerList::get_speaker_by_id_string(const std::string& id_string) {
   for (auto& from : m_speaker_list) {

@@ -44,7 +44,9 @@ public:
   /* Print part data to stdout */
   friend std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list);
 
-  std::vector<Speaker>* speaker_list();
+  std::vector<Speaker>& speaker_list();
+
+  std::vector<Speaker> const& speaker_list() const;
 
   Speaker get_speaker_by_id_string(const std::string& id_string);
 
@@ -52,7 +54,6 @@ public:
   void clear();
 
 protected:
-  /* Member variables */
   std::vector<Speaker> m_speaker_list;
 };
 
