@@ -71,7 +71,7 @@ bool CrossoverImageView::on_configure_event(GdkEventConfigure* event) {
 
 void CrossoverImageView::redraw() {
   if (visible) {
-    /* Clear to white background color */
+    /* Clear to white backgstd::round color */
     m_refGC->set_rgb_fg_color(white);
     m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().get_width(),
                                 get_allocation().get_height());
@@ -98,14 +98,14 @@ void CrossoverImageView::redraw() {
       int window_height = get_allocation().get_height();
       int window_width = get_allocation().get_width();
       int vert_space_per_net =
-          GSpeakers::round(double(window_height) / double(vert_space_per_net_devider));
+          std::round(double(window_height) / double(vert_space_per_net_devider));
 
       /* Draw first net here */
       std::vector<Net>& net_vector = *crossover->networks();
       for (unsigned i = 0; i < net_vector.size(); i++) {
 
         int net_vert_devider = 3;
-        int part_height = GSpeakers::round(double(vert_space_per_net) / double(net_vert_devider));
+        int part_height = std::round(double(vert_space_per_net) / double(net_vert_devider));
 
         int net_horz_devider = 2;
         switch (net_vector[i].get_lowpass_order()) {
@@ -144,13 +144,13 @@ void CrossoverImageView::redraw() {
           net_horz_devider++;
         if (net_vector[i].get_has_damp())
           net_horz_devider += 2;
-        int part_width = GSpeakers::round(double(window_width) / double(net_horz_devider));
+        int part_width = std::round(double(window_width) / double(net_horz_devider));
 
         if (scale_image_parts) {
           if (part_width > (1.5 * part_height) && net_vector[i].parts().size() <= 4) {
             part_width = part_height;
           } else if (part_width > 3 * part_height) {
-            part_width = GSpeakers::round(1.7 * part_height);
+            part_width = std::round(1.7 * part_height);
           }
           // if ((part_height > (1.5 * part_width)) || (net_vector[i].parts()->size() > 4))
           // part_height = part_width;
@@ -266,9 +266,8 @@ void CrossoverImageView::draw_highpass_net(int x, int y, int part_width, int par
 
 void CrossoverImageView::draw_imp_corr_net(int x, int y, int part_width, int part_height,
                                            Part& capacitor, Part& resistor) {
-  using GSpeakers::round;
 
-  int local_part_height = round(double(part_height) / 2);
+  int local_part_height = std::round(double(part_height) / 2);
   draw_t_cross(x, y, part_width, part_height, true);
   draw_capacitor(capacitor.get_id(), x, y + part_height, part_width, local_part_height, true);
   draw_resistor(resistor.get_id(), x, y + part_height + local_part_height, part_width,
@@ -301,50 +300,49 @@ void CrossoverImageView::draw_driver(int x, int y, int part_width, int part_heig
 }
 
 void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int height, bool rotate) {
-  using GSpeakers::round;
 
-  double half_space_y = round(double(height) / 2);
-  double half_space_x = round(double(width) / 2);
-  double small_space_x = round(double(width) / 20);
-  double small_space_y = round(double(height) / 20);
+  double half_space_y = std::round(double(height) / 2);
+  double half_space_x = std::round(double(width) / 2);
+  double small_space_x = std::round(double(width) / 20);
+  double small_space_y = std::round(double(height) / 20);
 
   m_refLayout->set_text("C" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
   if (rotate) {
     /* Horizontal line in capacitor */
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x),
-                           round(y + half_space_y - small_space_y));
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x),
-                           y + round(half_space_y + small_space_y), round(x + half_space_x),
-                           y + height);
+    m_refPixmap->draw_line(m_refGC, std::round(x + half_space_x), y, std::round(x + half_space_x),
+                           std::round(y + half_space_y - small_space_y));
+    m_refPixmap->draw_line(m_refGC, std::round(x + half_space_x),
+                           y + std::round(half_space_y + small_space_y),
+                           std::round(x + half_space_x), y + height);
 
     /* Vertical lines in capacitor */
     m_refPixmap->draw_line(
-        m_refGC, round(x + 2 * small_space_x), round(y + half_space_y - small_space_y),
-        round(x + width - 2 * small_space_x), round(y + half_space_y - small_space_y));
+        m_refGC, std::round(x + 2 * small_space_x), std::round(y + half_space_y - small_space_y),
+        std::round(x + width - 2 * small_space_x), std::round(y + half_space_y - small_space_y));
     m_refPixmap->draw_line(
-        m_refGC, round(x + 2 * small_space_x), round(y + half_space_y + small_space_y),
-        round(x + width - 2 * small_space_x), round(y + half_space_y + small_space_y));
+        m_refGC, std::round(x + 2 * small_space_x), std::round(y + half_space_y + small_space_y),
+        std::round(x + width - 2 * small_space_x), std::round(y + half_space_y + small_space_y));
   } else {
     /* Horizontal line in capacitor */
-    m_refPixmap->draw_line(m_refGC, x, round(y + half_space_y),
-                           round(x + half_space_x - small_space_x), round(y + half_space_y));
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x + small_space_x),
-                           round(y + half_space_y), x + width, round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, x, std::round(y + half_space_y),
+                           std::round(x + half_space_x - small_space_x),
+                           std::round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, std::round(x + half_space_x + small_space_x),
+                           std::round(y + half_space_y), x + width, std::round(y + half_space_y));
 
     /* Vertical lines in capacitor */
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x - small_space_x),
-                           round(y + 2 * small_space_y), round(x + half_space_x - small_space_x),
-                           round(y + height - 2 * small_space_y));
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x + small_space_x),
-                           round(y + 2 * small_space_y), round(x + half_space_x + small_space_x),
-                           round(y + height - 2 * small_space_y));
+    m_refPixmap->draw_line(
+        m_refGC, std::round(x + half_space_x - small_space_x), std::round(y + 2 * small_space_y),
+        std::round(x + half_space_x - small_space_x), std::round(y + height - 2 * small_space_y));
+    m_refPixmap->draw_line(
+        m_refGC, std::round(x + half_space_x + small_space_x), std::round(y + 2 * small_space_y),
+        std::round(x + half_space_x + small_space_x), std::round(y + height - 2 * small_space_y));
   }
 }
 
 void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int height, bool rotate) {
-  using GSpeakers::round;
 
   double half_space_y = double(height) / 2;
   double half_space_x = double(width) / 2;
@@ -356,41 +354,42 @@ void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int heig
 
   if (rotate) {
     /* Horizontal line in inductor */
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y, round(x + half_space_x),
-                           round(y + 2 * small_space_y));
-    m_refPixmap->draw_line(m_refGC, round(x + half_space_x), y + height - round(2 * small_space_y),
-                           round(x + half_space_x), y + height);
+    m_refPixmap->draw_line(m_refGC, std::round(x + half_space_x), y, std::round(x + half_space_x),
+                           std::round(y + 2 * small_space_y));
+    m_refPixmap->draw_line(m_refGC, std::round(x + half_space_x),
+                           y + height - std::round(2 * small_space_y), std::round(x + half_space_x),
+                           y + height);
 
     /* Arcs in inductor */
     for (int i = 0; i <= 12; i += 4) {
-      m_refPixmap->draw_arc(m_refGC, false, round(x + half_space_x - 2 * small_space_x),
-                            y + round(2 * small_space_y + i * small_space_y),
-                            round(4 * small_space_x), round(4 * small_space_y), 17280, 11520);
+      m_refPixmap->draw_arc(m_refGC, false, std::round(x + half_space_x - 2 * small_space_x),
+                            y + std::round(2 * small_space_y + i * small_space_y),
+                            std::round(4 * small_space_x), std::round(4 * small_space_y), 17280,
+                            11520);
     }
 
   } else {
     /* Horizontal line in inductor */
-    m_refPixmap->draw_line(m_refGC, x, round(y + half_space_y), round(x + 2 * small_space_x),
-                           round(y + half_space_y));
-    m_refPixmap->draw_line(m_refGC, round(x + width - 2 * small_space_x), round(y + half_space_y),
-                           x + width, round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, x, std::round(y + half_space_y),
+                           std::round(x + 2 * small_space_x), std::round(y + half_space_y));
+    m_refPixmap->draw_line(m_refGC, std::round(x + width - 2 * small_space_x),
+                           std::round(y + half_space_y), x + width, std::round(y + half_space_y));
 
     /* Arcs in inductor */
     for (int i = 0; i <= 12; i += 4) {
-      m_refPixmap->draw_arc(m_refGC, false, round(x + 2 * small_space_x + i * small_space_x),
-                            round(y + half_space_y - 2 * small_space_y), round(4 * small_space_x),
-                            round(4 * small_space_y), 0, 11520);
+      m_refPixmap->draw_arc(m_refGC, false, std::round(x + 2 * small_space_x + i * small_space_x),
+                            std::round(y + half_space_y - 2 * small_space_y),
+                            std::round(4 * small_space_x), std::round(4 * small_space_y), 0, 11520);
     }
   }
 }
 
 void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int height, bool rotate) {
-  using GSpeakers::round;
 
-  int half_space_y = round(double(height) / 2);
-  int half_space_x = round(double(width) / 2);
-  int small_space_x = round(double(width) / 20);
-  int small_space_y = round(double(height) / 20);
+  int half_space_y = std::round(double(height) / 2);
+  int half_space_x = std::round(double(width) / 2);
+  int small_space_x = std::round(double(width) / 20);
+  int small_space_y = std::round(double(height) / 20);
 
   m_refLayout->set_text("R" + GSpeakers::int_to_ustring(id));
   m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
@@ -420,20 +419,19 @@ void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int heig
 }
 
 void CrossoverImageView::draw_connector(int x, int y, int width, int height, bool positive) {
-  using GSpeakers::round;
 
-  int half_space_x = round(double(width) / 2);
-  int half_space_y = round(double(height) / 2);
-  int small_space_x = round(double(width) / 20);
-  int small_space_y = round(double(height) / 20);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
+  int small_space_x = std::round(double(width) / 20);
+  int small_space_y = std::round(double(height) / 20);
 
   if (positive) {
     m_refLayout->set_text("+");
   } else {
     m_refLayout->set_text("-");
   }
-  m_refPixmap->draw_layout(m_refGC, x + GSpeakers::round(half_space_x / 2),
-                           y + GSpeakers::round(half_space_y / 2), m_refLayout);
+  m_refPixmap->draw_layout(m_refGC, x + std::round(half_space_x / 2),
+                           y + std::round(half_space_y / 2), m_refLayout);
 
   /* Draw a "connector" cricle */
   m_refPixmap->draw_arc(m_refGC, false, x + half_space_x - 2 * small_space_x,
@@ -445,10 +443,9 @@ void CrossoverImageView::draw_connector(int x, int y, int width, int height, boo
 }
 
 void CrossoverImageView::draw_t_cross(int x, int y, int width, int height, bool upper) {
-  using GSpeakers::round;
 
-  int half_space_x = round(double(width) / 2);
-  int half_space_y = round(double(height) / 2);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
 
   m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + width, y + half_space_y);
 
@@ -461,8 +458,8 @@ void CrossoverImageView::draw_t_cross(int x, int y, int width, int height, bool 
 }
 
 void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool upper) {
-  int half_space_x = GSpeakers::round(double(width) / 2);
-  int half_space_y = GSpeakers::round(double(height) / 2);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
 
   m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + half_space_x, y + half_space_y);
 
@@ -476,21 +473,20 @@ void CrossoverImageView::draw_corner(int x, int y, int width, int height, bool u
 
 void CrossoverImageView::draw_line(int x, int y, int width, int height, bool rotate) {
   if (rotate) {
-    int half_space_x = GSpeakers::round(double(width) / 2);
+    int half_space_x = std::round(double(width) / 2);
     m_refPixmap->draw_line(m_refGC, x + half_space_x, y, x + half_space_x, y + height);
   } else {
-    int half_space_y = GSpeakers::round(double(height) / 2);
+    int half_space_y = std::round(double(height) / 2);
     m_refPixmap->draw_line(m_refGC, x, y + half_space_y, x + width, y + half_space_y);
   }
 }
 
 void CrossoverImageView::draw_woofer(int x, int y, int width, int height, bool positive_up) {
-  using GSpeakers::round;
 
-  int half_space_x = round(double(width) / 2);
-  int half_space_y = round(double(height) / 2);
-  int small_space_x = round(double(width) / 20);
-  int small_space_y = round(double(height) / 20);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
+  int small_space_x = std::round(double(width) / 20);
+  int small_space_y = std::round(double(height) / 20);
 
   if (positive_up) {
     m_refLayout->set_text("+");
@@ -516,12 +512,11 @@ void CrossoverImageView::draw_woofer(int x, int y, int width, int height, bool p
 }
 
 void CrossoverImageView::draw_midrange(int x, int y, int width, int height, bool positive_up) {
-  using GSpeakers::round;
 
-  int half_space_x = round(double(width) / 2);
-  int half_space_y = round(double(height) / 2);
-  int small_space_x = round(double(width) / 20);
-  int small_space_y = round(double(height) / 20);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
+  int small_space_x = std::round(double(width) / 20);
+  int small_space_y = std::round(double(height) / 20);
 
   if (positive_up) {
     m_refLayout->set_text("+");
@@ -550,12 +545,11 @@ void CrossoverImageView::draw_midrange(int x, int y, int width, int height, bool
 }
 
 void CrossoverImageView::draw_tweeter(int x, int y, int width, int height, bool positive_up) {
-  using GSpeakers::round;
 
-  int half_space_x = round(double(width) / 2);
-  int half_space_y = round(double(height) / 2);
-  int small_space_x = round(double(width) / 20);
-  int small_space_y = round(double(height) / 20);
+  int half_space_x = std::round(double(width) / 2);
+  int half_space_y = std::round(double(height) / 2);
+  int small_space_x = std::round(double(width) / 20);
+  int small_space_y = std::round(double(height) / 20);
 
   if (positive_up) {
     m_refLayout->set_text("+");

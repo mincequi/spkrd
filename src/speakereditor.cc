@@ -564,7 +564,7 @@ void Speaker_ListStore::on_selection_changed() {
               f2 = g_ascii_strtod(substr_ptr, nullptr);
 
               // std::cout << f1 << ", " << f2 << std::endl;
-              GSpeakers::Point p(GSpeakers::round(f1), f2);
+              GSpeakers::Point p(std::round(f1), f2);
               points.push_back(p);
               delete buffer;
             }
@@ -702,7 +702,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
                 }
 
                 // std::cout << f1 << "\t" << f2 << "\t" << f3 << std::endl;
-                GSpeakers::Point p(GSpeakers::round(f1), 50 + (1 / std::hypot(f2, f3)));
+                GSpeakers::Point p(std::round(f1), 50 + (1 / std::hypot(f2, f3)));
                 points.push_back(p);
               }
             } else {
@@ -715,7 +715,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
                 substr_ptr = strtok(nullptr, "\t");
                 f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-                GSpeakers::Point p(GSpeakers::round(f1), 50 + f2);
+                GSpeakers::Point p(std::round(f1), 50 + f2);
                 points.push_back(p);
               }
             }

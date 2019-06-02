@@ -89,9 +89,9 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
       speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
     }
     if (g_settings.getValueBool("UseDriverImpedance")) {
-      m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_imp() + 1)));
+      m_damp_spinbutton.set_value(std::round(20 * log10(r_ser / speaker.get_imp() + 1)));
     } else {
-      m_damp_spinbutton.set_value(GSpeakers::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
+      m_damp_spinbutton.set_value(std::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
     }
   }
   hbox->pack_start((*manage(new Gtk::Label("dB"))));
@@ -664,7 +664,7 @@ void FilterLinkFrame::on_plot_crossover() {
             // 	      f2 = f2 / 1000000000000.;
             // 	    }
             //	    std::cout << f1 << '\t' << std::endl;
-            GSpeakers::Point p(GSpeakers::round(freq), db);
+            GSpeakers::Point p(std::round(freq), db);
             points.push_back(p);
           }
 
@@ -677,7 +677,7 @@ void FilterLinkFrame::on_plot_crossover() {
             substr_ptr = strtok(nullptr, "\t");
             db = g_ascii_strtod(substr_ptr, nullptr);
 
-            GSpeakers::Point p(GSpeakers::round(freq), db);
+            GSpeakers::Point p(std::round(freq), db);
             points.push_back(p);
           }
         }

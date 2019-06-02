@@ -70,15 +70,6 @@ Glib::ustring int_to_ustring(int d) {
   return Glib::ustring(buffer->str);
 }
 
-int round(double d) {
-  if ((d - (int)d) >= 0.5) {
-    return (int)((int)d + 1);
-  } else {
-    return (int)(d);
-  }
-  return 0;
-}
-
 Gtk::Widget& image_widget(const std::string& filename) {
   Gtk::Widget* im;
   try {

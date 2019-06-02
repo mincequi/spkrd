@@ -100,7 +100,7 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
   m_points.push_back(ref_point_vector);
 
   int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  int half_space_x = GSpeakers::round(total_space_x / 2);
+  int half_space_x = std::round(total_space_x / 2);
 
   // auto const box_x = BOX_FRAME_SIZE;
   // auto const box_y = BOX_FRAME_SIZE;
@@ -120,27 +120,27 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
         f_div = (double)((*iter).get_x()) / 10;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + GSpeakers::round(half_space_x / 2 * f_mapped);
+        x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
       } else if ((*iter).get_x() >= 100) {
         /* Devide by 100 to only log numbers 0 < number < 10 */
         f_div = (double)((*iter).get_x()) / 100;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = GSpeakers::round(BOX_FRAME_SIZE + half_space_x / 2 +
-                             GSpeakers::round(half_space_x / 2 * f_mapped));
+        x = std::round(BOX_FRAME_SIZE + half_space_x / 2 +
+                             std::round(half_space_x / 2 * f_mapped));
       } else if ((*iter).get_x() >= 1000) {
         /* Devide by 1000 to only log numbers 0 < number < 10 */
         f_div = (double)((*iter).get_x()) / 1000;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + half_space_x + GSpeakers::round((half_space_x / 2) * f_mapped);
+        x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
       } else if ((*iter).get_x() >= 10000) {
         /* Devide by 1000 to only log numbers 0 < number < 10 */
         f_div = (double)((*iter).get_x()) / 10000;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = GSpeakers::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
-                             GSpeakers::round((half_space_x / 2) * f_mapped));
+        x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
+                             std::round((half_space_x / 2) * f_mapped));
       }
 
     } else {
@@ -149,13 +149,13 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
         f_div = (double)((*iter).get_x()) / 10;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + GSpeakers::round(half_space_x * f_mapped);
+        x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
       } else if ((*iter).get_x() >= 100) {
         /* Devide by 100 to only log numbers 0 < number < 10 */
         f_div = (double)((*iter).get_x()) / 100;
         f_mapped = log10(f_div);
         /* This is the x coordinate */
-        x = BOX_FRAME_SIZE + half_space_x + GSpeakers::round(half_space_x * f_mapped);
+        x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
       }
     }
 
@@ -166,7 +166,7 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
       (*iter).set_y(m_upper_y);
     }
     /* Calculate y-coordinate */
-    y = GSpeakers::round(box_height + BOX_FRAME_SIZE -
+    y = std::round(box_height + BOX_FRAME_SIZE -
                          ((double)(-m_lower_y) + (*iter).get_y()) *
                              (box_height / (double)(-m_lower_y + m_upper_y)));
     /* Don't draw anything if we got zeros */
@@ -303,9 +303,9 @@ void GSpeakersPlot::redraw() {
   }
 
   /* Draw some horizontal lines */
-  // int inc_space_y = GSpeakers::round( box_height /  (double)N_VERTICAL_LINES );
+  // int inc_space_y = std::round( box_height /  (double)N_VERTICAL_LINES );
   for (int i = m_lower_y; i < m_upper_y; i = i + 5) {
-    int y = GSpeakers::round(box_height + BOX_FRAME_SIZE -
+    int y = std::round(box_height + BOX_FRAME_SIZE -
                              ((double)(-m_lower_y) + (double)i) *
                                  (box_height / (double)(-m_lower_y + m_upper_y)));
     m_refPixmap->draw_line(m_refGC, BOX_FRAME_SIZE - 3, y,
@@ -332,7 +332,7 @@ void GSpeakersPlot::redraw() {
   }
 
   int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  int half_space_x = GSpeakers::round(total_space_x / 2);
+  int half_space_x = std::round(total_space_x / 2);
 
   /* Map points in m_points to screen points */
   int n_plots = m_points.size();
@@ -353,27 +353,27 @@ void GSpeakersPlot::redraw() {
             f_div = (double)((*iter).get_x()) / 10;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = BOX_FRAME_SIZE + GSpeakers::round(half_space_x / 2 * f_mapped);
+            x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
           } else if ((*iter).get_x() >= 100) {
             /* Devide by 100 to only log numbers 0 < number < 10 */
             f_div = (double)((*iter).get_x()) / 100;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = GSpeakers::round(BOX_FRAME_SIZE + half_space_x / 2 +
-                                 GSpeakers::round(half_space_x / 2 * f_mapped));
+            x = std::round(BOX_FRAME_SIZE + half_space_x / 2 +
+                                 std::round(half_space_x / 2 * f_mapped));
           } else if ((*iter).get_x() >= 1000) {
             /* Devide by 1000 to only log numbers 0 < number < 10 */
             f_div = (double)((*iter).get_x()) / 1000;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = BOX_FRAME_SIZE + half_space_x + GSpeakers::round((half_space_x / 2) * f_mapped);
+            x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
           } else if ((*iter).get_x() >= 10000) {
             /* Devide by 1000 to only log numbers 0 < number < 10 */
             f_div = (double)((*iter).get_x()) / 10000;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = GSpeakers::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
-                                 GSpeakers::round((half_space_x / 2) * f_mapped));
+            x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
+                                 std::round((half_space_x / 2) * f_mapped));
           }
 
         } else {
@@ -382,13 +382,13 @@ void GSpeakersPlot::redraw() {
             f_div = (double)((*iter).get_x()) / 10;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = BOX_FRAME_SIZE + GSpeakers::round(half_space_x * f_mapped);
+            x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
           } else if ((*iter).get_x() >= 100) {
             /* Devide by 100 to only log numbers 0 < number < 10 */
             f_div = (double)((*iter).get_x()) / 100;
             f_mapped = log10(f_div);
             /* This is the x coordinate */
-            x = BOX_FRAME_SIZE + half_space_x + GSpeakers::round(half_space_x * f_mapped);
+            x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
           }
         }
 
@@ -399,7 +399,7 @@ void GSpeakersPlot::redraw() {
           (*iter).set_y(m_upper_y);
         }
         /* Calculate y-coordinate */
-        y = GSpeakers::round(box_height + BOX_FRAME_SIZE -
+        y = std::round(box_height + BOX_FRAME_SIZE -
                              ((double)(-m_lower_y) + (*iter).get_y()) *
                                  (box_height / (double)(-m_lower_y + m_upper_y)));
         /* Don't draw anything if we got zeros */
@@ -435,8 +435,8 @@ void GSpeakersPlot::redraw() {
 
 void GSpeakersPlot::draw_log_grid() {
   int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  int quarter_space_x = GSpeakers::round(total_space_x / 4);
-  int half_space_x = GSpeakers::round(total_space_x / 2);
+  int quarter_space_x = std::round(total_space_x / 4);
+  int half_space_x = std::round(total_space_x / 2);
   int xaxis_y_position = get_allocation().get_height() - BOX_FRAME_SIZE;
 
   /* Draw the logaritmic vertical x-lines */
@@ -444,7 +444,7 @@ void GSpeakersPlot::draw_log_grid() {
     half_space_x = quarter_space_x;
   }
   for (int i = 0; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + GSpeakers::round(log10((double)i) * half_space_x);
+    int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
     m_refPixmap->draw_line(m_refGC, x, BOX_FRAME_SIZE, x, xaxis_y_position + 3);
     /* Draw text below some vertical lines */
     if ((i == 2) || (i == 5)) {
@@ -454,7 +454,7 @@ void GSpeakersPlot::draw_log_grid() {
   }
 
   for (int i = 1; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + GSpeakers::round(log10((double)i) * half_space_x);
+    int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
     m_refPixmap->draw_line(m_refGC, half_space_x + x, BOX_FRAME_SIZE, half_space_x + x,
                            xaxis_y_position + 3);
     // Special case: draw 1k instead of 1000
@@ -470,7 +470,7 @@ void GSpeakersPlot::draw_log_grid() {
   /* Draw some more vertical lines if upper limit is 20000 Hz */
   if (m_upper_x == 20000) {
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + GSpeakers::round(log10((double)i) * half_space_x);
+      int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
       m_refPixmap->draw_line(m_refGC, 2 * half_space_x + x, BOX_FRAME_SIZE, 2 * half_space_x + x,
                              xaxis_y_position + 3);
 
@@ -483,7 +483,7 @@ void GSpeakersPlot::draw_log_grid() {
     }
 
     for (int i = 1; i <= 10; i++) {
-      int x = BOX_FRAME_SIZE + GSpeakers::round(log10((double)i) * half_space_x);
+      int x = BOX_FRAME_SIZE + std::round(log10((double)i) * half_space_x);
       m_refPixmap->draw_line(m_refGC, 3 * half_space_x + x, BOX_FRAME_SIZE, 3 * half_space_x + x,
                              xaxis_y_position + 3);
       if ((i == 2) || (i == 5) || (i == 10)) {
@@ -515,10 +515,10 @@ void GSpeakersPlot::draw_lin_grid() {
   }
 
   /* Calculate number of pixels between each vertical line */
-  int x_inc_pixels = GSpeakers::round(((double)x_inc / (double)freq_range) * (double)total_space_x);
+  int x_inc_pixels = std::round(((double)x_inc / (double)freq_range) * (double)total_space_x);
 
   /* Calculate number of lines we're going to draw */
-  int n_lines = GSpeakers::round((double)freq_range / (double)x_inc);
+  int n_lines = std::round((double)freq_range / (double)x_inc);
 
   /* Draw the vertical lines to the pixmap */
   for (int i = 1; i < n_lines; i++) {

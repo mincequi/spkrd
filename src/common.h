@@ -45,9 +45,9 @@ class Point;
 Glib::ustring double_to_ustring(double d);
 Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
 Glib::ustring int_to_ustring(int d);
-int round(double d);
+
 Gtk::Widget& image_widget(const std::string& filename);
-//  Gtk::Widget& image_widget(const Gtk::StockID& stockid);
+
 Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
 Gtk::Tooltips& tooltips();
 bool& driverlist_modified();
