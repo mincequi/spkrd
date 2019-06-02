@@ -580,42 +580,39 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 }
 
 void FilterLinkFrame::on_plot_crossover() {
-  /* Create spice code for this net */
+
+  std::cout << "DEBUG: plotting cross-over\n";
+
+  // Create spice code for this net
   Speaker speaker;
-  if (m_speaker_list != nullptr) {
+  if (m_speaker_list) {
     speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
   }
   std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (GSpeakersException const& e) {
-#ifdef OUTPUT_DEBUG
-    std::cout << "FilterLinkFrame::on_plot_crossover: ERROR: " << e.what() << std::endl;
-#endif
     Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()),
                          false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d.run();
   }
 
   /* run spice with created file */
-  std::string cmd;
-  if ((g_settings.getValueBool("SPICEUseNGSPICE")) || (g_settings.getValueBool("SPICEUseGNUCAP"))) {
-    cmd = g_settings.getValueString("SPICECmdLine") + " -b " + spice_filename + " > " +
-          spice_filename + ".out";
+  std::string cmd = g_settings.getValueString("SPICECmdLine");
+  if (g_settings.getValueBool("SPICEUseNGSPICE") || g_settings.getValueBool("SPICEUseGNUCAP")) {
+    cmd += " -b " + spice_filename + " > " + spice_filename + ".out";
   } else {
-    cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + spice_filename + ".out " +
-          spice_filename;
+    cmd += " -b -o " + spice_filename + ".out " + spice_filename;
   }
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\""
-            << std::endl;
+  std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"\n";
 #endif
   system(cmd.c_str());
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done" << std::endl;
+  std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done\n";
 #endif
 
-  /* extract spice output into astd::vector */
+  /* extract spice output into a vector */
   std::string spice_output_file = spice_filename + ".out";
   std::ifstream fin(spice_output_file.c_str());
   if (fin.good()) {

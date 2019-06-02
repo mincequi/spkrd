@@ -41,6 +41,7 @@ private:
   void on_speakerlist_loaded(SpeakerList* speaker_list);
   void on_settings_changed(const std::string& s);
 
+private:
   Gtk::Adjustment adj;
 
   Gtk::VBox m_vbox;

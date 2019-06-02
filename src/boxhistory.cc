@@ -72,8 +72,8 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
 
   // m_TreeView.set_search_column(m_columns.id.index());
 
-  signal_add_to_boxlist.connect(mem_fun(*this, &BoxHistory::on_add_to_boxlist));
-  signal_box_modified.connect(mem_fun(*this, &BoxHistory::on_box_modified));
+  signal_add_to_boxlist.connect(sigc::mem_fun(*this, &BoxHistory::on_add_to_boxlist));
+  signal_box_modified.connect(sigc::mem_fun(*this, &BoxHistory::on_box_modified));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -85,7 +85,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
 
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   // selection->set_mode(Gtk::SELECTION_MULTIPLE);
-  selection->signal_changed().connect(mem_fun(*this, &BoxHistory::on_selection_changed));
+  selection->signal_changed().connect(sigc::mem_fun(*this, &BoxHistory::on_selection_changed));
 
   if (boxlist_found) {
     char* str = nullptr;
@@ -97,9 +97,9 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
     selection->select(row);
   }
   selected_plot = -1;
-  signal_select_plot.connect(mem_fun(*this, &BoxHistory::on_plot_selected));
+  signal_select_plot.connect(sigc::mem_fun(*this, &BoxHistory::on_plot_selected));
 
-  signal_save_open_files.connect(mem_fun(*this, &BoxHistory::on_save_open_files));
+  signal_save_open_files.connect(sigc::mem_fun(*this, &BoxHistory::on_save_open_files));
 }
 
 BoxHistory::~BoxHistory() { g_settings.setValue("BoxListXml", m_filename); }
@@ -147,7 +147,7 @@ void BoxHistory::open_xml(const std::string& filename) {
 
     m_filename = filename;
     for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
-             mem_fun(*this, &BoxHistory::liststore_add_item));
+             sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
 
     /* Delete items in box_list */
     m_box_list.box_list().erase(m_box_list.box_list().begin(), m_box_list.box_list().end());
@@ -184,7 +184,7 @@ void BoxHistory::append_xml(const std::string& filename) {
   try {
     temp_box_list = BoxList(filename);
     for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
-             mem_fun(*this, &BoxHistory::liststore_add_item));
+             sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
     for (auto& from : temp_box_list.box_list()) {
       m_box_list.box_list().push_back(from);
     }
@@ -414,8 +414,8 @@ void BoxHistory::on_add_plot(Box* b, Speaker* s) {
 void BoxHistory::create_model() {
   m_refListStore = Gtk::ListStore::create(m_columns);
 
-  for_each(m_box_list.box_list().begin(), m_box_list.box_list().end(),
-           mem_fun(*this, &BoxHistory::liststore_add_item));
+  std::for_each(m_box_list.box_list().begin(), m_box_list.box_list().end(),
+                sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
 }
 
 void BoxHistory::add_columns() {
@@ -443,7 +443,7 @@ void BoxHistory::add_columns() {
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
 
     // pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
-    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::type_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, sigc::mem_fun(*this, &BoxHistory::type_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -452,7 +452,7 @@ void BoxHistory::add_columns() {
 
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
     // pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
-    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::vb1_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, sigc::mem_fun(*this, &BoxHistory::vb1_cell_data_func));
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -461,7 +461,7 @@ void BoxHistory::add_columns() {
 
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
     // pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
-    pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &BoxHistory::fb1_cell_data_func));
+    pColumn->set_cell_data_func(*pRenderer, sigc::mem_fun(*this, &BoxHistory::fb1_cell_data_func));
   }
   /* Disable vb2 and fb2 until we use it */
   /*
