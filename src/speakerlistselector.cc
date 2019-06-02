@@ -41,7 +41,6 @@ SpeakerListSelector::SpeakerListSelector()
 
   show_all();
   m_EditButton.set_sensitive(false);
-  speaker_liststore = NULL;
 
   signal_speakerlist_loaded.connect(slot(*this, &SpeakerListSelector::on_speakerlist_loaded));
 
@@ -57,9 +56,9 @@ SpeakerListSelector::SpeakerListSelector()
 
 void SpeakerListSelector::on_open() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "on open" << std::endl;
+  std::cout << "on open\n";
 #endif
-  if (f_open == NULL) {
+  if (f_open == nullptr) {
     f_open = new Gtk::FileSelection(_("Open speaker xml"));
     f_open->get_ok_button()->signal_clicked().connect(
         bind<Gtk::FileSelection*>(slot(*this, &SpeakerListSelector::on_open_ok), f_open));
