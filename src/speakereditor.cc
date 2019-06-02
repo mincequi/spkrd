@@ -101,41 +101,41 @@ Speaker_ListStore::Speaker_ListStore()
   m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
   /* All the entries and stuff */
-  m_Table.attach(*manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  m_Table.attach(*manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 1, 0, 1);
   m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
   GSpeakers::tooltips().set_tip(m_IdStringEntry,
                                 _("The name or identificationstd::string for the driver"));
-  m_Table.attach(*manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_LEFT)), 0, 2, 1, 2,
+  m_Table.attach(*manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 2, 1, 2,
                  Gtk::FILL | Gtk::EXPAND | Gtk::SHRINK);
   m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
-  m_Table.attach(*manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_LEFT)), 0, 2, 2, 3);
+  m_Table.attach(*manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_START)), 0, 2, 2, 3);
   m_Table.attach(m_FsEntry, 2, 3, 2, 3);
-  m_Table.attach(*manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_LEFT)), 0, 2, 3, 4);
+  m_Table.attach(*manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_START)), 0, 2, 3, 4);
   m_Table.attach(m_VasEntry, 2, 3, 3, 4);
-  m_Table.attach(*manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_LEFT)), 0, 2, 4, 5);
+  m_Table.attach(*manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_START)), 0, 2, 4, 5);
   m_Table.attach(m_RdcEntry, 2, 3, 4, 5);
-  m_Table.attach(*manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_LEFT)), 0, 2, 5, 6);
+  m_Table.attach(*manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_START)), 0, 2, 5, 6);
   m_Table.attach(m_LvcEntry, 2, 3, 5, 6);
-  m_Table.attach(*manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_LEFT)), 0, 2, 6, 7);
+  m_Table.attach(*manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_START)), 0, 2, 6, 7);
   m_Table.attach(m_QmsEntry, 2, 3, 6, 7);
-  m_Table.attach(*manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_LEFT)), 0, 2, 7, 8);
+  m_Table.attach(*manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_START)), 0, 2, 7, 8);
   m_Table.attach(m_QesEntry, 2, 3, 7, 8);
-  m_Table.attach(*manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_LEFT)), 0, 2, 8, 9);
+  m_Table.attach(*manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 2, 8, 9);
   m_Table.attach(m_ImpEntry, 2, 3, 8, 9);
-  m_Table.attach(*manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_LEFT)), 0, 2, 9, 10);
+  m_Table.attach(*manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 2, 9, 10);
   m_Table.attach(m_SensEntry, 2, 3, 9, 10);
 
-  m_Table.attach(*manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_LEFT)), 0, 2, 10, 11);
+  m_Table.attach(*manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 2, 10, 11);
   m_Table.attach(m_MmdEntry, 2, 3, 10, 11);
-  m_Table.attach(*manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_LEFT)), 0, 2, 11,
+  m_Table.attach(*manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)), 0, 2, 11,
                  12);
   m_Table.attach(m_AdEntry, 2, 3, 11, 12);
-  m_Table.attach(*manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_LEFT)), 0, 2, 12, 13);
+  m_Table.attach(*manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_START)), 0, 2, 12, 13);
   m_Table.attach(m_BlEntry, 2, 3, 12, 13);
-  m_Table.attach(*manage(new Gtk::Label(_("Susp. resistance: (Ns/m)"), Gtk::ALIGN_LEFT)), 0, 2, 13,
+  m_Table.attach(*manage(new Gtk::Label(_("Susp. resistance: (Ns/m)"), Gtk::ALIGN_START)), 0, 2, 13,
                  14);
   m_Table.attach(m_RmsEntry, 2, 3, 13, 14);
-  m_Table.attach(*manage(new Gtk::Label(_("Susp. compleance: (m/N)"), Gtk::ALIGN_LEFT)), 0, 2, 14,
+  m_Table.attach(*manage(new Gtk::Label(_("Susp. compleance: (m/N)"), Gtk::ALIGN_START)), 0, 2, 14,
                  15);
   m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
 
@@ -149,10 +149,10 @@ Speaker_ListStore::Speaker_ListStore()
                                 _("Check this box if the driver will work as a tweeter"));
   m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
-  // m_Table.attach(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_LEFT)), 0, 1, 18, 19);
+  // m_Table.attach(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)), 0, 1, 18, 19);
   // m_Table.attach(m_FreqRespFileEntry, 1, 2, 18, 19);
   Gtk::HBox* vbox = manage(new Gtk::HBox());
-  vbox->pack_start(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_LEFT)));
+  vbox->pack_start(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)));
   vbox->pack_start(m_FreqRespFileEntry);
   m_FreqRespFileEntry.set_width_chars(15);
   vbox->pack_start(m_BrowseFreqRespButton);

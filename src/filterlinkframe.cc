@@ -136,7 +136,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
 
     Gtk::HBox* hbox = manage(new Gtk::HBox());
     vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label(_("Order: "), Gtk::ALIGN_LEFT))));
+    hbox->pack_start((*manage(new Gtk::Label(_("Order: "), Gtk::ALIGN_START))));
     hbox->pack_start(*m_higher_order_optionmenu);
     vbox->pack_start(*m_higher_type_optionmenu);
     hbox = manage(new Gtk::HBox());
@@ -145,7 +145,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
         manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
     hbox->pack_start(*m_higher_co_freq_spinbutton);
     label = manage(new Gtk::Label(" Hz"));
-    label->set_alignment(Gtk::ALIGN_LEFT);
+    label->set_alignment(Gtk::ALIGN_START);
     hbox->pack_start(*label);
     vbox->pack_start(*hbox);
     set_family(m_higher_type_optionmenu, m_net->get_highpass_order(), m_net->get_highpass_family());

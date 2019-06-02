@@ -34,8 +34,8 @@
 
 BoxEditor::BoxEditor()
     : Gtk::Frame(_("Enclosure editor")), m_table(5, 5, true), m_vbox(), m_hbox(),
-      m_bass_speaker_combo(), m_speaker_qts_label("", Gtk::ALIGN_LEFT),
-      m_speaker_vas_label("", Gtk::ALIGN_LEFT), m_speaker_fs_label("", Gtk::ALIGN_LEFT),
+      m_bass_speaker_combo(), m_speaker_qts_label("", Gtk::ALIGN_START),
+      m_speaker_vas_label("", Gtk::ALIGN_START), m_speaker_fs_label("", Gtk::ALIGN_START),
       m_box_type_optionmenu(), m_option_menu() {
   m_box = nullptr;
 
@@ -51,73 +51,65 @@ BoxEditor::BoxEditor()
   static_cast<Gtk::Label*>(get_label_widget())
       ->set_markup("<b>" + Glib::ustring(_("Enclosure editor")) + "</b>");
 
-  // m_speaker_qts_entry.set_width_chars(5);
-  // m_speaker_vas_entry.set_width_chars(10);
-  // m_speaker_fs_entry.set_width_chars(5);
-  // m_speaker_qts_entry.set_editable(false);
-  // m_speaker_vas_entry.set_editable(false);
-  // m_speaker_fs_entry.set_editable(false);
-
   m_vb1_entry.set_width_chars(10);
   m_fb1_entry.set_width_chars(10);
   m_id_string_entry.set_width_chars(10);
 
   m_table.set_spacings(4);
-  m_table.attach(*manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1);
+  m_table.attach(*manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_START)), 0, 1, 0, 1);
   m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
 
-  m_table.attach(*manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_LEFT)), 0, 1, 1, 2);
+  m_table.attach(*manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_START)), 0, 1, 1, 2);
   m_table.attach(m_speaker_qts_label, 1, 2, 1, 2);
-  m_table.attach(*manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_RIGHT)), 3, 4, 1, 2);
+  m_table.attach(*manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_END)), 3, 4, 1, 2);
   m_table.attach(m_speaker_vas_label, 4, 5, 1, 2);
 
-  m_table.attach(*manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_LEFT)), 0, 1, 2, 3);
+  m_table.attach(*manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_START)), 0, 1, 2, 3);
   m_table.attach(m_speaker_fs_label, 1, 2, 2, 3);
 
-  m_table.attach(*manage(new Gtk::Label(_("Idstd::string: "), Gtk::ALIGN_LEFT)), 0, 1, 3, 4);
+  m_table.attach(*manage(new Gtk::Label(_("Idstd::string: "), Gtk::ALIGN_START)), 0, 1, 3, 4);
   m_table.attach(m_id_string_entry, 1, 3, 3, 4);
-  m_table.attach(*manage(new Gtk::Label(_("  Type: "), Gtk::ALIGN_RIGHT)), 3, 4, 3, 4);
+  m_table.attach(*manage(new Gtk::Label(_("  Type: "), Gtk::ALIGN_END)), 3, 4, 3, 4);
   m_table.attach(m_box_type_optionmenu, 4, 5, 3, 4);
 
-  m_table.attach(*manage(new Gtk::Label(_("Vb1: "), Gtk::ALIGN_LEFT)), 0, 1, 4, 5);
+  m_table.attach(*manage(new Gtk::Label(_("Vb1: "), Gtk::ALIGN_START)), 0, 1, 4, 5);
   m_table.attach(m_vb1_entry, 1, 2, 4, 5);
-  m_table.attach(*manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_RIGHT)), 3, 4, 4, 5);
+  m_table.attach(*manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_END)), 3, 4, 4, 5);
   m_table.attach(m_fb1_entry, 4, 5, 4, 5);
 
   m_bass_speaker_combo.get_entry()->set_editable(false);
   m_bass_speaker_combo.get_entry()->signal_changed().connect(
       mem_fun(*this, &BoxEditor::on_combo_entry_changed));
 
-  m_id_string_entry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
+  m_id_string_entry.signal_changed().connect(sigc::bind<int>(
+      sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
   m_vb1_entry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
+      sigc::bind<int>(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
   m_fb1_entry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
+      sigc::bind<int>(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
-  signal_speakerlist_loaded.connect(mem_fun(*this, &BoxEditor::on_speaker_list_loaded));
+  signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &BoxEditor::on_speaker_list_loaded));
 
   /* Setup option menu */
   Gtk::Menu::MenuList& menulist = m_option_menu.items();
 
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
       _("Sealed"),
-      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED)));
+      sigc::bind<int>(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), SEALED_SELECTED)));
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
       _("Ported"),
-      sigc::bind<int>(mem_fun(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED)));
+      sigc::bind<int>(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), PORTED_SELECTED)));
   m_box_type_optionmenu.set_menu(m_option_menu);
 
-  signal_box_selected.connect(mem_fun(*this, &BoxEditor::on_box_selected));
+  signal_box_selected.connect(sigc::mem_fun(*this, &BoxEditor::on_box_selected));
 
   /* On enter presses in vb entry we should move focus to fb entry */
-  m_vb1_entry.signal_activate().connect(mem_fun(*this, &BoxEditor::on_vb1_entry_activated));
-  m_fb1_entry.signal_activate().connect(mem_fun(*this, &BoxEditor::on_append_to_boxlist_clicked));
+  m_vb1_entry.signal_activate().connect(sigc::mem_fun(*this, &BoxEditor::on_vb1_entry_activated));
+  m_fb1_entry.signal_activate().connect(
+      sigc::mem_fun(*this, &BoxEditor::on_append_to_boxlist_clicked));
 
   show_all();
 }
-
-BoxEditor::~BoxEditor() = default;
 
 void BoxEditor::on_vb1_entry_activated() {
   switch (m_box->get_type()) {

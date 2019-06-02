@@ -26,7 +26,7 @@
 
 #include <gdkmm/color.h>
 #include <gtkmm/stock.h>
-#include <gtkmm/tooltips.h>
+#include <gtkmm/tooltip.h>
 #include <gtkmm/widget.h>
 
 #include <libintl.h>
@@ -49,7 +49,9 @@ Glib::ustring int_to_ustring(int d);
 Gtk::Widget& image_widget(const std::string& filename);
 
 Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
-Gtk::Tooltips& tooltips();
+
+Gtk::Tooltip& tooltips();
+
 bool& driverlist_modified();
 bool& enclosurelist_modified();
 bool& crossoverlist_modified();

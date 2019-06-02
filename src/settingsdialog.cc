@@ -82,7 +82,7 @@ SettingsDialog::SettingsDialog()
   Gtk::Table* tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, false));
   tbar_table->set_border_width(12);
   tbar_table->set_spacings(5);
-  tbar_table->attach(*manage(new Gtk::Label(_("Toolbar style: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1,
+  tbar_table->attach(*manage(new Gtk::Label(_("Toolbar style: "), Gtk::ALIGN_START)), 0, 1, 0, 1,
                      Gtk::SHRINK, Gtk::SHRINK);
   tbar_table->attach(m_toolbar_style, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   toolbar_frame->add(*tbar_table);
@@ -98,7 +98,7 @@ SettingsDialog::SettingsDialog()
   spice_table->set_border_width(12);
   spice_table->set_spacings(5);
   spice_table->attach(
-      *manage(new Gtk::Label(_("Full path to SPICE executable: "), Gtk::ALIGN_LEFT)), 0, 1, 0, 1,
+      *manage(new Gtk::Label(_("Full path to SPICE executable: "), Gtk::ALIGN_START)), 0, 1, 0, 1,
       Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
   spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);

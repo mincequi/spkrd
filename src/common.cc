@@ -94,7 +94,7 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length) {
   if (filename.length() >= length) {
     Glib::ustring file = Glib::path_get_basename(filename);
     Glib::ustring dir = Glib::path_get_dirname(filename);
-    int base_length = length - file.length() - round(length / 4);
+    int base_length = length - file.length() - std::round(length / 4);
     if (base_length < 2) {
       base_length = 2;
     }
@@ -103,16 +103,15 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length) {
     if (space_left <= 0) {
       space_left = 1;
     }
-    shorted_filename =
-        shorted_filename + "..." + dir.substr(dir.length() - space_left, dir.length()) + "/" + file;
+    shorted_filename += "..." + dir.substr(dir.length() - space_left, dir.length()) + "/" + file;
   } else {
     return filename;
   }
   return shorted_filename;
 }
 
-Gtk::Tooltips& tooltips() {
-  static Gtk::Tooltips tooltips;
+Gtk::Tooltis& tooltips() {
+  static Gtk::Tooltip tooltips;
   return tooltips;
 }
 

@@ -172,7 +172,7 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
     d->get_action_area()->set_spacing(6);
 
     Gtk::VBox* vbox = manage(new Gtk::VBox());
-    Gtk::Label* label1 = manage(new Gtk::Label("", Gtk::ALIGN_LEFT));
+    Gtk::Label* label1 = manage(new Gtk::Label("", Gtk::ALIGN_START));
     label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") +
                        Glib::ustring("</b>\n\n"));
     vbox->pack_start(*label1);
@@ -182,7 +182,7 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
         _("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +
             _("to quit without saving all changes since last save") + Glib::ustring("\n") +
             _("will be lost."),
-        Gtk::ALIGN_LEFT));
+        Gtk::ALIGN_START));
     vbox->pack_start(*label3);
     hbox->pack_start(*vbox);
 
@@ -235,7 +235,7 @@ void MainWindow::on_quit() {
     d->get_action_area()->set_spacing(6);
 
     Gtk::VBox* vbox = manage(new Gtk::VBox());
-    Gtk::Label* label1 = manage(new Gtk::Label("", Gtk::ALIGN_LEFT));
+    Gtk::Label* label1 = manage(new Gtk::Label("", Gtk::ALIGN_START));
     label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") +
                        Glib::ustring("</b>\n\n"));
     vbox->pack_start(*label1);
@@ -245,7 +245,7 @@ void MainWindow::on_quit() {
         _("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +
             _("to quit without saving all changes since last save") + Glib::ustring("\n") +
             _("will be lost."),
-        Gtk::ALIGN_LEFT));
+        Gtk::ALIGN_START));
     vbox->pack_start(*label3);
     hbox->pack_start(*vbox);
 
