@@ -110,11 +110,6 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length) {
   return shorted_filename;
 }
 
-Gtk::Tooltis& tooltips() {
-  static Gtk::Tooltip tooltips;
-  return tooltips;
-}
-
 bool& driverlist_modified() {
   static bool driverlist_mod = false;
   return driverlist_mod;

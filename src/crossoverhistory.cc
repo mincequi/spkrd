@@ -56,7 +56,8 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
                             GSpeakers::short_filename(m_filename, 20) + "]</b>");
   static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
   set_label_widget(*m_evbox);
-  GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+
+  // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
 
   create_model();
 
@@ -67,8 +68,6 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
   // m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
   selection->signal_changed().connect(mem_fun(*this, &CrossoverHistory::on_selection_changed));
-  // selection->set_mode(Gtk::SELECTION_MULTIPLE);
-  // signal_part_modified.connect(mem_fun(*this, &CrossoverHistory::on_part_modified));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -172,8 +171,8 @@ void CrossoverHistory::open_xml(const std::string& filename) {
     signal_crossover_set_save_state(false);
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ")) +
                               GSpeakers::short_filename(m_filename, 20) + "]</b>");
-    GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
-    // set_label(_("Crossover list [") + m_filename + "]");
+    // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+
   } catch (GSpeakersException const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();

@@ -50,8 +50,6 @@ Gtk::Widget& image_widget(const std::string& filename);
 
 Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
 
-Gtk::Tooltip& tooltips();
-
 bool& driverlist_modified();
 bool& enclosurelist_modified();
 bool& crossoverlist_modified();

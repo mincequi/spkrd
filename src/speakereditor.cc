@@ -72,39 +72,29 @@ Speaker_ListStore::Speaker_ListStore()
   m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) +
                             GSpeakers::short_filename(m_filename, 50) + "]</b>");
   static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
-  //   static_cast<Gtk::Label*>(m_treeview_frame.get_label_widget())->set_markup("<b>" +
-  //   Glib::ustring(_("Drivers [")) +
-  //                               GSpeakers::short_filename(m_filename) + "]</b>");
+
   m_treeview_frame.set_label_widget(*m_evbox);
 
-  GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+  // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
 
   m_inner_treeview_vbox.set_border_width(12);
   m_inner_treeview_vbox.pack_start(m_TreeViewTable);
 
-  // m_vbox.pack_start(m_Table);
   m_vbox.set_border_width(2);
   m_Table.set_spacings(2);
-  //  m_vbox.pack_start(m_editor_frame);
-  //  m_editor_frame.add(m_inner_vbox);
+
   m_vbox.pack_start(m_Table);
   m_vbox.set_border_width(12);
-  //  m_vbox.pack_start(m_Table);
-
-  //  m_editor_frame.set_shadow_type(Gtk::SHADOW_NONE);
-  //  static_cast<Gtk::Label*>(m_editor_frame.get_label_widget())->set_markup("<b>" +
-  //  Glib::ustring(_("Driver")) + "</b>");
-  // m_editor_frame.set_label(_("Currently selected driver"));
 
   /* Setup the table */
   m_TreeViewTable.set_spacings(2);
   m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
-  /* All the entries and stuff */
+  // All the entries
   m_Table.attach(*manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 1, 0, 1);
   m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
-  GSpeakers::tooltips().set_tip(m_IdStringEntry,
-                                _("The name or identificationstd::string for the driver"));
+  // GSpeakers::tooltips().set_tip(m_IdStringEntry,
+  //                               _("The name or identificationstd::string for the driver"));
   m_Table.attach(*manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 2, 1, 2,
                  Gtk::FILL | Gtk::EXPAND | Gtk::SHRINK);
   m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
@@ -122,7 +112,8 @@ Speaker_ListStore::Speaker_ListStore()
   m_Table.attach(m_QesEntry, 2, 3, 7, 8);
   m_Table.attach(*manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 2, 8, 9);
   m_Table.attach(m_ImpEntry, 2, 3, 8, 9);
-  m_Table.attach(*manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 2, 9, 10);
+  m_Table.attach(*manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 2, 9,
+                 10);
   m_Table.attach(m_SensEntry, 2, 3, 9, 10);
 
   m_Table.attach(*manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 2, 10, 11);
@@ -139,14 +130,15 @@ Speaker_ListStore::Speaker_ListStore()
                  15);
   m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
 
-  GSpeakers::tooltips().set_tip(
-      m_BassCheckButton, _("Check this box if the driver will work as a woofer (bass speaker)"));
+  // GSpeakers::tooltips().set_tip(
+  //     m_BassCheckButton, _("Check this box if the driver will work as a woofer (bass speaker)"));
   m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
-  GSpeakers::tooltips().set_tip(m_MidrangeCheckButton,
-                                _("Check this box if the driver will work as a midrange speaker"));
+  // GSpeakers::tooltips().set_tip(m_MidrangeCheckButton,
+  //                               _("Check this box if the driver will work as a midrange
+  //                               speaker"));
   m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
-  GSpeakers::tooltips().set_tip(m_TweeterCheckButton,
-                                _("Check this box if the driver will work as a tweeter"));
+  // GSpeakers::tooltips().set_tip(m_TweeterCheckButton,
+  //                               _("Check this box if the driver will work as a tweeter"));
   m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
   // m_Table.attach(*manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)), 0, 1, 18, 19);
@@ -164,53 +156,54 @@ Speaker_ListStore::Speaker_ListStore()
   m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
   m_IdStringEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 0));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 0));
   m_QtsEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 1));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 1));
   m_FsEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 2));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 2));
   m_VasEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 3));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 3));
   m_RdcEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 4));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 4));
   m_LvcEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 5));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 5));
   m_QmsEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 6));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 6));
   m_QesEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 7));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 7));
   m_ImpEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 8));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 8));
   m_SensEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 9));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 9));
   m_MmdEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 13));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 13));
   m_AdEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 14));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 14));
   m_BlEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 15));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 15));
   m_RmsEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 16));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 16));
   m_CmsEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 17));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 17));
   m_FreqRespFileEntry.signal_changed().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 18));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 18));
   m_FreqRespFileEntry.set_editable(false);
 
   m_BassCheckButton.signal_toggled().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 10));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 10));
   m_MidrangeCheckButton.signal_toggled().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 11));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 11));
   m_TweeterCheckButton.signal_toggled().connect(
-      sigc::bind<int>(mem_fun(*this, &Speaker_ListStore::on_entry_changed), 12));
+      sigc::bind<int>(sigc::mem_fun(*this, &Speaker_ListStore::on_entry_changed), 12));
 
   m_EditFreqRespButton.signal_clicked().connect(
       mem_fun(*this, &Speaker_ListStore::on_edit_freq_resp));
   m_BrowseFreqRespButton.signal_clicked().connect(
       mem_fun(*this, &Speaker_ListStore::on_browse_freq_resp));
 
-  GSpeakers::tooltips().set_tip(m_EditFreqRespButton, _("Edit frequency response for this driver"));
-  GSpeakers::tooltips().set_tip(m_BrowseFreqRespButton, _("Browse for frequnecy response file"));
+  // GSpeakers::tooltips().set_tip(m_EditFreqRespButton, _("Edit frequency response for this
+  // driver")); GSpeakers::tooltips().set_tip(m_BrowseFreqRespButton, _("Browse for frequnecy
+  // response file"));
   set_entries_sensitive(false);
 
   /* create model */
@@ -219,14 +212,13 @@ Speaker_ListStore::Speaker_ListStore()
   /* create tree view */
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
-  // m_TreeView.set_search_column(m_columns.id.index());
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  // selection->set_mode(Gtk::SELECTION_MULTIPLE);
 
-  selection->signal_changed().connect(mem_fun(*this, &Speaker_ListStore::on_selection_changed));
-  // selection->set_mode(Gtk::SELECTION_SINGLE);
+  selection->signal_changed().connect(
+      sigc::mem_fun(*this, &Speaker_ListStore::on_selection_changed));
 
-  g_settings.settings_changed.connect(mem_fun(*this, &Speaker_ListStore::on_settings_changed));
+  g_settings.settings_changed.connect(
+      sigc::mem_fun(*this, &Speaker_ListStore::on_settings_changed));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
@@ -235,13 +227,6 @@ Speaker_ListStore::Speaker_ListStore()
   f_save_as = nullptr;
   new_xml_pressed = false;
   signal_save_open_files.connect(mem_fun(*this, &Speaker_ListStore::on_save_open_files));
-
-  /* Select first row */
-  //   if (m_refListStore->children().size() > 0) {
-  //     Gtk::TreePath path(m_refListStore->children().begin());
-  //     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-  //     selection->select(row);
-  //   }
 }
 
 Speaker_ListStore::~Speaker_ListStore() {
@@ -250,6 +235,10 @@ Speaker_ListStore::~Speaker_ListStore() {
     // Insert dialog here that asks if we want to save changes
     std::cout << "Speaker_ListStore::~Speaker_ListStore: save changes?" << std::endl;
 #endif
+  }
+  if (m_speaker_list) {
+    delete m_speaker_list;
+    m_speaker_list = nullptr;
   }
 }
 
@@ -543,7 +532,7 @@ void Speaker_ListStore::on_selection_changed() {
 
       /* Freq resp file entry */
       m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
-      GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, s.get_freq_resp_filename());
+      // GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, s.get_freq_resp_filename());
       plot.clear();
       if (g_settings.getValueBool("DrawDriverFreqRespPlot")) {
 
@@ -938,7 +927,7 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
       g_settings.setValue("SpeakerListXml", m_filename);
       m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers [")) +
                                 GSpeakers::short_filename(m_filename, 40) + "]</b>");
-      GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+      // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
       for_each(temp_speaker_list.speaker_list().begin(), temp_speaker_list.speaker_list().end(),
                mem_fun(*this, &Speaker_ListStore::liststore_add_item));
 
@@ -994,7 +983,7 @@ void Speaker_ListStore::on_edit_freq_resp() {
 
   m_FreqRespFileEntry.set_text(f->get_filename());
 
-  GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
+  // GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
 
   m_speaker_list->speaker_list()[index].set_freq_resp_filename(f->get_filename());
 
@@ -1016,7 +1005,8 @@ void Speaker_ListStore::on_browse_freq_resp() {
   if (filename.length() > 0) {
     /* TODO: Check that selected file exists */
     m_FreqRespFileEntry.set_text(m_filename);
-    GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
+
+    // GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
     m_speaker_list->speaker_list()[index].set_freq_resp_filename(filename);
 
     on_selection_changed();

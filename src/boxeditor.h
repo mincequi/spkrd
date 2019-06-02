@@ -21,7 +21,7 @@
 #define __GSPEAKERS_BOXEDITOR
 
 #include <gtkmm/box.h>
-#include <gtkmm/combobox.h>
+#include <gtkmm/combo.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 #include <gtkmm/menu.h>
@@ -59,7 +59,7 @@ protected:
   Gtk::Table m_table;
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
-  Gtk::ComboBox m_bass_speaker_combo;
+  Gtk::Combo m_bass_speaker_combo;
   Gtk::Label m_speaker_qts_label, m_speaker_vas_label, m_speaker_fs_label;
   Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;
   Gtk::OptionMenu m_box_type_optionmenu;
