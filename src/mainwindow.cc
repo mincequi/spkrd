@@ -28,6 +28,7 @@
 
 MainWindow::MainWindow() {
   // GSpeakers::tooltips().enable();
+
   in_quit_phase = false;
   crossover_paned.select_first_crossover();
   /* set program icon and title */
@@ -48,7 +49,7 @@ MainWindow::MainWindow() {
     std::cout << fe.code() << std::endl;
 #endif
   }
-  set_title("GSpeakers Redux-" + std::string(VERSION));
+  set_title("GSpeakers " + std::string(VERSION));
 
   /* add a vbox to the window */
   add(m_main_vbox);
