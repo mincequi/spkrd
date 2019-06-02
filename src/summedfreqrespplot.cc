@@ -90,9 +90,9 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point>& filter_points
         substr_ptr = strtok(nullptr, ",");
         f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-        if ((f1 != 0) && (f2 != 0)) { // Skip potential column headers
-          GSpeakers::Point p(std::round(f1), f2);
-          freq_resp_points.push_back(p);
+        // Skip potential column headers
+        if ((f1 != 0) && (f2 != 0)) {
+          freq_resp_points.emplace_back(std::round(f1), f2);
         }
         delete buffer;
       }
