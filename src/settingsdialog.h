@@ -28,9 +28,6 @@
 #include <gtkmm/optionmenu.h>
 #include <gtkmm/radiobutton.h>
 
-
-
-
 namespace GSpeakers {
 enum Settings {
   SAVE_MAIN_WINDOW_SIZE,
@@ -73,8 +70,9 @@ private:
 
   Gtk::Button* close_button;
 
- std::string m_filename;
+  std::string m_filename;
 
+private:
   void on_close();
   void on_spice_browse();
   void on_config_option_change(GSpeakers::Settings setting);

@@ -29,8 +29,9 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <map>
 #include <sigc++/sigc++.h>
+
+#include <map>
 #include <stdexcept>
 #include <string>
 

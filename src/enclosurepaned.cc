@@ -29,7 +29,7 @@
 EnclosurePaned::EnclosurePaned() {
   nof_plots = 0;
   plot_selected = false;
-  m_tbar = NULL;
+  m_tbar = nullptr;
   g_settings.settings_changed.connect(sigc::mem_fun(*this, &EnclosurePaned::on_settings_changed));
 
   /* Main paned for the enclosure tab */

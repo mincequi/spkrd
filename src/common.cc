@@ -18,8 +18,10 @@
 */
 
 #include "common.h"
-#include <gdkmm/pixbuf.h>
+
 #include <glibmm/miscutils.h>
+
+#include <gdkmm/pixbuf.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 

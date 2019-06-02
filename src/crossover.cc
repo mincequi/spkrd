@@ -19,7 +19,7 @@
 #include <glib.h>
 #include <sstream>
 
-Crossover::Crossover(int type, std::string id_string) : GSpeakersObject() {
+Crossover::Crossover(int type, std::string id_string) : GSpeakersObject(), m_id_string(id_string) {
   m_type = type;
 
   if (m_type & CROSSOVER_TYPE_SUBSONIC) {
@@ -46,11 +46,10 @@ Crossover::Crossover(int type, std::string id_string) : GSpeakersObject() {
     m_networks.push_back(Net(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST));
     m_networks.push_back(Net(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST));
   }
-  m_id_string = id_string;
 }
 
 Crossover::Crossover(xmlNodePtr parent) {
-  if ((parent != NULL) && (g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)) {
+  if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)) {
     try {
       parse_type(parent->children);
     } catch (GSpeakersException const& e) {
@@ -136,6 +135,6 @@ std::ostream& operator<<(std::ostream& o, const Crossover& crossover) {
 
 std::vector<Net>* Crossover::networks() { return &m_networks; }
 
-std::string Crossover::get_id_string() { return m_id_string; }
+std::string const& Crossover::get_id_string() const { return m_id_string; }
 
 void Crossover::set_id_string(std::string id_string) { m_id_string = id_string; }

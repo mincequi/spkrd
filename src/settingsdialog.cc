@@ -24,15 +24,17 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/table.h>
 
+#include <iostream>
+
 #define NOF_TABLE_ROWS 10
 
 SettingsDialog::SettingsDialog()
-    : Gtk::Dialog(_("GSpeakers settings..."), true, true), m_main_notebook(),
+    : Gtk::Dialog(_("Settings"), true, true), m_main_notebook(),
       m_spice_browse_button(_("Browse...")), m_spice_use_berkley(_("Berkley SPICE3f5")),
       m_spice_use_ngspice(_("NG-SPICE-reworked")),
       m_spice_use_gnucap(_("GNUCAP SPICE implementation")),
       m_autoupdate_filter_plots(
-          _("Automaticly update crossover plots when a parameter has changed")),
+          _("Automatically update crossover plots when a parameter has changed")),
       m_draw_driver_imp_plot(_("Draw driver impedance plot")),
       m_draw_driver_freq_resp_plot(_("Draw driver frequency response plot")),
       m_disable_filter_amp(_("Disable filter amplification")),
@@ -208,7 +210,7 @@ SettingsDialog::~SettingsDialog() {
 }
 
 void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
-  std::cout << "SettingsDialog::on_config_option_chage: " << setting << std::endl;
+  std::cout << "SettingsDialog::on_config_option_change: " << setting << std::endl;
   switch (setting) {
   case GSpeakers::SAVE_MAIN_WINDOW_SIZE:
     g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());

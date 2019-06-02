@@ -21,32 +21,28 @@
  */
 
 #include "gspeakersstock.h"
-#include "../config.h"
 
 #include <gtk/gtk.h>
 
-static GtkStockItem stock_items[] = {{GSPEAKERS_STOCK_DRIVER, NULL},
-                                     {GSPEAKERS_STOCK_SPEAKER, NULL},
-                                     {GSPEAKERS_STOCK_FILTER, NULL}};
+// TODO Use C++ bindings for these
+const GtkStockItem stock_items[] = {{const_cast<char*>(GSPEAKERS_STOCK_DRIVER), nullptr},
+                                    {const_cast<char*>(GSPEAKERS_STOCK_SPEAKER), nullptr},
+                                    {const_cast<char*>(GSPEAKERS_STOCK_FILTER), nullptr}};
 
-void gspeakers_stock_init(void) {
-  GtkIconFactory* icon_factory;
-  GtkIconSet* icon_set;
-  GdkPixbuf* pixbuf;
-  gint i;
-  gchar* filename;
+void gspeakers_stock_init() {
 
   gtk_stock_add(stock_items, G_N_ELEMENTS(stock_items));
 
-  icon_factory = gtk_icon_factory_new();
+  GtkIconFactory* icon_factory = gtk_icon_factory_new();
   gtk_icon_factory_add_default(icon_factory);
 
-  for (i = 0; i < G_N_ELEMENTS(stock_items); i++) {
-    filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
-    pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+  for (guint i = 0; i < G_N_ELEMENTS(stock_items); i++) {
+    gchar* filename =
+        g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_items[i].stock_id);
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
     g_free(filename);
 
-    icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
+    GtkIconSet* icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
 
     gtk_icon_factory_add(icon_factory, stock_items[i].stock_id, icon_set);
 

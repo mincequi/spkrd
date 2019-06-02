@@ -26,14 +26,9 @@
 
 Box::Box(std::string id_string, int type, double vb1, double fb1, double vb2, double fb2,
          std::string speaker)
-    : GSpeakersObject() {
+    : GSpeakersObject(), m_vb1(vb1), m_fb1(fb1), m_vb2(vb2), m_fb2(fb2), m_speaker(speaker) {
   m_id_string = id_string;
   m_type = type;
-  m_vb1 = vb1;
-  m_fb1 = fb1;
-  m_vb2 = vb2;
-  m_fb2 = fb2;
-  m_speaker = speaker;
 }
 
 Box::Box(xmlNodePtr parent) : GSpeakersObject() {
@@ -95,17 +90,17 @@ void Box::set_fb2(double fb2) { m_fb2 = fb2; }
 
 void Box::set_speaker(const std::string& speaker) { m_speaker = speaker; }
 
-std::string Box::get_id_string() { return m_id_string; }
+std::string const& Box::get_id_string() const { return m_id_string; }
 
-double Box::get_vb1() { return m_vb1; }
+double Box::get_vb1() const { return m_vb1; }
 
-double Box::get_fb1() { return m_fb1; }
+double Box::get_fb1() const { return m_fb1; }
 
-double Box::get_vb2() { return m_vb2; }
+double Box::get_vb2() const { return m_vb2; }
 
-double Box::get_fb2() { return m_fb2; }
+double Box::get_fb2() const { return m_fb2; }
 
-const std::string& Box::get_speaker() { return m_speaker; }
+const std::string& Box::get_speaker() const { return m_speaker; }
 
 void Box::parse_id_string(xmlNodePtr node) {
   if ((node != NULL) && (std::string((char*)node->name) == std::string("id_string"))) {

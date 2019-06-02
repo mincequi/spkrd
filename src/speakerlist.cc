@@ -17,9 +17,8 @@
 
 #include "speakerlist.h"
 #include "common.h"
-#include <glib.h>
 
-SpeakerList::SpeakerList() {}
+#include <glib.h>
 
 SpeakerList::SpeakerList(std::string filename) {
   xmlDocPtr doc;

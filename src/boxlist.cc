@@ -25,12 +25,12 @@ BoxList::BoxList(std::string filename) {
   xmlNodePtr children;
 
   xmlDocPtr doc = xmlParseFile(filename.c_str());
-  if (doc != NULL) {
+  if (doc != nullptr) {
     xmlNodePtr node = xmlDocGetRootElement(doc);
-    if ((node != NULL) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0)) {
+    if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0)) {
       if (node->children) {
         children = node->children;
-        while (children != NULL) {
+        while (children != nullptr) {
           try {
             m_box_list.push_back(Box(children));
           } catch (GSpeakersException const& e) {

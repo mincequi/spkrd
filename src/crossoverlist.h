@@ -24,7 +24,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 

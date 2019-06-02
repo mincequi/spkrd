@@ -213,9 +213,6 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
 }
 
 void MainWindow::on_quit() {
-  // #ifdef OUTPUT_DEBUG
-  //   std::cout << "MainWindow::on_quit: do you want to save unsaved documents?" << std::endl;
-  // #endif
 
   using namespace GSpeakers;
 

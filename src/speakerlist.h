@@ -24,7 +24,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 
@@ -33,8 +33,7 @@
  */
 class SpeakerList {
 public:
-  /* Default constructor */
-  SpeakerList();
+  SpeakerList() = default;
 
   /* Construct a part from an xml file */
   SpeakerList(std::string filename);

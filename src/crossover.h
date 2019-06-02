@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <iostream>
+#include <iosfwd>
 #include <vector>
 
 /* You should be able to use one or more of the type properties */
@@ -36,9 +36,9 @@
 /* Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY */
 #define CROSSOVER_TYPE_THREEWAY 16
 #define CROSSOVER_TYPE_FOURWAY 32
-/* Why would anyone use my program to develop something more adveanced
-   than a loudspeaker with four elements...? */
 
+/* Why would anyone use my program to develop something more advanced
+   than a loudspeaker with four elements...? */
 class Crossover : public GSpeakersObject {
 public:
   Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
@@ -56,17 +56,15 @@ public:
   std::vector<Net>* networks();
 
   /* return id_string for this crossover */
-  std::string get_id_string();
+  std::string const& get_id_string() const;
   void set_id_string(std::string id_string);
 
 protected:
-  /* Member variables */
   std::vector<Net> m_networks;
-  // int m_id; /* from GSpeakersObject */
-  // int m_type; /* from GSpeakersObject, we don't really need this one here... */
   std::string m_id_string;
 
-  /* Member functions, used to parse xml */
+protected:
+  /// Used to parse xml
   void parse_type(xmlNodePtr node);
   void parse_networks(xmlNodePtr node);
   void parse_id_string(xmlNodePtr node);

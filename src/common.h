@@ -32,7 +32,6 @@
 #include <libintl.h>
 #include <sigc++/sigc++.h>
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -62,16 +61,13 @@ class Crossover;
 class Net;
 class SpeakerList;
 
-/*
- *  We define a Exception class for our program just for fun (and consistancy)
- *
- */
+/// Define a Exception class for our program just for fun (and consistency)
 class GSpeakersException {
   std::string _what;
 
 public:
   GSpeakersException(const std::string& what_arg) : _what(what_arg) {}
-  virtual ~GSpeakersException() {}
+
   virtual const char* what() const { return _what.c_str(); }
 };
 

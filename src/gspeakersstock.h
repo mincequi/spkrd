@@ -23,10 +23,10 @@
 #ifndef __GSPEAKERS_STOCK_H__
 #define __GSPEAKERS_STOCK_H__
 
-#define GSPEAKERS_STOCK_DRIVER "driver64"
-#define GSPEAKERS_STOCK_SPEAKER "speaker64"
-#define GSPEAKERS_STOCK_FILTER "filter64"
+char const* const GSPEAKERS_STOCK_DRIVER = "driver64";
+char const* const GSPEAKERS_STOCK_SPEAKER = "speaker64";
+char const* const GSPEAKERS_STOCK_FILTER = "filter64";
 
-void gspeakers_stock_init(void);
+void gspeakers_stock_init();
 
 #endif /* __GSPEAKERS_STOCK_ICONS_H__ */

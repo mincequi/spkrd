@@ -72,6 +72,7 @@ private:
   bool shown_;
   bool editing_canceled_;
 
+private:
   bool on_button_press_event(GdkEventButton* event);
   bool on_key_press_event(GdkEventKey* event);
   void on_style_changed(const Glib::RefPtr<Gtk::Style>& previous_style);

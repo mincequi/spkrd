@@ -27,7 +27,6 @@
 class CrossoverWizard : public Gtk::ScrolledWindow {
 public:
   CrossoverWizard();
-  ~CrossoverWizard();
 
 private:
   /* Callbacks */
@@ -35,10 +34,13 @@ private:
   void on_button_plot_clicked();
   void on_button_update_clicked();
 
+  void on_crossover_selected(Crossover* crossover);
+
+private:
   //  Gtk::ScrolledWindow m_scrolled_window;
   Gtk::VBox m_vbox;
-  void on_crossover_selected(Crossover* crossover);
-  SpeakerList* m_speaker_list;
+
+  SpeakerList* m_speaker_list = nullptr;
 };
 
 #endif

@@ -21,26 +21,6 @@ int main(int argc, char* argv[]) {
 #endif
 
   Gtk::Main kit(argc, argv);
-  // SpeakerList slist;
-  // slist.speaker_list()->push_back(Speaker("Vifa P21WO-20-08"));
-  // slist.speaker_list()->push_back(Speaker("Vifa P22WO-20-08"));
-  // slist.speaker_list()->push_back(Speaker("Vifa P23WO-20-08"));
-  // slist.speaker_list()->push_back(Speaker("Vifa P24WO-20-08"));
-  // slist.speaker_list()->push_back(Speaker("Vifa P25WO-20-08"));
-  // slist.to_xml("test.xml");
-  //  Speaker_ListStore etl;
-  //  CrossoverList clist;
-  //  Crossover c1;
-  //  (*c1.networks())[0].set_has_imp_corr(true);
-  //  clist.crossover_list()->push_back(c1);
-  //  (*c1.networks())[1].set_has_damp(true);
-  //  clist.crossover_list()->push_back(c1);
-  //  clist.to_xml("crossover1.xml");
-  // clist.to_xml("crossover1.xml");
-
-  /* Init CrossoverTreeView before CrossoverHistory so that CrossoverHistory can select a Crossover
-   * to the TreeView */
-  // CrossoverTreeView ctv;
 
   try {
 #ifdef TARGET_WIN32

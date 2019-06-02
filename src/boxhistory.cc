@@ -108,7 +108,7 @@ void BoxHistory::on_delete_plot() { signal_remove_box_plot(selected_plot); }
 void BoxHistory::on_plot_selected(int i) { selected_plot = i; }
 
 void BoxHistory::on_save_open_files() {
-  if (GSpeakers::enclosurelist_modified() == true) {
+  if (GSpeakers::enclosurelist_modified()) {
     on_save();
   }
 }
@@ -125,7 +125,7 @@ bool BoxHistory::on_delete_event(GdkEventAny* event) {
 void BoxHistory::on_open_xml() {
   GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Open box xml"));
   std::string filename = fc->get_filename();
-  if (filename.length() > 0) {
+  if (filename.length()) {
     open_xml(filename);
   }
 }
@@ -159,10 +159,13 @@ void BoxHistory::open_xml(const std::string& filename) {
     /* Select the first item in the list */
     if (m_box_list.box_list()->size() > 0) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+
       GtkTreePath* gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(0).c_str());
+
       Gtk::TreePath path(gpath);
 
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+
       refSelection->select(row);
     }
     signal_enclosure_set_save_state(false);
@@ -171,7 +174,7 @@ void BoxHistory::open_xml(const std::string& filename) {
                      GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
   } catch (GSpeakersException const& e) {
-    Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+    Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
 }
@@ -188,7 +191,7 @@ void BoxHistory::append_xml(const std::string& filename) {
     }
     m_box_list.box_list()->size();
   } catch (GSpeakersException const& e) {
-    Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+    Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
   signal_enclosure_set_save_state(true);
@@ -200,8 +203,8 @@ void BoxHistory::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    std::vector<int> const& indices = path.get_indices();
+    if (!indices.empty()) {
       index = indices[0];
       signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
     }
@@ -217,8 +220,8 @@ void BoxHistory::on_new_copy() {
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
       Gtk::TreePath path = m_refListStore->get_path(iter);
 
-      std::vector<int> indices = path.get_indices();
-      if (indices.size() > 0) {
+      std::vector<int> const& indices = path.get_indices();
+      if (!indices.empty()) {
         /* Here we have the row in indices[0], we want to make a copy of this Crossover
            and put it last in the list */
 
@@ -255,6 +258,7 @@ void BoxHistory::on_new_copy() {
 }
 
 void BoxHistory::on_new() {
+
   Box b;
 
   /* Set time of day as this crossovers id_string */
@@ -298,7 +302,7 @@ void BoxHistory::on_save() {
       m_box_list.to_xml(m_filename);
       signal_enclosure_set_save_state(false);
     } catch (GSpeakersException const& e) {
-      Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+      Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
       m.run();
     }
   }
@@ -324,7 +328,7 @@ void BoxHistory::save_as_xml(const std::string& filename) {
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);
   } catch (GSpeakersException const& e) {
-    Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
+    Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
 }
@@ -335,8 +339,8 @@ void BoxHistory::on_remove() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    std::vector<int> const& indices = path.get_indices();
+    if (!indices.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 

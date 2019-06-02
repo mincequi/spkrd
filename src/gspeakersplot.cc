@@ -78,9 +78,6 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   m_refColormap->alloc_color(black);
 
   Glib::RefPtr<Pango::Context> refPangoContext = get_pango_context();
-  // Pango::FontDescription font_description = refPangoContext->get_font_description();
-
-  // m_refFont = refPangoContext->load_font(font_description);
 
   m_refLayout = Pango::Layout::create(refPangoContext);
 
@@ -90,7 +87,8 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color) {
+int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
+                            Gdk::Color& ref_color) {
 #ifdef OUTPUT_DEBUG
   // std::cout << "GSpeakersPlot: on add plot" << std::endl;
 #endif
@@ -103,20 +101,15 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk
 
   int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   int half_space_x = GSpeakers::round(total_space_x / 2);
-  int box_x, box_y, box_width, box_height;
-  box_x = BOX_FRAME_SIZE;
-  box_y = BOX_FRAME_SIZE;
-  box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
+
+  // auto const box_x = BOX_FRAME_SIZE;
+  // auto const box_y = BOX_FRAME_SIZE;
+  // auto const box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
+  auto const box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
   std::vector<Gdk::Point> points;
   double f_div, f_mapped;
   int x, y;
-
-  // for (std::vector<GSpeakers::Point>::iterator iter = ref_point_vector.begin(); iter !=
-  // ref_point_vector.end(); ++iter) {
-  //  std::cout << (*iter).get_x() << ":" << (*iter).get_y() << std::endl;
-  //}
 
   std::vector<GSpeakers::Point>::iterator iter;
 
@@ -228,8 +221,8 @@ void GSpeakersPlot::remove_plot(int n) {
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
   } else {
 
-    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin(); iter != m_points.end();
-         ++iter, i++) {
+    for (std::vector<std::vector<GSpeakers::Point>>::iterator iter = m_points.begin();
+         iter != m_points.end(); ++iter, i++) {
       if (n == i) {
         m_points.erase(iter);
       }

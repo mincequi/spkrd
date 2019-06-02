@@ -32,17 +32,14 @@ CrossoverWizard::CrossoverWizard() : Gtk::ScrolledWindow(), m_vbox() {
   signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &CrossoverWizard::on_speaker_list_loaded));
 }
 
-CrossoverWizard::~CrossoverWizard() {}
-
 void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 #ifdef OUTPUT_DEBUG
   std::cout << "CrossoverWizard::on_crossover_selected" << std::endl;
 #endif
-  //  delete m_vbox.children()[0].get_widget();
 
   /* We want to make sure the content of m_vbox get deleted */
   // m_vbox.children().erase(m_vbox.children().begin(), m_vbox.children().end());
-  if (m_vbox.children().size() > 0) {
+  if (!m_vbox.children().empty()) {
     for (int i = m_vbox.children().size() - 1; i >= 0; i--) {
       delete m_vbox.children()[i].get_widget();
     }
@@ -106,12 +103,12 @@ void CrossoverWizard::on_speaker_list_loaded(SpeakerList* speaker_list) {
 
 void CrossoverWizard::on_button_plot_clicked() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "CrossoverWiard::on_button_plot_cliecked" << std::endl;
+  std::cout << "CrossoverWiard::on_button_plot_clicked" << std::endl;
 #endif
 }
 
 void CrossoverWizard::on_button_update_clicked() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "CrossoverWiard::on_button_update_cliecked" << std::endl;
+  std::cout << "CrossoverWiard::on_button_update_clicked" << std::endl;
 #endif
 }

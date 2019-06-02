@@ -20,7 +20,7 @@
 #ifndef __GFILTER_BOX
 #define __GFILTER_BOX
 
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <string>
 
@@ -52,12 +52,12 @@ public:
   void set_fb2(double fb2);
   void set_speaker(const std::string& speaker);
 
-  std::string get_id_string();
-  double get_vb1();
-  double get_fb1();
-  double get_vb2();
-  double get_fb2();
-  const std::string& get_speaker();
+  std::string const& get_id_string() const;
+  double get_vb1() const;
+  double get_fb1() const;
+  double get_vb2() const;
+  double get_fb2() const;
+  const std::string& get_speaker() const;
 
 protected:
   std::string m_id_string;

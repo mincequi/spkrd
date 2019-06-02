@@ -95,21 +95,21 @@ public:
   double get_cms() const;
 
 protected:
-  double m_qts; // total Q
-  double m_vas;
-  double m_fs;   // free air resonanse frequency
-  double m_rdc;  // voice coil resistance
-  double m_lvc;  // voice coil inductance (mH)
-  double m_qms;  // mechanical Q
-  double m_qes;  // electrical Q
-  double m_imp;  // nominal impedance
-  double m_sens; // sensitivity
+  double m_qts;  /// total Q
+  double m_vas;  /// equivalent volume
+  double m_fs;   /// free air resonanse frequency
+  double m_rdc;  /// voice coil resistance
+  double m_lvc;  /// voice coil inductance (mH)
+  double m_qms;  /// mechanical Q
+  double m_qes;  /// electrical Q
+  double m_imp;  /// nominal impedance
+  double m_sens; /// sensitivity
 
-  double m_mmd; // cone mass, kg
-  double m_ad;  // effective radius, m
-  double m_bl;  // force factor
-  double m_rms; // suspension mechanical resistance, Ns/m
-  double m_cms; // suspension compliance, m/N
+  double m_mmd; /// cone mass, kg
+  double m_ad;  /// effective radius, m
+  double m_bl;  /// force factor
+  double m_rms; /// suspension mechanical resistance, Ns/m
+  double m_cms; /// suspension compliance, m/N
 
   std::string m_freq_resp_filename;
   std::map<double, double> m_freq_resp;

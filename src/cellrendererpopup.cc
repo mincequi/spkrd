@@ -35,19 +35,7 @@ namespace {
 
 bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time) {
   std::cout << "grab_on_window" << std::endl;
-  /*
-    if(gdk_pointer_grab(
-          Glib::unwrap(window), true,
-          GdkEventMask(GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK),
-          0, 0, activate_time) == 0)
-    {
-      if(gdk_keyboard_grab(Glib::unwrap(window), true, activate_time) == 0)
-        return true;
-      else
-        gdk_pointer_ungrab(activate_time);
-    }
-  */
-  // return false;
+
   return true;
 }
 
@@ -79,7 +67,8 @@ void CellRendererPopup::set_focus_widget(Gtk::Widget& focus_widget) {
 
 Gtk::Widget* CellRendererPopup::get_focus_widget() { return focus_widget_; }
 
-sigc::signal5<void, const Glib::ustring&, int, int, int, int>& CellRendererPopup::signal_show_popup() {
+sigc::signal5<void, const Glib::ustring&, int, int, int, int>&
+CellRendererPopup::signal_show_popup() {
   return signal_show_popup_;
 }
 
@@ -108,8 +97,9 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
   std::cout << "CellRendererPopup::start_editing_vfunc" << std::endl;
 
   // If the cell isn't editable we return 0.
-  if (!property_editable())
+  if (!property_editable()) {
     return 0;
+  }
 
   std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
 
@@ -137,8 +127,8 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
 
   const Gtk::Allocation alloc = popup_window_.get_allocation();
 
-  int x = x2;
-  int y = y2;
+  auto x = x2;
+  auto y = y2;
 
   const int button_height = y2 - y1;
 
