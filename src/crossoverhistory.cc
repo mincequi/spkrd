@@ -91,7 +91,7 @@ void CrossoverHistory::on_save_open_files() {
 }
 
 void CrossoverHistory::select_first_row() {
-  if (m_crossover_list.crossover_list()->size() > 0) {
+  if (!m_crossover_list.crossover_list()->empty()) {
     char* str = NULL;
     GString* buffer = g_string_new(str);
     g_string_printf(buffer, "%d", 0);
@@ -210,7 +210,7 @@ void CrossoverHistory::on_selection_changed() {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> const& indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       index = indices[0];
       signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));
       /* Plot the crossover immediately after we selected it */
@@ -224,14 +224,14 @@ void CrossoverHistory::on_selection_changed() {
 void CrossoverHistory::on_new_copy() {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-  if (m_crossover_list.crossover_list()->size() > 0) {
+  if (!m_crossover_list.crossover_list()->empty()) {
     /* Find out which row we selected */
 
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
       Gtk::TreePath path = m_refListStore->get_path(iter);
 
       std::vector<int> indices = path.get_indices();
-      if (indices.size() > 0) {
+      if (!indices.empty()) {
         /* Here we have the row in indices[0], we want to make a copy of this Crossover
            and put it last in the list */
 
@@ -395,7 +395,7 @@ void CrossoverHistory::on_remove() {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -460,7 +460,7 @@ void CrossoverHistory::add_columns() {
 void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter) {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  std::string s = "";
+  std::string s;
   if ((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) {
     s = s + _("lowpass");
   }

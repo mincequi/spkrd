@@ -321,12 +321,12 @@ void GSpeakersPlot::redraw() {
                                m_refLayout);
     }
   }
-  if (m_y_label1 != "") {
+  if (!m_y_label1.empty()) {
     m_refLayout->set_text(m_y_label1);
     m_refPixmap->draw_layout(m_refGC, (int)(BOX_FRAME_SIZE / 2), (int)(BOX_FRAME_SIZE / 3),
                              m_refLayout);
   }
-  if (m_y_label2 != "") {
+  if (!m_y_label2.empty()) {
     m_refLayout->set_text(m_y_label2);
     int width, height;
     m_refLayout->get_pixel_size(width, height);

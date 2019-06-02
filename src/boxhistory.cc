@@ -24,6 +24,7 @@
 #include <gtkmm/messagedialog.h>
 
 #include <ctime>
+#include <iostream>
 
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
@@ -157,7 +158,7 @@ void BoxHistory::open_xml(const std::string& filename) {
     }
 
     /* Select the first item in the list */
-    if (m_box_list.box_list()->size() > 0) {
+    if (!m_box_list.box_list()->empty()) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
       GtkTreePath* gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(0).c_str());
@@ -214,7 +215,7 @@ void BoxHistory::on_selection_changed() {
 void BoxHistory::on_new_copy() {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-  if (m_box_list.box_list()->size() > 0) {
+  if (!m_box_list.box_list()->empty()) {
     /* Find out which row we selected */
 
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
@@ -372,7 +373,7 @@ void BoxHistory::on_box_modified(Box* b) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
       /* Update the liststore */
       row[m_columns.type] = b->get_type();

@@ -77,7 +77,7 @@ void PlotHistory::on_selection_changed() {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       /* Check config if user want to mark selected plot */
       signal_select_plot(indices[0]);
 
@@ -102,7 +102,7 @@ void PlotHistory::on_remove() {
 
     std::vector<int> indices = path.get_indices();
 
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -172,7 +172,7 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
   path = m_refListStore->get_path(row);
 
   std::vector<int> indices = path.get_indices();
-  if (indices.size() > 0) {
+  if (!indices.empty()) {
 #ifdef OUTPUT_DEBUG
     std::cout << "PlotHistory: hide" << std::endl;
 #endif

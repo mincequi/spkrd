@@ -105,7 +105,7 @@ FreqRespEditor::FreqRespEditor(std::string filename)
   m_close_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_close));
   m_save_button.set_sensitive(false);
 
-  if (m_filename != "") {
+  if (!m_filename.empty()) {
     /* Open file and fill in the values */
     std::ifstream fin(m_filename.c_str());
     if (fin.good()) {

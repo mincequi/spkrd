@@ -426,7 +426,7 @@ void Speaker_ListStore::on_remove() {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -487,7 +487,7 @@ void Speaker_ListStore::on_selection_changed() {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
     std::vector<int> indices = path.get_indices();
-    if (indices.size() > 0) {
+    if (!indices.empty()) {
       index = indices[0];
       Speaker s = (*(m_speaker_list->speaker_list()))[index];
 
@@ -548,7 +548,7 @@ void Speaker_ListStore::on_selection_changed() {
       if (g_settings.getValueBool("DrawDriverFreqRespPlot") == true) {
 
         /* Plot freq resp if it exists */
-        if (s.get_freq_resp_filename() != "") {
+        if (!s.get_freq_resp_filename().empty()) {
           std::ifstream fin(s.get_freq_resp_filename().c_str());
           if (fin.good()) {
             std::vector<GSpeakers::Point> points;
@@ -726,7 +726,7 @@ void Speaker_ListStore::draw_imp_plot(Speaker& s, bool update) {
         Gdk::Color c2("red");
         if (update == true) {
           int i;
-          if ((s.get_freq_resp_filename() == "") ||
+          if ((s.get_freq_resp_filename().empty()) ||
               !(g_settings.getValueBool("DrawDriverFreqRespPlot"))) {
             i = 0;
           } else {
@@ -973,7 +973,7 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
 
       /* Select the first item in the list */
       // std::cout << m_speaker_list.speaker_list()->size() << std::endl;
-      if (m_speaker_list->speaker_list()->size() > 0) {
+      if (!m_speaker_list->speaker_list()->empty()) {
         Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
         char* str = NULL;
         GString* buffer = g_string_new(str);
@@ -1255,25 +1255,25 @@ void Speaker_ListStore::add_columns() {
 void Speaker_ListStore::type_cell_data_func(Gtk::CellRenderer* cell,
                                             const Gtk::TreeModel::iterator& iter) {
   Gtk::CellRendererText& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-  std::string s = "";
+  std::string s;
   if ((*iter)[m_columns.type] & SPEAKER_TYPE_BASS) {
     s = _("Woofer");
   }
   if ((*iter)[m_columns.type] & SPEAKER_TYPE_MIDRANGE) {
-    if (s.size() > 0) {
+    if (!s.empty()) {
       s = s + _(", Midrange");
     } else {
       s = _("Midrange");
     }
   }
   if ((*iter)[m_columns.type] & SPEAKER_TYPE_TWEETER) {
-    if (s.size() > 0) {
+    if (!s.empty()) {
       s = s + _(", Tweeter");
     } else {
       s = _("Tweeter");
     }
   }
-  if (s.size() == 0) {
+  if (s.empty()) {
     s = _("Unknown");
   }
   renderer.property_text() = s;

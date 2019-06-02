@@ -1,4 +1,3 @@
-
 project(gspeakers LANGUAGES C CXX)
 cmake_minimum_required(VERSION 3.10)
 
@@ -6,7 +5,7 @@ find_package(GTK2 REQUIRED COMPONENTS gtk gtkmm)
 find_package(LibXml2 REQUIRED)
 find_package(PkgConfig REQUIRED)
 
-#pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+# pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
@@ -17,4 +16,4 @@ add_subdirectory(pixmaps)
 add_subdirectory(xml)
 
 install(TARGETS gspeakers RUNTIME DESTINATION bin)
-install(FILES gspeakers.desktop DESTINATION /usr/share/applications)
+#install(FILES gspeakers.desktop DESTINATION /usr/share/applications)

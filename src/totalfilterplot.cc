@@ -56,7 +56,7 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Col
 
   /* Om *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
    * of thestd::vector */
-  if ((position != -1) && (m_points.size() > 0)) {
+  if ((position != -1) && (!m_points.empty())) {
     m_points[position] = points;
   } else {
     m_points.push_back(points);

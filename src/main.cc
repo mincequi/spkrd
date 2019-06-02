@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
   // mw.show_all_children();
   // signal_plot_crossover();
 
-  kit.run(mw);
+  Gtk::Main::run(mw);
   //  std::cout << c1;
   /* save settings */
   try {

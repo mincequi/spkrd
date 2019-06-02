@@ -13,6 +13,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
                 filter64.png
                 speaker64.png
                 stock_plot_crossover_24.png
-          DESTINATION /usr/share/applications)
+          DESTINATION share/pixmaps)
 
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
