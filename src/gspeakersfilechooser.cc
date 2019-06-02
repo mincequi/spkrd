@@ -18,17 +18,15 @@
 */
 
 #include "gspeakersfilechooser.h"
-#include <gtkmm/stock.h>
 
-#include <iostream>
+#include <gtkmm/stock.h>
 
 GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title,
                                                        Gtk::FileChooserAction action,
-                                                       const std::string& default_filename) {
+                                                       const std::string& default_filename)
+    : m_file_chooser(std::make_unique<Gtk::FileChooserDialog>(title, action)) {
   bool flag = false;
-  m_filename = "";
 
-  m_file_chooser = new Gtk::FileChooserDialog(title, action);
   m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
   switch (action) {
   case Gtk::FILE_CHOOSER_ACTION_OPEN:
@@ -45,9 +43,8 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
     m_file_chooser->set_filename(default_filename);
   }
 
-  int r;
   while (!flag) {
-    r = m_file_chooser->run();
+    auto r = m_file_chooser->run();
     switch (r) {
     case FILE_CHOOSER_SAVE:
     case FILE_CHOOSER_OPEN:

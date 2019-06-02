@@ -22,9 +22,13 @@
 
 #include <gtkmm/filechooserdialog.h>
 
+#include <memory>
+
 class GSpeakersFileChooserDialog {
 public:
   enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL };
+
+public:
   GSpeakersFileChooserDialog(const Glib::ustring& title,
                              Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
                              const std::string& default_filename = "");
@@ -32,7 +36,7 @@ public:
 
 private:
   Glib::ustring m_filename;
-  Gtk::FileChooserDialog* m_file_chooser;
+  std::unique_ptr<Gtk::FileChooserDialog> m_file_chooser;
 };
 
 #endif
