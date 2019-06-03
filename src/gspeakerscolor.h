@@ -18,13 +18,14 @@
 #ifndef __GSPEAKERS_COLOR
 #define __GSPEAKERS_COLOR
 
-#include <gtkmm.h>
 #include <string>
+#include <vector>
 
 class GSpeakersColor {
 public:
   GSpeakersColor();
 
+  /// Get the color string and cycle to the next color
   std::string const& get_color_string();
 
   void unget_color_string(const std::string& s);

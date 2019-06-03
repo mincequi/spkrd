@@ -32,8 +32,11 @@
 #include <gtkmm/box.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/table.h>
 #include <gtkmm/treemodel.h>
+#include <gtkmm/treeview.h>
 
 /*
  * This class implements a TreeView connected with a ListStore

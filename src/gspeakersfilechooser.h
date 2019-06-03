@@ -32,7 +32,8 @@ public:
   GSpeakersFileChooserDialog(const Glib::ustring& title,
                              Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
                              const std::string& default_filename = "");
-  Glib::ustring& get_filename();
+
+  Glib::ustring const& get_filename() const { return m_filename; }
 
 private:
   Glib::ustring m_filename;

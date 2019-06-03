@@ -45,12 +45,13 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   }
 
   while (!flag) {
-    auto r = m_file_chooser->run();
-    switch (r) {
+    auto file_option = m_file_chooser->run();
+    switch (file_option) {
     case FILE_CHOOSER_SAVE:
     case FILE_CHOOSER_OPEN:
       m_filename = m_file_chooser->get_filename();
       m_file_chooser->hide();
+
       if (!m_filename.empty()) {
         flag = true;
       }
@@ -65,5 +66,3 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
     }
   }
 }
-
-Glib::ustring& GSpeakersFileChooserDialog::get_filename() { return m_filename; }

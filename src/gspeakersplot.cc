@@ -26,11 +26,7 @@
 GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx,
                              int y_zero_freq, bool enable_sec_scale) {
   m_lower_x = lower_x;
-  m_upper_x = upper_x;
-  if (m_upper_x > 10000)
-    m_upper_x = 20000;
-  else
-    m_upper_x = 1000;
+  m_upper_x = upper_x > 10000 ? 20000 : 1000;
   m_lower_y = lower_y;
   m_upper_y = upper_y;
   m_logx = logx;
@@ -38,6 +34,7 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_linesize = 1;
   m_enable_sec_scale = static_cast<int>(enable_sec_scale);
   visible = false;
+
   m_y_label1 = "";
   m_y_label2 = "";
 }
@@ -52,28 +49,23 @@ bool GSpeakersPlot::on_expose_event(GdkEventExpose* event) {
                               event->area.x, event->area.y, event->area.x, event->area.y,
                               event->area.width, event->area.height);
   m_selected_plot = -1;
-  // std::cout << "GSpeakersPlot: on_expose" << std::endl;
 
   return false;
 }
 
-bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
-// void GSpeakersPlot::on_show()
-{
+bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event) {
   /* Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap, will probably be
      faster than redrawing the entire thing every time */
-#ifdef OUTPUT_DEBUG
-  // std::cout << "GSpeakersPlot::on_configure_event" << std::endl;
-#endif
   visible = true;
   m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(),
                                     get_allocation().get_height(), -1);
 
   m_refGC = get_style()->get_fg_gc(get_state());
-
   m_refColormap = m_refGC->get_colormap();
+
   white = Gdk::Color("white");
   black = Gdk::Color("black");
+
   m_refColormap->alloc_color(white);
   m_refColormap->alloc_color(black);
 
@@ -89,12 +81,10 @@ bool GSpeakersPlot::on_configure_event(GdkEventConfigure* event)
 
 int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
                             Gdk::Color& ref_color) {
-#ifdef OUTPUT_DEBUG
-  // std::cout << "GSpeakersPlot: on add plot" << std::endl;
-#endif
   if (visible) {
     m_refGC->set_rgb_fg_color(ref_color);
   }
+
   m_visible_plots.push_back(true);
   m_colors.push_back(ref_color);
   m_points.push_back(ref_point_vector);
@@ -102,14 +92,9 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
   int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   int half_space_x = std::round(total_space_x / 2);
 
-  // auto const box_x = BOX_FRAME_SIZE;
-  // auto const box_y = BOX_FRAME_SIZE;
-  // auto const box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   auto const box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
   std::vector<Gdk::Point> points;
-
-  double f_div, f_mapped;
 
   int x, y;
 
@@ -117,26 +102,26 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
     if (m_upper_x == 20000) {
       if (point.get_x() < 100) {
         /* Divide by 10 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 10.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 10.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
       } else if (point.get_x() >= 100) {
         /* Divide by 100 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 100.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 100.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = std::round(BOX_FRAME_SIZE + half_space_x / 2 + std::round(half_space_x / 2 * f_mapped));
       } else if (point.get_x() >= 1000) {
         /* Divide by 1000 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 1000.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 1000.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
       } else if (point.get_x() >= 10000) {
         /* Divide by 1000 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 10000.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 10000.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x +
                        std::round((half_space_x / 2) * f_mapped));
@@ -145,14 +130,14 @@ int GSpeakersPlot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector,
     } else {
       if (point.get_x() < 100) {
         /* Divide by 10 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 10.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 10.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
       } else if (point.get_x() >= 100) {
         /* Divide by 100 to only log numbers 0 < number < 10 */
-        f_div = point.get_x() / 100.0;
-        f_mapped = std::log10(f_div);
+        auto const f_div = point.get_x() / 100.0;
+        auto const f_mapped = std::log10(f_div);
         /* This is the x coordinate */
         x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
       }

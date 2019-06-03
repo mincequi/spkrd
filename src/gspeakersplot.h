@@ -28,23 +28,20 @@
 #include <string>
 #include <vector>
 
-/* This is max and min y-axis-values */
-#define MAX_NEG_VALUE -40
-#define MAX_POS_VALUE 10
-/* 30 is a nice little space to have between the graph and the window-border, especially if
-   you're on aa fonts */
-#define BOX_FRAME_SIZE 30
-/* We want vertical lines on every 5 dB */
-#define N_VERTICAL_LINES (2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10) - 1
-/* Upper frequency limit */
-#define UPPER_LIMIT 1000
+/// This is max and min y-axis-values
+constexpr auto MAX_NEG_VALUE = -40;
+constexpr auto MAX_POS_VALUE = 10;
+/// 30 is a nice little space to have between the graph and the window-border
+constexpr auto BOX_FRAME_SIZE = 30;
+/// We want vertical lines on every 5 dB
+constexpr auto N_VERTICAL_LINES = (2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10) - 1;
+/// Upper frequency limit
+constexpr auto UPPER_LIMIT = 1000;
 
-/*
- * Point class to exchange plot coordinates between classes.
- *
- * I need a double on the y-axis since decimal values are required
- * in the conversion to axis mappes coordinates
- */
+/// Point class to exchange plot coordinates between classes.
+///
+/// I need a double on the y-axis since decimal values are required
+/// in the conversion to axis mappes coordinates
 namespace GSpeakers {
 
 class Point {
