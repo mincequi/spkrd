@@ -21,6 +21,7 @@
 #define __GSPEAKERS_SETTINGSDLG_H
 
 #include "common.h"
+
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/fileselection.h>
@@ -47,13 +48,29 @@ enum Settings {
 class SettingsDialog : public Gtk::Dialog {
 public:
   SettingsDialog();
+
   ~SettingsDialog() override = default;
 
 private:
+  void on_close();
+  void on_spice_browse();
+  void on_config_option_change(GSpeakers::Settings setting);
+
+private:
+  void initialise_general_page();
+  void initialise_toolbar_page();
+  void initialise_spice_page();
+  void initialise_driver_page();
+  void initialise_crossover_page();
+
+  void restore_settings();
+  void connect_signals();
+
+private:
   Gtk::Notebook m_main_notebook;
+
   Gtk::Button m_spice_browse_button;
   Gtk::Entry m_spice_path_entry;
-
   Gtk::RadioButton m_spice_use_berkley;
   Gtk::RadioButton m_spice_use_ngspice;
   Gtk::RadioButton m_spice_use_gnucap;
@@ -71,11 +88,6 @@ private:
   Gtk::Button* close_button;
 
   std::string m_filename;
-
-private:
-  void on_close();
-  void on_spice_browse();
-  void on_config_option_change(GSpeakers::Settings setting);
 };
 
 #endif
