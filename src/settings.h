@@ -32,18 +32,15 @@
 #include <sigc++/sigc++.h>
 
 #include <map>
-#include <stdexcept>
 #include <string>
 
 class Settings : public sigc::trackable {
-private:
-  std::map<const std::string, std::string> m_map;
-  std::string m_filename;
 
 public:
   Settings();
 
   void load(const std::string& filename) noexcept(false);
+
   void save(const std::string& filename) noexcept(false);
   void save() noexcept(false);
 
@@ -72,12 +69,16 @@ public:
 
   bool exists(const std::string& k);
 
-  virtual void defaultSettings();
+  virtual void defaultSettings() {}
 
   static std::string Escape(const std::string& t);
   static std::string Unescape(const std::string& t);
 
   sigc::signal1<void, const std::string&> settings_changed;
+
+private:
+  std::map<const std::string, std::string> m_map;
+  std::string m_filename;
 };
 
 #endif

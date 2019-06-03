@@ -30,31 +30,29 @@
 #include <string>
 #include <vector>
 
-/*
- * This is a class that handles a list of boxes
- */
+/// This is a class that handles a list of boxes
 class BoxList {
 public:
   BoxList() = default;
 
-  /* Construct a part from an xml file */
+  /// Construct a part from an xml file
   BoxList(const std::string& filename);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
+  /// Convert data for a part to an xml node, throws GSpeakersException on failure
   void to_xml(const std::string& filename);
 
-  /* Print part data to stdout */
+  /// Print part data to stdout
   friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
-  /* Return the box_list vector */
+  /// \return box_list vector
   std::vector<Box>& box_list();
+
   std::vector<Box> const& box_list() const;
 
-  /* Clear all items in the list */
+  /// Clear all items in the list
   void clear();
 
 protected:
-  /* Member variables */
   std::vector<Box> m_box_list;
 };
 

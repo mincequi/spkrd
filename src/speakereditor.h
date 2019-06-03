@@ -41,8 +41,6 @@ public:
   Gtk::Widget& get_toolbar();
 
 protected:
-  bool updating_entries;
-
   /* callbacks */
   void on_cell_fixed_toggled(const Glib::ustring& path_string);
   void on_open_xml();
@@ -84,6 +82,9 @@ protected:
   virtual void add_columns();
   virtual void liststore_add_item(Speaker const& foo);
   void draw_imp_plot(Speaker& s, bool update = false);
+
+protected:
+  bool updating_entries;
 
   // Member widgets:
   Gtk::Table m_TreeViewTable;
@@ -155,7 +156,7 @@ protected:
     }
   };
 
-  /* vaious helper varaibles */
+  /* various helper variables */
   bool changed, new_xml_pressed;
   int index;
   ModelColumns m_columns;

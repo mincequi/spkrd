@@ -33,6 +33,7 @@ class PopupEntry;
 class CellRendererPopup : public Gtk::CellRendererText {
 public:
   CellRendererPopup();
+
   ~CellRendererPopup() override;
 
   PopupEntry* get_popup_entry();

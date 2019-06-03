@@ -36,7 +36,8 @@ class Box : public GSpeakersObject {
 public:
   Box(std::string id_string = "", int type = BOX_TYPE_SEALED, double vb1 = 20, double fb1 = 40,
       double vb2 = 0, double fb2 = 0, std::string speaker = "");
-  /* Construct box object from an xmlNode */
+
+  /// Construct from an xmlNode
   Box(xmlNodePtr parent);
 
   /* Convert data for a part to an xml node, throws GSpeakersException on failure */

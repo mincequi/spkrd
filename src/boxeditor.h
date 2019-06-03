@@ -39,6 +39,7 @@
 class BoxEditor : public Gtk::Frame {
 public:
   BoxEditor();
+
   ~BoxEditor() override = default;
 
   void on_optimize_button_clicked();

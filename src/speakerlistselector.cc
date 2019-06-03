@@ -76,9 +76,9 @@ void SpeakerListSelector::on_open_ok(Gtk::FileSelection* f) {
     signal_speakerlist_loaded(f->get_filename());
     g_settings.setValue("SpeakerListXml", f->get_filename());
     f_open->hide();
-  } catch (GSpeakersException e) {
-    Gtk::MessageDialog m(e.what(), Gtk::MESSAGE_ERROR);
-    m.run();
+  } catch (GSpeakersException const& error) {
+    Gtk::MessageDialog message(error.what(), Gtk::MESSAGE_ERROR);
+    message.run();
   }
 }
 
@@ -92,7 +92,7 @@ void SpeakerListSelector::on_speakerlist_loaded(std::string speaker_list_filenam
 
 void SpeakerListSelector::on_edit_speakers() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "SpeakerListSelector::on_edit_speakers" << std::endl;
+  std::cout << "SpeakerListSelector::on_edit_speakers\n";
 #endif
   speaker_liststore =
       std::make_unique<Speaker_ListStore>(&m_speaker_list, m_SpeakerXmlFilenameEntry.get_text());

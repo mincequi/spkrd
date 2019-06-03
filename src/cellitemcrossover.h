@@ -27,12 +27,8 @@
 
 #include <vector>
 
-/*
- * This is a cellitem for a crossover used in the current crossover treeview
- *
- * CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
- *
- */
+/// This is a cellitem for a crossover used in the current crossover treeview
+/// CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
 class CellItem_Crossover {
 public:
   CellItem_Crossover() = default;
@@ -41,7 +37,7 @@ public:
 
   CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
 
-  /* Construct a cellitem with children */
+  /// Construct a cellitem with children
   CellItem_Crossover(Glib::ustring label, std::vector<CellItem_Crossover> const& children);
 
 public:

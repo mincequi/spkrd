@@ -40,10 +40,9 @@
 #define UPPER_LIMIT 1000
 
 /*
- * Declare my own Point class which i can use to exchange
- * plot coordinates between classes.
+ * Point class to exchange plot coordinates between classes.
  *
- * I need a double on the y-axis since i need decimal values
+ * I need a double on the y-axis since decimal values are required
  * in the conversion to axis mappes coordinates
  */
 namespace GSpeakers {
@@ -146,8 +145,8 @@ private:
   Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
   Glib::RefPtr<Gdk::GC> m_refGC;
   Glib::RefPtr<Gdk::Colormap> m_refColormap;
-  // Glib::RefPtr<Pango::Font> m_refFont;
   Glib::RefPtr<Pango::Layout> m_refLayout;
+
   Gdk::Color black, white;
 };
 

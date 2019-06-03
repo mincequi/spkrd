@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <unistd.h>
 
 Settings::Settings() { defaultSettings(); }
@@ -333,8 +334,4 @@ void Settings::setValue(const std::string& k, bool v) {
   }
 }
 
-bool Settings::exists(const std::string& k) { return (m_map.count(k) != 0); }
-
-void Settings::defaultSettings() {
-  // virtual
-}
+bool Settings::exists(const std::string& k) { return m_map.count(k) != 0; }

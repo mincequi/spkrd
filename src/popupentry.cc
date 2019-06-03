@@ -23,25 +23,24 @@
 
 #include "popupentry.h"
 
-#include <gtk/gtkentry.h> /* see XXX below */
+#include <gtk/gtkentry.h>
 #include <gtkmm.h>
-#include <iostream>
+
+#include <cstdio>
+#include <cstring>
 #include <utility>
 
 PopupEntry::PopupEntry(Glib::ustring path)
     : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(),
       path_(std::move(path)), entry_(nullptr), editing_canceled_(false) {
-  std::cout << "PopupEntry::PopupEntry" << std::endl;
 
-  // Gtk::HBox *const hbox = new Gtk::HBox(false, 0);
-  // add(*Gtk::manage(hbox));
+  std::puts("PopupEntry::PopupEntry");
+
   spin_button_ = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(0, 0, 1000, 0.1, 1.0)), 0.0, 4));
   entry_ = spin_button_;
   entry_->set_has_frame(false);
-  entry_->gobj()->is_cell_renderer = true; // XXX
+  entry_->gobj()->is_cell_renderer = true;
 
-  // hbox->pack_start(*spin_button_, Gtk::PACK_SHRINK);
-  // hbox->pack_start(*spin_button_);
   add(*spin_button_);
   set_flags(Gtk::CAN_FOCUS);
   add_events(Gdk::KEY_PRESS_MASK | Gdk::KEY_RELEASE_MASK);
@@ -64,25 +63,25 @@ void PopupEntry::select_region(int start_pos, int end_pos) {
 }
 
 bool PopupEntry::get_editing_canceled() const {
-  std::cout << "PopupEntry::get_editing_canceled" << std::endl;
+
+  std::puts("PopupEntry::get_editing_canceled");
+
   return editing_canceled_;
 }
 
 // static
 int PopupEntry::get_button_width() {
-  std::cout << "PopupEntry::get_button_width" << std::endl;
+  std::puts("PopupEntry::get_button_width");
+
   Gtk::Window window(Gtk::WINDOW_POPUP);
 
-  auto* const button = new Gtk::Button();
-  window.add(*Gtk::manage(button));
+  window.add(*Gtk::manage(new Gtk::Button()));
 
   // Urgh.  Hackish :/
   window.move(-500, -500);
   window.show_all();
 
-  Gtk::Requisition requisition = {
-      0,
-  };
+  Gtk::Requisition requisition = {0};
   window.size_request(requisition);
 
   return requisition.width;
@@ -91,7 +90,8 @@ int PopupEntry::get_button_width() {
 sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return signal_arrow_clicked_; }
 
 bool PopupEntry::on_key_press_event(GdkEventKey* event) {
-  std::cout << "PopupEntry::on_key_press_event" << std::endl;
+
+  std::puts("PopupEntry::on_key_press_event");
   if (event->keyval == GDK_Escape) {
     editing_canceled_ = true;
 
@@ -106,7 +106,7 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
   // Hackish :/ Synthesize a key press event for the entry.
 
   GdkEvent tmp_event;
-  memcpy(&tmp_event, event, sizeof(GdkEventKey));
+  std::memcpy(&tmp_event, event, sizeof(GdkEventKey));
 
   tmp_event.key.window = Glib::unwrap(entry_->get_window()); // XXX
   tmp_event.key.send_event = 1;
@@ -115,39 +115,31 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
 
   return Gtk::EventBox::on_key_press_event(event);
 }
-/*
-bool PopupEntry::on_button_press_event(GdkEventButton *event)
-{
-  std::cout << "PopupEntry::on_button_press_event" << std::endl;
-  return true;
-}
-*/
+
 void PopupEntry::start_editing_vfunc(GdkEvent* event) {
-  std::cout << "PopupEntry::start_editing_vfunc" << std::endl;
-  using sigc::mem_fun;
+  std::puts("PopupEntry::start_editing_vfunc");
 
   entry_->select_region(0, -1);
-
-  entry_->signal_activate().connect(mem_fun(*this, &Self::on_entry_activate));
-  // entry_->signal_key_press_event().connect(mem_fun(*this, &Self::on_entry_key_press_event));
+  entry_->signal_activate().connect(sigc::mem_fun(*this, &Self::on_entry_activate));
 }
 
 void PopupEntry::on_entry_activate() {
-  std::cout << "PopupEntry::on_entry_activate" << std::endl;
+  std::puts("PopupEntry::on_entry_activate");
   editing_done();
-  // remove_widget(); // TODO: this line causes the widget to be removed twice -- dunno why
 }
 
 bool PopupEntry::on_entry_key_press_event(GdkEventKey* event) {
-  std::cout << "PopupEntry::on_entry_key_press_event" << std::endl;
-  if (event->keyval == GDK_Escape) {
-    editing_canceled_ = true;
 
-    editing_done();
-    remove_widget();
+  std::puts("PopupEntry::on_entry_key_press_event");
 
-    return true;
+  if (event->keyval != GDK_Escape) {
+    return false;
   }
 
-  return false;
+  editing_canceled_ = true;
+
+  editing_done();
+  remove_widget();
+
+  return true;
 }

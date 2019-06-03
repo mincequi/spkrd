@@ -82,7 +82,7 @@ void TotalFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 void TotalFilterPlot::on_plot_crossover() {}
 
 bool TotalFilterPlot::on_delete_event(GdkEventAny* event) {
-  m_color.release();
+  m_color.reset();
   /* Don't wanna delete this window */
   return true;
 }

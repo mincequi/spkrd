@@ -48,31 +48,30 @@ BoxList::BoxList(const std::string& filename) {
   }
 }
 
-void BoxList::to_xml(const std::string& filename) {
+void BoxList::to_xml(std::string const& filename) {
 
   xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
   xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
   xmlDocSetRootElement(doc, node);
 
-  /* Iterate through all boxes */
   for (auto& from : m_box_list) {
     from.to_xml_node(node);
   }
 
-  /* Save xml file */
+  // Save xml file
   if (xmlSaveFile(filename.c_str(), doc) == -1) {
     throw GSpeakersException(_("BoxList: Could not save to ") + filename);
   }
 }
 
-std::ostream& operator<<(std::ostream& o, const BoxList& box_list) {
-  o << "Box List\n";
+std::ostream& operator<<(std::ostream& output, const BoxList& box_list) {
+  output << "Box List\n";
 
   for (const auto& from : box_list.m_box_list) {
-    o << from;
+    output << from;
   }
-  return o;
+  return output;
 }
 
 std::vector<Box>& BoxList::box_list() { return m_box_list; }

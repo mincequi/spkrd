@@ -95,7 +95,6 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
                                                           Gtk::CellRendererState) {
   std::cout << "CellRendererPopup::start_editing_vfunc\n";
 
-  // If the cell isn't editable we return 0.
   if (!property_editable()) {
     return nullptr;
   }

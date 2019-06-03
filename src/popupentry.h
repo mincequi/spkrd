@@ -35,6 +35,7 @@
 class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
 public:
   explicit PopupEntry(Glib::ustring path);
+
   ~PopupEntry() override;
 
   Glib::ustring get_path() const;
@@ -53,7 +54,7 @@ public:
 protected:
   bool on_key_press_event(GdkEventKey* event) override;
   void start_editing_vfunc(GdkEvent* event) override;
-  // virtual bool on_button_press_event(GdkEventButton *event);
+
 private:
   using Self = PopupEntry;
 
