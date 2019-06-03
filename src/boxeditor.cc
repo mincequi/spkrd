@@ -238,7 +238,7 @@ void BoxEditor::on_append_to_boxlist_clicked() {
   signal_add_to_boxlist(m_box);
 }
 
-void BoxEditor::on_box_selected(Box* const b) {
+void BoxEditor::on_box_selected(Box* b) {
   if (!disable_signals) {
     disable_signals = true;
 #ifdef OUTPUT_DEBUG
