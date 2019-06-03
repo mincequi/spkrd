@@ -29,8 +29,9 @@
 #include <utility>
 
 FreqRespEditor::FreqRespEditor(std::string filename)
-    : m_table(15, 4, false), m_save_button(Gtk::Stock::SAVE), m_saveas_button(Gtk::Stock::SAVE_AS),
-      m_close_button(Gtk::Stock::CLOSE), m_filename(std::move(filename)) {
+    : m_table(15, 4, false), dbmag_entries(30), m_save_button(Gtk::Stock::SAVE),
+      m_saveas_button(Gtk::Stock::SAVE_AS), m_close_button(Gtk::Stock::CLOSE),
+      m_filename(std::move(filename)) {
 
   set_modal();
 
@@ -54,7 +55,8 @@ FreqRespEditor::FreqRespEditor(std::string filename)
   frame_vbox->set_spacing(12);
   frame_vbox->pack_start(m_table);
 
-  dbmag_entries.resize(30, Gtk::manage(new Gtk::Entry()));
+  std::generate(begin(dbmag_entries), end(dbmag_entries),
+                []() { return Gtk::manage(new Gtk::Entry()); });
 
   for (int j = 0; j < 15; j++) {
     m_table.attach(*dbmag_entries[2 * j], 1, 2, j, j + 1);
