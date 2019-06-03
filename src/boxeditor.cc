@@ -37,7 +37,6 @@ BoxEditor::BoxEditor()
       m_bass_speaker_combo(), m_speaker_qts_label("", Gtk::ALIGN_START),
       m_speaker_vas_label("", Gtk::ALIGN_START), m_speaker_fs_label("", Gtk::ALIGN_START),
       m_box_type_optionmenu(), m_option_menu() {
-  m_box = nullptr;
 
   speaker_list_is_loaded = false;
   disable_signals = false;
@@ -79,7 +78,7 @@ BoxEditor::BoxEditor()
 
   m_bass_speaker_combo.get_entry()->set_editable(false);
   m_bass_speaker_combo.get_entry()->signal_changed().connect(
-      mem_fun(*this, &BoxEditor::on_combo_entry_changed));
+      sigc::mem_fun(*this, &BoxEditor::on_combo_entry_changed));
 
   m_id_string_entry.signal_changed().connect(sigc::bind<int>(
       sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
@@ -239,7 +238,7 @@ void BoxEditor::on_append_to_boxlist_clicked() {
   signal_add_to_boxlist(m_box);
 }
 
-void BoxEditor::on_box_selected(Box* b) {
+void BoxEditor::on_box_selected(Box* const b) {
   if (!disable_signals) {
     disable_signals = true;
 #ifdef OUTPUT_DEBUG
@@ -252,19 +251,19 @@ void BoxEditor::on_box_selected(Box* b) {
       m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
 
       /* Set combo to proper speaker */
-
       if (speaker_list_is_loaded) {
+
         std::cout << b << std::endl;
+
         m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
         std::vector<Glib::ustring> popdown_strings;
 
         for (auto const& speaker : m_speaker_list->speaker_list()) {
-          if (((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) &&
-              (m_current_speaker.get_id_string() != speaker.get_id_string())) {
+          if ((speaker.get_type() & SPEAKER_TYPE_BASS) != 0 &&
+              m_current_speaker.get_id_string() != speaker.get_id_string()) {
             popdown_strings.emplace_back(speaker.get_id_string());
           }
         }
-
         popdown_strings.insert(popdown_strings.begin(), m_current_speaker.get_id_string());
         m_bass_speaker_combo.set_popdown_strings(popdown_strings);
       }
@@ -274,7 +273,7 @@ void BoxEditor::on_box_selected(Box* b) {
       m_box_type_optionmenu.set_history(b->get_type() - 1);
       if (m_box->get_type() == BOX_TYPE_SEALED) {
         m_fb1_entry.set_sensitive(false);
-        double qr = (1 / m_current_speaker.get_qts()) / (1 / 0.707 - 0.1);
+        double const qr = (1.0 / m_current_speaker.get_qts()) / (1.0 / 0.707 - 0.1);
         m_box->set_fb1(qr * m_current_speaker.get_fs());
         m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
       } else {
@@ -300,12 +299,12 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
     std::vector<Glib::ustring> popdown_strings;
 
     /* If we have got a selected box, insert the items with the driver belonging to the current
-       speaker at the top position, if we havn't got a selected box: insert all drivers and don't
+       speaker at the top position, if we haven't got a selected box: insert all drivers and don't
        care about the sort */
     if (m_box != nullptr) {
       for (auto const& speaker : m_speaker_list->speaker_list()) {
         if (((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) &&
-            (m_box->get_speaker() != speaker.get_id_string())) {
+            m_box->get_speaker() != speaker.get_id_string()) {
           popdown_strings.emplace_back(speaker.get_id_string());
         }
       }
@@ -353,24 +352,21 @@ void BoxEditor::on_box_data_changed(int i) {
 #ifdef OUTPUT_DEBUG
     std::cout << "BoxEditor::on_box_data_changed";
 #endif
-    double qr;
-    // char *str = NULL;
-    // GString *buffer;
-
     switch (i) {
-    case SEALED_SELECTED:
+    case SEALED_SELECTED: {
 #ifdef OUTPUT_DEBUG
       std::cout << "BoxEditor::on_box_data_changed: sealed enclosure" << std::endl;
 #endif
       m_box->set_type(BOX_TYPE_SEALED);
       m_fb1_entry.set_sensitive(false);
       // buffer = g_string_new(str);
-      qr = (1 / m_current_speaker.get_qts()) / (1 / 0.707 - 0.1);
+      double qr = (1 / m_current_speaker.get_qts()) / (1 / 0.707 - 0.1);
       m_box->set_fb1(qr * m_current_speaker.get_fs());
       // g_string_printf(buffer, "%f", m_box->get_fb1());
       // m_fb1_entry.set_text( Glib::ustring(buffer->str) );
       m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
       break;
+    }
     case PORTED_SELECTED:
 #ifdef OUTPUT_DEBUG
       std::cout << "BoxEditor::on_box_data_changed: ported enclosure" << std::endl;

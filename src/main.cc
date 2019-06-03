@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 
 #include <gtkmm/main.h>
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
@@ -29,9 +30,8 @@ int main(int argc, char* argv[]) {
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
 #endif
   } catch (std::runtime_error const& e) {
-#ifdef OUTPUT_DEBUG
     std::cout << "Main: " << e.what() << std::endl;
-#endif
+
 #ifdef TARGET_WIN32
     Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") +
                               _("gspeakers2.conf created in current directory"),
@@ -58,8 +58,6 @@ int main(int argc, char* argv[]) {
 
   g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
 
-  std::cout << _("Testing gettext") << std::endl;
-
   gspeakers_stock_init();
 
   MainWindow mw;
@@ -69,9 +67,7 @@ int main(int argc, char* argv[]) {
   try {
     g_settings.save();
   } catch (std::runtime_error const& e) {
-#ifdef OUTPUT_DEBUG
     std::cout << "Main: " << e.what() << std::endl;
-#endif
   }
   return 0;
 }

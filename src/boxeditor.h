@@ -57,6 +57,7 @@ protected:
   void on_box_data_changed(int i);
 
 protected:
+  // TODO Use Gtk::Grid
   Gtk::Table m_table;
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
@@ -67,7 +68,7 @@ protected:
   Gtk::Menu m_option_menu;
 
 private:
-  Box* m_box;
+  Box* m_box = nullptr;
   SpeakerList* m_speaker_list;
   Speaker m_current_speaker;
   bool disable_signals;
