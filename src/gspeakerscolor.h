@@ -25,7 +25,8 @@ class GSpeakersColor {
 public:
   GSpeakersColor();
 
-  std::string get_color_string();
+  std::string const& get_color_string();
+
   void unget_color_string(const std::string& s);
 
 private:

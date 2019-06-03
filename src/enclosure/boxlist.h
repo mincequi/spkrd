@@ -38,7 +38,7 @@ public:
   /// Construct a part from an xml file
   BoxList(const std::string& filename);
 
-  /// Convert data for a part to an xml node, throws GSpeakersException on failure
+  /// Convert data for a part to an xml node, throws std::runtime_error on failure
   void to_xml(const std::string& filename);
 
   /// Print part data to stdout

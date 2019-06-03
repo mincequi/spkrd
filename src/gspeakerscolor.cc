@@ -59,8 +59,8 @@ GSpeakersColor::GSpeakersColor() {
   m_colors.emplace_back("coral");         // 255 127  80
 }
 
-std::string GSpeakersColor::get_color_string() {
-  std::string s = m_colors[m_counter];
+std::string const& GSpeakersColor::get_color_string() {
+  std::string const& s = m_colors[m_counter];
   m_counter = (m_counter + 1) % m_colors.size();
   return s;
 }
@@ -71,8 +71,6 @@ void GSpeakersColor::unget_color_string(const std::string& s) {
 }
 
 std::vector<std::string>::iterator GSpeakersColor::get_iterator_from_string(const std::string& s) {
-
   auto const location = std::find(begin(m_colors), end(m_colors), s);
-
   return location == end(m_colors) ? location : begin(m_colors);
 }

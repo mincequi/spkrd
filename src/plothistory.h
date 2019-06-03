@@ -67,20 +67,7 @@ protected:
   virtual void add_columns();
   virtual void liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color&);
 
-  // Member widgets:
-  Gtk::Table m_Table;
-  Gtk::ScrolledWindow m_ScrolledWindow;
-  Gtk::TreeView m_TreeView;
-  Glib::RefPtr<Gtk::ListStore> m_refListStore;
-  // Gtk::Button m_RemoveButton;
-  Gtk::VBox m_vbox;
-
-  /* Data containers */
-  BoxList m_box_list;
-  SpeakerList m_speaker_list;
-
-  GSpeakersColor m_color_list;
-
+protected:
   /* This is used in the treemodel */
   struct ModelColumns : public Gtk::TreeModelColumnRecord {
     Gtk::TreeModelColumn<int> id;
@@ -111,6 +98,22 @@ protected:
       add(speaker_string);
     }
   };
+
+protected:
+  // Member widgets:
+  Gtk::Table m_Table;
+  Gtk::ScrolledWindow m_ScrolledWindow;
+  Gtk::TreeView m_TreeView;
+  Glib::RefPtr<Gtk::ListStore> m_refListStore;
+
+  Gtk::VBox m_vbox;
+
+  /* Data containers */
+  BoxList m_box_list;
+  SpeakerList m_speaker_list;
+
+  GSpeakersColor m_color_list;
+
   ModelColumns m_columns;
 
   /* Additional member variables */

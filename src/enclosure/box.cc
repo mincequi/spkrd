@@ -37,11 +37,11 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject() {
   if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("box"))) {
     try {
       parse_id_string(parent->children);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: box node not found"));
+    throw std::runtime_error(_("Box: box node not found"));
   }
 }
 
@@ -109,38 +109,38 @@ void Box::parse_id_string(xmlNodePtr node) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: id_string node not found"));
+    throw std::runtime_error(_("Box: id_string node not found"));
   }
 }
 
 void Box::parse_type(xmlNodePtr node) {
-  if ((node != nullptr) && (std::string((char*)node->name) == std::string("type"))) {
+  if ((node != nullptr) && (std::string((char*)node->name) == "type")) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_vb1(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: type node not found"));
+    throw std::runtime_error(_("Box: type node not found"));
   }
 }
 
 void Box::parse_vb1(xmlNodePtr node) {
   if ((node != nullptr) && (std::string((char*)node->name) == std::string("vb1"))) {
-    // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vb1;
+
     m_vb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_fb1(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: vb1 node not found"));
+    throw std::runtime_error(_("Box: vb1 node not found"));
   }
 }
 
@@ -150,25 +150,25 @@ void Box::parse_fb1(xmlNodePtr node) {
     m_fb1 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_vb2(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: fb1 node not found"));
+    throw std::runtime_error(_("Box: fb1 node not found"));
   }
 }
 
 void Box::parse_vb2(xmlNodePtr node) {
   if ((node != nullptr) && (std::string((char*)node->name) == std::string("vb2"))) {
-    // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vb2;
+
     m_vb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_fb2(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: vb2 node not found"));
+    throw std::runtime_error(_("Box: vb2 node not found"));
   }
 }
 
@@ -178,11 +178,11 @@ void Box::parse_fb2(xmlNodePtr node) {
     m_fb2 = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_speaker(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Box: fb2 node not found"));
+    throw std::runtime_error(_("Box: fb2 node not found"));
   }
 }
 
@@ -191,6 +191,6 @@ void Box::parse_speaker(xmlNodePtr node) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_fb2;
     m_speaker = std::string((char*)xmlNodeGetContent(node));
   } else {
-    throw GSpeakersException(_("Box: speaker node not found"));
+    throw std::runtime_error(_("Box: speaker node not found"));
   }
 }

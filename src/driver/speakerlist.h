@@ -35,13 +35,13 @@ class SpeakerList {
 public:
   SpeakerList() = default;
 
-  /* Construct a part from an xml file */
+  /// Construct a part from an xml file
   SpeakerList(const std::string& filename);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
+  /// Convert data for a part to an xml node, throws std::runtime_error on failure
   void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
-  /* Print part data to stdout */
+  /// Print part data to stdout
   friend std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list);
 
   std::vector<Speaker>& speaker_list();
@@ -50,7 +50,7 @@ public:
 
   Speaker get_speaker_by_id_string(const std::string& id_string);
 
-  /* Remove all items from the speakerlist */
+  /// Remove all items from the speakerlist
   void clear();
 
 protected:

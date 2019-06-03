@@ -25,12 +25,15 @@
 
 #include "crossover.h"
 #include "speakerlist.h"
+
 #include <gdkmm/color.h>
 #include <gdkmm/colormap.h>
 #include <gdkmm/gc.h>
 #include <gdkmm/pixmap.h>
 #include <gtkmm/drawingarea.h>
+
 #include <pangomm/layout.h>
+
 #include <string>
 #include <vector>
 
@@ -84,6 +87,7 @@ private:
   void draw_damp_net(int x, int y, int part_width, int part_height, Part& r1, Part& r2);
   void draw_driver(int x, int y, int part_width, int part_height, Speaker& speaker);
 
+private:
   bool visible;
   bool scale_image_parts;
 

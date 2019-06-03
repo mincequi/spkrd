@@ -25,6 +25,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
                                                        Gtk::FileChooserAction action,
                                                        const std::string& default_filename)
     : m_file_chooser(std::make_unique<Gtk::FileChooserDialog>(title, action)) {
+
   bool flag = false;
 
   m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
@@ -38,8 +39,8 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   default:
     break;
   }
-  //  m_file_chooser->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
-  if (default_filename.length() > 0) {
+
+  if (!default_filename.empty()) {
     m_file_chooser->set_filename(default_filename);
   }
 
@@ -50,7 +51,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
     case FILE_CHOOSER_OPEN:
       m_filename = m_file_chooser->get_filename();
       m_file_chooser->hide();
-      if (m_filename.length() > 0) {
+      if (!m_filename.empty()) {
         flag = true;
       }
       break;
@@ -63,7 +64,6 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
       break;
     }
   }
-  //  std::cout << "Got a filename: " << m_filename << std::endl;
 }
 
 Glib::ustring& GSpeakersFileChooserDialog::get_filename() { return m_filename; }

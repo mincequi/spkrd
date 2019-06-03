@@ -40,7 +40,7 @@ public:
   /// Construct from an xmlNode
   Box(xmlNodePtr parent);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
+  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
   xmlNodePtr to_xml_node(xmlNodePtr parent);
 
   /* Print part data to stdout */

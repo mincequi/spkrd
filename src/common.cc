@@ -125,7 +125,7 @@ bool& crossoverlist_modified() {
   return crossoverlist_mod;
 }
 
-bool& meassurementlist_modified() {
+bool& measurementlist_modified() {
   static bool meassurementlist_mod = false;
   return meassurementlist_mod;
 }

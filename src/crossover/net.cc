@@ -107,11 +107,11 @@ Net::Net(xmlNodePtr parent) {
   if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
     try {
       parse_type(parent->children);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: net node expected"));
+    throw std::runtime_error(_("Net: net node expected"));
   }
 }
 
@@ -120,11 +120,11 @@ void Net::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_lowpass_order(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: type node expected"));
+    throw std::runtime_error(_("Net: type node expected"));
   }
 }
 
@@ -133,11 +133,11 @@ void Net::parse_lowpass_order(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_order;
     try {
       parse_highpass_order(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: lowpass_order node expected"));
+    throw std::runtime_error(_("Net: lowpass_order node expected"));
   }
 }
 
@@ -146,11 +146,11 @@ void Net::parse_highpass_order(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_order;
     try {
       parse_has_imp_corr(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: highpass_order node expected"));
+    throw std::runtime_error(_("Net: highpass_order node expected"));
   }
 }
 
@@ -163,11 +163,11 @@ void Net::parse_has_imp_corr(xmlNodePtr node) {
     }
     try {
       parse_has_damp(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: has_imp_corr node expected"));
+    throw std::runtime_error(_("Net: has_imp_corr node expected"));
   }
 }
 
@@ -178,11 +178,11 @@ void Net::parse_has_damp(xmlNodePtr node) {
 
     try {
       parse_has_res(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: has_damp node expected"));
+    throw std::runtime_error(_("Net: has_damp node expected"));
   }
 }
 
@@ -193,11 +193,11 @@ void Net::parse_has_res(xmlNodePtr node) {
 
     try {
       parse_parts(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: has_res node expected"));
+    throw std::runtime_error(_("Net: has_res node expected"));
   }
 }
 
@@ -210,13 +210,13 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_imp_corr) {
       try {
         m_imp_corr_R = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_imp_corr_C = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
@@ -225,13 +225,13 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_damp) {
       try {
         m_damp_R1 = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_damp_R2 = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
@@ -240,19 +240,19 @@ void Net::parse_parts(xmlNodePtr node) {
     if (m_has_res) {
       try {
         m_res_R = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_res_C = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
       try {
         m_res_L = Part(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
@@ -262,18 +262,18 @@ void Net::parse_parts(xmlNodePtr node) {
     while (child != nullptr) {
       try {
         m_parts.emplace_back(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
     }
     try {
       parse_lowpass_family(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net: parts node expected"));
+    throw std::runtime_error(_("Net: parts node expected"));
   }
 }
 
@@ -282,11 +282,11 @@ void Net::parse_lowpass_family(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_family;
     try {
       parse_highpass_family(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net::parse_lowpass_family: lowpass_family node expected"));
+    throw std::runtime_error(_("Net::parse_lowpass_family: lowpass_family node expected"));
   }
 }
 
@@ -295,11 +295,11 @@ void Net::parse_highpass_family(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_family;
     try {
       parse_speaker(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net::parse_highpass_family: highpass_family node expected"));
+    throw std::runtime_error(_("Net::parse_highpass_family: highpass_family node expected"));
   }
 }
 
@@ -308,11 +308,11 @@ void Net::parse_speaker(xmlNodePtr node) {
     m_speaker = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_adv_imp_model(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net::parse_speaker: speaker node expected"));
+    throw std::runtime_error(_("Net::parse_speaker: speaker node expected"));
   }
 }
 
@@ -321,11 +321,11 @@ void Net::parse_adv_imp_model(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_adv_imp_model;
     try {
       parse_inv_pol(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Net::parse_adv_imp_model: adv_imp_model node expected"));
+    throw std::runtime_error(_("Net::parse_adv_imp_model: adv_imp_model node expected"));
   }
 }
 
@@ -333,7 +333,7 @@ void Net::parse_inv_pol(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "inv_pol", 7) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_inv_pol;
   } else {
-    throw GSpeakersException(_("Net::parse_inv_pol: inv_pol node expected"));
+    throw std::runtime_error(_("Net::parse_inv_pol: inv_pol node expected"));
   }
 }
 
@@ -584,7 +584,7 @@ std::string Net::to_SPICE(Speaker& s, bool use_gnucap) {
     of << ".end" << std::endl;
     of.close();
   } else {
-    throw GSpeakersException("Net::to_SPICE: could not write " + tmp_file);
+    throw std::runtime_error("Net::to_SPICE: could not write " + tmp_file);
   }
   return tmp_file;
 }

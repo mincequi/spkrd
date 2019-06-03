@@ -25,10 +25,11 @@ TotalFilterPlot::TotalFilterPlot() : plot(1, 20000), m_color(std::make_unique<Gd
 
   add(plot);
 
-  signal_plot_crossover.connect(mem_fun(*this, &TotalFilterPlot::on_plot_crossover));
-  signal_add_crossover_plot.connect(mem_fun(*this, &TotalFilterPlot::on_add_plot));
+  signal_plot_crossover.connect(sigc::mem_fun(*this, &TotalFilterPlot::on_plot_crossover));
+  signal_add_crossover_plot.connect(sigc::mem_fun(*this, &TotalFilterPlot::on_add_plot));
 
   plot.set_y_label(_("Magnitude / dB"));
+
   show_all();
 }
 

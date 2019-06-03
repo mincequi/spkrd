@@ -30,17 +30,17 @@ CrossoverList::CrossoverList(const std::string& filename) {
         while (children != nullptr) {
           try {
             m_crossover_list.emplace_back(children);
-          } catch (GSpeakersException const& e) {
+          } catch (std::runtime_error const& e) {
             throw e;
           }
           children = children->next;
         }
       }
     } else {
-      throw GSpeakersException(_("CrossoverList: crossoverlist node not found"));
+      throw std::runtime_error(_("CrossoverList: crossoverlist node not found"));
     }
   } else {
-    throw GSpeakersException(_("CrossoverList: Xml file not found"));
+    throw std::runtime_error(_("CrossoverList: Xml file not found"));
   }
 }
 
@@ -62,7 +62,7 @@ void CrossoverList::to_xml(const std::string& filename) {
 
   /* Save xml file */
   if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw GSpeakersException(_("CrossoverList: Could not save to ") + filename);
+    throw std::runtime_error(_("CrossoverList: Could not save to ") + filename);
   }
 }
 

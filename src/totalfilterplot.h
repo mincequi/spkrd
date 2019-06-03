@@ -38,8 +38,11 @@
 class TotalFilterPlot : public Gtk::Frame {
 public:
   TotalFilterPlot();
+
   ~TotalFilterPlot() override;
+
   void clear();
+
   int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:

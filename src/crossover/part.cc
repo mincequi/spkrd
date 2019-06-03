@@ -34,11 +34,11 @@ Part::Part(xmlNodePtr parent) : GSpeakersObject() {
   if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("part"))) {
     try {
       parse_type(parent->children);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Part: part node not found"));
+    throw std::runtime_error(_("Part: part node not found"));
   }
 }
 
@@ -47,11 +47,11 @@ void Part::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_value(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Part: type node not found"));
+    throw std::runtime_error(_("Part: type node not found"));
   }
 }
 
@@ -61,11 +61,11 @@ void Part::parse_value(xmlNodePtr node) {
     m_value = g_ascii_strtod((gchar*)xmlNodeGetContent(node), nullptr);
     try {
       parse_unit(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Part: value node not found"));
+    throw std::runtime_error(_("Part: value node not found"));
   }
 }
 
@@ -73,7 +73,7 @@ void Part::parse_unit(xmlNodePtr node) {
   if ((node != nullptr) && (std::string((char*)node->name) == std::string("unit"))) {
     m_unit = std::string((char*)xmlNodeGetContent(node));
   } else {
-    throw GSpeakersException(_("Part: unit node not found"));
+    throw std::runtime_error(_("Part: unit node not found"));
   }
 }
 

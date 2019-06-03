@@ -57,7 +57,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   try {
     m_box_list = BoxList(m_filename);
     boxlist_found = true;
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     std::cout << "BoxHistory::BoxHistory: " << e.what() << std::endl;
   }
   std::cout << "boxlist_found = " << boxlist_found << std::endl;
@@ -173,7 +173,7 @@ void BoxHistory::open_xml(const std::string& filename) {
         ->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
                      GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -189,7 +189,7 @@ void BoxHistory::append_xml(const std::string& filename) {
       m_box_list.box_list().push_back(from);
     }
     m_box_list.box_list().size();
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -300,7 +300,7 @@ void BoxHistory::on_save() {
     try {
       m_box_list.to_xml(m_filename);
       signal_enclosure_set_save_state(false);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
       m.run();
     }
@@ -326,7 +326,7 @@ void BoxHistory::save_as_xml(const std::string& filename) {
                      GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }

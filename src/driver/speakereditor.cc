@@ -59,7 +59,7 @@ Speaker_ListStore::Speaker_ListStore()
   try {
     m_speaker_list = new SpeakerList(m_filename);
     signal_speakerlist_loaded(m_speaker_list);
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     m_speaker_list = new SpeakerList();
     std::cout << "Speaker_ListStore::Speaker_ListStore: " << e.what() << std::endl;
   }
@@ -443,7 +443,7 @@ void Speaker_ListStore::on_save() {
       tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
       GSpeakers::driverlist_modified() = false;
       m_modified = false;
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
       m.run();
     }
@@ -463,7 +463,7 @@ void Speaker_ListStore::save_as(const std::string& filename) {
   try {
     m_speaker_list->to_xml(filename);
     m_filename = filename;
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -911,7 +911,7 @@ void Speaker_ListStore::append_xml(const std::string& filename) {
     m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -962,7 +962,7 @@ bool Speaker_ListStore::open_xml(const std::string& filename) {
 
       signal_speakerlist_loaded(m_speaker_list);
       m_modified = true;
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
       m.run();
       return false;

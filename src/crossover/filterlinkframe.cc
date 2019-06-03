@@ -292,7 +292,7 @@ void FilterLinkFrame::on_settings_changed(const std::string& s) {
 void FilterLinkFrame::on_param_changed() {
   if (enable_edit) {
 #ifdef OUTPUT_DEBUG
-    std::cout << "FilterLinkFrame::on_param_changed" << std::endl;
+    std::puts("FilterLinkFrame::on_param_changed");
 #endif
     enable_edit = false;
     Speaker speaker;
@@ -554,12 +554,13 @@ void FilterLinkFrame::on_clear_and_plot() {
 }
 
 void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
+
 #ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_speakerlist_loaded" << std::endl;
+  std::puts("FilterLinkFrame::on_speakerlist_loaded");
 #endif
   m_speaker_list = speaker_list;
 
-  std::string speaker_name = m_net->get_speaker();
+  std::string const& speaker_name = m_net->get_speaker();
   /* Setup the speaker combo box */
   std::vector<std::string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
@@ -581,7 +582,7 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
 
 void FilterLinkFrame::on_plot_crossover() {
 
-  std::cout << "DEBUG: plotting cross-over\n";
+  std::puts("DEBUG: plotting cross-over");
 
   // Create spice code for this net
   Speaker speaker;
@@ -591,7 +592,7 @@ void FilterLinkFrame::on_plot_crossover() {
   std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()),
                          false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
     d.run();

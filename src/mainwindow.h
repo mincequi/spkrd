@@ -21,7 +21,7 @@
 #define __GSPEAKERS_MAINWINDOW
 
 #include "common.h"
-#include "crossoverpaned.h"
+#include "crossover/crossoverpaned.h"
 #include "enclosurepaned.h"
 #include "settings.h"
 #include "sidebarnotebook.h"
@@ -43,6 +43,15 @@ private:
   void on_edit_settings();
   void on_switch_page(GtkNotebookPage* page, guint page_num);
   bool on_edit_menu_expose_event(GdkEventExpose* event);
+
+private:
+  void set_title_and_icons();
+
+  void set_defaults();
+
+  void connect_driver_tab();
+  void connect_enclosure_tab();
+  void connect_crossover_tab();
 
 private:
   Gtk::VBox m_main_vbox;

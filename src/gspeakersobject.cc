@@ -21,7 +21,7 @@ GSpeakersObject::GSpeakersObject() : sigc::trackable() {
   static int next_id = 0;
 
   m_id = next_id;
-  next_id = next_id + 1;
+  ++next_id;
 }
 
 int GSpeakersObject::get_id() const { return m_id; }

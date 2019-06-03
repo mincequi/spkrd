@@ -36,9 +36,11 @@ SummedFreqRespPlot::SummedFreqRespPlot() : plot(1, 20000, 50, 110, true, 0) {
 
   g_settings.defaultValueBool("DisableFilterAmp", false);
 
-  signal_speakerlist_loaded.connect(mem_fun(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
-  signal_add_crossover_plot.connect(mem_fun(*this, &SummedFreqRespPlot::on_add_plot));
-  signal_crossover_selected.connect(mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
+  signal_speakerlist_loaded.connect(
+      sigc::mem_fun(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
+  signal_add_crossover_plot.connect(sigc::mem_fun(*this, &SummedFreqRespPlot::on_add_plot));
+  signal_crossover_selected.connect(
+      sigc::mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
 }
 
 SummedFreqRespPlot::~SummedFreqRespPlot() = default;
@@ -122,9 +124,6 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                         lerp(freq_resp_points, filter_point.get_x()) + filter_y);
   }
 
-  Gdk::Color c2("red");
-  // plot.add_plot(points, c2);
-
   /* Search for *i in the graph */
   auto const location = std::find(begin(m_nets), end(m_nets), *i);
 
@@ -138,11 +137,16 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
   }
 
   plot.remove_all_plots();
+
   std::vector<GSpeakers::Point> pnts;
 
   if (!m_points.empty()) {
     pnts = m_points[0];
+
+    Gdk::Color c2("red");
+
     plot.add_plot(m_points[0], c2);
+
     for (std::size_t j = 1; j < m_points.size(); j++) {
       for (std::size_t k = 0; k < m_points[j].size(); k++) {
         pnts[k].set_y(10 * std::log10(std::pow(10, pnts[k].get_y() / 10) +
@@ -165,13 +169,13 @@ void SummedFreqRespPlot::clear() {
 }
 
 void SummedFreqRespPlot::on_crossover_selected(Crossover*) {
-  std::cout << "SummedFreqRespPlot::on_crossover_selected" << std::endl;
+  std::puts("SummedFreqRespPlot::on_crossover_selected");
   clear();
 }
 
 void SummedFreqRespPlot::on_speakerlist_loaded(SpeakerList* speaker_list) {
 #ifdef OUTPUT_DEBUG
-  std::cout << "SummedFreqRespPlot::on_speakerlist_loaded" << std::endl;
+  std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
 #endif
   m_speakerlist = speaker_list;
 }

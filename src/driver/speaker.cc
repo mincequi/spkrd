@@ -51,11 +51,11 @@ Speaker::Speaker(xmlNodePtr parent) {
   if ((parent != nullptr) && (std::string((char*)parent->name) == std::string("speaker"))) {
     try {
       parse_id_string(parent->children);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: speaker node not found"));
+    throw std::runtime_error(_("Speaker: speaker node not found"));
   }
 }
 
@@ -219,11 +219,11 @@ void Speaker::parse_id_string(xmlNodePtr node) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_type(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: id_string node not found"));
+    throw std::runtime_error(_("Speaker: id_string node not found"));
   }
 }
 
@@ -232,11 +232,11 @@ void Speaker::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_qts(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: type node not found"));
+    throw std::runtime_error(_("Speaker: type node not found"));
   }
 }
 
@@ -246,11 +246,11 @@ void Speaker::parse_qts(xmlNodePtr node) {
     m_qts = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_vas(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: qts node not found"));
+    throw std::runtime_error(_("Speaker: qts node not found"));
   }
 }
 
@@ -260,11 +260,11 @@ void Speaker::parse_vas(xmlNodePtr node) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_vas;
     try {
       parse_fs(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: vas node not found"));
+    throw std::runtime_error(_("Speaker: vas node not found"));
   }
 }
 
@@ -274,11 +274,11 @@ void Speaker::parse_fs(xmlNodePtr node) {
     m_fs = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_rdc(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: fs node not found"));
+    throw std::runtime_error(_("Speaker: fs node not found"));
   }
 }
 
@@ -288,11 +288,11 @@ void Speaker::parse_rdc(xmlNodePtr node) {
     m_rdc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_lcv(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: rdc node not found"));
+    throw std::runtime_error(_("Speaker: rdc node not found"));
   }
 }
 
@@ -302,11 +302,11 @@ void Speaker::parse_lcv(xmlNodePtr node) {
     m_lvc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_qms(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: lvc node not found"));
+    throw std::runtime_error(_("Speaker: lvc node not found"));
   }
 }
 
@@ -316,11 +316,11 @@ void Speaker::parse_qms(xmlNodePtr node) {
     m_qms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_qes(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: qms node not found"));
+    throw std::runtime_error(_("Speaker: qms node not found"));
   }
 }
 
@@ -330,11 +330,11 @@ void Speaker::parse_qes(xmlNodePtr node) {
     m_qes = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_imp(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: qes node not found"));
+    throw std::runtime_error(_("Speaker: qes node not found"));
   }
 }
 
@@ -344,11 +344,11 @@ void Speaker::parse_imp(xmlNodePtr node) {
     m_imp = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_sens(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: imp node not found"));
+    throw std::runtime_error(_("Speaker: imp node not found"));
   }
 }
 
@@ -358,11 +358,11 @@ void Speaker::parse_sens(xmlNodePtr node) {
     m_sens = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_freq_resp_filename(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: sens node not found"));
+    throw std::runtime_error(_("Speaker: sens node not found"));
   }
 }
 
@@ -371,11 +371,11 @@ void Speaker::parse_freq_resp_filename(xmlNodePtr node) {
     m_freq_resp_filename = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_imp_resp_filename(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: freq_resp_filename node not found"));
+    throw std::runtime_error(_("Speaker: freq_resp_filename node not found"));
   }
 }
 
@@ -384,11 +384,11 @@ void Speaker::parse_imp_resp_filename(xmlNodePtr node) {
     m_imp_resp_filename = std::string((char*)xmlNodeGetContent(node));
     try {
       parse_mmd(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: imp_resp_filename node not found"));
+    throw std::runtime_error(_("Speaker: imp_resp_filename node not found"));
   }
 }
 
@@ -398,11 +398,11 @@ void Speaker::parse_mmd(xmlNodePtr node) {
     m_mmd = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_ad(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: mmd node not found"));
+    throw std::runtime_error(_("Speaker: mmd node not found"));
   }
 }
 
@@ -412,11 +412,11 @@ void Speaker::parse_ad(xmlNodePtr node) {
     m_ad = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_bl(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: ad node not found"));
+    throw std::runtime_error(_("Speaker: ad node not found"));
   }
 }
 
@@ -426,11 +426,11 @@ void Speaker::parse_bl(xmlNodePtr node) {
     m_bl = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_rms(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: bl node not found"));
+    throw std::runtime_error(_("Speaker: bl node not found"));
   }
 }
 
@@ -440,11 +440,11 @@ void Speaker::parse_rms(xmlNodePtr node) {
     m_rms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     try {
       parse_cms(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Speaker: rms node not found"));
+    throw std::runtime_error(_("Speaker: rms node not found"));
   }
 }
 
@@ -453,6 +453,6 @@ void Speaker::parse_cms(xmlNodePtr node) {
     // std::istringstream((char *)xmlNodeGetContent(node)) >> m_cms;
     m_cms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
   } else {
-    throw GSpeakersException(_("Speaker: mmd node not found"));
+    throw std::runtime_error(_("Speaker: mmd node not found"));
   }
 }

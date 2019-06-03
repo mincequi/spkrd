@@ -23,11 +23,13 @@
 #include "crossover.h"
 #include "gspeakersplot.h"
 #include "speakerlist.h"
+
 #include <gtkmm.h>
 
 class FilterLinkFrame : public Gtk::Frame {
 public:
   FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list);
+
   ~FilterLinkFrame() override;
 
 private:
@@ -40,6 +42,14 @@ private:
   void on_clear_and_plot();
   void on_speakerlist_loaded(SpeakerList* speaker_list);
   void on_settings_changed(const std::string& s);
+
+private:
+  /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
+   * NET_TYPE_HIGHPASS */
+  std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
+
+  /* Helper function */
+  void set_family(Gtk::OptionMenu* option_menu, int order, int family);
 
 private:
   Gtk::Adjustment adj;
@@ -64,14 +74,6 @@ private:
   Gtk::CheckButton m_imp_corr_checkbutton;
   Gtk::CheckButton m_adv_imp_model_checkbutton;
 
-  /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
-   * NET_TYPE_HIGHPASS */
-  std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
-
-  /* Helper function */
-  void set_family(Gtk::OptionMenu* option_menu, int order, int family);
-
-private:
   Net* m_net;
   std::string m_description;
   SpeakerList* m_speaker_list;

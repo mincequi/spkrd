@@ -71,8 +71,11 @@ private:
   Box* m_box = nullptr;
   SpeakerList* m_speaker_list;
   Speaker m_current_speaker;
+
   bool disable_signals;
+
   GSpeakersColor m_color_list;
+
   bool speaker_list_is_loaded;
 };
 

@@ -26,22 +26,25 @@
 #include <pangomm/context.h>
 
 CrossoverImageView::CrossoverImageView() {
-  using sigc::mem_fun;
 
   visible = false;
   crossover = nullptr;
   speaker_list = nullptr;
   g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
   scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
-  g_settings.settings_changed.connect(mem_fun(*this, &CrossoverImageView::on_settings_changed));
-  signal_crossover_selected.connect(mem_fun(*this, &CrossoverImageView::on_crossover_selected));
-  signal_net_modified_by_wizard.connect(mem_fun(*this, &CrossoverImageView::on_net_modified));
-  signal_speakerlist_loaded.connect(mem_fun(*this, &CrossoverImageView::on_speakerlist_selected));
+
+  g_settings.settings_changed.connect(
+      sigc::mem_fun(*this, &CrossoverImageView::on_settings_changed));
+  signal_crossover_selected.connect(
+      sigc::mem_fun(*this, &CrossoverImageView::on_crossover_selected));
+  signal_net_modified_by_wizard.connect(sigc::mem_fun(*this, &CrossoverImageView::on_net_modified));
+  signal_speakerlist_loaded.connect(
+      sigc::mem_fun(*this, &CrossoverImageView::on_speakerlist_selected));
 }
 
 bool CrossoverImageView::on_expose_event(GdkEventExpose* event) {
   get_window()->draw_drawable(get_style()->get_fg_gc(get_state()), m_refPixmap,
-                              /* Only copy the area that was exposed. */
+                              // Only copy the area that was exposed
                               event->area.x, event->area.y, event->area.x, event->area.y,
                               event->area.width, event->area.height);
   return false;
@@ -78,62 +81,71 @@ void CrossoverImageView::redraw() {
     m_refGC->set_rgb_fg_color(black);
 
     if (crossover != nullptr) {
-      int vert_space_per_net_devider = 0;
-      if ((crossover->get_type() & CROSSOVER_TYPE_LOWPASS) != 0)
-        vert_space_per_net_devider++;
-      if ((crossover->get_type() & CROSSOVER_TYPE_SUBSONIC) != 0)
-        vert_space_per_net_devider++;
-      if ((crossover->get_type() & CROSSOVER_TYPE_HIGHPASS) != 0)
-        vert_space_per_net_devider++;
-      if ((crossover->get_type() & CROSSOVER_TYPE_TWOWAY) != 0)
-        vert_space_per_net_devider += 2;
-      if ((crossover->get_type() & CROSSOVER_TYPE_THREEWAY) != 0)
-        vert_space_per_net_devider += 3;
-      if ((crossover->get_type() & CROSSOVER_TYPE_FOURWAY) != 0)
-        vert_space_per_net_devider += 4;
+      int vert_space_per_net_divider = 0;
+      if ((crossover->get_type() & CROSSOVER_TYPE_LOWPASS) != 0) {
+        vert_space_per_net_divider++;
+      }
+      if ((crossover->get_type() & CROSSOVER_TYPE_SUBSONIC) != 0) {
+        vert_space_per_net_divider++;
+      }
+      if ((crossover->get_type() & CROSSOVER_TYPE_HIGHPASS) != 0) {
+        vert_space_per_net_divider++;
+      }
+      if ((crossover->get_type() & CROSSOVER_TYPE_TWOWAY) != 0) {
+        vert_space_per_net_divider += 2;
+      }
+      if ((crossover->get_type() & CROSSOVER_TYPE_THREEWAY) != 0) {
+        vert_space_per_net_divider += 3;
+      }
+      if ((crossover->get_type() & CROSSOVER_TYPE_FOURWAY) != 0) {
+        vert_space_per_net_divider += 4;
+      }
 
-      if (vert_space_per_net_devider == 0)
+      if (vert_space_per_net_divider == 0) {
         return;
+      }
 
       int window_height = get_allocation().get_height();
       int window_width = get_allocation().get_width();
       int vert_space_per_net =
-          std::round(double(window_height) / double(vert_space_per_net_devider));
+          std::round(double(window_height) / double(vert_space_per_net_divider));
 
       /* Draw first net here */
       std::vector<Net>& net_vector = *crossover->networks();
-      for (unsigned i = 0; i < net_vector.size(); i++) {
 
-        int net_vert_devider = 3;
-        int part_height = std::round(double(vert_space_per_net) / double(net_vert_devider));
+      for (std::size_t i = 0; i < net_vector.size(); i++) {
 
-        int net_horz_devider = 2;
+        int net_vert_divider = 3;
+        int net_horz_divider = 2;
+
+        int part_height = std::round(double(vert_space_per_net) / double(net_vert_divider));
+
         switch (net_vector[i].get_lowpass_order()) {
         case NET_ORDER_1ST:
-          net_horz_devider++;
+          net_horz_divider++;
           break;
         case NET_ORDER_2ND:
-          net_horz_devider += 2;
+          net_horz_divider += 2;
           break;
         case NET_ORDER_3RD:
-          net_horz_devider += 3;
+          net_horz_divider += 3;
           break;
         case NET_ORDER_4TH:
-          net_horz_devider += 4;
+          net_horz_divider += 4;
           break;
         }
         switch (net_vector[i].get_highpass_order()) {
         case NET_ORDER_1ST:
-          net_horz_devider++;
+          net_horz_divider++;
           break;
         case NET_ORDER_2ND:
-          net_horz_devider += 2;
+          net_horz_divider += 2;
           break;
         case NET_ORDER_3RD:
-          net_horz_devider += 3;
+          net_horz_divider += 3;
           break;
         case NET_ORDER_4TH:
-          net_horz_devider += 4;
+          net_horz_divider += 4;
           break;
         }
 
@@ -141,10 +153,10 @@ void CrossoverImageView::redraw() {
         int highpass_order = net_vector[i].get_highpass_order();
 
         if (net_vector[i].get_has_imp_corr())
-          net_horz_devider++;
+          net_horz_divider++;
         if (net_vector[i].get_has_damp())
-          net_horz_devider += 2;
-        int part_width = std::round(double(window_width) / double(net_horz_devider));
+          net_horz_divider += 2;
+        int part_width = std::round(double(window_width) / double(net_horz_divider));
 
         if (scale_image_parts) {
           if (part_width > (1.5 * part_height) && net_vector[i].parts().size() <= 4) {

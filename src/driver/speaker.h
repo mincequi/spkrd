@@ -48,7 +48,7 @@ public:
   /* Construct a speaker from an xml node, throws an exception on error in xml */
   Speaker(xmlNodePtr parent);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
+  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
   xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
 
   /* Print part data to stdout */

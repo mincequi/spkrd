@@ -30,22 +30,22 @@
 
 FreqRespEditor::FreqRespEditor(std::string filename)
     : m_table(15, 4, false), m_save_button(Gtk::Stock::SAVE), m_saveas_button(Gtk::Stock::SAVE_AS),
-      m_close_button(Gtk::Stock::CLOSE) {
-  m_filename = std::move(filename);
+      m_close_button(Gtk::Stock::CLOSE), m_filename(std::move(filename)) {
+
   set_modal();
 
-  Gtk::Frame* frame = manage(new Gtk::Frame(""));
-  Gtk::VBox* frame_vbox = manage(new Gtk::VBox());
+  m_label.set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
+
+  Gtk::Frame* frame = Gtk::manage(new Gtk::Frame());
+  Gtk::VBox* frame_vbox = Gtk::manage(new Gtk::VBox());
+
   frame->set_border_width(5);
   frame->set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(frame->get_label_widget())
-      ->set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
+  frame->set_label_widget(m_label);
 
-  // get_vbox()->pack_start(*manage(new Gtk::Label(_("Enter the freq response dB magnitude, this is
-  // not intended to provide an exact estimation of the total frequency response."))));
-  // get_vbox()->set_border_width(10);
   get_vbox()->pack_start(*frame);
   m_table.set_spacings(5);
+
   frame->add(*frame_vbox);
   frame_vbox->set_border_width(12);
   frame_vbox->pack_start(*manage(new Gtk::Label(
@@ -53,11 +53,8 @@ FreqRespEditor::FreqRespEditor(std::string filename)
       "\n" + Glib::ustring(_("exact estimation of the total frequency response.")))));
   frame_vbox->set_spacing(12);
   frame_vbox->pack_start(m_table);
-  // m_table.set_border_width(12);
 
-  for (int i = 0; i < 30; i++) {
-    dbmag_entries.push_back(manage(new Gtk::Entry()));
-  }
+  dbmag_entries.resize(30, Gtk::manage(new Gtk::Entry()));
 
   for (int j = 0; j < 15; j++) {
     m_table.attach(*dbmag_entries[2 * j], 1, 2, j, j + 1);
@@ -99,9 +96,9 @@ FreqRespEditor::FreqRespEditor(std::string filename)
   get_action_area()->pack_start(m_saveas_button);
   get_action_area()->pack_start(m_close_button);
 
-  m_saveas_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_save_as));
-  m_save_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_save));
-  m_close_button.signal_clicked().connect(mem_fun(*this, &FreqRespEditor::on_close));
+  m_saveas_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_save_as));
+  m_save_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_save));
+  m_close_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_close));
   m_save_button.set_sensitive(false);
 
   if (!m_filename.empty()) {
@@ -116,11 +113,11 @@ FreqRespEditor::FreqRespEditor(std::string filename)
         char* substr_ptr = strtok(buffer.data(), ",");
         g_ascii_strtod(substr_ptr, nullptr);
         substr_ptr = strtok(nullptr, ",");
-        float const f2 = g_ascii_strtod(substr_ptr, nullptr);
+        auto const f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-        dbmag_entries[i]->set_text(GSpeakers::double_to_ustring((double)f2, 2, 1));
+        dbmag_entries[i]->set_text(GSpeakers::double_to_ustring(f2, 2, 1));
         dbmag_entries[i]->signal_changed().connect(
-            sigc::bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+            sigc::bind<bool>(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
       }
     }
   }
@@ -129,9 +126,10 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
 void FreqRespEditor::on_save() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "FreqRespEditor::on_save" << std::endl;
+  std::puts("FreqRespEditor::on_save");
 #endif
-  std::vector<double> v = get_x_vector();
+  std::vector<double> const& v = get_x_vector();
+
   std::ofstream of(m_filename.c_str());
   if (of.good()) {
     std::array<char, 8> buffer;
@@ -148,7 +146,7 @@ void FreqRespEditor::on_save() {
     of.close();
     for (int i = 0; i < 30; i++) {
       dbmag_entries[i]->signal_changed().connect(
-          sigc::bind<bool>(mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+          sigc::bind<bool>(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
     }
 
   } else {
@@ -176,49 +174,14 @@ void FreqRespEditor::on_save_as() {
 
 void FreqRespEditor::on_close() {
 #ifdef OUTPUT_DEBUG
-  std::cout << "FreqRespEditor::on_close" << std::endl;
+  std::puts("FreqRespEditor::on_close");
 #endif
   response(0);
   hide();
 }
 
-FreqRespEditor::~FreqRespEditor() {
-#ifdef OUTPUT_DEBUG
-  std::cout << "FreqRespEditor::~FreqRespEditor" << std::endl;
-#endif
-}
-
 std::vector<double> FreqRespEditor::get_x_vector() {
-  std::vector<double> v;
-  v.push_back(20.0);
-  v.push_back(25.2);
-  v.push_back(31.7);
-  v.push_back(39.9);
-  v.push_back(50.2);
-  v.push_back(63.2);
-  v.push_back(79.6);
-  v.push_back(100);
-  v.push_back(126);
-  v.push_back(159);
-  v.push_back(200);
-  v.push_back(252);
-  v.push_back(317);
-  v.push_back(399);
-  v.push_back(502);
-  v.push_back(632);
-  v.push_back(796);
-  v.push_back(1000);
-  v.push_back(1260);
-  v.push_back(1590);
-  v.push_back(2000);
-  v.push_back(2520);
-  v.push_back(3170);
-  v.push_back(3990);
-  v.push_back(5020);
-  v.push_back(6320);
-  v.push_back(7960);
-  v.push_back(10000);
-  v.push_back(15900);
-  v.push_back(20000);
-  return v;
+  return {20.0, 25.2, 31.7, 39.9, 50.2, 63.2, 79.6, 100,   126,   159,
+          200,  252,  317,  399,  502,  632,  796,  1000,  1260,  1590,
+          2000, 2520, 3170, 3990, 5020, 6320, 7960, 10000, 15900, 20000};
 }

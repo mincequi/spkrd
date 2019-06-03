@@ -35,13 +35,18 @@
 class GSpeakersFilterPlot : public Gtk::Frame {
 public:
   GSpeakersFilterPlot();
-  ~GSpeakersFilterPlot() override;
+
+  ~GSpeakersFilterPlot() override = default;
+
   void clear();
+
   int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
   GSpeakersPlot plot;
+
   bool on_delete_event(GdkEventAny* event) override;
+
   void on_crossover_selected(Crossover*);
 };
 

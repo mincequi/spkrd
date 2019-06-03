@@ -54,11 +54,11 @@ Crossover::Crossover(xmlNodePtr parent) {
   if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)) {
     try {
       parse_type(parent->children);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Crossover: crossover node expected"));
+    throw std::runtime_error(_("Crossover: crossover node expected"));
   }
 }
 
@@ -67,11 +67,11 @@ void Crossover::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_networks(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   } else {
-    throw GSpeakersException(_("Crossover: type node expected"));
+    throw std::runtime_error(_("Crossover: type node expected"));
   }
 }
 
@@ -83,14 +83,14 @@ void Crossover::parse_networks(xmlNodePtr node) {
     while (child != nullptr) {
       try {
         m_networks.emplace_back(child);
-      } catch (GSpeakersException const& e) {
+      } catch (std::runtime_error const& e) {
         throw e;
       }
       child = child->next;
     }
     try {
       parse_id_string(node->next);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       throw e;
     }
   }
@@ -100,7 +100,7 @@ void Crossover::parse_id_string(xmlNodePtr node) {
   if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
     m_id_string = std::string((char*)xmlNodeGetContent(node));
   } else {
-    throw GSpeakersException(_("Crossover: id_string node expected"));
+    throw std::runtime_error(_("Crossover: id_string node expected"));
   }
 }
 

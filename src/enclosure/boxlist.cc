@@ -34,17 +34,17 @@ BoxList::BoxList(const std::string& filename) {
         while (children != nullptr) {
           try {
             m_box_list.emplace_back(children);
-          } catch (GSpeakersException const& e) {
+          } catch (std::runtime_error const& e) {
             throw e;
           }
           children = children->next;
         }
       }
     } else {
-      throw GSpeakersException(_("BoxList: boxlist node not found"));
+      throw std::runtime_error(_("BoxList: boxlist node not found"));
     }
   } else {
-    throw GSpeakersException(_("BoxList: Xml file not found"));
+    throw std::runtime_error(_("BoxList: Xml file not found"));
   }
 }
 
@@ -61,7 +61,7 @@ void BoxList::to_xml(std::string const& filename) {
 
   // Save xml file
   if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw GSpeakersException(_("BoxList: Could not save to ") + filename);
+    throw std::runtime_error(_("BoxList: Could not save to ") + filename);
   }
 }
 

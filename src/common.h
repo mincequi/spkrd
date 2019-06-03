@@ -53,7 +53,7 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30
 bool& driverlist_modified();
 bool& enclosurelist_modified();
 bool& crossoverlist_modified();
-bool& meassurementlist_modified();
+bool& measurementlist_modified();
 } // namespace GSpeakers
 
 class Box;
@@ -61,16 +61,6 @@ class Speaker;
 class Crossover;
 class Net;
 class SpeakerList;
-
-/// Define a Exception class for our program just for fun (and consistency)
-class GSpeakersException {
-  std::string _what;
-
-public:
-  GSpeakersException(std::string what_arg) : _what(std::move(what_arg)) {}
-
-  virtual const char* what() const { return _what.c_str(); }
-};
 
 extern Settings g_settings;
 

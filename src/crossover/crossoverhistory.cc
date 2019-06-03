@@ -45,7 +45,7 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("") {
 
   try {
     m_crossover_list = CrossoverList(m_filename);
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     std::cout << "CrossoverHistory::CrossoverHistory: " << e.what() << std::endl;
   }
   set_shadow_type(Gtk::SHADOW_NONE);
@@ -173,7 +173,7 @@ void CrossoverHistory::open_xml(const std::string& filename) {
                               GSpeakers::short_filename(m_filename, 20) + "]</b>");
     // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
 
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -194,7 +194,7 @@ void CrossoverHistory::append_xml(const std::string& filename) {
       m_crossover_list.crossover_list()->push_back(from);
     }
     m_crossover_list.crossover_list()->size();
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }
@@ -348,7 +348,7 @@ void CrossoverHistory::on_save() {
     try {
       m_crossover_list.to_xml(m_filename);
       signal_crossover_set_save_state(false);
-    } catch (GSpeakersException const& e) {
+    } catch (std::runtime_error const& e) {
       Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
       m.run();
     }
@@ -380,7 +380,7 @@ void CrossoverHistory::save_as_xml(const std::string& filename) {
 
     //    set_label("Crossover list [" + m_filename + "]");
     signal_crossover_set_save_state(false);
-  } catch (GSpeakersException const& e) {
+  } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
   }

@@ -43,7 +43,7 @@ public:
   /* Construct a part from an xml node */
   CrossoverList(const std::string& filename);
 
-  /* Convert data for a part to an xml node, throws GSpeakersException on failure */
+  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
   void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
   /* Print part data to stdout */

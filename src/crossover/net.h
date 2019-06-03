@@ -48,14 +48,10 @@
 #define NET_LEGENDRE 6
 #define NET_LINEARPHASE 7
 
-/*
- * Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
- *
- * For example: Lowpassfilter with impedance correction network or highpassfilter with
- *              damping network.
- *
- * TODO: Use c++ streams for input in Part(xmlNodePtr)
- */
+/// Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
+/// For example: Lowpassfilter with impedance correction network or highpassfilter with
+///              damping network.
+/// TODO: Use c++ streams for input in Part(xmlNodePtr)
 class Net : public GSpeakersObject {
 public:
   /*
@@ -74,7 +70,7 @@ public:
   /// stuff like that
   Net(xmlNodePtr parent);
 
-  /// Convert data for a part to an xml node, throws GSpeakersException on failure
+  /// Convert data for a part to an xml node, throws std::runtime_error on failure
   /// Maybe this one should throw an exception
   xmlNodePtr to_xml_node(xmlNodePtr parent);
 

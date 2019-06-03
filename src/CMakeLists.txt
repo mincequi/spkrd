@@ -16,6 +16,10 @@ target_link_libraries(gspeaker_core
                       PUBLIC LibXml2::LibXml2
                       PRIVATE ${GTK2_LIBRARIES} libegg)
 target_include_directories(gspeaker_core
+                           PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/crossover
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/driver
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/enclosure
                            PUBLIC ${GTK2_INCLUDE_DIRS}
                                   ${CMAKE_CURRENT_SOURCE_DIR}/libegg)
 target_compile_definitions(gspeaker_core

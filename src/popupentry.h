@@ -36,7 +36,7 @@ class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
 public:
   explicit PopupEntry(Glib::ustring path);
 
-  ~PopupEntry() override;
+  ~PopupEntry() override = default;
 
   Glib::ustring get_path() const;
 

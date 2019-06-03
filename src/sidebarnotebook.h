@@ -34,12 +34,15 @@ public:
   int append_page(Widget& child);
   void set_current_page(int page_num);
   int get_current_page() const;
+
   Glib::SignalProxy2<void, GtkNotebookPage*, guint> signal_switch_page();
 
 private:
   friend void on_button_clicked1(GtkWidget* widget, SidebarNotebook* me);
   friend void on_button_clicked2(GtkWidget* widget, SidebarNotebook* me);
   friend void on_button_clicked3(GtkWidget* widget, SidebarNotebook* me);
+
+private:
   Gtk::Notebook* m_notebook;
   GtkWidget* m_sidebar;
   EggSidebarButton *button0, *button1, *button2;

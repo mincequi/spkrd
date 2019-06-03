@@ -24,7 +24,8 @@
 #include "popupentry.h"
 
 #include <gtk/gtkentry.h>
-#include <gtkmm.h>
+
+#include <gtkmm/window.h>
 
 #include <cstdio>
 #include <cstring>
@@ -47,8 +48,6 @@ PopupEntry::PopupEntry(Glib::ustring path)
 
   show_all_children();
 }
-
-PopupEntry::~PopupEntry() = default;
 
 Glib::ustring PopupEntry::get_path() const { return path_; }
 
@@ -104,11 +103,10 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
   entry_->grab_focus();
 
   // Hackish :/ Synthesize a key press event for the entry.
-
   GdkEvent tmp_event;
   std::memcpy(&tmp_event, event, sizeof(GdkEventKey));
 
-  tmp_event.key.window = Glib::unwrap(entry_->get_window()); // XXX
+  tmp_event.key.window = Glib::unwrap(entry_->get_window());
   tmp_event.key.send_event = 1;
 
   entry_->event(&tmp_event);
