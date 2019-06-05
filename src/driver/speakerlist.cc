@@ -48,17 +48,15 @@ SpeakerList::SpeakerList(const std::string& filename) {
 void SpeakerList::clear() { m_speaker_list.erase(m_speaker_list.begin(), m_speaker_list.end()); }
 
 void SpeakerList::to_xml(const std::string& filename) {
-  xmlDocPtr doc;
-  xmlNodePtr node;
 
-  doc = xmlNewDoc((xmlChar*)("1.0"));
+  xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  node = xmlNewDocNode(doc, nullptr, (xmlChar*)("speakerlist"), nullptr);
+  xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("speakerlist"), nullptr);
   xmlDocSetRootElement(doc, node);
 
   // Iterate through all speakers
   for (auto& from : m_speaker_list) {
-    ((Speaker)from).to_xml_node(node);
+    from.to_xml_node(node);
   }
 
   // Save xml file

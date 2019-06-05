@@ -23,7 +23,8 @@
 #ifndef __GSPEAKERS_PLOT_H
 #define __GSPEAKERS_PLOT_H
 
-#include <gtkmm.h>
+#include <gdkmm/color.h>
+#include <gtkmm/drawingarea.h>
 
 #include <string>
 #include <vector>
@@ -34,12 +35,11 @@ constexpr auto MAX_POS_VALUE = 10;
 /// 30 is a nice little space to have between the graph and the window-border
 constexpr auto BOX_FRAME_SIZE = 30;
 /// We want vertical lines on every 5 dB
-constexpr auto N_VERTICAL_LINES = (2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10) - 1;
+constexpr auto N_VERTICAL_LINES = 2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10 - 1;
 /// Upper frequency limit
 constexpr auto UPPER_LIMIT = 1000;
 
 /// Point class to exchange plot coordinates between classes.
-///
 /// I need a double on the y-axis since decimal values are required
 /// in the conversion to axis mappes coordinates
 namespace GSpeakers {
@@ -82,31 +82,37 @@ struct comparison {
 class GSpeakersPlot : public Gtk::DrawingArea {
 
 public:
-  /*
-   * lower_x: x axis lower limit
-   * upper_x: x axis upper limit
-   * lower_y: y axis lower limit
-   * upper_y: y axis upper limit
-   * logx:    logarithmic x axis
-   * y_zero_freq: draw a thicker horizontal line on this y-value
-   */
+  /// lower_x: x axis lower limit
+  /// upper_x: x axis upper limit
+  /// lower_y: y axis lower limit
+  /// upper_y: y axis upper limit
+  /// logx:    logarithmic x axis
+  /// y_zero_freq: draw a thicker horizontal line on this y-value
   GSpeakersPlot(int lower_x = 20, int upper_x = 1000, int lower_y = -40, int upper_y = 10,
                 bool logx = true, int y_zero_freq = 0, bool enable_sec_scale = false);
+
   int add_plot(std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
+
   void remove_plot(int n);
+
   void hide_plot(int n);
+
   void remove_all_plots();
 
   void redraw();
 
   void set_font(const std::string& font);
+
   void set_line_style(Gdk::LineStyle& style);
+
   void set_line_size(int size);
 
   void select_plot(int index);
 
   void replace_plot(int index, std::vector<GSpeakers::Point>& p, Gdk::Color& ref_color);
+
   void set_y_label(const std::string& text);
+
   void set_y_label2(const std::string& text);
 
 protected:
@@ -117,8 +123,8 @@ protected:
   bool on_configure_event(GdkEventConfigure* event) override;
 
 protected:
-  /*std::vectors that hold the y magnitude points for the plots (dbmag) and
-     the corresponding colors (colors) */
+  /// vectors that hold the y magnitude points for the plots (dbmag) and
+  /// the corresponding colors (colors)
   std::vector<std::vector<GSpeakers::Point>> m_points;
   std::vector<Gdk::Color> m_colors;
   std::vector<bool> m_visible_plots;

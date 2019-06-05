@@ -1,4 +1,5 @@
-/* gspeakersboxplot
+/*
+ * $Id$
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
@@ -18,30 +19,39 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_BOX_PLOT
-#define __GSPEAKERS_BOX_PLOT
+#ifndef __SUMMED_FREQ_RESP_PLOT
+#define __SUMMED_FREQ_RESP_PLOT
 
+#include "common.h"
 #include "gspeakersplot.h"
-
-#include <gtkmm/box.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/scrolledwindow.h>
+#include "speakerlist.h"
+#include <gtkmm.h>
+#include <vector>
 
 /*
  * This is a wrapper class for GSpeakersPlot
- * The reason why we have this class is that we want
- * an extra layer (where we can connect signals and so on)
- * between the program and the plot widget.
  */
-class GSpeakersBoxPlot : public Gtk::Frame {
+class SummedFreqRespPlot : public Gtk::Frame {
 public:
-  GSpeakersBoxPlot();
+  SummedFreqRespPlot();
+
+  ~SummedFreqRespPlot() override;
+
+  void clear();
+
+  int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color&, int*, Net*);
 
 private:
-  Gtk::Label m_label;
-  Gtk::VBox m_vbox;
-  Gtk::ScrolledWindow sw;
+  void on_crossover_selected(Crossover*);
+
+  void on_speakerlist_loaded(SpeakerList* speaker_list);
+
+private:
   GSpeakersPlot plot;
+  std::vector<int> m_nets;
+  Gdk::Color* m_color;
+  std::vector<std::vector<GSpeakers::Point>> m_points;
+  SpeakerList* m_speakerlist;
 };
 
 #endif

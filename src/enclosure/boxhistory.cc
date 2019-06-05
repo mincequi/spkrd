@@ -60,10 +60,12 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   } catch (std::runtime_error const& e) {
     std::cout << "BoxHistory::BoxHistory: " << e.what() << std::endl;
   }
-  std::cout << "boxlist_found = " << boxlist_found << std::endl;
-  static_cast<Gtk::Label*>(get_label_widget())
-      ->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
-                   GSpeakers::short_filename(m_filename) + "]</b>");
+  std::cout << "boxlist_found = " << boxlist_found << "\n";
+
+  m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
+                     GSpeakers::short_filename(m_filename) + "]</b>");
+  set_label_widget(m_label);
+
   create_model();
 
   /* create tree view */
@@ -84,7 +86,7 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   index = 0;
 
   Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-  // selection->set_mode(Gtk::SELECTION_MULTIPLE);
+
   selection->signal_changed().connect(sigc::mem_fun(*this, &BoxHistory::on_selection_changed));
 
   if (boxlist_found) {
@@ -150,19 +152,15 @@ void BoxHistory::open_xml(const std::string& filename) {
              sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
 
     /* Delete items in box_list */
-    m_box_list.box_list().erase(m_box_list.box_list().begin(), m_box_list.box_list().end());
-
-    for (auto& from : temp_box_list.box_list()) {
-      m_box_list.box_list().push_back(from);
-    }
+    m_box_list.box_list().clear();
+    m_box_list.box_list().insert(end(m_box_list.box_list()), begin(temp_box_list.box_list()),
+                                 end(temp_box_list.box_list()));
 
     /* Select the first item in the list */
     if (!m_box_list.box_list().empty()) {
       Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-      GtkTreePath* gpath = gtk_tree_path_new_from_string(GSpeakers::int_to_ustring(0).c_str());
-
-      Gtk::TreePath path(gpath);
+      Gtk::TreePath path(std::to_string(0));
 
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
@@ -173,9 +171,9 @@ void BoxHistory::open_xml(const std::string& filename) {
         ->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
                      GSpeakers::short_filename(m_filename) + "]</b>");
     g_settings.setValue("BoxListXml", m_filename);
-  } catch (std::runtime_error const& e) {
-    Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-    m.run();
+  } catch (std::runtime_error const& error) {
+    Gtk::MessageDialog message(error.what(), false, Gtk::MESSAGE_ERROR);
+    message.run();
   }
 }
 
@@ -185,10 +183,10 @@ void BoxHistory::append_xml(const std::string& filename) {
     temp_box_list = BoxList(filename);
     for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
              sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
+
     for (auto& from : temp_box_list.box_list()) {
       m_box_list.box_list().push_back(from);
     }
-    m_box_list.box_list().size();
   } catch (std::runtime_error const& e) {
     Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
     m.run();
@@ -202,10 +200,9 @@ void BoxHistory::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> const& indices = path.get_indices();
-    if (!indices.empty()) {
-      index = indices[0];
-      signal_box_selected(&(m_box_list.box_list()[indices[0]]));
+    if (!path.empty()) {
+      index = path[0];
+      signal_box_selected(&(m_box_list.box_list()[path[0]]));
     }
   }
 }
@@ -219,9 +216,8 @@ void BoxHistory::on_new_copy() {
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
       Gtk::TreePath path = m_refListStore->get_path(iter);
 
-      std::vector<int> const& indices = path.get_indices();
-      if (!indices.empty()) {
-        /* Here we have the row in indices[0], we want to make a copy of this Crossover
+      if (!path.empty()) {
+        /* Here we have the row in path[0], we want to make a copy of this Crossover
            and put it last in the list */
 
         /* Here we want a copy of the original Crossover, not a crossover that has the
@@ -229,17 +225,13 @@ void BoxHistory::on_new_copy() {
            Quick and easy solution...use the to_xml function which gets rid of the id */
 
         xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
-        m_box_list.box_list()[indices[0]].to_xml_node(node);
-        Box b = Box(node->children);
+        m_box_list.box_list()[path[0]].to_xml_node(node);
+        Box b(node->children);
 
-        /* Set time of day as this crossovers id_string */
-        time_t t;
-        time(&t);
-        /* convert to nice time format */
-        std::string s = std::string(ctime(&t));
-        int length = s.length();
-        s[length - 1] = '\0';
-        b.set_id_string(_("Box: ") + s);
+        // Set time of day as this id_string */
+        std::time_t const time =
+            std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
 
         /* the usual adding of items to the liststore and data-container */
         liststore_add_item(b);
@@ -247,10 +239,8 @@ void BoxHistory::on_new_copy() {
       }
     }
   }
-  /* Select the last crossover in the list: the new crossover */
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(
-      GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
-  Gtk::TreePath path(gpath);
+
+  Gtk::TreePath path(std::to_string(m_box_list.box_list().size() - 1));
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
   signal_enclosure_set_save_state(true);
@@ -260,14 +250,9 @@ void BoxHistory::on_new() {
 
   Box b;
 
-  /* Set time of day as this crossovers id_string */
-  time_t t;
-  time(&t);
-  /* convert to nice time format */
-  std::string s = std::string(ctime(&t));
-  int length = s.length();
-  s[length - 1] = '\0';
-  b.set_id_string(_("Box: ") + s);
+  // Use time of day as identifier
+  std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
 
   liststore_add_item(b);
   m_box_list.box_list().push_back(b);
@@ -285,11 +270,13 @@ void BoxHistory::on_new() {
 void BoxHistory::on_new_xml() {
   m_refListStore->clear();
   m_box_list.clear();
+
   new_xml_pressed = true;
   on_new();
   signal_enclosure_set_save_state(true);
-  static_cast<Gtk::Label*>(get_label_widget())
-      ->set_markup("<b>" + Glib::ustring(_("Enclosure list [new file]")) + "</b>");
+
+  m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list [new file]")) + "</b>");
+  set_label_widget(m_label);
 }
 
 void BoxHistory::on_save() {
@@ -300,9 +287,9 @@ void BoxHistory::on_save() {
     try {
       m_box_list.to_xml(m_filename);
       signal_enclosure_set_save_state(false);
-    } catch (std::runtime_error const& e) {
-      Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-      m.run();
+    } catch (std::runtime_error const& error) {
+      Gtk::MessageDialog message(error.what(), false, Gtk::MESSAGE_ERROR);
+      message.run();
     }
   }
 }
@@ -311,8 +298,8 @@ void BoxHistory::on_save_as() {
 
   GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(
       _("Save box xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
-  std::string filename = fc->get_filename();
-  if (filename.length() > 0) {
+  std::string const& filename = fc->get_filename();
+  if (!filename.empty()) {
     save_as_xml(filename);
   }
 }
@@ -321,9 +308,11 @@ void BoxHistory::save_as_xml(const std::string& filename) {
   try {
     m_box_list.to_xml(filename);
     m_filename = filename;
-    static_cast<Gtk::Label*>(get_label_widget())
-        ->set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
-                     GSpeakers::short_filename(m_filename) + "]</b>");
+
+    m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list [")) +
+                       GSpeakers::short_filename(m_filename) + "]</b>");
+    set_label_widget(m_label);
+
     g_settings.setValue("BoxListXml", m_filename);
     signal_enclosure_set_save_state(false);
   } catch (std::runtime_error const& e) {
@@ -333,13 +322,13 @@ void BoxHistory::save_as_xml(const std::string& filename) {
 }
 
 void BoxHistory::on_remove() {
+
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> const& indices = path.get_indices();
-    if (!indices.empty()) {
+    if (!path.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -347,32 +336,25 @@ void BoxHistory::on_remove() {
         m_box_list.box_list().erase(m_box_list.box_list().begin() + index);
     }
   }
-
-  char* str = nullptr;
-  GString* buffer = g_string_new(str);
-  if (index > 0) {
-    g_string_printf(buffer, "%d", index - 1);
-  } else {
-    g_string_printf(buffer, "%d", 0);
-  }
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
+  Gtk::TreePath path(std::to_string(index > 0 ? index - 1 : 0));
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+
   refSelection->select(row);
+
   signal_enclosure_set_save_state(true);
 }
 
 void BoxHistory::on_box_modified(Box* b) {
-  // std::cout << "BoxHistory: box modified: " << b << std::endl;
+
   // get the row from selection
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (!indices.empty()) {
+    if (!path.empty()) {
       Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+
       /* Update the liststore */
       row[m_columns.type] = b->get_type();
       row[m_columns.id_string] = b->get_id_string();
@@ -381,14 +363,16 @@ void BoxHistory::on_box_modified(Box* b) {
       row[m_columns.fb1] = b->get_fb1();
       row[m_columns.vb2] = b->get_vb2();
       row[m_columns.fb2] = b->get_fb2();
+
       /* Update the boxlist */
-      m_box_list.box_list()[indices[0]].set_type(b->get_type());
-      m_box_list.box_list()[indices[0]].set_id_string(b->get_id_string());
-      m_box_list.box_list()[indices[0]].set_speaker(b->get_speaker());
-      m_box_list.box_list()[indices[0]].set_vb1(b->get_vb1());
-      m_box_list.box_list()[indices[0]].set_fb1(b->get_fb1());
-      m_box_list.box_list()[indices[0]].set_vb2(b->get_vb2());
-      m_box_list.box_list()[indices[0]].set_fb2(b->get_fb2());
+      m_box_list.box_list()[path[0]].set_type(b->get_type());
+      m_box_list.box_list()[path[0]].set_id_string(b->get_id_string());
+      m_box_list.box_list()[path[0]].set_speaker(b->get_speaker());
+      m_box_list.box_list()[path[0]].set_vb1(b->get_vb1());
+      m_box_list.box_list()[path[0]].set_fb1(b->get_fb1());
+      m_box_list.box_list()[path[0]].set_vb2(b->get_vb2());
+      m_box_list.box_list()[path[0]].set_fb2(b->get_fb2());
+
       signal_enclosure_set_save_state(true);
     }
   }
@@ -398,10 +382,9 @@ void BoxHistory::on_add_to_boxlist(Box* b) {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
   liststore_add_item(*b);
   m_box_list.box_list().push_back(*b);
+
   /* Select the last crossover in the list: the added crossover */
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(
-      GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
-  Gtk::TreePath path(gpath);
+  Gtk::TreePath path(std::to_string(m_box_list.box_list().size() - 1));
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
 }
@@ -451,7 +434,6 @@ void BoxHistory::add_columns() {
     col_cnt = m_TreeView.append_column(_("Vb1"), *pRenderer);
 
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
-    // pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1_str);
     pColumn->set_cell_data_func(*pRenderer, sigc::mem_fun(*this, &BoxHistory::vb1_cell_data_func));
   }
   {
@@ -460,34 +442,13 @@ void BoxHistory::add_columns() {
     col_cnt = m_TreeView.append_column(_("Fb1"), *pRenderer);
 
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
-    // pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1_str);
     pColumn->set_cell_data_func(*pRenderer, sigc::mem_fun(*this, &BoxHistory::fb1_cell_data_func));
   }
-  /* Disable vb2 and fb2 until we use it */
-  /*
-  {
-    Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-    int cols_count = m_TreeView.append_column(_("Vb2"), *pRenderer);
-    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.vb2);
-  }
-  {
-    Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-    int cols_count = m_TreeView.append_column(_("Fb2"), *pRenderer);
-    Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-    pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
-  }
-  */
 }
 
 /* This function will execute when a type cell is shown */
 void BoxHistory::type_cell_data_func(Gtk::CellRenderer* cell,
                                      const Gtk::TreeModel::iterator& iter) {
-  // std::cout << "BoxHistory::type_cell_data_func" << std::endl;
   auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
   switch ((*iter)[m_columns.type]) {
   case BOX_TYPE_SEALED:

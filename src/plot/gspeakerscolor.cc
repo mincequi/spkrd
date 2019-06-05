@@ -60,17 +60,18 @@ GSpeakersColor::GSpeakersColor() {
 }
 
 std::string const& GSpeakersColor::get_color_string() {
-  std::string const& s = m_colors[m_counter];
+  std::string const& colour_value = m_colors[m_counter];
   m_counter = (m_counter + 1) % m_colors.size();
-  return s;
+  return colour_value;
 }
 
-void GSpeakersColor::unget_color_string(const std::string& s) {
-  m_colors.erase(get_iterator_from_string(s));
-  m_colors.insert(m_colors.begin() + m_counter, s);
+void GSpeakersColor::unget_color_string(const std::string& colour_value) {
+  m_colors.erase(get_iterator_from_string(colour_value));
+  m_colors.insert(m_colors.begin() + m_counter, colour_value);
 }
 
-std::vector<std::string>::iterator GSpeakersColor::get_iterator_from_string(const std::string& s) {
-  auto const location = std::find(begin(m_colors), end(m_colors), s);
+std::vector<std::string>::iterator
+GSpeakersColor::get_iterator_from_string(const std::string& colour_value) {
+  auto const location = std::find(begin(m_colors), end(m_colors), colour_value);
   return location == end(m_colors) ? location : begin(m_colors);
 }

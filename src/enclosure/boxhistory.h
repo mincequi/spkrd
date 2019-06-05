@@ -24,9 +24,11 @@
 #include "common.h"
 
 #include <gdkmm/event.h>
+
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/fileselection.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treemodel.h>
@@ -90,6 +92,7 @@ protected:
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
   Gtk::VBox m_vbox;
   Gtk::FileSelection *f_open, *f_save_as, *f_append;
+  Gtk::Label m_label;
 
   /* Data containers */
   BoxList m_box_list;

@@ -21,6 +21,10 @@
 #include "common.h"
 #include "freqrespeditor.h"
 #include "gspeakersfilechooser.h"
+
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/separatortoolitem.h>
+
 #include <cmath>
 #include <fstream>
 

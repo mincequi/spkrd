@@ -23,15 +23,13 @@
 
 #include "common.h"
 #include "gspeakersplot.h"
-#include <gtkmm.h>
 
-/*
- * This is a wrapper class for GSpeakersPlot
- *
- * The reason why we have this class is that we want
- * an extra layer (where we can connect signals and so on)
- * between the program and the plot widget.
- */
+#include <gtkmm/frame.h>
+
+/// This is a wrapper class for GSpeakersPlot
+/// The reason why we have this class is that we want
+/// an extra layer (where we can connect signals and so on)
+/// between the program and the plot widget.
 class GSpeakersFilterPlot : public Gtk::Frame {
 public:
   GSpeakersFilterPlot();

@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
 #else
     g_settings.load(Glib::get_home_dir() + "/.gspeakers/gspeakers2.conf");
 #endif
-  } catch (std::runtime_error const& e) {
-    std::cout << "Main: " << e.what() << std::endl;
+  } catch (std::runtime_error const& error) {
+    std::cout << "Main: " << error.what() << "\n";
 
 #ifdef TARGET_WIN32
     Gtk::MessageDialog md(_("No configuration file found!") + Glib::ustring("\n") +

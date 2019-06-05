@@ -19,7 +19,6 @@
 #define __GFILTER_SPEAKER
 
 #include <iostream>
-#include <map>
 #include <string>
 
 #include <libxml/parser.h>
@@ -37,7 +36,7 @@
  */
 class Speaker : public GSpeakersObject {
 public:
-  /* Default values from Vifa P21WO-20-08 */
+  /// Default values from Vifa P21WO-20-08
   Speaker(std::string id_string = "Vifa P21-20-08",
           int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE, double qts = 0.33, double vas = 113,
           double fs = 28, double rdc = 5.6, double lvc = 0.9, double qms = 1.6, double qes = 0.41,
@@ -45,14 +44,14 @@ public:
           std::string imp_resp_filename = "", double mmd = 0.04, double ad = 0.0837, double bl = 11,
           double rms = 1.7, double cms = 0.0012);
 
-  /* Construct a speaker from an xml node, throws an exception on error in xml */
+  /// Construct a speaker from an xml node, throws an exception on error in xml
   Speaker(xmlNodePtr parent);
 
-  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
+  /// Convert data for a part to an xml node, throws std::runtime_error on failure
   xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
 
-  /* Print part data to stdout */
-  friend std::ostream& operator<<(std::ostream& o, const Speaker& speaker);
+  /// Print part data to stdout
+  friend std::ostream& operator<<(std::ostream& output, Speaker const& speaker);
 
   void set_qts(double qts);
   void set_vas(double vas);
@@ -63,10 +62,10 @@ public:
   void set_qes(double qes);
   void set_imp(double imp);
   void set_sens(double sens);
+
   void set_freq_resp_filename(std::string filename);
-  void set_freq_resp(std::map<double, double> freq_resp);
   void set_imp_resp_filename(std::string filename);
-  void set_imp_resp(std::map<double, double> imp_resp);
+
   void set_id_string(std::string id_string);
   void set_mmd(double mmd);
   void set_ad(double ad);
@@ -83,11 +82,12 @@ public:
   double get_qes() const;
   double get_imp() const;
   double get_sens() const;
+
   std::string get_freq_resp_filename() const;
-  std::map<double, double> const* get_freq_resp() const;
   std::string get_imp_resp_filename() const;
-  std::map<double, double> const* get_imp_resp() const;
+
   std::string const& get_id_string() const;
+
   double get_mmd() const;
   double get_ad() const;
   double get_bl() const;
@@ -95,31 +95,42 @@ public:
   double get_cms() const;
 
 protected:
-  double m_qts;  /// total Q
-  double m_vas;  /// equivalent volume
-  double m_fs;   /// free air resonanse frequency
-  double m_rdc;  /// voice coil resistance
-  double m_lvc;  /// voice coil inductance (mH)
-  double m_qms;  /// mechanical Q
-  double m_qes;  /// electrical Q
-  double m_imp;  /// nominal impedance
-  double m_sens; /// sensitivity
-
-  double m_mmd; /// cone mass, kg
-  double m_ad;  /// effective radius, m
-  double m_bl;  /// force factor
-  double m_rms; /// suspension mechanical resistance, Ns/m
-  double m_cms; /// suspension compliance, m/N
+  /// total Q
+  double m_qts;
+  /// mechanical Q
+  double m_qms;
+  /// electrical Q
+  double m_qes;
+  /// equivalent volume
+  double m_vas;
+  /// free air resonanse frequency
+  double m_fs;
+  /// voice coil resistance
+  double m_rdc;
+  /// voice coil inductance (mH)
+  double m_lvc;
+  /// nominal impedance
+  double m_imp;
+  /// sensitivity
+  double m_sens;
+  /// cone mass, kg
+  double m_mmd;
+  /// effective radius, m
+  double m_ad;
+  /// force factor
+  double m_bl;
+  /// suspension mechanical resistance, Ns/m
+  double m_rms;
+  /// suspension compliance, m/N
+  double m_cms;
 
   std::string m_freq_resp_filename;
-  std::map<double, double> m_freq_resp;
   std::string m_imp_resp_filename;
-  std::map<double, double> m_imp_resp;
 
   std::string m_id_string;
 
 private:
-  /* xml parsing helper functions */
+  /// xml parsing helper functions
   void parse_type(xmlNodePtr node);
   void parse_qts(xmlNodePtr node);
   void parse_vas(xmlNodePtr node);

@@ -20,7 +20,11 @@
 #include "crossoverhistory.h"
 
 #include "gspeakersfilechooser.h"
-#include <ctime>
+
+#include <gtkmm/eventbox.h>
+#include <gtkmm/messagedialog.h>
+
+#include <chrono>
 
 #define MENU_INDEX_SAVE 6
 #define TOOLBAR_INDEX_SAVE 4
@@ -207,10 +211,9 @@ void CrossoverHistory::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> const& indices = path.get_indices();
-    if (!indices.empty()) {
-      index = indices[0];
-      signal_crossover_selected(&((*m_crossover_list.crossover_list())[indices[0]]));
+    if (!path.empty()) {
+      index = path[0];
+      signal_crossover_selected(&((*m_crossover_list.crossover_list())[path[0]]));
       /* Plot the crossover immediately after we selected it */
       if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
         signal_plot_crossover();
@@ -228,27 +231,25 @@ void CrossoverHistory::on_new_copy() {
     if (const Gtk::TreeIter iter = refSelection->get_selected()) {
       Gtk::TreePath path = m_refListStore->get_path(iter);
 
-      std::vector<int> indices = path.get_indices();
-      if (!indices.empty()) {
+      if (!path.empty()) {
+
         /* Here we have the row in indices[0], we want to make a copy of this Crossover
            and put it last in the list */
 
         /* Here we want a copy of the original Crossover, not a crossover that has the
            same id and so on, as we would get if we used the operator = or something similar,
            Quick and easy solution...use the to_xml function which gets rid of the id */
-
         xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
-        ((*m_crossover_list.crossover_list())[indices[0]]).to_xml_node(node);
-        Crossover c = Crossover(node->children);
+
+        ((*m_crossover_list.crossover_list())[path[0]]).to_xml_node(node);
+
+        Crossover c(node->children);
+
+        /* convert to nice time format */
 
         /* Set time of day as this crossovers id_string */
-        time_t t;
-        time(&t);
-        /* convert to nice time format */
-        std::string s = std::string(ctime(&t));
-        int length = s.length();
-        s[length - 1] = '\0';
-        c.set_id_string(_("Crossover: ") + s);
+        std::time_t time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        c.set_id_string(_("Crossover: ") + std::string(std::ctime(&time) + '\0'));
 
         /* the usual adding of items to the liststore and data-container */
         liststore_add_item(c);
@@ -256,12 +257,10 @@ void CrossoverHistory::on_new_copy() {
       }
     }
   }
+
   /* Select the last crossover in the list: the new crossover */
-  char* str = nullptr;
-  GString* buffer = g_string_new(str);
-  g_string_printf(buffer, "%lu", m_crossover_list.crossover_list()->size() - 1);
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
+  Gtk::TreePath path(Glib::ustring(std::to_string(m_crossover_list.crossover_list()->size() - 1)));
+
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
   signal_crossover_set_save_state(true);
@@ -333,8 +332,6 @@ void CrossoverHistory::on_new_xml() {
   signal_crossover_set_save_state(true);
   static_cast<Gtk::Label*>(get_label_widget())
       ->set_markup("<b>" + Glib::ustring(_("Crossover list [new file]")) + "</b>");
-
-  // set_label(_("Crossover list [new file]"));
 }
 
 void CrossoverHistory::on_save() {
@@ -391,9 +388,7 @@ void CrossoverHistory::on_remove() {
 
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
-
-    std::vector<int> indices = path.get_indices();
-    if (!indices.empty()) {
+    if (!path.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -402,16 +397,7 @@ void CrossoverHistory::on_remove() {
                                                  index);
     }
   }
-
-  char* str = nullptr;
-  GString* buffer = g_string_new(str);
-  if (index > 0) {
-    g_string_printf(buffer, "%d", index - 1);
-  } else {
-    g_string_printf(buffer, "%d", 0);
-  }
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-  Gtk::TreePath path(gpath);
+  Gtk::TreePath path(std::to_string(index > 0 ? index - 1 : 0));
   Gtk::TreeRow row = *(m_refListStore->get_iter(path));
   refSelection->select(row);
   signal_crossover_set_save_state(true);

@@ -32,6 +32,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/table.h>
@@ -110,8 +111,8 @@ protected:
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
 
   Gtk::VBox m_vbox;
+  Gtk::Label m_label;
 
-  /* Data containers */
   BoxList m_box_list;
   SpeakerList m_speaker_list;
 
@@ -119,9 +120,8 @@ protected:
 
   ModelColumns m_columns;
 
-  /* Additional member variables */
-  int index;
-  int nof_plots;
+  int m_index{0};
+  int m_nof_plots{0};
 };
 
 #endif

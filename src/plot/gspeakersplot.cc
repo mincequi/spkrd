@@ -32,11 +32,8 @@ GSpeakersPlot::GSpeakersPlot(int lower_x, int upper_x, int lower_y, int upper_y,
   m_logx = logx;
   m_y_zero_freq = y_zero_freq;
   m_linesize = 1;
-  m_enable_sec_scale = static_cast<int>(enable_sec_scale);
+  m_enable_sec_scale = enable_sec_scale;
   visible = false;
-
-  m_y_label1 = "";
-  m_y_label2 = "";
 }
 
 bool GSpeakersPlot::on_expose_event(GdkEventExpose* event) {
@@ -186,15 +183,13 @@ void GSpeakersPlot::replace_plot(int index, std::vector<GSpeakers::Point>& p,
 void GSpeakersPlot::remove_plot(int n) {
   int i = 0;
 
-  /* For some reason something goes wrong when we select the last row so we add a special case for
-   * that event */
+  // For some reason something goes wrong when we select the last row so we add
+  // a special case for that event
   if (n == (int)(m_points.size() - 1)) {
-    //    std::cout << "GSpeakersPlot: last list item" << std::endl;
     m_points.erase(m_points.begin() + m_points.size());
     m_colors.erase(m_colors.begin() + m_colors.size());
     m_visible_plots.erase(m_visible_plots.begin() + m_visible_plots.size());
   } else {
-
     for (auto iter = m_points.begin(); iter != m_points.end(); ++iter, i++) {
       if (n == i) {
         m_points.erase(iter);
@@ -224,9 +219,11 @@ void GSpeakersPlot::remove_plot(int n) {
 }
 
 void GSpeakersPlot::remove_all_plots() {
-  m_points.erase(m_points.begin(), m_points.end());
-  m_colors.erase(m_colors.begin(), m_colors.end());
-  m_visible_plots.erase(m_visible_plots.begin(), m_visible_plots.end());
+
+  m_points.clear();
+  m_colors.clear();
+  m_visible_plots.clear();
+
   if (visible) {
     redraw();
     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
@@ -253,18 +250,18 @@ void GSpeakersPlot::select_plot(int index) {
 }
 
 void GSpeakersPlot::redraw() {
-  /* Clear to white background color */
+  // Clear to white background color
   m_refGC->set_rgb_fg_color(white);
   m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, get_allocation().get_width(),
                               get_allocation().get_height());
 
-  /* Calc coordinates for a rectangular box */
+  // Calc coordinates for a rectangular box
   auto const box_x = BOX_FRAME_SIZE;
   auto const box_y = BOX_FRAME_SIZE;
   auto const box_width = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
   auto const box_height = get_allocation().get_height() - (2 * BOX_FRAME_SIZE);
 
-  /* Draw the box */
+  // Draw the box
   m_refGC->set_rgb_fg_color(black);
   m_refPixmap->draw_rectangle(m_refGC, false, box_x, box_y, box_width, box_height);
 
@@ -399,17 +396,19 @@ void GSpeakersPlot::redraw() {
 }
 
 void GSpeakersPlot::draw_log_grid() {
-  int total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
-  int quarter_space_x = std::round(total_space_x / 4);
-  int half_space_x = std::round(total_space_x / 2);
-  int xaxis_y_position = get_allocation().get_height() - BOX_FRAME_SIZE;
+
+  auto total_space_x = get_allocation().get_width() - (2 * BOX_FRAME_SIZE);
+  auto quarter_space_x = std::round(total_space_x / 4);
+  auto half_space_x = std::round(total_space_x / 2);
+  auto xaxis_y_position = get_allocation().get_height() - BOX_FRAME_SIZE;
 
   /* Draw the logaritmic vertical x-lines */
   if (m_upper_x == 20000) {
     half_space_x = quarter_space_x;
   }
+
   for (int i = 0; i <= 10; i++) {
-    int x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
+    auto x = BOX_FRAME_SIZE + std::round(std::log10((double)i) * half_space_x);
     m_refPixmap->draw_line(m_refGC, x, BOX_FRAME_SIZE, x, xaxis_y_position + 3);
     /* Draw text below some vertical lines */
     if ((i == 2) || (i == 5)) {
@@ -494,11 +493,6 @@ void GSpeakersPlot::draw_lin_grid() {
 
 void GSpeakersPlot::draw_horz_grid() {}
 
-// void GSpeakersPlot::set_font( const std::string& font )
-//{
-
-//}
-
 void GSpeakersPlot::set_line_style(Gdk::LineStyle& style) {}
 
 void GSpeakersPlot::set_line_size(int size) {}
@@ -523,12 +517,7 @@ void GSpeakersPlot::set_y_label2(const std::string& text) {
   }
 }
 
-Glib::ustring GSpeakersPlot::int_to_ustring(int d) {
-  char* str = nullptr;
-  GString* buffer = g_string_new(str);
-  g_string_printf(buffer, "%d", d);
-  return Glib::ustring(buffer->str);
-}
+Glib::ustring GSpeakersPlot::int_to_ustring(int d) { return Glib::ustring(std::to_string(d)); }
 
 Glib::ustring GSpeakersPlot::int_to_ustring3(int d) {
   char* str = nullptr;

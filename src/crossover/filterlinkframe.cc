@@ -22,269 +22,293 @@
 #include "common.h"
 #include "gspeakersplot.h"
 
+#include <gtkmm/messagedialog.h>
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
-#include <sstream>
 
 FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
                                  SpeakerList* speaker_list)
-    : Gtk::Frame(""), adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0), m_speaker_combo(),
+    : Gtk::Frame(""), adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
       m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
       m_imp_corr_checkbutton(_("Impedance correction")),
-      m_adv_imp_model_checkbutton(_("Use adv. driver imp. model")) {
+      m_adv_imp_model_checkbutton(_("Use adv. driver imp. model")), m_net(net),
+      m_description(description), m_speaker_list(speaker_list) {
+
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())->set_markup("<b>" + description + "</b>");
+
+  m_label.set_markup("<b>" + description + "</b>");
+  set_label_widget(m_label);
+
   m_vbox.set_border_width(12);
+  // m_vbox.set_border_width(5);
 
-  init = true;
-  enable_edit = false;
-  m_net = net;
-  m_description = description;
-  m_speaker_list = speaker_list;
-  std::string speaker_name = m_net->get_speaker();
+  this->initialise_speaker_combobox();
 
-  /* Setup the speaker combo box */
-  m_vbox.set_border_width(5);
-  std::vector<std::string> popdown_strings;
+  m_vbox.pack_start(m_imp_corr_checkbutton);
+  m_imp_corr_checkbutton.set_active(m_net->get_has_imp_corr());
+
+  m_vbox.pack_start(m_adv_imp_model_checkbutton);
+  m_adv_imp_model_checkbutton.set_active(m_net->get_adv_imp_model() == 1);
+
+  Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+  m_vbox.pack_start(*hbox);
+  hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Damping: ")))));
+  hbox->pack_start(m_damp_spinbutton);
+  hbox->pack_start(*Gtk::manage(new Gtk::Label("dB")));
+
+  if (m_net->get_has_damp()) {
+    this->initialise_dampening();
+  }
+  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
+    this->initialise_highpass_filter();
+  }
+  if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
+    this->initialise_lowpass_filter();
+  }
+
+  add(m_vbox);
+  show_all();
+
+  this->connect_signals();
+
+  g_settings.defaultValueString("SPICECmdLine", "gnucap");
+
+  init = false;
+  enable_edit = true;
+}
+
+void FilterLinkFrame::initialise_dampening() {
+  // Set damp value in dB here
+  auto const r_ser = m_net->get_damp_R1().get_value();
+
+  Speaker speaker;
+
+  if (m_speaker_list) {
+    speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
+  }
+
+  m_damp_spinbutton.set_value(std::round(
+      20 * std::log10(r_ser / (g_settings.getValueBool("UseDriverImpedance") ? speaker.get_imp()
+                                                                             : speaker.get_rdc()) +
+                      1.0)));
+}
+
+void FilterLinkFrame::initialise_speaker_combobox() {
+
+  std::string const& speaker_name = m_net->get_speaker();
+
   if (!speaker_name.empty()) {
-    popdown_strings.push_back(speaker_name);
+    m_speaker_combo.append_text(speaker_name);
   }
 
   if (m_speaker_list != nullptr) {
     for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
-        popdown_strings.push_back(iter.get_id_string());
+        m_speaker_combo.append_text(iter.get_id_string());
       }
     }
   }
-  m_speaker_combo.set_popdown_strings(popdown_strings);
-  m_speaker_combo.get_entry()->set_editable(false);
+  m_speaker_combo.set_active(0);
   m_vbox.pack_start(m_speaker_combo);
+}
 
-  m_vbox.pack_start(m_imp_corr_checkbutton);
-  if (m_net->get_has_imp_corr()) {
-    m_imp_corr_checkbutton.set_active(true);
+void FilterLinkFrame::initialise_highpass_filter() {
+  Gtk::Frame* frame = Gtk::manage(new Gtk::Frame(""));
+
+  frame->set_border_width(2);
+  frame->set_shadow_type(Gtk::SHADOW_NONE);
+
+  {
+    auto label = Gtk::manage(new Gtk::Label());
+    label->set_markup("<b>" + Glib::ustring(_("Highpass")) + "</b>");
+    frame->set_label_widget(*label);
   }
 
-  m_vbox.pack_start(m_adv_imp_model_checkbutton);
-  if (m_net->get_adv_imp_model() == 1) {
-    m_adv_imp_model_checkbutton.set_active(true);
-  }
+  m_vbox.pack_start(*frame);
+  Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+  vbox->set_border_width(12);
+  frame->add(*vbox);
 
-  Gtk::HBox* hbox = manage(new Gtk::HBox());
-  m_vbox.pack_start(*hbox);
-  hbox->pack_start((*manage(new Gtk::Label(_("Damping: ")))));
-  hbox->pack_start(m_damp_spinbutton);
+  /* Setup menus */
+  m_higher_order_combo = Gtk::manage(new Gtk::ComboBoxText());
+  m_higher_order_combo->append_text("1");
+  m_higher_order_combo->append_text("2");
+  m_higher_order_combo->append_text("3");
+  m_higher_order_combo->append_text("4");
+  m_higher_order_combo->set_active(m_net->get_highpass_order() - 1);
 
-  if (m_net->get_has_damp()) {
-    /* Set damp value in dB here */
-    double r_ser = m_net->get_damp_R1().get_value();
-    Speaker speaker;
-    if (m_speaker_list != nullptr) {
-      speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
-    }
-    if (g_settings.getValueBool("UseDriverImpedance")) {
-      m_damp_spinbutton.set_value(std::round(20 * log10(r_ser / speaker.get_imp() + 1)));
-    } else {
-      m_damp_spinbutton.set_value(std::round(20 * log10(r_ser / speaker.get_rdc() + 1)));
-    }
-  }
-  hbox->pack_start((*manage(new Gtk::Label("dB"))));
+  m_higher_type_combo = Gtk::manage(new Gtk::ComboBoxText());
 
-  Gtk::Label* label;
-  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
-    Gtk::Frame* frame = manage(new Gtk::Frame(""));
+  on_order_selected(m_higher_order_combo, m_higher_type_combo);
 
-    frame->set_border_width(2);
-    frame->set_shadow_type(Gtk::SHADOW_NONE);
-    static_cast<Gtk::Label*>(frame->get_label_widget())
-        ->set_markup("<b>" + Glib::ustring(_("Highpass")) + "</b>");
-    m_vbox.pack_start(*frame);
-    Gtk::VBox* vbox = manage(new Gtk::VBox());
-    vbox->set_border_width(12);
-    frame->add(*vbox);
+  m_higher_order_combo->signal_changed().connect(
+      sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_higher_order_combo,
+                 m_higher_type_combo));
 
-    /* Setup menus */
-    m_higher_order_optionmenu = manage(new Gtk::OptionMenu());
-    m_higher_order_menu = manage(new Gtk::Menu());
-    Gtk::Menu::MenuList& menulist = m_higher_order_menu->items();
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "1",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 1)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "2",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 2)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "3",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 3)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "4",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 1, 4)));
-    m_higher_order_optionmenu->set_menu(*m_higher_order_menu);
-    m_higher_type_optionmenu = manage(new Gtk::OptionMenu());
-    m_higher_type_menu = manage(new Gtk::Menu());
-    m_higher_order_optionmenu->set_history(m_net->get_highpass_order() - 1);
-    on_order_selected(1, m_net->get_highpass_order());
-    m_higher_type_optionmenu->set_menu(*m_higher_type_menu);
+  /* menus ready */
+  Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+  vbox->pack_start(*hbox);
+  hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Order: "), Gtk::ALIGN_START))));
+  hbox->pack_start(*m_higher_order_combo);
+  vbox->pack_start(*m_higher_type_combo);
 
-    /* menus ready */
-
-    Gtk::HBox* hbox = manage(new Gtk::HBox());
-    vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label(_("Order: "), Gtk::ALIGN_START))));
-    hbox->pack_start(*m_higher_order_optionmenu);
-    vbox->pack_start(*m_higher_type_optionmenu);
-    hbox = manage(new Gtk::HBox());
-    hbox->pack_start((*manage(new Gtk::Label(_("Cutoff: ")))));
-    m_higher_co_freq_spinbutton =
-        manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
-    hbox->pack_start(*m_higher_co_freq_spinbutton);
-    label = manage(new Gtk::Label(" Hz"));
+  hbox = Gtk::manage(new Gtk::HBox());
+  hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Cutoff: ")))));
+  m_higher_co_freq_spinbutton =
+      Gtk::manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
+  hbox->pack_start(*m_higher_co_freq_spinbutton);
+  {
+    auto label = Gtk::manage(new Gtk::Label(" Hz"));
     label->set_alignment(Gtk::ALIGN_START);
     hbox->pack_start(*label);
-    vbox->pack_start(*hbox);
-    set_family(m_higher_type_optionmenu, m_net->get_highpass_order(), m_net->get_highpass_family());
   }
+  vbox->pack_start(*hbox);
+
+  this->set_family(m_higher_type_combo, m_net->get_highpass_order(), m_net->get_highpass_family());
+}
+
+void FilterLinkFrame::initialise_lowpass_filter() {
+
+  Gtk::Frame* frame = Gtk::manage(new Gtk::Frame(""));
+  frame->set_border_width(2);
+  frame->set_shadow_type(Gtk::SHADOW_NONE);
+  m_vbox.pack_start(*frame);
+
+  {
+    auto label = Gtk::manage(new Gtk::Label());
+    label->set_markup("<b>" + Glib::ustring(_("Lowpass")) + "</b>");
+    frame->set_label_widget(*label);
+  }
+
+  Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+  vbox->set_border_width(12);
+  frame->add(*vbox);
+
+  // Setup menus
+  m_lower_order_combo = Gtk::manage(new Gtk::ComboBoxText());
+  m_lower_order_combo->append_text("1");
+  m_lower_order_combo->append_text("2");
+  m_lower_order_combo->append_text("3");
+  m_lower_order_combo->append_text("4");
+  m_lower_order_combo->set_active(m_net->get_lowpass_order() - 1);
+
+  m_lower_type_combo = Gtk::manage(new Gtk::ComboBoxText());
+
+  m_lower_order_combo->signal_changed().connect(
+      sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_lower_order_combo,
+                 m_lower_type_combo));
+
+  on_order_selected(m_lower_order_combo, m_lower_type_combo);
+
+  /* menus ready */
+  Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+  vbox->pack_start(*hbox);
+  hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Order: "))));
+  hbox->pack_start(*m_lower_order_combo);
+  vbox->pack_start(*m_lower_type_combo);
+
+  hbox = Gtk::manage(new Gtk::HBox());
+  hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Cutoff: ")))));
+  m_lower_co_freq_spinbutton =
+      Gtk::manage(new Gtk::SpinButton(*Gtk::manage(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
+
+  hbox->pack_start(*m_lower_co_freq_spinbutton);
+  hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Hz"))));
+
+  vbox->pack_start(*hbox);
+
+  this->set_family(m_lower_type_combo, m_net->get_lowpass_order(), m_net->get_lowpass_family());
+}
+
+void FilterLinkFrame::connect_signals() {
+
+  m_speaker_combo.signal_changed().connect(
+      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
 
   if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
-    Gtk::Frame* frame = manage(new Gtk::Frame(""));
-    frame->set_border_width(2);
-    frame->set_shadow_type(Gtk::SHADOW_NONE);
-    static_cast<Gtk::Label*>(frame->get_label_widget())
-        ->set_markup("<b>" + Glib::ustring(_("Lowpass")) + "</b>");
-
-    m_vbox.pack_start(*frame);
-    Gtk::VBox* vbox = manage(new Gtk::VBox());
-    frame->add(*vbox);
-    vbox->set_border_width(12);
-
-    /* Setup menus */
-    m_lower_order_optionmenu = manage(new Gtk::OptionMenu());
-    m_lower_order_menu = manage(new Gtk::Menu());
-    Gtk::Menu::MenuList& menulist = m_lower_order_menu->items();
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "1",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 1)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "2",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 2)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "3",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 3)));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-        "4",
-        sigc::bind<int, int>(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), 0, 4)));
-    m_lower_order_optionmenu->set_menu(*m_lower_order_menu);
-    m_lower_type_optionmenu = manage(new Gtk::OptionMenu());
-    m_lower_type_menu = manage(new Gtk::Menu());
-    m_lower_order_optionmenu->set_history(m_net->get_lowpass_order() - 1);
-    on_order_selected(0, m_net->get_lowpass_order());
-    m_lower_type_optionmenu->set_menu(*m_lower_type_menu);
-
-    /* menus ready */
-
-    Gtk::HBox* hbox = manage(new Gtk::HBox());
-    vbox->pack_start(*hbox);
-    hbox->pack_start((*manage(new Gtk::Label(_("Order: ")))));
-    hbox->pack_start(*m_lower_order_optionmenu);
-    vbox->pack_start(*m_lower_type_optionmenu);
-    hbox = manage(new Gtk::HBox());
-    hbox->pack_start((*manage(new Gtk::Label(_("Cutoff: ")))));
-    m_lower_co_freq_spinbutton =
-        manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
-    hbox->pack_start(*m_lower_co_freq_spinbutton);
-    hbox->pack_start((*manage(new Gtk::Label(_("Hz")))));
-    vbox->pack_start(*hbox);
-    set_family(m_lower_type_optionmenu, m_net->get_lowpass_order(), m_net->get_lowpass_family());
-  }
-
-  add(m_vbox);
-  show_all();
-
-  m_speaker_combo.get_entry()->signal_changed().connect(
-      sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
-  if ((net->get_type() & NET_TYPE_LOWPASS) != 0) {
-    m_lower_type_optionmenu->signal_changed().connect(
+    m_lower_type_combo->signal_changed().connect(
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+    m_lower_order_combo->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_lower_co_freq_spinbutton->signal_value_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
-    m_lower_order_optionmenu->signal_changed().connect(
-        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
-  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
-    m_higher_order_optionmenu->signal_changed().connect(
+  if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0) {
+    m_higher_order_combo->signal_changed().connect(
+        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+    m_higher_type_combo->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_higher_co_freq_spinbutton->signal_value_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
-    m_higher_type_optionmenu->signal_changed().connect(
-        sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
+
   m_imp_corr_checkbutton.signal_toggled().connect(
       sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+
   m_damp_spinbutton.signal_value_changed().connect(
       sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+
   m_adv_imp_model_checkbutton.signal_toggled().connect(
       sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
+
   signal_net_modified_by_user.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_net_updated));
   signal_plot_crossover.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_clear_and_plot));
-  g_settings.defaultValueString("SPICECmdLine", "gnucap");
-  my_filter_plot_index = -1;
+
   signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_speakerlist_loaded));
   g_settings.settings_changed.connect(sigc::mem_fun(*this, &FilterLinkFrame::on_settings_changed));
-  //  on_net_updated(m_net);
-  init = false;
-  enable_edit = true;
 }
 
-FilterLinkFrame::~FilterLinkFrame() { std::cout << "FilterLinkFrame: dtor\n"; }
+FilterLinkFrame::~FilterLinkFrame() = default;
 
-void FilterLinkFrame::on_order_selected(int which, int order) {
-#ifdef OUTPUT_DEBUG
-  std::cout << "FilterLinkFrame::on_order_selected, which = " << which << "   order = " << order
-            << std::endl;
-#endif
-  Gtk::Menu::MenuList& menulist =
-      which == 0 ? m_lower_type_menu->items() : m_higher_type_menu->items();
+void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
+                                        Gtk::ComboBoxText* type_box) {
 
-  menulist.clear();
+  std::puts("checking if already populated");
+  if (type_box->get_active()) {
+    std::puts("is populated and now trying to remove");
+    type_box->remove_all();
+  } else {
+    std::puts("is not populated");
+  }
 
-  switch (order) {
+  switch (order_box->get_active_row_number() + 1) {
   case NET_ORDER_1ST:
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    std::puts("first order");
+    type_box->append_text("Butterworth");
     break;
   case NET_ORDER_2ND:
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Chebychev"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
+    std::puts("second order");
+    type_box->append_text("Bessel");
+    type_box->append_text("Butterworth");
+    type_box->append_text("Chebychev");
+    type_box->append_text("Linkwitz-Riley");
     break;
   case NET_ORDER_3RD:
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
+    std::puts("third order");
+    type_box->append_text("Bessel");
+    type_box->append_text("Butterworth");
     break;
   case NET_ORDER_4TH:
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Bessel"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Butterworth"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Gaussian"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Legendre"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linear-Phase"));
-    menulist.push_back(Gtk::Menu_Helpers::MenuElem("Linkwitz-Riley"));
+    std::puts("fourth order");
+    type_box->append_text("Bessel");
+    type_box->append_text("Butterworth");
+    type_box->append_text("Gaussian");
+    type_box->append_text("Legendre");
+    type_box->append_text("Linear-Phase");
+    type_box->append_text("Linkwitz-Riley");
     break;
   }
-  if (which == 0) {
-    m_lower_type_optionmenu->set_history(0);
-  } else if (which == 1) {
-    m_higher_type_optionmenu->set_history(0);
-  }
+  type_box->set_active(0);
 }
 
-void FilterLinkFrame::on_settings_changed(const std::string& s) {
-  if (s == "DisableFilterAmp") {
+void FilterLinkFrame::on_settings_changed(const std::string& setting) {
+  if (setting == "DisableFilterAmp") {
     on_param_changed();
   }
 }
@@ -295,17 +319,22 @@ void FilterLinkFrame::on_param_changed() {
     std::puts("FilterLinkFrame::on_param_changed");
 #endif
     enable_edit = false;
+
     Speaker speaker;
+
     if (m_speaker_list != nullptr) {
-      speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+      speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
     }
     m_net->set_speaker(speaker.get_id_string());
 
     int index = 0;
     std::vector<double> num_params;
+
     if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
-      m_net->set_lowpass_order(m_lower_order_optionmenu->get_history() + 1);
-      double cutoff = m_lower_co_freq_spinbutton->get_value();
+
+      m_net->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
+      double const cutoff = m_lower_co_freq_spinbutton->get_value();
+
       switch (m_net->get_lowpass_order()) {
       case NET_ORDER_1ST:
         num_params = get_filter_params(NET_BUTTERWORTH, NET_ORDER_1ST, NET_TYPE_LOWPASS);
@@ -314,7 +343,7 @@ void FilterLinkFrame::on_param_changed() {
         m_net->set_lowpass_family(NET_BUTTERWORTH);
         break;
       case NET_ORDER_2ND:
-        switch (m_lower_type_optionmenu->get_history()) {
+        switch (m_lower_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_2ND, NET_TYPE_LOWPASS);
           m_net->set_lowpass_family(NET_BESSEL);
@@ -333,14 +362,14 @@ void FilterLinkFrame::on_param_changed() {
           break;
         }
         /* inductor */
-        m_net->parts()[index].set_value(((speaker.get_rdc() * num_params[0]) / cutoff) * 1000);
+        m_net->parts()[index].set_value(speaker.get_rdc() * num_params[0] / cutoff * 1000);
         m_net->parts()[index++].set_unit("m");
         /* capacitor */
-        m_net->parts()[index].set_value((num_params[1] / (speaker.get_rdc() * cutoff)) * 1000000);
+        m_net->parts()[index].set_value(num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
         m_net->parts()[index++].set_unit("u");
         break;
       case NET_ORDER_3RD:
-        switch (m_lower_type_optionmenu->get_history()) {
+        switch (m_lower_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_3RD, NET_TYPE_LOWPASS);
           m_net->set_lowpass_family(NET_BESSEL);
@@ -361,7 +390,7 @@ void FilterLinkFrame::on_param_changed() {
         m_net->parts()[index++].set_unit("m");
         break;
       case NET_ORDER_4TH:
-        switch (m_lower_type_optionmenu->get_history()) {
+        switch (m_lower_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_4TH, NET_TYPE_LOWPASS);
           m_net->set_lowpass_family(NET_BESSEL);
@@ -403,7 +432,7 @@ void FilterLinkFrame::on_param_changed() {
       }
     }
     if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0) {
-      m_net->set_highpass_order(m_higher_order_optionmenu->get_history() + 1);
+      m_net->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
       double cutoff = m_higher_co_freq_spinbutton->get_value();
       switch (m_net->get_highpass_order()) {
       case NET_ORDER_1ST:
@@ -413,7 +442,7 @@ void FilterLinkFrame::on_param_changed() {
         m_net->set_highpass_family(NET_BUTTERWORTH);
         break;
       case NET_ORDER_2ND:
-        switch (m_higher_type_optionmenu->get_history()) {
+        switch (m_higher_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_2ND, NET_TYPE_HIGHPASS);
           m_net->set_highpass_family(NET_BESSEL);
@@ -439,7 +468,7 @@ void FilterLinkFrame::on_param_changed() {
         m_net->parts()[index++].set_unit("m");
         break;
       case NET_ORDER_3RD:
-        switch (m_higher_type_optionmenu->get_history()) {
+        switch (m_higher_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_3RD, NET_TYPE_HIGHPASS);
           m_net->set_highpass_family(NET_BESSEL);
@@ -460,7 +489,7 @@ void FilterLinkFrame::on_param_changed() {
         m_net->parts()[index++].set_unit("u");
         break;
       case NET_ORDER_4TH:
-        switch (m_higher_type_optionmenu->get_history()) {
+        switch (m_higher_type_combo->get_active_row_number()) {
         case 0: // bessel
           num_params = get_filter_params(NET_BESSEL, NET_ORDER_4TH, NET_TYPE_HIGHPASS);
           m_net->set_highpass_family(NET_BESSEL);
@@ -504,23 +533,21 @@ void FilterLinkFrame::on_param_changed() {
     if (m_imp_corr_checkbutton.get_active()) {
       m_net->set_has_imp_corr(true);
       /* calc imp corr here */
-      m_net->get_imp_corr_C().set_value((speaker.get_lvc() / 1000) / pow(speaker.get_rdc(), 2) *
-                                        1000000);
+      m_net->get_imp_corr_C().set_value((speaker.get_lvc() / 1000) /
+                                        std::pow(speaker.get_rdc(), 2) * 1000000);
       m_net->get_imp_corr_C().set_unit("u");
       m_net->get_imp_corr_R().set_value(speaker.get_rdc());
     } else {
       m_net->set_has_imp_corr(false);
     }
-    if (m_adv_imp_model_checkbutton.get_active()) {
-      m_net->set_adv_imp_model(1);
-    } else {
-      m_net->set_adv_imp_model(0);
-    }
+
+    m_net->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
+
     if (m_damp_spinbutton.get_value_as_int() > 0) {
       m_net->set_has_damp(true);
       /* Calculate resistors for damping network */
-      double r_ser = speaker.get_rdc() * (pow(10, m_damp_spinbutton.get_value() / 20) - 1);
-      double r_par = speaker.get_rdc() + pow(speaker.get_rdc(), 2) / r_ser;
+      auto const r_ser = speaker.get_rdc() * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
+      auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
       m_net->get_damp_R2().set_value(r_ser);
       m_net->get_damp_R1().set_value(r_par);
     } else {
@@ -540,7 +567,6 @@ void FilterLinkFrame::on_net_updated(Net* net) {
 #ifdef OUPUTDEBUG
     std::cout << "FilterLinkFrame::on_net_updated" << std::endl;
 #endif
-    // enable_edit = false;
 
     if (g_settings.getValueBool("AutoUpdateFilterPlots")) {
       on_plot_crossover();
@@ -561,23 +587,23 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   m_speaker_list = speaker_list;
 
   std::string const& speaker_name = m_net->get_speaker();
+
   /* Setup the speaker combo box */
-  std::vector<std::string> popdown_strings;
   bool speaker_is_in_speakerlist = false;
-  if (m_speaker_list != nullptr) {
+
+  if (m_speaker_list) {
     for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
-        popdown_strings.push_back(iter.get_id_string());
+        m_speaker_combo.append_text(iter.get_id_string());
       } else {
         speaker_is_in_speakerlist = true;
       }
     }
   }
   if (speaker_is_in_speakerlist) {
-    popdown_strings.insert(popdown_strings.begin(), speaker_name);
+    m_speaker_combo.prepend_text(speaker_name);
   }
-  m_speaker_combo.set_popdown_strings(popdown_strings);
 }
 
 void FilterLinkFrame::on_plot_crossover() {
@@ -587,19 +613,22 @@ void FilterLinkFrame::on_plot_crossover() {
   // Create spice code for this net
   Speaker speaker;
   if (m_speaker_list) {
-    speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_entry()->get_text());
+    speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
   }
+
   std::string spice_filename;
   try {
     spice_filename = m_net->to_SPICE(speaker, g_settings.getValueBool("SPICEUseGNUCAP"));
   } catch (std::runtime_error const& e) {
-    Gtk::MessageDialog d(_("FilterLinkFrame::on_plot_crossover: ERROR: ") + Glib::ustring(e.what()),
-                         false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
-    d.run();
+    Gtk::MessageDialog dialog(_("FilterLinkFrame::on_plot_crossover: ERROR: ") +
+                                  Glib::ustring(e.what()),
+                              false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+    dialog.run();
   }
 
   /* run spice with created file */
   std::string cmd = g_settings.getValueString("SPICECmdLine");
+
   if (g_settings.getValueBool("SPICEUseNGSPICE") || g_settings.getValueBool("SPICEUseGNUCAP")) {
     cmd += " -b " + spice_filename + " > " + spice_filename + ".out";
   } else {
@@ -608,7 +637,9 @@ void FilterLinkFrame::on_plot_crossover() {
 #ifdef OUTPUT_DEBUG
   std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"\n";
 #endif
+
   system(cmd.c_str());
+
 #ifdef OUTPUT_DEBUG
   std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done\n";
 #endif
@@ -718,9 +749,6 @@ void FilterLinkFrame::on_plot_crossover() {
   }
 }
 
-/*
- * Numerical coefficients for the filter principles
- */
 std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order,
                                                        int net_type) {
   std::vector<double> nums;
@@ -922,7 +950,7 @@ std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int ne
   return nums;
 }
 
-void FilterLinkFrame::set_family(Gtk::OptionMenu* option_menu, int order, int family) {
+void FilterLinkFrame::set_family(Gtk::ComboBoxText* option_menu, int order, int family) {
 #ifdef OUTPUT_DEBUG
   std::cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family
             << std::endl;
@@ -931,48 +959,48 @@ void FilterLinkFrame::set_family(Gtk::OptionMenu* option_menu, int order, int fa
   case NET_ORDER_2ND:
     switch (family) {
     case NET_BESSEL:
-      option_menu->set_history(0);
+      option_menu->set_active(0);
       break;
     case NET_BUTTERWORTH:
-      option_menu->set_history(1);
+      option_menu->set_active(1);
       break;
     case NET_CHEBYCHEV:
-      option_menu->set_history(2);
+      option_menu->set_active(2);
       break;
     case NET_LINKWITZRILEY:
-      option_menu->set_history(3);
+      option_menu->set_active(3);
       break;
     }
     break;
   case NET_ORDER_3RD:
     switch (family) {
     case NET_BUTTERWORTH:
-      option_menu->set_history(1);
+      option_menu->set_active(1);
       break;
     case NET_BESSEL:
-      option_menu->set_history(0);
+      option_menu->set_active(0);
       break;
     }
     break;
   case NET_ORDER_4TH:
     switch (family) {
     case NET_BESSEL:
-      option_menu->set_history(0);
+      option_menu->set_active(0);
       break;
     case NET_BUTTERWORTH:
-      option_menu->set_history(1);
+      option_menu->set_active(1);
       break;
     case NET_GAUSSIAN:
-      option_menu->set_history(2);
+      option_menu->set_active(2);
       break;
     case NET_LEGENDRE:
-      option_menu->set_history(3);
+      option_menu->set_active(3);
       break;
     case NET_LINEARPHASE:
-      option_menu->set_history(4);
+      option_menu->set_active(4);
       break;
     case NET_LINKWITZRILEY:
-      option_menu->set_history(5);
+      option_menu->set_active(5);
       break;
     }
     break;

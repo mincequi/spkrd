@@ -29,6 +29,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
   bool flag = false;
 
   m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
+
   switch (action) {
   case Gtk::FILE_CHOOSER_ACTION_OPEN:
     m_file_chooser->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);

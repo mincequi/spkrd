@@ -24,7 +24,10 @@
 #include "gspeakersplot.h"
 #include "speakerlist.h"
 
-#include <gtkmm.h>
+#include <gtkmm/box.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/spinbutton.h>
 
 class FilterLinkFrame : public Gtk::Frame {
 public:
@@ -34,8 +37,7 @@ public:
 
 private:
   /* callbacks */
-  /* which == 0: lower, which == 1: higher, order = filter order */
-  void on_order_selected(int which, int order);
+  void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);
   void on_param_changed();
   void on_net_updated(Net* net);
   void on_plot_crossover();
@@ -44,29 +46,39 @@ private:
   void on_settings_changed(const std::string& s);
 
 private:
-  /* net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
+  void connect_signals();
+
+  void initialise_speaker_combobox();
+  void initialise_dampening();
+  void initialise_highpass_filter();
+  void initialise_lowpass_filter();
+
+private:
+  /*
+   * Numerical coefficients for the filter principles
+   * net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
    * NET_TYPE_HIGHPASS */
   std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
 
-  /* Helper function */
-  void set_family(Gtk::OptionMenu* option_menu, int order, int family);
+  void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
 private:
   Gtk::Adjustment adj;
 
+  Gtk::Label m_label;
   Gtk::VBox m_vbox;
-  Gtk::Combo m_speaker_combo;
+  Gtk::ComboBoxText m_speaker_combo;
   Gtk::CheckButton m_enable_checkbutton;
 
   /* For lowpass filter */
-  Gtk::OptionMenu *m_lower_order_optionmenu, *m_lower_type_optionmenu;
+  Gtk::ComboBoxText* m_lower_order_combo;
+  Gtk::ComboBoxText* m_lower_type_combo;
   Gtk::SpinButton* m_lower_co_freq_spinbutton;
-  Gtk::Menu *m_lower_order_menu, *m_lower_type_menu;
 
   /* For highpass filter */
-  Gtk::OptionMenu *m_higher_order_optionmenu, *m_higher_type_optionmenu;
+  Gtk::ComboBoxText* m_higher_order_combo;
+  Gtk::ComboBoxText* m_higher_type_combo;
   Gtk::SpinButton* m_higher_co_freq_spinbutton;
-  Gtk::Menu *m_higher_order_menu, *m_higher_type_menu;
 
   /* For both */
   Gtk::CheckButton m_inv_pol_checkbutton;
@@ -77,10 +89,10 @@ private:
   Net* m_net;
   std::string m_description;
   SpeakerList* m_speaker_list;
-  bool enable_edit;
-  bool init;
+  bool enable_edit{false};
+  bool init{true};
 
-  int my_filter_plot_index;
+  int my_filter_plot_index{-1};
   std::vector<GSpeakers::Point> points;
 };
 

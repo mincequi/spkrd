@@ -25,6 +25,8 @@
 
 #include "common.h"
 
+#include <gtkmm/label.h>
+
 DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), plot(1, 20000, 50, 110, true, 0, true) {
   set_shadow_type(Gtk::SHADOW_NONE);
   static_cast<Gtk::Label*>(get_label_widget())

@@ -25,7 +25,16 @@
 
 #include <glibmm/ustring.h>
 
+#include <gtkmm/cellrenderer.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/handlebox.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/table.h>
+#include <gtkmm/toolbar.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treeview.h>
 #include <gtkmm/widget.h>
 
 #include <sigc++/sigc++.h>
@@ -33,11 +42,17 @@
 class Speaker_ListStore : public sigc::trackable {
 public:
   Speaker_ListStore();
+
   virtual ~Speaker_ListStore();
+
   Gtk::Widget& get_treeview_table();
+
   Gtk::Widget& get_editor_table();
+
   Gtk::Widget& get_plot();
+
   Gtk::Menu& get_menu();
+
   Gtk::Widget& get_toolbar();
 
 protected:
@@ -160,7 +175,7 @@ protected:
   bool changed, new_xml_pressed;
   int index;
   ModelColumns m_columns;
-  // Glib::RefPtr<Gtk::TreeSelection> old_refSelection;
+
   void set_entries_sensitive(bool value);
   std::string m_filename;
   bool m_modified;

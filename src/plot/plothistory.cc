@@ -19,22 +19,21 @@
 
 #include "plothistory.h"
 #include "gspeakersplot.h"
+
 #include <cmath>
 #include <ctime>
 
 PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())
-      ->set_markup("<b>" + Glib::ustring(_("Plot list")) + "</b>");
 
-  // set_title("Plot history");
+  m_label.set_markup("<b>" + Glib::ustring(_("Plot list")) + "</b>");
+  set_label_widget(m_label);
+
   m_vbox.set_border_width(12);
 
-  // set_default_size(250, 300);
-  nof_plots = 0;
-
   add(m_vbox);
+
   m_vbox.pack_start(m_ScrolledWindow);
 
   m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
@@ -42,7 +41,7 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
 
   create_model();
 
-  /* create tree view */
+  // create tree view
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
 
@@ -53,9 +52,10 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox() {
   signal_add_plot.connect(mem_fun(*this, &PlotHistory::on_add_plot));
 
   add_columns();
+
   m_ScrolledWindow.add(m_TreeView);
+
   show_all();
-  index = 0;
 }
 
 PlotHistory::~PlotHistory() = default;
@@ -70,23 +70,15 @@ void PlotHistory::on_selection_changed() {
 
     std::vector<int> indices = path.get_indices();
     if (!indices.empty()) {
-      /* Check config if user want to mark selected plot */
+      // Check config if user want to mark selected plot
       signal_select_plot(indices[0]);
-
-      index = indices[0];
-#ifdef OUTPUT_DEBUG
-      std::cout << "PlotHistory: selection changed" << std::endl;
-#endif
-
-      // signal_box_selected(&((*m_box_list.box_list())[indices[0]]));
+      m_index = indices[0];
     }
   }
 }
 
 void PlotHistory::on_remove() {
-#ifdef OUTPUT_DEBUG
-  std::cout << "PlotHistory: on_remove" << std::endl;
-#endif
+
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
@@ -95,49 +87,39 @@ void PlotHistory::on_remove() {
     std::vector<int> const& indices = path.get_indices();
 
     if (!indices.empty()) {
-      // Remove item from ListStore:
+
+      // Remove item from ListStore
       m_refListStore->erase(iter);
 
-      /* Signal to the plot */
-      /* We got the plot index to remove in indices[0] */
-#ifdef OUTPUT_DEBUG
-      std::cout << "Path: " << path[0] << std::endl;
-      std::cout << "PlotHistory: plot to remove = " << indices[0] << std::endl;
-#endif
+      // Signal to the plot that we got the plot index to remove in indices[0]
       signal_remove_box_plot(indices[0]);
     }
   }
-  if (nof_plots > 0) {
-    nof_plots--;
+
+  if (m_nof_plots > 0) {
+    --m_nof_plots;
   }
-  if (nof_plots > 0) {
+
+  if (m_nof_plots > 0) {
     /* Select first row */
-    char* str = nullptr;
-    GString* buffer = g_string_new(str);
-    if (index > 0) {
-      g_string_printf(buffer, "%d", index - 1);
-    } else {
-      g_string_printf(buffer, "%d", 0);
-    }
-    GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-    Gtk::TreePath path(gpath);
+    Gtk::TreePath path(Glib::ustring(std::to_string(m_index > 0 ? m_index - 1 : 0)));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
     refSelection->select(row);
   }
 }
 
-void PlotHistory::on_box_modified(Box* b) {}
+void PlotHistory::on_box_modified(Box*) {}
 
 void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
-  if ((b != nullptr) && (s != nullptr)) {
+
+  if (b != nullptr && s != nullptr) {
     m_box_list.box_list().push_back(*b);
+
     m_speaker_list.speaker_list().emplace_back(*s);
+
     liststore_add_item(*b, *s, color);
-#ifdef OUTPUT_DEBUG
-    std::cout << "PlotHistory: plot added" << std::endl;
-#endif
   }
-  nof_plots++;
+  ++m_nof_plots;
 }
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
@@ -160,9 +142,6 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
 
   std::vector<int> const& indices = path.get_indices();
   if (!indices.empty()) {
-#ifdef OUTPUT_DEBUG
-    std::cout << "PlotHistory: hide" << std::endl;
-#endif
     signal_hide_box_plot(indices[0]);
   }
   /* set new value */
@@ -208,16 +187,6 @@ void PlotHistory::add_columns() {
 
     pColumn->add_attribute(pRenderer->property_text(), m_columns.speaker_string);
   }
-  /*
-{
-Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-int cols_count = m_TreeView.append_column(_("Id"), *pRenderer);
-Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
-
-pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
-}
-  */
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
@@ -225,7 +194,6 @@ pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
     pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::type_cell_data_func));
-    // pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -234,7 +202,6 @@ pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
     pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::vb1_cell_data_func));
-    // pColumn->add_attribute(pRenderer->property_text(), m_columns.vb1);
   }
   {
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -243,26 +210,7 @@ pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
     Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
     pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::fb1_cell_data_func));
-    // pColumn->add_attribute(pRenderer->property_text(), m_columns.fb1);
   }
-  /*
-{
-Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-int cols_count = m_TreeView.append_column(_("Vb2"), *pRenderer);
-Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
-
-pColumn->add_attribute(pRenderer->property_text(), m_columns.vb2);
-}
-{
-Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-int cols_count = m_TreeView.append_column(_("Fb2"), *pRenderer);
-Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
-
-pColumn->add_attribute(pRenderer->property_text(), m_columns.fb2);
-}
-  */
 }
 
 void PlotHistory::type_cell_data_func(Gtk::CellRenderer* cell,
@@ -279,7 +227,6 @@ void PlotHistory::type_cell_data_func(Gtk::CellRenderer* cell,
     renderer.property_text() = _("Unknown");
     break;
   }
-  // renderer.property_xalign() = 1.0;
 }
 
 void PlotHistory::vb1_cell_data_func(Gtk::CellRenderer* cell,
@@ -297,13 +244,11 @@ void PlotHistory::fb1_cell_data_func(Gtk::CellRenderer* cell,
 }
 
 void PlotHistory::liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color& color) {
-  gushort r, g, b;
-  r = (int)((color.get_red_p()) * 255);
-  g = (int)((color.get_green_p()) * 255);
-  b = (int)((color.get_blue_p()) * 255);
-#ifdef OUTPUT_DEBUG
-  std::cout << "color: " << r << ", " << g << ", " << b << std::endl;
-#endif
+
+  gushort r = (int)((color.get_red_p()) * 255);
+  gushort g = (int)((color.get_green_p()) * 255);
+  gushort b = (int)((color.get_blue_p()) * 255);
+
   char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "#%.2X%.2X%.2X", r, g, b);
@@ -313,9 +258,6 @@ void PlotHistory::liststore_add_item(Box const& box, Speaker const& spk, Gdk::Co
   row[m_columns.view_plot] = true;
   row[m_columns.id] = box.get_id();
   row[m_columns.id_string] = box.get_id_string();
-#ifdef OUTPUT_DEBUG
-  std::cout << box.get_id_string() << std::endl;
-#endif
   row[m_columns.speaker_string] = spk.get_id_string();
   row[m_columns.type] = box.get_type();
   row[m_columns.vb1] = box.get_vb1();

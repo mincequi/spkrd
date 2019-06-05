@@ -20,6 +20,7 @@ target_include_directories(gspeaker_core
                                    ${CMAKE_CURRENT_SOURCE_DIR}/crossover
                                    ${CMAKE_CURRENT_SOURCE_DIR}/driver
                                    ${CMAKE_CURRENT_SOURCE_DIR}/enclosure
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/plot
                            PUBLIC ${GTK2_INCLUDE_DIRS}
                                   ${CMAKE_CURRENT_SOURCE_DIR}/libegg)
 target_compile_definitions(gspeaker_core

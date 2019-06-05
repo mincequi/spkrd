@@ -56,7 +56,7 @@ MainWindow::MainWindow() {
   /* Setup the menu */
   {
     Gtk::Menu::MenuList& menulist = m_file_menu.items();
-    Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
+    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
     menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
         _("_Save all files"), *im, sigc::mem_fun(*this, &MainWindow::on_save_all)));
     menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
@@ -171,29 +171,29 @@ bool MainWindow::on_delete_event(GdkEventAny* event) {
     dialog->set_border_width(6);
     dialog->get_vbox()->set_spacing(12);
 
-    Gtk::HBox* hbox = manage(new Gtk::HBox());
+    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
     dialog->get_vbox()->pack_start(*hbox);
     hbox->set_border_width(6);
     hbox->set_spacing(12);
 
-    auto image = manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+    auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
     hbox->pack_start(*image);
 
     dialog->get_action_area()->set_border_width(12);
     dialog->get_action_area()->set_spacing(6);
 
-    Gtk::VBox* vbox = manage(new Gtk::VBox());
+    Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
 
-    auto label1 = manage(new Gtk::Label("", Gtk::ALIGN_START));
+    auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
     label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") +
                        Glib::ustring("</b>\n\n"));
     vbox->pack_start(*label1);
 
-    Gtk::Label* label3 = manage(new Gtk::Label(
+    Gtk::Label* label3 = new Gtk::Label(
         _("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +
             _("to quit without saving all changes since last save") + Glib::ustring("\n") +
             _("will be lost."),
-        Gtk::ALIGN_START));
+        Gtk::ALIGN_START);
 
     vbox->pack_start(*label3);
     hbox->pack_start(*vbox);
@@ -237,25 +237,26 @@ void MainWindow::on_quit() {
     dialog->set_border_width(6);
     dialog->get_vbox()->set_spacing(12);
 
-    Gtk::HBox* hbox = manage(new Gtk::HBox());
+    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
     dialog->get_vbox()->pack_start(*hbox);
     hbox->set_border_width(6);
     hbox->set_spacing(12);
 
-    Gtk::Image* image = manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+    Gtk::Image* image =
+        Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
     hbox->pack_start(*image);
 
     dialog->get_action_area()->set_border_width(12);
     dialog->get_action_area()->set_spacing(6);
 
-    Gtk::VBox* vbox = manage(new Gtk::VBox());
-    Gtk::Label* label1 = manage(new Gtk::Label("", Gtk::ALIGN_START));
+    Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+    Gtk::Label* label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
     label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?") +
                        Glib::ustring("</b>\n\n"));
     vbox->pack_start(*label1);
-    // Gtk::Label *label2 = manage(new Gtk::Label("\n\n"));
+    // Gtk::Label *label2 = Gtk::manage(new Gtk::Label("\n\n"));
     // vbox->pack_start(*label2);
-    Gtk::Label* label3 = manage(new Gtk::Label(
+    Gtk::Label* label3 = Gtk::manage(new Gtk::Label(
         _("There are unsaved files in GSpeakers. If you choose") + Glib::ustring("\n") +
             _("to quit without saving all changes since last save") + Glib::ustring("\n") +
             _("will be lost."),
@@ -268,20 +269,11 @@ void MainWindow::on_quit() {
     dialog->add_button(Gtk::Stock::SAVE, 2);
     dialog->show_all();
 
-    int response = dialog->run();
+    auto const response = dialog->run();
     dialog->hide();
 
-    switch (response) {
-    case 0:
-      break;
-    case 1:
-      return;
-      break;
-    case 2:
+    if (response == 2) {
       signal_save_open_files();
-      break;
-    default:
-      break;
     }
   }
 

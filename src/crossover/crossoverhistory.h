@@ -23,7 +23,14 @@
 #include "common.h"
 #include "crossoverlist.h"
 
-#include <gtkmm.h>
+#include <gtkmm/cellrenderer.h>
+#include <gtkmm/filechooserdialog.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/label.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treemodel.h>
+#include <gtkmm/treeview.h>
 
 extern sigc::signal1<void, bool> signal_crossover_set_save_state;
 
@@ -80,7 +87,7 @@ protected:
   Gtk::TreeView m_TreeView;
   Glib::RefPtr<Gtk::ListStore> m_refListStore;
 
-  Gtk::FileSelection *f_open, *f_save_as, *f_append;
+  Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
 
   /* Data containers */
   CrossoverList m_crossover_list;

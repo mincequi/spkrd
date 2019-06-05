@@ -67,7 +67,7 @@ Glib::ustring int_to_ustring(int d) {
   char* str = nullptr;
   GString* buffer = g_string_new(str);
   g_string_printf(buffer, "%d", d);
-  return Glib::ustring(buffer->str);
+  return Glib::ustring(std::to_string(d));
 }
 
 Gtk::Widget& image_widget(const std::string& filename) {
@@ -79,11 +79,11 @@ Gtk::Widget& image_widget(const std::string& filename) {
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_file(
         std::string(GSPEAKERS_PREFIX) + std::string("/share/pixmaps/") + filename);
 #endif
-    im = manage(new Gtk::Image(pixbuf));
+    im = Gtk::manage(new Gtk::Image(pixbuf));
   } catch (Glib::FileError const& fe) {
-    im = manage(new Gtk::Label());
+    im = Gtk::manage(new Gtk::Label());
   } catch (Gdk::PixbufError const& pe) {
-    im = manage(new Gtk::Label());
+    im = Gtk::manage(new Gtk::Label());
   }
   return *im;
 }

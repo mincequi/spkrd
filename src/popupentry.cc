@@ -23,8 +23,6 @@
 
 #include "popupentry.h"
 
-#include <gtk/gtkentry.h>
-
 #include <gtkmm/window.h>
 
 #include <cstdio>
@@ -33,42 +31,41 @@
 
 PopupEntry::PopupEntry(Glib::ustring path)
     : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(),
-      path_(std::move(path)), entry_(nullptr), editing_canceled_(false) {
+      m_path(std::move(path)), m_entry(nullptr), m_editing_canceled(false) {
 
   std::puts("PopupEntry::PopupEntry");
 
-  spin_button_ = manage(new Gtk::SpinButton(*(new Gtk::Adjustment(0, 0, 1000, 0.1, 1.0)), 0.0, 4));
-  entry_ = spin_button_;
-  entry_->set_has_frame(false);
-  entry_->gobj()->is_cell_renderer = true;
+  m_entry = m_spin_button =
+      Gtk::manage(new Gtk::SpinButton(*(new Gtk::Adjustment(0, 0, 1000, 0.1, 1.0)), 0.0, 4));
+  m_entry->set_has_frame(false);
+  m_entry->gobj()->is_cell_renderer = true;
 
-  add(*spin_button_);
+  add(*m_spin_button);
   set_flags(Gtk::CAN_FOCUS);
   add_events(Gdk::KEY_PRESS_MASK | Gdk::KEY_RELEASE_MASK);
 
   show_all_children();
 }
 
-Glib::ustring PopupEntry::get_path() const { return path_; }
+Glib::ustring const& PopupEntry::get_path() const { return m_path; }
 
 void PopupEntry::set_text(const Glib::ustring& text) {
-  spin_button_->set_value(atof(text.c_str()));
+  m_spin_button->set_value(atof(text.c_str()));
 }
 
-Glib::ustring PopupEntry::get_text() const { return entry_->get_text(); }
+Glib::ustring PopupEntry::get_text() const { return m_entry->get_text(); }
 
 void PopupEntry::select_region(int start_pos, int end_pos) {
-  entry_->select_region(start_pos, end_pos);
+  m_entry->select_region(start_pos, end_pos);
 }
 
 bool PopupEntry::get_editing_canceled() const {
 
   std::puts("PopupEntry::get_editing_canceled");
 
-  return editing_canceled_;
+  return m_editing_canceled;
 }
 
-// static
 int PopupEntry::get_button_width() {
   std::puts("PopupEntry::get_button_width");
 
@@ -86,13 +83,13 @@ int PopupEntry::get_button_width() {
   return requisition.width;
 }
 
-sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return signal_arrow_clicked_; }
+sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return m_signal_arrow_clicked; }
 
 bool PopupEntry::on_key_press_event(GdkEventKey* event) {
 
   std::puts("PopupEntry::on_key_press_event");
   if (event->keyval == GDK_Escape) {
-    editing_canceled_ = true;
+    m_editing_canceled = true;
 
     editing_done();
     remove_widget();
@@ -100,16 +97,16 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
     return true;
   }
 
-  entry_->grab_focus();
+  m_entry->grab_focus();
 
   // Hackish :/ Synthesize a key press event for the entry.
   GdkEvent tmp_event;
   std::memcpy(&tmp_event, event, sizeof(GdkEventKey));
 
-  tmp_event.key.window = Glib::unwrap(entry_->get_window());
+  tmp_event.key.window = Glib::unwrap(m_entry->get_window());
   tmp_event.key.send_event = 1;
 
-  entry_->event(&tmp_event);
+  m_entry->event(&tmp_event);
 
   return Gtk::EventBox::on_key_press_event(event);
 }
@@ -117,8 +114,8 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event) {
 void PopupEntry::start_editing_vfunc(GdkEvent* event) {
   std::puts("PopupEntry::start_editing_vfunc");
 
-  entry_->select_region(0, -1);
-  entry_->signal_activate().connect(sigc::mem_fun(*this, &Self::on_entry_activate));
+  m_entry->select_region(0, -1);
+  m_entry->signal_activate().connect(sigc::mem_fun(*this, &Self::on_entry_activate));
 }
 
 void PopupEntry::on_entry_activate() {
@@ -134,7 +131,7 @@ bool PopupEntry::on_entry_key_press_event(GdkEventKey* event) {
     return false;
   }
 
-  editing_canceled_ = true;
+  m_editing_canceled = true;
 
   editing_done();
   remove_widget();
