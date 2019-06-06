@@ -327,35 +327,35 @@ void MainWindow::on_switch_page(GtkNotebookPage* page, guint page_num) {
   if (!in_quit_phase) {
     switch (page_num) {
     case NOTEBOOK_PAGE::DRIVERS:
-      if (!speaker_editor.get_toolbar().is_visible()) {
+      if (!speaker_editor.get_toolbar().get_visible()) {
         speaker_editor.get_toolbar().show();
       }
-      if (enclosure_paned.get_toolbar().is_visible()) {
+      if (enclosure_paned.get_toolbar().get_visible()) {
         enclosure_paned.get_toolbar().hide();
       }
-      if (crossover_paned.get_toolbar().is_visible()) {
+      if (crossover_paned.get_toolbar().get_visible()) {
         crossover_paned.get_toolbar().hide();
       }
       break;
     case NOTEBOOK_PAGE::ENCLOSURE:
-      if (speaker_editor.get_toolbar().is_visible()) {
+      if (speaker_editor.get_toolbar().get_visible()) {
         speaker_editor.get_toolbar().hide();
       }
-      if (!enclosure_paned.get_toolbar().is_visible()) {
+      if (!enclosure_paned.get_toolbar().get_visible()) {
         enclosure_paned.get_toolbar().show();
       }
-      if (crossover_paned.get_toolbar().is_visible()) {
+      if (crossover_paned.get_toolbar().get_visible()) {
         crossover_paned.get_toolbar().hide();
       }
       break;
     case NOTEBOOK_PAGE::FILTER:
-      if (speaker_editor.get_toolbar().is_visible()) {
+      if (speaker_editor.get_toolbar().get_visible()) {
         speaker_editor.get_toolbar().hide();
       }
-      if (enclosure_paned.get_toolbar().is_visible()) {
+      if (enclosure_paned.get_toolbar().get_visible()) {
         enclosure_paned.get_toolbar().hide();
       }
-      if (!crossover_paned.get_toolbar().is_visible()) {
+      if (!crossover_paned.get_toolbar().get_visible()) {
         crossover_paned.get_toolbar().show();
       }
       break;

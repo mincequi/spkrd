@@ -43,7 +43,6 @@ SettingsDialog::SettingsDialog()
       m_scale_crossover_image_parts(_("Scale components in crossover visual view")),
       m_use_driver_impedance(_("Use driver impedance instead of rdc when calculating crossover")),
       m_toolbar_style() {
-  m_file_selection = nullptr;
 
   close_button = manage(new Gtk::Button(Gtk::Stock::CLOSE));
   get_action_area()->pack_start(*close_button);
@@ -96,7 +95,7 @@ void SettingsDialog::on_config_option_change(GSpeakers::Settings setting) {
     g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
     break;
   case GSpeakers::TOOLBAR_STYLE:
-    g_settings.setValue("ToolbarStyle", m_toolbar_style.get_history());
+    g_settings.setValue("ToolbarStyle", m_toolbar_style.get_active_row_number());
     break;
   case GSpeakers::SPICE_TYPE:
     if (m_spice_use_berkley.get_active()) {
@@ -149,7 +148,7 @@ void SettingsDialog::restore_settings() {
   m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
   m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
   m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
-  m_toolbar_style.set_history(g_settings.getValueUnsignedInt("ToolbarStyle"));
+  m_toolbar_style.set_active(g_settings.getValueUnsignedInt("ToolbarStyle"));
   m_save_mainwindow_size.set_active(g_settings.getValueBool("SetMainWindowSize"));
   m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
   m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
@@ -229,13 +228,10 @@ void SettingsDialog::initialise_toolbar_page() {
   static_cast<Gtk::Label*>(toolbar_frame->get_label_widget())
       ->set_markup("<b>" + Glib::ustring(_("Toolbar settings")) + "</b>");
 
-  Gtk::Menu* menu = manage(new Gtk::Menu());
-  Gtk::Menu_Helpers::MenuList& menulist = menu->items();
-  menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("Icons only")));
-  menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("Text only")));
-  menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("Text and icons")));
-  menulist.push_back(Gtk::Menu_Helpers::MenuElem(_("Text and icons (horz)")));
-  m_toolbar_style.set_menu(*menu);
+  m_toolbar_style.append(_("Icons only"));
+  m_toolbar_style.append(_("Text only"));
+  m_toolbar_style.append(_("Text and icons"));
+  m_toolbar_style.append(_("Text and icons (horz)"));
 
   Gtk::Table* tbar_table = manage(new Gtk::Table(NOF_TABLE_ROWS, 4, false));
   tbar_table->set_border_width(12);

@@ -29,8 +29,8 @@
 #include <map>
 #include <string>
 
-#define BOX_TYPE_SEALED 1
-#define BOX_TYPE_PORTED 2
+constexpr auto BOX_TYPE_SEALED = 1;
+constexpr auto BOX_TYPE_PORTED = 2;
 
 class Box : public GSpeakersObject {
 public:

@@ -29,12 +29,10 @@
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
-BoxHistory::BoxHistory() : Gtk::Frame("") {
+BoxHistory::BoxHistory() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL) {
   bool boxlist_found = false;
   set_border_width(2);
   set_shadow_type(Gtk::SHADOW_NONE);
-  static_cast<Gtk::Label*>(get_label_widget())
-      ->set_markup("<b>" + Glib::ustring(_("Enclosure list")) + "</b>");
 
   m_vbox.set_border_width(12);
   add(m_vbox);
@@ -57,8 +55,8 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   try {
     m_box_list = BoxList(m_filename);
     boxlist_found = true;
-  } catch (std::runtime_error const& e) {
-    std::cout << "BoxHistory::BoxHistory: " << e.what() << std::endl;
+  } catch (std::runtime_error const& error) {
+    std::cout << "BoxHistory::BoxHistory: " << error.what() << std::endl;
   }
   std::cout << "boxlist_found = " << boxlist_found << "\n";
 
@@ -72,16 +70,12 @@ BoxHistory::BoxHistory() : Gtk::Frame("") {
   m_TreeView.set_model(m_refListStore);
   m_TreeView.set_rules_hint();
 
-  // m_TreeView.set_search_column(m_columns.id.index());
-
   signal_add_to_boxlist.connect(sigc::mem_fun(*this, &BoxHistory::on_add_to_boxlist));
   signal_box_modified.connect(sigc::mem_fun(*this, &BoxHistory::on_box_modified));
 
   add_columns();
   m_ScrolledWindow.add(m_TreeView);
-  f_append = nullptr;
-  f_open = nullptr;
-  f_save_as = nullptr;
+
   show_all();
   index = 0;
 
@@ -228,7 +222,7 @@ void BoxHistory::on_new_copy() {
         m_box_list.box_list()[path[0]].to_xml_node(node);
         Box b(node->children);
 
-        // Set time of day as this id_string */
+        // Set time of day as this id_string
         std::time_t const time =
             std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));

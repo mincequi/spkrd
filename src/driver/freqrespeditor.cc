@@ -19,7 +19,7 @@
 
 #include "freqrespeditor.h"
 
-#include <gtkmm/fileselection.h>
+#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
@@ -49,7 +49,7 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
   frame->add(*frame_vbox);
   frame_vbox->set_border_width(12);
-  frame_vbox->pack_start(*manage(new Gtk::Label(
+  frame_vbox->pack_start(*Gtk::manage(new Gtk::Label(
       Glib::ustring(_("Enter the freq response dB magnitude, this is not intended to provide an")) +
       "\n" + Glib::ustring(_("exact estimation of the total frequency response.")))));
   frame_vbox->set_spacing(12);
@@ -63,36 +63,36 @@ FreqRespEditor::FreqRespEditor(std::string filename)
     m_table.attach(*dbmag_entries[2 * j + 1], 3, 4, j, j + 1);
   }
 
-  m_table.attach(*manage(new Gtk::Label("20.0 Hz: ", Gtk::ALIGN_END)), 0, 1, 0, 1);
-  m_table.attach(*manage(new Gtk::Label("25.2 Hz: ", Gtk::ALIGN_END)), 2, 3, 0, 1);
-  m_table.attach(*manage(new Gtk::Label("31.7 Hz: ", Gtk::ALIGN_END)), 0, 1, 1, 2);
-  m_table.attach(*manage(new Gtk::Label("39.9 Hz: ", Gtk::ALIGN_END)), 2, 3, 1, 2);
-  m_table.attach(*manage(new Gtk::Label("50.2 Hz: ", Gtk::ALIGN_END)), 0, 1, 2, 3);
-  m_table.attach(*manage(new Gtk::Label("63.2 Hz: ", Gtk::ALIGN_END)), 2, 3, 2, 3);
-  m_table.attach(*manage(new Gtk::Label("79.6 Hz: ", Gtk::ALIGN_END)), 0, 1, 3, 4);
-  m_table.attach(*manage(new Gtk::Label("100 Hz: ", Gtk::ALIGN_END)), 2, 3, 3, 4);
-  m_table.attach(*manage(new Gtk::Label("126 Hz: ", Gtk::ALIGN_END)), 0, 1, 4, 5);
-  m_table.attach(*manage(new Gtk::Label("159 Hz: ", Gtk::ALIGN_END)), 2, 3, 4, 5);
-  m_table.attach(*manage(new Gtk::Label("200 Hz: ", Gtk::ALIGN_END)), 0, 1, 5, 6);
-  m_table.attach(*manage(new Gtk::Label("252 Hz: ", Gtk::ALIGN_END)), 2, 3, 5, 6);
-  m_table.attach(*manage(new Gtk::Label("317 Hz: ", Gtk::ALIGN_END)), 0, 1, 6, 7);
-  m_table.attach(*manage(new Gtk::Label("399 Hz: ", Gtk::ALIGN_END)), 2, 3, 6, 7);
-  m_table.attach(*manage(new Gtk::Label("502 Hz: ", Gtk::ALIGN_END)), 0, 1, 7, 8);
-  m_table.attach(*manage(new Gtk::Label("632 Hz: ", Gtk::ALIGN_END)), 2, 3, 7, 8);
-  m_table.attach(*manage(new Gtk::Label("796 Hz: ", Gtk::ALIGN_END)), 0, 1, 8, 9);
-  m_table.attach(*manage(new Gtk::Label("1.00 kHz: ", Gtk::ALIGN_END)), 2, 3, 8, 9);
-  m_table.attach(*manage(new Gtk::Label("1.26 kHz: ", Gtk::ALIGN_END)), 0, 1, 9, 10);
-  m_table.attach(*manage(new Gtk::Label("1.59 kHz: ", Gtk::ALIGN_END)), 2, 3, 9, 10);
-  m_table.attach(*manage(new Gtk::Label("2.00 kHz: ", Gtk::ALIGN_END)), 0, 1, 10, 11);
-  m_table.attach(*manage(new Gtk::Label("2.52 kHz: ", Gtk::ALIGN_END)), 2, 3, 10, 11);
-  m_table.attach(*manage(new Gtk::Label("3.17 kHz: ", Gtk::ALIGN_END)), 0, 1, 11, 12);
-  m_table.attach(*manage(new Gtk::Label("3.99 kHz: ", Gtk::ALIGN_END)), 2, 3, 11, 12);
-  m_table.attach(*manage(new Gtk::Label("5.02 kHz: ", Gtk::ALIGN_END)), 0, 1, 12, 13);
-  m_table.attach(*manage(new Gtk::Label("6.32 kHz: ", Gtk::ALIGN_END)), 2, 3, 12, 13);
-  m_table.attach(*manage(new Gtk::Label("7.96 kHz: ", Gtk::ALIGN_END)), 0, 1, 13, 14);
-  m_table.attach(*manage(new Gtk::Label("10.0 kHz: ", Gtk::ALIGN_END)), 2, 3, 13, 14);
-  m_table.attach(*manage(new Gtk::Label("15.9 kHz: ", Gtk::ALIGN_END)), 0, 1, 14, 15);
-  m_table.attach(*manage(new Gtk::Label("20.0 kHz: ", Gtk::ALIGN_END)), 2, 3, 14, 15);
+  m_table.attach(*Gtk::manage(new Gtk::Label("20.0 Hz: ", Gtk::ALIGN_END)), 0, 1, 0, 1);
+  m_table.attach(*Gtk::manage(new Gtk::Label("25.2 Hz: ", Gtk::ALIGN_END)), 2, 3, 0, 1);
+  m_table.attach(*Gtk::manage(new Gtk::Label("31.7 Hz: ", Gtk::ALIGN_END)), 0, 1, 1, 2);
+  m_table.attach(*Gtk::manage(new Gtk::Label("39.9 Hz: ", Gtk::ALIGN_END)), 2, 3, 1, 2);
+  m_table.attach(*Gtk::manage(new Gtk::Label("50.2 Hz: ", Gtk::ALIGN_END)), 0, 1, 2, 3);
+  m_table.attach(*Gtk::manage(new Gtk::Label("63.2 Hz: ", Gtk::ALIGN_END)), 2, 3, 2, 3);
+  m_table.attach(*Gtk::manage(new Gtk::Label("79.6 Hz: ", Gtk::ALIGN_END)), 0, 1, 3, 4);
+  m_table.attach(*Gtk::manage(new Gtk::Label("100 Hz: ", Gtk::ALIGN_END)), 2, 3, 3, 4);
+  m_table.attach(*Gtk::manage(new Gtk::Label("126 Hz: ", Gtk::ALIGN_END)), 0, 1, 4, 5);
+  m_table.attach(*Gtk::manage(new Gtk::Label("159 Hz: ", Gtk::ALIGN_END)), 2, 3, 4, 5);
+  m_table.attach(*Gtk::manage(new Gtk::Label("200 Hz: ", Gtk::ALIGN_END)), 0, 1, 5, 6);
+  m_table.attach(*Gtk::manage(new Gtk::Label("252 Hz: ", Gtk::ALIGN_END)), 2, 3, 5, 6);
+  m_table.attach(*Gtk::manage(new Gtk::Label("317 Hz: ", Gtk::ALIGN_END)), 0, 1, 6, 7);
+  m_table.attach(*Gtk::manage(new Gtk::Label("399 Hz: ", Gtk::ALIGN_END)), 2, 3, 6, 7);
+  m_table.attach(*Gtk::manage(new Gtk::Label("502 Hz: ", Gtk::ALIGN_END)), 0, 1, 7, 8);
+  m_table.attach(*Gtk::manage(new Gtk::Label("632 Hz: ", Gtk::ALIGN_END)), 2, 3, 7, 8);
+  m_table.attach(*Gtk::manage(new Gtk::Label("796 Hz: ", Gtk::ALIGN_END)), 0, 1, 8, 9);
+  m_table.attach(*Gtk::manage(new Gtk::Label("1.00 kHz: ", Gtk::ALIGN_END)), 2, 3, 8, 9);
+  m_table.attach(*Gtk::manage(new Gtk::Label("1.26 kHz: ", Gtk::ALIGN_END)), 0, 1, 9, 10);
+  m_table.attach(*Gtk::manage(new Gtk::Label("1.59 kHz: ", Gtk::ALIGN_END)), 2, 3, 9, 10);
+  m_table.attach(*Gtk::manage(new Gtk::Label("2.00 kHz: ", Gtk::ALIGN_END)), 0, 1, 10, 11);
+  m_table.attach(*Gtk::manage(new Gtk::Label("2.52 kHz: ", Gtk::ALIGN_END)), 2, 3, 10, 11);
+  m_table.attach(*Gtk::manage(new Gtk::Label("3.17 kHz: ", Gtk::ALIGN_END)), 0, 1, 11, 12);
+  m_table.attach(*Gtk::manage(new Gtk::Label("3.99 kHz: ", Gtk::ALIGN_END)), 2, 3, 11, 12);
+  m_table.attach(*Gtk::manage(new Gtk::Label("5.02 kHz: ", Gtk::ALIGN_END)), 0, 1, 12, 13);
+  m_table.attach(*Gtk::manage(new Gtk::Label("6.32 kHz: ", Gtk::ALIGN_END)), 2, 3, 12, 13);
+  m_table.attach(*Gtk::manage(new Gtk::Label("7.96 kHz: ", Gtk::ALIGN_END)), 0, 1, 13, 14);
+  m_table.attach(*Gtk::manage(new Gtk::Label("10.0 kHz: ", Gtk::ALIGN_END)), 2, 3, 13, 14);
+  m_table.attach(*Gtk::manage(new Gtk::Label("15.9 kHz: ", Gtk::ALIGN_END)), 0, 1, 14, 15);
+  m_table.attach(*Gtk::manage(new Gtk::Label("20.0 kHz: ", Gtk::ALIGN_END)), 2, 3, 14, 15);
 
   get_action_area()->pack_start(m_save_button);
   get_action_area()->pack_start(m_saveas_button);
@@ -161,17 +161,24 @@ void FreqRespEditor::on_save() {
 }
 
 void FreqRespEditor::on_save_as() {
-#ifdef OUTPUT_DEBUG
-  std::cout << "FreqRespEditor::on_save_as\n";
-#endif
-  auto f = std::make_unique<Gtk::FileSelection>(_("Enter filename..."));
-  f->set_modal();
-  /* -5 == ok button clicked */
-  if (f->run() == -5) {
-    m_filename = f->get_filename();
+
+  std::puts("FreqRespEditor::on_save_as");
+
+  Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+  dialog.set_transient_for(*this);
+
+  // Add response buttons the the dialog:
+  dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+  dialog.add_button("_Open", Gtk::RESPONSE_OK);
+
+  // Show the dialog and wait for a user response
+  switch (dialog.run()) {
+  case (Gtk::RESPONSE_OK): {
+    m_filename = dialog.get_filename();
     on_save();
+    break;
   }
-  f->hide();
+  }
 }
 
 void FreqRespEditor::on_close() {

@@ -418,8 +418,7 @@ void Speaker_ListStore::on_remove() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (!indices.empty()) {
+    if (!path.empty()) {
       // Remove item from ListStore:
       m_refListStore->erase(iter);
 
@@ -479,9 +478,8 @@ void Speaker_ListStore::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (!indices.empty()) {
-      index = indices[0];
+    if (!path.empty()) {
+      index = path[0];
       Speaker s = m_speaker_list->speaker_list()[index];
 
       m_IdStringEntry.set_text(Glib::ustring(s.get_id_string()));
@@ -536,7 +534,7 @@ void Speaker_ListStore::on_selection_changed() {
 
       /* Freq resp file entry */
       m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
-      // GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, s.get_freq_resp_filename());
+
       plot.clear();
       if (g_settings.getValueBool("DrawDriverFreqRespPlot")) {
 

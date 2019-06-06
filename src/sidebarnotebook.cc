@@ -22,6 +22,7 @@
 #include "sidebarnotebook.h"
 #include "common.h"
 #include "gspeakersstock.h"
+
 #include <iostream>
 
 void on_button_clicked1(GtkWidget* widget, SidebarNotebook* me);
@@ -29,7 +30,7 @@ void on_button_clicked2(GtkWidget* widget, SidebarNotebook* me);
 void on_button_clicked3(GtkWidget* widget, SidebarNotebook* me);
 
 SidebarNotebook::SidebarNotebook() : Gtk::HBox() {
-  m_notebook = manage(new Gtk::Notebook());
+  m_notebook = Gtk::manage(new Gtk::Notebook());
   m_sidebar = egg_sidebar_new();
   GtkHBox* vbox = gobj();
   gtk_box_pack_start(GTK_BOX(vbox), m_sidebar, 0, 1, 0);

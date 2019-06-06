@@ -22,11 +22,10 @@
 
 #include "common.h"
 
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/fileselection.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/optionmenu.h>
 #include <gtkmm/radiobutton.h>
 
 namespace GSpeakers {
@@ -81,9 +80,7 @@ private:
   Gtk::CheckButton m_scale_crossover_image_parts;
   Gtk::CheckButton m_use_driver_impedance;
 
-  Gtk::OptionMenu m_toolbar_style;
-
-  Gtk::FileSelection* m_file_selection;
+  Gtk::ComboBoxText m_toolbar_style;
 
   Gtk::Button* close_button;
 

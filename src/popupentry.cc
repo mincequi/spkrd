@@ -41,7 +41,7 @@ PopupEntry::PopupEntry(Glib::ustring path)
   m_entry->gobj()->is_cell_renderer = true;
 
   add(*m_spin_button);
-  set_flags(Gtk::CAN_FOCUS);
+  // set_flags(Gtk::CAN_FOCUS);
   add_events(Gdk::KEY_PRESS_MASK | Gdk::KEY_RELEASE_MASK);
 
   show_all_children();
@@ -77,10 +77,10 @@ int PopupEntry::get_button_width() {
   window.move(-500, -500);
   window.show_all();
 
-  Gtk::Requisition requisition = {0};
-  window.size_request(requisition);
+  int width, height;
+  window.get_size(width, height);
 
-  return requisition.width;
+  return width;
 }
 
 sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return m_signal_arrow_clicked; }

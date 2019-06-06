@@ -19,12 +19,12 @@
 
 #include "enclosurepaned.h"
 
-#define MENU_INDEX_SAVE 6
-#define MENU_INDEX_DELETE 8
-#define MENU_INDEX_DELETE_BOXPLOT 13
-#define TOOLBAR_INDEX_SAVE 4
-#define TOOLBAR_INDEX_DELETE 5
-#define TOOLBAR_INDEX_DELETE_BOXPLOT 10
+constexpr auto MENU_INDEX_SAVE = 6;
+constexpr auto MENU_INDEX_DELETE = 8;
+constexpr auto MENU_INDEX_DELETE_BOXPLOT = 13;
+constexpr auto TOOLBAR_INDEX_SAVE = 4;
+constexpr auto TOOLBAR_INDEX_DELETE = 5;
+constexpr auto TOOLBAR_INDEX_DELETE_BOXPLOT = 10;
 
 EnclosurePaned::EnclosurePaned() {
   nof_plots = 0;
@@ -75,34 +75,34 @@ EnclosurePaned::~EnclosurePaned() {
 Gtk::Menu& EnclosurePaned::get_menu() {
   Gtk::Menu::MenuList& menulist = m_menu.items();
 
-  Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
+  Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("_New Enclosure"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new)));
 
-  im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("_Copy"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new_copy)));
 
   menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
-  im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("N_ew"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new_xml)));
 
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
       _("A_ppend Enclosure Xml..."), sigc::mem_fun(box_history, &BoxHistory::on_append_xml)));
 
-  im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("_Open..."), *im, sigc::mem_fun(box_history, &BoxHistory::on_open_xml)));
 
   menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
-  im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("_Save"), *im, sigc::mem_fun(box_history, &BoxHistory::on_save)));
 
-  im = manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("Save _As..."), *im, sigc::mem_fun(box_history, &BoxHistory::on_save_as)));
 
@@ -114,13 +114,13 @@ Gtk::Menu& EnclosurePaned::get_menu() {
   menulist.push_back(Gtk::Menu_Helpers::MenuElem(
       _("_Plot"), sigc::mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked)));
 
-  im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("_Delete"), *im, sigc::mem_fun(box_history, &BoxHistory::on_remove)));
 
   menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
 
-  im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
+  im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
   menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
       _("Delete Plot"), *im, sigc::mem_fun(plot_history, &PlotHistory::on_remove)));
 
@@ -131,54 +131,54 @@ Gtk::Menu& EnclosurePaned::get_menu() {
 
 Gtk::Widget& EnclosurePaned::get_toolbar() {
   if (m_tbar == nullptr) {
-    m_tbar = manage(new Gtk::Toolbar());
+    m_tbar = Gtk::manage(new Gtk::Toolbar());
 
-    Gtk::Widget* im = manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    Gtk::ToolButton* t = manage(new Gtk::ToolButton(*im, _("New")));
+    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("New")));
     t->signal_clicked().connect(sigc::mem_fun(box_history, &BoxHistory::on_new));
     m_tbar->append(*t);
 
-    im = manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    t = manage(new Gtk::ToolButton(*im, _("Copy")));
+    im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = Gtk::manage(new Gtk::ToolButton(*im, _("Copy")));
     t->signal_clicked().connect(sigc::mem_fun(box_history, &BoxHistory::on_new_copy));
     m_tbar->append(*t);
 
-    Gtk::SeparatorToolItem* s = manage(new Gtk::SeparatorToolItem());
+    Gtk::SeparatorToolItem* s = Gtk::manage(new Gtk::SeparatorToolItem());
     m_tbar->append(*s);
 
-    im = manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    t = manage(new Gtk::ToolButton(*im, _("Open")));
+    im = Gtk::manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = Gtk::manage(new Gtk::ToolButton(*im, _("Open")));
     t->signal_clicked().connect(sigc::mem_fun(box_history, &BoxHistory::on_open_xml));
     m_tbar->append(*t);
 
-    im = manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    t = manage(new Gtk::ToolButton(*im, _("Save")));
+    im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = Gtk::manage(new Gtk::ToolButton(*im, _("Save")));
     t->signal_clicked().connect(sigc::mem_fun(box_history, &BoxHistory::on_save));
     m_tbar->append(*t);
 
-    s = manage(new Gtk::SeparatorToolItem());
+    s = Gtk::manage(new Gtk::SeparatorToolItem());
     m_tbar->append(*s);
 
-    im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    t = manage(new Gtk::ToolButton(*im, _("Delete")));
+    im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = Gtk::manage(new Gtk::ToolButton(*im, _("Delete")));
     t->signal_clicked().connect(sigc::mem_fun(box_history, &BoxHistory::on_remove));
     m_tbar->append(*t);
 
-    t = manage(new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Optimize")));
+    t = Gtk::manage(
+        new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Optimize")));
     t->signal_clicked().connect(sigc::mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked));
     m_tbar->append(*t);
-    t = manage(
+    t = Gtk::manage(
         new Gtk::ToolButton(GSpeakers::image_widget("append_plot_enclosure_24.png"), _("Plot")));
     t->signal_clicked().connect(sigc::mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked));
     m_tbar->append(*t);
 
-    s = manage(new Gtk::SeparatorToolItem());
+    s = Gtk::manage(new Gtk::SeparatorToolItem());
     m_tbar->append(*s);
 
-    im = manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    t = manage(new Gtk::ToolButton(*im, _("Delete Plot")));
-    //     t = manage(new Gtk::ToolButton(GSpeakers::image_widget("delete_plot_24.png"), _("Delete
-    //     Plot")));
+    im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+    t = Gtk::manage(new Gtk::ToolButton(*im, _("Delete Plot")));
+
     t->signal_clicked().connect(sigc::mem_fun(plot_history, &PlotHistory::on_remove));
     m_tbar->append(*t);
 

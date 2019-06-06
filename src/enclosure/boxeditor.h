@@ -22,28 +22,29 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/combo.h>
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
-#include <gtkmm/menu.h>
-#include <gtkmm/optionmenu.h>
 #include <gtkmm/table.h>
 
 #include "box.h"
 #include "gspeakerscolor.h"
 #include "speakerlist.h"
 
-/*
- * This class will contain the control panel where you can adjust
- * settings for the enclosure you're working with.
- */
+/// This class will contain the control panel where you can adjust
+/// settings for the enclosure you're working with.
 class BoxEditor : public Gtk::Frame {
 public:
   BoxEditor();
 
   ~BoxEditor() override = default;
 
+  /// This function executes when you have clicked the optimize button.
   void on_optimize_button_clicked();
   void on_append_to_boxlist_clicked();
+
+  /// This function executes when you have clicked the plot button
   void on_append_to_plot_clicked();
   void on_calc_port_clicked();
   void append_and_plot();
@@ -54,29 +55,29 @@ protected:
   void on_box_selected(Box* b);
   void on_speaker_list_loaded(SpeakerList*);
   void on_combo_entry_changed();
+
   void on_box_data_changed(int i);
+  /// Callback when enclosure type has been changed
+  void on_enclosure_changed();
 
 protected:
   // TODO Use Gtk::Grid
   Gtk::Table m_table;
   Gtk::VBox m_vbox;
   Gtk::HBox m_hbox;
-  Gtk::Combo m_bass_speaker_combo;
+  Gtk::ComboBoxText m_bass_speaker_combo;
   Gtk::Label m_speaker_qts_label, m_speaker_vas_label, m_speaker_fs_label;
+  Gtk::Label m_frame_label;
   Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;
-  Gtk::OptionMenu m_box_type_optionmenu;
-  Gtk::Menu m_option_menu;
+  Gtk::ComboBoxText m_box_type_combo;
 
 private:
   Box* m_box = nullptr;
   SpeakerList* m_speaker_list;
   Speaker m_current_speaker;
-
-  bool disable_signals;
-
   GSpeakersColor m_color_list;
-
-  bool speaker_list_is_loaded;
+  bool disable_signals{false};
+  bool speaker_list_is_loaded{false};
 };
 
 #endif

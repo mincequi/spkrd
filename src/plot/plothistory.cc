@@ -68,11 +68,10 @@ void PlotHistory::on_selection_changed() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> indices = path.get_indices();
-    if (!indices.empty()) {
+    if (!path.empty()) {
       // Check config if user want to mark selected plot
-      signal_select_plot(indices[0]);
-      m_index = indices[0];
+      signal_select_plot(path[0]);
+      m_index = path[0];
     }
   }
 }
@@ -84,15 +83,11 @@ void PlotHistory::on_remove() {
   if (const Gtk::TreeIter iter = refSelection->get_selected()) {
     Gtk::TreePath path = m_refListStore->get_path(iter);
 
-    std::vector<int> const& indices = path.get_indices();
-
-    if (!indices.empty()) {
-
+    if (!path.empty()) {
       // Remove item from ListStore
       m_refListStore->erase(iter);
-
       // Signal to the plot that we got the plot index to remove in indices[0]
-      signal_remove_box_plot(indices[0]);
+      signal_remove_box_plot(path[0]);
     }
   }
 
@@ -140,9 +135,8 @@ void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string) {
 
   path = m_refListStore->get_path(row);
 
-  std::vector<int> const& indices = path.get_indices();
-  if (!indices.empty()) {
-    signal_hide_box_plot(indices[0]);
+  if (!path.empty()) {
+    signal_hide_box_plot(path[0]);
   }
   /* set new value */
   row[m_columns.view_plot] = view_plot;
