@@ -147,10 +147,6 @@ void FilterLinkFrame::initialise_highpass_filter() {
 
   on_order_selected(m_higher_order_combo, m_higher_type_combo);
 
-  m_higher_order_combo->signal_changed().connect(
-      sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_higher_order_combo,
-                 m_higher_type_combo));
-
   /* menus ready */
   Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
   vbox->pack_start(*hbox);
@@ -200,10 +196,6 @@ void FilterLinkFrame::initialise_lowpass_filter() {
 
   m_lower_type_combo = Gtk::manage(new Gtk::ComboBoxText());
 
-  m_lower_order_combo->signal_changed().connect(
-      sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_lower_order_combo,
-                 m_lower_type_combo));
-
   on_order_selected(m_lower_order_combo, m_lower_type_combo);
 
   /* menus ready */
@@ -214,7 +206,7 @@ void FilterLinkFrame::initialise_lowpass_filter() {
   vbox->pack_start(*m_lower_type_combo);
 
   hbox = Gtk::manage(new Gtk::HBox());
-  hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Cutoff: ")))));
+  hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Cutoff: "))));
   m_lower_co_freq_spinbutton =
       Gtk::manage(new Gtk::SpinButton(*Gtk::manage(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
 
@@ -232,6 +224,9 @@ void FilterLinkFrame::connect_signals() {
       sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
 
   if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
+    m_lower_order_combo->signal_changed().connect(
+        sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_lower_order_combo,
+                   m_lower_type_combo));
     m_lower_type_combo->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_lower_order_combo->signal_changed().connect(
@@ -240,6 +235,9 @@ void FilterLinkFrame::connect_signals() {
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
   }
   if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0) {
+    m_higher_order_combo->signal_changed().connect(
+        sigc::bind(sigc::mem_fun(*this, &FilterLinkFrame::on_order_selected), m_higher_order_combo,
+                   m_higher_type_combo));
     m_higher_order_combo->signal_changed().connect(
         sigc::mem_fun(*this, &FilterLinkFrame::on_param_changed));
     m_higher_type_combo->signal_changed().connect(
@@ -269,12 +267,11 @@ FilterLinkFrame::~FilterLinkFrame() = default;
 void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
                                         Gtk::ComboBoxText* type_box) {
 
-  std::puts("checking if already populated");
   if (type_box->get_active()) {
-    std::puts("is populated and now trying to remove");
+    // Block the signal from being emitted until the end of the function
+    // otherwise on_param_changed() will be called prematurely
+    enable_edit = false;
     type_box->remove_all();
-  } else {
-    std::puts("is not populated");
   }
 
   switch (order_box->get_active_row_number() + 1) {
@@ -305,6 +302,10 @@ void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
     break;
   }
   type_box->set_active(0);
+
+  enable_edit = true;
+
+  std::puts("returning from on_order_selected");
 }
 
 void FilterLinkFrame::on_settings_changed(const std::string& setting) {
@@ -315,9 +316,9 @@ void FilterLinkFrame::on_settings_changed(const std::string& setting) {
 
 void FilterLinkFrame::on_param_changed() {
   if (enable_edit) {
-#ifdef OUTPUT_DEBUG
+
     std::puts("FilterLinkFrame::on_param_changed");
-#endif
+
     enable_edit = false;
 
     Speaker speaker;
