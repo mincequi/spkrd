@@ -103,14 +103,14 @@ void FilterLinkFrame::initialise_speaker_combobox() {
   std::string const& speaker_name = m_net->get_speaker();
 
   if (!speaker_name.empty()) {
-    m_speaker_combo.append_text(speaker_name);
+    m_speaker_combo.append(speaker_name);
   }
 
   if (m_speaker_list != nullptr) {
     for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
-        m_speaker_combo.append_text(iter.get_id_string());
+        m_speaker_combo.append(iter.get_id_string());
       }
     }
   }
@@ -137,10 +137,10 @@ void FilterLinkFrame::initialise_highpass_filter() {
 
   /* Setup menus */
   m_higher_order_combo = Gtk::manage(new Gtk::ComboBoxText());
-  m_higher_order_combo->append_text("1");
-  m_higher_order_combo->append_text("2");
-  m_higher_order_combo->append_text("3");
-  m_higher_order_combo->append_text("4");
+  m_higher_order_combo->append("1");
+  m_higher_order_combo->append("2");
+  m_higher_order_combo->append("3");
+  m_higher_order_combo->append("4");
   m_higher_order_combo->set_active(m_net->get_highpass_order() - 1);
 
   m_higher_type_combo = Gtk::manage(new Gtk::ComboBoxText());
@@ -188,10 +188,10 @@ void FilterLinkFrame::initialise_lowpass_filter() {
 
   // Setup menus
   m_lower_order_combo = Gtk::manage(new Gtk::ComboBoxText());
-  m_lower_order_combo->append_text("1");
-  m_lower_order_combo->append_text("2");
-  m_lower_order_combo->append_text("3");
-  m_lower_order_combo->append_text("4");
+  m_lower_order_combo->append("1");
+  m_lower_order_combo->append("2");
+  m_lower_order_combo->append("3");
+  m_lower_order_combo->append("4");
   m_lower_order_combo->set_active(m_net->get_lowpass_order() - 1);
 
   m_lower_type_combo = Gtk::manage(new Gtk::ComboBoxText());
@@ -277,28 +277,28 @@ void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
   switch (order_box->get_active_row_number() + 1) {
   case NET_ORDER_1ST:
     std::puts("first order");
-    type_box->append_text("Butterworth");
+    type_box->append("Butterworth");
     break;
   case NET_ORDER_2ND:
     std::puts("second order");
-    type_box->append_text("Bessel");
-    type_box->append_text("Butterworth");
-    type_box->append_text("Chebychev");
-    type_box->append_text("Linkwitz-Riley");
+    type_box->append("Bessel");
+    type_box->append("Butterworth");
+    type_box->append("Chebychev");
+    type_box->append("Linkwitz-Riley");
     break;
   case NET_ORDER_3RD:
     std::puts("third order");
-    type_box->append_text("Bessel");
-    type_box->append_text("Butterworth");
+    type_box->append("Bessel");
+    type_box->append("Butterworth");
     break;
   case NET_ORDER_4TH:
     std::puts("fourth order");
-    type_box->append_text("Bessel");
-    type_box->append_text("Butterworth");
-    type_box->append_text("Gaussian");
-    type_box->append_text("Legendre");
-    type_box->append_text("Linear-Phase");
-    type_box->append_text("Linkwitz-Riley");
+    type_box->append("Bessel");
+    type_box->append("Butterworth");
+    type_box->append("Gaussian");
+    type_box->append("Legendre");
+    type_box->append("Linear-Phase");
+    type_box->append("Linkwitz-Riley");
     break;
   }
   type_box->set_active(0);
@@ -596,14 +596,14 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
     for (auto& iter : m_speaker_list->speaker_list()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
-        m_speaker_combo.append_text(iter.get_id_string());
+        m_speaker_combo.append(iter.get_id_string());
       } else {
         speaker_is_in_speakerlist = true;
       }
     }
   }
   if (speaker_is_in_speakerlist) {
-    m_speaker_combo.prepend_text(speaker_name);
+    m_speaker_combo.prepend(speaker_name);
   }
 }
 

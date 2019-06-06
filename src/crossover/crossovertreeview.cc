@@ -68,20 +68,15 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
             << std::endl;
 #endif
 
-  GtkTreePath* gpath = gtk_tree_path_new_from_string(path_string.c_str());
-  Gtk::TreePath path(gpath);
+  Gtk::TreePath path(path_string);
 
-  std::vector<int> const& indices = path.get_indices();
-  if (!indices.empty()) {
-    // int i = indices[0];
-    // m_vecItems[i].m_number = atoi(new_text.c_str());
-
+  if (!path.empty()) {
     Gtk::TreeRow row = *(m_refTreeStore->get_iter(path));
-    row[m_columns.value] = atof(new_text.c_str());
+    row[m_columns.value] = std::atof(new_text.c_str());
 
-#ifdef OUTPUT_DEBUG
-    std::cout << "CrossoverTreeView::on_cell_edited_value: indices[0:1:2:4] = " << indices[0] << ":"
-              << indices[1] << ":" << indices[2] << ":" << indices[3] << std::endl;
+#ifndef NDEBUG
+    std::cout << "CrossoverTreeView::on_cell_edited_value: path[0:1:2:4] = " << path[0] << ":"
+              << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
 #endif
     /* Since the stupid signals doesn't seem to work we have to go through the data-containers
        and update values for the particular part we change... */
@@ -89,15 +84,15 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
     /* Index is a counter for the extra circuits (impedance correction network, damping network...)
        we have Number of extra circuits + the crossover is the total number of "base nodes" after
        filter type nodes */
-    Net* n = &(*(cover->networks()))[indices[0]];
+    Net* n = &(*(cover->networks()))[path[0]];
 
     int ndx = 0;
     bool mod = false;
     if (n->get_has_imp_corr()) {
       /* Check if we have edited imp corr */
-      if (indices[1] == ndx) {
+      if (path[1] == ndx) {
         /* If we have edited imp corr, update the appropriate component */
-        switch (indices[2]) {
+        switch (path[2]) {
         case 0:
           n->get_imp_corr_C().set_value(row[m_columns.value]);
           mod = true;
@@ -111,8 +106,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
       ndx++;
     }
     if (n->get_has_damp()) {
-      if (indices[1] == ndx) {
-        switch (indices[2]) {
+      if (path[1] == ndx) {
+        switch (path[2]) {
         case 0:
           n->get_damp_R1().set_value(row[m_columns.value]);
           mod = true;
@@ -126,8 +121,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
       ndx++;
     }
     if (n->get_has_res()) {
-      if (indices[1] == ndx) {
-        switch (indices[2]) {
+      if (path[1] == ndx) {
+        switch (path[2]) {
         case 0:
           n->get_res_L().set_value(row[m_columns.value]);
           mod = true;
@@ -146,13 +141,13 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
     }
     /* If we did not modified anything until here, the actual crossover is the circuit to modify */
     if (!mod) {
-      /* check indices[2], if this is 0 we edit the part with offset 0
-         if indices[2] = 1 we have a bandpassfilter and we should add an offset of the lowpassfilter
-         order to indices[3] which is the index of the highpass part to change */
-      if (indices[2] == 0) {
-        n->parts()[indices[3]].set_value(row[m_columns.value]);
-      } else if (indices[2] == 1) {
-        n->parts()[indices[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
+      /* check path[2], if this is 0 we edit the part with offset 0
+         if path[2] = 1 we have a bandpassfilter and we should add an offset of the lowpassfilter
+         order to path[3] which is the index of the highpass part to change */
+      if (path[2] == 0) {
+        n->parts()[path[3]].set_value(row[m_columns.value]);
+      } else if (path[2] == 1) {
+        n->parts()[path[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
       }
     }
 #ifdef OUTPUT_DEBUG
