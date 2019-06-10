@@ -17,6 +17,9 @@
 
 #include "crossoverlist.h"
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+
 #include <glib.h>
 
 CrossoverList::CrossoverList(const std::string& filename) {
@@ -44,9 +47,7 @@ CrossoverList::CrossoverList(const std::string& filename) {
   }
 }
 
-void CrossoverList::clear() {
-  m_crossover_list.erase(m_crossover_list.begin(), m_crossover_list.end());
-}
+void CrossoverList::clear() { m_crossover_list.clear(); }
 
 void CrossoverList::to_xml(const std::string& filename) {
 
@@ -57,7 +58,7 @@ void CrossoverList::to_xml(const std::string& filename) {
 
   /* Iterate through all crossovers */
   for (auto& from : m_crossover_list) {
-    ((Crossover)from).to_xml_node(node);
+    from.to_xml_node(node);
   }
 
   /* Save xml file */
@@ -66,13 +67,11 @@ void CrossoverList::to_xml(const std::string& filename) {
   }
 }
 
-std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list) {
-  o << "Crossover List" << std::endl;
+std::ostream& operator<<(std::ostream& output, const CrossoverList& crossover_list) {
+  output << "Crossover List" << std::endl;
 
   for (const auto& from : crossover_list.m_crossover_list) {
-    o << from;
+    output << from;
   }
-  return o;
+  return output;
 }
-
-std::vector<Crossover>* CrossoverList::crossover_list() { return &m_crossover_list; }

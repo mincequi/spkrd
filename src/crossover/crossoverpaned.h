@@ -35,20 +35,28 @@
 class CrossoverPaned : public Gtk::HPaned {
 public:
   CrossoverPaned();
+
   ~CrossoverPaned() override;
 
   Gtk::Menu& get_menu();
+
   Gtk::Widget& get_toolbar();
+
   void select_first_crossover();
 
 protected:
   void on_settings_changed(const std::string&);
+
   void on_plot_crossover();
+
   void on_new_crossover_menu_action(int);
+
   void set_save_state(bool b);
 
 private:
-  Gtk::Notebook m_crossover_notebook, m_plot_notebook;
+  Gtk::Notebook m_crossover_notebook;
+  Gtk::Notebook m_plot_notebook;
+
   CrossoverWizard crossover_wizard;
   CrossoverTreeView crossover_treeview;
   CrossoverHistory crossover_history;

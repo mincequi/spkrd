@@ -23,29 +23,31 @@
 #define __SIDEBAR_NOTEBOOK_H
 
 #include <gtkmm/box.h>
+#include <gtkmm/buttonbox.h>
 #include <gtkmm/notebook.h>
-
-#include "libegg/eggsidebar.h"
+#include <gtkmm/togglebutton.h>
 
 class SidebarNotebook : public Gtk::HBox {
 public:
   SidebarNotebook();
+
   int append_page(Widget& child, Widget& tab_label);
+
   int append_page(Widget& child);
+
   void set_current_page(int page_num);
+
   int get_current_page() const;
 
-  Glib::SignalProxy2<void, GtkNotebookPage*, guint> signal_switch_page();
-
 private:
-  friend void on_button_clicked1(GtkWidget* widget, SidebarNotebook* me);
-  friend void on_button_clicked2(GtkWidget* widget, SidebarNotebook* me);
-  friend void on_button_clicked3(GtkWidget* widget, SidebarNotebook* me);
+  void on_button_clicked1();
+  void on_button_clicked2();
+  void on_button_clicked3();
 
 private:
   Gtk::Notebook* m_notebook;
-  GtkWidget* m_sidebar;
-  EggSidebarButton *button0, *button1, *button2;
+  Gtk::VBox m_button_box;
+  Gtk::ToggleButton m_driver_btn, m_enclosure_btn, m_crossover_btn;
 };
 
 #endif

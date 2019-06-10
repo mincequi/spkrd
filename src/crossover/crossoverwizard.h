@@ -39,7 +39,6 @@ private:
 
 private:
   Gtk::VBox m_vbox;
-
   SpeakerList* m_speaker_list = nullptr;
 };
 

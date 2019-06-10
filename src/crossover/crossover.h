@@ -29,16 +29,14 @@
 #include <vector>
 
 /* You should be able to use one or more of the type properties */
-#define CROSSOVER_TYPE_LOWPASS 1
-#define CROSSOVER_TYPE_SUBSONIC 2
-#define CROSSOVER_TYPE_HIGHPASS 4
-#define CROSSOVER_TYPE_TWOWAY 8
+constexpr auto CROSSOVER_TYPE_LOWPASS = 1;
+constexpr auto CROSSOVER_TYPE_SUBSONIC = 2;
+constexpr auto CROSSOVER_TYPE_HIGHPASS = 4;
+constexpr auto CROSSOVER_TYPE_TWOWAY = 8;
 /* Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY */
-#define CROSSOVER_TYPE_THREEWAY 16
-#define CROSSOVER_TYPE_FOURWAY 32
+constexpr auto CROSSOVER_TYPE_THREEWAY = 16;
+constexpr auto CROSSOVER_TYPE_FOURWAY = 32;
 
-/* Why would anyone use my program to develop something more advanced
-   than a loudspeaker with four elements...? */
 class Crossover : public GSpeakersObject {
 public:
   Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
@@ -57,17 +55,18 @@ public:
 
   /* return id_string for this crossover */
   std::string const& get_id_string() const;
-  void set_id_string(std::string id_string);
 
-protected:
-  std::vector<Net> m_networks;
-  std::string m_id_string;
+  void set_id_string(std::string id_string);
 
 protected:
   /// Used to parse xml
   void parse_type(xmlNodePtr node);
   void parse_networks(xmlNodePtr node);
   void parse_id_string(xmlNodePtr node);
+
+protected:
+  std::vector<Net> m_networks;
+  std::string m_id_string;
 };
 
 #endif

@@ -80,7 +80,22 @@ protected:
   virtual void add_columns();
   virtual void liststore_add_item(Crossover const& foo);
 
-  // Member widgets:
+protected:
+  /* This is used in the treemodel */
+  struct model_columns : public Gtk::TreeModelColumnRecord {
+
+    model_columns() {
+      add(id);
+      add(type);
+      add(id_string);
+    }
+
+    Gtk::TreeModelColumn<int> id;
+    Gtk::TreeModelColumn<int> type;
+    Gtk::TreeModelColumn<Glib::ustring> id_string;
+  };
+
+protected:
   Gtk::Widget* m_evbox;
   Gtk::Label* m_frame_label;
   Gtk::ScrolledWindow m_ScrolledWindow;
@@ -89,27 +104,13 @@ protected:
 
   Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
 
-  /* Data containers */
   CrossoverList m_crossover_list;
 
-  /* This is used in the treemodel */
-  struct ModelColumns : public Gtk::TreeModelColumnRecord {
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<int> type;
-    Gtk::TreeModelColumn<Glib::ustring> id_string;
-
-    ModelColumns() {
-      add(id);
-      add(type);
-      add(id_string);
-    }
-  };
-  ModelColumns m_columns;
-
-  /* Additional member variables */
   std::string m_filename;
   bool new_xml_pressed;
   int index;
+
+  model_columns m_columns;
 };
 
 #endif

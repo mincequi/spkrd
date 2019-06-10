@@ -21,38 +21,31 @@
 #include "common.h"
 #include "crossover.h"
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <iosfwd>
 #include <string>
 #include <vector>
 
-/*
- * This is a class that pretty much just contains a list of crossovers.
- *
- * All operations on the list will be made on the list, maybe this class
- * will provide some conveniance methods...
- *
- * The class also contains some xml-writing functions
- */
+/// This is a class that pretty much just contains a list of crossovers
+/// and xml output functionality
 class CrossoverList {
 public:
   CrossoverList() = default;
 
-  /* Construct a part from an xml node */
+  // Construct a part from an xml node
   CrossoverList(const std::string& filename);
 
-  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
-  void to_xml(const std::string& filename); // Maybe this one should throw an exception
+  // Convert data for a part to an xml node, throws std::runtime_error on failure
+  // Maybe this one should throw an exception?
+  void to_xml(const std::string& filename);
 
-  /* Print part data to stdout */
+  // Print part data to stdout
   friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
 
-  /* return a pointer to the crossover list */
-  std::vector<Crossover>* crossover_list();
+  std::vector<Crossover>& crossover_list() { return m_crossover_list; }
 
-  /* Remove all items from the corssover list */
+  std::vector<Crossover> const& crossover_list() const { return m_crossover_list; }
+
+  // Remove all items from the corssover list
   void clear();
 
 protected:

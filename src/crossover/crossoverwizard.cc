@@ -34,9 +34,10 @@ void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
 #endif
 
   /* We want to make sure the content of m_vbox get deleted */
-  if (!m_vbox.children().empty()) {
-    for (int i = m_vbox.children().size() - 1; i >= 0; i--) {
-      delete m_vbox.children()[i].get_widget();
+  if (!m_vbox.get_children().empty()) {
+    for (int i = m_vbox.get_children().size() - 1; i >= 0; i--) {
+      // FIXME gtk3 port
+      // delete m_vbox.get_children()[i]->get_widget();
     }
   }
 

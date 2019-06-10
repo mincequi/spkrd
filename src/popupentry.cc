@@ -31,14 +31,16 @@
 
 PopupEntry::PopupEntry(Glib::ustring path)
     : Glib::ObjectBase(typeid(PopupEntry)), Gtk::EventBox(), Gtk::CellEditable(),
-      m_path(std::move(path)), m_entry(nullptr), m_editing_canceled(false) {
+      m_path(std::move(path)), m_entry(nullptr),
+      m_spin_digits(Gtk::Adjustment::create(0, 0, 1000, 0.1, 1.0)), m_editing_canceled(false) {
 
   std::puts("PopupEntry::PopupEntry");
 
-  m_entry = m_spin_button =
-      Gtk::manage(new Gtk::SpinButton(*(new Gtk::Adjustment(0, 0, 1000, 0.1, 1.0)), 0.0, 4));
+  m_entry = m_spin_button = Gtk::manage(new Gtk::SpinButton(m_spin_digits, 0.0, 4));
   m_entry->set_has_frame(false);
-  m_entry->gobj()->is_cell_renderer = true;
+
+  // FIXME gtk3 port
+  // m_entry->gobj()->is_cell_renderer = true;
 
   add(*m_spin_button);
   // set_flags(Gtk::CAN_FOCUS);
@@ -88,7 +90,7 @@ sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return m_signal_arrow_
 bool PopupEntry::on_key_press_event(GdkEventKey* event) {
 
   std::puts("PopupEntry::on_key_press_event");
-  if (event->keyval == GDK_Escape) {
+  if (event->keyval == GDK_KEY_Escape) {
     m_editing_canceled = true;
 
     editing_done();
@@ -127,7 +129,7 @@ bool PopupEntry::on_entry_key_press_event(GdkEventKey* event) {
 
   std::puts("PopupEntry::on_entry_key_press_event");
 
-  if (event->keyval != GDK_Escape) {
+  if (event->keyval != GDK_KEY_Escape) {
     return false;
   }
 

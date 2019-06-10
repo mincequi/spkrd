@@ -103,8 +103,6 @@ public:
 
   void set_font(const std::string& font);
 
-  void set_line_style(Gdk::LineStyle& style);
-
   void set_line_size(int size);
 
   void select_plot(int index);
@@ -116,9 +114,10 @@ public:
   void set_y_label2(const std::string& text);
 
 protected:
-  /* This is the function that draws the graphics */
+  /// Copy the area that needs to be updated from the pixmap
+  /// to the window
+  bool on_expose_event(GdkEventExpose* event);
 
-  bool on_expose_event(GdkEventExpose* event) override;
   // void on_show();
   bool on_configure_event(GdkEventConfigure* event) override;
 
@@ -134,20 +133,19 @@ private:
   Glib::ustring int_to_ustring3(int d);
 
   void draw_log_grid();
+
+  /// Draw the vertical lines in a linear plot
   void draw_lin_grid();
+
   void draw_horz_grid();
 
 private:
   int m_linesize;
-  Gdk::LineStyle line_style;
   int m_lower_x, m_upper_x, m_lower_y, m_upper_y, m_y_zero_freq, m_enable_sec_scale;
   bool m_logx, visible;
   int m_selected_plot;
   std::string m_y_label1, m_y_label2;
 
-  Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
-  Glib::RefPtr<Gdk::GC> m_refGC;
-  Glib::RefPtr<Gdk::Colormap> m_refColormap;
   Glib::RefPtr<Pango::Layout> m_refLayout;
 
   Gdk::Color black, white;

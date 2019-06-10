@@ -26,49 +26,55 @@
 #include "settings.h"
 #include "sidebarnotebook.h"
 #include "speakereditor.h"
+
 #include <gtkmm/menu.h>
 #include <gtkmm/window.h>
 
-class MainWindow : public Gtk::Window {
+class main_window : public Gtk::Window
+{
 public:
-  MainWindow();
+    main_window();
 
 private:
-  /* Callbacks */
-  void on_quit();
-  bool on_delete_event(GdkEventAny* event) override;
-  void on_quit_common();
-  void on_about();
-  void on_save_all();
-  void on_edit_settings();
-  void on_switch_page(GtkNotebookPage* page, guint page_num);
-  bool on_edit_menu_expose_event(GdkEventExpose* event);
+    /* Callbacks */
+    void on_quit();
+    bool on_delete_event(GdkEventAny* event) override;
+    void on_quit_common();
+    void on_about();
+    void on_save_all();
+    void on_edit_settings();
+
+    // FIXME gtk3 port
+    // void on_switch_page(Gtk::Widget* page, guint page_num);
+    // bool on_edit_menu_expose_event(Gdk::EventExpose* event);
 
 private:
-  void set_title_and_icons();
+    void set_title_and_icons();
 
-  void set_defaults();
+    void set_defaults();
 
-  void connect_driver_tab();
-  void connect_enclosure_tab();
-  void connect_crossover_tab();
+    void connect_driver_tab();
+
+    void connect_enclosure_tab();
+
+    void connect_crossover_tab();
 
 private:
-  Gtk::VBox m_main_vbox;
-  SidebarNotebook m_main_notebook;
-  Gtk::HPaned m_driver_hpaned;
-  Gtk::VPaned m_driver_vpaned;
+    Gtk::VBox m_main_vbox;
+    SidebarNotebook m_main_notebook;
+    Gtk::HPaned m_driver_hpaned;
+    Gtk::VPaned m_driver_vpaned;
 
-  Gtk::MenuBar m_menubar;
-  Gtk::Menu m_file_menu;
-  Gtk::Menu m_edit_menu;
-  Gtk::Menu m_help_menu;
+    Gtk::MenuBar m_menubar;
+    Gtk::Menu m_file_menu;
+    Gtk::Menu m_edit_menu;
+    Gtk::Menu m_help_menu;
 
-  EnclosurePaned enclosure_paned;
-  CrossoverPaned crossover_paned;
-  Speaker_ListStore speaker_editor;
+    EnclosurePaned enclosure_paned;
+    CrossoverPaned crossover_paned;
+    Speaker_ListStore speaker_editor;
 
-  bool in_quit_phase;
+    bool in_quit_phase;
 };
 
 #endif

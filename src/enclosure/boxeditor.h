@@ -21,7 +21,6 @@
 #define __GSPEAKERS_BOXEDITOR
 
 #include <gtkmm/box.h>
-#include <gtkmm/combo.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>

@@ -25,6 +25,8 @@
 #include "popupentry.h"
 
 #include <gdkmm/general.h>
+#include <gdkmm/monitor.h>
+
 #include <gtk/gtkmain.h>
 
 #include <algorithm>
@@ -43,12 +45,13 @@ CellRendererPopup::CellRendererPopup()
       popup_window_(Gtk::WINDOW_POPUP) {
   std::cout << "CellRendererPopup::CellRendererPopup\n";
 
-  signal_show_popup_.connect(mem_fun(*this, &Self::on_show_popup));
-  signal_hide_popup_.connect(mem_fun(*this, &Self::on_hide_popup));
+  signal_show_popup_.connect(sigc::mem_fun(*this, &Self::on_show_popup));
+  signal_hide_popup_.connect(sigc::mem_fun(*this, &Self::on_hide_popup));
 
-  popup_window_.signal_button_press_event().connect(mem_fun(*this, &Self::on_button_press_event));
-  popup_window_.signal_key_press_event().connect(mem_fun(*this, &Self::on_key_press_event));
-  popup_window_.signal_style_changed().connect(mem_fun(*this, &Self::on_style_changed));
+  popup_window_.signal_button_press_event().connect(
+      sigc::mem_fun(*this, &Self::on_button_press_event));
+  popup_window_.signal_key_press_event().connect(sigc::mem_fun(*this, &Self::on_key_press_event));
+  // popup_window_.signal_style_changed().connect(sigc::mem_fun(*this, &Self::on_style_changed));
 }
 
 CellRendererPopup::~CellRendererPopup() = default;
@@ -76,7 +79,8 @@ void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle
                                        int* x_offset, int* y_offset, int* width,
                                        int* height) const {
 
-  Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
+  // BUG commented to get gtk3 port done
+  // Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
 
   // We cache this because it takes really long to get the width.
   if (button_width_ < 0) {
@@ -101,9 +105,10 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*, Gtk::Widget
 
   std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
 
-  popup_entry->signal_editing_done().connect(mem_fun(*this, &Self::on_popup_editing_done));
-  // popup_entry->signal_arrow_clicked().connect(mem_fun(*this, &Self::on_popup_arrow_clicked));
-  popup_entry->signal_hide().connect(mem_fun(*this, &Self::on_popup_hide));
+  popup_entry->signal_editing_done().connect(sigc::mem_fun(*this, &Self::on_popup_editing_done));
+  // popup_entry->signal_arrow_clicked().connect(sigc::mem_fun(*this,
+  // &Self::on_popup_arrow_clicked));
+  popup_entry->signal_hide().connect(sigc::mem_fun(*this, &Self::on_popup_hide));
 
   std::cout << property_text() << std::endl;
 
@@ -130,8 +135,14 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
 
   const int button_height = y2 - y1;
 
-  int screen_height = Gdk::screen_height() - y;
-  const int screen_width = Gdk::screen_width();
+  auto const display = Gdk::Display::get_default();
+  auto const monitor = display->get_primary_monitor();
+
+  Gdk::Rectangle screen_geometry;
+  monitor->get_geometry(screen_geometry);
+
+  auto screen_height = screen_geometry.get_height() - y;
+  auto const screen_width = screen_geometry.get_width();
 
   // Check if it fits in the available height.
   if (alloc.get_height() > screen_height) {
@@ -219,13 +230,13 @@ bool CellRendererPopup::on_key_press_event(GdkEventKey* event) {
   std::cout << "CellRendererPopup::on_key_press\n";
 
   switch (event->keyval) {
-  case GDK_Escape:
+  case GDK_KEY_Escape:
     editing_canceled_ = true;
     break;
-  case GDK_Return:
-  case GDK_KP_Enter:
-  case GDK_ISO_Enter:
-  case GDK_3270_Enter:
+  case GDK_KEY_Return:
+  case GDK_KEY_KP_Enter:
+  case GDK_KEY_ISO_Enter:
+  case GDK_KEY_3270_Enter:
     editing_canceled_ = false;
     break;
   default:

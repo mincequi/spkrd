@@ -25,6 +25,7 @@
 #include "speakerlist.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
@@ -43,7 +44,7 @@ private:
   void on_plot_crossover();
   void on_clear_and_plot();
   void on_speakerlist_loaded(SpeakerList* speaker_list);
-  void on_settings_changed(const std::string& s);
+  void on_settings_changed(std::string const& s);
 
 private:
   void connect_signals();
@@ -63,25 +64,25 @@ private:
   void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
 private:
-  Gtk::Adjustment adj;
-
   Gtk::Label m_label;
   Gtk::VBox m_vbox;
   Gtk::ComboBoxText m_speaker_combo;
-  Gtk::CheckButton m_enable_checkbutton;
 
   /* For lowpass filter */
   Gtk::ComboBoxText* m_lower_order_combo;
   Gtk::ComboBoxText* m_lower_type_combo;
+  Glib::RefPtr<Gtk::Adjustment> m_lower_co_freq_digits;
   Gtk::SpinButton* m_lower_co_freq_spinbutton;
 
   /* For highpass filter */
   Gtk::ComboBoxText* m_higher_order_combo;
   Gtk::ComboBoxText* m_higher_type_combo;
+  Glib::RefPtr<Gtk::Adjustment> m_higher_co_freq_digits;
   Gtk::SpinButton* m_higher_co_freq_spinbutton;
 
   /* For both */
   Gtk::CheckButton m_inv_pol_checkbutton;
+  Glib::RefPtr<Gtk::Adjustment> m_dampening_digits;
   Gtk::SpinButton m_damp_spinbutton;
   Gtk::CheckButton m_imp_corr_checkbutton;
   Gtk::CheckButton m_adv_imp_model_checkbutton;

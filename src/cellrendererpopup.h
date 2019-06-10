@@ -49,7 +49,7 @@ public:
 
 protected:
   virtual void get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area, int* x_offset,
-                              int* y_offset, int* width, int* height) const override;
+                              int* y_offset, int* width, int* height) const;
 
   Gtk::CellEditable* start_editing_vfunc(GdkEvent* event, Gtk::Widget& widget,
                                          const Glib::ustring& path,

@@ -18,11 +18,11 @@
 */
 
 #include "net.h"
-
 #include "speaker.h"
 
+#include <glibmm.h>
+
 #include <fstream>
-#include <glib.h>
 #include <sstream>
 #include <utility>
 
@@ -42,7 +42,7 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
   m_inv_pol = inv_pol;
 
   /* Init lowpass filter if present */
-  if ((m_type & NET_TYPE_LOWPASS) != 0) {
+  if (m_type == NET_TYPE_LOWPASS) {
     switch (lowpass_order) {
     case NET_ORDER_1ST:
       m_parts.emplace_back(PART_TYPE_INDUCTOR);
@@ -66,7 +66,7 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
   }
 
   /* Init highpass filter if present */
-  if ((m_type & NET_TYPE_HIGHPASS) != 0) {
+  if (m_type == NET_TYPE_HIGHPASS) {
     switch (highpass_order) {
     case NET_ORDER_1ST:
       m_parts.emplace_back(PART_TYPE_CAPACITOR);
@@ -104,11 +104,11 @@ Net::Net(int type, int lowpass_order, int highpass_order, bool has_imp_corr, boo
 }
 
 Net::Net(xmlNodePtr parent) {
-  if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
+  if (parent != nullptr && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0)) {
     try {
       parse_type(parent->children);
-    } catch (std::runtime_error const& e) {
-      throw e;
+    } catch (std::runtime_error const& error) {
+      throw error;
     }
   } else {
     throw std::runtime_error(_("Net: net node expected"));
@@ -116,12 +116,12 @@ Net::Net(xmlNodePtr parent) {
 }
 
 void Net::parse_type(xmlNodePtr node) {
-  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
+  if (node != nullptr && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_lowpass_order(node->next);
-    } catch (std::runtime_error const& e) {
-      throw e;
+    } catch (std::runtime_error const& error) {
+      throw error;
     }
   } else {
     throw std::runtime_error(_("Net: type node expected"));

@@ -26,7 +26,10 @@
 #include "gspeakersboxplot.h"
 #include "plothistory.h"
 
-#include <gtkmm.h>
+#include <gtkmm/handlebox.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/toolbar.h>
 
 class EnclosurePaned : public Gtk::HPaned {
 public:
@@ -35,15 +38,19 @@ public:
   ~EnclosurePaned() override;
 
   Gtk::Menu& get_menu();
+
   Gtk::Widget& get_toolbar();
 
 protected:
   /* Callbacks */
   void on_settings_changed(const std::string&);
+
   void set_save_state(bool b);
 
   void on_plot_selected(int);
+
   void on_remove_boxplot(int);
+
   void on_add_plot(Box*, Speaker*, Gdk::Color&);
 
 private:
@@ -57,10 +64,10 @@ private:
 
   Gtk::Menu m_menu;
   Gtk::HandleBox m_toolbar;
-  Gtk::Toolbar* m_tbar;
+  Gtk::Toolbar* m_tbar{nullptr};
 
-  int nof_plots;
-  bool plot_selected;
+  int nof_plots{0};
+  bool plot_selected{false};
 };
 
 #endif

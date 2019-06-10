@@ -24,13 +24,13 @@ Crossover::Crossover(int type, std::string id_string)
     : GSpeakersObject(), m_id_string(std::move(id_string)) {
   m_type = type;
 
-  if ((m_type & CROSSOVER_TYPE_SUBSONIC) != 0) {
+  if (m_type == CROSSOVER_TYPE_SUBSONIC) {
     m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
-  if ((m_type & CROSSOVER_TYPE_LOWPASS) != 0) {
+  if (m_type == CROSSOVER_TYPE_LOWPASS) {
     m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
   }
-  if ((m_type & CROSSOVER_TYPE_HIGHPASS) != 0) {
+  if (m_type == CROSSOVER_TYPE_HIGHPASS) {
     m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
   }
   if ((m_type & CROSSOVER_TYPE_TWOWAY) != 0) {
@@ -67,8 +67,8 @@ void Crossover::parse_type(xmlNodePtr node) {
     std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
     try {
       parse_networks(node->next);
-    } catch (std::runtime_error const& e) {
-      throw e;
+    } catch (std::runtime_error const& error) {
+      throw error;
     }
   } else {
     throw std::runtime_error(_("Crossover: type node expected"));
@@ -106,31 +106,32 @@ void Crossover::parse_id_string(xmlNodePtr node) {
 
 xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent) {
 
-  xmlNodePtr crossover, field;
+  xmlNodePtr crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
 
-  crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
-
-  field = xmlNewChild(crossover, nullptr, (xmlChar*)("type"), nullptr);
+  xmlNodePtr field = xmlNewChild(crossover, nullptr, (xmlChar*)("type"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
+
   field = xmlNewChild(crossover, nullptr, (xmlChar*)("networks"), nullptr);
 
   for (auto& network : m_networks) {
     network.to_xml_node(field);
   }
+
   field = xmlNewChild(crossover, nullptr, (xmlChar*)("id_string"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)m_id_string.c_str());
 
   return crossover;
 }
 
-std::ostream& operator<<(std::ostream& o, const Crossover& crossover) {
-  o << _("Crossover type:") << crossover.m_type << std::endl
-    << "Id: " << crossover.m_id << std::endl
-    << "---Nets----" << std::endl;
+std::ostream& operator<<(std::ostream& output, const Crossover& crossover) {
+  output << _("Crossover type:") << crossover.m_type << "\n"
+         << "Id: " << crossover.m_id << "\n"
+         << "---Nets----"
+         << "\n";
   for (auto const& network : crossover.m_networks) {
-    o << network;
+    output << network;
   }
-  return o;
+  return output;
 }
 
 std::vector<Net>* Crossover::networks() { return &m_networks; }

@@ -26,6 +26,7 @@
 #include <glibmm/ustring.h>
 
 #include <gtkmm/cellrenderer.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/handlebox.h>
@@ -98,9 +99,9 @@ protected:
   virtual void liststore_add_item(Speaker const& foo);
   void draw_imp_plot(Speaker& s, bool update = false);
 
-protected:
-  bool updating_entries;
+  void set_entries_sensitive(bool value);
 
+protected:
   // Member widgets:
   Gtk::Table m_TreeViewTable;
   Gtk::Table m_Table;
@@ -119,36 +120,13 @@ protected:
 
   Gtk::Widget* m_evbox;
   Gtk::Label* m_frame_label;
-  Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
   Gtk::Menu m_menu;
 
   Gtk::HandleBox toolbar;
-  Gtk::Toolbar* tbar;
-
-  /* Data container */
-  SpeakerList* m_speaker_list;
-  DriverFreqRespPlot plot;
+  Gtk::Toolbar* tbar{nullptr};
 
   struct ModelColumns : public Gtk::TreeModelColumnRecord {
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<int> type;
-    Gtk::TreeModelColumn<Glib::ustring> id_string;
-    Gtk::TreeModelColumn<double> qts;
-    Gtk::TreeModelColumn<double> fs;
-    Gtk::TreeModelColumn<double> vas;
-    Gtk::TreeModelColumn<double> rdc;
-    Gtk::TreeModelColumn<double> lvc;
-    Gtk::TreeModelColumn<double> qms;
-    Gtk::TreeModelColumn<double> qes;
-    Gtk::TreeModelColumn<double> imp;
-    Gtk::TreeModelColumn<double> sens;
-    Gtk::TreeModelColumn<double> mmd;
-    Gtk::TreeModelColumn<double> ad;
-    Gtk::TreeModelColumn<double> bl;
-    Gtk::TreeModelColumn<double> rms;
-    Gtk::TreeModelColumn<double> cms;
-    Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
-
+  public:
     ModelColumns() {
       add(id);
       add(type);
@@ -169,16 +147,40 @@ protected:
       add(cms);
       add(freq_resp_file);
     }
+
+  public:
+    Gtk::TreeModelColumn<int> id;
+    Gtk::TreeModelColumn<int> type;
+    Gtk::TreeModelColumn<Glib::ustring> id_string;
+    Gtk::TreeModelColumn<double> qts;
+    Gtk::TreeModelColumn<double> fs;
+    Gtk::TreeModelColumn<double> vas;
+    Gtk::TreeModelColumn<double> rdc;
+    Gtk::TreeModelColumn<double> lvc;
+    Gtk::TreeModelColumn<double> qms;
+    Gtk::TreeModelColumn<double> qes;
+    Gtk::TreeModelColumn<double> imp;
+    Gtk::TreeModelColumn<double> sens;
+    Gtk::TreeModelColumn<double> mmd;
+    Gtk::TreeModelColumn<double> ad;
+    Gtk::TreeModelColumn<double> bl;
+    Gtk::TreeModelColumn<double> rms;
+    Gtk::TreeModelColumn<double> cms;
+    Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
   };
 
-  /* various helper variables */
-  bool changed, new_xml_pressed;
-  int index;
-  ModelColumns m_columns;
+  bool updating_entries{false};
+  bool m_modified{false};
+  bool changed{false};
+  bool new_xml_pressed{false};
+  int index{-1};
 
-  void set_entries_sensitive(bool value);
+  /* Data container */
+  SpeakerList* m_speaker_list{nullptr};
+  DriverFreqRespPlot plot;
+
+  ModelColumns m_columns;
   std::string m_filename;
-  bool m_modified;
 };
 
 #endif

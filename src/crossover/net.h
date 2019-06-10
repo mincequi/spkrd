@@ -28,25 +28,25 @@
 #include <vector>
 
 /* Net types */
-#define NET_TYPE_LOWPASS 1
-#define NET_TYPE_HIGHPASS 2
-#define NET_TYPE_BANDPASS 3
-#define NET_NOT_PRESENT 0
+constexpr auto NET_TYPE_LOWPASS = 1;
+constexpr auto NET_TYPE_HIGHPASS = 2;
+constexpr auto NET_TYPE_BANDPASS = 3;
+constexpr auto NET_NOT_PRESENT = 0;
 
 /* Filter # */
-#define NET_ORDER_1ST 1
-#define NET_ORDER_2ND 2
-#define NET_ORDER_3RD 3
-#define NET_ORDER_4TH 4
+constexpr auto NET_ORDER_1ST = 1;
+constexpr auto NET_ORDER_2ND = 2;
+constexpr auto NET_ORDER_3RD = 3;
+constexpr auto NET_ORDER_4TH = 4;
 
 /* filter family */
-#define NET_BESSEL 1
-#define NET_BUTTERWORTH 2
-#define NET_CHEBYCHEV 3
-#define NET_LINKWITZRILEY 4
-#define NET_GAUSSIAN 5
-#define NET_LEGENDRE 6
-#define NET_LINEARPHASE 7
+constexpr auto NET_BESSEL = 1;
+constexpr auto NET_BUTTERWORTH = 2;
+constexpr auto NET_CHEBYCHEV = 3;
+constexpr auto NET_LINKWITZRILEY = 4;
+constexpr auto NET_GAUSSIAN = 5;
+constexpr auto NET_LEGENDRE = 6;
+constexpr auto NET_LINEARPHASE = 7;
 
 /// Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
 /// For example: Lowpassfilter with impedance correction network or highpassfilter with

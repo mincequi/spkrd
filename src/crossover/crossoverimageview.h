@@ -26,10 +26,7 @@
 #include "crossover.h"
 #include "speakerlist.h"
 
-#include <gdkmm/color.h>
-#include <gdkmm/colormap.h>
-#include <gdkmm/gc.h>
-#include <gdkmm/pixmap.h>
+#include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
 #include <pangomm/layout.h>
@@ -37,16 +34,16 @@
 #include <string>
 #include <vector>
 
-/*
- * The CrossoverImageView is a widget that will display the
- * current crossover as an image of the component layout.
- */
+/// The CrossoverImageView is a widget that will display the
+/// current crossover as an image of the component layout.
 class CrossoverImageView : public Gtk::DrawingArea {
 public:
   CrossoverImageView();
 
 private:
-  bool on_expose_event(GdkEventExpose* event) override;
+  bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
+
+  bool on_expose_event(GdkEventExpose* event);
   bool on_configure_event(GdkEventConfigure* event) override;
 
   void on_crossover_selected(Crossover* selected_crossover);
@@ -79,27 +76,32 @@ private:
   void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
   void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
 
-  void draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
-  void draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
+  void draw_lowpass_net(int x, int y, int part_width, int part_height,
+                        std::vector<Part> const& parts);
+  void draw_highpass_net(int x, int y, int part_width, int part_height,
+                         std::vector<Part> const& parts);
 
-  void draw_imp_corr_net(int x, int y, int part_width, int part_height, Part& capacitor,
-                         Part& resistor);
-  void draw_damp_net(int x, int y, int part_width, int part_height, Part& r1, Part& r2);
-  void draw_driver(int x, int y, int part_width, int part_height, Speaker& speaker);
+  void draw_imp_corr_net(int x, int y, int part_width, int part_height, Part const& capacitor,
+                         Part const& resistor);
+  void draw_damp_net(int x, int y, int part_width, int part_height, Part const& r1, Part const& r2);
+  void draw_driver(int x, int y, int part_width, int part_height, Speaker const& speaker);
 
 private:
-  bool visible;
-  bool scale_image_parts;
+  bool m_visible{false};
+  bool m_scale_image_parts;
 
-  Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
-  Glib::RefPtr<Gdk::GC> m_refGC;
-  Glib::RefPtr<Gdk::Colormap> m_refColormap;
+  // /// Pixel map
+  // Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
+  // /// Graphics context
+  // Glib::RefPtr<Gdk::GC> m_refGC;
+  //
+  // Glib::RefPtr<Gdk::Colormap> m_refColormap;
 
   Glib::RefPtr<Pango::Layout> m_refLayout;
-  Gdk::Color black, white;
+  Gdk::RGBA black, white;
 
-  Crossover* crossover;
-  SpeakerList* speaker_list;
+  Crossover* crossover{nullptr};
+  SpeakerList* speaker_list{nullptr};
 };
 
 #endif

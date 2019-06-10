@@ -89,20 +89,19 @@ xmlNodePtr Part::to_xml_node(xmlNodePtr parent) {
   field = xmlNewChild(part, nullptr, (xmlChar*)("unit"), nullptr);
   xmlNodeSetContent(field, (xmlChar*)(m_unit.c_str()));
 
+  delete[] buffer;
+  buffer = nullptr;
+
   return part;
 }
 
-void Part::set_value(double value) {
-
-  m_value = value;
-  // std::cout << "Part.id: " << get_id() << "...value set to " << m_value << std::endl;
-}
+void Part::set_value(double value) { m_value = value; }
 
 void Part::set_unit(std::string unit) { m_unit = std::move(unit); }
 
-double Part::get_value() { return m_value; }
+double Part::get_value() const { return m_value; }
 
-std::string Part::get_unit() { return m_unit; }
+std::string const& Part::get_unit() const { return m_unit; }
 
 void Part::on_part_value_changed(int id, double new_value) {
   if (id == get_id()) {
@@ -113,22 +112,20 @@ void Part::on_part_value_changed(int id, double new_value) {
 
 void Part::on_part_unit_changed(int id, std::string new_unit) {
   if (id == get_id()) {
-    // std::cout << "Signal emitted in: " << get_id() << std::endl;
     m_unit = std::move(new_unit);
   }
 }
 
 void Part::on_part_type_changed(int id, int new_type) {
   if (id == get_id()) {
-    // std::cout << "Signal emitted in: " << get_id() << std::endl;
     m_type = new_type;
   }
 }
 
 std::ostream& operator<<(std::ostream& o, const Part& part) {
   return o << _("***Part***") << std::endl
-           << _("Id   : ") << part.m_id << std::endl
-           << _("Type : ") << part.m_type << std::endl
-           << _("Value: ") << part.m_value << std::endl
-           << _("Unit : ") << part.m_unit << std::endl;
+           << _("Id   : ") << part.m_id << "\n"
+           << _("Type : ") << part.m_type << "\n"
+           << _("Value: ") << part.m_value << "\n"
+           << _("Unit : ") << part.m_unit << "\n";
 }

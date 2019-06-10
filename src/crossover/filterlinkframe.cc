@@ -31,10 +31,11 @@
 
 FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
                                  SpeakerList* speaker_list)
-    : Gtk::Frame(""), adj(1.0, 1.0, 31.0, 1.0, 5.0, 0.0),
+    : Gtk::Frame(""), m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
+      m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
-      m_damp_spinbutton(*(new Gtk::Adjustment(0, 0, 100, 1, 5.0))),
-      m_imp_corr_checkbutton(_("Impedance correction")),
+      m_dampening_digits(Gtk::Adjustment::create(0, 0, 100, 1, 5.0)),
+      m_damp_spinbutton(m_dampening_digits), m_imp_corr_checkbutton(_("Impedance correction")),
       m_adv_imp_model_checkbutton(_("Use adv. driver imp. model")), m_net(net),
       m_description(description), m_speaker_list(speaker_list) {
 
@@ -64,10 +65,10 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
   if (m_net->get_has_damp()) {
     this->initialise_dampening();
   }
-  if ((net->get_type() & NET_TYPE_HIGHPASS) != 0) {
+  if (net->get_type() == NET_TYPE_HIGHPASS) {
     this->initialise_highpass_filter();
   }
-  if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0) {
+  if (m_net->get_type() == NET_TYPE_LOWPASS) {
     this->initialise_lowpass_filter();
   }
 
@@ -156,8 +157,7 @@ void FilterLinkFrame::initialise_highpass_filter() {
 
   hbox = Gtk::manage(new Gtk::HBox());
   hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Cutoff: ")))));
-  m_higher_co_freq_spinbutton =
-      Gtk::manage(new Gtk::SpinButton(*(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
+  m_higher_co_freq_spinbutton = Gtk::manage(new Gtk::SpinButton(m_higher_co_freq_digits));
   hbox->pack_start(*m_higher_co_freq_spinbutton);
   {
     auto label = Gtk::manage(new Gtk::Label(" Hz"));
@@ -207,8 +207,8 @@ void FilterLinkFrame::initialise_lowpass_filter() {
 
   hbox = Gtk::manage(new Gtk::HBox());
   hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Cutoff: "))));
-  m_lower_co_freq_spinbutton =
-      Gtk::manage(new Gtk::SpinButton(*Gtk::manage(new Gtk::Adjustment(2000, 1, 20000, 1, 100))));
+
+  m_lower_co_freq_spinbutton = Gtk::manage(new Gtk::SpinButton(m_lower_co_freq_digits));
 
   hbox->pack_start(*m_lower_co_freq_spinbutton);
   hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Hz"))));
