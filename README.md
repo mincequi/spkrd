@@ -1,21 +1,33 @@
-GSpeakers Redux
-===============
+spkrd
+=====
 
-GSpeakers Redux is an update to the GSpeakers application written by Daniel Sundberg and originally hosted at [SourceForge](https://sourceforge.net/projects/gspeakers/).
+spkrd (Speaker Design) is an update to the GSpeakers and GSpeakers-Redux application written originally by Daniel Sundberg and originally hosted at [SourceForge](https://sourceforge.net/projects/gspeakers/).
 
-The purpose of this update is to bring GSpeakers up to date so that it will compile without problems on modern Linuxes, to add/improve features, to encourage collaboration, and perhaps to eventually rewrite the application.  I welcome your forks and pull requests!
+The purpose of this repository is to bring a high quality loudspeaker design software to Linux.  Extensive work is underway to cleanup the deprecated features in GTK2 and to use GTK3.  The old and dusty code has been cleaned up to align with modern C++ and we require C++14 as the working standard.  The build system has been ported to CMake for ease of compilation.
 
+Requests to add and improve features, bug reports and collaboration are strongly encouraged.  I welcome your forks and pull requests!
 
-Original README
-===============
+## Compiling spkrd
 
-GSpeakers is a loudspeaker enclosure and crossovernetwork designer for the gtk+/gnome desktop.
+The cross-platform nature of `Cmake` allows mostly the same compilation steps across platforms.  Generally you want to create a separate build directory and run
 
-However, you can build GSpeakers on both Microsoft Windows and MacOS X. See README.win32 and README.macosx for further details.
+```
+cmake ..
+```
 
-## GSpeakers on Windows
+and once configured run the appropriate compilation program.
 
-The best thing you can do if you want to run GSpeakers on Windows is
+### Linux
+
+```
+mkdir build && cd build
+cmake ..
+make all
+```
+
+### Windows
+
+The best thing you can do if you want to run spkrd on Windows is
 to download the binary package.
 
 * Download and install the gtk+ runtime environment
@@ -23,10 +35,6 @@ to download the binary package.
 
 * Download and unzip the GSpeakers zip file, double click on gspeakers.exe
   to start GSpeakers
-
-
-Building GSpeakers
----------------
 
 If you want to build GSpeakers things get a little bit more complicated. First
 you need a compiler and some kind of GNU system. I use Mingw and Msys and some
@@ -41,124 +49,7 @@ add the pkg-config definition file for libxml2 since that file has been
 missing in the win32 binary distribution. This file is attached at the bottom
 of this file.
 
-INSTALLATION INSTRUCTIONS FOR GTK+ AND GTKMM USING CYGWIN AND MINGW.
---------------------------------------------------------------------
-
-1. Download and install the latest mingw (I used MinGW-3.1.0-1.exe). Install
-   to default folder, c:\mingw.
-
-2. Download and install the latest cygwin. You probably want to add the following
-   to the default cygwin setup:
-
-	Admin->cygrunsrv (so that you can run sshd)
-	Archive->zip
-	Archive->unzip
-	Devel->autoconf
-	Devel->automake
-	Devel->cvs
-	Devel->libtool
-	Devel->make
-	Editors->nano
-	Graphics->libpng2
-	Net->Openssh
-	Net->setup
-	Web->wget
-
-   At least autoconf, automake, make and libtool is required to setup a standard
-   gtkmm build system.
-
-3. Cygwins path needs to be modified, because we want to use mingws gcc.
-   Edit /etc/profile to add /cygdrive/c/mingw/bin in front of the current PATH.
-
-4. Download and install the GTK+2 development environment[0]. Install into
-   c:\cygwin.
-
-5. Download and install the GTK+2 runtime environment[0]. Install to standard
-   location.
-
-6. Download and install the gtkmm development environment[1]. Install to
-   c:\cygwin. Answer yes to add it to the path.
-
-7. You can now test whether GTK works by typing:
-       pkg-config.exe gtk+-2.0 --modversion
-   You can test gtkmm by a similar command:
-       pkg-config.exe gtkmm-2.0 --modversion
-
-   If they return something sane, you should be on your way.
-
-8. "Hello World" can be compiled like this:
-   GTK+:
-       gcc foo.c `pkg-config.exe gtk+-2.0 --libs --cflags` -mno-cygwin -mms-bitfields
-   gtkmm:
-       g++ foo.cpp `pkg-config.exe gtkmm-2.0 --libs --cflags` -mno-cygwin -mms-bitfields
-
-   The standard gtkmm examples is in /demo or /examples.
-
-Now you should be able to compile and run the examples. Also you will find the gtkmm
-standard demo in the start menu. Now it is time for the more tricky parts. We need to
-have GNU Gettext and libxml2 working. Get them from the gnuwin32 project.
-
-9. In order to compile a regular gtkmm application with autoconf, automake,
-   libtool and gettext,  the following needs to be installed as well:
-
-  - autoconf from cygwin setup
-  - automake from cygwin setup
-  - make from cygwin setup
-  - libtool from cygwin setup
-  - libiconv from www.mingw.org (install to standard location)
-  - gettext from www.mingw.org (install to standard location)
-
-
-
-
-[0] http://www2.arnes.si/~sopjsimo/gimp/stable.html
-[1] http://www.pcpm.ucl.ac.be/~gustin/win32_ports/
-
-
-Install mingw
-
-Install msys
-
-Install msys DTK
-
-Install gtk+
-
-Install gtkmm
-
-Install emacs
-
-Add paths
-
-aclocal -I /mingw/share/aclocal
-
-autoconf
-
-automake -a
-
-autoheader
-
-./configure --enable-win32
-
-
-=============
-libmls-2.0.pc
-=============
-
-prefix=/target
-exec_prefix=${prefix}
-libdir=${exec_prefix}/libdir
-includedir=${prefix}/include
-
-
-Name: libXML
-Version: 2.5.11
-Description: libXML library version2.
-Requires:
-Libs: -L${libdir} -lxml2  -lm
-Cflags: -I${includedir}/libxml2 -I${includedir}/libxml2
-
-
-## Installation instructions for GSpeakers on Mac OS X
+### Mac OS X
 by Emil Hessman
 
 Make sure you have the following software installed before an attempt
