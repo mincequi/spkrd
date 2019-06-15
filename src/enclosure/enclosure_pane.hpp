@@ -43,7 +43,6 @@ public:
     Gtk::Widget& get_toolbar();
 
 protected:
-    /* Callbacks */
     void on_settings_changed(const std::string&);
 
     void set_save_state(bool b);

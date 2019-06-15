@@ -33,8 +33,6 @@ int sidebar_notebook::append_page(Widget& child, Widget& tab_label)
     return m_notebook.append_page(child, tab_label);
 }
 
-int sidebar_notebook::append_page(Widget& child) { return m_notebook.append_page(child); }
-
 void sidebar_notebook::set_current_page(int page_num) { m_notebook.set_current_page(page_num); }
 
 int sidebar_notebook::get_current_page() const { return m_notebook.get_current_page(); }

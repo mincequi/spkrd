@@ -49,9 +49,9 @@ private:
 
     void on_edit_settings();
 
-    // FIXME gtk3 port
-    // void on_switch_page(Gtk::Widget* page, guint page_num);
-    // bool on_edit_menu_expose_event(Gdk::EventExpose* event);
+    void on_switch_page(Gtk::Widget* page, int page_number);
+
+    void on_edit_menu_expose_event();
 
 private:
     void set_title_and_icons();

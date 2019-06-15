@@ -31,21 +31,21 @@
 
 #include <vector>
 
-/*
- * This is a wrapper class for GSpeakersPlot
- *
- */
-class DriverFreqRespPlot : public Gtk::Frame {
+/// This is a wrapper class for GSpeakersPlot
+class DriverFreqRespPlot : public Gtk::Frame
+{
 public:
-  DriverFreqRespPlot();
+    DriverFreqRespPlot();
 
-  void clear();
-  void add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&);
-  void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color&);
+    void clear() { plot.remove_all_plots(); }
+
+    void add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&);
+
+    void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color&);
 
 private:
-  GSpeakersPlot plot;
-  Gtk::ScrolledWindow sw;
+    GSpeakersPlot plot;
+    Gtk::ScrolledWindow sw;
 };
 
 #endif

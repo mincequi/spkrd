@@ -77,8 +77,6 @@ enclosure_pane::~enclosure_pane()
 
 Gtk::MenuItem& enclosure_pane::get_menu()
 {
-    // FIXME gtk3 port
-
     m_menu_item.set_label("Enclosure");
 
     // Create the drop down menu options
@@ -100,7 +98,6 @@ Gtk::MenuItem& enclosure_pane::get_menu()
         new_enclosure->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_new_xml));
         enclosure_submenu->append(*new_enclosure);
     }
-
     {
         auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
         append_xml->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_append_xml));
@@ -216,6 +213,7 @@ Gtk::Widget& enclosure_pane::get_toolbar()
             static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyle")));
 
         m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
+
         // FIXME gtk3 port
         // m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(false);
     }
@@ -260,7 +258,7 @@ void enclosure_pane::on_remove_boxplot(int)
 #endif
     if (nof_plots > 0)
     {
-        nof_plots--;
+        --nof_plots;
     }
     if (nof_plots < 1)
     {

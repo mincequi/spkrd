@@ -28,9 +28,7 @@
 #include <string>
 #include <vector>
 
-/*
- * This is a list to store all speakers in
- */
+/// This is a list to store all speakers in
 class speaker_list
 {
 public:

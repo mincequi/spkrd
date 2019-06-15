@@ -104,9 +104,8 @@ main_window::main_window()
     m_menubar.append(m_crossover_paned.get_menu());
     m_menubar.append(m_help_menu_item);
 
-    // FIXME gtk3 port
-    // m_file_menu.signal_expose_event().connect(
-    //     sigc::mem_fun(*this, &main_window::on_edit_menu_expose_event));
+    m_edit_menu_item.signal_activate().connect(
+        sigc::mem_fun(*this, &main_window::on_edit_menu_expose_event));
 
     // Add the MenuBar to the window
     m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
@@ -130,8 +129,8 @@ main_window::main_window()
 
     // For some reason I had to put this after calling show_all_children()
 
-    // FIXME gtk3 port
-    // m_main_notebook.signal_switch_page().connect(sigc::mem_fun(*this, &main_window::on_switch_page));
+    m_main_notebook.data().signal_switch_page().connect(
+        sigc::mem_fun(*this, &main_window::on_switch_page));
 
     m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
 }
@@ -360,58 +359,71 @@ void main_window::on_quit_common()
 void main_window::on_save_all()
 {
     std::puts("Saving all files!");
-
     signal_save_open_files();
 }
 
-// FIXME gtk3 port
-// bool main_window::on_edit_menu_expose_event(GdkEventExpose* event) {
-//   // Check whether to ungrey "save all" menuitem or not
-//   m_file_menu.items()[0].set_sensitive(is_state_modified());
-//   return false;
-// }
+void main_window::on_edit_menu_expose_event()
+{
+    // FIXME gtk3 port
+    // Check whether to ungrey "save all" menuitem or not
+    // m_file_menu.items()[0].set_sensitive(is_state_modified());
+}
 
-// FIXME gtk3 port
-// void main_window::on_switch_page(GtkNotebookPage* page, guint page_num) {
-//
-//   if (!m_in_quit_phase) {
-//     switch (page_num) {
-//     case NOTEBOOK_PAGE::DRIVERS:
-//       if (!m_speaker_editor.get_toolbar().get_visible()) {
-//         m_speaker_editor.get_toolbar().show();
-//       }
-//       if (m_enclosure_paned.get_toolbar().get_visible()) {
-//         m_enclosure_paned.get_toolbar().hide();
-//       }
-//       if (m_crossover_paned.get_toolbar().get_visible()) {
-//         m_crossover_paned.get_toolbar().hide();
-//       }
-//       break;
-//     case NOTEBOOK_PAGE::ENCLOSURE:
-//       if (m_speaker_editor.get_toolbar().get_visible()) {
-//         m_speaker_editor.get_toolbar().hide();
-//       }
-//       if (!m_enclosure_paned.get_toolbar().get_visible()) {
-//         m_enclosure_paned.get_toolbar().show();
-//       }
-//       if (m_crossover_paned.get_toolbar().get_visible()) {
-//         m_crossover_paned.get_toolbar().hide();
-//       }
-//       break;
-//     case NOTEBOOK_PAGE::FILTER:
-//       if (m_speaker_editor.get_toolbar().get_visible()) {
-//         m_speaker_editor.get_toolbar().hide();
-//       }
-//       if (m_enclosure_paned.get_toolbar().get_visible()) {
-//         m_enclosure_paned.get_toolbar().hide();
-//       }
-//       if (!m_crossover_paned.get_toolbar().get_visible()) {
-//         m_crossover_paned.get_toolbar().show();
-//       }
-//       break;
-//     }
-//   }
-// }
+void main_window::on_switch_page(Gtk::Widget* page, int page_number)
+{
+    if (m_in_quit_phase)
+    {
+        return;
+    }
+
+    std::cout << "showing page " << page_number << "\n";
+
+    switch (page_number)
+    {
+        case NOTEBOOK_PAGE::DRIVERS:
+            if (!m_speaker_editor.get_toolbar().get_visible())
+            {
+                m_speaker_editor.get_toolbar().show();
+            }
+            if (m_enclosure_paned.get_toolbar().get_visible())
+            {
+                m_enclosure_paned.get_toolbar().hide();
+            }
+            if (m_crossover_paned.get_toolbar().get_visible())
+            {
+                m_crossover_paned.get_toolbar().hide();
+            }
+            break;
+        case NOTEBOOK_PAGE::ENCLOSURE:
+            if (m_speaker_editor.get_toolbar().get_visible())
+            {
+                m_speaker_editor.get_toolbar().hide();
+            }
+            if (!m_enclosure_paned.get_toolbar().get_visible())
+            {
+                m_enclosure_paned.get_toolbar().show();
+            }
+            if (m_crossover_paned.get_toolbar().get_visible())
+            {
+                m_crossover_paned.get_toolbar().hide();
+            }
+            break;
+        case NOTEBOOK_PAGE::FILTER:
+            if (m_speaker_editor.get_toolbar().get_visible())
+            {
+                m_speaker_editor.get_toolbar().hide();
+            }
+            if (m_enclosure_paned.get_toolbar().get_visible())
+            {
+                m_enclosure_paned.get_toolbar().hide();
+            }
+            if (!m_crossover_paned.get_toolbar().get_visible())
+            {
+                m_crossover_paned.get_toolbar().show();
+            }
+            break;
+    }
+}
 
 void main_window::on_about()
 {

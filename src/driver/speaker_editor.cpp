@@ -82,8 +82,7 @@ speaker_editor::speaker_editor()
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
 
     m_treeview_frame.set_label_widget(*m_evbox);
-
-    // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+    m_evbox->set_tooltip_text(m_filename);
 
     m_inner_treeview_vbox.set_border_width(12);
     m_inner_treeview_vbox.pack_start(m_TreeViewTable);
@@ -94,7 +93,7 @@ speaker_editor::speaker_editor()
     m_vbox.pack_start(m_Table);
     m_vbox.set_border_width(12);
 
-    /* Setup the table */
+    // Setup the table
     m_TreeViewTable.set_spacings(2);
     m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
@@ -102,8 +101,7 @@ speaker_editor::speaker_editor()
     m_Table.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 1, 0, 1);
     m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
 
-    // GSpeakers::tooltips().set_tip(m_IdStringEntry,
-    //                               _("The name or identificationstd::string for the driver"));
+    m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
     m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)),
                    0,
@@ -161,19 +159,17 @@ speaker_editor::speaker_editor()
                    15);
     m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
 
-    // GSpeakers::tooltips().set_tip(
-    //     m_BassCheckButton, _("Check this box if the driver will work as a woofer (bass speaker)"));
+    m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will work as a woofer (bass "
+                                         "speaker)"));
     m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
-    // GSpeakers::tooltips().set_tip(m_MidrangeCheckButton,
-    //                               _("Check this box if the driver will work as a midrange
-    //                               speaker"));
+
+    m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will work as a midrange "
+                                             "speaker"));
     m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
-    // GSpeakers::tooltips().set_tip(m_TweeterCheckButton,
-    //                               _("Check this box if the driver will work as a tweeter"));
+
+    m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
     m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
-    // m_Table.attach(*Gtk::manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)), 0, 1,
-    // 18, 19); m_Table.attach(m_FreqRespFileEntry, 1, 2, 18, 19);
     Gtk::HBox* vbox = Gtk::manage(new Gtk::HBox());
     vbox->pack_start(*Gtk::manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)));
     vbox->pack_start(m_FreqRespFileEntry);
@@ -232,15 +228,14 @@ speaker_editor::speaker_editor()
     m_BrowseFreqRespButton.signal_clicked().connect(
         sigc::mem_fun(*this, &speaker_editor::on_browse_freq_resp));
 
-    // GSpeakers::tooltips().set_tip(m_EditFreqRespButton, _("Edit frequency response for this
-    // driver"));
-    // GSpeakers::tooltips().set_tip(m_BrowseFreqRespButton, _("Browse for frequency
-    // response file"));
+    m_EditFreqRespButton.set_tooltip_text(_("Edit frequency response for this driver"));
+    m_BrowseFreqRespButton.set_tooltip_text(_("Browse for frequency response file"));
+
     set_entries_sensitive(false);
 
     create_model();
 
-    /* create tree view */
+    // create tree view
     m_TreeView.set_model(m_refListStore);
     m_TreeView.set_rules_hint();
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
@@ -266,8 +261,6 @@ speaker_editor::~speaker_editor()
 
 Gtk::MenuItem& speaker_editor::get_menu()
 {
-    // FIXME gtk3 port
-
     m_menu_item.set_label("Driver");
 
     // Create the drop down menu options
@@ -452,6 +445,7 @@ void speaker_editor::on_new_xml()
 
     set_entries_sensitive(false);
     new_xml_pressed = true;
+
     // Add one new speaker to the new xml file, we usually want to do this
     on_new();
 }
@@ -582,7 +576,7 @@ void speaker_editor::on_selection_changed()
             g_string_printf(buffer, "%0.4f", s.get_cms());
             m_CmsEntry.set_text(Glib::ustring(buffer->str));
 
-            /* Check buttons */
+            // Check buttons
             if (s.get_type() == SPEAKER_TYPE_BASS)
             {
                 m_BassCheckButton.set_active(true);
@@ -615,7 +609,7 @@ void speaker_editor::on_selection_changed()
             plot.clear();
             if (g_settings.getValueBool("DrawDriverFreqRespPlot"))
             {
-                /* Plot freq resp if it exists */
+                // Plot freq resp if it exists
                 if (!s.get_freq_resp_filename().empty())
                 {
                     std::ifstream fin(s.get_freq_resp_filename().c_str());

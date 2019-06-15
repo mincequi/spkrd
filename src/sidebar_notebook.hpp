@@ -32,11 +32,11 @@ public:
 
     int append_page(Gtk::Widget& child, Gtk::Widget& tab_label);
 
-    int append_page(Gtk::Widget& child);
-
     void set_current_page(int page_num);
 
     int get_current_page() const;
+
+    auto data() -> Gtk::Notebook& { return m_notebook; }
 
 private:
     Gtk::Notebook m_notebook;
