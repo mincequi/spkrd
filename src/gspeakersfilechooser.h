@@ -24,20 +24,21 @@
 
 #include <memory>
 
-class GSpeakersFileChooserDialog {
+class GSpeakersFileChooserDialog
+{
 public:
-  enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL };
+    enum { FILE_CHOOSER_OPEN, FILE_CHOOSER_SAVE, FILE_CHOOSER_CANCEL };
 
 public:
-  GSpeakersFileChooserDialog(const Glib::ustring& title,
-                             Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
-                             const std::string& default_filename = "");
+    GSpeakersFileChooserDialog(const Glib::ustring& title,
+                               Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
+                               const std::string& default_filename = "");
 
-  Glib::ustring const& get_filename() const { return m_filename; }
+    Glib::ustring const& get_filename() const { return m_filename; }
 
 private:
-  Glib::ustring m_filename;
-  std::unique_ptr<Gtk::FileChooserDialog> m_file_chooser;
+    Glib::ustring m_filename;
+    std::unique_ptr<Gtk::FileChooserDialog> m_file_chooser;
 };
 
 #endif

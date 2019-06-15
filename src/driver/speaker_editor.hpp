@@ -41,12 +41,14 @@
 
 #include <sigc++/sigc++.h>
 
+#include <memory>
+
 class speaker_editor : public sigc::trackable
 {
 public:
     speaker_editor();
 
-    virtual ~speaker_editor();
+    virtual ~speaker_editor() = default;
 
     Gtk::Widget& get_treeview_table() noexcept { return m_treeview_vbox; }
 
@@ -56,7 +58,7 @@ public:
 
     Gtk::MenuItem& get_menu();
 
-    Gtk::Widget& get_toolbar();
+    Gtk::Toolbar& get_toolbar();
 
 protected:
     bool open_xml(const std::string& filename);
@@ -149,8 +151,7 @@ protected:
 
     Gtk::MenuItem m_menu_item;
 
-    Gtk::HandleBox toolbar;
-    Gtk::Toolbar* tbar{nullptr};
+    Gtk::Toolbar* m_toolbar{nullptr};
 
     struct ModelColumns : public Gtk::TreeModelColumnRecord
     {
@@ -204,7 +205,7 @@ protected:
     bool new_xml_pressed{false};
     int index{-1};
 
-    speaker_list* m_speaker_list{nullptr};
+    std::unique_ptr<speaker_list> m_speaker_list{nullptr};
     DriverFreqRespPlot plot;
 
     ModelColumns m_columns;

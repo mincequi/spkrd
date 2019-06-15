@@ -63,12 +63,12 @@ speaker_editor::speaker_editor()
 
     try
     {
-        m_speaker_list = new speaker_list(m_filename);
-        signal_speakerlist_loaded(m_speaker_list);
+        m_speaker_list = std::make_unique<speaker_list>(m_filename);
+        signal_speakerlist_loaded(m_speaker_list.get());
     }
     catch (std::runtime_error const& e)
     {
-        m_speaker_list = new speaker_list();
+        m_speaker_list = std::make_unique<speaker_list>();
         std::cout << "speaker_editor::speaker_editor: " << e.what() << std::endl;
     }
     m_treeview_vbox.set_border_width(5);
@@ -250,15 +250,6 @@ speaker_editor::speaker_editor()
     signal_save_open_files.connect(sigc::mem_fun(*this, &speaker_editor::on_save_open_files));
 }
 
-speaker_editor::~speaker_editor()
-{
-    if (m_speaker_list)
-    {
-        delete m_speaker_list;
-        m_speaker_list = nullptr;
-    }
-}
-
 Gtk::MenuItem& speaker_editor::get_menu()
 {
     m_menu_item.set_label("Driver");
@@ -313,41 +304,39 @@ Gtk::MenuItem& speaker_editor::get_menu()
     // menulist[MENU_INDEX_DELETE].set_sensitive(false);
 }
 
-Gtk::Widget& speaker_editor::get_toolbar()
+Gtk::Toolbar& speaker_editor::get_toolbar()
 {
-    if (tbar == nullptr)
+    if (m_toolbar == nullptr)
     {
-        tbar = Gtk::manage(new Gtk::Toolbar());
+        m_toolbar = Gtk::manage(new Gtk::Toolbar());
 
-        // TODO: tooltips
         Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("New Driver")));
         t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_new));
-        tbar->append(*t);
+        m_toolbar->append(*t);
 
-        Gtk::SeparatorToolItem* s = Gtk::manage(new Gtk::SeparatorToolItem());
-        tbar->append(*s);
+        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
         t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_open_xml));
-        tbar->append(*t);
+        m_toolbar->append(*t);
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::SAVE));
         t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_save));
-        tbar->append(*t);
+        m_toolbar->append(*t);
 
-        s = Gtk::manage(new Gtk::SeparatorToolItem());
-        tbar->append(*s);
+        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::DELETE));
         t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_remove));
-        tbar->append(*t);
+        m_toolbar->append(*t);
 
-        toolbar.add(*tbar);
-        tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-        tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
-        tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(false);
+        m_toolbar->set_toolbar_style(
+            static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyle")));
+
+        m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
+        m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(false);
     }
-    return toolbar;
+    return *m_toolbar;
 }
 
 void speaker_editor::on_save_open_files()
@@ -362,7 +351,8 @@ void speaker_editor::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
-        tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+        m_toolbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyl"
+                                                                                       "e"));
     }
     if (setting == "DrawDriverImpPlot" || setting == "DrawDriverFreqRespPlot")
     {
@@ -373,7 +363,7 @@ void speaker_editor::on_settings_changed(const std::string& setting)
     }
 }
 
-void speaker_editor::on_close() { signal_speakerlist_loaded(m_speaker_list); }
+void speaker_editor::on_close() { signal_speakerlist_loaded(m_speaker_list.get()); }
 
 void speaker_editor::set_entries_sensitive(bool const is_sensitive)
 {
@@ -431,10 +421,10 @@ void speaker_editor::on_new()
     // FIXME gtk3 port
     // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
-    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-    tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-    signal_speakerlist_loaded(m_speaker_list);
+    signal_speakerlist_loaded(m_speaker_list.get());
     m_modified = true;
 }
 
@@ -490,7 +480,7 @@ void speaker_editor::on_save()
             m_speaker_list->to_xml(m_filename);
             // FIXME gtk3 port
             // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
-            tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
+            m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
             GSpeakers::driverlist_modified() = false;
             m_modified = false;
         }
@@ -648,7 +638,7 @@ void speaker_editor::on_selection_changed()
     // FIXME gtk3 port
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
 
-    tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 }
 
 void speaker_editor::draw_imp_plot(Speaker& s, bool update)
@@ -928,10 +918,9 @@ void speaker_editor::on_entry_changed(int i)
                                                            & ~SPEAKER_TYPE_BASS);
                 }
                 row[m_columns.type] = m_speaker_list->data()[index].get_type();
-                signal_speakerlist_loaded(m_speaker_list);
+                signal_speakerlist_loaded(m_speaker_list.get());
                 break;
             case 11:
-                // std::cout << "midrange" << std::endl;
                 if (m_MidrangeCheckButton.get_active())
                 {
                     m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
@@ -1001,7 +990,7 @@ void speaker_editor::on_entry_changed(int i)
     }
     // FIXME gtk3 port
     // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
     m_modified = true;
 }
@@ -1019,7 +1008,7 @@ void speaker_editor::on_append_xml()
 void speaker_editor::on_open_xml()
 {
     GSpeakersFileChooserDialog fc(_("Open speaker xml"));
-    std::string filename = fc.get_filename();
+    std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
         open_xml(filename);
@@ -1043,7 +1032,7 @@ void speaker_editor::append_xml(const std::string& filename)
         set_entries_sensitive(true);
         m_modified = true;
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-        tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+        m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         GSpeakers::driverlist_modified() = true;
     }
     catch (std::runtime_error const& e)
@@ -1093,10 +1082,10 @@ bool speaker_editor::open_xml(const std::string& filename)
             // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
 
             GSpeakers::driverlist_modified() = true;
-            tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-            tbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
+            m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+            m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 
-            signal_speakerlist_loaded(m_speaker_list);
+            signal_speakerlist_loaded(m_speaker_list.get());
 
             m_modified = true;
         }
@@ -1121,16 +1110,16 @@ void speaker_editor::on_edit_freq_resp()
     f->run();
 
     m_FreqRespFileEntry.set_text(f->get_filename());
-
-    // GSpeakers::tooltips().set_tip(m_FreqRespFileEntry, m_FreqRespFileEntry.get_text());
+    m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
     m_speaker_list->data()[index].set_freq_resp_filename(f->get_filename());
 
     on_selection_changed();
 
+    // gtk3 port
     // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
 
-    tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
     m_modified = true;
 }
@@ -1154,7 +1143,7 @@ void speaker_editor::on_browse_freq_resp()
         on_selection_changed();
         // FIXME gtk3 port
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-        tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+        m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
 
         m_modified = true;
 

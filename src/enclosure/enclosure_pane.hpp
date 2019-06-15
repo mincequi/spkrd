@@ -40,7 +40,7 @@ public:
 
     Gtk::MenuItem& get_menu();
 
-    Gtk::Widget& get_toolbar();
+    Gtk::Toolbar& get_toolbar();
 
 protected:
     void on_settings_changed(const std::string&);
@@ -63,7 +63,6 @@ private:
     Gtk::VPaned m_plot_vpaned;
 
     Gtk::MenuItem m_menu_item;
-    Gtk::HandleBox m_toolbar;
     Gtk::Toolbar* m_tbar{nullptr};
 
     int nof_plots{0};

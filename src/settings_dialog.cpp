@@ -16,6 +16,7 @@
 */
 
 #include "settings_dialog.hpp"
+
 #include "gspeakersfilechooser.h"
 
 #include <gtkmm/frame.h>
@@ -27,7 +28,7 @@
 constexpr auto NOF_TABLE_ROWS = 10;
 
 settings_dialog::settings_dialog()
-    : Gtk::Dialog(_("Settings"), true),
+    : Gtk::Dialog(_("Preferences"), true),
       m_main_notebook(),
       m_spice_browse_button(_("Browse...")),
       m_spice_use_berkley(_("Berkley SPICE3f5")),

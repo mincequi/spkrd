@@ -24,46 +24,52 @@
 GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title,
                                                        Gtk::FileChooserAction action,
                                                        const std::string& default_filename)
-    : m_file_chooser(std::make_unique<Gtk::FileChooserDialog>(title, action)) {
+    : m_file_chooser(std::make_unique<Gtk::FileChooserDialog>(title, action))
+{
+    bool flag = false;
 
-  bool flag = false;
+    m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
 
-  m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
-
-  switch (action) {
-  case Gtk::FILE_CHOOSER_ACTION_OPEN:
-    m_file_chooser->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
-    break;
-  case Gtk::FILE_CHOOSER_ACTION_SAVE:
-    m_file_chooser->add_button(Gtk::Stock::SAVE, FILE_CHOOSER_SAVE);
-    break;
-  default:
-    break;
-  }
-
-  if (!default_filename.empty()) {
-    m_file_chooser->set_filename(default_filename);
-  }
-
-  while (!flag) {
-    auto file_option = m_file_chooser->run();
-    switch (file_option) {
-    case FILE_CHOOSER_SAVE:
-    case FILE_CHOOSER_OPEN:
-      m_filename = m_file_chooser->get_filename();
-      m_file_chooser->hide();
-
-      if (!m_filename.empty()) {
-        flag = true;
-      }
-      break;
-    default:
-      if (action == Gtk::FILE_CHOOSER_ACTION_SAVE) {
-        m_filename = "";
-      }
-      m_file_chooser->hide();
-      flag = true;
-      break;
+    switch (action)
+    {
+        case Gtk::FILE_CHOOSER_ACTION_OPEN:
+            m_file_chooser->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
+            break;
+        case Gtk::FILE_CHOOSER_ACTION_SAVE:
+            m_file_chooser->add_button(Gtk::Stock::SAVE, FILE_CHOOSER_SAVE);
+            break;
+        default:
+            break;
     }
-  }
+
+    if (!default_filename.empty())
+    {
+        m_file_chooser->set_filename(default_filename);
+    }
+
+    while (!flag)
+    {
+        auto file_option = m_file_chooser->run();
+        switch (file_option)
+        {
+            case FILE_CHOOSER_SAVE:
+            case FILE_CHOOSER_OPEN:
+                m_filename = m_file_chooser->get_filename();
+                m_file_chooser->hide();
+
+                if (!m_filename.empty())
+                {
+                    flag = true;
+                }
+                break;
+            default:
+                if (action == Gtk::FILE_CHOOSER_ACTION_SAVE)
+                {
+                    m_filename = "";
+                }
+                m_file_chooser->hide();
+                flag = true;
+                break;
+        }
+    }
 }

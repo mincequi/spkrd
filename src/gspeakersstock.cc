@@ -29,23 +29,24 @@ const GtkStockItem stock_items[] = {{const_cast<char*>(GSPEAKERS_STOCK_DRIVER), 
                                     {const_cast<char*>(GSPEAKERS_STOCK_SPEAKER), nullptr},
                                     {const_cast<char*>(GSPEAKERS_STOCK_FILTER), nullptr}};
 
-void gspeakers_stock_init() {
+void gspeakers_stock_init()
+{
+    gtk_stock_add(stock_items, G_N_ELEMENTS(stock_items));
 
-  gtk_stock_add(stock_items, G_N_ELEMENTS(stock_items));
+    GtkIconFactory* icon_factory = gtk_icon_factory_new();
+    gtk_icon_factory_add_default(icon_factory);
 
-  GtkIconFactory* icon_factory = gtk_icon_factory_new();
-  gtk_icon_factory_add_default(icon_factory);
+    for (const auto& stock_item : stock_items)
+    {
+        gchar* filename = g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png",
+                                          stock_item.stock_id);
+        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, nullptr);
+        g_free(filename);
 
-  for (const auto& stock_item : stock_items) {
-    gchar* filename =
-        g_strdup_printf(GSPEAKERS_PREFIX "/share/pixmaps/%s.png", stock_item.stock_id);
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(filename, nullptr);
-    g_free(filename);
+        GtkIconSet* icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
 
-    GtkIconSet* icon_set = gtk_icon_set_new_from_pixbuf(pixbuf);
+        gtk_icon_factory_add(icon_factory, stock_item.stock_id, icon_set);
 
-    gtk_icon_factory_add(icon_factory, stock_item.stock_id, icon_set);
-
-    g_object_unref(pixbuf);
-  }
+        g_object_unref(pixbuf);
+    }
 }

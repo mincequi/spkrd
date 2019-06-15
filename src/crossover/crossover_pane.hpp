@@ -43,7 +43,7 @@ public:
 
     Gtk::MenuItem& get_menu();
 
-    Gtk::Widget& get_toolbar();
+    Gtk::Toolbar& get_toolbar();
 
     void select_first_crossover();
 
@@ -69,8 +69,7 @@ private:
     CrossoverImageView crossover_image_view;
 
     Gtk::MenuItem m_menu_item;
-    Gtk::HandleBox m_toolbar;
-    Gtk::Toolbar* m_tbar{nullptr};
+    Gtk::Toolbar* m_toolbar{nullptr};
 };
 
 #endif

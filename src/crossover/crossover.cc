@@ -21,117 +21,154 @@
 #include <utility>
 
 Crossover::Crossover(int type, std::string id_string)
-    : GSpeakersObject(), m_id_string(std::move(id_string)) {
-  m_type = type;
+    : GSpeakersObject(), m_id_string(std::move(id_string))
+{
+    m_type = type;
 
-  if (m_type == CROSSOVER_TYPE_SUBSONIC) {
-    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
-  }
-  if (m_type == CROSSOVER_TYPE_LOWPASS) {
-    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-  }
-  if (m_type == CROSSOVER_TYPE_HIGHPASS) {
-    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
-  }
-  if ((m_type & CROSSOVER_TYPE_TWOWAY) != 0) {
-    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
-  }
-  if ((m_type & CROSSOVER_TYPE_THREEWAY) != 0) {
-    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
-    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
-  }
-  if ((m_type & CROSSOVER_TYPE_FOURWAY) != 0) {
-    m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
-    m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
-    m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
-  }
-}
-
-Crossover::Crossover(xmlNodePtr parent) {
-  if ((parent != nullptr) && (g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)) {
-    try {
-      parse_type(parent->children);
-    } catch (std::runtime_error const& e) {
-      throw e;
+    if (m_type == CROSSOVER_TYPE_SUBSONIC)
+    {
+        m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-  } else {
-    throw std::runtime_error(_("Crossover: crossover node expected"));
-  }
-}
-
-void Crossover::parse_type(xmlNodePtr node) {
-  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)) {
-    std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
-    try {
-      parse_networks(node->next);
-    } catch (std::runtime_error const& error) {
-      throw error;
+    if (m_type == CROSSOVER_TYPE_LOWPASS)
+    {
+        m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
     }
-  } else {
-    throw std::runtime_error(_("Crossover: type node expected"));
-  }
-}
-
-void Crossover::parse_networks(xmlNodePtr node) {
-  xmlNodePtr child;
-
-  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)) {
-    child = node->children;
-    while (child != nullptr) {
-      try {
-        m_networks.emplace_back(child);
-      } catch (std::runtime_error const& e) {
-        throw e;
-      }
-      child = child->next;
+    if (m_type == CROSSOVER_TYPE_HIGHPASS)
+    {
+        m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-    try {
-      parse_id_string(node->next);
-    } catch (std::runtime_error const& e) {
-      throw e;
+    if ((m_type & CROSSOVER_TYPE_TWOWAY) != 0)
+    {
+        m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+        m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-  }
+    if ((m_type & CROSSOVER_TYPE_THREEWAY) != 0)
+    {
+        m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
+    }
+    if ((m_type & CROSSOVER_TYPE_FOURWAY) != 0)
+    {
+        m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
+    }
 }
 
-void Crossover::parse_id_string(xmlNodePtr node) {
-  if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)) {
-    m_id_string = std::string((char*)xmlNodeGetContent(node));
-  } else {
-    throw std::runtime_error(_("Crossover: id_string node expected"));
-  }
+Crossover::Crossover(xmlNodePtr parent)
+{
+    if (parent != nullptr && g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)
+    {
+        try
+        {
+            parse_type(parent->children);
+        }
+        catch (std::runtime_error const& error)
+        {
+            throw error;
+        }
+    }
+    else
+    {
+        throw std::runtime_error(_("Crossover: crossover node expected"));
+    }
 }
 
-xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent) {
-
-  xmlNodePtr crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
-
-  xmlNodePtr field = xmlNewChild(crossover, nullptr, (xmlChar*)("type"), nullptr);
-  xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
-
-  field = xmlNewChild(crossover, nullptr, (xmlChar*)("networks"), nullptr);
-
-  for (auto& network : m_networks) {
-    network.to_xml_node(field);
-  }
-
-  field = xmlNewChild(crossover, nullptr, (xmlChar*)("id_string"), nullptr);
-  xmlNodeSetContent(field, (xmlChar*)m_id_string.c_str());
-
-  return crossover;
+void Crossover::parse_type(xmlNodePtr node)
+{
+    if (node != nullptr && g_ascii_strncasecmp((char*)node->name, "type", 4) == 0)
+    {
+        std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
+        try
+        {
+            parse_networks(node->next);
+        }
+        catch (std::runtime_error const& error)
+        {
+            throw error;
+        }
+    }
+    else
+    {
+        throw std::runtime_error(_("Crossover: type node expected"));
+    }
 }
 
-std::ostream& operator<<(std::ostream& output, const Crossover& crossover) {
-  output << _("Crossover type:") << crossover.m_type << "\n"
-         << "Id: " << crossover.m_id << "\n"
-         << "---Nets----"
-         << "\n";
-  for (auto const& network : crossover.m_networks) {
-    output << network;
-  }
-  return output;
+void Crossover::parse_networks(xmlNodePtr node)
+{
+    xmlNodePtr child;
+
+    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0))
+    {
+        child = node->children;
+        while (child != nullptr)
+        {
+            try
+            {
+                m_networks.emplace_back(child);
+            }
+            catch (std::runtime_error const& error)
+            {
+                throw error;
+            }
+            child = child->next;
+        }
+        try
+        {
+            parse_id_string(node->next);
+        }
+        catch (std::runtime_error const& error)
+        {
+            throw error;
+        }
+    }
+}
+
+void Crossover::parse_id_string(xmlNodePtr node)
+{
+    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0))
+    {
+        m_id_string = std::string((char*)xmlNodeGetContent(node));
+    }
+    else
+    {
+        throw std::runtime_error(_("Crossover: id_string node expected"));
+    }
+}
+
+xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
+{
+    xmlNodePtr crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
+
+    xmlNodePtr field = xmlNewChild(crossover, nullptr, (xmlChar*)("type"), nullptr);
+    xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_type));
+
+    field = xmlNewChild(crossover, nullptr, (xmlChar*)("networks"), nullptr);
+
+    for (auto& network : m_networks)
+    {
+        network.to_xml_node(field);
+    }
+
+    field = xmlNewChild(crossover, nullptr, (xmlChar*)("id_string"), nullptr);
+    xmlNodeSetContent(field, (xmlChar*)m_id_string.c_str());
+
+    return crossover;
+}
+
+std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
+{
+    output << _("Crossover type:") << crossover.m_type << "\n"
+           << "Id: " << crossover.m_id << "\n"
+           << "---Nets----"
+           << "\n";
+    for (auto const& network : crossover.m_networks)
+    {
+        output << network;
+    }
+    return output;
 }
 
 std::vector<Net>* Crossover::networks() { return &m_networks; }

@@ -65,7 +65,7 @@ private:
     void connect_crossover_tab();
 
 private:
-    Gtk::VBox m_main_vbox;
+    Gtk::Box m_main_vbox;
     Gtk::HPaned m_driver_hpaned;
     Gtk::VPaned m_driver_vpaned;
 
@@ -84,7 +84,7 @@ private:
     crossover_pane m_crossover_paned;
     speaker_editor m_speaker_editor;
 
-    bool m_in_quit_phase;
+    bool m_in_quit_phase{false};
 };
 
 #endif

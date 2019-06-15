@@ -22,56 +22,70 @@
 
 #include <glib.h>
 
-BoxList::BoxList(const std::string& filename) {
-  xmlNodePtr children;
-
-  xmlDocPtr doc = xmlParseFile(filename.c_str());
-  if (doc != nullptr) {
-    xmlNodePtr node = xmlDocGetRootElement(doc);
-    if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0)) {
-      if (node->children != nullptr) {
-        children = node->children;
-        while (children != nullptr) {
-          try {
-            m_box_list.emplace_back(children);
-          } catch (std::runtime_error const& e) {
-            throw e;
-          }
-          children = children->next;
+BoxList::BoxList(const std::string& filename)
+{
+    xmlDocPtr doc = xmlParseFile(filename.c_str());
+    if (doc != nullptr)
+    {
+        xmlNodePtr node = xmlDocGetRootElement(doc);
+        if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0))
+        {
+            if (node->children != nullptr)
+            {
+                xmlNodePtr children = node->children;
+                while (children != nullptr)
+                {
+                    try
+                    {
+                        m_box_list.emplace_back(children);
+                    }
+                    catch (std::runtime_error const& e)
+                    {
+                        throw e;
+                    }
+                    children = children->next;
+                }
+            }
         }
-      }
-    } else {
-      throw std::runtime_error(_("BoxList: boxlist node not found"));
+        else
+        {
+            throw std::runtime_error(_("BoxList: boxlist node not found"));
+        }
     }
-  } else {
-    throw std::runtime_error(_("BoxList: Xml file not found"));
-  }
+    else
+    {
+        throw std::runtime_error(_("BoxList: Xml file not found"));
+    }
 }
 
-void BoxList::to_xml(std::string const& filename) {
+void BoxList::to_xml(std::string const& filename)
+{
+    xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
-  xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
+    xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
+    xmlDocSetRootElement(doc, node);
 
-  xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
-  xmlDocSetRootElement(doc, node);
+    for (auto& from : m_box_list)
+    {
+        from.to_xml_node(node);
+    }
 
-  for (auto& from : m_box_list) {
-    from.to_xml_node(node);
-  }
-
-  // Save xml file
-  if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw std::runtime_error(_("BoxList: Could not save to ") + filename);
-  }
+    // Save xml file
+    if (xmlSaveFile(filename.c_str(), doc) == -1)
+    {
+        throw std::runtime_error(_("BoxList: Could not save to ") + filename);
+    }
 }
 
-std::ostream& operator<<(std::ostream& output, const BoxList& box_list) {
-  output << "Box List\n";
+std::ostream& operator<<(std::ostream& output, const BoxList& box_list)
+{
+    output << "Box List\n";
 
-  for (const auto& from : box_list.m_box_list) {
-    output << from;
-  }
-  return output;
+    for (const auto& from : box_list.m_box_list)
+    {
+        output << from;
+    }
+    return output;
 }
 
 std::vector<Box>& BoxList::box_list() { return m_box_list; }

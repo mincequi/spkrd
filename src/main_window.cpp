@@ -30,10 +30,8 @@ inline bool is_state_modified()
            || GSpeakers::crossoverlist_modified() || GSpeakers::measurementlist_modified();
 }
 
-main_window::main_window()
+main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
 {
-    m_in_quit_phase = false;
-
     m_crossover_paned.select_first_crossover();
 
     this->set_title_and_icons();
@@ -57,9 +55,8 @@ main_window::main_window()
     }
 
     // Setup the menu
+    m_file_menu_item.set_label("File");
     {
-        m_file_menu_item.set_label("File");
-
         auto file_submenu = Gtk::manage(new Gtk::Menu());
 
         m_file_menu_item.set_submenu(*file_submenu);
@@ -108,15 +105,23 @@ main_window::main_window()
         sigc::mem_fun(*this, &main_window::on_edit_menu_expose_event));
 
     // Add the MenuBar to the window
-    m_main_vbox.pack_start(m_menubar, Gtk::PACK_SHRINK);
+    m_main_vbox.pack_start(m_menubar, false, false);
+
+    // auto toolbar = Gtk::manage(new Gtk::Toolbar());
+    // auto item = Gtk::make_managed<Gtk::ToolButton>("_Save");
+    // item->set_use_underline();
+    // item->set_icon_name("document-save");
+    // item->set_homogeneous(false);
+    // toolbar->append(*item);
+    // m_main_vbox.pack_start(*toolbar);
 
     // add toolbars
     m_speaker_editor.get_toolbar().hide();
-    m_main_vbox.pack_start(m_speaker_editor.get_toolbar(), Gtk::PACK_SHRINK);
+    m_main_vbox.pack_start(m_speaker_editor.get_toolbar(), false, false);
     m_enclosure_paned.get_toolbar().hide();
-    m_main_vbox.pack_start(m_enclosure_paned.get_toolbar(), Gtk::PACK_SHRINK);
+    m_main_vbox.pack_start(m_enclosure_paned.get_toolbar(), false, false);
     m_crossover_paned.get_toolbar().hide();
-    m_main_vbox.pack_start(m_crossover_paned.get_toolbar(), Gtk::PACK_SHRINK);
+    m_main_vbox.pack_start(m_crossover_paned.get_toolbar(), false, false);
 
     // Add main notebook
     m_main_vbox.pack_start(m_main_notebook);
@@ -125,14 +130,12 @@ main_window::main_window()
     this->connect_enclosure_tab();
     this->connect_crossover_tab();
 
-    show_all_children();
-
-    // For some reason I had to put this after calling show_all_children()
-
     m_main_notebook.data().signal_switch_page().connect(
         sigc::mem_fun(*this, &main_window::on_switch_page));
 
     m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
+
+    show_all_children();
 }
 
 void main_window::set_title_and_icons()
@@ -364,9 +367,8 @@ void main_window::on_save_all()
 
 void main_window::on_edit_menu_expose_event()
 {
-    // FIXME gtk3 port
     // Check whether to ungrey "save all" menuitem or not
-    // m_file_menu.items()[0].set_sensitive(is_state_modified());
+    m_file_menu.get_children()[0]->set_sensitive(is_state_modified());
 }
 
 void main_window::on_switch_page(Gtk::Widget* page, int page_number)
@@ -375,8 +377,6 @@ void main_window::on_switch_page(Gtk::Widget* page, int page_number)
     {
         return;
     }
-
-    std::cout << "showing page " << page_number << "\n";
 
     switch (page_number)
     {
