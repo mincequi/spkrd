@@ -17,7 +17,10 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "enclosurepaned.h"
+#include "enclosure_pane.hpp"
+
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/imagemenuitem.h>
 
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto MENU_INDEX_DELETE = 8;
@@ -26,9 +29,9 @@ constexpr auto TOOLBAR_INDEX_SAVE = 4;
 constexpr auto TOOLBAR_INDEX_DELETE = 5;
 constexpr auto TOOLBAR_INDEX_DELETE_BOXPLOT = 10;
 
-EnclosurePaned::EnclosurePaned()
+enclosure_pane::enclosure_pane()
 {
-    g_settings.settings_changed.connect(sigc::mem_fun(*this, &EnclosurePaned::on_settings_changed));
+    g_settings.settings_changed.connect(sigc::mem_fun(*this, &enclosure_pane::on_settings_changed));
 
     // Main pane for the enclosure tab
     add1(m_edit_vpaned);
@@ -48,16 +51,16 @@ EnclosurePaned::EnclosurePaned()
     g_settings.defaultValueUnsignedInt("BoxPlotPanedPosition", 300);
     m_plot_vpaned.set_position(g_settings.getValueUnsignedInt("BoxPlotPanedPosition"));
 
-    signal_enclosure_set_save_state.connect(sigc::mem_fun(*this, &EnclosurePaned::set_save_state));
-    signal_remove_box_plot.connect(sigc::mem_fun(*this, &EnclosurePaned::on_remove_boxplot));
-    signal_select_plot.connect(sigc::mem_fun(*this, &EnclosurePaned::on_plot_selected));
-    signal_add_plot.connect(sigc::mem_fun(*this, &EnclosurePaned::on_add_plot));
+    signal_enclosure_set_save_state.connect(sigc::mem_fun(*this, &enclosure_pane::set_save_state));
+    signal_remove_box_plot.connect(sigc::mem_fun(*this, &enclosure_pane::on_remove_boxplot));
+    signal_select_plot.connect(sigc::mem_fun(*this, &enclosure_pane::on_plot_selected));
+    signal_add_plot.connect(sigc::mem_fun(*this, &enclosure_pane::on_add_plot));
 }
 
-EnclosurePaned::~EnclosurePaned()
+enclosure_pane::~enclosure_pane()
 {
 #ifdef OUTPUT_DEBUG
-    std::puts("EnclosurePaned::~EnclosurePaned");
+    std::puts("enclosure_pane::~enclosure_pane");
 #endif
     g_settings.setValue("BoxMainPanedPosition", get_position());
     g_settings.setValue("BoxEditPanedPosition", m_edit_vpaned.get_position());
@@ -72,67 +75,87 @@ EnclosurePaned::~EnclosurePaned()
     }
 }
 
-Gtk::Menu& EnclosurePaned::get_menu()
+Gtk::MenuItem& enclosure_pane::get_menu()
 {
     // FIXME gtk3 port
 
-    // Gtk::Menu::MenuList& menulist = m_menu.items();
-    //
-    // Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_New Enclosure"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new)));
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Copy"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new_copy)));
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("N_ew"), *im, sigc::mem_fun(box_history, &BoxHistory::on_new_xml)));
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-    //     _("A_ppend Enclosure Xml..."), sigc::mem_fun(box_history, &BoxHistory::on_append_xml)));
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Open..."), *im, sigc::mem_fun(box_history, &BoxHistory::on_open_xml)));
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Save"), *im, sigc::mem_fun(box_history, &BoxHistory::on_save)));
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("Save _As..."), *im, sigc::mem_fun(box_history, &BoxHistory::on_save_as)));
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Optimize Enclosure"), GSpeakers::image_widget("opt_enclosure_16.png"),
-    //     sigc::mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked)));
-    // menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-    //     _("_Plot"), sigc::mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked)));
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Delete"), *im, sigc::mem_fun(box_history, &BoxHistory::on_remove)));
-    //
-    // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-    //
-    // im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("Delete Plot"), *im, sigc::mem_fun(plot_history, &PlotHistory::on_remove)));
-    //
-    // menulist[MENU_INDEX_SAVE].set_sensitive(false);
-    // menulist[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(false);
-    return m_menu;
+    m_menu_item.set_label("Enclosure");
+
+    // Create the drop down menu options
+    auto enclosure_submenu = Gtk::manage(new Gtk::Menu());
+
+    {
+        auto new_enclosure = Gtk::manage(new Gtk::MenuItem("New Enclosure"));
+        new_enclosure->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_new));
+        enclosure_submenu->append(*new_enclosure);
+    }
+    {
+        auto copy = Gtk::manage(new Gtk::MenuItem("Copy"));
+        copy->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_new_copy));
+        enclosure_submenu->append(*copy);
+    }
+    enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto new_enclosure = Gtk::manage(new Gtk::MenuItem("New"));
+        new_enclosure->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_new_xml));
+        enclosure_submenu->append(*new_enclosure);
+    }
+
+    {
+        auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
+        append_xml->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_append_xml));
+        enclosure_submenu->append(*append_xml);
+    }
+    {
+        auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
+        open_xml->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_open_xml));
+        enclosure_submenu->append(*open_xml);
+    }
+
+    enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto save = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE));
+        save->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_save));
+        save->set_sensitive(false);
+        enclosure_submenu->append(*save);
+    }
+    {
+        auto save_as = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE_AS));
+        save_as->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_save_as));
+        save_as->set_sensitive(false);
+        enclosure_submenu->append(*save_as);
+    }
+    enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto optimise = Gtk::manage(new Gtk::MenuItem("Optimise Enclosure"));
+        optimise->signal_activate().connect(
+            sigc::mem_fun(box_editor, &BoxEditor::on_optimize_button_clicked));
+        enclosure_submenu->append(*optimise);
+    }
+    {
+        auto plot = Gtk::manage(new Gtk::MenuItem("Plot"));
+        plot->signal_activate().connect(
+            sigc::mem_fun(box_editor, &BoxEditor::on_append_to_plot_clicked));
+        enclosure_submenu->append(*plot);
+    }
+    {
+        auto delete_item = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::DELETE));
+        delete_item->signal_activate().connect(sigc::mem_fun(box_history, &BoxHistory::on_remove));
+        enclosure_submenu->append(*delete_item);
+    }
+    enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto delete_plot = Gtk::manage(new Gtk::MenuItem("Delete Plot"));
+        delete_plot->signal_activate().connect(sigc::mem_fun(plot_history, &PlotHistory::on_remove));
+        delete_plot->set_sensitive(false);
+        enclosure_submenu->append(*delete_plot);
+    }
+    m_menu_item.set_submenu(*enclosure_submenu);
+
+    return m_menu_item;
 }
 
-Gtk::Widget& EnclosurePaned::get_toolbar()
+Gtk::Widget& enclosure_pane::get_toolbar()
 {
     if (m_tbar == nullptr)
     {
@@ -199,7 +222,7 @@ Gtk::Widget& EnclosurePaned::get_toolbar()
     return m_toolbar;
 }
 
-void EnclosurePaned::on_settings_changed(const std::string& setting)
+void enclosure_pane::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
@@ -208,7 +231,7 @@ void EnclosurePaned::on_settings_changed(const std::string& setting)
     }
 }
 
-void EnclosurePaned::set_save_state(bool b)
+void enclosure_pane::set_save_state(bool b)
 {
     if (m_tbar != nullptr)
     {
@@ -220,7 +243,7 @@ void EnclosurePaned::set_save_state(bool b)
     // }
 }
 
-void EnclosurePaned::on_plot_selected(int)
+void enclosure_pane::on_plot_selected(int)
 {
 #ifdef OUTPUT_DEBUG
     std::puts("EnclsourePaned::on_plot_selected");
@@ -230,10 +253,10 @@ void EnclosurePaned::on_plot_selected(int)
     // m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(true);
 }
 
-void EnclosurePaned::on_remove_boxplot(int)
+void enclosure_pane::on_remove_boxplot(int)
 {
 #ifdef OUTPUT_DEBUG
-    std::cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << std::endl;
+    std::cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << "\n";
 #endif
     if (nof_plots > 0)
     {
@@ -246,10 +269,10 @@ void EnclosurePaned::on_remove_boxplot(int)
     }
 }
 
-void EnclosurePaned::on_add_plot(Box* b, Speaker* s, Gdk::Color& c)
+void enclosure_pane::on_add_plot(Box* b, Speaker* s, Gdk::Color& c)
 {
 #ifdef OUTPUT_DEBUG
-    std::cout << "EnclsourePaned::on_add_plot" << std::endl;
+    std::puts("EnclsourePaned::on_add_plot");
 #endif
-    nof_plots++;
+    ++nof_plots;
 }

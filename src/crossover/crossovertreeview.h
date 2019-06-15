@@ -30,52 +30,51 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 
-/*
- * This is a TreeView that displays the currently selected crossover
- */
-class CrossoverTreeView : public Gtk::Frame {
+/// A TreeView that displays the currently selected crossover
+class CrossoverTreeView : public Gtk::Frame
+{
 public:
-  CrossoverTreeView();
-  ~CrossoverTreeView() override;
-  /* Callback */
-  void on_crossover_selected(Crossover* new_crossover);
+    CrossoverTreeView();
+    ~CrossoverTreeView() override;
+
+public:
+    void on_crossover_selected(Crossover* new_crossover);
 
 protected:
-  // vfunc overrides:
-  void on_realize() override;
+    void on_realize() override;
 
-  /* callbacks */
-  void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
-  void on_net_modified_by_wizard();
-  void value_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+    void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
 
-  /* Helper functions */
-  virtual void create_model();
-  virtual void add_columns();
-  virtual void treestore_add_item(const CellItem_Crossover& foo);
+    void on_net_modified_by_wizard();
 
-  // Member widgets:
-  Gtk::VBox m_VBox;
-  Gtk::ScrolledWindow m_ScrolledWindow;
-  Gtk::TreeView m_TreeView;
-  Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
-  std::vector<CellItem_Crossover> m_vecItems;
+    void value_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
-  /* Pointer to currently selected crossover */
-  Crossover* cover;
+    virtual void create_model();
+    virtual void add_columns();
+    virtual void treestore_add_item(const CellItem_Crossover& foo);
 
-  struct ModelColumns : public Gtk::TreeModelColumnRecord {
-    Gtk::TreeModelColumn<Glib::ustring> id_string;
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<int> type;
-    Gtk::TreeModelColumn<double> value;
-    Gtk::TreeModelColumn<Glib::ustring> unit;
-    Gtk::TreeModelColumn<bool> editable;
-    Gtk::TreeModelColumn<bool> visible;
-    ModelColumns();
-  };
+    Gtk::VBox m_VBox;
+    Gtk::ScrolledWindow m_ScrolledWindow;
+    Gtk::TreeView m_TreeView;
+    Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
+    std::vector<CellItem_Crossover> m_vecItems;
 
-  const ModelColumns m_columns;
+    // Pointer to currently selected crossover
+    Crossover* cover;
+
+    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    {
+        Gtk::TreeModelColumn<Glib::ustring> id_string;
+        Gtk::TreeModelColumn<int> id;
+        Gtk::TreeModelColumn<int> type;
+        Gtk::TreeModelColumn<double> value;
+        Gtk::TreeModelColumn<Glib::ustring> unit;
+        Gtk::TreeModelColumn<bool> editable;
+        Gtk::TreeModelColumn<bool> visible;
+        ModelColumns();
+    };
+
+    const ModelColumns m_columns;
 };
 
 #endif

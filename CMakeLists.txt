@@ -11,7 +11,7 @@ pkg_check_modules(GTK3 REQUIRED gtk+-3.0 gtkmm-3.0 gdkmm-3.0)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
 add_executable(gspeakers ${CMAKE_SOURCE_DIR}/src/main.cpp)
-target_link_libraries(gspeakers gspeaker_core LibXml2::LibXml2)
+target_link_libraries(gspeakers gspeaker_core LibXml2::LibXml2 ${GTK3_LIBRARIES})
 
 add_subdirectory(pixmaps)
 add_subdirectory(xml)

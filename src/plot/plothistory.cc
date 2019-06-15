@@ -110,9 +110,9 @@ void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color) {
   if (b != nullptr && s != nullptr) {
     m_box_list.box_list().push_back(*b);
 
-    m_speaker_list.speaker_list().emplace_back(*s);
+    m_speaker_list.data().emplace_back(*s);
 
-    liststore_add_item(*b, *s, color);
+    add_item(*b, *s, color);
   }
   ++m_nof_plots;
 }
@@ -237,7 +237,7 @@ void PlotHistory::fb1_cell_data_func(Gtk::CellRenderer* cell,
   renderer.property_xalign() = 1.0;
 }
 
-void PlotHistory::liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color& color) {
+void PlotHistory::add_item(Box const& box, Speaker const& spk, Gdk::Color& color) {
 
   gushort r = (int)((color.get_red_p()) * 255);
   gushort g = (int)((color.get_green_p()) * 255);

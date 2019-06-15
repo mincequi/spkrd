@@ -31,43 +31,44 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/toolbar.h>
 
-class EnclosurePaned : public Gtk::HPaned {
+class enclosure_pane : public Gtk::HPaned
+{
 public:
-  EnclosurePaned();
+    enclosure_pane();
 
-  ~EnclosurePaned() override;
+    ~enclosure_pane() override;
 
-  Gtk::Menu& get_menu();
+    Gtk::MenuItem& get_menu();
 
-  Gtk::Widget& get_toolbar();
+    Gtk::Widget& get_toolbar();
 
 protected:
-  /* Callbacks */
-  void on_settings_changed(const std::string&);
+    /* Callbacks */
+    void on_settings_changed(const std::string&);
 
-  void set_save_state(bool b);
+    void set_save_state(bool b);
 
-  void on_plot_selected(int);
+    void on_plot_selected(int);
 
-  void on_remove_boxplot(int);
+    void on_remove_boxplot(int);
 
-  void on_add_plot(Box*, Speaker*, Gdk::Color&);
+    void on_add_plot(Box*, Speaker*, Gdk::Color&);
 
 private:
-  BoxEditor box_editor;
-  BoxHistory box_history;
-  PlotHistory plot_history;
-  GSpeakersBoxPlot box_plot;
+    BoxEditor box_editor;
+    BoxHistory box_history;
+    PlotHistory plot_history;
+    GSpeakersBoxPlot box_plot;
 
-  Gtk::VPaned m_edit_vpaned;
-  Gtk::VPaned m_plot_vpaned;
+    Gtk::VPaned m_edit_vpaned;
+    Gtk::VPaned m_plot_vpaned;
 
-  Gtk::Menu m_menu;
-  Gtk::HandleBox m_toolbar;
-  Gtk::Toolbar* m_tbar{nullptr};
+    Gtk::MenuItem m_menu_item;
+    Gtk::HandleBox m_toolbar;
+    Gtk::Toolbar* m_tbar{nullptr};
 
-  int nof_plots{0};
-  bool plot_selected{false};
+    int nof_plots{0};
+    bool plot_selected{false};
 };
 
 #endif

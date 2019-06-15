@@ -4,8 +4,7 @@ list(REMOVE_ITEM GSPEAKERS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 
 add_library(gspeaker_core ${GSPEAKERS_SOURCES})
 target_link_libraries(gspeaker_core
-                      PUBLIC LibXml2::LibXml2
-                      PRIVATE ${GTK3_LIBRARIES})
+                      PUBLIC LibXml2::LibXml2 ${GTK3_LIBRARIES})
 
 target_include_directories(gspeaker_core
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

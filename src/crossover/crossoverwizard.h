@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "filterlinkframe.h"
-#include "speakerlist.h"
+#include "speaker_list.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
@@ -31,7 +31,7 @@ public:
 
 private:
   /* Callbacks */
-  void on_speaker_list_loaded(SpeakerList*);
+  void on_speaker_list_loaded(speaker_list*);
   void on_button_plot_clicked();
   void on_button_update_clicked();
 
@@ -39,7 +39,7 @@ private:
 
 private:
   Gtk::VBox m_vbox;
-  SpeakerList* m_speaker_list = nullptr;
+  speaker_list* m_speaker_list = nullptr;
 };
 
 #endif

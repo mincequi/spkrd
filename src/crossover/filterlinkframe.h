@@ -22,7 +22,7 @@
 
 #include "crossover.h"
 #include "gspeakersplot.h"
-#include "speakerlist.h"
+#include "speaker_list.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
@@ -32,7 +32,7 @@
 
 class FilterLinkFrame : public Gtk::Frame {
 public:
-  FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list);
+  FilterLinkFrame(Net* net, const std::string& description, speaker_list* speaker_list);
 
   ~FilterLinkFrame() override;
 
@@ -43,7 +43,7 @@ private:
   void on_net_updated(Net* net);
   void on_plot_crossover();
   void on_clear_and_plot();
-  void on_speakerlist_loaded(SpeakerList* speaker_list);
+  void on_speakerlist_loaded(speaker_list* speaker_list);
   void on_settings_changed(std::string const& s);
 
 private:
@@ -89,7 +89,7 @@ private:
 
   Net* m_net;
   std::string m_description;
-  SpeakerList* m_speaker_list;
+  speaker_list* m_speaker_list;
   bool enable_edit{false};
   bool init{true};
 

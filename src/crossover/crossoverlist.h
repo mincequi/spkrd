@@ -27,30 +27,30 @@
 
 /// This is a class that pretty much just contains a list of crossovers
 /// and xml output functionality
-class CrossoverList {
+class CrossoverList
+{
 public:
-  CrossoverList() = default;
+    CrossoverList() = default;
 
-  // Construct a part from an xml node
-  CrossoverList(const std::string& filename);
+    // Construct a part from an xml node
+    CrossoverList(const std::string& filename);
 
-  // Convert data for a part to an xml node, throws std::runtime_error on failure
-  // Maybe this one should throw an exception?
-  void to_xml(const std::string& filename);
+    // Convert data for a part to an xml node, throws std::runtime_error on failure
+    // Maybe this one should throw an exception?
+    void to_xml(const std::string& filename);
 
-  // Print part data to stdout
-  friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
+    // Print part data to stdout
+    friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
 
-  std::vector<Crossover>& crossover_list() { return m_crossover_list; }
+    std::vector<Crossover>& crossover_list() { return m_crossover_list; }
 
-  std::vector<Crossover> const& crossover_list() const { return m_crossover_list; }
+    std::vector<Crossover> const& crossover_list() const { return m_crossover_list; }
 
-  // Remove all items from the corssover list
-  void clear();
+    // Remove all items
+    void clear();
 
 protected:
-  /* Member variables */
-  std::vector<Crossover> m_crossover_list;
+    std::vector<Crossover> m_crossover_list;
 };
 
 #endif

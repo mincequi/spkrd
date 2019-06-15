@@ -78,7 +78,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Crossover const& foo);
+  virtual void add_item(Crossover const& foo);
 
 protected:
   /* This is used in the treemodel */

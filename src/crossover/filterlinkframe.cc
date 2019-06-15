@@ -30,7 +30,7 @@
 #include <fstream>
 
 FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description,
-                                 SpeakerList* speaker_list)
+                                 speaker_list* speaker_list)
     : Gtk::Frame(""), m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
@@ -108,7 +108,7 @@ void FilterLinkFrame::initialise_speaker_combobox() {
   }
 
   if (m_speaker_list != nullptr) {
-    for (auto& iter : m_speaker_list->speaker_list()) {
+    for (auto& iter : m_speaker_list->data()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
         m_speaker_combo.append(iter.get_id_string());
@@ -580,7 +580,7 @@ void FilterLinkFrame::on_clear_and_plot() {
   on_plot_crossover();
 }
 
-void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
+void FilterLinkFrame::on_speakerlist_loaded(speaker_list* speaker_list) {
 
 #ifdef OUTPUT_DEBUG
   std::puts("FilterLinkFrame::on_speakerlist_loaded");
@@ -593,7 +593,7 @@ void FilterLinkFrame::on_speakerlist_loaded(SpeakerList* speaker_list) {
   bool speaker_is_in_speakerlist = false;
 
   if (m_speaker_list) {
-    for (auto& iter : m_speaker_list->speaker_list()) {
+    for (auto& iter : m_speaker_list->data()) {
       /* TODO: only insert speakers appropriate for this particular crossover */
       if (speaker_name != iter.get_id_string()) {
         m_speaker_combo.append(iter.get_id_string());

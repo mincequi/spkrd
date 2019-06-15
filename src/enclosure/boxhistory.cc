@@ -143,7 +143,7 @@ void BoxHistory::open_xml(const std::string& filename) {
 
     m_filename = filename;
     for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
-             sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
+             sigc::mem_fun(*this, &BoxHistory::add_item));
 
     /* Delete items in box_list */
     m_box_list.box_list().clear();
@@ -176,7 +176,7 @@ void BoxHistory::append_xml(const std::string& filename) {
   try {
     temp_box_list = BoxList(filename);
     for_each(temp_box_list.box_list().begin(), temp_box_list.box_list().end(),
-             sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
+             sigc::mem_fun(*this, &BoxHistory::add_item));
 
     for (auto& from : temp_box_list.box_list()) {
       m_box_list.box_list().push_back(from);
@@ -228,7 +228,7 @@ void BoxHistory::on_new_copy() {
         b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
 
         /* the usual adding of items to the liststore and data-container */
-        liststore_add_item(b);
+        add_item(b);
         m_box_list.box_list().push_back(b);
       }
     }
@@ -248,7 +248,7 @@ void BoxHistory::on_new() {
   std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
 
-  liststore_add_item(b);
+  add_item(b);
   m_box_list.box_list().push_back(b);
 
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
@@ -374,7 +374,7 @@ void BoxHistory::on_box_modified(Box* b) {
 
 void BoxHistory::on_add_to_boxlist(Box* b) {
   Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-  liststore_add_item(*b);
+  add_item(*b);
   m_box_list.box_list().push_back(*b);
 
   /* Select the last crossover in the list: the added crossover */
@@ -384,7 +384,7 @@ void BoxHistory::on_add_to_boxlist(Box* b) {
 }
 
 void BoxHistory::on_add_plot(Box* b, Speaker* s) {
-  liststore_add_item(*b);
+  add_item(*b);
   m_box_list.box_list().push_back(*b);
 }
 
@@ -392,7 +392,7 @@ void BoxHistory::create_model() {
   m_refListStore = Gtk::ListStore::create(m_columns);
 
   std::for_each(m_box_list.box_list().begin(), m_box_list.box_list().end(),
-                sigc::mem_fun(*this, &BoxHistory::liststore_add_item));
+                sigc::mem_fun(*this, &BoxHistory::add_item));
 }
 
 void BoxHistory::add_columns() {
@@ -472,7 +472,7 @@ void BoxHistory::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeMode
   renderer.property_xalign() = 1.0;
 }
 
-void BoxHistory::liststore_add_item(Box const& box) {
+void BoxHistory::add_item(Box const& box) {
   Gtk::TreeRow row = *(m_refListStore->append());
   row[m_columns.id_string] = box.get_id_string();
   row[m_columns.speaker] = box.get_speaker();

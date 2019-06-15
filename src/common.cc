@@ -30,7 +30,7 @@
 Settings g_settings;
 
 sigc::signal1<void, Crossover*> signal_crossover_selected;
-sigc::signal1<void, SpeakerList*> signal_speakerlist_loaded;
+sigc::signal1<void, speaker_list*> signal_speakerlist_loaded;
 sigc::signal1<void, Box*> signal_box_selected;
 sigc::signal1<void, Box*> signal_add_to_boxlist;
 sigc::signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;

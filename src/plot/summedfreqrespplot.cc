@@ -173,7 +173,7 @@ void SummedFreqRespPlot::on_crossover_selected(Crossover*) {
   clear();
 }
 
-void SummedFreqRespPlot::on_speakerlist_loaded(SpeakerList* speaker_list) {
+void SummedFreqRespPlot::on_speakerlist_loaded(speaker_list* speaker_list) {
 #ifdef OUTPUT_DEBUG
   std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
 #endif

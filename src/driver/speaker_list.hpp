@@ -31,30 +31,31 @@
 /*
  * This is a list to store all speakers in
  */
-class SpeakerList {
+class speaker_list
+{
 public:
-  SpeakerList() = default;
+    speaker_list() = default;
 
-  /// Construct a part from an xml file
-  SpeakerList(const std::string& filename);
+    /// Construct a part from an xml file
+    speaker_list(const std::string& filename);
 
-  /// Convert data for a part to an xml node, throws std::runtime_error on failure
-  void to_xml(const std::string& filename); // Maybe this one should throw an exception
+    /// Convert data for a part to an xml node, throws std::runtime_error on failure
+    void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
-  /// Print part data to stdout
-  friend std::ostream& operator<<(std::ostream& o, const SpeakerList& speaker_list);
+    /// Print part data to stdout
+    friend std::ostream& operator<<(std::ostream& output, const speaker_list& speaker_list);
 
-  std::vector<Speaker>& speaker_list();
+    std::vector<Speaker>& data() noexcept { return m_speaker_list; }
 
-  std::vector<Speaker> const& speaker_list() const;
+    std::vector<Speaker> const& data() const noexcept { return m_speaker_list; }
 
-  Speaker get_speaker_by_id_string(const std::string& id_string);
+    Speaker get_speaker_by_id_string(const std::string& id_string);
 
-  /// Remove all items from the speakerlist
-  void clear();
+    /// Remove all items
+    void clear();
 
 protected:
-  std::vector<Speaker> m_speaker_list;
+    std::vector<Speaker> m_speaker_list;
 };
 
 #endif

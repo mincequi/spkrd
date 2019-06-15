@@ -22,13 +22,14 @@
 
 #include "common.h"
 #include "crossover/crossoverpaned.h"
-#include "enclosurepaned.h"
+#include "enclosure_pane.hpp"
 #include "settings.h"
 #include "sidebarnotebook.h"
-#include "speakereditor.h"
+#include "speaker_editor.hpp"
 
 #include <gtkmm/menu.h>
 #include <gtkmm/window.h>
+#include <gtkmm/menubar.h>
 
 class main_window : public Gtk::Window
 {
@@ -36,12 +37,16 @@ public:
     main_window();
 
 private:
-    /* Callbacks */
     void on_quit();
+
     bool on_delete_event(GdkEventAny* event) override;
+
     void on_quit_common();
+
     void on_about();
+
     void on_save_all();
+
     void on_edit_settings();
 
     // FIXME gtk3 port
@@ -61,20 +66,25 @@ private:
 
 private:
     Gtk::VBox m_main_vbox;
-    SidebarNotebook m_main_notebook;
     Gtk::HPaned m_driver_hpaned;
     Gtk::VPaned m_driver_vpaned;
 
     Gtk::MenuBar m_menubar;
+    Gtk::MenuItem m_file_menu_item;
+    Gtk::MenuItem m_edit_menu_item;
+    Gtk::MenuItem m_help_menu_item;
+
     Gtk::Menu m_file_menu;
     Gtk::Menu m_edit_menu;
     Gtk::Menu m_help_menu;
 
-    EnclosurePaned enclosure_paned;
-    CrossoverPaned crossover_paned;
-    Speaker_ListStore speaker_editor;
+    SidebarNotebook m_main_notebook;
 
-    bool in_quit_phase;
+    enclosure_pane m_enclosure_paned;
+    CrossoverPaned m_crossover_paned;
+    speaker_editor m_speaker_editor;
+
+    bool m_in_quit_phase;
 };
 
 #endif

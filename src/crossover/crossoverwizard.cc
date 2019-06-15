@@ -89,7 +89,7 @@ void CrossoverWizard::on_crossover_selected(Crossover* crossover) {
   }
 }
 
-void CrossoverWizard::on_speaker_list_loaded(SpeakerList* speaker_list) {
+void CrossoverWizard::on_speaker_list_loaded(speaker_list* speaker_list) {
 #ifdef OUTPUT_DEBUG
   std::cout << "CrossoverWizard::on_speaker_list_loaded" << std::endl;
 #endif

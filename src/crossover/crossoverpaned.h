@@ -21,53 +21,56 @@
 #define __CROSSOVER_PANED_H
 
 #include "common.h"
+
 #include "crossoverhistory.h"
 #include "crossoverimageview.h"
 #include "crossovertreeview.h"
 #include "crossoverwizard.h"
+
 #include "gspeakersfilterplot.h"
 #include "summedfreqrespplot.h"
 #include "totalfilterplot.h"
 
-#include <gtkmm/menu.h>
+#include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
 
-class CrossoverPaned : public Gtk::HPaned {
+class CrossoverPaned : public Gtk::HPaned
+{
 public:
-  CrossoverPaned();
+    CrossoverPaned();
 
-  ~CrossoverPaned() override;
+    ~CrossoverPaned() override;
 
-  Gtk::Menu& get_menu();
+    Gtk::MenuItem& get_menu();
 
-  Gtk::Widget& get_toolbar();
+    Gtk::Widget& get_toolbar();
 
-  void select_first_crossover();
+    void select_first_crossover();
 
 protected:
-  void on_settings_changed(const std::string&);
+    void on_settings_changed(const std::string&);
 
-  void on_plot_crossover();
+    void on_plot_crossover();
 
-  void on_new_crossover_menu_action(int);
+    void on_new_crossover_menu_action(int);
 
-  void set_save_state(bool b);
+    void set_save_state(bool b);
 
 private:
-  Gtk::Notebook m_crossover_notebook;
-  Gtk::Notebook m_plot_notebook;
+    Gtk::Notebook m_crossover_notebook;
+    Gtk::Notebook m_plot_notebook;
 
-  CrossoverWizard crossover_wizard;
-  CrossoverTreeView crossover_treeview;
-  CrossoverHistory crossover_history;
-  GSpeakersFilterPlot filter_plot;
-  TotalFilterPlot total_filter_plot;
-  SummedFreqRespPlot summed_freq_resp_plot;
-  CrossoverImageView crossover_image_view;
+    CrossoverWizard crossover_wizard;
+    CrossoverTreeView crossover_treeview;
+    CrossoverHistory crossover_history;
+    GSpeakersFilterPlot filter_plot;
+    TotalFilterPlot total_filter_plot;
+    SummedFreqRespPlot summed_freq_resp_plot;
+    CrossoverImageView crossover_image_view;
 
-  Gtk::Menu m_menu;
-  Gtk::HandleBox m_toolbar;
-  Gtk::Toolbar* m_tbar;
+    Gtk::MenuItem m_menu_item;
+    Gtk::HandleBox m_toolbar;
+    Gtk::Toolbar* m_tbar{nullptr};
 };
 
 #endif

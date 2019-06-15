@@ -27,27 +27,30 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/togglebutton.h>
 
-class SidebarNotebook : public Gtk::HBox {
+class SidebarNotebook : public Gtk::HBox
+{
 public:
-  SidebarNotebook();
+    SidebarNotebook();
 
-  int append_page(Widget& child, Widget& tab_label);
+    int append_page(Gtk::Widget& child, Gtk::Widget& tab_label);
 
-  int append_page(Widget& child);
+    int append_page(Gtk::Widget& child);
 
-  void set_current_page(int page_num);
+    void set_current_page(int page_num);
 
-  int get_current_page() const;
-
-private:
-  void on_button_clicked1();
-  void on_button_clicked2();
-  void on_button_clicked3();
+    int get_current_page() const;
 
 private:
-  Gtk::Notebook* m_notebook;
-  Gtk::VBox m_button_box;
-  Gtk::ToggleButton m_driver_btn, m_enclosure_btn, m_crossover_btn;
+    void on_button_clicked1();
+    void on_button_clicked2();
+    void on_button_clicked3();
+
+private:
+    Gtk::Notebook* m_notebook;
+    Gtk::VBox m_button_box;
+    Gtk::ToggleButton m_driver_btn;
+    Gtk::ToggleButton m_enclosure_btn;
+    Gtk::ToggleButton m_crossover_btn;
 };
 
 #endif

@@ -226,7 +226,7 @@ void BoxEditor::on_box_selected(Box* b) {
 
         m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
 
-        for (auto const& speaker : m_speaker_list->speaker_list()) {
+        for (auto const& speaker : m_speaker_list->data()) {
           if ((speaker.get_type() & SPEAKER_TYPE_BASS) != 0 &&
               m_current_speaker.get_id_string() != speaker.get_id_string()) {
             m_bass_speaker_combo.append(speaker.get_id_string());
@@ -258,7 +258,7 @@ void BoxEditor::on_box_selected(Box* b) {
   }
 }
 
-void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
+void BoxEditor::on_speaker_list_loaded(speaker_list* speaker_list) {
 
   if (!disable_signals) {
 
@@ -269,7 +269,7 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
        speaker at the top position, if we haven't got a selected box: insert all drivers and don't
        care about the sort */
     if (m_box != nullptr) {
-      for (auto const& speaker : m_speaker_list->speaker_list()) {
+      for (auto const& speaker : m_speaker_list->data()) {
         if (((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) &&
             m_box->get_speaker() != speaker.get_id_string()) {
           m_bass_speaker_combo.append(speaker.get_id_string());
@@ -277,7 +277,7 @@ void BoxEditor::on_speaker_list_loaded(SpeakerList* speaker_list) {
       }
       m_bass_speaker_combo.prepend(m_box->get_speaker());
     } else {
-      for (auto const& speaker : m_speaker_list->speaker_list()) {
+      for (auto const& speaker : m_speaker_list->data()) {
         if ((speaker.get_type() & SPEAKER_TYPE_BASS) != 0) {
           m_bass_speaker_combo.append(speaker.get_id_string());
         }
@@ -295,7 +295,7 @@ void BoxEditor::on_combo_entry_changed() {
   if (!disable_signals) {
     disable_signals = true;
 
-    /* Search for the new entry string in the SpeakerList */
+    /* Search for the new entry string in the speaker_list */
     m_current_speaker =
         m_speaker_list->get_speaker_by_id_string(m_bass_speaker_combo.get_active_text());
 

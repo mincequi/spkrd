@@ -22,157 +22,173 @@
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 3;
 
-CrossoverPaned::CrossoverPaned() {
-  m_tbar = nullptr;
-  g_settings.settings_changed.connect(sigc::mem_fun(*this, &CrossoverPaned::on_settings_changed));
+CrossoverPaned::CrossoverPaned()
+{
+    g_settings.settings_changed.connect(sigc::mem_fun(*this, &CrossoverPaned::on_settings_changed));
 
-  add1(m_crossover_notebook);
-  g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
-  set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
-  add2(m_plot_notebook);
+    add1(m_crossover_notebook);
+    g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
+    set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
+    add2(m_plot_notebook);
 
-  m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
-  m_crossover_notebook.append_page(crossover_treeview, _("Filter"));
-  m_crossover_notebook.append_page(crossover_history, _("History"));
+    m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
+    m_crossover_notebook.append_page(crossover_treeview, _("Filter"));
+    m_crossover_notebook.append_page(crossover_history, _("History"));
 
-  m_plot_notebook.append_page(filter_plot, _("Crossover freq resp"));
-  m_plot_notebook.append_page(total_filter_plot, _("Total crossover freq resp"));
-  m_plot_notebook.append_page(summed_freq_resp_plot, _("Total freq resp"));
-  m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));
+    m_plot_notebook.append_page(filter_plot, _("Crossover freq resp"));
+    m_plot_notebook.append_page(total_filter_plot, _("Total crossover freq resp"));
+    m_plot_notebook.append_page(summed_freq_resp_plot, _("Total freq resp"));
+    m_plot_notebook.append_page(crossover_image_view, _("Crossover network"));
 
-  m_plot_notebook.set_scrollable();
+    m_plot_notebook.set_scrollable();
 
-  signal_crossover_set_save_state.connect(sigc::mem_fun(*this, &CrossoverPaned::set_save_state));
+    signal_crossover_set_save_state.connect(sigc::mem_fun(*this, &CrossoverPaned::set_save_state));
 }
 
 void CrossoverPaned::select_first_crossover() { crossover_history.select_first_row(); }
 
-CrossoverPaned::~CrossoverPaned() {
+CrossoverPaned::~CrossoverPaned()
+{
+    g_settings.setValue("CrossoverPaned1Position", get_position());
 
-  g_settings.setValue("CrossoverPaned1Position", get_position());
-
-  try {
-    g_settings.save();
-  } catch (std::runtime_error const& error) {
-    std::cout << "CrossoverPaned::~CrossoverPaned: " << error.what() << "\n";
-  }
+    try
+    {
+        g_settings.save();
+    }
+    catch (std::runtime_error const& error)
+    {
+        std::cout << "CrossoverPaned::~CrossoverPaned: " << error.what() << "\n";
+    }
 }
 
-Gtk::Menu& CrossoverPaned::get_menu() {
+Gtk::MenuItem& CrossoverPaned::get_menu()
+{
+    m_menu_item.set_label("Crossover");
 
-  // Gtk::Menu* new_crossover_submenu = Gtk::manage(new Gtk::Menu());
+    // Create new crossover submenu
+    auto crossover_menu = Gtk::manage(new Gtk::Menu());
 
-  // Create new crossover submenu
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _lowpass crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_LOWPASS)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _subsonic crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_SUBSONIC)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _highpass crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_HIGHPASS)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _2-way crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_TWOWAY)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New 2._5-way crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _3-way crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_THREEWAY)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // new_crossover_submenu->attach(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New _4-way crossover"), *im,
-    //     sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
-    //                CROSSOVER_TYPE_FOURWAY)));
-  }
+    {
+        auto crossover_submenu = Gtk::manage(new Gtk::MenuItem("New"));
 
-  // Gtk::Menu::MenuList& menulist = m_menu.items();
+        auto crossover_types_menu = Gtk::manage(new Gtk::Menu());
 
-  // m_menu.attach(Gtk::Menu_Helpers::MenuElem(_("_New crossover"), *new_crossover_submenu));
+        crossover_submenu->set_submenu(*crossover_types_menu);
 
-  {
-      // Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_MENU));
-      // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-      //     _("_Copy"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_new_copy)));
-  }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("Lowpass"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_LOWPASS));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("Subsonic"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_SUBSONIC));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("Highpass"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_HIGHPASS));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("2 way"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_TWOWAY));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("2.5 way"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("3 way"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_THREEWAY));
+            crossover_types_menu->append(*filter);
+        }
+        {
+            auto filter = Gtk::manage(new Gtk::MenuItem("4 way"));
+            filter->signal_activate().connect(
+                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                           CROSSOVER_TYPE_FOURWAY));
+            crossover_types_menu->append(*filter);
+        }
+        crossover_menu->append(*crossover_submenu);
+    }
 
-  // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
+    {
+        auto copy = Gtk::manage(new Gtk::MenuItem("Copy"));
+        copy->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_new_copy));
+        crossover_menu->append(*copy);
+    }
+    crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto new_xml = Gtk::manage(new Gtk::MenuItem("New XML"));
+        new_xml->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_new_xml));
+        crossover_menu->append(*new_xml);
+    }
+    {
+        auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
+        append_xml->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_append_xml));
+        crossover_menu->append(*append_xml);
+    }
+    {
+        auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
+        open_xml->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_open_xml));
+        crossover_menu->append(*open_xml);
+    }
+    crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto save = Gtk::manage(new Gtk::MenuItem("Save"));
+        save->signal_activate().connect(sigc::mem_fun(crossover_history, &CrossoverHistory::on_save));
+        save->set_sensitive(false);
+        crossover_menu->append(*save);
+    }
+    {
+        auto save_as = Gtk::manage(new Gtk::MenuItem("Save As"));
+        save_as->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_save_as));
+        crossover_menu->append(*save_as);
+    }
+    crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto delete_item = Gtk::manage(new Gtk::MenuItem("Delete"));
+        delete_item->signal_activate().connect(
+            sigc::mem_fun(crossover_history, &CrossoverHistory::on_remove));
+        crossover_menu->append(*delete_item);
+    }
+    crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    {
+        auto plot = Gtk::manage(new Gtk::MenuItem("Plot"));
+        plot->signal_activate().connect(sigc::mem_fun(*this, &CrossoverPaned::on_plot_crossover));
+        crossover_menu->append(*plot);
+    }
+    m_menu_item.set_submenu(*crossover_menu);
 
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("New"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_new_xml)));
-  }
-
-  // menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-  // _("A_ppend Crossover Xml..."),
-  // sigc::mem_fun(crossover_history, &CrossoverHistory::on_append_xml)));
-
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Open"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_open_xml)));
-  }
-
-  // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("_Save"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_save)));
-  }
-  {
-    Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE_AS, Gtk::ICON_SIZE_MENU));
-    // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-    //     _("Save _As"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_save_as)));
-  }
-
-  // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-
-  Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU));
-  // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-  // _("_Delete"), *im, sigc::mem_fun(crossover_history, &CrossoverHistory::on_remove)));
-
-  // menulist.push_back(Gtk::Menu_Helpers::SeparatorElem());
-
-  // menulist.push_back(Gtk::Menu_Helpers::ImageMenuElem(
-  // _("_Plot"), GSpeakers::image_widget("stock_plot_crossover_16.png"),
-  // sigc::mem_fun(*this, &CrossoverPaned::on_plot_crossover)));
-
-  // menulist[MENU_INDEX_SAVE].set_sensitive(false);
-
-  return m_menu;
+    return m_menu_item;
 }
 
-Gtk::Widget& CrossoverPaned::get_toolbar() {
-  if (m_tbar == nullptr) {
+Gtk::Widget& CrossoverPaned::get_toolbar()
+{
+    if (m_tbar != nullptr)
+    {
+        return m_toolbar;
+    }
 
     m_tbar = Gtk::manage(new Gtk::Toolbar());
 
@@ -212,36 +228,44 @@ Gtk::Widget& CrossoverPaned::get_toolbar() {
     m_tbar->append(*t);
 
     m_toolbar.add(*m_tbar);
-    m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
+    m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyl"
+                                                                                "e"));
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
 
     g_settings.settings_changed.connect(sigc::mem_fun(*this, &CrossoverPaned::on_settings_changed));
-  }
-  return m_toolbar;
+
+    return m_toolbar;
 }
 
-void CrossoverPaned::on_plot_crossover() {
-  filter_plot.clear();
-  signal_plot_crossover();
+void CrossoverPaned::on_plot_crossover()
+{
+    filter_plot.clear();
+    signal_plot_crossover();
 }
 
-void CrossoverPaned::on_settings_changed(const std::string& s) {
-  if (s == "ToolbarStyle") {
-    m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyle"));
-  }
-  if (s == "AutoUpdateFilterPlots" && g_settings.getValueBool("AutoUpdateFilterPlots")) {
-    on_plot_crossover();
-  }
+void CrossoverPaned::on_settings_changed(const std::string& setting)
+{
+    if (setting == "ToolbarStyle")
+    {
+        m_tbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyl"
+                                                                                    "e"));
+    }
+    if (setting == "AutoUpdateFilterPlots" && g_settings.getValueBool("AutoUpdateFilterPlots"))
+    {
+        on_plot_crossover();
+    }
 }
 
 void CrossoverPaned::on_new_crossover_menu_action(int i) { signal_new_crossover(i); }
 
-void CrossoverPaned::set_save_state(bool b) {
-  if (m_tbar != nullptr) {
-    m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
-  }
-  // if (m_menu.items().size() > 0) {
-  //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
-  //   GSpeakers::crossoverlist_modified() = b;
-  // }
+void CrossoverPaned::set_save_state(bool b)
+{
+    if (m_tbar != nullptr)
+    {
+        m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
+    }
+    // if (m_menu.items().size() > 0) {
+    //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+    //   GSpeakers::crossoverlist_modified() = b;
+    // }
 }
