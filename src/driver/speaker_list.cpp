@@ -56,7 +56,7 @@ speaker_list::speaker_list(const std::string& filename)
     }
 }
 
-void speaker_list::clear() { m_speaker_list.erase(m_speaker_list.begin(), m_speaker_list.end()); }
+void speaker_list::clear() { m_speaker_list.clear(); }
 
 void speaker_list::to_xml(const std::string& filename)
 {
