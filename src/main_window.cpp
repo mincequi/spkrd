@@ -131,8 +131,7 @@ main_window::main_window()
     // For some reason I had to put this after calling show_all_children()
 
     // FIXME gtk3 port
-    // m_main_notebook.signal_switch_page().connect(sigc::mem_fun(*this,
-    // &main_window::on_switch_page));
+    // m_main_notebook.signal_switch_page().connect(sigc::mem_fun(*this, &main_window::on_switch_page));
 
     m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
 }
@@ -177,7 +176,7 @@ void main_window::set_defaults()
 void main_window::connect_driver_tab()
 {
     // Driver tab
-    m_main_notebook.append_page(m_driver_hpaned);
+    m_main_notebook.append_page(m_driver_hpaned, *Gtk::manage(new Gtk::Label("Driver")));
     m_driver_hpaned.add1(m_speaker_editor.get_editor_table());
     g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
     g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
@@ -188,9 +187,15 @@ void main_window::connect_driver_tab()
     m_driver_vpaned.add2(m_speaker_editor.get_treeview_table());
 }
 
-void main_window::connect_enclosure_tab() { m_main_notebook.append_page(m_enclosure_paned); }
+void main_window::connect_enclosure_tab()
+{
+    m_main_notebook.append_page(m_enclosure_paned, *Gtk::manage(new Gtk::Label("Enclosure")));
+}
 
-void main_window::connect_crossover_tab() { m_main_notebook.append_page(m_crossover_paned); }
+void main_window::connect_crossover_tab()
+{
+    m_main_notebook.append_page(m_crossover_paned, *Gtk::manage(new Gtk::Label("Crossover")));
+}
 
 bool main_window::on_delete_event(GdkEventAny* event)
 {

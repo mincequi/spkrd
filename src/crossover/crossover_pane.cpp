@@ -193,7 +193,9 @@ Gtk::Widget& crossover_pane::get_toolbar()
     m_tbar = Gtk::manage(new Gtk::Toolbar());
 
     Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
+
     Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("Copy")));
+
     t->signal_clicked().connect(sigc::mem_fun(crossover_history, &CrossoverHistory::on_new_copy));
 
     m_tbar->append(*t);
@@ -258,14 +260,22 @@ void crossover_pane::on_settings_changed(const std::string& setting)
 
 void crossover_pane::on_new_crossover_menu_action(int i) { signal_new_crossover(i); }
 
-void crossover_pane::set_save_state(bool b)
+void crossover_pane::set_save_state(bool state)
 {
     if (m_tbar != nullptr)
     {
-        m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
+        m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(state);
     }
-    // if (m_menu.items().size() > 0) {
-    //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
-    //   GSpeakers::crossoverlist_modified() = b;
-    // }
+    if (m_menu_item.has_submenu())
+    {
+        for (auto& child : m_menu_item.get_children())
+        {
+            if (child->get_name() == "Save")
+            {
+                child->set_sensitive(state);
+            }
+        }
+        //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+        GSpeakers::crossoverlist_modified() = state;
+    }
 }

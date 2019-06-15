@@ -24,7 +24,7 @@
 #include "crossover/crossover_pane.hpp"
 #include "enclosure_pane.hpp"
 #include "settings.h"
-#include "sidebarnotebook.h"
+#include "sidebar_notebook.hpp"
 #include "speaker_editor.hpp"
 
 #include <gtkmm/menu.h>
@@ -78,7 +78,7 @@ private:
     Gtk::Menu m_edit_menu;
     Gtk::Menu m_help_menu;
 
-    SidebarNotebook m_main_notebook;
+    sidebar_notebook m_main_notebook;
 
     enclosure_pane m_enclosure_paned;
     crossover_pane m_crossover_paned;

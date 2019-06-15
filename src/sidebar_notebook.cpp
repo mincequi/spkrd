@@ -19,38 +19,22 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SIDEBAR_NOTEBOOK_H
-#define __SIDEBAR_NOTEBOOK_H
+#include "sidebar_notebook.hpp"
+#include "common.h"
 
-#include <gtkmm/box.h>
-#include <gtkmm/buttonbox.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/togglebutton.h>
-
-class SidebarNotebook : public Gtk::HBox
+sidebar_notebook::sidebar_notebook() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
 {
-public:
-    SidebarNotebook();
+    pack_start(m_notebook, true, true, 0);
+    m_notebook.set_show_tabs(true);
+}
 
-    int append_page(Gtk::Widget& child, Gtk::Widget& tab_label);
+int sidebar_notebook::append_page(Widget& child, Widget& tab_label)
+{
+    return m_notebook.append_page(child, tab_label);
+}
 
-    int append_page(Gtk::Widget& child);
+int sidebar_notebook::append_page(Widget& child) { return m_notebook.append_page(child); }
 
-    void set_current_page(int page_num);
+void sidebar_notebook::set_current_page(int page_num) { m_notebook.set_current_page(page_num); }
 
-    int get_current_page() const;
-
-private:
-    void on_button_clicked1();
-    void on_button_clicked2();
-    void on_button_clicked3();
-
-private:
-    Gtk::Notebook* m_notebook;
-    Gtk::VBox m_button_box;
-    Gtk::ToggleButton m_driver_btn;
-    Gtk::ToggleButton m_enclosure_btn;
-    Gtk::ToggleButton m_crossover_btn;
-};
-
-#endif
+int sidebar_notebook::get_current_page() const { return m_notebook.get_current_page(); }
