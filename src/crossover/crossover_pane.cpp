@@ -17,18 +17,18 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "crossoverpaned.h"
+#include "crossover_pane.hpp"
 
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 3;
 
-CrossoverPaned::CrossoverPaned()
+crossover_pane::crossover_pane()
 {
-    g_settings.settings_changed.connect(sigc::mem_fun(*this, &CrossoverPaned::on_settings_changed));
+    g_settings.settings_changed.connect(sigc::mem_fun(*this, &crossover_pane::on_settings_changed));
 
     add1(m_crossover_notebook);
-    g_settings.defaultValueUnsignedInt("CrossoverPaned1Position", 220);
-    set_position(g_settings.getValueUnsignedInt("CrossoverPaned1Position"));
+    g_settings.defaultValueUnsignedInt("crossover_pane1Position", 220);
+    set_position(g_settings.getValueUnsignedInt("crossover_pane1Position"));
     add2(m_plot_notebook);
 
     m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
@@ -42,14 +42,14 @@ CrossoverPaned::CrossoverPaned()
 
     m_plot_notebook.set_scrollable();
 
-    signal_crossover_set_save_state.connect(sigc::mem_fun(*this, &CrossoverPaned::set_save_state));
+    signal_crossover_set_save_state.connect(sigc::mem_fun(*this, &crossover_pane::set_save_state));
 }
 
-void CrossoverPaned::select_first_crossover() { crossover_history.select_first_row(); }
+void crossover_pane::select_first_crossover() { crossover_history.select_first_row(); }
 
-CrossoverPaned::~CrossoverPaned()
+crossover_pane::~crossover_pane()
 {
-    g_settings.setValue("CrossoverPaned1Position", get_position());
+    g_settings.setValue("crossover_pane1Position", get_position());
 
     try
     {
@@ -57,11 +57,11 @@ CrossoverPaned::~CrossoverPaned()
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "CrossoverPaned::~CrossoverPaned: " << error.what() << "\n";
+        std::cout << "crossover_pane::~crossover_pane: " << error.what() << "\n";
     }
 }
 
-Gtk::MenuItem& CrossoverPaned::get_menu()
+Gtk::MenuItem& crossover_pane::get_menu()
 {
     m_menu_item.set_label("Crossover");
 
@@ -78,49 +78,49 @@ Gtk::MenuItem& CrossoverPaned::get_menu()
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("Lowpass"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_LOWPASS));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("Subsonic"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_SUBSONIC));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("Highpass"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_HIGHPASS));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("2 way"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_TWOWAY));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("2.5 way"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("3 way"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_THREEWAY));
             crossover_types_menu->append(*filter);
         }
         {
             auto filter = Gtk::manage(new Gtk::MenuItem("4 way"));
             filter->signal_activate().connect(
-                sigc::bind(sigc::mem_fun(*this, &CrossoverPaned::on_new_crossover_menu_action),
+                sigc::bind(sigc::mem_fun(*this, &crossover_pane::on_new_crossover_menu_action),
                            CROSSOVER_TYPE_FOURWAY));
             crossover_types_menu->append(*filter);
         }
@@ -175,7 +175,7 @@ Gtk::MenuItem& CrossoverPaned::get_menu()
     crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto plot = Gtk::manage(new Gtk::MenuItem("Plot"));
-        plot->signal_activate().connect(sigc::mem_fun(*this, &CrossoverPaned::on_plot_crossover));
+        plot->signal_activate().connect(sigc::mem_fun(*this, &crossover_pane::on_plot_crossover));
         crossover_menu->append(*plot);
     }
     m_menu_item.set_submenu(*crossover_menu);
@@ -183,7 +183,7 @@ Gtk::MenuItem& CrossoverPaned::get_menu()
     return m_menu_item;
 }
 
-Gtk::Widget& CrossoverPaned::get_toolbar()
+Gtk::Widget& crossover_pane::get_toolbar()
 {
     if (m_tbar != nullptr)
     {
@@ -224,7 +224,7 @@ Gtk::Widget& CrossoverPaned::get_toolbar()
 
     t = Gtk::manage(
         new Gtk::ToolButton(GSpeakers::image_widget("stock_plot_crossover_24.png"), _("Plot")));
-    t->signal_clicked().connect(sigc::mem_fun(*this, &CrossoverPaned::on_plot_crossover));
+    t->signal_clicked().connect(sigc::mem_fun(*this, &crossover_pane::on_plot_crossover));
     m_tbar->append(*t);
 
     m_toolbar.add(*m_tbar);
@@ -232,18 +232,18 @@ Gtk::Widget& CrossoverPaned::get_toolbar()
                                                                                 "e"));
     m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
 
-    g_settings.settings_changed.connect(sigc::mem_fun(*this, &CrossoverPaned::on_settings_changed));
+    g_settings.settings_changed.connect(sigc::mem_fun(*this, &crossover_pane::on_settings_changed));
 
     return m_toolbar;
 }
 
-void CrossoverPaned::on_plot_crossover()
+void crossover_pane::on_plot_crossover()
 {
     filter_plot.clear();
     signal_plot_crossover();
 }
 
-void CrossoverPaned::on_settings_changed(const std::string& setting)
+void crossover_pane::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
@@ -256,9 +256,9 @@ void CrossoverPaned::on_settings_changed(const std::string& setting)
     }
 }
 
-void CrossoverPaned::on_new_crossover_menu_action(int i) { signal_new_crossover(i); }
+void crossover_pane::on_new_crossover_menu_action(int i) { signal_new_crossover(i); }
 
-void CrossoverPaned::set_save_state(bool b)
+void crossover_pane::set_save_state(bool b)
 {
     if (m_tbar != nullptr)
     {

@@ -21,7 +21,7 @@
 #define __GSPEAKERS_MAINWINDOW
 
 #include "common.h"
-#include "crossover/crossoverpaned.h"
+#include "crossover/crossover_pane.hpp"
 #include "enclosure_pane.hpp"
 #include "settings.h"
 #include "sidebarnotebook.h"
@@ -81,7 +81,7 @@ private:
     SidebarNotebook m_main_notebook;
 
     enclosure_pane m_enclosure_paned;
-    CrossoverPaned m_crossover_paned;
+    crossover_pane m_crossover_paned;
     speaker_editor m_speaker_editor;
 
     bool m_in_quit_phase;

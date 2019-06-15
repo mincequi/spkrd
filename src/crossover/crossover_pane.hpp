@@ -34,12 +34,12 @@
 #include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
 
-class CrossoverPaned : public Gtk::HPaned
+class crossover_pane : public Gtk::HPaned
 {
 public:
-    CrossoverPaned();
+    crossover_pane();
 
-    ~CrossoverPaned() override;
+    ~crossover_pane() override;
 
     Gtk::MenuItem& get_menu();
 
