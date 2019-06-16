@@ -5,8 +5,9 @@ option(GSPK_ENABLE_PROFILE "Enable profiling flags" OFF)
 
 # find_package(GTK2 REQUIRED COMPONENTS gtk gtkmm)
 find_package(LibXml2 REQUIRED)
+
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0 gtkmm-3.0 gdkmm-3.0)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0 glibmm-2.4 gtkmm-3.0 gdkmm-3.0)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
