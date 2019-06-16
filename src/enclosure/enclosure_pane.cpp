@@ -252,10 +252,11 @@ void enclosure_pane::set_save_state(bool b)
     {
         m_tbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(b);
     }
-    // if (m_menu.items().size() > 0) {
-    //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
-    //   GSpeakers::enclosurelist_modified() = b;
-    // }
+    if (!m_tbar->get_children().empty())
+    {
+        //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
+        GSpeakers::enclosurelist_modified() = b;
+    }
 }
 
 void enclosure_pane::on_plot_selected(int)

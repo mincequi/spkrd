@@ -193,7 +193,7 @@ void FreqRespEditor::on_save_as()
     // Show the dialog and wait for a user response
     switch (dialog.run())
     {
-        case (Gtk::RESPONSE_OK):
+        case Gtk::RESPONSE_OK:
         {
             m_filename = dialog.get_filename();
             on_save();

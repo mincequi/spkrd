@@ -59,7 +59,7 @@ public:
     Speaker(xmlNodePtr parent);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
+    xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);
 
     /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& output, Speaker const& speaker);

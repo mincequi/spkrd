@@ -18,8 +18,6 @@
 #include "speaker.h"
 #include "common.h"
 
-#include <glib.h>
-
 #include <utility>
 
 Speaker::Speaker(std::string id_string,
