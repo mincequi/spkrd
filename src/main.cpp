@@ -1,6 +1,5 @@
 
 #include "common.h"
-#include "gspeakersstock.h"
 #include "main_window.hpp"
 
 #include <gtkmm/main.h>
@@ -67,8 +66,6 @@ int main(int argc, char* argv[])
     }
 
     g_settings.defaultValueUnsignedInt("ToolbarStyle", Gtk::TOOLBAR_BOTH);
-
-    gspeakers_stock_init();
 
     main_window mw;
 
