@@ -20,7 +20,7 @@
 #ifndef __GSPEAKERS_CELLITEM_CROSSOVER
 #define __GSPEAKERS_CELLITEM_CROSSOVER
 
-#include "part.h"
+#include "passive_component.hpp"
 
 #include <glibmm/ustring.h>
 
@@ -33,7 +33,7 @@ class CellItem_Crossover
 public:
     CellItem_Crossover() = default;
 
-    CellItem_Crossover(Part const& part);
+    CellItem_Crossover(passive_component const& part);
 
     CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
 

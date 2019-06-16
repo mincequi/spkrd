@@ -127,7 +127,9 @@ protected:
 protected:
     Gtk::Table m_TreeViewTable;
     Gtk::Table m_Table;
+
     Gtk::ScrolledWindow m_ScrolledWindow;
+
     Gtk::Label m_Label;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::ListStore> m_refListStore;
@@ -159,9 +161,9 @@ protected:
     Gtk::Entry m_RmsEntry;
     Gtk::Entry m_CmsEntry;
 
-    Gtk::VBox m_vbox;
-    Gtk::VBox m_treeview_vbox;
-    Gtk::VBox m_inner_treeview_vbox;
+    Gtk::Box m_vbox;
+    Gtk::Box m_treeview_vbox;
+    Gtk::Box m_inner_treeview_vbox;
 
     Gtk::Frame m_treeview_frame;
 

@@ -64,7 +64,7 @@ enclosure_pane::enclosure_pane()
 
 enclosure_pane::~enclosure_pane()
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("enclosure_pane::~enclosure_pane");
 #endif
     g_settings.setValue("BoxMainPanedPosition", get_position());
@@ -264,7 +264,7 @@ void enclosure_pane::set_save_state(bool b)
 
 void enclosure_pane::on_plot_selected(int)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("EnclsourePaned::on_plot_selected");
 #endif
     plot_selected = true;
@@ -274,7 +274,7 @@ void enclosure_pane::on_plot_selected(int)
 
 void enclosure_pane::on_remove_boxplot(int)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << "\n";
 #endif
     if (nof_plots > 0)
@@ -290,7 +290,7 @@ void enclosure_pane::on_remove_boxplot(int)
 
 void enclosure_pane::on_add_plot(Box* b, Speaker* s, Gdk::Color& c)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("EnclsourePaned::on_add_plot");
 #endif
     ++nof_plots;

@@ -29,6 +29,8 @@
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
 
+#include <iostream>
+
 enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
 inline bool is_state_modified()

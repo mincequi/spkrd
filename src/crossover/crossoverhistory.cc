@@ -25,6 +25,7 @@
 #include <gtkmm/messagedialog.h>
 
 #include <chrono>
+#include <iostream>
 
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 4;
@@ -66,11 +67,11 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
     set_label_widget(*m_evbox);
 
-    // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+    m_evbox->set_tooltip_text(m_filename);
 
     create_model();
 
-    /* create tree view */
+    // create tree view
     m_TreeView.set_model(m_refListStore);
 
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
@@ -80,19 +81,18 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
 
     m_ScrolledWindow.add(m_TreeView);
 
-    f_append = nullptr;
-    f_open = nullptr;
-    f_save_as = nullptr;
-
     show_all();
 
     index = 0;
 
     signal_new_crossover.connect(sigc::mem_fun(*this, &CrossoverHistory::on_new_from_menu));
+
     signal_net_modified_by_wizard.connect(
         sigc::mem_fun(*this, &CrossoverHistory::on_net_modified_by_user));
+
     signal_net_modified_by_user.connect(
         sigc::mem_fun(*this, &CrossoverHistory::on_net_modified_by_wizard));
+
     signal_save_open_files.connect(sigc::mem_fun(*this, &CrossoverHistory::on_save_open_files));
 }
 
@@ -135,20 +135,18 @@ CrossoverHistory::~CrossoverHistory()
     {
         g_settings.save();
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const& error)
     {
-#ifdef OUTPUT_DEBUG
-        std::cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << e.what()
-                  << std::endl;
-#endif
+        std::cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << error.what()
+                  << "\n";
     }
 }
 
 void CrossoverHistory::on_open_xml()
 {
-    GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Open crossover xml"));
-    std::string filename = fc->get_filename();
-    if (filename.length() > 0)
+    GSpeakersFileChooserDialog fc(_("Open crossover xml"));
+    std::string const& filename = fc.get_filename();
+    if (!filename.empty())
     {
         open_xml(filename);
     }
@@ -156,9 +154,9 @@ void CrossoverHistory::on_open_xml()
 
 void CrossoverHistory::on_append_xml()
 {
-    GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Append crossover xml"));
-    std::string filename = fc->get_filename();
-    if (filename.length() > 0)
+    GSpeakersFileChooserDialog fc(_("Append crossover xml"));
+    std::string const& filename = fc.get_filename();
+    if (filename.empty())
     {
         append_xml(filename);
     }
@@ -173,9 +171,9 @@ void CrossoverHistory::open_xml(const std::string& filename)
         m_refListStore->clear();
 
         m_filename = filename;
-        for_each(temp_crossover_list.crossover_list().begin(),
-                 temp_crossover_list.crossover_list().end(),
-                 sigc::mem_fun(*this, &CrossoverHistory::add_item));
+        std::for_each(temp_crossover_list.crossover_list().begin(),
+                      temp_crossover_list.crossover_list().end(),
+                      sigc::mem_fun(*this, &CrossoverHistory::add_item));
 
         /* Delete items in crossover_list */
         m_crossover_list.crossover_list().clear();
@@ -187,10 +185,13 @@ void CrossoverHistory::open_xml(const std::string& filename)
         if (!m_crossover_list.crossover_list().empty())
         {
             Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+
             char* str = nullptr;
             GString* buffer = g_string_new(str);
             g_string_printf(buffer, "%d", 0);
+
             GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
+
             Gtk::TreePath path(gpath);
 
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -199,7 +200,7 @@ void CrossoverHistory::open_xml(const std::string& filename)
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
                                   + GSpeakers::short_filename(m_filename, 20) + "]</b>");
-        // GSpeakers::tooltips().set_tip(*m_evbox, m_filename);
+        m_evbox->set_tooltip_text(m_filename);
     }
     catch (std::runtime_error const& e)
     {
@@ -210,7 +211,7 @@ void CrossoverHistory::open_xml(const std::string& filename)
 
 void CrossoverHistory::append_xml(const std::string& filename)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "append xml ok: " << filename << std::endl;
 #endif
     CrossoverList temp_crossover_list;
@@ -306,7 +307,7 @@ void CrossoverHistory::on_new_copy()
 
 void CrossoverHistory::on_new_from_menu(int type)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "CrossoverHistory::on_new_from_menu: " << type << std::endl;
 #endif
     /* add new crossover of appropriate type here */
@@ -325,12 +326,8 @@ void CrossoverHistory::on_new_from_menu(int type)
 
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-    /* make our new crossover the selected crossover */
-    char* str = nullptr;
-    GString* buffer = g_string_new(str);
-    g_string_printf(buffer, "%lu", m_crossover_list.crossover_list().size() - 1);
-    GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-    Gtk::TreePath path(gpath);
+    // make our new crossover the selected crossover
+    Gtk::TreePath path(std::to_string(m_crossover_list.crossover_list().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
     refSelection->select(row);
     signal_crossover_set_save_state(true);
@@ -340,26 +337,25 @@ void CrossoverHistory::on_new()
 {
     Crossover c;
 
-    /* Set time of day as this crossovers id_string */
+    // Set time of day as this crossovers id_string
     time_t t;
     time(&t);
-    /* convert to nice time format */
+    // convert to nice time format
     std::string s = std::string(ctime(&t));
     int length = s.length();
     s[length - 1] = '\0';
     c.set_id_string(_("Crossover: ") + s);
 
     add_item(c);
+
     m_crossover_list.crossover_list().push_back(c);
 
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-    char* str = nullptr;
-    GString* buffer = g_string_new(str);
-    g_string_printf(buffer, "%lu", m_crossover_list.crossover_list().size() - 1);
-    GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-    Gtk::TreePath path(gpath);
+    Gtk::TreePath path(std::to_string(m_crossover_list.crossover_list().size() - 1));
+
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+
     refSelection->select(row);
     signal_crossover_set_save_state(true);
 }
@@ -377,8 +373,8 @@ void CrossoverHistory::on_new_xml()
 
 void CrossoverHistory::on_save()
 {
-#ifdef OUTPUT_DEBUG
-    std::cout << "CrossoverHistory::on_save" << std::endl;
+#ifndef NDEBUG
+    std::puts("CrossoverHistory::on_save");
 #endif
     if (new_xml_pressed)
     {
@@ -394,22 +390,21 @@ void CrossoverHistory::on_save()
         }
         catch (std::runtime_error const& e)
         {
-            Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-            m.run();
+            Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
         }
     }
 }
 
 void CrossoverHistory::on_save_as()
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "save as" << std::endl;
 #endif
-    GSpeakersFileChooserDialog* fc = new GSpeakersFileChooserDialog(_("Save crossover xml as"),
-                                                                    Gtk::FILE_CHOOSER_ACTION_SAVE,
-                                                                    m_filename);
-    std::string filename = fc->get_filename();
-    if (filename.length() > 0)
+    GSpeakersFileChooserDialog fc(_("Save crossover xml as"),
+                                  Gtk::FILE_CHOOSER_ACTION_SAVE,
+                                  m_filename);
+    std::string const& filename = fc.get_filename();
+    if (filename.empty())
     {
         save_as_xml(filename);
     }
@@ -417,8 +412,8 @@ void CrossoverHistory::on_save_as()
 
 void CrossoverHistory::save_as_xml(const std::string& filename)
 {
-#ifdef OUTPUT_DEBUG
-    std::cout << _("save as ok") << std::endl;
+#ifndef NDEBUG
+    std::cout << _("save as ok") << "\n";
 #endif
     try
     {
@@ -435,8 +430,7 @@ void CrossoverHistory::save_as_xml(const std::string& filename)
     }
     catch (std::runtime_error const& e)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
     }
 }
 
@@ -467,9 +461,9 @@ void CrossoverHistory::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
-    for_each(m_crossover_list.crossover_list().begin(),
-             m_crossover_list.crossover_list().end(),
-             sigc::mem_fun(*this, &CrossoverHistory::add_item));
+    std::for_each(m_crossover_list.crossover_list().begin(),
+                  m_crossover_list.crossover_list().end(),
+                  sigc::mem_fun(*this, &CrossoverHistory::add_item));
 }
 
 void CrossoverHistory::add_columns()

@@ -121,7 +121,7 @@ bool BoxHistory::on_delete_event(GdkEventAny* event)
 {
     // handle this since we don't want to close the window
     g_settings.setValue("BoxListXml", m_filename);
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "BoxHistory: on_delete_event" << std::endl;
 #endif
     return true;

@@ -37,18 +37,18 @@ Crossover::Crossover(int type, std::string id_string)
     {
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-    if ((m_type & CROSSOVER_TYPE_TWOWAY) != 0)
+    if (m_type == CROSSOVER_TYPE_TWOWAY)
     {
         m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-    if ((m_type & CROSSOVER_TYPE_THREEWAY) != 0)
+    if (m_type == CROSSOVER_TYPE_THREEWAY)
     {
         m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
         m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
-    if ((m_type & CROSSOVER_TYPE_FOURWAY) != 0)
+    if (m_type == CROSSOVER_TYPE_FOURWAY)
     {
         m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
         m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
@@ -162,6 +162,7 @@ std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
 {
     output << _("Crossover type:") << crossover.m_type << "\n"
            << "Id: " << crossover.m_id << "\n---Nets----\n";
+
     for (auto const& network : crossover.m_networks)
     {
         output << network;

@@ -77,16 +77,29 @@ private:
     void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
     void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
 
-    void draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part> const& parts);
-    void draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part> const& parts);
+    void draw_lowpass_net(int x,
+                          int y,
+                          int part_width,
+                          int part_height,
+                          std::vector<passive_component> const& parts);
+    void draw_highpass_net(int x,
+                           int y,
+                           int part_width,
+                           int part_height,
+                           std::vector<passive_component> const& parts);
 
     void draw_imp_corr_net(int x,
                            int y,
                            int part_width,
                            int part_height,
-                           Part const& capacitor,
-                           Part const& resistor);
-    void draw_damp_net(int x, int y, int part_width, int part_height, Part const& r1, Part const& r2);
+                           passive_component const& capacitor,
+                           passive_component const& resistor);
+    void draw_damp_net(int x,
+                       int y,
+                       int part_width,
+                       int part_height,
+                       passive_component const& r1,
+                       passive_component const& r2);
     void draw_driver(int x, int y, int part_width, int part_height, Speaker const& speaker);
 
 private:
@@ -103,7 +116,7 @@ private:
     Glib::RefPtr<Pango::Layout> m_refLayout;
     Gdk::RGBA black, white;
 
-    Crossover* crossover{nullptr};
+    Crossover* m_crossover{nullptr};
     speaker_list* m_speaker_list{nullptr};
 };
 

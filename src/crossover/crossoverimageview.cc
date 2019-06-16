@@ -87,277 +87,359 @@ bool CrossoverImageView::on_configure_event(GdkEventConfigure* event)
 
 void CrossoverImageView::redraw()
 {
-    // if (m_visible) {
-    //
-    //   auto const& allocation = get_allocation();
-    //
-    //   /* Clear to white background color */
-    //   m_refGC->set_rgb_fg_color(white);
-    //   m_refPixmap->draw_rectangle(m_refGC, true, 0, 0, allocation.get_width(),
-    //                               allocation.get_height());
-    //   m_refGC->set_rgb_fg_color(black);
-    //
-    //   if (crossover != nullptr) {
-    //     int vert_space_per_net_divider = 0;
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_LOWPASS) != 0) {
-    //       vert_space_per_net_divider++;
-    //     }
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_SUBSONIC) != 0) {
-    //       vert_space_per_net_divider++;
-    //     }
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_HIGHPASS) != 0) {
-    //       vert_space_per_net_divider++;
-    //     }
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_TWOWAY) != 0) {
-    //       vert_space_per_net_divider += 2;
-    //     }
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_THREEWAY) != 0) {
-    //       vert_space_per_net_divider += 3;
-    //     }
-    //     if ((crossover->get_type() & CROSSOVER_TYPE_FOURWAY) != 0) {
-    //       vert_space_per_net_divider += 4;
-    //     }
-    //
-    //     if (vert_space_per_net_divider == 0) {
-    //       return;
-    //     }
-    //
-    //     auto const window_height = allocation.get_height();
-    //     auto const window_width = allocation.get_width();
-    //     auto const vert_space_per_net =
-    //         std::round(double(window_height) / double(vert_space_per_net_divider));
-    //
-    //     /* Draw first net here */
-    //     std::vector<Net>& net_vector = *crossover->networks();
-    //
-    //     for (std::size_t i = 0; i < net_vector.size(); i++) {
-    //
-    //       int net_vert_divider = 3;
-    //       int net_horz_divider = 2;
-    //
-    //       int part_height = std::round(double(vert_space_per_net) / double(net_vert_divider));
-    //
-    //       switch (net_vector[i].get_lowpass_order()) {
-    //       case NET_ORDER_1ST:
-    //         net_horz_divider++;
-    //         break;
-    //       case NET_ORDER_2ND:
-    //         net_horz_divider += 2;
-    //         break;
-    //       case NET_ORDER_3RD:
-    //         net_horz_divider += 3;
-    //         break;
-    //       case NET_ORDER_4TH:
-    //         net_horz_divider += 4;
-    //         break;
-    //       }
-    //       switch (net_vector[i].get_highpass_order()) {
-    //       case NET_ORDER_1ST:
-    //         net_horz_divider++;
-    //         break;
-    //       case NET_ORDER_2ND:
-    //         net_horz_divider += 2;
-    //         break;
-    //       case NET_ORDER_3RD:
-    //         net_horz_divider += 3;
-    //         break;
-    //       case NET_ORDER_4TH:
-    //         net_horz_divider += 4;
-    //         break;
-    //       }
-    //
-    //       auto const lowpass_order = net_vector[i].get_lowpass_order();
-    //       auto const highpass_order = net_vector[i].get_highpass_order();
-    //
-    //       if (net_vector[i].get_has_imp_corr())
-    //         net_horz_divider++;
-    //       if (net_vector[i].get_has_damp())
-    //         net_horz_divider += 2;
-    //       int part_width = std::round(double(window_width) / double(net_horz_divider));
-    //
-    //       if (m_scale_image_parts) {
-    //         if (part_width > (1.5 * part_height) && net_vector[i].parts().size() <= 4) {
-    //           part_width = part_height;
-    //         } else if (part_width > 3 * part_height) {
-    //           part_width = std::round(1.7 * part_height);
-    //         }
-    //       }
-    //
-    //       draw_connector(0, i * vert_space_per_net, part_width, part_height, true);
-    //       draw_connector(0, i * vert_space_per_net + 2 * part_height, part_width, part_height,
-    //       false);
-    //
-    //       /* lowpass part */
-    //       std::vector<Part> const& part_vector = net_vector[i].parts();
-    //       if (lowpass_order > 0) {
-    //         std::vector<Part> lowpass_parts(part_vector.begin(), part_vector.begin() +
-    //         lowpass_order); draw_lowpass_net(part_width, i * vert_space_per_net, part_width,
-    //         part_height,
-    //                          lowpass_parts);
-    //       }
-    //
-    //       /* highpass part */
-    //       if (highpass_order > 0) {
-    //         std::vector<Part> highpass_parts(part_vector.begin() + lowpass_order,
-    //                                          part_vector.begin() + lowpass_order + highpass_order);
-    //         this->draw_highpass_net(part_width + lowpass_order * part_width, i *
-    //         vert_space_per_net,
-    //                                 part_width, part_height, highpass_parts);
-    //       }
-    //
-    //       int driver_offset = 0;
-    //       if (net_vector[i].get_has_imp_corr()) {
-    //         draw_imp_corr_net((1 + lowpass_order + highpass_order) * part_width,
-    //                           i * vert_space_per_net, part_width, part_height,
-    //                           net_vector[i].get_imp_corr_R(), net_vector[i].get_imp_corr_C());
-    //         driver_offset++;
-    //       }
-    //       if (net_vector[i].get_has_damp()) {
-    //         draw_damp_net((1 + lowpass_order + highpass_order + driver_offset) * part_width,
-    //                       i * vert_space_per_net, part_width, part_height,
-    //                       net_vector[i].get_damp_R1(), net_vector[i].get_damp_R2());
-    //         driver_offset += 2;
-    //       }
-    //       std::string const& spk = net_vector[i].get_speaker();
-    //       Speaker speaker;
-    //       if (speaker_list != nullptr) {
-    //         speaker = speaker_list->get_speaker_by_id_string(spk);
-    //       }
-    //       draw_driver((1 + lowpass_order + highpass_order + driver_offset) * part_width,
-    //                   i * vert_space_per_net, part_width, part_height, speaker);
-    //     }
-    //   }
-    // }
+    if (m_visible)
+    {
+        auto const& allocation = get_allocation();
+
+        /* Clear to white background color */
+        // m_refGC->set_rgb_fg_color(white);
+        // m_refPixmap
+        //     ->draw_rectangle(m_refGC, true, 0, 0, allocation.get_width(), allocation.get_height());
+        // m_refGC->set_rgb_fg_color(black);
+
+        if (m_crossover != nullptr)
+        {
+            int vert_space_per_net_divider = 0;
+            if (m_crossover->get_type() == CROSSOVER_TYPE_LOWPASS)
+            {
+                vert_space_per_net_divider++;
+            }
+            if (m_crossover->get_type() == CROSSOVER_TYPE_SUBSONIC)
+            {
+                vert_space_per_net_divider++;
+            }
+            if (m_crossover->get_type() == CROSSOVER_TYPE_HIGHPASS)
+            {
+                vert_space_per_net_divider++;
+            }
+            if (m_crossover->get_type() == CROSSOVER_TYPE_TWOWAY)
+            {
+                vert_space_per_net_divider += 2;
+            }
+            if (m_crossover->get_type() == CROSSOVER_TYPE_THREEWAY)
+            {
+                vert_space_per_net_divider += 3;
+            }
+            if (m_crossover->get_type() == CROSSOVER_TYPE_FOURWAY)
+            {
+                vert_space_per_net_divider += 4;
+            }
+
+            if (vert_space_per_net_divider == 0)
+            {
+                return;
+            }
+
+            auto const window_height = allocation.get_height();
+            auto const window_width = allocation.get_width();
+            auto const vert_space_per_net = std::round(double(window_height)
+                                                       / double(vert_space_per_net_divider));
+
+            /* Draw first net here */
+            std::vector<Net>& net_vector = *m_crossover->networks();
+
+            for (std::size_t i = 0; i < net_vector.size(); i++)
+            {
+                int net_vert_divider = 3;
+                int net_horz_divider = 2;
+
+                int part_height = std::round(double(vert_space_per_net) / double(net_vert_divider));
+
+                switch (net_vector[i].get_lowpass_order())
+                {
+                    case NET_ORDER_1ST:
+                        net_horz_divider++;
+                        break;
+                    case NET_ORDER_2ND:
+                        net_horz_divider += 2;
+                        break;
+                    case NET_ORDER_3RD:
+                        net_horz_divider += 3;
+                        break;
+                    case NET_ORDER_4TH:
+                        net_horz_divider += 4;
+                        break;
+                }
+                switch (net_vector[i].get_highpass_order())
+                {
+                    case NET_ORDER_1ST:
+                        net_horz_divider++;
+                        break;
+                    case NET_ORDER_2ND:
+                        net_horz_divider += 2;
+                        break;
+                    case NET_ORDER_3RD:
+                        net_horz_divider += 3;
+                        break;
+                    case NET_ORDER_4TH:
+                        net_horz_divider += 4;
+                        break;
+                }
+
+                auto const lowpass_order = net_vector[i].get_lowpass_order();
+                auto const highpass_order = net_vector[i].get_highpass_order();
+
+                if (net_vector[i].get_has_imp_corr())
+                {
+                    net_horz_divider++;
+                }
+                if (net_vector[i].get_has_damp())
+                {
+                    net_horz_divider += 2;
+                }
+
+                auto part_width = std::round(window_width / static_cast<double>(net_horz_divider));
+
+                if (m_scale_image_parts)
+                {
+                    if (part_width > (1.5 * part_height) && net_vector[i].parts().size() <= 4)
+                    {
+                        part_width = part_height;
+                    }
+                    else if (part_width > 3 * part_height)
+                    {
+                        part_width = std::round(1.7 * part_height);
+                    }
+                }
+
+                draw_connector(0, i * vert_space_per_net, part_width, part_height, true);
+                draw_connector(0,
+                               i * vert_space_per_net + 2 * part_height,
+                               part_width,
+                               part_height,
+                               false);
+
+                // lowpass part
+                std::vector<passive_component> const& part_vector = net_vector[i].parts();
+                if (lowpass_order > 0)
+                {
+                    std::vector<passive_component> lowpass_parts(part_vector.begin(),
+                                                                 part_vector.begin() + lowpass_order);
+                    draw_lowpass_net(part_width,
+                                     i * vert_space_per_net,
+                                     part_width,
+                                     part_height,
+                                     lowpass_parts);
+                }
+
+                /* highpass part */
+                if (highpass_order > 0)
+                {
+                    std::vector<passive_component> highpass_parts(part_vector.begin() + lowpass_order,
+                                                                  part_vector.begin() + lowpass_order
+                                                                      + highpass_order);
+                    this->draw_highpass_net(part_width + lowpass_order * part_width,
+                                            i * vert_space_per_net,
+                                            part_width,
+                                            part_height,
+                                            highpass_parts);
+                }
+
+                int driver_offset = 0;
+
+                if (net_vector[i].get_has_imp_corr())
+                {
+                    draw_imp_corr_net((1 + lowpass_order + highpass_order) * part_width,
+                                      i * vert_space_per_net,
+                                      part_width,
+                                      part_height,
+                                      net_vector[i].get_imp_corr_R(),
+                                      net_vector[i].get_imp_corr_C());
+                    driver_offset++;
+                }
+                if (net_vector[i].get_has_damp())
+                {
+                    draw_damp_net((1 + lowpass_order + highpass_order + driver_offset) * part_width,
+                                  i * vert_space_per_net,
+                                  part_width,
+                                  part_height,
+                                  net_vector[i].get_damp_R1(),
+                                  net_vector[i].get_damp_R2());
+                    driver_offset += 2;
+                }
+                std::string const& spk = net_vector[i].get_speaker();
+
+                Speaker speaker;
+
+                if (m_speaker_list != nullptr)
+                {
+                    speaker = m_speaker_list->get_speaker_by_id_string(spk);
+                }
+                draw_driver((1 + lowpass_order + highpass_order + driver_offset) * part_width,
+                            i * vert_space_per_net,
+                            part_width,
+                            part_height,
+                            speaker);
+            }
+        }
+    }
 }
 
-void CrossoverImageView::on_settings_changed(const std::string& s)
+void CrossoverImageView::on_settings_changed(const std::string& setting)
 {
-    // if (s == "ScaleCrossoverImageParts") {
-    //   m_scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
-    //   if (m_visible) {
-    //     redraw();
-    //     Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(),
-    //     get_allocation().get_height()); get_window()->invalidate_rect(update_rect, true);
-    //   }
-    // }
+    if (setting == "ScaleCrossoverImageParts")
+    {
+        m_scale_image_parts = g_settings.getValueBool("ScaleCrossoverImageParts");
+
+        if (m_visible)
+        {
+            // redraw();
+            Gdk::Rectangle update_rect(0,
+                                       0,
+                                       get_allocation().get_width(),
+                                       get_allocation().get_height());
+            get_window()->invalidate_rect(update_rect, true);
+        }
+    }
 }
 
 void CrossoverImageView::on_crossover_selected(Crossover* selected_crossover)
 {
-    // crossover = selected_crossover;
-    // if (m_visible) {
-    //   redraw();
-    //   Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(),
-    //   get_allocation().get_height()); get_window()->invalidate_rect(update_rect, true);
-    // }
+    m_crossover = selected_crossover;
+    if (m_visible)
+    {
+        // redraw();
+        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        get_window()->invalidate_rect(update_rect, true);
+    }
 }
 
 void CrossoverImageView::on_net_modified()
 {
-    // if (crossover != nullptr) {
-    //   on_crossover_selected(crossover);
-    // }
+    if (m_crossover != nullptr)
+    {
+        on_crossover_selected(m_crossover);
+    }
 }
 
 void CrossoverImageView::on_speakerlist_selected(speaker_list* selected_speaker_list)
 {
-    // speaker_list = selected_speaker_list;
-    // if (m_visible) {
-    //   redraw();
-    //   Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(),
-    //   get_allocation().get_height()); get_window()->invalidate_rect(update_rect, true);
-    // }
+    m_speaker_list = selected_speaker_list;
+    if (m_visible)
+    {
+        //   redraw();
+        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        get_window()->invalidate_rect(update_rect, true);
+    }
 }
 
 void CrossoverImageView::draw_lowpass_net(int x,
                                           int y,
                                           int part_width,
                                           int part_height,
-                                          std::vector<Part> const& parts)
+                                          std::vector<passive_component> const& parts)
 {
-    // for (std::size_t i = 0; i < parts.size(); i++) {
-    //   if (parts[i].get_type() == PART_TYPE_INDUCTOR) {
-    //     draw_inductor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
-    //     draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
-    //   } else {
-    //     draw_t_cross(x + part_width * i, y, part_width, part_height);
-    //     draw_capacitor(parts[i].get_id(), x + part_width * i, y + part_height, part_width,
-    //                    part_height, true);
-    //     draw_t_cross(x + part_width * i, y + 2 * part_height, part_width, part_height, false);
-    //   }
-    // }
+    for (std::size_t i = 0; i < parts.size(); i++)
+    {
+        if (parts[i].get_type() == PART_TYPE_INDUCTOR)
+        {
+            draw_inductor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
+            draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
+        }
+        else
+        {
+            draw_t_cross(x + part_width * i, y, part_width, part_height);
+            draw_capacitor(parts[i].get_id(),
+                           x + part_width * i,
+                           y + part_height,
+                           part_width,
+                           part_height,
+                           true);
+            draw_t_cross(x + part_width * i, y + 2 * part_height, part_width, part_height, false);
+        }
+    }
 }
 
 void CrossoverImageView::draw_highpass_net(int x,
                                            int y,
                                            int part_width,
                                            int part_height,
-                                           std::vector<Part> const& parts)
+                                           std::vector<passive_component> const& parts)
 {
-    // for (unsigned i = 0; i < parts.size(); i++) {
-    //   if (parts[i].get_type() == PART_TYPE_CAPACITOR) {
-    //     draw_capacitor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
-    //     draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
-    //   } else {
-    //     draw_t_cross(x + part_width * i, y, part_width, part_height);
-    //     draw_inductor(parts[i].get_id(), x + part_width * i, y + part_height, part_width,
-    //     part_height,
-    //                   true);
-    //     draw_t_cross(x + part_width * i, y + 2 * part_height, part_width, part_height, false);
-    //   }
-    // }
+    for (std::size_t i = 0; i < parts.size(); i++)
+    {
+        if (parts[i].get_type() == PART_TYPE_CAPACITOR)
+        {
+            draw_capacitor(parts[i].get_id(), x + part_width * i, y, part_width, part_height);
+            draw_line(x + part_width * i, y + 2 * part_height, part_width, part_height);
+        }
+        else
+        {
+            draw_t_cross(x + part_width * i, y, part_width, part_height);
+            draw_inductor(parts[i].get_id(),
+                          x + part_width * i,
+                          y + part_height,
+                          part_width,
+                          part_height,
+                          true);
+            draw_t_cross(x + part_width * i, y + 2 * part_height, part_width, part_height, false);
+        }
+    }
 }
 
 void CrossoverImageView::draw_imp_corr_net(int x,
                                            int y,
                                            int part_width,
                                            int part_height,
-                                           Part const& capacitor,
-                                           Part const& resistor)
+                                           passive_component const& capacitor,
+                                           passive_component const& resistor)
 {
-    // int local_part_height = std::round(double(part_height) / 2);
-    // draw_t_cross(x, y, part_width, part_height, true);
-    // draw_capacitor(capacitor.get_id(), x, y + part_height, part_width, local_part_height, true);
-    // draw_resistor(resistor.get_id(), x, y + part_height + local_part_height, part_width,
-    //               local_part_height, true);
-    // draw_t_cross(x, y + 2 * part_height, part_width, part_height, false);
+    int local_part_height = std::round(part_height / 2.0);
+
+    draw_t_cross(x, y, part_width, part_height, true);
+
+    draw_capacitor(capacitor.get_id(), x, y + part_height, part_width, local_part_height, true);
+
+    draw_resistor(resistor.get_id(),
+                  x,
+                  y + part_height + local_part_height,
+                  part_width,
+                  local_part_height,
+                  true);
+
+    draw_t_cross(x, y + 2 * part_height, part_width, part_height, false);
 }
 
 void CrossoverImageView::draw_damp_net(int x,
                                        int y,
                                        int part_width,
                                        int part_height,
-                                       Part const& r1,
-                                       Part const& r2)
+                                       passive_component const& r1,
+                                       passive_component const& r2)
 {
-    // draw_resistor(r1.get_id(), x, y, part_width, part_height, false);
-    // draw_line(x, y + 2 * part_height, part_width, part_height, false);
-    // draw_t_cross(x + part_width, y, part_width, part_height, true);
-    // draw_resistor(r2.get_id(), x + part_width, y + part_height, part_width, part_height, true);
-    // draw_t_cross(x + part_width, y + 2 * part_height, part_width, part_height, false);
+    draw_resistor(r1.get_id(), x, y, part_width, part_height, false);
+    draw_line(x, y + 2 * part_height, part_width, part_height, false);
+    draw_t_cross(x + part_width, y, part_width, part_height, true);
+    draw_resistor(r2.get_id(), x + part_width, y + part_height, part_width, part_height, true);
+    draw_t_cross(x + part_width, y + 2 * part_height, part_width, part_height, false);
 }
 
 void CrossoverImageView::draw_driver(int x, int y, int part_width, int part_height, Speaker const& speaker)
 {
-    // draw_corner(x, y, part_width, part_height, true);
-    //
-    // if (speaker.get_type() == SPEAKER_TYPE_MIDRANGE) {
-    //   draw_midrange(x, y + part_height, part_width, part_height);
-    // } else if (speaker.get_type() == SPEAKER_TYPE_BASS) {
-    //   draw_woofer(x, y + part_height, part_width, part_height);
-    // } else {
-    //   draw_tweeter(x, y + part_height, part_width, part_height);
-    // }
-    // draw_corner(x, y + 2 * part_height, part_width, part_height, false);
+    draw_corner(x, y, part_width, part_height, true);
+
+    if (speaker.get_type() == SPEAKER_TYPE_MIDRANGE)
+    {
+        draw_midrange(x, y + part_height, part_width, part_height);
+    }
+    else if (speaker.get_type() == SPEAKER_TYPE_BASS)
+    {
+        draw_woofer(x, y + part_height, part_width, part_height);
+    }
+    else
+    {
+        draw_tweeter(x, y + part_height, part_width, part_height);
+    }
+    draw_corner(x, y + 2 * part_height, part_width, part_height, false);
 }
 
 void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int height, bool rotate)
 {
-    // double half_space_y = std::round(double(height) / 2);
-    // double half_space_x = std::round(double(width) / 2);
-    // double small_space_x = std::round(double(width) / 20);
-    // double small_space_y = std::round(double(height) / 20);
-    //
+    double half_space_y = std::round(height / 2.0);
+    double half_space_x = std::round(width / 2.0);
+    double small_space_x = std::round(width / 20.0);
+    double small_space_y = std::round(height / 20.0);
+
     // m_refLayout->set_text("C" + std::to_string(id));
     // m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
     //
@@ -400,11 +482,11 @@ void CrossoverImageView::draw_capacitor(int id, int x, int y, int width, int hei
 
 void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int height, bool rotate)
 {
-    // double half_space_y = double(height) / 2;
-    // double half_space_x = double(width) / 2;
-    // double small_space_x = double(width) / 20;
-    // double small_space_y = double(height) / 20;
-    //
+    double half_space_y = height / 2.0;
+    double half_space_x = width / 2.0;
+    double small_space_x = width / 20.0;
+    double small_space_y = height / 20.0;
+
     // m_refLayout->set_text("L" + std::to_string(id));
     // m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
     //
@@ -446,11 +528,11 @@ void CrossoverImageView::draw_inductor(int id, int x, int y, int width, int heig
 
 void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int height, bool rotate)
 {
-    // int half_space_y = std::round(double(height) / 2);
-    // int half_space_x = std::round(double(width) / 2);
-    // int small_space_x = std::round(double(width) / 20);
-    // int small_space_y = std::round(double(height) / 20);
-    //
+    int half_space_y = std::round(double(height) / 2);
+    int half_space_x = std::round(double(width) / 2);
+    int small_space_x = std::round(double(width) / 20);
+    int small_space_y = std::round(double(height) / 20);
+
     // m_refLayout->set_text("R" + std::to_string(id));
     // m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
     //
@@ -482,11 +564,11 @@ void CrossoverImageView::draw_resistor(int id, int x, int y, int width, int heig
 
 void CrossoverImageView::draw_connector(int x, int y, int width, int height, bool positive)
 {
-    // int half_space_x = std::round(double(width) / 2);
-    // int half_space_y = std::round(double(height) / 2);
-    // int small_space_x = std::round(double(width) / 20);
-    // int small_space_y = std::round(double(height) / 20);
-    //
+    int half_space_x = std::round(double(width) / 2);
+    int half_space_y = std::round(double(height) / 2);
+    int small_space_x = std::round(double(width) / 20);
+    int small_space_y = std::round(double(height) / 20);
+
     // if (positive) {
     //   m_refLayout->set_text("+");
     // } else {

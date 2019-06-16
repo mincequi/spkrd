@@ -19,7 +19,9 @@
  */
 
 #include "totalfilterplot.h"
+
 #include <cmath>
+#include <iostream>
 
 TotalFilterPlot::TotalFilterPlot() : m_plot(1, 20000), m_color(std::make_unique<Gdk::Color>("blue"))
 {
@@ -40,7 +42,7 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
                                  int* i,
                                  Net* n)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "TotalFilterPlot::on_add_plot" << std::endl;
 #endif
     /* Search for *i in the graph */

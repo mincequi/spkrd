@@ -136,7 +136,7 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
 void FreqRespEditor::on_save()
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("FreqRespEditor::on_save");
 #endif
     std::vector<double> const& v = get_x_vector();
@@ -204,7 +204,7 @@ void FreqRespEditor::on_save_as()
 
 void FreqRespEditor::on_close()
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("FreqRespEditor::on_close");
 #endif
     response(0);

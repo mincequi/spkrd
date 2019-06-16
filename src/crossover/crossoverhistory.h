@@ -45,72 +45,71 @@ extern sigc::signal1<void, bool> signal_crossover_set_save_state;
  * depend on the currently selected crossover can update thier
  * data.
  */
-class CrossoverHistory : public Gtk::Frame {
+class CrossoverHistory : public Gtk::Frame
+{
 public:
-  CrossoverHistory();
-  ~CrossoverHistory() override;
-  /* public callbacks, for use in container class */
-  void on_open_xml();
-  void on_append_xml();
-  void on_new_copy();
-  void on_new();
-  void on_new_from_menu(int type);
-  void on_new_xml();
-  void on_save();
-  void on_save_as();
-  void on_remove();
-  void select_first_row();
+    CrossoverHistory();
+    ~CrossoverHistory() override;
+    /* public callbacks, for use in container class */
+    void on_open_xml();
+    void on_append_xml();
+    void on_new_copy();
+    void on_new();
+    void on_new_from_menu(int type);
+    void on_new_xml();
+    void on_save();
+    void on_save_as();
+    void on_remove();
+    void select_first_row();
 
 protected:
-  /* callbacks */
-  void open_xml(const std::string& filename);
-  void append_xml(const std::string& filename);
-  void save_as_xml(const std::string& filename);
-  void on_selection_changed();
-  void on_part_modified();
-  void on_net_modified_by_wizard(Net* net);
-  void on_net_modified_by_user();
-  void on_new_crossover_menu_action(int);
-  void on_plot_crossover();
-  void on_save_open_files();
-  void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+    /* callbacks */
+    void open_xml(const std::string& filename);
+    void append_xml(const std::string& filename);
+    void save_as_xml(const std::string& filename);
+    void on_selection_changed();
+    void on_part_modified();
+    void on_net_modified_by_wizard(Net* net);
+    void on_net_modified_by_user();
+    void on_new_crossover_menu_action(int);
+    void on_plot_crossover();
+    void on_save_open_files();
+    void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
-  /* Helper member functions */
-  virtual void create_model();
-  virtual void add_columns();
-  virtual void add_item(Crossover const& foo);
-
-protected:
-  /* This is used in the treemodel */
-  struct model_columns : public Gtk::TreeModelColumnRecord {
-
-    model_columns() {
-      add(id);
-      add(type);
-      add(id_string);
-    }
-
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<int> type;
-    Gtk::TreeModelColumn<Glib::ustring> id_string;
-  };
+    /* Helper member functions */
+    virtual void create_model();
+    virtual void add_columns();
+    virtual void add_item(Crossover const& foo);
 
 protected:
-  Gtk::Widget* m_evbox;
-  Gtk::Label* m_frame_label;
-  Gtk::ScrolledWindow m_ScrolledWindow;
-  Gtk::TreeView m_TreeView;
-  Glib::RefPtr<Gtk::ListStore> m_refListStore;
+    // This is used in the treemodel
+    struct model_columns : public Gtk::TreeModelColumnRecord
+    {
+        model_columns()
+        {
+            add(id);
+            add(type);
+            add(id_string);
+        }
+        Gtk::TreeModelColumn<int> id;
+        Gtk::TreeModelColumn<int> type;
+        Gtk::TreeModelColumn<Glib::ustring> id_string;
+    };
 
-  Gtk::FileChooserDialog *f_open, *f_save_as, *f_append;
+protected:
+    Gtk::Widget* m_evbox;
+    Gtk::Label* m_frame_label;
+    Gtk::ScrolledWindow m_ScrolledWindow;
+    Gtk::TreeView m_TreeView;
+    Glib::RefPtr<Gtk::ListStore> m_refListStore;
 
-  CrossoverList m_crossover_list;
+    CrossoverList m_crossover_list;
 
-  std::string m_filename;
-  bool new_xml_pressed;
-  int index;
+    std::string m_filename;
+    bool new_xml_pressed;
+    int index;
 
-  model_columns m_columns;
+    model_columns m_columns;
 };
 
 #endif

@@ -25,6 +25,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <iostream>
 
 SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0)
 {
@@ -92,7 +93,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                                     int* i,
                                     Net* n)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "SummedFreqRespPlot::on_add_plot" << std::endl;
 #endif
 
@@ -212,7 +213,7 @@ void SummedFreqRespPlot::on_crossover_selected(Crossover*)
 
 void SummedFreqRespPlot::on_speakerlist_loaded(speaker_list* speaker_list)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
 #endif
     m_speakerlist = speaker_list;

@@ -25,7 +25,7 @@
 #include "crossoverhistory.h"
 #include "crossoverimageview.h"
 #include "crossovertreeview.h"
-#include "crossoverwizard.h"
+#include "crossover_wizard.hpp"
 
 #include "gspeakersfilterplot.h"
 #include "summedfreqrespplot.h"
@@ -62,7 +62,7 @@ private:
     Gtk::Notebook m_crossover_notebook;
     Gtk::Notebook m_plot_notebook;
 
-    CrossoverWizard crossover_wizard;
+    crossover_wizard m_crossover_wizard;
     CrossoverTreeView crossover_treeview;
     CrossoverHistory crossover_history;
     GSpeakersFilterPlot filter_plot;

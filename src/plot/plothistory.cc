@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <ctime>
+#include <iostream>
 
 PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox()
 {
@@ -128,7 +129,7 @@ void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color)
 
 void PlotHistory::on_cell_plot_toggled(const Glib::ustring& path_string)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "PlotHistory: toggle plot" << std::endl;
 #endif
 

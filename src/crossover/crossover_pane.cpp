@@ -23,6 +23,8 @@
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/stock.h>
 
+#include <iostream>
+
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 3;
 
@@ -35,7 +37,7 @@ crossover_pane::crossover_pane()
     set_position(g_settings.getValueUnsignedInt("crossover_pane1Position"));
     add2(m_plot_notebook);
 
-    m_crossover_notebook.append_page(crossover_wizard, _("Wizard"));
+    m_crossover_notebook.append_page(m_crossover_wizard, _("Wizard"));
     m_crossover_notebook.append_page(crossover_treeview, _("Filter"));
     m_crossover_notebook.append_page(crossover_history, _("History"));
 
@@ -250,8 +252,8 @@ void crossover_pane::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
-        m_toolbar->set_toolbar_style((Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyl"
-                                                                                       "e"));
+        m_toolbar->set_toolbar_style(
+            static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyle")));
     }
     if (setting == "AutoUpdateFilterPlots" && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
@@ -269,14 +271,15 @@ void crossover_pane::set_save_state(bool state)
     }
     if (m_menu_item.has_submenu())
     {
-        for (auto& child : m_menu_item.get_children())
-        {
-            if (child->get_name() == "Save")
-            {
-                child->set_sensitive(state);
-            }
-        }
-        m_menu_item.get_children().at(MENU_INDEX_SAVE)->set_sensitive(state);
+        // FIXME gtk3 port
+        // for (auto& child : m_menu_item.get_children())
+        // {
+        //     if (child->get_name() == "Save")
+        //     {
+        //         child->set_sensitive(state);
+        //     }
+        // }
+        // m_menu_item.get_children().at(MENU_INDEX_SAVE)->set_sensitive(state);
 
         GSpeakers::crossoverlist_modified() = state;
     }

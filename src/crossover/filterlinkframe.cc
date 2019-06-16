@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 
 FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speaker_list* speaker_list)
     : Gtk::Frame(""),
@@ -37,7 +38,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speak
       m_dampening_digits(Gtk::Adjustment::create(0, 0, 100, 1, 5.0)),
       m_damp_spinbutton(m_dampening_digits),
       m_imp_corr_checkbutton(_("Impedance correction")),
-      m_adv_imp_model_checkbutton(_("Use adv. driver imp. model")),
+      m_adv_imp_model_checkbutton(_("Use advance driver impendance model")),
       m_net(net),
       m_description(description),
       m_speaker_list(speaker_list)
@@ -607,6 +608,7 @@ void FilterLinkFrame::on_param_changed()
                             m_net->set_highpass_family(NET_LINKWITZRILEY);
                             break;
                     }
+
                     /* capacitor */
                     m_net->parts()[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff))
                                                     * 1000000);
@@ -626,6 +628,9 @@ void FilterLinkFrame::on_param_changed()
                     break;
             }
         }
+
+        std::puts("Checking impedance correction state");
+
         if (m_imp_corr_checkbutton.get_active())
         {
             m_net->set_has_imp_corr(true);
@@ -643,10 +648,13 @@ void FilterLinkFrame::on_param_changed()
 
         m_net->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
 
-        if (m_damp_spinbutton.get_value_as_int() > 0)
+        std::puts("Checking dampening correction state");
+
+        if (m_damp_spinbutton.get_value_as_int())
         {
             m_net->set_has_damp(true);
-            /* Calculate resistors for damping network */
+
+            // Calculate resistors for damping network
             auto const r_ser = speaker.get_rdc()
                                * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
             auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
@@ -657,13 +665,22 @@ void FilterLinkFrame::on_param_changed()
         {
             m_net->set_has_damp(false);
         }
+
+        std::puts("Signaling wizard - magic!");
+
         signal_net_modified_by_wizard();
+
+        std::puts("I don't work anymore ;()");
 
         if (g_settings.getValueBool("AutoUpdateFilterPlots"))
         {
+            std::puts("Updating plots");
+
             on_plot_crossover();
         }
         enable_edit = true;
+
+        std::puts("Finalised update");
     }
 }
 
@@ -690,7 +707,7 @@ void FilterLinkFrame::on_clear_and_plot()
 
 void FilterLinkFrame::on_speakerlist_loaded(speaker_list* speaker_list)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::puts("FilterLinkFrame::on_speakerlist_loaded");
 #endif
     m_speaker_list = speaker_list;
@@ -759,13 +776,13 @@ void FilterLinkFrame::on_plot_crossover()
     {
         cmd += " -b -o " + spice_filename + ".out " + spice_filename;
     }
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"\n";
 #endif
 
     system(cmd.c_str());
 
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done\n";
 #endif
 
@@ -1124,12 +1141,14 @@ std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int ne
         throw std::runtime_error("Filter parameters was not correctly populated");
     }
 
+    std::puts("Finished populating parameters");
+
     return nums;
 }
 
 void FilterLinkFrame::set_family(Gtk::ComboBoxText* option_menu, int order, int family)
 {
-#ifdef OUTPUT_DEBUG
+#ifndef NDEBUG
     std::cout << "FilterLinkFrame::set_family: order = " << order << ", family = " << family
               << std::endl;
 #endif
