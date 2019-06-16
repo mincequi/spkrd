@@ -33,6 +33,8 @@
 
 #include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/hvpaned.h>
+#include <gtkmm/toolbar.h>
 
 class crossover_pane : public Gtk::HPaned
 {

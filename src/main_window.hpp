@@ -64,6 +64,10 @@ private:
 
     void connect_crossover_tab();
 
+    void initialise_menu_bar();
+
+    void initialise_toolbar();
+
 private:
     Gtk::Box m_main_vbox;
     Gtk::HPaned m_driver_hpaned;

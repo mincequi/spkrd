@@ -19,6 +19,10 @@
 
 #include "crossover_pane.hpp"
 
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/separatortoolitem.h>
+#include <gtkmm/stock.h>
+
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 3;
 

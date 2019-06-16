@@ -27,6 +27,8 @@
 #include <gtkmm/label.h>
 #include <gtkmm/table.h>
 
+#include <vector>
+
 class FreqRespEditor : public Gtk::Dialog
 {
 public:

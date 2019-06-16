@@ -18,6 +18,8 @@
 #include "speaker.h"
 #include "common.h"
 
+#include <libxml/parser.h>
+
 #include <utility>
 
 Speaker::Speaker(std::string id_string,
@@ -62,7 +64,7 @@ Speaker::Speaker(std::string id_string,
 
 Speaker::Speaker(xmlNodePtr parent)
 {
-    if (parent != nullptr && std::string((char*)parent->name) == std::string("speaker"))
+    if (parent != nullptr && std::string((char*)parent->name) == "speaker")
     {
         try
         {
@@ -81,12 +83,11 @@ Speaker::Speaker(xmlNodePtr parent)
 
 xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
 {
-    xmlNodePtr speaker, child;
     std::array<gchar, 10> buffer;
 
-    speaker = xmlNewChild(parent, nullptr, (xmlChar*)("speaker"), nullptr);
+    xmlNodePtr speaker = xmlNewChild(parent, nullptr, (xmlChar*)("speaker"), nullptr);
 
-    child = xmlNewChild(speaker, nullptr, (xmlChar*)("id_string"), nullptr);
+    xmlNodePtr child = xmlNewChild(speaker, nullptr, (xmlChar*)("id_string"), nullptr);
     xmlNodeSetContent(child, (xmlChar*)m_id_string.c_str());
 
     child = xmlNewChild(speaker, nullptr, (xmlChar*)("type"), nullptr);
@@ -230,7 +231,7 @@ double Speaker::get_cms() const { return m_cms; }
 
 void Speaker::parse_id_string(xmlNodePtr node)
 {
-    if (node != nullptr && std::string((char*)node->name) == std::string("id_string"))
+    if (node != nullptr && std::string((char*)node->name) == "id_string")
     {
         m_id_string = std::string((char*)xmlNodeGetContent(node));
         try
@@ -250,7 +251,7 @@ void Speaker::parse_id_string(xmlNodePtr node)
 
 void Speaker::parse_type(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("type")))
+    if (node != nullptr && std::string((char*)node->name) == "type")
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
         try
@@ -270,7 +271,7 @@ void Speaker::parse_type(xmlNodePtr node)
 
 void Speaker::parse_qts(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("qts")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("qts"))
     {
         m_qts = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
 
@@ -291,7 +292,7 @@ void Speaker::parse_qts(xmlNodePtr node)
 
 void Speaker::parse_vas(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("vas")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("vas"))
     {
         m_vas = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
 
@@ -312,7 +313,7 @@ void Speaker::parse_vas(xmlNodePtr node)
 
 void Speaker::parse_fs(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("fs")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("fs"))
     {
         m_fs = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -332,7 +333,7 @@ void Speaker::parse_fs(xmlNodePtr node)
 
 void Speaker::parse_rdc(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("rdc")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("rdc"))
     {
         m_rdc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -352,7 +353,7 @@ void Speaker::parse_rdc(xmlNodePtr node)
 
 void Speaker::parse_lcv(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("lvc")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("lvc"))
     {
         m_lvc = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -372,7 +373,7 @@ void Speaker::parse_lcv(xmlNodePtr node)
 
 void Speaker::parse_qms(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("qms")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("qms"))
     {
         m_qms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -392,7 +393,7 @@ void Speaker::parse_qms(xmlNodePtr node)
 
 void Speaker::parse_qes(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("qes")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("qes"))
     {
         m_qes = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -412,7 +413,7 @@ void Speaker::parse_qes(xmlNodePtr node)
 
 void Speaker::parse_imp(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("imp")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("imp"))
     {
         m_imp = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -432,7 +433,7 @@ void Speaker::parse_imp(xmlNodePtr node)
 
 void Speaker::parse_sens(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("sens")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("sens"))
     {
         m_sens = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -452,7 +453,7 @@ void Speaker::parse_sens(xmlNodePtr node)
 
 void Speaker::parse_freq_resp_filename(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("freq_resp_filename")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("freq_resp_filename"))
     {
         m_freq_resp_filename = std::string((char*)xmlNodeGetContent(node));
         try
@@ -472,7 +473,7 @@ void Speaker::parse_freq_resp_filename(xmlNodePtr node)
 
 void Speaker::parse_imp_resp_filename(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("imp_resp_filename")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("imp_resp_filename"))
     {
         m_imp_resp_filename = std::string((char*)xmlNodeGetContent(node));
         try
@@ -492,7 +493,7 @@ void Speaker::parse_imp_resp_filename(xmlNodePtr node)
 
 void Speaker::parse_mmd(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("mmd")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("mmd"))
     {
         m_mmd = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -512,7 +513,7 @@ void Speaker::parse_mmd(xmlNodePtr node)
 
 void Speaker::parse_ad(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("ad")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("ad"))
     {
         m_ad = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -532,7 +533,7 @@ void Speaker::parse_ad(xmlNodePtr node)
 
 void Speaker::parse_bl(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("bl")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("bl"))
     {
         m_bl = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -552,7 +553,7 @@ void Speaker::parse_bl(xmlNodePtr node)
 
 void Speaker::parse_rms(xmlNodePtr node)
 {
-    if (node != nullptr && std::string((char*)node->name) == std::string("rms"))
+    if (node != nullptr && std::string((char*)node->name) == "rms")
     {
         m_rms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
         try
@@ -572,7 +573,7 @@ void Speaker::parse_rms(xmlNodePtr node)
 
 void Speaker::parse_cms(xmlNodePtr node)
 {
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("cms")))
+    if (node != nullptr && std::string((char*)node->name) == std::string("cms"))
     {
         m_cms = g_ascii_strtod((char*)xmlNodeGetContent(node), nullptr);
     }

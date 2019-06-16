@@ -23,6 +23,7 @@
 #include "plot.hpp"
 
 #include <cmath>
+#include <iostream>
 
 constexpr auto SEALED_SELECTED = 0;
 constexpr auto PORTED_SELECTED = 1;

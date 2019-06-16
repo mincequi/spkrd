@@ -2,7 +2,9 @@
 #include "common.h"
 #include "main_window.hpp"
 
+#include <glibmm.h>
 #include <gtkmm/main.h>
+#include <gtkmm/messagedialog.h>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>

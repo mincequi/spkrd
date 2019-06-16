@@ -18,34 +18,31 @@
 #include "speaker_list.hpp"
 #include "common.h"
 
-#include <glib.h>
-
 speaker_list::speaker_list(const std::string& filename)
 {
+    // Allows human readable (formatted) XML documents without receiving
+    // whitespace errors
+    xmlKeepBlanksDefault(0);
+
     xmlDocPtr doc = xmlParseFile(filename.c_str());
 
     if (doc == nullptr)
     {
-        throw std::runtime_error(_("speaker_list: Xml file not found"));
+        throw std::runtime_error(_("speaker_list: XML file not found"));
     }
 
     xmlNodePtr node = xmlDocGetRootElement(doc);
 
-    if (node != nullptr && g_ascii_strcasecmp((char*)node->name, "speakerlist") == 0)
+    if (node != nullptr && std::string((char*)node->name) == "speakerlist")
     {
         if (node->children != nullptr)
         {
             xmlNodePtr children = node->children;
+
             while (children != nullptr)
             {
-                try
-                {
-                    m_speaker_list.emplace_back(children);
-                }
-                catch (std::runtime_error const& e)
-                {
-                    throw e;
-                }
+                m_speaker_list.emplace_back(children);
+
                 children = children->next;
             }
         }

@@ -23,6 +23,9 @@
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/menutoolbutton.h>
+#include <gtkmm/stock.h>
+
+#include <iostream>
 
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto MENU_INDEX_DELETE = 8;

@@ -24,7 +24,8 @@
 #include "common.h"
 #include "plot.hpp"
 
-#include <gtkmm.h>
+#include <gtkmm/frame.h>
+#include <gdkmm/color.h>
 
 #include <vector>
 
@@ -35,26 +36,27 @@
  * an extra layer (where we can connect signals and so on)
  * between the program and the plot widget.
  */
-class TotalFilterPlot : public Gtk::Frame {
+class TotalFilterPlot : public Gtk::Frame
+{
 public:
-  TotalFilterPlot();
+    TotalFilterPlot();
 
-  ~TotalFilterPlot() override;
+    ~TotalFilterPlot() override;
 
-  void clear();
+    void clear();
 
-  int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
-
-private:
-  bool on_delete_event(GdkEventAny* event) override;
-  void on_crossover_selected(Crossover*);
-  void on_plot_crossover();
+    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
-  plot m_plot;
-  std::vector<int> m_nets;
-  std::unique_ptr<Gdk::Color> m_color;
-  std::vector<std::vector<GSpeakers::Point>> m_points;
+    bool on_delete_event(GdkEventAny* event) override;
+    void on_crossover_selected(Crossover*);
+    void on_plot_crossover();
+
+private:
+    plot m_plot;
+    std::vector<int> m_nets;
+    std::unique_ptr<Gdk::Color> m_color;
+    std::vector<std::vector<GSpeakers::Point>> m_points;
 };
 
 #endif

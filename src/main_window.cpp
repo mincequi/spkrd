@@ -22,6 +22,13 @@
 #include "crossover.h"
 #include "settings_dialog.hpp"
 
+#include <glibmm.h>
+
+#include <gtkmm/imagemenuitem.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/main.h>
+#include <gtkmm/messagedialog.h>
+
 enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
 inline bool is_state_modified()
@@ -54,6 +61,74 @@ main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
              g_settings.getValueUnsignedInt("MainWindowPositionY"));
     }
 
+    this->initialise_menu_bar();
+    this->initialise_toolbar();
+
+    this->connect_driver_tab();
+    this->connect_enclosure_tab();
+    this->connect_crossover_tab();
+
+    m_main_notebook.data().signal_switch_page().connect(
+        sigc::mem_fun(*this, &main_window::on_switch_page));
+
+    m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
+
+    show_all_children();
+}
+
+void main_window::set_title_and_icons()
+{
+    try
+    {
+#ifdef TARGET_WIN32
+        Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
+#else
+        Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(
+            std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+#endif
+        set_icon(main_icon);
+    }
+    catch (Gdk::PixbufError const& error)
+    {
+        std::cout << error.code() << "\n";
+    }
+    catch (Glib::FileError const& error)
+    {
+        std::cout << error.code() << "\n";
+    }
+    set_title("GSpeakers " + std::string(VERSION));
+}
+
+void main_window::set_defaults()
+{
+    g_settings.defaultValueBool("SetMainWindowSize", true);
+    g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
+    g_settings.defaultValueUnsignedInt("MainWindowHeight", 480);
+    g_settings.defaultValueBool("SetMainWindowPosition", false);
+    g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
+    g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
+    g_settings.defaultValueBool("AutoUpdateFilterPlots", false);
+    g_settings.defaultValueString("SPICECmdLine", "gnucap");
+    g_settings.defaultValueBool("SPICEUseNGSPICE", false);
+    g_settings.defaultValueBool("SPICEUseGNUCAP", true);
+}
+
+void main_window::initialise_toolbar()
+{
+    // add toolbars
+    m_speaker_editor.get_toolbar().hide();
+    m_main_vbox.pack_start(m_speaker_editor.get_toolbar(), false, false);
+    m_enclosure_paned.get_toolbar().hide();
+    m_main_vbox.pack_start(m_enclosure_paned.get_toolbar(), false, false);
+    m_crossover_paned.get_toolbar().hide();
+    m_main_vbox.pack_start(m_crossover_paned.get_toolbar(), false, false);
+
+    // Add main notebook
+    m_main_vbox.pack_start(m_main_notebook);
+}
+
+void main_window::initialise_menu_bar()
+{
     // Setup the menu
     m_file_menu_item.set_label("File");
     {
@@ -106,73 +181,6 @@ main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
 
     // Add the MenuBar to the window
     m_main_vbox.pack_start(m_menubar, false, false);
-
-    // auto toolbar = Gtk::manage(new Gtk::Toolbar());
-    // auto item = Gtk::make_managed<Gtk::ToolButton>("_Save");
-    // item->set_use_underline();
-    // item->set_icon_name("document-save");
-    // item->set_homogeneous(false);
-    // toolbar->append(*item);
-    // m_main_vbox.pack_start(*toolbar);
-
-    // add toolbars
-    m_speaker_editor.get_toolbar().hide();
-    m_main_vbox.pack_start(m_speaker_editor.get_toolbar(), false, false);
-    m_enclosure_paned.get_toolbar().hide();
-    m_main_vbox.pack_start(m_enclosure_paned.get_toolbar(), false, false);
-    m_crossover_paned.get_toolbar().hide();
-    m_main_vbox.pack_start(m_crossover_paned.get_toolbar(), false, false);
-
-    // Add main notebook
-    m_main_vbox.pack_start(m_main_notebook);
-
-    this->connect_driver_tab();
-    this->connect_enclosure_tab();
-    this->connect_crossover_tab();
-
-    m_main_notebook.data().signal_switch_page().connect(
-        sigc::mem_fun(*this, &main_window::on_switch_page));
-
-    m_main_notebook.set_current_page(g_settings.getValueUnsignedInt("MainNotebookPage"));
-
-    show_all_children();
-}
-
-void main_window::set_title_and_icons()
-{
-    try
-    {
-#ifdef TARGET_WIN32
-        Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
-#else
-        Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(
-            std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
-#endif
-        set_icon(main_icon);
-    }
-    catch (Gdk::PixbufError const& error)
-    {
-        std::cout << error.code() << "\n";
-    }
-    catch (Glib::FileError const& error)
-    {
-        std::cout << error.code() << "\n";
-    }
-    set_title("GSpeakers " + std::string(VERSION));
-}
-
-void main_window::set_defaults()
-{
-    g_settings.defaultValueBool("SetMainWindowSize", true);
-    g_settings.defaultValueUnsignedInt("MainWindowWidth", 640);
-    g_settings.defaultValueUnsignedInt("MainWindowHeight", 480);
-    g_settings.defaultValueBool("SetMainWindowPosition", false);
-    g_settings.defaultValueUnsignedInt("MainWindowPositionX", 0);
-    g_settings.defaultValueUnsignedInt("MainWindowPositionY", 0);
-    g_settings.defaultValueBool("AutoUpdateFilterPlots", false);
-    g_settings.defaultValueString("SPICECmdLine", "gnucap");
-    g_settings.defaultValueBool("SPICEUseNGSPICE", false);
-    g_settings.defaultValueBool("SPICEUseGNUCAP", true);
 }
 
 void main_window::connect_driver_tab()
@@ -180,10 +188,13 @@ void main_window::connect_driver_tab()
     // Driver tab
     m_main_notebook.append_page(m_driver_hpaned, *Gtk::manage(new Gtk::Label("Driver")));
     m_driver_hpaned.add1(m_speaker_editor.get_editor_table());
+
     g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
     g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
+
     m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPosition"));
     m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPosition"));
+
     m_driver_hpaned.add2(m_driver_vpaned);
     m_driver_vpaned.add1(m_speaker_editor.get_plot());
     m_driver_vpaned.add2(m_speaker_editor.get_treeview_table());
@@ -268,7 +279,7 @@ bool main_window::on_delete_event(GdkEventAny* event)
 
 void main_window::on_quit()
 {
-    /* Popup dialog and ask if user want to save changes */
+    // Popup dialog and ask if user want to save changes
     if (is_state_modified())
     {
         std::puts("main_window::on_quit: opening confirmation dialog");

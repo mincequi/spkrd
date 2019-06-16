@@ -27,9 +27,11 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/imagemenuitem.h>
+#include <gtkmm/stock.h>
 
 #include <cmath>
 #include <fstream>
+#include <iostream>
 
 constexpr auto MENU_INDEX_SAVE = 5;
 constexpr auto MENU_INDEX_DELETE = 8;
@@ -150,13 +152,13 @@ speaker_editor::speaker_editor()
                    12,
                    13);
     m_Table.attach(m_BlEntry, 2, 3, 12, 13);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Susp. resistance: (Ns/m)"), Gtk::ALIGN_START)),
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Suspension resistance: (Ns/m)"), Gtk::ALIGN_START)),
                    0,
                    2,
                    13,
                    14);
     m_Table.attach(m_RmsEntry, 2, 3, 13, 14);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Susp. compleance: (m/N)"), Gtk::ALIGN_START)),
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START)),
                    0,
                    2,
                    14,
@@ -175,7 +177,7 @@ speaker_editor::speaker_editor()
     m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
     Gtk::HBox* vbox = Gtk::manage(new Gtk::HBox());
-    vbox->pack_start(*Gtk::manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)));
+    vbox->pack_start(*Gtk::manage(new Gtk::Label(_("Frequency response file:"), Gtk::ALIGN_START)));
     vbox->pack_start(m_FreqRespFileEntry);
 
     m_FreqRespFileEntry.set_width_chars(15);
@@ -574,32 +576,9 @@ void speaker_editor::on_selection_changed()
             m_CmsEntry.set_text(Glib::ustring(buffer->str));
 
             // Check buttons
-            if (s.get_type() == SPEAKER_TYPE_BASS)
-            {
-                m_BassCheckButton.set_active(true);
-            }
-            else
-            {
-                m_BassCheckButton.set_active(false);
-            }
-
-            if (s.get_type() == SPEAKER_TYPE_MIDRANGE)
-            {
-                m_MidrangeCheckButton.set_active(true);
-            }
-            else
-            {
-                m_MidrangeCheckButton.set_active(false);
-            }
-
-            if (s.get_type() == SPEAKER_TYPE_TWEETER)
-            {
-                m_TweeterCheckButton.set_active(true);
-            }
-            else
-            {
-                m_TweeterCheckButton.set_active(false);
-            }
+            m_BassCheckButton.set_active(s.get_type() == SPEAKER_TYPE_BASS);
+            m_MidrangeCheckButton.set_active(s.get_type() == SPEAKER_TYPE_MIDRANGE);
+            m_TweeterCheckButton.set_active(s.get_type() == SPEAKER_TYPE_TWEETER);
 
             m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
 

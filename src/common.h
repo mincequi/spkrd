@@ -25,8 +25,6 @@
 #include <glibmm/ustring.h>
 
 #include <gdkmm/color.h>
-#include <gtkmm/stock.h>
-#include <gtkmm/tooltip.h>
 #include <gtkmm/widget.h>
 
 #include <libintl.h>

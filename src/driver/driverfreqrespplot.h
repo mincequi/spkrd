@@ -28,6 +28,7 @@
 
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/label.h>
 
 #include <vector>
 
@@ -45,6 +46,7 @@ public:
 
 private:
     plot m_plot;
+    Gtk::Label m_label;
     Gtk::ScrolledWindow sw;
 };
 

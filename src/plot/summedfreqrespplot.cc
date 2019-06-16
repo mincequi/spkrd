@@ -20,7 +20,9 @@
  */
 
 #include "summedfreqrespplot.h"
+
 #include "net.h"
+
 #include <cmath>
 #include <fstream>
 
@@ -66,8 +68,8 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
         std::advance(first_i, -1);
     }
 
-    auto second_i = std::upper_bound(freq_resp_points.begin(),
-                                     freq_resp_points.end(),
+    auto second_i = std::upper_bound(begin(freq_resp_points),
+                                     end(freq_resp_points),
                                      x,
                                      GSpeakers::comparison{});
 
@@ -150,7 +152,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                             lerp(freq_resp_points, filter_point.get_x()) + filter_y);
     }
 
-    /* Search for *i in the graph */
+    // Search for *i in the graph
     auto const location = std::find(begin(m_nets), end(m_nets), *i);
 
     // If *i is in the graph, replace the old point-vector, if *i not in graph

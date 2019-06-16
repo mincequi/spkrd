@@ -43,26 +43,6 @@ bool plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
 {
     this->redraw(context);
 
-    // auto const& allocation = get_allocation();
-    //
-    // auto const width = allocation.get_width();
-    // auto const height = allocation.get_height();
-    //
-    // // coordinates for the center of the window
-    // auto const xc = width / 2;
-    // auto const yc = height / 2;
-    //
-    // context->set_line_width(m_linesize);
-    //
-    // // draw red lines out from the center of the window
-    // context->set_source_rgb(0.0, 0.0, 0.0);
-    // context->move_to(0, 0);
-    // context->line_to(xc, yc);
-    // context->line_to(0, height);
-    // context->move_to(xc, yc);
-    // context->line_to(width, yc);
-    // context->stroke();
-
     return true;
 }
 
@@ -207,7 +187,7 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
         // // Reset rgb fg color
         // m_refGC->set_rgb_fg_color(black);
 
-        // select_plot(m_colors.size() - 1);
+        select_plot(m_colors.size() - 1);
 
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
@@ -279,21 +259,23 @@ void plot::remove_all_plots()
     m_colors.clear();
     m_visible_plots.clear();
 
-    // if (visible) {
-    //   redraw();
-    //   Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(),
-    //   get_allocation().get_height()); get_window()->invalidate_rect(update_rect, false);
-    // }
+    if (visible)
+    {
+        // redraw();
+        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        get_window()->invalidate_rect(update_rect, false);
+    }
 }
 
 void plot::hide_plot(int n)
 {
     m_visible_plots[n] = !m_visible_plots[n];
-    // if (visible) {
-    //   redraw();
-    //   Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(),
-    //   get_allocation().get_height()); get_window()->invalidate_rect(update_rect, false);
-    // }
+    if (visible)
+    {
+        // redraw();
+        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        get_window()->invalidate_rect(update_rect, false);
+    }
 }
 
 void plot::select_plot(int index)
@@ -376,7 +358,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     {
         if (m_visible_plots[i])
         {
-            // m_refGC->set_rgb_fg_color(m_colors[i]);
+            // context->set_source_rgb(m_colors[i]);
 
             std::vector<Gdk::Point> points;
 
@@ -469,22 +451,20 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
             // Don't draw the line until we have it all done
             if (i == m_selected_plot)
             {
-                m_linesize += 2;
-                context->set_line_width(m_linesize);
+                context->set_line_width(m_linesize + 1);
             }
 
-            context->move_to(points[0].get_x(), points[0].get_y());
+            context->move_to(points.front().get_x(), points.front().get_y());
 
             std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
                 context->line_to(point.get_x(), point.get_y());
-                context->move_to(point.get_x(), point.get_y());
                 context->stroke();
+                context->move_to(point.get_x(), point.get_y());
             });
 
             // Reset
             if (i == m_selected_plot)
             {
-                m_linesize -= 2;
                 context->set_line_width(m_linesize);
             }
         }

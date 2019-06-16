@@ -25,7 +25,10 @@
 #include "common.h"
 #include "plot.hpp"
 #include "speaker_list.hpp"
-#include <gtkmm.h>
+
+#include <gtkmm/frame.h>
+#include <gdkmm/color.h>
+
 #include <vector>
 
 /// This is a wrapper class for GSpeakersPlot
