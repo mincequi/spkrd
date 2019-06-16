@@ -25,6 +25,7 @@
 
 #include <glibmm/ustring.h>
 
+#include <gtkmm/box.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
@@ -125,8 +126,54 @@ protected:
     void set_entries_sensitive(bool value);
 
 protected:
+    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    {
+    public:
+        ModelColumns()
+        {
+            add(id);
+            add(type);
+            add(id_string);
+            add(qts);
+            add(fs);
+            add(vas);
+            add(rdc);
+            add(lvc);
+            add(qms);
+            add(qes);
+            add(imp);
+            add(sens);
+            add(mmd);
+            add(ad);
+            add(bl);
+            add(rms);
+            add(cms);
+            add(freq_resp_file);
+        }
+
+    public:
+        Gtk::TreeModelColumn<int> id;
+        Gtk::TreeModelColumn<int> type;
+        Gtk::TreeModelColumn<Glib::ustring> id_string;
+        Gtk::TreeModelColumn<double> qts;
+        Gtk::TreeModelColumn<double> fs;
+        Gtk::TreeModelColumn<double> vas;
+        Gtk::TreeModelColumn<double> rdc;
+        Gtk::TreeModelColumn<double> lvc;
+        Gtk::TreeModelColumn<double> qms;
+        Gtk::TreeModelColumn<double> qes;
+        Gtk::TreeModelColumn<double> imp;
+        Gtk::TreeModelColumn<double> sens;
+        Gtk::TreeModelColumn<double> mmd;
+        Gtk::TreeModelColumn<double> ad;
+        Gtk::TreeModelColumn<double> bl;
+        Gtk::TreeModelColumn<double> rms;
+        Gtk::TreeModelColumn<double> cms;
+        Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
+    };
+
     Gtk::Table m_TreeViewTable;
-    Gtk::Table m_Table;
+    Gtk::Grid m_grid;
 
     Gtk::ScrolledWindow m_ScrolledWindow;
 
@@ -173,52 +220,6 @@ protected:
     Gtk::MenuItem m_menu_item;
 
     Gtk::Toolbar* m_toolbar{nullptr};
-
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
-    {
-    public:
-        ModelColumns()
-        {
-            add(id);
-            add(type);
-            add(id_string);
-            add(qts);
-            add(fs);
-            add(vas);
-            add(rdc);
-            add(lvc);
-            add(qms);
-            add(qes);
-            add(imp);
-            add(sens);
-            add(mmd);
-            add(ad);
-            add(bl);
-            add(rms);
-            add(cms);
-            add(freq_resp_file);
-        }
-
-    public:
-        Gtk::TreeModelColumn<int> id;
-        Gtk::TreeModelColumn<int> type;
-        Gtk::TreeModelColumn<Glib::ustring> id_string;
-        Gtk::TreeModelColumn<double> qts;
-        Gtk::TreeModelColumn<double> fs;
-        Gtk::TreeModelColumn<double> vas;
-        Gtk::TreeModelColumn<double> rdc;
-        Gtk::TreeModelColumn<double> lvc;
-        Gtk::TreeModelColumn<double> qms;
-        Gtk::TreeModelColumn<double> qes;
-        Gtk::TreeModelColumn<double> imp;
-        Gtk::TreeModelColumn<double> sens;
-        Gtk::TreeModelColumn<double> mmd;
-        Gtk::TreeModelColumn<double> ad;
-        Gtk::TreeModelColumn<double> bl;
-        Gtk::TreeModelColumn<double> rms;
-        Gtk::TreeModelColumn<double> cms;
-        Gtk::TreeModelColumn<Glib::ustring> freq_resp_file;
-    };
 
     bool updating_entries{false};
     bool m_modified{false};

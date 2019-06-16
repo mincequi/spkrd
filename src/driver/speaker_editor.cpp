@@ -50,10 +50,10 @@ speaker_editor::speaker_editor()
       m_BassCheckButton(_("Bass")),
       m_MidrangeCheckButton(_("Midrange")),
       m_TweeterCheckButton(_("Tweeter")),
-      m_treeview_frame(""),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_treeview_vbox(Gtk::ORIENTATION_VERTICAL),
-      m_inner_treeview_vbox(Gtk::ORIENTATION_VERTICAL)
+      m_inner_treeview_vbox(Gtk::ORIENTATION_VERTICAL),
+      m_treeview_frame("")
 {
 #ifdef TARGET_WIN32
     g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
@@ -76,6 +76,7 @@ speaker_editor::speaker_editor()
         m_speaker_list = std::make_unique<speaker_list>();
         std::cout << "speaker_editor::speaker_editor: " << e.what() << std::endl;
     }
+
     m_treeview_vbox.set_border_width(5);
     m_treeview_vbox.pack_start(m_treeview_frame);
 
@@ -96,14 +97,14 @@ speaker_editor::speaker_editor()
     m_inner_treeview_vbox.set_border_width(12);
     m_inner_treeview_vbox.pack_start(m_TreeViewTable);
 
-    m_vbox.set_border_width(2);
     m_Table.set_spacings(2);
+    m_vbox.set_border_width(10);
 
     m_vbox.pack_start(m_Table);
-    m_vbox.set_border_width(12);
 
     // Setup the table
     m_TreeViewTable.set_spacings(2);
+
     m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
     // All the entries
@@ -112,31 +113,30 @@ speaker_editor::speaker_editor()
 
     m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 2, 1, 2);
-
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qts"), Gtk::ALIGN_START)), 0, 2, 1, 2);
     m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_START)), 0, 2, 2, 3);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Fs (Hz)"), Gtk::ALIGN_START)), 0, 2, 2, 3);
     m_Table.attach(m_FsEntry, 2, 3, 2, 3);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_START)), 0, 2, 3, 4);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Vas (l)"), Gtk::ALIGN_START)), 0, 2, 3, 4);
     m_Table.attach(m_VasEntry, 2, 3, 3, 4);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_START)), 0, 2, 4, 5);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Rdc (Ohm)"), Gtk::ALIGN_START)), 0, 2, 4, 5);
     m_Table.attach(m_RdcEntry, 2, 3, 4, 5);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_START)), 0, 2, 5, 6);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Lvc (mH)"), Gtk::ALIGN_START)), 0, 2, 5, 6);
     m_Table.attach(m_LvcEntry, 2, 3, 5, 6);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_START)), 0, 2, 6, 7);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qms"), Gtk::ALIGN_START)), 0, 2, 6, 7);
     m_Table.attach(m_QmsEntry, 2, 3, 6, 7);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_START)), 0, 2, 7, 8);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qes"), Gtk::ALIGN_START)), 0, 2, 7, 8);
     m_Table.attach(m_QesEntry, 2, 3, 7, 8);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 2, 8, 9);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Impedance (Ohm)"), Gtk::ALIGN_START)), 0, 2, 8, 9);
     m_Table.attach(m_ImpEntry, 2, 3, 8, 9);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)),
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity (dB/W/m)"), Gtk::ALIGN_START)),
                    0,
                    2,
                    9,
                    10);
     m_Table.attach(m_SensEntry, 2, 3, 9, 10);
 
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 2, 10, 11);
+    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Cone mass (kg)"), Gtk::ALIGN_START)), 0, 2, 10, 11);
     m_Table.attach(m_MmdEntry, 2, 3, 10, 11);
     m_Table.attach(*Gtk::manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)),
                    0,
@@ -162,22 +162,20 @@ speaker_editor::speaker_editor()
                    14,
                    15);
     m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
+    m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
+    m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
+    m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
     m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will work as a woofer (bass "
                                          "speaker)"));
-    m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
-
     m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will work as a midrange "
                                              "speaker"));
-    m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
-
     m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
-    m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Frequency response file:"), Gtk::ALIGN_START)));
-    hbox->pack_start(m_FreqRespFileEntry);
 
+    hbox->pack_start(m_FreqRespFileEntry);
     m_FreqRespFileEntry.set_width_chars(15);
 
     hbox->pack_start(m_BrowseFreqRespButton);
@@ -520,8 +518,7 @@ void speaker_editor::save_as(const std::string& filename)
     }
     catch (std::runtime_error const& error)
     {
-        Gtk::MessageDialog message(error.what(), false, Gtk::MESSAGE_ERROR);
-        message.run();
+        Gtk::MessageDialog(error.what(), false, Gtk::MESSAGE_ERROR).run();
     }
 }
 
@@ -658,13 +655,15 @@ void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
 
             // air density kg/m^3
             constexpr auto po = 1.18;
+
             auto const cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad()
                               / (3 * s.get_bl() * s.get_bl()) * 1000000;
 
             of << "R" << s.get_id() << " 1 2 " << g_ascii_dtostr(buffer.data(), 8, s.get_rdc())
-               << std::endl;
+               << "\n";
             of << "L" << s.get_id() << " 2 3 " << g_ascii_dtostr(buffer.data(), 8, s.get_lvc())
-               << "mH" << std::endl;
+               << "mH"
+               << "\n";
             of << "lces 3 0 " << g_ascii_dtostr(buffer.data(), 8, lces) << "mH\n";
             of << "cmes 3 0 " << g_ascii_dtostr(buffer.data(), 8, cmes) << "uF\n";
             of << "res 3 0 " << g_ascii_dtostr(buffer.data(), 8, res) << "\n";
@@ -672,18 +671,21 @@ void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
 
             if (g_settings.getValueBool("SPICEUseGNUCAP"))
             {
-                of << ".print ac ir(vamp) ii(vamp)" << std::endl;
-                of << ".ac DEC 50 20 20k" << std::endl;
+                of << ".print ac ir(vamp) ii(vamp)\n";
+                of << ".ac DEC 50 20 20k\n";
             }
             else
             {
-                of << ".ac DEC 50 20 20k" << std::endl;
-                of << ".print ac 1/mag(i(vamp))" << std::endl;
+                of << ".ac DEC 50 20 20k\n";
+                of << ".print ac 1/mag(i(vamp))\n";
             }
 
-            of << ".end" << std::endl;
+            of << ".end\n";
+
             of.close();
+
             std::string cmd;
+
             if (g_settings.getValueBool("SPICEUseNGSPICE")
                 || g_settings.getValueBool("SPICEUseGNUCAP"))
             {
