@@ -24,19 +24,19 @@
 GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& title,
                                                        Gtk::FileChooserAction action,
                                                        const std::string& default_filename)
-    : m_file_chooser(std::make_unique<Gtk::FileChooserDialog>(title, action))
+    : m_file_chooser(title, action)
 {
     bool flag = false;
 
-    m_file_chooser->add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
+    m_file_chooser.add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
 
     switch (action)
     {
         case Gtk::FILE_CHOOSER_ACTION_OPEN:
-            m_file_chooser->add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
+            m_file_chooser.add_button(Gtk::Stock::OPEN, FILE_CHOOSER_OPEN);
             break;
         case Gtk::FILE_CHOOSER_ACTION_SAVE:
-            m_file_chooser->add_button(Gtk::Stock::SAVE, FILE_CHOOSER_SAVE);
+            m_file_chooser.add_button(Gtk::Stock::SAVE, FILE_CHOOSER_SAVE);
             break;
         default:
             break;
@@ -44,18 +44,18 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
 
     if (!default_filename.empty())
     {
-        m_file_chooser->set_filename(default_filename);
+        m_file_chooser.set_filename(default_filename);
     }
 
     while (!flag)
     {
-        auto file_option = m_file_chooser->run();
+        auto file_option = m_file_chooser.run();
         switch (file_option)
         {
             case FILE_CHOOSER_SAVE:
             case FILE_CHOOSER_OPEN:
-                m_filename = m_file_chooser->get_filename();
-                m_file_chooser->hide();
+                m_filename = m_file_chooser.get_filename();
+                m_file_chooser.hide();
 
                 if (!m_filename.empty())
                 {
@@ -67,7 +67,7 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
                 {
                     m_filename = "";
                 }
-                m_file_chooser->hide();
+                m_file_chooser.hide();
                 flag = true;
                 break;
         }

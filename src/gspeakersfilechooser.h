@@ -22,8 +22,6 @@
 
 #include <gtkmm/filechooserdialog.h>
 
-#include <memory>
-
 class GSpeakersFileChooserDialog
 {
 public:
@@ -38,7 +36,8 @@ public:
 
 private:
     Glib::ustring m_filename;
-    std::unique_ptr<Gtk::FileChooserDialog> m_file_chooser;
+
+    Gtk::FileChooserDialog m_file_chooser;
 };
 
 #endif

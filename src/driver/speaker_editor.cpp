@@ -73,12 +73,16 @@ speaker_editor::speaker_editor()
     }
     m_treeview_vbox.set_border_width(5);
     m_treeview_vbox.pack_start(m_treeview_frame);
+
     m_treeview_frame.add(m_inner_treeview_vbox);
     m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
+
     m_evbox = Gtk::manage(new Gtk::EventBox());
+
     m_frame_label = Gtk::manage(new Gtk::Label());
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers ["))
                               + GSpeakers::short_filename(m_filename, 50) + "]</b>");
+
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
 
     m_treeview_frame.set_label_widget(*m_evbox);
@@ -173,10 +177,13 @@ speaker_editor::speaker_editor()
     Gtk::HBox* vbox = Gtk::manage(new Gtk::HBox());
     vbox->pack_start(*Gtk::manage(new Gtk::Label(_("Freq resp file:"), Gtk::ALIGN_START)));
     vbox->pack_start(m_FreqRespFileEntry);
+
     m_FreqRespFileEntry.set_width_chars(15);
+
     vbox->pack_start(m_BrowseFreqRespButton);
     vbox->pack_start(m_EditFreqRespButton);
     vbox->set_spacing(12);
+
     m_Table.attach(*vbox, 0, 3, 18, 19);
 
     m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
@@ -238,7 +245,7 @@ speaker_editor::speaker_editor()
     // create tree view
     m_TreeView.set_model(m_refListStore);
     m_TreeView.set_rules_hint();
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    auto selection = m_TreeView.get_selection();
 
     selection->signal_changed().connect(sigc::mem_fun(*this, &speaker_editor::on_selection_changed));
 
@@ -792,7 +799,7 @@ void speaker_editor::draw_imp_plot(Speaker& s, bool update)
                         }
                         else
                         {
-                            if ((buffer[0] >= '0') && (buffer[0] <= '9'))
+                            if (buffer[0] >= '0' && buffer[0] <= '9')
                             {
                                 strtok(buffer.data(), "\t");
                                 char* substr_ptr = strtok(nullptr, "\t");

@@ -368,7 +368,8 @@ void main_window::on_save_all()
 void main_window::on_edit_menu_expose_event()
 {
     // Check whether to ungrey "save all" menuitem or not
-    m_file_menu.get_children()[0]->set_sensitive(is_state_modified());
+    // FIXME gtk3 port
+    // m_file_menu.get_children()[0]->set_sensitive(is_state_modified());
 }
 
 void main_window::on_switch_page(Gtk::Widget* page, int page_number)
