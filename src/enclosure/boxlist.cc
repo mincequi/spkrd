@@ -20,15 +20,18 @@
 #include "boxlist.h"
 #include "common.h"
 
-#include <glib.h>
+#include <libxml/parser.h>
 
 BoxList::BoxList(const std::string& filename)
 {
+    xmlKeepBlanksDefault(0);
+
     xmlDocPtr doc = xmlParseFile(filename.c_str());
+
     if (doc != nullptr)
     {
         xmlNodePtr node = xmlDocGetRootElement(doc);
-        if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "boxlist") == 0))
+        if (node != nullptr && std::string((char*)node->name) == "boxlist")
         {
             if (node->children != nullptr)
             {
@@ -63,6 +66,7 @@ void BoxList::to_xml(std::string const& filename)
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
     xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("boxlist"), nullptr);
+
     xmlDocSetRootElement(doc, node);
 
     for (auto& from : m_box_list)
@@ -87,9 +91,3 @@ std::ostream& operator<<(std::ostream& output, const BoxList& box_list)
     }
     return output;
 }
-
-std::vector<Box>& BoxList::box_list() { return m_box_list; }
-
-std::vector<Box> const& BoxList::box_list() const { return m_box_list; }
-
-void BoxList::clear() { m_box_list.erase(m_box_list.begin(), m_box_list.end()); }

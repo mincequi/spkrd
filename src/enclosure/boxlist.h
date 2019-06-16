@@ -23,7 +23,6 @@
 #include "box.h"
 #include "gspeakersobject.h"
 
-#include <libxml/parser.h>
 #include <libxml/tree.h>
 
 #include <iosfwd>
@@ -31,29 +30,31 @@
 #include <vector>
 
 /// This is a class that handles a list of boxes
-class BoxList {
+class BoxList
+{
 public:
-  BoxList() = default;
+    BoxList() = default;
 
-  /// Construct a part from an xml file
-  BoxList(const std::string& filename);
+    /// Construct a part from an xml file
+    BoxList(const std::string& filename);
 
-  /// Convert data for a part to an xml node, throws std::runtime_error on failure
-  void to_xml(const std::string& filename);
+    /// Convert data for a part to an xml node, throws std::runtime_error on failure
+    void to_xml(const std::string& filename);
 
-  /// Print part data to stdout
-  friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
+    /// Print part data to stdout
+    friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
 
-  /// \return box_list vector
-  std::vector<Box>& box_list();
+    /// \return box_list vector
+    std::vector<Box>& box_list() { return m_box_list; }
 
-  std::vector<Box> const& box_list() const;
+    /// \return box_list vector
+    std::vector<Box> const& box_list() const { return m_box_list; }
 
-  /// Clear all items in the list
-  void clear();
+    /// Clear all items in the list
+    void clear() { m_box_list.clear(); }
 
 protected:
-  std::vector<Box> m_box_list;
+    std::vector<Box> m_box_list;
 };
 
 #endif

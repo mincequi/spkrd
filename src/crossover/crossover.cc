@@ -16,7 +16,7 @@
 */
 
 #include "crossover.h"
-#include <glib.h>
+
 #include <sstream>
 #include <utility>
 
@@ -161,9 +161,7 @@ xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
 std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
 {
     output << _("Crossover type:") << crossover.m_type << "\n"
-           << "Id: " << crossover.m_id << "\n"
-           << "---Nets----"
-           << "\n";
+           << "Id: " << crossover.m_id << "\n---Nets----\n";
     for (auto const& network : crossover.m_networks)
     {
         output << network;

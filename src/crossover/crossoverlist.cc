@@ -20,8 +20,6 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <glib.h>
-
 CrossoverList::CrossoverList(const std::string& filename)
 {
     xmlDocPtr doc = xmlParseFile(filename.c_str());

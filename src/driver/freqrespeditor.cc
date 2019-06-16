@@ -127,7 +127,7 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
                 dbmag_entries[i]->set_text(GSpeakers::double_to_ustring(f2, 2, 1));
                 dbmag_entries[i]->signal_changed().connect(
-                    sigc::bind<bool>(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+                    sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
             }
         }
     }

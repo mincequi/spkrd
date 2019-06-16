@@ -65,21 +65,37 @@ protected:
     void append_xml(const std::string& filename);
 
     void on_cell_fixed_toggled(const Glib::ustring& path_string);
+
     void on_open_xml();
+
     void on_append_xml();
+
     void on_clear();
+
     void on_selection_changed();
+
     void on_new();
+
     void on_new_xml();
+
     void on_entry_changed(int i);
+
     void on_save();
+
     void on_save_as();
+
     void save_as(const std::string& filename);
+
     void on_remove();
+
     void on_close();
+
     void on_edit_freq_resp();
+
     void on_browse_freq_resp();
+
     void on_save_open_files();
+
     void on_settings_changed(const std::string&);
 
     void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
@@ -99,9 +115,12 @@ protected:
     void cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
     virtual void create_model();
+
     virtual void add_columns();
+
     virtual void add_item(Speaker const& foo);
-    void draw_imp_plot(Speaker& s, bool update = false);
+
+    void draw_impedance_plot(Speaker const& s, bool update = false);
 
     void set_entries_sensitive(bool value);
 

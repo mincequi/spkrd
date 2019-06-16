@@ -103,34 +103,33 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     }
 
     std::vector<GSpeakers::Point> freq_resp_points;
+
     if (!s.get_freq_resp_filename().empty())
     {
-        std::ifstream fin(s.get_freq_resp_filename().c_str());
         std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = "
-                  << s.get_freq_resp_filename() << std::endl;
+                  << s.get_freq_resp_filename() << "\n";
 
-        if (!fin.good())
+        std::ifstream input_file(s.get_freq_resp_filename().c_str());
+
+        if (!input_file.is_open())
         {
-            std::cout << _("Could not open ") << s.get_freq_resp_filename() << std::endl;
-            return -1;
+            throw std::runtime_error(_("Could not open ") + s.get_freq_resp_filename());
         }
 
-        while (!fin.eof())
+        while (input_file)
         {
-            std::vector<char> buffer(100);
-            fin.getline(buffer.data(), 100, '\n');
+            double frequency;
+            double magnitude;
+            char comma;
 
-            // sscanf(buffer, "%f,%f", &f1, &f2);
-            char* substr_ptr = strtok(buffer.data(), ",");
-            float f1 = g_ascii_strtod(substr_ptr, nullptr);
-            substr_ptr = strtok(nullptr, ",");
-            float f2 = g_ascii_strtod(substr_ptr, nullptr);
+            input_file >> frequency >> comma >> magnitude;
 
-            // Skip potential column headers
-            if ((f1 != 0) && (f2 != 0))
+            if (comma != ',')
             {
-                freq_resp_points.emplace_back(std::round(f1), f2);
+                throw std::runtime_error("Frequency response requires comma separated values in "
+                                         + s.get_freq_resp_filename());
             }
+            freq_resp_points.emplace_back(std::round(frequency), magnitude);
         }
     }
     else
