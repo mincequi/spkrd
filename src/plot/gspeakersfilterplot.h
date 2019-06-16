@@ -22,7 +22,7 @@
 #define __GSPEAKERS_FILTER_PLOT
 
 #include "common.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <gtkmm/frame.h>
 
@@ -41,7 +41,7 @@ public:
   int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
-  GSpeakersPlot plot;
+  plot m_plot;
 
   bool on_delete_event(GdkEventAny* event) override;
 

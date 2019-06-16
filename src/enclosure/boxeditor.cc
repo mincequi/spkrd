@@ -20,7 +20,7 @@
 #include "boxeditor.h"
 #include "common.h"
 #include "gspeakerscolor.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <cmath>
 

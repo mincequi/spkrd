@@ -18,7 +18,7 @@
 */
 
 #include "plothistory.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <cmath>
 #include <ctime>

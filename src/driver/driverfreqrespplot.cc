@@ -27,14 +27,14 @@
 
 #include <gtkmm/label.h>
 
-DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), plot(1, 20000, 50, 110, true, 0, true)
+DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), m_plot(1, 20000, 50, 110, true, 0, true)
 {
     set_shadow_type(Gtk::SHADOW_NONE);
     static_cast<Gtk::Label*>(get_label_widget())
         ->set_markup("<b>" + Glib::ustring(_("Frequency response and impedance")) + "</b>");
     set_border_width(5);
 
-    sw.add(plot);
+    sw.add(m_plot);
     sw.set_border_width(12);
     sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
 
@@ -42,16 +42,16 @@ DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), plot(1, 20000, 50, 11
 
     show_all();
 
-    plot.set_y_label(_("Magnitude / dB"));
-    plot.set_y_label2(_("Impedance / Ohm"));
+    m_plot.set_y_label(_("Magnitude / dB"));
+    m_plot.set_y_label2(_("Impedance / Ohm"));
 }
 
 void DriverFreqRespPlot::add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color)
 {
-    plot.add_plot(points, color);
+    m_plot.add_plot(points, color);
 }
 
 void DriverFreqRespPlot::replace_plot(int i, std::vector<GSpeakers::Point>& points, Gdk::Color& color)
 {
-    plot.replace_plot(i, points, color);
+    m_plot.replace_plot(i, points, color);
 }

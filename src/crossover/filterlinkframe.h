@@ -21,7 +21,7 @@
 #define __FILTER_LINK_FRAME_H
 
 #include "crossover.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 #include "speaker_list.hpp"
 
 #include <gtkmm/box.h>

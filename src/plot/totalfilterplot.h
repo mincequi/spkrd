@@ -22,7 +22,7 @@
 #define __TOTAL_FILTER_PLOT
 
 #include "common.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <gtkmm.h>
 
@@ -51,7 +51,7 @@ private:
   void on_plot_crossover();
 
 private:
-  GSpeakersPlot plot;
+  plot m_plot;
   std::vector<int> m_nets;
   std::unique_ptr<Gdk::Color> m_color;
   std::vector<std::vector<GSpeakers::Point>> m_points;

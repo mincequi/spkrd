@@ -20,7 +20,7 @@
 #include "filterlinkframe.h"
 
 #include "common.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <gtkmm/messagedialog.h>
 

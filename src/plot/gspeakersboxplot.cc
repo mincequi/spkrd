@@ -22,29 +22,29 @@
 
 #include "gspeakersboxplot.h"
 
-GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), plot(1, 1000) {
+GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), m_plot(1, 1000)
+{
+    set_border_width(2);
+    set_shadow_type(Gtk::SHADOW_NONE);
 
-  set_border_width(2);
-  set_shadow_type(Gtk::SHADOW_NONE);
+    m_label.set_markup("<b>" + Glib::ustring(_("Enclosure frequency response")) + "</b>");
+    set_label_widget(m_label);
 
-  m_label.set_markup("<b>" + Glib::ustring(_("Enclosure frequency response")) + "</b>");
-  set_label_widget(m_label);
+    m_vbox.set_border_width(12);
+    m_vbox.pack_start(sw);
 
-  m_vbox.set_border_width(12);
-  m_vbox.pack_start(sw);
+    sw.add(m_plot);
+    sw.set_shadow_type(Gtk::SHADOW_IN);
+    sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
 
-  sw.add(plot);
-  sw.set_shadow_type(Gtk::SHADOW_IN);
-  sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    add(m_vbox);
 
-  add(m_vbox);
+    signal_add_box_plot.connect(sigc::mem_fun(m_plot, &plot::add_plot));
+    signal_remove_box_plot.connect(sigc::mem_fun(m_plot, &plot::remove_plot));
+    signal_hide_box_plot.connect(sigc::mem_fun(m_plot, &plot::hide_plot));
+    signal_select_plot.connect(sigc::mem_fun(m_plot, &plot::select_plot));
 
-  signal_add_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::add_plot));
-  signal_remove_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::remove_plot));
-  signal_hide_box_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::hide_plot));
-  signal_select_plot.connect(sigc::mem_fun(plot, &GSpeakersPlot::select_plot));
+    m_plot.set_y_label(_("Magnitude / dB"));
 
-  plot.set_y_label(_("Magnitude / dB"));
-
-  show_all_children();
+    show_all_children();
 }

@@ -24,7 +24,7 @@
 #ifndef __DRIVER_FREQ_RESP_PLOT_H
 #define __DRIVER_FREQ_RESP_PLOT_H
 
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
@@ -37,14 +37,14 @@ class DriverFreqRespPlot : public Gtk::Frame
 public:
     DriverFreqRespPlot();
 
-    void clear() { plot.remove_all_plots(); }
+    void clear() { m_plot.remove_all_plots(); }
 
     void add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&);
 
     void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color&);
 
 private:
-    GSpeakersPlot plot;
+    plot m_plot;
     Gtk::ScrolledWindow sw;
 };
 

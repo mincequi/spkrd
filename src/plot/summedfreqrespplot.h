@@ -23,35 +23,34 @@
 #define __SUMMED_FREQ_RESP_PLOT
 
 #include "common.h"
-#include "gspeakersplot.h"
+#include "plot.hpp"
 #include "speaker_list.hpp"
 #include <gtkmm.h>
 #include <vector>
 
-/*
- * This is a wrapper class for GSpeakersPlot
- */
-class SummedFreqRespPlot : public Gtk::Frame {
+/// This is a wrapper class for GSpeakersPlot
+class SummedFreqRespPlot : public Gtk::Frame
+{
 public:
-  SummedFreqRespPlot();
+    SummedFreqRespPlot();
 
-  ~SummedFreqRespPlot() override;
+    ~SummedFreqRespPlot() override;
 
-  void clear();
+    void clear();
 
-  int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color&, int*, Net*);
-
-private:
-  void on_crossover_selected(Crossover*);
-
-  void on_speakerlist_loaded(speaker_list* speaker_list);
+    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color&, int*, Net*);
 
 private:
-  GSpeakersPlot plot;
-  std::vector<int> m_nets;
-  Gdk::Color* m_color;
-  std::vector<std::vector<GSpeakers::Point>> m_points;
-  speaker_list* m_speakerlist;
+    void on_crossover_selected(Crossover*);
+
+    void on_speakerlist_loaded(speaker_list* speaker_list);
+
+private:
+    plot m_plot;
+    std::vector<int> m_nets;
+    Gdk::Color* m_color;
+    std::vector<std::vector<GSpeakers::Point>> m_points;
+    speaker_list* m_speakerlist;
 };
 
 #endif
