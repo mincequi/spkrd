@@ -1,7 +1,7 @@
 /*
   $Id$
 
-  freqrespeditor Copyright (C) 2002 Daniel Sundberg
+  frequency_response_editor Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "freqrespeditor.h"
+#include "frequency_response_editor.hpp"
 
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/frame.h>
@@ -28,7 +28,7 @@
 #include <fstream>
 #include <utility>
 
-FreqRespEditor::FreqRespEditor(std::string filename)
+frequency_response_editor::frequency_response_editor(std::string filename)
     : m_table(15, 4, false),
       dbmag_entries(30),
       m_save_button(Gtk::Stock::SAVE),
@@ -40,10 +40,14 @@ FreqRespEditor::FreqRespEditor(std::string filename)
 
     m_label.set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
 
-    Gtk::Frame* frame = Gtk::manage(new Gtk::Frame());
-    Gtk::VBox* frame_vbox = Gtk::manage(new Gtk::VBox());
+    auto frame = Gtk::make_managed<Gtk::Frame>();
+    auto frame_vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
 
-    frame->set_border_width(5);
+    m_save_button.set_border_width(10);
+    m_saveas_button.set_border_width(10);
+    m_close_button.set_border_width(10);
+
+    frame->set_border_width(10);
     frame->set_shadow_type(Gtk::SHADOW_NONE);
     frame->set_label_widget(m_label);
 
@@ -51,15 +55,15 @@ FreqRespEditor::FreqRespEditor(std::string filename)
     m_table.set_spacings(5);
 
     frame->add(*frame_vbox);
-    frame_vbox->set_border_width(12);
-    frame_vbox->pack_start(*Gtk::manage(new Gtk::Label(
+    frame_vbox->set_border_width(10);
+    frame_vbox->pack_start(*Gtk::make_managed<Gtk::Label>(
         Glib::ustring(_("Enter the freq response dB magnitude, this is not intended to provide an"))
-        + "\n" + Glib::ustring(_("exact estimation of the total frequency response.")))));
+        + "\n" + Glib::ustring(_("exact estimation of the total frequency response."))));
     frame_vbox->set_spacing(12);
     frame_vbox->pack_start(m_table);
 
     std::generate(begin(dbmag_entries), end(dbmag_entries), []() {
-        return Gtk::manage(new Gtk::Entry());
+        return Gtk::make_managed<Gtk::Entry>();
     });
 
     for (int j = 0; j < 15; j++)
@@ -103,9 +107,11 @@ FreqRespEditor::FreqRespEditor(std::string filename)
     get_action_area()->pack_start(m_saveas_button);
     get_action_area()->pack_start(m_close_button);
 
-    m_saveas_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_save_as));
-    m_save_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_save));
-    m_close_button.signal_clicked().connect(sigc::mem_fun(*this, &FreqRespEditor::on_close));
+    m_saveas_button.signal_clicked().connect(
+        sigc::mem_fun(*this, &frequency_response_editor::on_save_as));
+    m_save_button.signal_clicked().connect(sigc::mem_fun(*this, &frequency_response_editor::on_save));
+    m_close_button.signal_clicked().connect(
+        sigc::mem_fun(*this, &frequency_response_editor::on_close));
     m_save_button.set_sensitive(false);
 
     if (!m_filename.empty())
@@ -134,10 +140,10 @@ FreqRespEditor::FreqRespEditor(std::string filename)
     show_all();
 }
 
-void FreqRespEditor::on_save()
+void frequency_response_editor::on_save()
 {
 #ifndef NDEBUG
-    std::puts("FreqRespEditor::on_save");
+    std::puts("frequency_response_editor::on_save");
 #endif
     std::vector<double> const& v = get_x_vector();
 
@@ -162,26 +168,25 @@ void FreqRespEditor::on_save()
         for (int i = 0; i < 30; i++)
         {
             dbmag_entries[i]->signal_changed().connect(
-                sigc::bind<bool>(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+                sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
         }
     }
     else
     {
-        auto d = std::make_unique<Gtk::MessageDialog>(*this,
-                                                      std::string(_("Could not open file: "))
-                                                          + m_filename,
-                                                      false,
-                                                      Gtk::MESSAGE_ERROR,
-                                                      Gtk::BUTTONS_OK,
-                                                      true);
-        d->run();
+        Gtk::MessageDialog(*this,
+                           std::string(_("Could not open file: ")) + m_filename,
+                           false,
+                           Gtk::MESSAGE_ERROR,
+                           Gtk::BUTTONS_OK,
+                           true)
+            .run();
     }
     m_save_button.set_sensitive(false);
 }
 
-void FreqRespEditor::on_save_as()
+void frequency_response_editor::on_save_as()
 {
-    std::puts("FreqRespEditor::on_save_as");
+    std::puts("frequency_response_editor::on_save_as");
 
     Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
     dialog.set_transient_for(*this);
@@ -202,16 +207,16 @@ void FreqRespEditor::on_save_as()
     }
 }
 
-void FreqRespEditor::on_close()
+void frequency_response_editor::on_close()
 {
 #ifndef NDEBUG
-    std::puts("FreqRespEditor::on_close");
+    std::puts("frequency_response_editor::on_close");
 #endif
     response(0);
     hide();
 }
 
-std::vector<double> FreqRespEditor::get_x_vector()
+std::vector<double> frequency_response_editor::get_x_vector()
 {
     return {20.0, 25.2, 31.7, 39.9, 50.2, 63.2, 79.6, 100,   126,   159,
             200,  252,  317,  399,  502,  632,  796,  1000,  1260,  1590,

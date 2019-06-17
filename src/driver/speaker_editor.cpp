@@ -20,7 +20,7 @@
 #include "speaker_editor.hpp"
 
 #include "common.h"
-#include "freqrespeditor.h"
+#include "frequency_response_editor.hpp"
 #include "gspeakersfilechooser.h"
 
 #include <glibmm.h>
@@ -1082,7 +1082,7 @@ void speaker_editor::on_edit_freq_resp()
     std::cout << "SpeakerEditor::on_edit_freq_resp" << std::endl;
     std::cout << "SpeakerEditor::on_edit_freq_resp: index = " << index << std::endl;
 #endif
-    auto f = std::make_unique<FreqRespEditor>(m_FreqRespFileEntry.get_text());
+    auto f = std::make_unique<frequency_response_editor>(m_FreqRespFileEntry.get_text());
     f->run();
 
     m_FreqRespFileEntry.set_text(f->get_filename());

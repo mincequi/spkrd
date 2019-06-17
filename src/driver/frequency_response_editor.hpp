@@ -1,7 +1,7 @@
 /*
   $Id$
 
-  freqrespeditor Copyright (C) 2002 Daniel Sundberg
+  frequency_response_editor Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2
@@ -29,12 +29,12 @@
 
 #include <vector>
 
-class FreqRespEditor : public Gtk::Dialog
+class frequency_response_editor : public Gtk::Dialog
 {
 public:
-    FreqRespEditor(std::string filename = "");
+    frequency_response_editor(std::string filename = "");
 
-    ~FreqRespEditor() override = default;
+    ~frequency_response_editor() override = default;
 
     std::string const& get_filename() const { return m_filename; }
 
