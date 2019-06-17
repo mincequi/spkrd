@@ -21,7 +21,9 @@
  */
 
 #include "crossoverimageview.h"
+
 #include "common.h"
+
 #include <gdkmm/rectangle.h>
 #include <pangomm/context.h>
 

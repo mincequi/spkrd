@@ -42,9 +42,9 @@ public:
     // Print part data to stdout
     friend std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list);
 
-    std::vector<Crossover>& crossover_list() { return m_crossover_list; }
+    std::vector<Crossover>& data() { return m_crossover_list; }
 
-    std::vector<Crossover> const& crossover_list() const { return m_crossover_list; }
+    std::vector<Crossover> const& data() const { return m_crossover_list; }
 
     // Remove all items
     void clear();
