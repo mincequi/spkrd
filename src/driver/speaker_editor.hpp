@@ -34,6 +34,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/table.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/toolbar.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>

@@ -44,7 +44,6 @@ constexpr auto FILE_CHOOSER_SAVE = 10003;
 
 speaker_editor::speaker_editor()
     : m_TreeViewTable(10, 4, true),
-      m_Table(19, 2, true),
       m_EditFreqRespButton(_("Edit...")),
       m_BrowseFreqRespButton(_("...")),
       m_BassCheckButton(_("Bass")),
@@ -97,92 +96,76 @@ speaker_editor::speaker_editor()
     m_inner_treeview_vbox.set_border_width(12);
     m_inner_treeview_vbox.pack_start(m_TreeViewTable);
 
-    m_Table.set_spacings(2);
+    auto input_scrolled_window = Gtk::make_managed<Gtk::ScrolledWindow>();
+    input_scrolled_window->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    input_scrolled_window->add(m_grid);
+
+    m_grid.set_row_spacing(10);
+    // m_grid.set_column_spacing(2);
+
     m_vbox.set_border_width(10);
 
-    m_vbox.pack_start(m_Table);
+    m_vbox.pack_start(*input_scrolled_window);
 
     // Setup the table
     m_TreeViewTable.set_spacings(2);
-
     m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
     // All the entries
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 1, 0, 1);
-    m_Table.attach(m_IdStringEntry, 1, 3, 0, 1);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 0);
+    m_grid.attach(m_IdStringEntry, 1, 0);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 1);
+    m_grid.attach(m_QtsEntry, 1, 1);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_START)), 0, 2);
+    m_grid.attach(m_FsEntry, 1, 2);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_START)), 0, 3);
+    m_grid.attach(m_VasEntry, 1, 3);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_START)), 0, 4);
+    m_grid.attach(m_RdcEntry, 1, 4);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_START)), 0, 5);
+    m_grid.attach(m_LvcEntry, 1, 5);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_START)), 0, 6);
+    m_grid.attach(m_QmsEntry, 1, 6);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_START)), 0, 7);
+    m_grid.attach(m_QesEntry, 1, 7);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 8);
+    m_grid.attach(m_ImpEntry, 1, 8);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 9);
+    m_grid.attach(m_SensEntry, 1, 9);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 10);
+    m_grid.attach(m_MmdEntry, 1, 10);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)), 0, 11);
+    m_grid.attach(m_AdEntry, 1, 11);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_START)), 0, 12);
+    m_grid.attach(m_BlEntry, 1, 12);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension resistance: (Ns/m)"), Gtk::ALIGN_START)),
+                  0,
+                  13);
+    m_grid.attach(m_RmsEntry, 1, 13);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START)),
+                  0,
+                  14);
+    m_grid.attach(m_CmsEntry, 1, 14);
 
-    m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
-
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qts"), Gtk::ALIGN_START)), 0, 2, 1, 2);
-    m_Table.attach(m_QtsEntry, 2, 3, 1, 2);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Fs (Hz)"), Gtk::ALIGN_START)), 0, 2, 2, 3);
-    m_Table.attach(m_FsEntry, 2, 3, 2, 3);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Vas (l)"), Gtk::ALIGN_START)), 0, 2, 3, 4);
-    m_Table.attach(m_VasEntry, 2, 3, 3, 4);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Rdc (Ohm)"), Gtk::ALIGN_START)), 0, 2, 4, 5);
-    m_Table.attach(m_RdcEntry, 2, 3, 4, 5);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Lvc (mH)"), Gtk::ALIGN_START)), 0, 2, 5, 6);
-    m_Table.attach(m_LvcEntry, 2, 3, 5, 6);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qms"), Gtk::ALIGN_START)), 0, 2, 6, 7);
-    m_Table.attach(m_QmsEntry, 2, 3, 6, 7);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Qes"), Gtk::ALIGN_START)), 0, 2, 7, 8);
-    m_Table.attach(m_QesEntry, 2, 3, 7, 8);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Impedance (Ohm)"), Gtk::ALIGN_START)), 0, 2, 8, 9);
-    m_Table.attach(m_ImpEntry, 2, 3, 8, 9);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity (dB/W/m)"), Gtk::ALIGN_START)),
-                   0,
-                   2,
-                   9,
-                   10);
-    m_Table.attach(m_SensEntry, 2, 3, 9, 10);
-
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Cone mass (kg)"), Gtk::ALIGN_START)), 0, 2, 10, 11);
-    m_Table.attach(m_MmdEntry, 2, 3, 10, 11);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)),
-                   0,
-                   2,
-                   11,
-                   12);
-    m_Table.attach(m_AdEntry, 2, 3, 11, 12);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_START)),
-                   0,
-                   2,
-                   12,
-                   13);
-    m_Table.attach(m_BlEntry, 2, 3, 12, 13);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Suspension resistance: (Ns/m)"), Gtk::ALIGN_START)),
-                   0,
-                   2,
-                   13,
-                   14);
-    m_Table.attach(m_RmsEntry, 2, 3, 13, 14);
-    m_Table.attach(*Gtk::manage(new Gtk::Label(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START)),
-                   0,
-                   2,
-                   14,
-                   15);
-    m_Table.attach(m_CmsEntry, 2, 3, 14, 15);
-    m_Table.attach(m_BassCheckButton, 0, 3, 15, 16);
-    m_Table.attach(m_MidrangeCheckButton, 0, 3, 16, 17);
-    m_Table.attach(m_TweeterCheckButton, 0, 3, 17, 18);
+    m_grid.attach(m_BassCheckButton, 0, 15);
+    m_grid.attach(m_MidrangeCheckButton, 0, 16);
+    m_grid.attach(m_TweeterCheckButton, 0, 17);
 
     m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will work as a woofer (bass "
                                          "speaker)"));
     m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will work as a midrange "
                                              "speaker"));
     m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
+    m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-    hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Frequency response file:"), Gtk::ALIGN_START)));
-
+    hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
     hbox->pack_start(m_FreqRespFileEntry);
     m_FreqRespFileEntry.set_width_chars(15);
-
     hbox->pack_start(m_BrowseFreqRespButton);
     hbox->pack_start(m_EditFreqRespButton);
     hbox->set_spacing(12);
-
-    m_Table.attach(*hbox, 0, 3, 18, 19);
+    m_grid.attach(*hbox, 0, 18, 2, 1);
 
     m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
