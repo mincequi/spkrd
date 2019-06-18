@@ -545,6 +545,7 @@ void CrossoverImageView::draw_inductor(Cairo::RefPtr<Cairo::Context> const& cont
     // m_refLayout->set_text("L" + std::to_string(id));
     // m_refPixmap->draw_layout(m_refGC, x, y, m_refLayout);
 
+    // Vertical inductor
     if (rotate)
     {
         // Horizontal line in inductor
@@ -559,11 +560,11 @@ void CrossoverImageView::draw_inductor(Cairo::RefPtr<Cairo::Context> const& cont
         // Arcs in inductor
         for (int i = 0; i <= 12; i += 4)
         {
-            context->arc(std::round(x + half_space_x - 2 * small_space_x),
-                         y + std::round(2 * small_space_y + i * small_space_y),
-                         std::round(4 * small_space_x),
-                         0.0,
-                         M_PI);
+            context->arc(x + half_space_x,
+                         y + 4 * small_space_y + i * small_space_y,
+                         2 * small_space_y,
+                         3.0 * M_PI / 2.0,
+                         M_PI / 2.0);
             context->stroke();
         }
     }
@@ -581,9 +582,9 @@ void CrossoverImageView::draw_inductor(Cairo::RefPtr<Cairo::Context> const& cont
         // Arcs in inductor
         for (int i = 0; i <= 12; i += 4)
         {
-            context->arc(std::round(x + 2 * small_space_x + i * small_space_x),
-                         std::round(y + half_space_y - 2 * small_space_y),
-                         std::round(4 * small_space_y),
+            context->arc(x + 4 * small_space_x + i * small_space_x,
+                         y + half_space_y,
+                         2 * small_space_x,
                          M_PI,
                          2.0 * M_PI);
             context->stroke();
