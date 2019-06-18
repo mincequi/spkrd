@@ -101,10 +101,11 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     auto const& allocation = get_allocation();
 
     // Clear to white background color
+    context->save();
     context->set_source_rgb(1.0, 1.0, 1.0);
     context->rectangle(0, 0, allocation.get_width(), allocation.get_height());
-
-    context->set_source_rgb(0.0, 0.0, 0.0);
+    context->stroke();
+    context->restore();
 
     if (m_crossover == nullptr)
     {
@@ -115,15 +116,15 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
     if (m_crossover->get_type() == CROSSOVER_TYPE_LOWPASS)
     {
-        vert_space_per_net_divider++;
+        vert_space_per_net_divider += 1;
     }
     if (m_crossover->get_type() == CROSSOVER_TYPE_SUBSONIC)
     {
-        vert_space_per_net_divider++;
+        vert_space_per_net_divider += 1;
     }
     if (m_crossover->get_type() == CROSSOVER_TYPE_HIGHPASS)
     {
-        vert_space_per_net_divider++;
+        vert_space_per_net_divider += 1;
     }
     if (m_crossover->get_type() == CROSSOVER_TYPE_TWOWAY)
     {
@@ -191,7 +192,7 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         if (net_vector[i].get_has_imp_corr())
         {
-            net_horz_divider++;
+            net_horz_divider += 1;
         }
         if (net_vector[i].get_has_damp())
         {
@@ -223,9 +224,9 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         auto const lowpass_order = net_vector[i].get_lowpass_order();
         auto const highpass_order = net_vector[i].get_highpass_order();
 
-        // lowpass part
         std::vector<passive_component> const& part_vector = net_vector[i].parts();
 
+        // lowpass part
         if (lowpass_order > 0)
         {
             std::vector<passive_component> lowpass_parts(part_vector.begin(),
@@ -238,7 +239,7 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                              lowpass_parts);
         }
 
-        /* highpass part */
+        // highpass part
         if (highpass_order > 0)
         {
             std::vector<passive_component> highpass_parts(part_vector.begin() + lowpass_order,
@@ -276,13 +277,12 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                           net_vector[i].get_damp_R2());
             driver_offset += 2;
         }
-        std::string const& spk = net_vector[i].get_speaker();
 
         Speaker speaker;
 
         if (m_speaker_list != nullptr)
         {
-            speaker = m_speaker_list->get_speaker_by_id_string(spk);
+            speaker = m_speaker_list->get_speaker_by_id_string(net_vector[i].get_speaker());
         }
         draw_driver(context,
                     (1 + lowpass_order + highpass_order + driver_offset) * part_width,
@@ -357,7 +357,7 @@ void CrossoverImageView::draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const& c
         }
         else
         {
-            draw_t_cross(context, context, x + part_width * i, y, part_width, part_height);
+            draw_t_cross(context, x + part_width * i, y, part_width, part_height);
             draw_capacitor(context,
                            parts[i].get_id(),
                            x + part_width * i,
@@ -386,7 +386,7 @@ void CrossoverImageView::draw_highpass_net(Cairo::RefPtr<Cairo::Context> const& 
         }
         else
         {
-            draw_t_cross(context, context, x + part_width * i, y, part_width, part_height);
+            draw_t_cross(context, x + part_width * i, y, part_width, part_height);
             draw_inductor(context,
                           parts[i].get_id(),
                           x + part_width * i,
@@ -407,7 +407,7 @@ void CrossoverImageView::draw_imp_corr_net(Cairo::RefPtr<Cairo::Context> const& 
                                            passive_component const& capacitor,
                                            passive_component const& resistor)
 {
-    int local_part_height = std::round(part_height / 2.0);
+    auto const local_part_height = std::round(part_height / 2.0);
 
     draw_t_cross(context, x, y, part_width, part_height, true);
 
@@ -482,6 +482,7 @@ void CrossoverImageView::draw_capacitor(Cairo::RefPtr<Cairo::Context> const& con
     if (rotate)
     {
         // Horizontal line in capacitor
+
         context->move_to(std::round(x + half_space_x), y);
         context->line_to(std::round(x + half_space_x), std::round(y + half_space_y - small_space_y));
         context->stroke();
@@ -491,6 +492,7 @@ void CrossoverImageView::draw_capacitor(Cairo::RefPtr<Cairo::Context> const& con
         context->stroke();
 
         // Vertical lines in capacitor
+
         context->move_to(std::round(x + 2 * small_space_x),
                          std::round(y + half_space_y - small_space_y));
         context->line_to(std::round(x + width - 2 * small_space_x),
@@ -664,15 +666,9 @@ void CrossoverImageView::draw_connector(Cairo::RefPtr<Cairo::Context> const& con
     //                          y + std::round(half_space_y / 2.0),
     //                          m_refLayout);
 
-    // Draw a "connector" cricle
-    // m_refPixmap->draw_arc(m_refGC,
-    //                       false,
-    //                       x + half_space_x - 2 * small_space_x,
-    //                       y + half_space_y - 2 * small_space_y,
-    //                       4 * small_space_x,
-    //                       4 * small_space_y,
-    //                       0,
-    //                       23040);
+    // Draw a "connector" circle
+    context->arc(x + half_space_x, y + half_space_y, 2.0 * small_space_x, 0.0, 2.0 * M_PI);
+    context->stroke();
 
     // Draw line from connector to edge of this component
     context->move_to(x + half_space_x + 2 * small_space_x, y + half_space_y);
@@ -835,6 +831,7 @@ void CrossoverImageView::draw_midrange(Cairo::RefPtr<Cairo::Context> const& cont
                        y + half_space_y - 3 * small_space_y,
                        2 * small_space_x,
                        6 * small_space_y);
+    context->stroke();
 
     context->move_to(x + half_space_x, y + half_space_y - 2 * small_space_y);
     context->line_to(x + half_space_x + 4 * small_space_x, y + 2 * small_space_y);
