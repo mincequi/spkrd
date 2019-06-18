@@ -659,7 +659,6 @@ void CrossoverImageView::draw_connector(Cairo::RefPtr<Cairo::Context> const& con
     auto const small_space_y = std::round(height / 20.0);
 
     // m_refLayout->set_text((positive ? "+" : "-"));
-
     // m_refPixmap->draw_layout(m_refGC,
     //                          x + std::round(half_space_x / 2.0),
     //                          y + std::round(half_space_y / 2.0),
@@ -877,13 +876,15 @@ void CrossoverImageView::draw_tweeter(Cairo::RefPtr<Cairo::Context> const& conte
                        6 * small_space_y);
     context->stroke();
 
-    context->arc(x + half_space_x + small_space_x,
-                 y + half_space_y - small_space_y,
+    // Draw tweeter dome
+    context->arc(x + half_space_x + 2 * small_space_x,
+                 y + half_space_y,
                  2 * small_space_x,
-                 0.0,
-                 2.0 * M_PI);
+                 3.0 * M_PI / 2.0,
+                 M_PI / 2.0);
     context->stroke();
 
+    // Draw flat plate
     context->move_to(x + half_space_x + 2 * small_space_x, y + half_space_y - 5 * small_space_y);
     context->line_to(x + half_space_x + 2 * small_space_x, y + half_space_y + 5 * small_space_y);
     context->stroke();
