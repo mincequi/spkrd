@@ -879,7 +879,7 @@ void CrossoverImageView::draw_tweeter(Cairo::RefPtr<Cairo::Context> const& conte
     // Draw tweeter dome
     context->arc(x + half_space_x + 2 * small_space_x,
                  y + half_space_y,
-                 2 * small_space_x,
+                 small_space_y,
                  3.0 * M_PI / 2.0,
                  M_PI / 2.0);
     context->stroke();
