@@ -170,8 +170,6 @@ std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
     return output;
 }
 
-std::vector<Net>* Crossover::networks() { return &m_networks; }
-
 std::string const& Crossover::get_id_string() const { return m_id_string; }
 
 void Crossover::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }

@@ -50,7 +50,6 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speak
     set_label_widget(m_label);
 
     m_vbox.set_border_width(12);
-    // m_vbox.set_border_width(5);
 
     this->initialise_speaker_combobox();
 

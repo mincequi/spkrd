@@ -89,16 +89,16 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
         /* Index is a counter for the extra circuits (impedance correction network, damping
            network...) we have Number of extra circuits + the crossover is the total number of "base
            nodes" after filter type nodes */
-        Net* n = &(*(cover->networks()))[path[0]];
+        Net* n = &(cover->networks())[path[0]];
 
         int ndx = 0;
         bool mod = false;
         if (n->get_has_imp_corr())
         {
-            /* Check if we have edited imp corr */
+            // Check if we have edited imp corr
             if (path[1] == ndx)
             {
-                /* If we have edited imp corr, update the appropriate component */
+                // If we have edited imp corr, update the appropriate component
                 switch (path[2])
                 {
                     case 0:
@@ -172,7 +172,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
         std::cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id]
                   << std::endl;
 #endif
-        /* Tell others that we have modified a part */
+        // Tell others that we have modified a part
         signal_net_modified_by_user(n);
     }
 }
@@ -195,12 +195,11 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover)
 #endif
 
     m_refTreeStore->clear();
-    m_vecItems.erase(m_vecItems.begin(), m_vecItems.end());
+    m_vecItems.clear();
 
     cover = new_crossover;
-    std::vector<Net> networks = *(cover->networks());
 
-    for (auto n : *cover->networks())
+    for (auto n : cover->networks())
     {
         std::vector<CellItem_Crossover> crossover_elements;
         std::vector<CellItem_Crossover> filter;
@@ -213,7 +212,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover)
         {
             imp_corr.emplace_back(CellItem_Crossover(n.get_imp_corr_C()));
             imp_corr.emplace_back(CellItem_Crossover(n.get_imp_corr_R()));
-            crossover_elements.emplace_back(CellItem_Crossover(_("Impedace correction"), imp_corr));
+            crossover_elements.emplace_back(CellItem_Crossover(_("Impedance correction"), imp_corr));
         }
         if (n.get_has_damp())
         {
@@ -223,7 +222,7 @@ void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover)
         }
 
         // The rest of the parts
-        int type = n.get_type();
+        auto const type = n.get_type();
 
         std::vector<passive_component> const& parts = n.parts();
         int counter = 0;

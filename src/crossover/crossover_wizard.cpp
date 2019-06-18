@@ -47,11 +47,11 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
     }
 
     int index = 0;
-    int type = crossover->get_type();
 
-    for (auto iter = crossover->networks()->begin(); iter != crossover->networks()->end();
-         ++iter, index++)
+    for (auto& network : crossover->networks())
     {
+        auto const type = crossover->get_type();
+
         // The following code is here because we want pretty labels for what
         // was each subfilter is there for
         if (type == CROSSOVER_TYPE_TWOWAY)
@@ -59,12 +59,12 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
             if (index == 0)
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Woofer/midrange filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Woofer/midrange filter"), m_speaker_list)));
             }
             else
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else if (type == CROSSOVER_TYPE_THREEWAY)
@@ -72,17 +72,17 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
             if (index == 0)
             {
                 m_vbox.pack_start(
-                    *Gtk::manage(new FilterLinkFrame(&(*iter), _("Woofer filter"), m_speaker_list)));
+                    *Gtk::manage(new FilterLinkFrame(&network, _("Woofer filter"), m_speaker_list)));
             }
             else if (index == 1)
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Midrange filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Midrange filter"), m_speaker_list)));
             }
             else
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else if (type == (CROSSOVER_TYPE_TWOWAY | CROSSOVER_TYPE_LOWPASS))
@@ -90,24 +90,25 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
             if (index == 0)
             {
                 m_vbox.pack_start(
-                    *Gtk::manage(new FilterLinkFrame(&(*iter), _("Woofer filter"), m_speaker_list)));
+                    *Gtk::manage(new FilterLinkFrame(&network, _("Woofer filter"), m_speaker_list)));
             }
             else if (index == 1)
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Woofer/midrange filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Woofer/midrange filter"), m_speaker_list)));
             }
             else
             {
                 m_vbox.pack_start(*Gtk::manage(
-                    new FilterLinkFrame(&(*iter), _("Tweeter filter"), m_speaker_list)));
+                    new FilterLinkFrame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else
         {
             m_vbox.pack_start(
-                *Gtk::manage(new FilterLinkFrame(&(*iter), _("filter"), m_speaker_list)));
+                *Gtk::manage(new FilterLinkFrame(&network, _("filter"), m_speaker_list)));
         }
+        ++index;
     }
 }
 

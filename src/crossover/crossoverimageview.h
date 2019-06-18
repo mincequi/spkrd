@@ -52,7 +52,7 @@ private:
     void on_net_modified();
     void on_settings_changed(const std::string& s);
 
-    void redraw();
+    void redraw(Cairo::RefPtr<Cairo::Context> const& context);
 
     /*
      * Draw capacitor to refPixmap
@@ -64,43 +64,115 @@ private:
      * height = height
      * rotate = rotate this component 90 degrees
      */
-    void draw_capacitor(int id, int x, int y, int width, int height, bool rotate = false);
-    void draw_inductor(int id, int x, int y, int width, int height, bool rotate = false);
-    void draw_resistor(int id, int x, int y, int width, int height, bool rotate = false);
-    void draw_connector(int x, int y, int width, int height, bool positive = true);
+    void draw_capacitor(Cairo::RefPtr<Cairo::Context> const& context,
+                        int id,
+                        int x,
+                        int y,
+                        int width,
+                        int height,
+                        bool rotate = false);
 
-    void draw_t_cross(int x, int y, int width, int height, bool upper = true);
-    void draw_corner(int x, int y, int width, int height, bool upper = true);
-    void draw_line(int x, int y, int width, int height, bool rotate = false);
+    void draw_inductor(Cairo::RefPtr<Cairo::Context> const& context,
+                       int id,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool rotate = false);
 
-    void draw_woofer(int x, int y, int width, int height, bool positive_up = true);
-    void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
-    void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
+    void draw_resistor(Cairo::RefPtr<Cairo::Context> const& context,
+                       int id,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool rotate = false);
 
-    void draw_lowpass_net(int x,
+    void draw_connector(Cairo::RefPtr<Cairo::Context> const& context,
+                        int x,
+                        int y,
+                        int width,
+                        int height,
+                        bool positive = true);
+
+    void draw_t_cross(Cairo::RefPtr<Cairo::Context> const& context,
+                      int x,
+                      int y,
+                      int width,
+                      int height,
+                      bool upper = true);
+
+    void draw_corner(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int width,
+                     int height,
+                     bool upper = true);
+
+    void draw_line(Cairo::RefPtr<Cairo::Context> const& context,
+                   int x,
+                   int y,
+                   int width,
+                   int height,
+                   bool rotate = false);
+
+    void draw_woofer(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int width,
+                     int height,
+                     bool positive_up = true);
+
+    void draw_midrange(Cairo::RefPtr<Cairo::Context> const& context,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool positive_up = true);
+
+    void draw_tweeter(Cairo::RefPtr<Cairo::Context> const& context,
+                      int x,
+                      int y,
+                      int width,
+                      int height,
+                      bool positive_up = true);
+
+    void draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const& context,
+                          int x,
                           int y,
                           int part_width,
                           int part_height,
                           std::vector<passive_component> const& parts);
-    void draw_highpass_net(int x,
+
+    void draw_highpass_net(Cairo::RefPtr<Cairo::Context> const& context,
+                           int x,
                            int y,
                            int part_width,
                            int part_height,
                            std::vector<passive_component> const& parts);
 
-    void draw_imp_corr_net(int x,
+    void draw_imp_corr_net(Cairo::RefPtr<Cairo::Context> const& context,
+                           int x,
                            int y,
                            int part_width,
                            int part_height,
                            passive_component const& capacitor,
                            passive_component const& resistor);
-    void draw_damp_net(int x,
+
+    void draw_damp_net(Cairo::RefPtr<Cairo::Context> const& context,
+                       int x,
                        int y,
                        int part_width,
                        int part_height,
                        passive_component const& r1,
                        passive_component const& r2);
-    void draw_driver(int x, int y, int part_width, int part_height, Speaker const& speaker);
+
+    void draw_driver(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int part_width,
+                     int part_height,
+                     Speaker const& speaker);
 
 private:
     bool m_visible{false};
