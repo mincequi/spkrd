@@ -74,10 +74,6 @@ bool plot::on_configure_event(GdkEventConfigure* event)
     // m_refColormap->alloc_color(white);
     // m_refColormap->alloc_color(black);
 
-    Glib::RefPtr<Pango::Context> refPangoContext = get_pango_context();
-
-    m_refLayout = Pango::Layout::create(refPangoContext);
-
     // redraw();
 
     // We've handled the configure event, no need for further processing.

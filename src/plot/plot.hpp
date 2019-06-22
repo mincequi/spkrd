@@ -166,8 +166,6 @@ private:
 
     std::string m_y_label1, m_y_label2;
 
-    Glib::RefPtr<Pango::Layout> m_refLayout;
-
     Gdk::Color black, white;
 };
 
