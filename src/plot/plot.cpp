@@ -165,8 +165,8 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
 
         // Calculate y-coordinate
         y = std::round(box_height + BOX_FRAME_SIZE
-                       - (-m_lower_y + point.get_y()) * box_height
-                             / static_cast<double>(-m_lower_y + m_upper_y));
+                       - (point.get_y() - m_lower_y) * box_height
+                             / static_cast<double>(m_upper_y - m_lower_y));
 
         // Don't draw anything if we got zeros
         if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
@@ -257,7 +257,6 @@ void plot::remove_all_plots()
 
     if (visible)
     {
-        // redraw();
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
@@ -268,7 +267,6 @@ void plot::hide_plot(int n)
     m_visible_plots[n] = !m_visible_plots[n];
     if (visible)
     {
-        // redraw();
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
@@ -279,7 +277,6 @@ void plot::select_plot(int index)
     m_selected_plot = index;
     if (visible)
     {
-        // redraw();
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
@@ -290,8 +287,10 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     auto const& allocation = get_allocation();
 
     // Clear to white background color
+    context->save();
     context->set_source_rgb(1.0, 1.0, 1.0);
     context->rectangle(0, 0, allocation.get_width(), allocation.get_height());
+    context->restore();
 
     // Calc coordinates for a rectangular box
     auto const box_x = BOX_FRAME_SIZE;
@@ -300,8 +299,10 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     auto const box_height = allocation.get_height() - 2 * BOX_FRAME_SIZE;
 
     // Draw black rectangle
+    context->save();
     context->set_source_rgb(0.0, 0.0, 0.0);
     context->rectangle(box_x, box_y, box_width, box_height);
+    context->restore();
 
     if (m_logx)
     {
@@ -313,7 +314,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     }
 
     // Draw horizontal lines
-    for (int i = m_lower_y; i < m_upper_y; i = i + 5)
+    for (int i = m_lower_y; i < m_upper_y; i += 5)
     {
         int y = std::round(box_height + BOX_FRAME_SIZE
                            - (-m_lower_y + i) * box_height
@@ -434,8 +435,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
                 // Calculate y-coordinate
                 y = std::round(box_height + BOX_FRAME_SIZE
-                               - (-m_lower_y + point.get_y()) * box_height
-                                     / static_cast<double>(-m_lower_y + m_upper_y));
+                               - (point.get_y() - m_lower_y) * box_height
+                                     / static_cast<double>(m_upper_y - m_lower_y));
 
                 // Don't draw anything if we got zeros
                 if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
@@ -445,21 +446,25 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
             }
 
             // Don't draw the line until we have it all done
-            if (i == m_selected_plot)
+            if (static_cast<int>(i) == m_selected_plot)
             {
                 context->set_line_width(m_linesize + 1);
             }
 
-            context->move_to(points.front().get_x(), points.front().get_y());
+            // Draw only if the vector is not empty
+            if (!points.empty())
+            {
+                context->move_to(points.front().get_x(), points.front().get_y());
 
-            std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
-                context->line_to(point.get_x(), point.get_y());
-                context->stroke();
-                context->move_to(point.get_x(), point.get_y());
-            });
+                std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
+                    context->line_to(point.get_x(), point.get_y());
+                    context->stroke();
+                    context->move_to(point.get_x(), point.get_y());
+                });
+            }
 
             // Reset
-            if (i == m_selected_plot)
+            if (static_cast<int>(i) == m_selected_plot)
             {
                 context->set_line_width(m_linesize);
             }
@@ -628,8 +633,8 @@ void plot::set_y_label(const std::string& text)
 
     if (visible)
     {
-        // redraw();
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        auto const& allocation = get_allocation();
+        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
 }
@@ -640,8 +645,8 @@ void plot::set_y_label2(const std::string& text)
 
     if (visible)
     {
-        // redraw();
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        auto const& allocation = get_allocation();
+        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
 }
