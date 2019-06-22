@@ -171,7 +171,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
         Gdk::Color c2("red");
 
-        // m_plot.add_plot(m_points[0], c2);
+        m_plot.add_plot(m_points[0], c2);
 
         for (std::size_t j = 1; j < m_points.size(); j++)
         {
@@ -181,11 +181,11 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                               * std::log10(std::pow(10, pnts[k].get_y() / 10)
                                            + std::pow(10, (m_points[j])[k].get_y() / 10)));
             }
-            // m_plot.add_plot(m_points[j], c2);
+            m_plot.add_plot(m_points[j], c2);
         }
     }
     // Add summed freq resp plot to the plot and select this plot since
-    //  it's the most important plot in this graph
+    // it's the most important plot in this graph
     m_plot.select_plot(m_plot.add_plot(pnts, m_color));
 
     return 0;
