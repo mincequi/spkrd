@@ -43,9 +43,6 @@ PopupEntry::PopupEntry(Glib::ustring path)
     m_entry = m_spin_button = Gtk::manage(new Gtk::SpinButton(m_spin_digits, 0.0, 4));
     m_entry->set_has_frame(false);
 
-    // FIXME gtk3 port
-    // m_entry->gobj()->is_cell_renderer = true;
-
     add(*m_spin_button);
     add_events(Gdk::KEY_PRESS_MASK | Gdk::KEY_RELEASE_MASK);
 

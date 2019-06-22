@@ -29,13 +29,10 @@
 
 #include <vector>
 
-/*
- * This is a wrapper class for GSpeakersPlot
- *
- * The reason why we have this class is that we want
- * an extra layer (where we can connect signals and so on)
- * between the program and the plot widget.
- */
+/// This is a wrapper class for GSpeakersPlot
+/// The reason why we have this class is that we want
+/// an extra layer (where we can connect signals and so on)
+/// between the program and the plot widget.
 class TotalFilterPlot : public Gtk::Frame
 {
 public:
@@ -49,7 +46,9 @@ public:
 
 private:
     bool on_delete_event(GdkEventAny* event) override;
+
     void on_crossover_selected(Crossover*);
+
     void on_plot_crossover();
 
 private:

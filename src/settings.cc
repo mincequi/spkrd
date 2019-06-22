@@ -26,7 +26,6 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
-#include <unistd.h>
 
 Settings::Settings() { defaultSettings(); }
 
