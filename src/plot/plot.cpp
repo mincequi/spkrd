@@ -33,7 +33,7 @@ plot::plot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_
       m_y_zero_freq{y_zero_freq},
       m_enable_sec_scale{enable_sec_scale},
       m_logx{logx},
-      visible{false},
+      m_visible{false},
       black("black"),
       white("white")
 {
@@ -62,7 +62,7 @@ bool plot::on_configure_event(GdkEventConfigure* event)
     // Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap
     // as this will probably be faster than redrawing every time
 
-    visible = true;
+    m_visible = true;
 
     // FIXME gtk3 port use cairo surfaces
     // m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(),
@@ -83,7 +83,7 @@ bool plot::on_configure_event(GdkEventConfigure* event)
 int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color)
 {
     // FIXME gtk3 port
-    if (visible)
+    if (m_visible)
     {
         //   m_refGC->set_rgb_fg_color(ref_color);
     }
@@ -176,7 +176,7 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
     }
 
     // Don't draw the line until we have it all done
-    if (visible)
+    if (m_visible)
     {
         // FIXME gtk3 port
         // m_refPixmap->draw_lines(m_refGC, points);
@@ -241,7 +241,7 @@ void plot::remove_plot(int n)
     }
     m_selected_plot = -1;
 
-    if (visible)
+    if (m_visible)
     {
         // redraw();
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
@@ -255,7 +255,7 @@ void plot::remove_all_plots()
     m_colors.clear();
     m_visible_plots.clear();
 
-    if (visible)
+    if (m_visible)
     {
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
@@ -265,7 +265,7 @@ void plot::remove_all_plots()
 void plot::hide_plot(int n)
 {
     m_visible_plots[n] = !m_visible_plots[n];
-    if (visible)
+    if (m_visible)
     {
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
@@ -275,7 +275,7 @@ void plot::hide_plot(int n)
 void plot::select_plot(int index)
 {
     m_selected_plot = index;
-    if (visible)
+    if (m_visible)
     {
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
@@ -631,7 +631,7 @@ void plot::set_y_label(const std::string& text)
 {
     m_y_label1 = text;
 
-    if (visible)
+    if (m_visible)
     {
         auto const& allocation = get_allocation();
         Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
@@ -643,7 +643,7 @@ void plot::set_y_label2(const std::string& text)
 {
     m_y_label2 = text;
 
-    if (visible)
+    if (m_visible)
     {
         auto const& allocation = get_allocation();
         Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());

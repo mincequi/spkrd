@@ -161,7 +161,7 @@ private:
     int m_enable_sec_scale;
 
     bool m_logx;
-    bool visible;
+    bool m_visible;
     int m_selected_plot;
 
     std::string m_y_label1, m_y_label2;
