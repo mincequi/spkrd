@@ -55,7 +55,7 @@ private:
 private:
     plot m_plot;
     std::vector<int> m_nets;
-    std::unique_ptr<Gdk::Color> m_color;
+    Gdk::Color m_color;
     std::vector<std::vector<GSpeakers::Point>> m_points;
 };
 

@@ -27,7 +27,7 @@
 #include <fstream>
 #include <iostream>
 
-SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0)
+SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
     m_speakerlist = nullptr;
 
@@ -36,8 +36,6 @@ SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0)
     m_plot.set_y_label(_("Magnitude / dB"));
 
     show_all();
-
-    m_color = new Gdk::Color("blue");
 
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
@@ -48,14 +46,7 @@ SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0)
         sigc::mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
 }
 
-SummedFreqRespPlot::~SummedFreqRespPlot()
-{
-    if (m_color)
-    {
-        delete m_color;
-        m_color = nullptr;
-    }
-}
+SummedFreqRespPlot::~SummedFreqRespPlot() = default;
 
 double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
 {
@@ -90,12 +81,14 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
 
 int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
                                     Gdk::Color& color,
-                                    int* i,
+                                    int* output_plot_index,
                                     Net* n)
 {
 #ifndef NDEBUG
-    std::cout << "SummedFreqRespPlot::on_add_plot" << std::endl;
+    std::puts("SummedFreqRespPlot::on_add_plot");
 #endif
+
+    auto const& plot_index = *output_plot_index;
 
     Speaker s;
     if (m_speakerlist != nullptr)
@@ -138,6 +131,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
         freq_resp_points.emplace_back(0, 0);
         freq_resp_points.emplace_back(20000, 0);
     }
+
     std::vector<GSpeakers::Point> points;
 
     for (auto const& filter_point : filter_points)
@@ -152,10 +146,10 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                             lerp(freq_resp_points, filter_point.get_x()) + filter_y);
     }
 
-    // Search for *i in the graph
-    auto const location = std::find(begin(m_nets), end(m_nets), *i);
+    // Search for plot_index in the graph
+    auto const location = std::find(begin(m_nets), end(m_nets), plot_index);
 
-    // If *i is in the graph, replace the old point-vector, if *i not in graph
+    // If plot_index is in the graph, replace the old point-vector, if plot_index not in graph
     // insert it at the end of the vector
     if (location != end(m_nets) && !m_points.empty())
     {
@@ -164,7 +158,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     else
     {
         m_points.push_back(points);
-        m_nets.push_back(*i);
+        m_nets.push_back(plot_index);
     }
 
     m_plot.remove_all_plots();
@@ -177,7 +171,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
         Gdk::Color c2("red");
 
-        m_plot.add_plot(m_points[0], c2);
+        // m_plot.add_plot(m_points[0], c2);
 
         for (std::size_t j = 1; j < m_points.size(); j++)
         {
@@ -187,12 +181,12 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
                               * std::log10(std::pow(10, pnts[k].get_y() / 10)
                                            + std::pow(10, (m_points[j])[k].get_y() / 10)));
             }
-            m_plot.add_plot(m_points[j], c2);
+            // m_plot.add_plot(m_points[j], c2);
         }
     }
     // Add summed freq resp plot to the plot and select this plot since
     //  it's the most important plot in this graph
-    m_plot.select_plot(m_plot.add_plot(pnts, *m_color));
+    m_plot.select_plot(m_plot.add_plot(pnts, m_color));
 
     return 0;
 }

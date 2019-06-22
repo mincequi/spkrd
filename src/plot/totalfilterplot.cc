@@ -23,7 +23,7 @@
 #include <cmath>
 #include <iostream>
 
-TotalFilterPlot::TotalFilterPlot() : m_plot(1, 20000), m_color(std::make_unique<Gdk::Color>("blue"))
+TotalFilterPlot::TotalFilterPlot() : m_plot(1, 20000), m_color("blue")
 {
     add(m_plot);
 
@@ -39,17 +39,20 @@ TotalFilterPlot::~TotalFilterPlot() = default;
 
 int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
                                  Gdk::Color& color,
-                                 int* i,
+                                 int* output_plot_index,
                                  Net* n)
 {
 #ifndef NDEBUG
-    std::cout << "TotalFilterPlot::on_add_plot" << std::endl;
+    std::puts("TotalFilterPlot::on_add_plot");
 #endif
-    /* Search for *i in the graph */
-    auto const position = std::find(begin(m_nets), end(m_nets), *i);
 
-    /* If *i is in the graph, replace the old point-vector, if *i not in graph, insert it at the end
-     * of the vector */
+    auto const& plot_index = *output_plot_index;
+
+    /* Search for plot_index in the graph */
+    auto const position = std::find(begin(m_nets), end(m_nets), plot_index);
+
+    /* If plot_index is in the graph, replace the old point-vector, if plot_index not in graph,
+     * insert it at the end of the vector */
     if (position != end(m_nets) && !m_points.empty())
     {
         m_points[std::distance(begin(m_nets), position)] = points;
@@ -57,7 +60,7 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
     else
     {
         m_points.push_back(points);
-        m_nets.push_back(*i);
+        m_nets.push_back(plot_index);
     }
 
     // sum the plots into one great plot
@@ -81,7 +84,7 @@ int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
             m_plot.add_plot(m_points[j], c);
         }
     }
-    m_plot.select_plot(m_plot.add_plot(pnts, *m_color));
+    m_plot.select_plot(m_plot.add_plot(pnts, m_color));
 
     return 0;
 }
@@ -100,8 +103,6 @@ void TotalFilterPlot::on_plot_crossover() {}
 
 bool TotalFilterPlot::on_delete_event(GdkEventAny* event)
 {
-    m_color.reset();
-
     // Don't delete this window
     return true;
 }
