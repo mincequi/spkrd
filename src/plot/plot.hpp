@@ -124,11 +124,11 @@ protected:
 
     /// Copy the area that needs to be updated from the pixmap
     /// to the window
-    bool on_expose_event(GdkEventExpose* event);
+    [[deprecated]] bool on_expose_event(GdkEventExpose* event);
 
     // void on_show();
 
-    bool on_configure_event(GdkEventConfigure* event) override;
+    [[deprecated]] bool on_configure_event(GdkEventConfigure* event) override;
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)
