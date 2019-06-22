@@ -42,11 +42,12 @@ public:
     int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
 
 private:
-    plot m_plot;
-
     [[deprecated]] bool on_delete_event(GdkEventAny* event) override;
 
     void on_crossover_selected(Crossover*);
+
+private:
+    plot m_plot;
 };
 
 #endif
