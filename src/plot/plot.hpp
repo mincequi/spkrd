@@ -122,6 +122,10 @@ public:
 protected:
     bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
 
+    void draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
+                    std::vector<Gdk::Point> const& points,
+                    Gdk::Color const& colour);
+
     /// Copy the area that needs to be updated from the pixmap
     /// to the window
     [[deprecated]] bool on_expose_event(GdkEventExpose* event);
@@ -166,7 +170,7 @@ private:
 
     std::string m_y_label1, m_y_label2;
 
-    Gdk::Color black, white;
+    Cairo::RefPtr<Cairo::Context> m_context;
 };
 
 #endif

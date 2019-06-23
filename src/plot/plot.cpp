@@ -33,14 +33,14 @@ plot::plot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_
       m_y_zero_freq{y_zero_freq},
       m_enable_sec_scale{enable_sec_scale},
       m_logx{logx},
-      m_visible{false},
-      black("black"),
-      white("white")
+      m_visible{false}
 {
 }
 
 bool plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
 {
+    m_context = context;
+
     this->redraw(context);
 
     return true;
@@ -48,10 +48,6 @@ bool plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
 
 bool plot::on_expose_event(GdkEventExpose* event)
 {
-    // get_window()->draw_drawable(get_style()->get_fg_gc(get_state()), m_refPixmap,
-    //                             // Only copy the area that was exposed
-    //                             event->area.x, event->area.y, event->area.x, event->area.y,
-    //                             event->area.width, event->area.height);
     m_selected_plot = -1;
 
     return false;
@@ -59,22 +55,7 @@ bool plot::on_expose_event(GdkEventExpose* event)
 
 bool plot::on_configure_event(GdkEventConfigure* event)
 {
-    // Init the pixmap, here we use a pixmap, then we do all drawing to the pixmap
-    // as this will probably be faster than redrawing every time
-
     m_visible = true;
-
-    // FIXME gtk3 port use cairo surfaces
-    // m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(),
-    //                                   get_allocation().get_height(), -1);
-    //
-    // m_refGC = get_style()->get_fg_gc(get_state());
-    // m_refColormap = m_refGC->get_colormap();
-    //
-    // m_refColormap->alloc_color(white);
-    // m_refColormap->alloc_color(black);
-
-    // redraw();
 
     // We've handled the configure event, no need for further processing.
     return true;
@@ -82,20 +63,16 @@ bool plot::on_configure_event(GdkEventConfigure* event)
 
 int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& ref_color)
 {
-    // FIXME gtk3 port
-    if (m_visible)
-    {
-        //   m_refGC->set_rgb_fg_color(ref_color);
-    }
+    auto const& allocation = get_allocation();
 
     m_visible_plots.push_back(true);
     m_colors.push_back(ref_color);
     m_points.push_back(ref_point_vector);
 
-    int total_space_x = get_allocation().get_width() - 2 * BOX_FRAME_SIZE;
+    int total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
     int half_space_x = std::round(total_space_x / 2);
 
-    auto const box_height = get_allocation().get_height() - 2 * BOX_FRAME_SIZE;
+    auto const box_height = allocation.get_height() - 2 * BOX_FRAME_SIZE;
 
     std::vector<Gdk::Point> points;
 
@@ -108,35 +85,16 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
             if (point.get_x() < 100)
             {
                 // Divide by 10 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 10.0;
-                auto const f_mapped = std::log10(f_div);
+                auto const f_mapped = std::log10(point.get_x() / 10.0);
                 // This is the x coordinate
                 x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
             }
             else if (point.get_x() >= 100)
             {
                 // Divide by 100 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 100.0;
-                auto const f_mapped = std::log10(f_div);
+                auto const f_mapped = std::log10(point.get_x() / 100.0);
                 // This is the x coordinate
                 x = std::round(BOX_FRAME_SIZE + half_space_x / 2
-                               + std::round(half_space_x / 2 * f_mapped));
-            }
-            else if (point.get_x() >= 1000)
-            {
-                // Divide by 1000 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 1000.0;
-                auto const f_mapped = std::log10(f_div);
-                // This is the x coordinate
-                x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
-            }
-            else if (point.get_x() >= 10000)
-            {
-                // Divide by 1000 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 10000.0;
-                auto const f_mapped = std::log10(f_div);
-                // This is the x coordinate
-                x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x
                                + std::round(half_space_x / 2 * f_mapped));
             }
         }
@@ -145,16 +103,14 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
             if (point.get_x() < 100)
             {
                 // Divide by 10 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 10.0;
-                auto const f_mapped = std::log10(f_div);
+                auto const f_mapped = std::log10(point.get_x() / 10.0);
                 // This is the x coordinate
                 x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
             }
             else if (point.get_x() >= 100)
             {
                 // Divide by 100 to only log numbers 0 < number < 10
-                auto const f_div = point.get_x() / 100.0;
-                auto const f_mapped = std::log10(f_div);
+                auto const f_mapped = std::log10(point.get_x() / 100.0);
                 // This is the x coordinate
                 x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
             }
@@ -178,21 +134,39 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
     // Don't draw the line until we have it all done
     if (m_visible)
     {
-        // FIXME gtk3 port
-        // m_refPixmap->draw_lines(m_refGC, points);
-        // // Reset rgb fg color
-        // m_refGC->set_rgb_fg_color(black);
-
-        // context->draw_lines(points);
+        this->draw_lines(m_context, points, ref_color);
 
         select_plot(m_colors.size() - 1);
 
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
         get_window()->invalidate_rect(update_rect, false);
     }
     // Return index of the new plot so that the owner of
     // this plot can keep track of plots
     return m_colors.size() - 1;
+}
+
+void plot::draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
+                      std::vector<Gdk::Point> const& points,
+                      Gdk::Color const& colour)
+{
+    if (points.empty())
+    {
+        return;
+    }
+
+    context->save();
+
+    context->set_source_rgb(colour.get_red_p(), colour.get_green_p(), colour.get_blue_p());
+
+    context->move_to(points.front().get_x(), points.front().get_y());
+
+    std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
+        context->line_to(point.get_x(), point.get_y());
+        context->stroke();
+        context->move_to(point.get_x(), point.get_y());
+    });
+    context->restore();
 }
 
 void plot::replace_plot(int index, std::vector<GSpeakers::Point>& points, Gdk::Color& ref_color)
@@ -247,6 +221,7 @@ void plot::hide_plot(int n)
 void plot::select_plot(int index)
 {
     m_selected_plot = index;
+
     if (m_visible)
     {
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
