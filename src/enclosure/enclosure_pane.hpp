@@ -21,6 +21,7 @@
 #define __ENCLOSURE_PANED_H
 
 #include "enclosure_editor.hpp"
+
 #include "enclosure_history.hpp"
 #include "common.h"
 #include "gspeakersboxplot.h"
@@ -54,8 +55,8 @@ protected:
     void on_add_plot(Box*, Speaker*, Gdk::Color&);
 
 private:
-    BoxEditor box_editor;
-    BoxHistory box_history;
+    enclosure_editor box_editor;
+    enclosure_history box_history;
     PlotHistory plot_history;
     GSpeakersBoxPlot box_plot;
 

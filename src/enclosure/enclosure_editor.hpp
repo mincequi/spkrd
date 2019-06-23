@@ -33,12 +33,12 @@
 
 /// This class will contain the control panel where you can adjust
 /// settings for the enclosure you're working with.
-class BoxEditor : public Gtk::Frame
+class enclosure_editor : public Gtk::Frame
 {
 public:
-    BoxEditor();
+    enclosure_editor();
 
-    ~BoxEditor() override = default;
+    ~enclosure_editor() override = default;
 
     /// This function executes when you have clicked the optimize button.
     void on_optimize_button_clicked();

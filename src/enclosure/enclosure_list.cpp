@@ -22,7 +22,7 @@
 
 #include <libxml/parser.h>
 
-BoxList::BoxList(const std::string& filename)
+enclosure_list::enclosure_list(const std::string& filename)
 {
     xmlKeepBlanksDefault(0);
 
@@ -52,16 +52,16 @@ BoxList::BoxList(const std::string& filename)
         }
         else
         {
-            throw std::runtime_error(_("BoxList: boxlist node not found"));
+            throw std::runtime_error(_("enclosure_list: boxlist node not found"));
         }
     }
     else
     {
-        throw std::runtime_error(_("BoxList: Xml file not found"));
+        throw std::runtime_error(_("enclosure_list: Xml file not found"));
     }
 }
 
-void BoxList::to_xml(std::string const& filename)
+void enclosure_list::to_xml(std::string const& filename)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
@@ -77,11 +77,11 @@ void BoxList::to_xml(std::string const& filename)
     // Save xml file
     if (xmlSaveFile(filename.c_str(), doc) == -1)
     {
-        throw std::runtime_error(_("BoxList: Could not save to ") + filename);
+        throw std::runtime_error(_("enclosure_list: Could not save to ") + filename);
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const BoxList& box_list)
+std::ostream& operator<<(std::ostream& output, const enclosure_list& box_list)
 {
     output << "Box List\n";
 

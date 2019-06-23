@@ -47,12 +47,12 @@ extern sigc::signal1<void, bool> signal_enclosure_set_save_state;
  * The list contains a list of all enclosures...you can select
  * to plot, not plot or whatever for each enclosure.
  */
-class BoxHistory : public Gtk::Frame
+class enclosure_history : public Gtk::Frame
 {
 public:
-    BoxHistory();
+    enclosure_history();
 
-    ~BoxHistory() override;
+    ~enclosure_history() override;
 
     /* public callbacks, used in container classes from toolbar/menu events */
     void on_new();
@@ -94,7 +94,7 @@ protected:
     Gtk::VBox m_vbox;
     Gtk::Label m_label;
 
-    BoxList m_box_list;
+    enclosure_list m_box_list;
 
     // This is used in the treemodel
     struct ModelColumns : public Gtk::TreeModelColumnRecord

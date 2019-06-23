@@ -29,19 +29,19 @@
 #include <vector>
 
 /// This is a class that handles a list of boxes
-class BoxList
+class enclosure_list
 {
 public:
-    BoxList() = default;
+    enclosure_list() = default;
 
     /// Construct a part from an xml file
-    BoxList(const std::string& filename);
+    enclosure_list(const std::string& filename);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     void to_xml(const std::string& filename);
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const BoxList& box_list);
+    friend std::ostream& operator<<(std::ostream& o, const enclosure_list& box_list);
 
     /// \return box_list vector
     std::vector<Box>& box_list() { return m_box_list; }

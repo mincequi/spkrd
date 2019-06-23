@@ -35,7 +35,7 @@ constexpr auto FB1_ENTRY_CHANGED = 4;
 constexpr auto VB2_ENTRY_CHANGED = 5;
 constexpr auto FB2_ENTRY_CHANGED = 6;
 
-BoxEditor::BoxEditor()
+enclosure_editor::enclosure_editor()
     : Gtk::Frame(_("Enclosure editor")),
       m_table(5, 5, true),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
@@ -81,33 +81,33 @@ BoxEditor::BoxEditor()
     m_table.attach(m_fb1_entry, 4, 5, 4, 5);
 
     m_bass_speaker_combo.signal_changed().connect(
-        sigc::mem_fun(*this, &BoxEditor::on_combo_entry_changed));
+        sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
 
     m_id_string_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
     m_vb1_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), VB1_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), VB1_ENTRY_CHANGED));
     m_fb1_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &BoxEditor::on_box_data_changed), FB1_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
-    signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &BoxEditor::on_speaker_list_loaded));
+    signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
 
     // Setup option menu
     m_box_type_combo.append("Sealed");
     m_box_type_combo.append("Ported");
-    m_box_type_combo.signal_changed().connect(sigc::mem_fun(*this, &BoxEditor::on_enclosure_changed));
+    m_box_type_combo.signal_changed().connect(sigc::mem_fun(*this, &enclosure_editor::on_enclosure_changed));
 
-    signal_box_selected.connect(sigc::mem_fun(*this, &BoxEditor::on_box_selected));
+    signal_box_selected.connect(sigc::mem_fun(*this, &enclosure_editor::on_box_selected));
 
     // On enter presses in vb entry we should move focus to fb entry
-    m_vb1_entry.signal_activate().connect(sigc::mem_fun(*this, &BoxEditor::on_vb1_entry_activated));
+    m_vb1_entry.signal_activate().connect(sigc::mem_fun(*this, &enclosure_editor::on_vb1_entry_activated));
     m_fb1_entry.signal_activate().connect(
-        sigc::mem_fun(*this, &BoxEditor::on_append_to_boxlist_clicked));
+        sigc::mem_fun(*this, &enclosure_editor::on_append_to_boxlist_clicked));
 
     show_all();
 }
 
-void BoxEditor::on_vb1_entry_activated()
+void enclosure_editor::on_vb1_entry_activated()
 {
     switch (m_box->get_type())
     {
@@ -120,14 +120,14 @@ void BoxEditor::on_vb1_entry_activated()
     }
 }
 
-void BoxEditor::append_and_plot()
+void enclosure_editor::append_and_plot()
 {
     on_append_to_boxlist_clicked();
     on_append_to_plot_clicked();
     m_vb1_entry.grab_focus();
 }
 
-void BoxEditor::on_optimize_button_clicked()
+void enclosure_editor::on_optimize_button_clicked()
 {
     if (!disable_signals)
     {
@@ -165,7 +165,7 @@ void BoxEditor::on_optimize_button_clicked()
     disable_signals = false;
 }
 
-void BoxEditor::on_append_to_plot_clicked()
+void enclosure_editor::on_append_to_plot_clicked()
 {
     m_box = new Box();
 
@@ -224,11 +224,11 @@ void BoxEditor::on_append_to_plot_clicked()
     signal_add_plot(m_box, &m_current_speaker, color);
 }
 
-void BoxEditor::on_calc_port_clicked() {}
+void enclosure_editor::on_calc_port_clicked() {}
 
-void BoxEditor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_box); }
+void enclosure_editor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_box); }
 
-void BoxEditor::on_box_selected(Box* b)
+void enclosure_editor::on_box_selected(Box* b)
 {
     if (!disable_signals)
     {
@@ -286,7 +286,7 @@ void BoxEditor::on_box_selected(Box* b)
     }
 }
 
-void BoxEditor::on_speaker_list_loaded(speaker_list* speaker_list)
+void enclosure_editor::on_speaker_list_loaded(speaker_list* speaker_list)
 {
     if (!disable_signals)
     {
@@ -323,9 +323,9 @@ void BoxEditor::on_speaker_list_loaded(speaker_list* speaker_list)
     }
 }
 
-void BoxEditor::on_combo_entry_changed()
+void enclosure_editor::on_combo_entry_changed()
 {
-    std::cout << "BoxEditor: combo entry changed: " << m_bass_speaker_combo.get_active_text() << "\n";
+    std::cout << "enclosure_editor: combo entry changed: " << m_bass_speaker_combo.get_active_text() << "\n";
 
     if (!disable_signals)
     {
@@ -345,7 +345,7 @@ void BoxEditor::on_combo_entry_changed()
     }
 }
 
-void BoxEditor::on_enclosure_changed()
+void enclosure_editor::on_enclosure_changed()
 {
     if (!disable_signals)
     {
@@ -376,7 +376,7 @@ void BoxEditor::on_enclosure_changed()
     }
 }
 
-void BoxEditor::on_box_data_changed(int i)
+void enclosure_editor::on_box_data_changed(int i)
 {
     if (!disable_signals)
     {

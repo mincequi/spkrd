@@ -113,7 +113,7 @@ protected:
   Gtk::VBox m_vbox;
   Gtk::Label m_label;
 
-  BoxList m_box_list;
+  enclosure_list m_box_list;
   speaker_list m_speaker_list;
 
   GSpeakersColor m_color_list;
