@@ -195,7 +195,6 @@ void SummedFreqRespPlot::clear()
 {
     m_points.clear();
     m_nets.clear();
-
     m_plot.remove_all_plots();
 }
 

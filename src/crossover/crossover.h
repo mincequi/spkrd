@@ -28,12 +28,12 @@
 #include <iosfwd>
 #include <vector>
 
-/* You should be able to use one or more of the type properties */
+// You should be able to use one or more of the type properties
 constexpr auto CROSSOVER_TYPE_LOWPASS = 1;
 constexpr auto CROSSOVER_TYPE_SUBSONIC = 2;
 constexpr auto CROSSOVER_TYPE_HIGHPASS = 4;
 constexpr auto CROSSOVER_TYPE_TWOWAY = 8;
-/* Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY */
+// Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY
 constexpr auto CROSSOVER_TYPE_THREEWAY = 16;
 constexpr auto CROSSOVER_TYPE_FOURWAY = 32;
 
@@ -52,6 +52,7 @@ public:
     friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
     std::vector<Net>& networks() { return m_networks; }
+
     std::vector<Net> const& networks() const { return m_networks; }
 
     /* return id_string for this crossover */

@@ -327,8 +327,6 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     {
         if (m_visible_plots[i])
         {
-            // context->set_source_rgb(m_colors[i]);
-
             std::vector<Gdk::Point> points;
 
             double f_div, f_mapped;
@@ -417,15 +415,20 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 }
             }
 
-            // Don't draw the line until we have it all done
-            if (static_cast<int>(i) == m_selected_plot)
-            {
-                context->set_line_width(m_linesize + 1);
-            }
-
             // Draw only if the vector is not empty
             if (!points.empty())
             {
+                context->save();
+
+                if (static_cast<int>(i) == m_selected_plot)
+                {
+                    context->set_line_width(m_linesize + 1);
+                }
+
+                auto const& color = m_colors.at(i);
+
+                context->set_source_rgb(color.get_red_p(), color.get_green_p(), color.get_blue_p());
+
                 context->move_to(points.front().get_x(), points.front().get_y());
 
                 std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
@@ -433,12 +436,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                     context->stroke();
                     context->move_to(point.get_x(), point.get_y());
                 });
-            }
 
-            // Reset
-            if (static_cast<int>(i) == m_selected_plot)
-            {
-                context->set_line_width(m_linesize);
+                context->restore();
             }
         }
     }

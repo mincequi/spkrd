@@ -84,7 +84,8 @@ enclosure_editor::enclosure_editor()
         sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
 
     m_id_string_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), ID_STRING_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
+                   ID_STRING_ENTRY_CHANGED));
     m_vb1_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), VB1_ENTRY_CHANGED));
     m_fb1_entry.signal_changed().connect(
@@ -95,12 +96,14 @@ enclosure_editor::enclosure_editor()
     // Setup option menu
     m_box_type_combo.append("Sealed");
     m_box_type_combo.append("Ported");
-    m_box_type_combo.signal_changed().connect(sigc::mem_fun(*this, &enclosure_editor::on_enclosure_changed));
+    m_box_type_combo.signal_changed().connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_enclosure_changed));
 
     signal_box_selected.connect(sigc::mem_fun(*this, &enclosure_editor::on_box_selected));
 
     // On enter presses in vb entry we should move focus to fb entry
-    m_vb1_entry.signal_activate().connect(sigc::mem_fun(*this, &enclosure_editor::on_vb1_entry_activated));
+    m_vb1_entry.signal_activate().connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_vb1_entry_activated));
     m_fb1_entry.signal_activate().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_append_to_boxlist_clicked));
 
@@ -129,9 +132,9 @@ void enclosure_editor::append_and_plot()
 
 void enclosure_editor::on_optimize_button_clicked()
 {
-    if (!disable_signals)
+    if (!m_disable_signals)
     {
-        disable_signals = true;
+        m_disable_signals = true;
         switch (m_box_type_combo.get_active_row_number() + 1)
         {
             case BOX_TYPE_SEALED:
@@ -162,7 +165,7 @@ void enclosure_editor::on_optimize_button_clicked()
         m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
     }
     signal_box_modified(m_box);
-    disable_signals = false;
+    m_disable_signals = false;
 }
 
 void enclosure_editor::on_append_to_plot_clicked()
@@ -230,179 +233,194 @@ void enclosure_editor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_
 
 void enclosure_editor::on_box_selected(Box* b)
 {
-    if (!disable_signals)
+    if (m_disable_signals)
     {
-        disable_signals = true;
+        return;
+    }
 
+    m_disable_signals = true;
+
+    if (b != nullptr)
+    {
+        m_box = b;
+        m_id_string_entry.set_text(b->get_id_string());
+        m_vb1_entry.set_text(GSpeakers::double_to_ustring(b->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
+
+        // Set combo to proper speaker
+        if (speaker_list_is_loaded)
+        {
+            m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
+
+            // Remove all the previous entries and populate again
+            m_bass_speaker_combo.remove_all();
+
+            for (auto const& speaker : m_speaker_list->data())
+            {
+                if (speaker.get_type() == SPEAKER_TYPE_BASS
+                    && m_current_speaker.get_id_string() != speaker.get_id_string())
+                {
+                    m_bass_speaker_combo.append(speaker.get_id_string());
+                }
+            }
+            m_bass_speaker_combo.prepend(m_current_speaker.get_id_string());
+            m_bass_speaker_combo.set_active(0);
+        }
+        // set state of option menu here
+        // Box type is 1, 2, 3...therefor the '-1'
+        m_box_type_combo.set_active(b->get_type() - 1);
+
+        m_fb1_entry.set_sensitive(m_box->get_type() != BOX_TYPE_SEALED);
+
+        if (m_box->get_type() == BOX_TYPE_SEALED)
+        {
+            auto const qr = (1.0 / m_current_speaker.get_qts()) / (1.0 / std::sqrt(2.0) - 0.1);
+            m_box->set_fb1(qr * m_current_speaker.get_fs());
+
+            m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
+        }
+    }
+    else
+    {
+        // Maybe we don't really need this one
         if (b != nullptr)
         {
-            m_box = b;
-            m_id_string_entry.set_text(b->get_id_string());
-            m_vb1_entry.set_text(GSpeakers::double_to_ustring(b->get_vb1(), 2, 1));
-            m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
-
-            // Set combo to proper speaker
-            if (speaker_list_is_loaded)
-            {
-                m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
-
-                for (auto const& speaker : m_speaker_list->data())
-                {
-                    if (speaker.get_type() == SPEAKER_TYPE_BASS
-                        && m_current_speaker.get_id_string() != speaker.get_id_string())
-                    {
-                        m_bass_speaker_combo.append(speaker.get_id_string());
-                    }
-                }
-                m_bass_speaker_combo.prepend(m_current_speaker.get_id_string());
-            }
-            // set state of option menu here
-            // Box type is 1, 2, 3...therefor the '-1'
-            m_box_type_combo.set_active(b->get_type() - 1);
-            if (m_box->get_type() == BOX_TYPE_SEALED)
-            {
-                m_fb1_entry.set_sensitive(false);
-
-                auto const qr = (1.0 / m_current_speaker.get_qts()) / (1.0 / std::sqrt(2.0) - 0.1);
-                m_box->set_fb1(qr * m_current_speaker.get_fs());
-
-                m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
-            }
-            else
-            {
-                m_fb1_entry.set_sensitive(true);
-            }
+            delete b;
         }
-        else
-        {
-            // Maybe we don't really need this one
-            if (b != nullptr)
-            {
-                delete b;
-            }
-            b = new Box();
-        }
-        disable_signals = false;
+        b = new Box();
     }
+    m_disable_signals = false;
 }
 
 void enclosure_editor::on_speaker_list_loaded(speaker_list* speaker_list)
 {
-    if (!disable_signals)
+    if (m_disable_signals)
     {
-        disable_signals = true;
-        m_speaker_list = speaker_list;
-
-        // If we have got a selected box, insert the items with the driver
-        // belonging to the current speaker at the top position, if we haven't
-        // got a selected box: insert all drivers and don't care about the order
-        if (m_box != nullptr)
-        {
-            for (auto const& speaker : m_speaker_list->data())
-            {
-                if (speaker.get_type() == SPEAKER_TYPE_BASS
-                    && m_box->get_speaker() != speaker.get_id_string())
-                {
-                    m_bass_speaker_combo.append(speaker.get_id_string());
-                }
-            }
-            m_bass_speaker_combo.prepend(m_box->get_speaker());
-        }
-        else
-        {
-            for (auto const& speaker : m_speaker_list->data())
-            {
-                if (speaker.get_type() == SPEAKER_TYPE_BASS)
-                {
-                    m_bass_speaker_combo.append(speaker.get_id_string());
-                }
-            }
-        }
-        speaker_list_is_loaded = true;
-        disable_signals = false;
+        return;
     }
+    m_disable_signals = true;
+    m_speaker_list = speaker_list;
+
+    m_bass_speaker_combo.remove_all();
+
+    // If we have got a selected box, insert the items with the driver
+    // belonging to the current speaker at the top position, if we haven't
+    // got a selected box: insert all drivers and don't care about the order
+    if (m_box != nullptr)
+    {
+        for (auto const& speaker : m_speaker_list->data())
+        {
+            if (speaker.get_type() == SPEAKER_TYPE_BASS
+                && m_box->get_speaker() != speaker.get_id_string())
+            {
+                m_bass_speaker_combo.append(speaker.get_id_string());
+            }
+        }
+        m_bass_speaker_combo.prepend(m_box->get_speaker());
+    }
+    else
+    {
+        for (auto const& speaker : m_speaker_list->data())
+        {
+            if (speaker.get_type() == SPEAKER_TYPE_BASS)
+            {
+                m_bass_speaker_combo.append(speaker.get_id_string());
+            }
+        }
+    }
+
+    m_bass_speaker_combo.set_active(m_speaker_list->data().empty() ? -1 : 0);
+
+    speaker_list_is_loaded = true;
+    m_disable_signals = false;
 }
 
 void enclosure_editor::on_combo_entry_changed()
 {
-    std::cout << "enclosure_editor: combo entry changed: " << m_bass_speaker_combo.get_active_text() << "\n";
+    std::cout << "enclosure_editor: combo entry changed: " << m_bass_speaker_combo.get_active_text()
+              << "\n";
 
-    if (!disable_signals)
+    if (m_disable_signals)
     {
-        disable_signals = true;
-
-        // Search for the new entry string in the speaker_list
-        m_current_speaker = m_speaker_list->get_speaker_by_id_string(
-            m_bass_speaker_combo.get_active_text());
-
-        // maybe set_markup here?
-        m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
-        m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
-        m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
-        m_box->set_speaker(m_bass_speaker_combo.get_active_text());
-        signal_box_modified(m_box);
-        disable_signals = false;
+        return;
     }
+
+    m_disable_signals = true;
+
+    // Search for the new entry string in the speaker_list
+    m_current_speaker = m_speaker_list->get_speaker_by_id_string(
+        m_bass_speaker_combo.get_active_text());
+
+    // maybe set_markup here?
+    m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
+    m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
+    m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+    m_box->set_speaker(m_bass_speaker_combo.get_active_text());
+    signal_box_modified(m_box);
+    m_disable_signals = false;
 }
 
 void enclosure_editor::on_enclosure_changed()
 {
-    if (!disable_signals)
+    if (m_disable_signals)
     {
-        disable_signals = true;
-
-        switch (m_box_type_combo.get_active_row_number())
-        {
-            case SEALED_SELECTED:
-            {
-                m_box->set_type(BOX_TYPE_SEALED);
-                m_fb1_entry.set_sensitive(false);
-
-                auto const qr = 1.0 / m_current_speaker.get_qts() / (1.0 / std::sqrt(2.0) - 0.1);
-                m_box->set_fb1(qr * m_current_speaker.get_fs());
-
-                m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
-                break;
-            }
-            case PORTED_SELECTED:
-                m_box->set_type(BOX_TYPE_PORTED);
-                m_fb1_entry.set_sensitive(true);
-                break;
-        }
-        signal_box_selected(m_box);
-        signal_box_modified(m_box);
-
-        disable_signals = false;
+        return;
     }
+    m_disable_signals = true;
+
+    switch (m_box_type_combo.get_active_row_number())
+    {
+        case SEALED_SELECTED:
+        {
+            m_box->set_type(BOX_TYPE_SEALED);
+            m_fb1_entry.set_sensitive(false);
+
+            auto const qr = 1.0 / m_current_speaker.get_qts() / (1.0 / std::sqrt(2.0) - 0.1);
+            m_box->set_fb1(qr * m_current_speaker.get_fs());
+
+            m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
+            break;
+        }
+        case PORTED_SELECTED:
+            m_box->set_type(BOX_TYPE_PORTED);
+            m_fb1_entry.set_sensitive(true);
+            break;
+    }
+    signal_box_selected(m_box);
+    signal_box_modified(m_box);
+
+    m_disable_signals = false;
 }
 
 void enclosure_editor::on_box_data_changed(int i)
 {
-    if (!disable_signals)
+    if (m_disable_signals)
     {
-        disable_signals = true;
-
-        switch (i)
-        {
-            case ID_STRING_ENTRY_CHANGED:
-                m_box->set_id_string(m_id_string_entry.get_text());
-                break;
-            case VB1_ENTRY_CHANGED:
-                m_box->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
-                break;
-            case FB1_ENTRY_CHANGED:
-                m_box->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
-                break;
-            case VB2_ENTRY_CHANGED:
-                m_box->set_vb2(std::atof(m_vb2_entry.get_text().c_str()));
-                break;
-            case FB2_ENTRY_CHANGED:
-                m_box->set_fb2(std::atof(m_fb2_entry.get_text().c_str()));
-                break;
-        }
-        signal_box_selected(m_box);
-        signal_box_modified(m_box);
-
-        disable_signals = false;
+        return;
     }
+
+    m_disable_signals = true;
+
+    switch (i)
+    {
+        case ID_STRING_ENTRY_CHANGED:
+            m_box->set_id_string(m_id_string_entry.get_text());
+            break;
+        case VB1_ENTRY_CHANGED:
+            m_box->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
+            break;
+        case FB1_ENTRY_CHANGED:
+            m_box->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
+            break;
+        case VB2_ENTRY_CHANGED:
+            m_box->set_vb2(std::atof(m_vb2_entry.get_text().c_str()));
+            break;
+        case FB2_ENTRY_CHANGED:
+            m_box->set_fb2(std::atof(m_fb2_entry.get_text().c_str()));
+            break;
+    }
+    signal_box_selected(m_box);
+    signal_box_modified(m_box);
+
+    m_disable_signals = false;
 }

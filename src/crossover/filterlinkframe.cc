@@ -59,7 +59,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speak
     m_vbox.pack_start(m_adv_imp_model_checkbutton);
     m_adv_imp_model_checkbutton.set_active(m_net->get_adv_imp_model() == 1);
 
-    Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     m_vbox.pack_start(*hbox);
     hbox->pack_start((*Gtk::manage(new Gtk::Label(_("Damping: ")))));
     hbox->pack_start(m_damp_spinbutton);
@@ -112,6 +112,8 @@ void FilterLinkFrame::initialise_dampening()
 void FilterLinkFrame::initialise_speaker_combobox()
 {
     std::string const& speaker_name = m_net->get_speaker();
+
+    m_speaker_combo.remove_all();
 
     if (!speaker_name.empty())
     {
@@ -713,8 +715,10 @@ void FilterLinkFrame::on_speakerlist_loaded(speaker_list* speaker_list)
 
     std::string const& speaker_name = m_net->get_speaker();
 
-    /* Setup the speaker combo box */
+    // Setup the speaker combo box
     bool speaker_is_in_speakerlist = false;
+
+    m_speaker_combo.remove_all();
 
     if (m_speaker_list)
     {
@@ -734,6 +738,7 @@ void FilterLinkFrame::on_speakerlist_loaded(speaker_list* speaker_list)
     if (speaker_is_in_speakerlist)
     {
         m_speaker_combo.prepend(speaker_name);
+        m_speaker_combo.set_active(0);
     }
 }
 
@@ -764,7 +769,7 @@ void FilterLinkFrame::on_plot_crossover()
         dialog.run();
     }
 
-    /* run spice with created file */
+    // run spice with created file
     std::string cmd = g_settings.getValueString("SPICECmdLine");
 
     if (g_settings.getValueBool("SPICEUseNGSPICE") || g_settings.getValueBool("SPICEUseGNUCAP"))

@@ -81,7 +81,7 @@ private:
     speaker_list* m_speaker_list;
     Speaker m_current_speaker;
     GSpeakersColor m_color_list;
-    bool disable_signals{false};
+    bool m_disable_signals{false};
     bool speaker_list_is_loaded{false};
 };
 
