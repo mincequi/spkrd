@@ -68,68 +68,66 @@ Speaker::Speaker(std::string id_string,
 
 Speaker::Speaker(xmlNodePtr parent)
 {
-    if (parent != nullptr && std::string((char*)parent->name) == "speaker")
-    {
-        auto node = parent->children;
-
-        m_id_string = parse_string(node, "id_string");
-        node = node->next;
-
-        m_type = parse_int(node, "type");
-        node = node->next;
-
-        m_qts = parse_double(node, "qts");
-        node = node->next;
-
-        m_vas = parse_double(node, "vas");
-        node = node->next;
-
-        m_fs = parse_double(node, "fs");
-        node = node->next;
-
-        m_rdc = parse_double(node, "rdc");
-        node = node->next;
-
-        m_lvc = parse_double(node, "lvc");
-        node = node->next;
-
-        m_qms = parse_double(node, "qms");
-        node = node->next;
-
-        m_qes = parse_double(node, "qes");
-        node = node->next;
-
-        m_imp = parse_double(node, "imp");
-        node = node->next;
-
-        m_sens = parse_double(node, "sens");
-        node = node->next;
-
-        m_freq_resp_filename = parse_string(node, "freq_resp_filename");
-        node = node->next;
-
-        m_imp_resp_filename = parse_string(node, "imp_resp_filename");
-        node = node->next;
-
-        m_mmd = parse_double(node, "mmd");
-        node = node->next;
-
-        m_ad = parse_double(node, "ad");
-        node = node->next;
-
-        m_bl = parse_double(node, "bl");
-        node = node->next;
-
-        m_rms = parse_double(node, "rms");
-        node = node->next;
-
-        m_cms = parse_double(node, "cms");
-        node = node->next;
-    }
-    else
+    if (parent == nullptr || std::string((char*)parent->name) != "speaker")
     {
         throw std::runtime_error(_("Speaker: speaker node not found"));
     }
+
+    auto node = parent->children;
+
+    m_id_string = parse_string(node, "id_string");
+    node = node->next;
+
+    m_type = parse_int(node, "type");
+    node = node->next;
+
+    m_qts = parse_double(node, "qts");
+    node = node->next;
+
+    m_vas = parse_double(node, "vas");
+    node = node->next;
+
+    m_fs = parse_double(node, "fs");
+    node = node->next;
+
+    m_rdc = parse_double(node, "rdc");
+    node = node->next;
+
+    m_lvc = parse_double(node, "lvc");
+    node = node->next;
+
+    m_qms = parse_double(node, "qms");
+    node = node->next;
+
+    m_qes = parse_double(node, "qes");
+    node = node->next;
+
+    m_imp = parse_double(node, "imp");
+    node = node->next;
+
+    m_sens = parse_double(node, "sens");
+    node = node->next;
+
+    m_freq_resp_filename = parse_string(node, "freq_resp_filename");
+    node = node->next;
+
+    m_imp_resp_filename = parse_string(node, "imp_resp_filename");
+    node = node->next;
+
+    m_mmd = parse_double(node, "mmd");
+    node = node->next;
+
+    m_ad = parse_double(node, "ad");
+    node = node->next;
+
+    m_bl = parse_double(node, "bl");
+    node = node->next;
+
+    m_rms = parse_double(node, "rms");
+    node = node->next;
+
+    m_cms = parse_double(node, "cms");
+    node = node->next;
 }
 
 xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
