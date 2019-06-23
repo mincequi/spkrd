@@ -63,59 +63,76 @@ public:
     /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& output, Speaker const& speaker);
 
-    void set_qts(double qts);
-    void set_vas(double vas);
-    void set_fs(double fs);
-    void set_rdc(double rdc);
-    void set_lvc(double lvc);
-    void set_qms(double qms);
-    void set_qes(double qes);
-    void set_imp(double imp);
-    void set_sens(double sens);
+    void set_qts(double const qts) { m_qts = qts; }
 
-    void set_freq_resp_filename(std::string filename);
-    void set_imp_resp_filename(std::string filename);
+    void set_vas(double const vas) { m_vas = vas; }
 
-    void set_id_string(std::string id_string);
-    void set_mmd(double mmd);
-    void set_ad(double ad);
-    void set_bl(double bl);
-    void set_rms(double rms);
-    void set_cms(double cms);
+    void set_fs(double const fs) { m_fs = fs; }
 
-    double get_qts() const;
+    void set_rdc(double const rdc) { m_rdc = rdc; }
 
-    double get_vas() const;
+    void set_lvc(double const lvc) { m_lvc = lvc; }
 
-    double get_fs() const;
+    void set_qms(double const qms) { m_qms = qms; }
 
-    double get_rdc() const;
+    void set_qes(double const qes) { m_qes = qes; }
 
-    double get_lvc() const;
+    void set_imp(double const imp) { m_imp = imp; }
 
-    double get_qms() const;
+    void set_sens(double const sens) { m_sens = sens; }
 
-    double get_qes() const;
+    void set_freq_resp_filename(std::string filename)
+    {
+        m_freq_resp_filename = std::move(filename);
+    }
 
-    double get_imp() const;
+    void set_imp_resp_filename(std::string filename) { m_imp_resp_filename = std::move(filename); }
 
-    double get_sens() const;
+    void set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
-    std::string get_freq_resp_filename() const;
+    void set_mmd(double const mmd) { m_mmd = mmd; }
 
-    std::string get_imp_resp_filename() const;
+    void set_ad(double const ad) { m_ad = ad; }
 
-    std::string const& get_id_string() const;
+    void set_bl(double const bl) { m_bl = bl; }
 
-    double get_mmd() const;
+    void set_rms(double const rms) { m_rms = rms; }
 
-    double get_ad() const;
+    void set_cms(double const cms) { m_cms = cms; }
 
-    double get_bl() const;
+    double get_qts() const { return m_qts; }
 
-    double get_rms() const;
+    double get_vas() const { return m_vas; }
 
-    double get_cms() const;
+    double get_fs() const { return m_fs; }
+
+    double get_rdc() const { return m_rdc; }
+
+    double get_lvc() const { return m_lvc; }
+
+    double get_qms() const { return m_qms; }
+
+    double get_qes() const { return m_qes; }
+
+    double get_imp() const { return m_imp; }
+
+    double get_sens() const { return m_sens; }
+
+    std::string get_freq_resp_filename() const { return m_freq_resp_filename; }
+
+    std::string get_imp_resp_filename() const { return m_imp_resp_filename; }
+
+    std::string const& get_id_string() const { return m_id_string; }
+
+    double get_mmd() const { return m_mmd; }
+
+    double get_ad() const { return m_ad; }
+
+    double get_bl() const { return m_bl; }
+
+    double get_rms() const { return m_rms; }
+
+    double get_cms() const { return m_cms; }
 
 protected:
     /// total Q
@@ -151,43 +168,6 @@ protected:
     std::string m_imp_resp_filename;
 
     std::string m_id_string;
-
-private:
-    void parse_type(xmlNodePtr node);
-
-    void parse_qts(xmlNodePtr node);
-
-    void parse_vas(xmlNodePtr node);
-
-    void parse_fs(xmlNodePtr node);
-
-    void parse_rdc(xmlNodePtr node);
-
-    void parse_lcv(xmlNodePtr node);
-
-    void parse_qms(xmlNodePtr node);
-
-    void parse_qes(xmlNodePtr node);
-
-    void parse_imp(xmlNodePtr node);
-
-    void parse_sens(xmlNodePtr node);
-
-    void parse_freq_resp_filename(xmlNodePtr node);
-
-    void parse_imp_resp_filename(xmlNodePtr node);
-
-    void parse_id_string(xmlNodePtr node);
-
-    void parse_mmd(xmlNodePtr node);
-
-    void parse_ad(xmlNodePtr node);
-
-    void parse_bl(xmlNodePtr node);
-
-    void parse_rms(xmlNodePtr node);
-
-    void parse_cms(xmlNodePtr node);
 };
 
 #endif
