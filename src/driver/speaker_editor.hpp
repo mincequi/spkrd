@@ -20,7 +20,7 @@
 #ifndef __GSPEAKERS_SPEAKEREDITOR
 #define __GSPEAKERS_SPEAKEREDITOR
 
-#include "driverfreqrespplot.h"
+#include "driver_frequency_response_plot.hpp"
 #include "speaker_list.hpp"
 
 #include <glibmm/ustring.h>
@@ -229,7 +229,7 @@ protected:
     int index{-1};
 
     std::unique_ptr<speaker_list> m_speaker_list{nullptr};
-    DriverFreqRespPlot plot;
+    driver_frequency_response_plot plot;
 
     ModelColumns m_columns;
     std::string m_filename;

@@ -33,10 +33,10 @@
 #include <vector>
 
 /// This is a wrapper class for GSpeakersPlot
-class DriverFreqRespPlot : public Gtk::Frame
+class driver_frequency_response_plot : public Gtk::Frame
 {
 public:
-    DriverFreqRespPlot();
+    driver_frequency_response_plot();
 
     void clear() { m_plot.remove_all_plots(); }
 

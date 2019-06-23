@@ -21,11 +21,12 @@
  * USA
  */
 
-#include "driverfreqrespplot.h"
+#include "driver_frequency_response_plot.hpp"
 
 #include "common.h"
 
-DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), m_plot(1, 20000, 50, 110, true, 0, true)
+driver_frequency_response_plot::driver_frequency_response_plot()
+    : Gtk::Frame(""), m_plot(1, 20000, 50, 110, true, 0, true)
 {
     set_shadow_type(Gtk::SHADOW_NONE);
 
@@ -46,12 +47,14 @@ DriverFreqRespPlot::DriverFreqRespPlot() : Gtk::Frame(""), m_plot(1, 20000, 50, 
     m_plot.set_y_label2(_("Impedance / Ohm"));
 }
 
-void DriverFreqRespPlot::add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color)
+void driver_frequency_response_plot::add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color)
 {
     m_plot.add_plot(points, color);
 }
 
-void DriverFreqRespPlot::replace_plot(int i, std::vector<GSpeakers::Point>& points, Gdk::Color& color)
+void driver_frequency_response_plot::replace_plot(int i,
+                                                  std::vector<GSpeakers::Point>& points,
+                                                  Gdk::Color& color)
 {
     m_plot.replace_plot(i, points, color);
 }
