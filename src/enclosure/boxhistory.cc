@@ -70,7 +70,7 @@ BoxHistory::BoxHistory() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 
     create_model();
 
-    /* create tree view */
+    // create tree view
     m_TreeView.set_model(m_refListStore);
     m_TreeView.set_rules_hint();
 
@@ -83,18 +83,16 @@ BoxHistory::BoxHistory() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
     show_all();
     index = 0;
 
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    auto selection = m_TreeView.get_selection();
 
     selection->signal_changed().connect(sigc::mem_fun(*this, &BoxHistory::on_selection_changed));
 
     if (boxlist_found)
     {
-        char* str = nullptr;
-        GString* buffer = g_string_new(str);
-        g_string_printf(buffer, "%d", 0);
-        GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-        Gtk::TreePath path(gpath);
+        Gtk::TreePath path(std::to_string(0));
+
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+
         selection->select(row);
     }
     selected_plot = -1;
@@ -122,7 +120,7 @@ bool BoxHistory::on_delete_event(GdkEventAny* event)
     // handle this since we don't want to close the window
     g_settings.setValue("BoxListXml", m_filename);
 #ifndef NDEBUG
-    std::cout << "BoxHistory: on_delete_event" << std::endl;
+    std::puts("BoxHistory: on_delete_event");
 #endif
     return true;
 }

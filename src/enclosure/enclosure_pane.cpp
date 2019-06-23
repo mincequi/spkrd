@@ -76,7 +76,7 @@ enclosure_pane::~enclosure_pane()
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "Main: " << error.what() << std::endl;
+        std::cout << "Main: " << error.what() << "\n";
     }
 }
 

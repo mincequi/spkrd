@@ -183,6 +183,8 @@ int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color& 
         // // Reset rgb fg color
         // m_refGC->set_rgb_fg_color(black);
 
+        // context->draw_lines(points);
+
         select_plot(m_colors.size() - 1);
 
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
@@ -201,49 +203,19 @@ void plot::replace_plot(int index, std::vector<GSpeakers::Point>& points, Gdk::C
 
 void plot::remove_plot(int n)
 {
-    int i = 0;
-
-    // For some reason something goes wrong when we select the last row so we add
-    // a special case for that event
-    if (n == static_cast<int>(m_points.size() - 1))
+    if (n > static_cast<int>(m_points.size()))
     {
-        m_points.clear();
-        m_colors.clear();
-        m_visible_plots.clear();
+        throw std::runtime_error("Plot removed was greater than number of available plots");
     }
-    else
-    {
-        // FIXME cleanup this horrible logic
 
-        for (auto iter = m_points.begin(); iter != m_points.end(); ++iter, i++)
-        {
-            if (n == i)
-            {
-                m_points.erase(iter);
-            }
-        }
-        i = 0;
-        for (auto iter = m_colors.begin(); iter != m_colors.end(); ++iter, i++)
-        {
-            if (n == i)
-            {
-                m_colors.erase(iter);
-            }
-        }
-        i = 0;
-        for (auto iter = m_visible_plots.begin(); iter != m_visible_plots.end(); ++iter, i++)
-        {
-            if (n == i)
-            {
-                m_visible_plots.erase(iter);
-            }
-        }
-    }
+    m_points.erase(std::next(begin(m_points), n));
+    m_colors.erase(std::next(begin(m_colors), n));
+    m_visible_plots.erase(std::next(begin(m_visible_plots), n));
+
     m_selected_plot = -1;
 
     if (m_visible)
     {
-        // redraw();
         Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, false);
     }

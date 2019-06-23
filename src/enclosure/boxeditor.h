@@ -20,16 +20,16 @@
 #ifndef __GSPEAKERS_BOXEDITOR
 #define __GSPEAKERS_BOXEDITOR
 
+#include "box.h"
+#include "gspeakerscolor.h"
+#include "speaker_list.hpp"
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 #include <gtkmm/table.h>
-
-#include "box.h"
-#include "gspeakerscolor.h"
-#include "speaker_list.hpp"
 
 /// This class will contain the control panel where you can adjust
 /// settings for the enclosure you're working with.
@@ -42,17 +42,23 @@ public:
 
     /// This function executes when you have clicked the optimize button.
     void on_optimize_button_clicked();
+
     void on_append_to_boxlist_clicked();
 
     /// This function executes when you have clicked the plot button
     void on_append_to_plot_clicked();
+
     void on_calc_port_clicked();
+
     void append_and_plot();
+
     void on_vb1_entry_activated();
 
 protected:
     void on_box_selected(Box* b);
+
     void on_speaker_list_loaded(speaker_list*);
+
     void on_combo_entry_changed();
 
     void on_box_data_changed(int i);
@@ -62,8 +68,8 @@ protected:
 protected:
     // TODO Use Gtk::Grid
     Gtk::Table m_table;
-    Gtk::VBox m_vbox;
-    Gtk::HBox m_hbox;
+    Gtk::Box m_vbox;
+    Gtk::Box m_hbox;
     Gtk::ComboBoxText m_bass_speaker_combo;
     Gtk::Label m_speaker_qts_label, m_speaker_vas_label, m_speaker_fs_label;
     Gtk::Label m_frame_label;

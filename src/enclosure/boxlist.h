@@ -21,7 +21,6 @@
 #define __GFILTER_BOXLIST
 
 #include "box.h"
-#include "gspeakersobject.h"
 
 #include <libxml/tree.h>
 

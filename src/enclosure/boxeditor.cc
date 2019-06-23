@@ -18,8 +18,8 @@
 */
 
 #include "boxeditor.h"
+
 #include "common.h"
-#include "gspeakerscolor.h"
 #include "plot.hpp"
 
 #include <cmath>
@@ -38,6 +38,8 @@ constexpr auto FB2_ENTRY_CHANGED = 6;
 BoxEditor::BoxEditor()
     : Gtk::Frame(_("Enclosure editor")),
       m_table(5, 5, true),
+      m_vbox(Gtk::ORIENTATION_VERTICAL),
+      m_hbox(Gtk::ORIENTATION_HORIZONTAL),
       m_speaker_qts_label("", Gtk::ALIGN_START),
       m_speaker_vas_label("", Gtk::ALIGN_START),
       m_speaker_fs_label("", Gtk::ALIGN_START)
@@ -176,6 +178,7 @@ void BoxEditor::on_append_to_plot_clicked()
 
     // Calculate the frequency response graph for current enclosure and the current speaker
     std::vector<GSpeakers::Point> points;
+
     GSpeakers::Point point;
     switch (m_box->get_type())
     {
@@ -241,8 +244,6 @@ void BoxEditor::on_box_selected(Box* b)
             // Set combo to proper speaker
             if (speaker_list_is_loaded)
             {
-                std::cout << b << std::endl;
-
                 m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
 
                 for (auto const& speaker : m_speaker_list->data())

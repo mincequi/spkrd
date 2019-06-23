@@ -26,7 +26,6 @@
 #include <libxml/tree.h>
 
 #include <iosfwd>
-#include <map>
 #include <string>
 
 constexpr auto BOX_TYPE_SEALED = 1;
@@ -46,25 +45,35 @@ public:
     /// Construct from an xmlNode
     Box(xmlNodePtr parent);
 
-    /// Convert data for a part to an xml node, throws std::runtime_error on failure */
+    /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent);
 
-    /// Print part data to stdout */
+    /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& o, const Box& box);
 
-    void set_id_string(std::string id_string);
-    void set_vb1(double vb1);
-    void set_fb1(double fb1);
-    void set_vb2(double vb2);
-    void set_fb2(double fb2);
-    void set_speaker(const std::string& speaker);
+    void set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
-    std::string const& get_id_string() const;
-    double get_vb1() const;
-    double get_fb1() const;
-    double get_vb2() const;
-    double get_fb2() const;
-    const std::string& get_speaker() const;
+    void set_vb1(double vb1) { m_vb1 = vb1; }
+
+    void set_fb1(double fb1) { m_fb1 = fb1; }
+
+    void set_vb2(double vb2) { m_vb2 = vb2; }
+
+    void set_fb2(double fb2) { m_fb2 = fb2; }
+
+    void set_speaker(const std::string& speaker) { m_speaker = speaker; }
+
+    std::string const& get_id_string() const { return m_id_string; }
+
+    double get_vb1() const { return m_vb1; }
+
+    double get_fb1() const { return m_fb1; }
+
+    double get_vb2() const { return m_vb2; }
+
+    double get_fb2() const { return m_fb2; }
+
+    const std::string& get_speaker() const { return m_speaker; }
 
 protected:
     std::string m_id_string;
@@ -73,16 +82,6 @@ protected:
     double m_vb2;
     double m_fb2;
     std::string m_speaker;
-
-private:
-    /* various helper functions for the xml parsing routine */
-    void parse_id_string(xmlNodePtr node);
-    void parse_type(xmlNodePtr node);
-    void parse_vb1(xmlNodePtr node);
-    void parse_fb1(xmlNodePtr node);
-    void parse_vb2(xmlNodePtr node);
-    void parse_fb2(xmlNodePtr node);
-    void parse_speaker(xmlNodePtr node);
 };
 
 #endif
