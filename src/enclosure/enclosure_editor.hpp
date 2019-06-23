@@ -20,7 +20,7 @@
 #ifndef __GSPEAKERS_BOXEDITOR
 #define __GSPEAKERS_BOXEDITOR
 
-#include "box.h"
+#include "enclosure.hpp"
 #include "gspeakerscolor.h"
 #include "speaker_list.hpp"
 

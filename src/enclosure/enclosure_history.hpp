@@ -20,7 +20,7 @@
 #ifndef __GSPEAKERS_BOXHISTORY
 #define __GSPEAKERS_BOXHISTORY
 
-#include "boxlist.h"
+#include "enclosure_list.hpp"
 #include "common.h"
 
 #include <gdkmm/event.h>

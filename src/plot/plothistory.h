@@ -20,7 +20,7 @@
 #ifndef __GSPEAKERS_PLOTHISTORY
 #define __GSPEAKERS_PLOTHISTORY
 
-#include "boxlist.h"
+#include "enclosure_list.hpp"
 #include "common.h"
 #include "gspeakerscolor.h"
 #include "speaker_list.hpp"

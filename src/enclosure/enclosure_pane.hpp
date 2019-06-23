@@ -20,8 +20,8 @@
 #ifndef __ENCLOSURE_PANED_H
 #define __ENCLOSURE_PANED_H
 
-#include "boxeditor.h"
-#include "boxhistory.h"
+#include "enclosure_editor.hpp"
+#include "enclosure_history.hpp"
 #include "common.h"
 #include "gspeakersboxplot.h"
 #include "plothistory.h"

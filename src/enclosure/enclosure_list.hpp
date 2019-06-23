@@ -20,7 +20,7 @@
 #ifndef __GFILTER_BOXLIST
 #define __GFILTER_BOXLIST
 
-#include "box.h"
+#include "enclosure.hpp"
 
 #include <libxml/tree.h>
 
