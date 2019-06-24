@@ -24,7 +24,7 @@
 #define __CROSSOVER_IMAGE_VIEW_H
 
 #include "crossover.h"
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 #include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
@@ -48,7 +48,7 @@ private:
     bool on_configure_event(GdkEventConfigure* event) override;
 
     void on_crossover_selected(Crossover* selected_crossover);
-    void on_speakerlist_selected(speaker_list* selected_speaker_list);
+    void on_speakerlist_selected(driver_list* selected_speaker_list);
     void on_net_modified();
     void on_settings_changed(const std::string& s);
 
@@ -172,7 +172,7 @@ private:
                      int y,
                      int part_width,
                      int part_height,
-                     Speaker const& speaker);
+                     driver const& speaker);
 
 private:
     bool m_visible{false};
@@ -189,7 +189,7 @@ private:
     Gdk::RGBA black, white;
 
     Crossover* m_crossover{nullptr};
-    speaker_list* m_speaker_list{nullptr};
+    driver_list* m_speaker_list{nullptr};
 };
 
 #endif

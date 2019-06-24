@@ -31,25 +31,25 @@
 constexpr auto BOX_TYPE_SEALED = 1;
 constexpr auto BOX_TYPE_PORTED = 2;
 
-class Box : public GSpeakersObject
+class enclosure : public GSpeakersObject
 {
 public:
-    Box(std::string id_string = "",
-        int type = BOX_TYPE_SEALED,
-        double vb1 = 20,
-        double fb1 = 40,
-        double vb2 = 0,
-        double fb2 = 0,
-        std::string speaker = "");
+    enclosure(std::string id_string = "",
+              int type = BOX_TYPE_SEALED,
+              double vb1 = 20,
+              double fb1 = 40,
+              double vb2 = 0,
+              double fb2 = 0,
+              std::string speaker = "");
 
     /// Construct from an xmlNode
-    Box(xmlNodePtr parent);
+    enclosure(xmlNodePtr parent);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent);
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const Box& box);
+    friend std::ostream& operator<<(std::ostream& o, const enclosure& box);
 
     void set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 

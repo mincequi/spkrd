@@ -17,7 +17,7 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-#include "speaker_editor.hpp"
+#include "driver_editor.hpp"
 
 #include "common.h"
 #include "frequency_response_editor.hpp"
@@ -42,7 +42,7 @@ constexpr auto FILE_CHOOSER_CANCEL = 10001;
 constexpr auto FILE_CHOOSER_OPEN = 10002;
 constexpr auto FILE_CHOOSER_SAVE = 10003;
 
-speaker_editor::speaker_editor()
+driver_editor::driver_editor()
     : m_TreeViewTable(10, 4, true),
       m_EditFreqRespButton(_("Edit...")),
       m_BrowseFreqRespButton(_("...")),
@@ -67,13 +67,13 @@ speaker_editor::speaker_editor()
 
     try
     {
-        m_speaker_list = std::make_unique<speaker_list>(m_filename);
+        m_speaker_list = std::make_unique<driver_list>(m_filename);
         signal_speakerlist_loaded(m_speaker_list.get());
     }
     catch (std::runtime_error const& e)
     {
-        m_speaker_list = std::make_unique<speaker_list>();
-        std::cout << "speaker_editor::speaker_editor: " << e.what() << std::endl;
+        m_speaker_list = std::make_unique<driver_list>();
+        std::cout << "driver_editor::driver_editor: " << e.what() << std::endl;
     }
 
     m_treeview_vbox.set_border_width(5);
@@ -171,50 +171,50 @@ speaker_editor::speaker_editor()
     m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     m_IdStringEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 0));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 0));
     m_QtsEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 1));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 1));
     m_FsEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 2));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 2));
     m_VasEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 3));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 3));
     m_RdcEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 4));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 4));
     m_LvcEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 5));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 5));
     m_QmsEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 6));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 6));
     m_QesEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 7));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 7));
     m_ImpEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 8));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 8));
     m_SensEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 9));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 9));
     m_MmdEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 13));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 13));
     m_AdEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 14));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 14));
     m_BlEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 15));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 15));
     m_RmsEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 16));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 16));
     m_CmsEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 17));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 17));
     m_FreqRespFileEntry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 18));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 18));
     m_FreqRespFileEntry.set_editable(false);
 
     m_BassCheckButton.signal_toggled().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 10));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 10));
     m_MidrangeCheckButton.signal_toggled().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 11));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 11));
     m_TweeterCheckButton.signal_toggled().connect(
-        sigc::bind(sigc::mem_fun(*this, &speaker_editor::on_entry_changed), 12));
+        sigc::bind(sigc::mem_fun(*this, &driver_editor::on_entry_changed), 12));
 
     m_EditFreqRespButton.signal_clicked().connect(
-        sigc::mem_fun(*this, &speaker_editor::on_edit_freq_resp));
+        sigc::mem_fun(*this, &driver_editor::on_edit_freq_resp));
     m_BrowseFreqRespButton.signal_clicked().connect(
-        sigc::mem_fun(*this, &speaker_editor::on_browse_freq_resp));
+        sigc::mem_fun(*this, &driver_editor::on_browse_freq_resp));
 
     m_EditFreqRespButton.set_tooltip_text(_("Edit frequency response for this driver"));
     m_BrowseFreqRespButton.set_tooltip_text(_("Browse for frequency response file"));
@@ -228,17 +228,17 @@ speaker_editor::speaker_editor()
     m_TreeView.set_rules_hint();
     auto selection = m_TreeView.get_selection();
 
-    selection->signal_changed().connect(sigc::mem_fun(*this, &speaker_editor::on_selection_changed));
+    selection->signal_changed().connect(sigc::mem_fun(*this, &driver_editor::on_selection_changed));
 
-    g_settings.settings_changed.connect(sigc::mem_fun(*this, &speaker_editor::on_settings_changed));
+    g_settings.settings_changed.connect(sigc::mem_fun(*this, &driver_editor::on_settings_changed));
 
     add_columns();
     m_ScrolledWindow.add(m_TreeView);
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &speaker_editor::on_save_open_files));
+    signal_save_open_files.connect(sigc::mem_fun(*this, &driver_editor::on_save_open_files));
 }
 
-Gtk::MenuItem& speaker_editor::get_menu()
+Gtk::MenuItem& driver_editor::get_menu()
 {
     m_menu_item.set_label("Driver");
 
@@ -247,40 +247,40 @@ Gtk::MenuItem& speaker_editor::get_menu()
 
     {
         auto new_driver = Gtk::manage(new Gtk::MenuItem("New Driver"));
-        new_driver->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_new));
+        new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         driver_submenu->append(*new_driver);
     }
     driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto new_driver = Gtk::manage(new Gtk::MenuItem("New"));
-        new_driver->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_new_xml));
+        new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new_xml));
         driver_submenu->append(*new_driver);
     }
     {
         auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
-        append_xml->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_append_xml));
+        append_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_append_xml));
         driver_submenu->append(*append_xml);
     }
     {
         auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
-        open_xml->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_open_xml));
+        open_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         driver_submenu->append(*open_xml);
     }
     driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto save = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE));
-        save->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_save));
+        save->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         driver_submenu->append(*save);
     }
     {
         auto save_as = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE_AS));
-        save_as->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_save_as));
+        save_as->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save_as));
         driver_submenu->append(*save_as);
     }
     driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto delete_item = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::DELETE));
-        delete_item->signal_activate().connect(sigc::mem_fun(*this, &speaker_editor::on_remove));
+        delete_item->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         driver_submenu->append(*delete_item);
     }
 
@@ -292,7 +292,7 @@ Gtk::MenuItem& speaker_editor::get_menu()
     // menulist[MENU_INDEX_DELETE].set_sensitive(false);
 }
 
-Gtk::Toolbar& speaker_editor::get_toolbar()
+Gtk::Toolbar& driver_editor::get_toolbar()
 {
     if (m_toolbar == nullptr)
     {
@@ -300,22 +300,22 @@ Gtk::Toolbar& speaker_editor::get_toolbar()
 
         Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("New Driver")));
-        t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_new));
+        t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         m_toolbar->append(*t);
 
         m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
-        t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_open_xml));
+        t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         m_toolbar->append(*t);
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::SAVE));
-        t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_save));
+        t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         m_toolbar->append(*t);
 
         m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
         t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::DELETE));
-        t->signal_clicked().connect(sigc::mem_fun(*this, &speaker_editor::on_remove));
+        t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         m_toolbar->append(*t);
 
         m_toolbar->set_toolbar_style(
@@ -327,7 +327,7 @@ Gtk::Toolbar& speaker_editor::get_toolbar()
     return *m_toolbar;
 }
 
-void speaker_editor::on_save_open_files()
+void driver_editor::on_save_open_files()
 {
     if (GSpeakers::driverlist_modified())
     {
@@ -335,7 +335,7 @@ void speaker_editor::on_save_open_files()
     }
 }
 
-void speaker_editor::on_settings_changed(const std::string& setting)
+void driver_editor::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
@@ -351,9 +351,9 @@ void speaker_editor::on_settings_changed(const std::string& setting)
     }
 }
 
-void speaker_editor::on_close() { signal_speakerlist_loaded(m_speaker_list.get()); }
+void driver_editor::on_close() { signal_speakerlist_loaded(m_speaker_list.get()); }
 
-void speaker_editor::set_entries_sensitive(bool const is_sensitive)
+void driver_editor::set_entries_sensitive(bool const is_sensitive)
 {
     m_IdStringEntry.set_sensitive(is_sensitive);
     m_QtsEntry.set_sensitive(is_sensitive);
@@ -387,9 +387,9 @@ void speaker_editor::set_entries_sensitive(bool const is_sensitive)
     }
 }
 
-void speaker_editor::on_new()
+void driver_editor::on_new()
 {
-    Speaker s(_("New Speaker"));
+    driver s(_("New driver"));
 
     s.set_id_string(s.get_id_string() + " " + std::to_string(s.get_id()));
 
@@ -416,7 +416,7 @@ void speaker_editor::on_new()
     m_modified = true;
 }
 
-void speaker_editor::on_new_xml()
+void driver_editor::on_new_xml()
 {
     m_refListStore->clear();
     m_speaker_list->clear();
@@ -428,7 +428,7 @@ void speaker_editor::on_new_xml()
     on_new();
 }
 
-void speaker_editor::on_remove()
+void driver_editor::on_remove()
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -448,7 +448,7 @@ void speaker_editor::on_remove()
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
 }
 
-void speaker_editor::on_save()
+void driver_editor::on_save()
 {
 #ifndef NDEBUG
     std::puts("SpeakerEditor: save");
@@ -479,7 +479,7 @@ void speaker_editor::on_save()
     }
 }
 
-void speaker_editor::on_save_as()
+void driver_editor::on_save_as()
 {
     std::string const& filename = GSpeakersFileChooserDialog(_("Save speaker xml as"),
                                                              Gtk::FILE_CHOOSER_ACTION_SAVE,
@@ -492,7 +492,7 @@ void speaker_editor::on_save_as()
     }
 }
 
-void speaker_editor::save_as(const std::string& filename)
+void driver_editor::save_as(const std::string& filename)
 {
     try
     {
@@ -505,7 +505,7 @@ void speaker_editor::save_as(const std::string& filename)
     }
 }
 
-void speaker_editor::on_selection_changed()
+void driver_editor::on_selection_changed()
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -518,7 +518,7 @@ void speaker_editor::on_selection_changed()
         if (!path.empty())
         {
             index = path[0];
-            Speaker const& s = m_speaker_list->data()[index];
+            driver const& s = m_speaker_list->data()[index];
 
             m_IdStringEntry.set_text(s.get_id_string());
 
@@ -608,7 +608,7 @@ void speaker_editor::on_selection_changed()
     m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 }
 
-void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
+void driver_editor::draw_impedance_plot(driver const& s, bool update)
 {
     std::array<gchar, 8> buffer;
 
@@ -680,11 +680,11 @@ void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
             }
             // g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
 #ifndef NDEBUG
-            std::cout << "speaker_editor::draw_impedance_plot: running SPICE with \"" + cmd + "\"\n";
+            std::cout << "driver_editor::draw_impedance_plot: running SPICE with \"" + cmd + "\"\n";
 #endif
             system(cmd.c_str());
 #ifndef NDEBUG
-            std::puts("speaker_editor::draw_impedance_plot: SPICE done");
+            std::puts("driver_editor::draw_impedance_plot: SPICE done");
 #endif
             std::string spice_output_file = tmp_file + ".out";
             std::ifstream input_file(spice_output_file.c_str());
@@ -798,14 +798,14 @@ void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
     }
 }
 
-void speaker_editor::on_clear()
+void driver_editor::on_clear()
 {
     m_refListStore->clear();
     m_speaker_list->data().clear();
     m_modified = true;
 }
 
-void speaker_editor::on_entry_changed(int i)
+void driver_editor::on_entry_changed(int i)
 {
     if (updating_entries)
     {
@@ -968,7 +968,7 @@ void speaker_editor::on_entry_changed(int i)
     m_modified = true;
 }
 
-void speaker_editor::on_append_xml()
+void driver_editor::on_append_xml()
 {
     GSpeakersFileChooserDialog fc(_("Append speaker xml"));
     std::string const& filename = fc.get_filename();
@@ -978,7 +978,7 @@ void speaker_editor::on_append_xml()
     }
 }
 
-void speaker_editor::on_open_xml()
+void driver_editor::on_open_xml()
 {
     GSpeakersFileChooserDialog fc(_("Open speaker xml"));
     std::string const& filename = fc.get_filename();
@@ -988,15 +988,15 @@ void speaker_editor::on_open_xml()
     }
 }
 
-void speaker_editor::append_xml(const std::string& filename)
+void driver_editor::append_xml(const std::string& filename)
 {
     try
     {
-        auto const& temp_speaker_list = speaker_list(filename);
+        auto const& temp_speaker_list = driver_list(filename);
 
         std::for_each(begin(temp_speaker_list.data()),
                       end(temp_speaker_list.data()),
-                      sigc::mem_fun(*this, &speaker_editor::add_item));
+                      sigc::mem_fun(*this, &driver_editor::add_item));
         for (auto& from : temp_speaker_list.data())
         {
             m_speaker_list->data().push_back(from);
@@ -1014,7 +1014,7 @@ void speaker_editor::append_xml(const std::string& filename)
     }
 }
 
-bool speaker_editor::open_xml(const std::string& filename)
+bool driver_editor::open_xml(const std::string& filename)
 {
     if (filename.empty())
     {
@@ -1023,7 +1023,7 @@ bool speaker_editor::open_xml(const std::string& filename)
 
     try
     {
-        speaker_list const& temp_speaker_list = speaker_list(filename);
+        driver_list const& temp_speaker_list = driver_list(filename);
 
         m_refListStore->clear();
 
@@ -1036,7 +1036,7 @@ bool speaker_editor::open_xml(const std::string& filename)
 
         std::for_each(temp_speaker_list.data().begin(),
                       temp_speaker_list.data().end(),
-                      sigc::mem_fun(*this, &speaker_editor::add_item));
+                      sigc::mem_fun(*this, &driver_editor::add_item));
 
         m_speaker_list->data().clear();
         m_speaker_list->data().insert(begin(m_speaker_list->data()),
@@ -1074,7 +1074,7 @@ bool speaker_editor::open_xml(const std::string& filename)
     return true;
 }
 
-void speaker_editor::on_edit_freq_resp()
+void driver_editor::on_edit_freq_resp()
 {
 #ifndef NDEBUG
     std::cout << "SpeakerEditor::on_edit_freq_resp" << std::endl;
@@ -1098,7 +1098,7 @@ void speaker_editor::on_edit_freq_resp()
     m_modified = true;
 }
 
-void speaker_editor::on_browse_freq_resp()
+void driver_editor::on_browse_freq_resp()
 {
 #ifndef NDEBUG
     std::puts("SpeakerEditor::on_browse_freq_resp");
@@ -1125,16 +1125,16 @@ void speaker_editor::on_browse_freq_resp()
     }
 }
 
-void speaker_editor::create_model()
+void driver_editor::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
     std::for_each(begin(m_speaker_list->data()),
                   end(m_speaker_list->data()),
-                  sigc::mem_fun(*this, &speaker_editor::add_item));
+                  sigc::mem_fun(*this, &driver_editor::add_item));
 }
 
-void speaker_editor::add_item(Speaker const& spk)
+void driver_editor::add_item(driver const& spk)
 {
     Gtk::TreeRow row = *(m_refListStore->append());
 
@@ -1158,7 +1158,7 @@ void speaker_editor::add_item(Speaker const& spk)
     row[m_columns.freq_resp_file] = spk.get_freq_resp_filename();
 }
 
-void speaker_editor::add_columns()
+void driver_editor::add_columns()
 {
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1175,7 +1175,7 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::type_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::type_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1184,7 +1184,7 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::qts_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::qts_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1193,7 +1193,7 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::fs_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::fs_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1202,7 +1202,7 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::vas_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::vas_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1211,7 +1211,7 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::imp_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::imp_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1220,11 +1220,11 @@ void speaker_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &speaker_editor::sens_cell_data_func));
+                                    sigc::mem_fun(*this, &driver_editor::sens_cell_data_func));
     }
 }
 
-void speaker_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     std::string s;
@@ -1261,70 +1261,70 @@ void speaker_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::Tre
     renderer.property_text() = s;
 }
 
-void speaker_editor::qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qts], 3, 3);
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fs], 3, 0) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::vas_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::vas_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vas], 3, 3) + " l";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::rdc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::rdc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rdc], 3, 1) + " Ohm";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::lvc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::lvc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.lvc], 3, 2) + " mH";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::qms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qms], 3, 3);
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::qes_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qes_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.qes], 3, 2);
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::imp_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::imp_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.imp], 3, 1) + " Ohm";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::sens_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::sens_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.sens], 3, 1) + " dB";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.mmd] * 1000, 3, 2)
@@ -1332,35 +1332,35 @@ void speaker_editor::mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::Tree
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::ad_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::ad_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.ad], 3, 3) + " m";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::bl_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::bl_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.bl], 3, 1) + " N/A";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::rms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::rms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.rms], 3, 2) + " Ns/m";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.cms], 3, 4) + " m/N";
     renderer.property_xalign() = 1.0;
 }
 
-void speaker_editor::on_cell_fixed_toggled(const Glib::ustring& path_string)
+void driver_editor::on_cell_fixed_toggled(const Glib::ustring& path_string)
 {
     Gtk::TreePath path(path_string);
 

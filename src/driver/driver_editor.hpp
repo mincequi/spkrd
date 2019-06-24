@@ -21,7 +21,7 @@
 #define __GSPEAKERS_SPEAKEREDITOR
 
 #include "driver_frequency_response_plot.hpp"
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 #include <glibmm/ustring.h>
 
@@ -45,12 +45,12 @@
 
 #include <memory>
 
-class speaker_editor : public sigc::trackable
+class driver_editor : public sigc::trackable
 {
 public:
-    speaker_editor();
+    driver_editor();
 
-    virtual ~speaker_editor() = default;
+    virtual ~driver_editor() = default;
 
     Gtk::Widget& get_treeview_table() noexcept { return m_treeview_vbox; }
 
@@ -120,9 +120,9 @@ protected:
 
     virtual void add_columns();
 
-    virtual void add_item(Speaker const& foo);
+    virtual void add_item(driver const& foo);
 
-    void draw_impedance_plot(Speaker const& s, bool update = false);
+    void draw_impedance_plot(driver const& s, bool update = false);
 
     void set_entries_sensitive(bool value);
 
@@ -228,7 +228,7 @@ protected:
     bool new_xml_pressed{false};
     int index{-1};
 
-    std::unique_ptr<speaker_list> m_speaker_list{nullptr};
+    std::unique_ptr<driver_list> m_speaker_list{nullptr};
     driver_frequency_response_plot plot;
 
     ModelColumns m_columns;

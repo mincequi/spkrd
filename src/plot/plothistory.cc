@@ -112,9 +112,9 @@ void PlotHistory::on_remove()
     }
 }
 
-void PlotHistory::on_box_modified(Box*) {}
+void PlotHistory::on_box_modified(enclosure*) {}
 
-void PlotHistory::on_add_plot(Box* b, Speaker* s, Gdk::Color& color)
+void PlotHistory::on_add_plot(enclosure* b, driver* s, Gdk::Color& color)
 {
     if (b != nullptr && s != nullptr)
     {
@@ -187,7 +187,7 @@ void PlotHistory::add_columns()
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Speaker"), *pRenderer);
+        int cols_count = m_TreeView.append_column(_("driver"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->add_attribute(pRenderer->property_text(), m_columns.speaker_string);
@@ -249,7 +249,7 @@ void PlotHistory::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeMod
     renderer.property_xalign() = 1.0;
 }
 
-void PlotHistory::add_item(Box const& box, Speaker const& spk, Gdk::Color& color)
+void PlotHistory::add_item(enclosure const& box, driver const& spk, Gdk::Color& color)
 {
     gushort r = (int)((color.get_red_p()) * 255);
     gushort g = (int)((color.get_green_p()) * 255);

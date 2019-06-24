@@ -19,38 +19,38 @@
 #define __GFILTER_SPEAKERLIST
 
 #include "gspeakersobject.h"
-#include "speaker.h"
+#include "driver.hpp"
 
 #include <iosfwd>
 #include <string>
 #include <vector>
 
 /// This is a list to store all speakers in
-class speaker_list
+class driver_list
 {
 public:
-    speaker_list() = default;
+    driver_list() = default;
 
     /// Construct a part from an xml file
-    speaker_list(const std::string& filename);
+    driver_list(const std::string& filename);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, const speaker_list& speaker_list);
+    friend std::ostream& operator<<(std::ostream& output, const driver_list& driver_list);
 
-    std::vector<Speaker>& data() noexcept { return m_speaker_list; }
+    std::vector<driver>& data() noexcept { return m_speaker_list; }
 
-    std::vector<Speaker> const& data() const noexcept { return m_speaker_list; }
+    std::vector<driver> const& data() const noexcept { return m_speaker_list; }
 
-    Speaker get_speaker_by_id_string(const std::string& id_string);
+    driver get_speaker_by_id_string(const std::string& id_string);
 
     /// Remove all items
     void clear();
 
 protected:
-    std::vector<Speaker> m_speaker_list;
+    std::vector<driver> m_speaker_list;
 };
 
 #endif

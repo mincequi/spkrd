@@ -15,7 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "speaker.h"
+#include "driver.hpp"
 #include "common.h"
 
 #include "xml_parser.hpp"
@@ -26,24 +26,24 @@
 
 using namespace spkrd;
 
-Speaker::Speaker(std::string id_string,
-                 int type,
-                 double qts,
-                 double vas,
-                 double fs,
-                 double rdc,
-                 double lvc,
-                 double qms,
-                 double qes,
-                 double imp,
-                 double sens,
-                 std::string freq_resp_filename,
-                 std::string imp_resp_filename,
-                 double mmd,
-                 double ad,
-                 double bl,
-                 double rms,
-                 double cms)
+driver::driver(std::string id_string,
+               int type,
+               double qts,
+               double vas,
+               double fs,
+               double rdc,
+               double lvc,
+               double qms,
+               double qes,
+               double imp,
+               double sens,
+               std::string freq_resp_filename,
+               std::string imp_resp_filename,
+               double mmd,
+               double ad,
+               double bl,
+               double rms,
+               double cms)
     : GSpeakersObject(),
       m_qts(qts),
       m_qms(qms),
@@ -66,11 +66,11 @@ Speaker::Speaker(std::string id_string,
     m_type = type;
 }
 
-Speaker::Speaker(xmlNodePtr parent)
+driver::driver(xmlNodePtr parent)
 {
     if (parent == nullptr || std::string((char*)parent->name) != "speaker")
     {
-        throw std::runtime_error(_("Speaker: speaker node not found"));
+        throw std::runtime_error(_("driver: speaker node not found"));
     }
 
     auto node = parent->children;
@@ -130,7 +130,7 @@ Speaker::Speaker(xmlNodePtr parent)
     node = node->next;
 }
 
-xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
+xmlNodePtr driver::to_xml_node(xmlNodePtr parent)
 {
     std::array<gchar, 10> buffer;
 
@@ -193,7 +193,7 @@ xmlNodePtr Speaker::to_xml_node(xmlNodePtr parent)
     return speaker;
 }
 
-std::ostream& operator<<(std::ostream& output, const Speaker& speaker)
+std::ostream& operator<<(std::ostream& output, const driver& speaker)
 {
     output << speaker.m_id_string << "\n"
            << _("Id:   ") << speaker.m_id << "\n"

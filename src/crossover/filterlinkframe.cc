@@ -30,7 +30,7 @@
 #include <fstream>
 #include <iostream>
 
-FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speaker_list* speaker_list)
+FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, driver_list* driver_list)
     : Gtk::Frame(""),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -41,7 +41,7 @@ FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, speak
       m_adv_imp_model_checkbutton(_("Use advance driver impendance model")),
       m_net(net),
       m_description(description),
-      m_speaker_list(speaker_list)
+      m_speaker_list(driver_list)
 {
     set_border_width(2);
     set_shadow_type(Gtk::SHADOW_NONE);
@@ -94,7 +94,7 @@ void FilterLinkFrame::initialise_dampening()
     // Set damp value in dB here
     auto const r_ser = m_net->get_damp_R1().get_value();
 
-    Speaker speaker;
+    driver speaker;
 
     if (m_speaker_list)
     {
@@ -346,7 +346,7 @@ void FilterLinkFrame::on_param_changed()
 
         enable_edit = false;
 
-        Speaker speaker;
+        driver speaker;
 
         if (m_speaker_list != nullptr)
         {
@@ -706,12 +706,12 @@ void FilterLinkFrame::on_clear_and_plot()
     on_plot_crossover();
 }
 
-void FilterLinkFrame::on_speakerlist_loaded(speaker_list* speaker_list)
+void FilterLinkFrame::on_speakerlist_loaded(driver_list* driver_list)
 {
 #ifndef NDEBUG
     std::puts("FilterLinkFrame::on_speakerlist_loaded");
 #endif
-    m_speaker_list = speaker_list;
+    m_speaker_list = driver_list;
 
     std::string const& speaker_name = m_net->get_speaker();
 
@@ -747,7 +747,7 @@ void FilterLinkFrame::on_plot_crossover()
     std::puts("DEBUG: plotting cross-over");
 
     // Create spice code for this net
-    Speaker speaker;
+    driver speaker;
     if (m_speaker_list)
     {
         speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());

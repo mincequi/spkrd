@@ -170,7 +170,7 @@ void enclosure_editor::on_optimize_button_clicked()
 
 void enclosure_editor::on_append_to_plot_clicked()
 {
-    m_box = new Box();
+    m_box = new enclosure();
 
     m_box->set_id_string(m_id_string_entry.get_text());
     m_box->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
@@ -231,7 +231,7 @@ void enclosure_editor::on_calc_port_clicked() {}
 
 void enclosure_editor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_box); }
 
-void enclosure_editor::on_box_selected(Box* b)
+void enclosure_editor::on_box_selected(enclosure* b)
 {
     if (m_disable_signals)
     {
@@ -267,7 +267,7 @@ void enclosure_editor::on_box_selected(Box* b)
             m_bass_speaker_combo.set_active(0);
         }
         // set state of option menu here
-        // Box type is 1, 2, 3...therefor the '-1'
+        // enclosure type is 1, 2, 3...therefor the '-1'
         m_box_type_combo.set_active(b->get_type() - 1);
 
         m_fb1_entry.set_sensitive(m_box->get_type() != BOX_TYPE_SEALED);
@@ -287,19 +287,19 @@ void enclosure_editor::on_box_selected(Box* b)
         {
             delete b;
         }
-        b = new Box();
+        b = new enclosure();
     }
     m_disable_signals = false;
 }
 
-void enclosure_editor::on_speaker_list_loaded(speaker_list* speaker_list)
+void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
 {
     if (m_disable_signals)
     {
         return;
     }
     m_disable_signals = true;
-    m_speaker_list = speaker_list;
+    m_speaker_list = driver_list;
 
     m_bass_speaker_combo.remove_all();
 
@@ -347,7 +347,7 @@ void enclosure_editor::on_combo_entry_changed()
 
     m_disable_signals = true;
 
-    // Search for the new entry string in the speaker_list
+    // Search for the new entry string in the driver_list
     m_current_speaker = m_speaker_list->get_speaker_by_id_string(
         m_bass_speaker_combo.get_active_text());
 

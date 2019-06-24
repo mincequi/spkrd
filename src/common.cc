@@ -30,11 +30,11 @@
 Settings g_settings;
 
 sigc::signal1<void, Crossover*> signal_crossover_selected;
-sigc::signal1<void, speaker_list*> signal_speakerlist_loaded;
-sigc::signal1<void, Box*> signal_box_selected;
-sigc::signal1<void, Box*> signal_add_to_boxlist;
-sigc::signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
-sigc::signal1<void, Box*> signal_box_modified;
+sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
+sigc::signal1<void, enclosure*> signal_box_selected;
+sigc::signal1<void, enclosure*> signal_add_to_boxlist;
+sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
+sigc::signal1<void, enclosure*> signal_box_modified;
 sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 sigc::signal1<void, int> signal_remove_box_plot;
 sigc::signal1<void, int> signal_hide_box_plot;

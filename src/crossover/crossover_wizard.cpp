@@ -112,12 +112,12 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
     }
 }
 
-void crossover_wizard::on_speaker_list_loaded(speaker_list* speaker_list)
+void crossover_wizard::on_speaker_list_loaded(driver_list* driver_list)
 {
 #ifndef NDEBUG
     std::puts("crossover_wizard::on_speaker_list_loaded");
 #endif
-    m_speaker_list = speaker_list;
+    m_speaker_list = driver_list;
 }
 
 void crossover_wizard::on_button_plot_clicked()
