@@ -90,7 +90,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
     auto const& plot_index = *output_plot_index;
 
-    Speaker s;
+    driver s;
     if (m_speakerlist != nullptr)
     {
         s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
@@ -204,10 +204,10 @@ void SummedFreqRespPlot::on_crossover_selected(Crossover*)
     clear();
 }
 
-void SummedFreqRespPlot::on_speakerlist_loaded(speaker_list* speaker_list)
+void SummedFreqRespPlot::on_speakerlist_loaded(driver_list* driver_list)
 {
 #ifndef NDEBUG
     std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
 #endif
-    m_speakerlist = speaker_list;
+    m_speakerlist = driver_list;
 }

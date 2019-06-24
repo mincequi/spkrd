@@ -85,7 +85,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
 
     auto selection = m_TreeView.get_selection();
 
-    selection->signal_changed().connect(sigc::mem_fun(*this, &enclosure_history::on_selection_changed));
+    selection->signal_changed().connect(
+        sigc::mem_fun(*this, &enclosure_history::on_selection_changed));
 
     if (boxlist_found)
     {
@@ -250,12 +251,12 @@ void enclosure_history::on_new_copy()
 
                 xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
                 m_box_list.box_list()[path[0]].to_xml_node(node);
-                Box b(node->children);
+                enclosure b(node->children);
 
                 // Set time of day as this id_string
                 std::time_t const time = std::chrono::system_clock::to_time_t(
                     std::chrono::system_clock::now());
-                b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
+                b.set_id_string(_("enclosure: ") + std::string(std::ctime(&time)));
 
                 /* the usual adding of items to the liststore and data-container */
                 add_item(b);
@@ -273,11 +274,11 @@ void enclosure_history::on_new_copy()
 
 void enclosure_history::on_new()
 {
-    Box b;
+    enclosure b;
 
     // Use time of day as identifier
     std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    b.set_id_string(_("Box: ") + std::string(std::ctime(&time)));
+    b.set_id_string(_("enclosure: ") + std::string(std::ctime(&time)));
 
     add_item(b);
     m_box_list.box_list().push_back(b);
@@ -384,7 +385,7 @@ void enclosure_history::on_remove()
     signal_enclosure_set_save_state(true);
 }
 
-void enclosure_history::on_box_modified(Box* b)
+void enclosure_history::on_box_modified(enclosure* b)
 {
     // get the row from selection
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
@@ -420,7 +421,7 @@ void enclosure_history::on_box_modified(Box* b)
     }
 }
 
-void enclosure_history::on_add_to_boxlist(Box* b)
+void enclosure_history::on_add_to_boxlist(enclosure* b)
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
     add_item(*b);
@@ -432,7 +433,7 @@ void enclosure_history::on_add_to_boxlist(Box* b)
     refSelection->select(row);
 }
 
-void enclosure_history::on_add_plot(Box* b, Speaker* s)
+void enclosure_history::on_add_plot(enclosure* b, driver* s)
 {
     add_item(*b);
     m_box_list.box_list().push_back(*b);
@@ -497,7 +498,8 @@ void enclosure_history::add_columns()
 }
 
 /* This function will execute when a type cell is shown */
-void enclosure_history::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void enclosure_history::type_cell_data_func(Gtk::CellRenderer* cell,
+                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     switch ((*iter)[m_columns.type])
@@ -515,7 +517,8 @@ void enclosure_history::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::
     renderer.property_xalign() = 1.0;
 }
 
-void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
+                                           const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
 
@@ -523,14 +526,15 @@ void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::T
     renderer.property_xalign() = 1.0;
 }
 
-void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
+                                           const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 
-void enclosure_history::add_item(Box const& box)
+void enclosure_history::add_item(enclosure const& box)
 {
     Gtk::TreeRow row = *(m_refListStore->append());
     row[m_columns.id_string] = box.get_id_string();

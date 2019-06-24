@@ -25,17 +25,17 @@
 #include <iosfwd>
 #include <string>
 
-/// Speaker types
+/// driver types
 #define SPEAKER_TYPE_BASS 1
 #define SPEAKER_TYPE_MIDRANGE 2
 #define SPEAKER_TYPE_TWEETER 4
 
 /// This class contains data for a speaker
-class Speaker : public GSpeakersObject
+class driver : public GSpeakersObject
 {
 public:
     /// Default values from Vifa P21WO-20-08
-    Speaker(std::string id_string = "Vifa P21-20-08",
+    driver(std::string id_string = "Vifa P21-20-08",
             int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
             double qts = 0.33,
             double vas = 113,
@@ -55,13 +55,13 @@ public:
             double cms = 0.0012);
 
     /// Construct a speaker from an xml node, throws an exception on error in xml
-    Speaker(xmlNodePtr parent);
+    driver(xmlNodePtr parent);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, Speaker const& speaker);
+    friend std::ostream& operator<<(std::ostream& output, driver const& speaker);
 
     void set_qts(double const qts) { m_qts = qts; }
 

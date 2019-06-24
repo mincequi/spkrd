@@ -55,11 +55,11 @@ bool& crossoverlist_modified();
 bool& measurementlist_modified();
 } // namespace GSpeakers
 
-class Box;
-class Speaker;
+class enclosure;
+class driver;
 class Crossover;
 class Net;
-class speaker_list;
+class driver_list;
 
 extern Settings g_settings;
 
@@ -73,19 +73,19 @@ extern sigc::signal1<void, Crossover*> signal_crossover_selected;
 /*
  * signal_speakerlist_loaded
  * Emit this signal when you want to change current speakerlist.
- * speaker_list arg is the new speaker_list
+ * driver_list arg is the new driver_list
  */
-extern sigc::signal1<void, speaker_list*> signal_speakerlist_loaded;
+extern sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
 
 /*
  * signal_box_selected
  * Emit this signal when you want to change the current box
- * Box * is a ptr to the new box
+ * enclosure * is a ptr to the new box
  */
-extern sigc::signal1<void, Box*> signal_box_selected;
-extern sigc::signal1<void, Box*> signal_box_modified;
-extern sigc::signal1<void, Box*> signal_add_to_boxlist;
-extern sigc::signal3<void, Box*, Speaker*, Gdk::Color&> signal_add_plot;
+extern sigc::signal1<void, enclosure*> signal_box_selected;
+extern sigc::signal1<void, enclosure*> signal_box_modified;
+extern sigc::signal1<void, enclosure*> signal_add_to_boxlist;
+extern sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
 extern sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
 extern sigc::signal1<void, int> signal_remove_box_plot;
 extern sigc::signal1<void, int> signal_hide_box_plot;

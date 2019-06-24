@@ -24,7 +24,7 @@
 
 #include "common.h"
 #include "plot.hpp"
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 #include <gtkmm/frame.h>
 #include <gdkmm/color.h>
@@ -46,14 +46,14 @@ public:
 private:
     void on_crossover_selected(Crossover*);
 
-    void on_speakerlist_loaded(speaker_list* speaker_list);
+    void on_speakerlist_loaded(driver_list* driver_list);
 
 private:
     plot m_plot;
     std::vector<int> m_nets;
     Gdk::Color m_color;
     std::vector<std::vector<GSpeakers::Point>> m_points;
-    speaker_list* m_speakerlist;
+    driver_list* m_speakerlist;
 };
 
 #endif

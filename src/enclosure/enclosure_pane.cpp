@@ -89,7 +89,8 @@ Gtk::MenuItem& enclosure_pane::get_menu()
 
     {
         auto new_enclosure = Gtk::manage(new Gtk::MenuItem("New Enclosure"));
-        new_enclosure->signal_activate().connect(sigc::mem_fun(box_history, &enclosure_history::on_new));
+        new_enclosure->signal_activate().connect(
+            sigc::mem_fun(box_history, &enclosure_history::on_new));
         enclosure_submenu->append(*new_enclosure);
     }
     {
@@ -100,17 +101,20 @@ Gtk::MenuItem& enclosure_pane::get_menu()
     enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto new_enclosure = Gtk::manage(new Gtk::MenuItem("New"));
-        new_enclosure->signal_activate().connect(sigc::mem_fun(box_history, &enclosure_history::on_new_xml));
+        new_enclosure->signal_activate().connect(
+            sigc::mem_fun(box_history, &enclosure_history::on_new_xml));
         enclosure_submenu->append(*new_enclosure);
     }
     {
         auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
-        append_xml->signal_activate().connect(sigc::mem_fun(box_history, &enclosure_history::on_append_xml));
+        append_xml->signal_activate().connect(
+            sigc::mem_fun(box_history, &enclosure_history::on_append_xml));
         enclosure_submenu->append(*append_xml);
     }
     {
         auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
-        open_xml->signal_activate().connect(sigc::mem_fun(box_history, &enclosure_history::on_open_xml));
+        open_xml->signal_activate().connect(
+            sigc::mem_fun(box_history, &enclosure_history::on_open_xml));
         enclosure_submenu->append(*open_xml);
     }
 
@@ -142,7 +146,8 @@ Gtk::MenuItem& enclosure_pane::get_menu()
     }
     {
         auto delete_item = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::DELETE));
-        delete_item->signal_activate().connect(sigc::mem_fun(box_history, &enclosure_history::on_remove));
+        delete_item->signal_activate().connect(
+            sigc::mem_fun(box_history, &enclosure_history::on_remove));
         enclosure_submenu->append(*delete_item);
     }
     enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
@@ -168,7 +173,8 @@ Gtk::Toolbar& enclosure_pane::get_toolbar()
                 new Gtk::ToolButton(*Gtk::manage(new Gtk::Image(Gtk::Stock::NEW,
                                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR)),
                                     _("New")));
-            tool_button->signal_clicked().connect(sigc::mem_fun(box_history, &enclosure_history::on_new));
+            tool_button->signal_clicked().connect(
+                sigc::mem_fun(box_history, &enclosure_history::on_new));
             m_tbar->append(*tool_button);
         }
         {
@@ -195,7 +201,8 @@ Gtk::Toolbar& enclosure_pane::get_toolbar()
                 new Gtk::ToolButton(*Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE,
                                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR)),
                                     _("Save")));
-            tool_button->signal_clicked().connect(sigc::mem_fun(box_history, &enclosure_history::on_save));
+            tool_button->signal_clicked().connect(
+                sigc::mem_fun(box_history, &enclosure_history::on_save));
             m_tbar->append(*tool_button);
         }
         m_tbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -204,7 +211,8 @@ Gtk::Toolbar& enclosure_pane::get_toolbar()
                 new Gtk::ToolButton(*Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE,
                                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR)),
                                     _("Delete")));
-            tool_button->signal_clicked().connect(sigc::mem_fun(box_history, &enclosure_history::on_remove));
+            tool_button->signal_clicked().connect(
+                sigc::mem_fun(box_history, &enclosure_history::on_remove));
             m_tbar->append(*tool_button);
         }
         {
@@ -288,7 +296,7 @@ void enclosure_pane::on_remove_boxplot(int)
     }
 }
 
-void enclosure_pane::on_add_plot(Box* b, Speaker* s, Gdk::Color& c)
+void enclosure_pane::on_add_plot(enclosure* b, driver* s, Gdk::Color& c)
 {
 #ifndef NDEBUG
     std::puts("EnclsourePaned::on_add_plot");

@@ -22,7 +22,7 @@
 
 #include "crossover.h"
 #include "plot.hpp"
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/checkbutton.h>
@@ -33,7 +33,7 @@
 class FilterLinkFrame : public Gtk::Frame
 {
 public:
-    FilterLinkFrame(Net* net, const std::string& description, speaker_list* speaker_list);
+    FilterLinkFrame(Net* net, const std::string& description, driver_list* driver_list);
 
     ~FilterLinkFrame() override;
 
@@ -48,7 +48,7 @@ private:
 
     void on_clear_and_plot();
 
-    void on_speakerlist_loaded(speaker_list* speaker_list);
+    void on_speakerlist_loaded(driver_list* driver_list);
 
     void on_settings_changed(std::string const& s);
 
@@ -95,7 +95,7 @@ private:
 
     Net* m_net;
     std::string m_description;
-    speaker_list* m_speaker_list;
+    driver_list* m_speaker_list;
     bool enable_edit{false};
     bool init{true};
 

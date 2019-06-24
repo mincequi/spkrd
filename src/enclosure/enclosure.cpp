@@ -27,7 +27,13 @@
 
 using namespace spkrd;
 
-Box::Box(std::string id_string, int type, double vb1, double fb1, double vb2, double fb2, std::string speaker)
+enclosure::enclosure(std::string id_string,
+                     int type,
+                     double vb1,
+                     double fb1,
+                     double vb2,
+                     double fb2,
+                     std::string speaker)
     : GSpeakersObject(),
       m_id_string(std::move(id_string)),
       m_vb1(vb1),
@@ -39,7 +45,7 @@ Box::Box(std::string id_string, int type, double vb1, double fb1, double vb2, do
     m_type = type;
 }
 
-Box::Box(xmlNodePtr parent) : GSpeakersObject()
+enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
 {
     if (parent != nullptr && std::string((char*)parent->name) == "box")
     {
@@ -76,11 +82,11 @@ Box::Box(xmlNodePtr parent) : GSpeakersObject()
     }
     else
     {
-        throw std::runtime_error(_("Box: box node not found"));
+        throw std::runtime_error(_("enclosure: box node not found"));
     }
 }
 
-xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
+xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
 {
     std::array<char, 8> buffer;
 
@@ -104,14 +110,14 @@ xmlNodePtr Box::to_xml_node(xmlNodePtr parent)
     return box;
 }
 
-std::ostream& operator<<(std::ostream& output, const Box& box)
+std::ostream& operator<<(std::ostream& output, const enclosure& box)
 {
-    output << _("Box") << "\n"
+    output << _("enclosure") << "\n"
            << _("Id:        ") << box.m_id << "\n"
            << _("Id-string: ") << box.m_id_string << "\n"
            << _("Type:      ") << box.m_type << "\n"
            << _("Vb1:       ") << box.m_vb1 << "\n"
            << _("Fb1:       ") << box.m_fb1 << "\n"
-           << _("Speaker:   ") << box.m_speaker << "\n";
+           << _("driver:   ") << box.m_speaker << "\n";
     return output;
 }

@@ -18,7 +18,7 @@
 */
 
 #include "net.h"
-#include "speaker.h"
+#include "driver.hpp"
 
 #include <glibmm.h>
 
@@ -524,7 +524,7 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
     return net;
 }
 
-std::string Net::to_SPICE(Speaker& s, bool use_gnucap)
+std::string Net::to_SPICE(driver& s, bool use_gnucap)
 {
     std::string tmp_dir = Glib::get_tmp_dir();
 #ifdef TARGET_WIN32

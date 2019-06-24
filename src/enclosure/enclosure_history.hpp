@@ -71,10 +71,10 @@ protected:
     void append_xml(const std::string& filename);
     void on_selection_changed();
     void save_as_xml(const std::string& filename);
-    void on_box_modified(Box* box);
-    void on_add_plot(Box* box, Speaker* speaker);
-    void on_append_box(Box* box);
-    void on_add_to_boxlist(Box* b);
+    void on_box_modified(enclosure* box);
+    void on_add_plot(enclosure* box, driver* speaker);
+    void on_append_box(enclosure* box);
+    void on_add_to_boxlist(enclosure* b);
     bool on_delete_event(GdkEventAny* event) override;
     void on_plot_selected(int i);
     void on_save_open_files();
@@ -85,7 +85,7 @@ protected:
     /* Helper member functions */
     virtual void create_model();
     virtual void add_columns();
-    virtual void add_item(Box const& box);
+    virtual void add_item(enclosure const& box);
 
 protected:
     Gtk::ScrolledWindow m_ScrolledWindow;

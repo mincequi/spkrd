@@ -52,7 +52,7 @@ protected:
 
     void on_remove_boxplot(int);
 
-    void on_add_plot(Box*, Speaker*, Gdk::Color&);
+    void on_add_plot(enclosure*, driver*, Gdk::Color&);
 
 private:
     enclosure_editor box_editor;

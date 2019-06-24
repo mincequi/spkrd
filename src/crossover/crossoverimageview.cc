@@ -278,7 +278,7 @@ void CrossoverImageView::redraw(Cairo::RefPtr<Cairo::Context> const& context)
             driver_offset += 2;
         }
 
-        Speaker speaker;
+        driver speaker;
 
         if (m_speaker_list != nullptr)
         {
@@ -330,7 +330,7 @@ void CrossoverImageView::on_net_modified()
     }
 }
 
-void CrossoverImageView::on_speakerlist_selected(speaker_list* selected_speaker_list)
+void CrossoverImageView::on_speakerlist_selected(driver_list* selected_speaker_list)
 {
     m_speaker_list = selected_speaker_list;
     if (m_visible)
@@ -444,7 +444,7 @@ void CrossoverImageView::draw_driver(Cairo::RefPtr<Cairo::Context> const& contex
                                      int y,
                                      int part_width,
                                      int part_height,
-                                     Speaker const& speaker)
+                                     driver const& speaker)
 {
     draw_corner(context, x, y, part_width, part_height, true);
 

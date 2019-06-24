@@ -22,8 +22,8 @@
 
 #include "enclosure_list.hpp"
 #include "common.h"
-#include "gspeakerscolor.h"
-#include "speaker_list.hpp"
+#include "colours.hpp"
+#include "driver_list.hpp"
 
 #include <gdkmm/event.h>
 
@@ -58,8 +58,8 @@ public:
 protected:
   /* callbacks */
   void on_selection_changed();
-  void on_box_modified(Box* box);
-  void on_add_plot(Box* box, Speaker* speaker, Gdk::Color&);
+  void on_box_modified(enclosure* box);
+  void on_add_plot(enclosure* box, driver* speaker, Gdk::Color&);
   void on_cell_plot_toggled(const Glib::ustring& path_string);
   bool on_delete_event(GdkEventAny*) override;
   void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
@@ -69,7 +69,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void add_item(Box const& box, Speaker const& spk, Gdk::Color&);
+  virtual void add_item(enclosure const& box, driver const& spk, Gdk::Color&);
 
 protected:
   /* This is used in the treemodel */
@@ -114,9 +114,9 @@ protected:
   Gtk::Label m_label;
 
   enclosure_list m_box_list;
-  speaker_list m_speaker_list;
+  driver_list m_speaker_list;
 
-  GSpeakersColor m_color_list;
+  colours m_color_list;
 
   ModelColumns m_columns;
 

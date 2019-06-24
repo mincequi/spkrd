@@ -83,7 +83,7 @@ public:
     /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& o, const Net& net);
 
-    std::string to_SPICE(Speaker& s, bool use_gnucap = false);
+    std::string to_SPICE(driver& s, bool use_gnucap = false);
 
     /// Use this to add a component to the net
     std::vector<passive_component>& parts() { return m_parts; }

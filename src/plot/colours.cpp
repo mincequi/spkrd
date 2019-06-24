@@ -15,11 +15,11 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "gspeakerscolor.h"
+#include "colours.hpp"
 
 #include <algorithm>
 
-GSpeakersColor::GSpeakersColor()
+colours::colours()
 {
     m_colors.emplace_back("black");   // 0, 0, 0
     m_colors.emplace_back("red");     // 255   0   0
@@ -60,21 +60,19 @@ GSpeakersColor::GSpeakersColor()
     m_colors.emplace_back("coral");         // 255 127  80
 }
 
-std::string const& GSpeakersColor::get_color_string()
+std::string const& colours::get_color_string()
 {
     std::string const& colour_value = m_colors[m_counter];
     m_counter = (m_counter + 1) % m_colors.size();
     return colour_value;
 }
 
-void GSpeakersColor::unget_color_string(const std::string& colour_value)
-{
-    m_colors.erase(get_iterator_from_string(colour_value));
-    m_colors.insert(m_colors.begin() + m_counter, colour_value);
-}
-
-std::vector<std::string>::iterator GSpeakersColor::get_iterator_from_string(const std::string& colour_value)
+void colours::unget_color_string(const std::string& colour_value)
 {
     auto const location = std::find(begin(m_colors), end(m_colors), colour_value);
-    return location == end(m_colors) ? location : begin(m_colors);
+    if (location != end(m_colors))
+    {
+        m_colors.erase(location);
+    }
+    m_colors.insert(m_colors.begin() + m_counter, colour_value);
 }

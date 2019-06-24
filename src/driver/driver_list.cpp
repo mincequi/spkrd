@@ -15,14 +15,14 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 #include "common.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-speaker_list::speaker_list(const std::string& filename)
+driver_list::driver_list(const std::string& filename)
 {
     // Allows human readable (formatted) XML documents without receiving
     // whitespace errors
@@ -32,7 +32,7 @@ speaker_list::speaker_list(const std::string& filename)
 
     if (doc == nullptr)
     {
-        throw std::runtime_error(_("speaker_list: XML file not found"));
+        throw std::runtime_error(_("driver_list: XML file not found"));
     }
 
     xmlNodePtr node = xmlDocGetRootElement(doc);
@@ -53,13 +53,13 @@ speaker_list::speaker_list(const std::string& filename)
     }
     else
     {
-        throw std::runtime_error(_("speaker_list: speakerlist node not found"));
+        throw std::runtime_error(_("driver_list: speakerlist node not found"));
     }
 }
 
-void speaker_list::clear() { m_speaker_list.clear(); }
+void driver_list::clear() { m_speaker_list.clear(); }
 
-void speaker_list::to_xml(const std::string& filename)
+void driver_list::to_xml(const std::string& filename)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
@@ -75,22 +75,22 @@ void speaker_list::to_xml(const std::string& filename)
     // Save xml file
     if (xmlSaveFile(filename.c_str(), doc) == -1)
     {
-        throw std::runtime_error(_("speaker_list: Could not save to ") + filename);
+        throw std::runtime_error(_("driver_list: Could not save to ") + filename);
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const speaker_list& speaker_list)
+std::ostream& operator<<(std::ostream& output, const driver_list& driver_list)
 {
-    output << _("Speaker List") << "\n";
+    output << _("driver List") << "\n";
 
-    for (auto& from : speaker_list.m_speaker_list)
+    for (auto& from : driver_list.m_speaker_list)
     {
         output << from;
     }
     return output;
 }
 
-Speaker speaker_list::get_speaker_by_id_string(std::string const& id_string)
+driver driver_list::get_speaker_by_id_string(std::string const& id_string)
 {
     auto const location = std::find_if(begin(m_speaker_list),
                                        end(m_speaker_list),
@@ -108,5 +108,5 @@ Speaker speaker_list::get_speaker_by_id_string(std::string const& id_string)
         return m_speaker_list.front();
     }
 
-    return Speaker();
+    return driver();
 }

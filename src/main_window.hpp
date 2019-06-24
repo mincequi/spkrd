@@ -25,7 +25,7 @@
 #include "enclosure_pane.hpp"
 #include "settings.h"
 #include "sidebar_notebook.hpp"
-#include "speaker_editor.hpp"
+#include "driver_editor.hpp"
 
 #include <gtkmm/menu.h>
 #include <gtkmm/window.h>
@@ -86,7 +86,7 @@ private:
 
     enclosure_pane m_enclosure_paned;
     crossover_pane m_crossover_paned;
-    speaker_editor m_speaker_editor;
+    driver_editor m_speaker_editor;
 
     bool m_in_quit_phase{false};
 };
