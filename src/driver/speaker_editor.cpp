@@ -592,9 +592,7 @@ void speaker_editor::on_selection_changed()
                     }
                     points.emplace_back(std::round(frequency), magnitude);
                 }
-
-                Gdk::Color c("blue");
-                plot.add_plot(points, c);
+                plot.add_plot(points, Gdk::Color("blue"));
             }
             // Plot impedance response increase impedance y coordinate 50 to align to imp scale
             draw_impedance_plot(s);
@@ -783,17 +781,17 @@ void speaker_editor::draw_impedance_plot(Speaker const& s, bool update)
                         }
                     }
                 }
-                Gdk::Color c2("red");
+
                 if (update)
                 {
                     plot.replace_plot(!(s.get_freq_resp_filename().empty()
                                         || !g_settings.getValueBool("DrawDriverFreqRespPlot")),
                                       points,
-                                      c2);
+                                      Gdk::Color("red"));
                 }
                 else
                 {
-                    plot.add_plot(points, c2);
+                    plot.add_plot(points, Gdk::Color("red"));
                 }
             }
         }
@@ -1110,7 +1108,7 @@ void speaker_editor::on_browse_freq_resp()
 
     if (!filename.empty())
     {
-        /* TODO: Check that selected file exists */
+        // TODO: Check that selected file exists
         m_FreqRespFileEntry.set_text(m_filename);
         m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 

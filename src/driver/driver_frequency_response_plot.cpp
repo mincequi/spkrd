@@ -47,14 +47,15 @@ driver_frequency_response_plot::driver_frequency_response_plot()
     m_plot.set_y_label2(_("Impedance / Ohm"));
 }
 
-void driver_frequency_response_plot::add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color)
+void driver_frequency_response_plot::add_plot(std::vector<GSpeakers::Point>& points,
+                                              Gdk::Color const& color)
 {
     m_plot.add_plot(points, color);
 }
 
 void driver_frequency_response_plot::replace_plot(int i,
                                                   std::vector<GSpeakers::Point>& points,
-                                                  Gdk::Color& color)
+                                                  Gdk::Color const& color)
 {
     m_plot.replace_plot(i, points, color);
 }

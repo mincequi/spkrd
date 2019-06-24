@@ -21,9 +21,6 @@
 #include "gspeakersobject.h"
 #include "speaker.h"
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <iosfwd>
 #include <string>
 #include <vector>
