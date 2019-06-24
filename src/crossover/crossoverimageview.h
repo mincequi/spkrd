@@ -24,12 +24,9 @@
 #define __CROSSOVER_IMAGE_VIEW_H
 
 #include "crossover.h"
-#include "speakerlist.h"
+#include "speaker_list.hpp"
 
-#include <gdkmm/color.h>
-#include <gdkmm/colormap.h>
-#include <gdkmm/gc.h>
-#include <gdkmm/pixmap.h>
+#include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
 #include <pangomm/layout.h>
@@ -37,69 +34,162 @@
 #include <string>
 #include <vector>
 
-/*
- * The CrossoverImageView is a widget that will display the
- * current crossover as an image of the component layout.
- */
-class CrossoverImageView : public Gtk::DrawingArea {
+/// The CrossoverImageView is a widget that will display the
+/// current crossover as an image of the component layout.
+class CrossoverImageView : public Gtk::DrawingArea
+{
 public:
-  CrossoverImageView();
+    CrossoverImageView();
 
 private:
-  bool on_expose_event(GdkEventExpose* event) override;
-  bool on_configure_event(GdkEventConfigure* event) override;
+    bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
 
-  void on_crossover_selected(Crossover* selected_crossover);
-  void on_speakerlist_selected(SpeakerList* selected_speaker_list);
-  void on_net_modified();
-  void on_settings_changed(const std::string& s);
+    bool on_expose_event(GdkEventExpose* event);
+    bool on_configure_event(GdkEventConfigure* event) override;
 
-  void redraw();
+    void on_crossover_selected(Crossover* selected_crossover);
+    void on_speakerlist_selected(speaker_list* selected_speaker_list);
+    void on_net_modified();
+    void on_settings_changed(const std::string& s);
 
-  /*
-   * Draw capacitor to refPixmap
-   *
-   * id     = component id
-   * x      = horizontal position
-   * y      = vertical position
-   * width  = width
-   * height = height
-   * rotate = rotate this component 90 degrees
-   */
-  void draw_capacitor(int id, int x, int y, int width, int height, bool rotate = false);
-  void draw_inductor(int id, int x, int y, int width, int height, bool rotate = false);
-  void draw_resistor(int id, int x, int y, int width, int height, bool rotate = false);
-  void draw_connector(int x, int y, int width, int height, bool positive = true);
+    void redraw(Cairo::RefPtr<Cairo::Context> const& context);
 
-  void draw_t_cross(int x, int y, int width, int height, bool upper = true);
-  void draw_corner(int x, int y, int width, int height, bool upper = true);
-  void draw_line(int x, int y, int width, int height, bool rotate = false);
+    /*
+     * Draw capacitor to refPixmap
+     *
+     * id     = component id
+     * x      = horizontal position
+     * y      = vertical position
+     * width  = width
+     * height = height
+     * rotate = rotate this component 90 degrees
+     */
+    void draw_capacitor(Cairo::RefPtr<Cairo::Context> const& context,
+                        int id,
+                        int x,
+                        int y,
+                        int width,
+                        int height,
+                        bool rotate = false);
 
-  void draw_woofer(int x, int y, int width, int height, bool positive_up = true);
-  void draw_midrange(int x, int y, int width, int height, bool positive_up = true);
-  void draw_tweeter(int x, int y, int width, int height, bool positive_up = true);
+    void draw_inductor(Cairo::RefPtr<Cairo::Context> const& context,
+                       int id,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool rotate = false);
 
-  void draw_lowpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
-  void draw_highpass_net(int x, int y, int part_width, int part_height, std::vector<Part>& parts);
+    void draw_resistor(Cairo::RefPtr<Cairo::Context> const& context,
+                       int id,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool rotate = false);
 
-  void draw_imp_corr_net(int x, int y, int part_width, int part_height, Part& capacitor,
-                         Part& resistor);
-  void draw_damp_net(int x, int y, int part_width, int part_height, Part& r1, Part& r2);
-  void draw_driver(int x, int y, int part_width, int part_height, Speaker& speaker);
+    void draw_connector(Cairo::RefPtr<Cairo::Context> const& context,
+                        int x,
+                        int y,
+                        int width,
+                        int height,
+                        bool positive = true);
+
+    void draw_t_cross(Cairo::RefPtr<Cairo::Context> const& context,
+                      int x,
+                      int y,
+                      int width,
+                      int height,
+                      bool upper = true);
+
+    void draw_corner(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int width,
+                     int height,
+                     bool upper = true);
+
+    void draw_line(Cairo::RefPtr<Cairo::Context> const& context,
+                   int x,
+                   int y,
+                   int width,
+                   int height,
+                   bool rotate = false);
+
+    void draw_woofer(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int width,
+                     int height,
+                     bool positive_up = true);
+
+    void draw_midrange(Cairo::RefPtr<Cairo::Context> const& context,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       bool positive_up = true);
+
+    void draw_tweeter(Cairo::RefPtr<Cairo::Context> const& context,
+                      int x,
+                      int y,
+                      int width,
+                      int height,
+                      bool positive_up = true);
+
+    void draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const& context,
+                          int x,
+                          int y,
+                          int part_width,
+                          int part_height,
+                          std::vector<passive_component> const& parts);
+
+    void draw_highpass_net(Cairo::RefPtr<Cairo::Context> const& context,
+                           int x,
+                           int y,
+                           int part_width,
+                           int part_height,
+                           std::vector<passive_component> const& parts);
+
+    void draw_imp_corr_net(Cairo::RefPtr<Cairo::Context> const& context,
+                           int x,
+                           int y,
+                           int part_width,
+                           int part_height,
+                           passive_component const& capacitor,
+                           passive_component const& resistor);
+
+    void draw_damp_net(Cairo::RefPtr<Cairo::Context> const& context,
+                       int x,
+                       int y,
+                       int part_width,
+                       int part_height,
+                       passive_component const& r1,
+                       passive_component const& r2);
+
+    void draw_driver(Cairo::RefPtr<Cairo::Context> const& context,
+                     int x,
+                     int y,
+                     int part_width,
+                     int part_height,
+                     Speaker const& speaker);
 
 private:
-  bool visible;
-  bool scale_image_parts;
+    bool m_visible{false};
+    bool m_scale_image_parts;
 
-  Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
-  Glib::RefPtr<Gdk::GC> m_refGC;
-  Glib::RefPtr<Gdk::Colormap> m_refColormap;
+    // /// Pixel map
+    // Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
+    // /// Graphics context
+    // Glib::RefPtr<Gdk::GC> m_refGC;
+    //
+    // Glib::RefPtr<Gdk::Colormap> m_refColormap;
 
-  Glib::RefPtr<Pango::Layout> m_refLayout;
-  Gdk::Color black, white;
+    Glib::RefPtr<Pango::Layout> m_refLayout;
+    Gdk::RGBA black, white;
 
-  Crossover* crossover;
-  SpeakerList* speaker_list;
+    Crossover* m_crossover{nullptr};
+    speaker_list* m_speaker_list{nullptr};
 };
 
 #endif

@@ -20,10 +20,10 @@
 #ifndef __GSPEAKERS_PLOTHISTORY
 #define __GSPEAKERS_PLOTHISTORY
 
-#include "boxlist.h"
+#include "enclosure_list.hpp"
 #include "common.h"
 #include "gspeakerscolor.h"
-#include "speakerlist.h"
+#include "speaker_list.hpp"
 
 #include <gdkmm/event.h>
 
@@ -69,7 +69,7 @@ protected:
   /* Helper member functions */
   virtual void create_model();
   virtual void add_columns();
-  virtual void liststore_add_item(Box const& box, Speaker const& spk, Gdk::Color&);
+  virtual void add_item(Box const& box, Speaker const& spk, Gdk::Color&);
 
 protected:
   /* This is used in the treemodel */
@@ -113,8 +113,8 @@ protected:
   Gtk::VBox m_vbox;
   Gtk::Label m_label;
 
-  BoxList m_box_list;
-  SpeakerList m_speaker_list;
+  enclosure_list m_box_list;
+  speaker_list m_speaker_list;
 
   GSpeakersColor m_color_list;
 

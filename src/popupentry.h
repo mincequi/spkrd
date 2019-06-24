@@ -27,7 +27,6 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/button.h>
 #include <gtkmm/celleditable.h>
-#include <gtkmm/editable.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/spinbutton.h>
@@ -40,7 +39,8 @@ public:
 
   Glib::ustring const& get_path() const;
 
-  void set_text(const Glib::ustring& text);
+  void set_text(Glib::ustring const& text);
+
   Glib::ustring get_text() const;
 
   void select_region(int start_pos, int end_pos);
@@ -58,6 +58,7 @@ protected:
 private:
   using Self = PopupEntry;
 
+private:
   void on_entry_activate();
   bool on_entry_key_press_event(GdkEventKey* event);
 
@@ -65,6 +66,7 @@ private:
   Glib::ustring m_path;
   Gtk::Entry* m_entry;
   Gtk::SpinButton* m_spin_button;
+  Glib::RefPtr<Gtk::Adjustment> m_spin_digits;
   bool m_editing_canceled;
 
   sigc::signal0<void> m_signal_arrow_clicked;

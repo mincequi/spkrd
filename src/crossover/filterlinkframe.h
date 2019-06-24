@@ -21,79 +21,86 @@
 #define __FILTER_LINK_FRAME_H
 
 #include "crossover.h"
-#include "gspeakersplot.h"
-#include "speakerlist.h"
+#include "plot.hpp"
+#include "speaker_list.hpp"
 
 #include <gtkmm/box.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
-class FilterLinkFrame : public Gtk::Frame {
+class FilterLinkFrame : public Gtk::Frame
+{
 public:
-  FilterLinkFrame(Net* net, const std::string& description, SpeakerList* speaker_list);
+    FilterLinkFrame(Net* net, const std::string& description, speaker_list* speaker_list);
 
-  ~FilterLinkFrame() override;
-
-private:
-  /* callbacks */
-  void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);
-  void on_param_changed();
-  void on_net_updated(Net* net);
-  void on_plot_crossover();
-  void on_clear_and_plot();
-  void on_speakerlist_loaded(SpeakerList* speaker_list);
-  void on_settings_changed(const std::string& s);
+    ~FilterLinkFrame() override;
 
 private:
-  void connect_signals();
+    void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);
 
-  void initialise_speaker_combobox();
-  void initialise_dampening();
-  void initialise_highpass_filter();
-  void initialise_lowpass_filter();
+    void on_param_changed();
 
-private:
-  /*
-   * Numerical coefficients for the filter principles
-   * net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
-   * NET_TYPE_HIGHPASS */
-  std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
+    void on_net_updated(Net* net);
 
-  void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
+    void on_plot_crossover();
+
+    void on_clear_and_plot();
+
+    void on_speakerlist_loaded(speaker_list* speaker_list);
+
+    void on_settings_changed(std::string const& s);
 
 private:
-  Gtk::Adjustment adj;
+    void connect_signals();
 
-  Gtk::Label m_label;
-  Gtk::VBox m_vbox;
-  Gtk::ComboBoxText m_speaker_combo;
-  Gtk::CheckButton m_enable_checkbutton;
+    void initialise_speaker_combobox();
+    void initialise_dampening();
+    void initialise_highpass_filter();
+    void initialise_lowpass_filter();
 
-  /* For lowpass filter */
-  Gtk::ComboBoxText* m_lower_order_combo;
-  Gtk::ComboBoxText* m_lower_type_combo;
-  Gtk::SpinButton* m_lower_co_freq_spinbutton;
+private:
+    /*
+     * Numerical coefficients for the filter principles
+     * net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
+     * NET_TYPE_HIGHPASS */
+    std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
 
-  /* For highpass filter */
-  Gtk::ComboBoxText* m_higher_order_combo;
-  Gtk::ComboBoxText* m_higher_type_combo;
-  Gtk::SpinButton* m_higher_co_freq_spinbutton;
+    void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
-  /* For both */
-  Gtk::CheckButton m_inv_pol_checkbutton;
-  Gtk::SpinButton m_damp_spinbutton;
-  Gtk::CheckButton m_imp_corr_checkbutton;
-  Gtk::CheckButton m_adv_imp_model_checkbutton;
+private:
+    Gtk::Label m_label;
+    Gtk::VBox m_vbox;
+    Gtk::ComboBoxText m_speaker_combo;
 
-  Net* m_net;
-  std::string m_description;
-  SpeakerList* m_speaker_list;
-  bool enable_edit{false};
-  bool init{true};
+    /* For lowpass filter */
+    Gtk::ComboBoxText* m_lower_order_combo;
+    Gtk::ComboBoxText* m_lower_type_combo;
+    Glib::RefPtr<Gtk::Adjustment> m_lower_co_freq_digits;
+    Gtk::SpinButton* m_lower_co_freq_spinbutton;
 
-  int my_filter_plot_index{-1};
-  std::vector<GSpeakers::Point> points;
+    /* For highpass filter */
+    Gtk::ComboBoxText* m_higher_order_combo;
+    Gtk::ComboBoxText* m_higher_type_combo;
+    Glib::RefPtr<Gtk::Adjustment> m_higher_co_freq_digits;
+    Gtk::SpinButton* m_higher_co_freq_spinbutton;
+
+    /* For both */
+    Gtk::CheckButton m_inv_pol_checkbutton;
+    Glib::RefPtr<Gtk::Adjustment> m_dampening_digits;
+    Gtk::SpinButton m_damp_spinbutton;
+    Gtk::CheckButton m_imp_corr_checkbutton;
+    Gtk::CheckButton m_adv_imp_model_checkbutton;
+
+    Net* m_net;
+    std::string m_description;
+    speaker_list* m_speaker_list;
+    bool enable_edit{false};
+    bool init{true};
+
+    int my_filter_plot_index{-1};
+    std::vector<GSpeakers::Point> points;
 };
 
 #endif

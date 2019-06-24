@@ -21,7 +21,7 @@
 #ifndef __GSPEAKERS_BOX_PLOT
 #define __GSPEAKERS_BOX_PLOT
 
-#include "gspeakersplot.h"
+#include "plot.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
@@ -32,15 +32,17 @@
 /// The reason why we have this class is that we want
 /// an extra layer (where we can connect signals and so on)
 /// between the program and the plot widget.
-class GSpeakersBoxPlot : public Gtk::Frame {
+class GSpeakersBoxPlot : public Gtk::Frame
+{
 public:
-  GSpeakersBoxPlot();
+    GSpeakersBoxPlot();
 
 private:
-  Gtk::Label m_label;
-  Gtk::VBox m_vbox;
-  Gtk::ScrolledWindow sw;
-  GSpeakersPlot plot;
+    Gtk::Label m_label;
+    Gtk::VBox m_vbox;
+    Gtk::ScrolledWindow sw;
+
+    plot m_plot;
 };
 
 #endif

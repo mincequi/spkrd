@@ -28,46 +28,47 @@
 #include <iosfwd>
 #include <vector>
 
-/* You should be able to use one or more of the type properties */
-#define CROSSOVER_TYPE_LOWPASS 1
-#define CROSSOVER_TYPE_SUBSONIC 2
-#define CROSSOVER_TYPE_HIGHPASS 4
-#define CROSSOVER_TYPE_TWOWAY 8
-/* Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY */
-#define CROSSOVER_TYPE_THREEWAY 16
-#define CROSSOVER_TYPE_FOURWAY 32
+// You should be able to use one or more of the type properties
+constexpr auto CROSSOVER_TYPE_LOWPASS = 1;
+constexpr auto CROSSOVER_TYPE_SUBSONIC = 2;
+constexpr auto CROSSOVER_TYPE_HIGHPASS = 4;
+constexpr auto CROSSOVER_TYPE_TWOWAY = 8;
+// Two and a half way filter will be CROSSOVER_TYPE_LOWPASS | CROSSOVER_TYPE_TWOWAY
+constexpr auto CROSSOVER_TYPE_THREEWAY = 16;
+constexpr auto CROSSOVER_TYPE_FOURWAY = 32;
 
-/* Why would anyone use my program to develop something more advanced
-   than a loudspeaker with four elements...? */
-class Crossover : public GSpeakersObject {
+class Crossover : public GSpeakersObject
+{
 public:
-  Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
+    Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
 
-  /* Construct a part from an xml node */
-  Crossover(xmlNodePtr parent);
+    /* Construct a part from an xml node */
+    Crossover(xmlNodePtr parent);
 
-  /* Convert data for a part to an xml node, throws std::runtime_error on failure */
-  xmlNodePtr to_xml_node(xmlNodePtr parent);
+    /* Convert data for a part to an xml node, throws std::runtime_error on failure */
+    xmlNodePtr to_xml_node(xmlNodePtr parent);
 
-  /* Print part data to stdout */
-  friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
+    /* Print part data to stdout */
+    friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
-  /* Use this to get the parts or add part to the net */
-  std::vector<Net>* networks();
+    std::vector<Net>& networks() { return m_networks; }
 
-  /* return id_string for this crossover */
-  std::string const& get_id_string() const;
-  void set_id_string(std::string id_string);
+    std::vector<Net> const& networks() const { return m_networks; }
 
-protected:
-  std::vector<Net> m_networks;
-  std::string m_id_string;
+    /* return id_string for this crossover */
+    std::string const& get_id_string() const;
+
+    void set_id_string(std::string id_string);
 
 protected:
-  /// Used to parse xml
-  void parse_type(xmlNodePtr node);
-  void parse_networks(xmlNodePtr node);
-  void parse_id_string(xmlNodePtr node);
+    /// Used to parse xml
+    void parse_type(xmlNodePtr node);
+    void parse_networks(xmlNodePtr node);
+    void parse_id_string(xmlNodePtr node);
+
+protected:
+    std::vector<Net> m_networks;
+    std::string m_id_string;
 };
 
 #endif

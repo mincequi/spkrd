@@ -17,62 +17,72 @@
 
 #include "crossoverlist.h"
 
-#include <glib.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
-CrossoverList::CrossoverList(const std::string& filename) {
+CrossoverList::CrossoverList(const std::string& filename)
+{
+    xmlDocPtr doc = xmlParseFile(filename.c_str());
 
-  xmlDocPtr doc = xmlParseFile(filename.c_str());
-  if (doc != nullptr) {
-    xmlNodePtr node = xmlDocGetRootElement(doc);
-    if ((node != nullptr) && (g_ascii_strcasecmp((char*)node->name, "crossoverlist") == 0)) {
-      if (node->children != nullptr) {
-        xmlNodePtr children = node->children;
-        while (children != nullptr) {
-          try {
-            m_crossover_list.emplace_back(children);
-          } catch (std::runtime_error const& e) {
-            throw e;
-          }
-          children = children->next;
-        }
-      }
-    } else {
-      throw std::runtime_error(_("CrossoverList: crossoverlist node not found"));
+    if (doc == nullptr)
+    {
+        throw std::runtime_error(_("CrossoverList: Xml file not found"));
     }
-  } else {
-    throw std::runtime_error(_("CrossoverList: Xml file not found"));
-  }
+
+    xmlNodePtr node = xmlDocGetRootElement(doc);
+
+    if (node != nullptr && g_ascii_strcasecmp((char*)node->name, "crossoverlist") == 0)
+    {
+        if (node->children != nullptr)
+        {
+            xmlNodePtr children = node->children;
+            while (children != nullptr)
+            {
+                try
+                {
+                    m_crossover_list.emplace_back(children);
+                }
+                catch (std::runtime_error const& e)
+                {
+                    throw e;
+                }
+                children = children->next;
+            }
+        }
+    }
+    else
+    {
+        throw std::runtime_error(_("CrossoverList: crossoverlist node not found"));
+    }
 }
 
-void CrossoverList::clear() {
-  m_crossover_list.erase(m_crossover_list.begin(), m_crossover_list.end());
+void CrossoverList::clear() { m_crossover_list.clear(); }
+
+void CrossoverList::to_xml(const std::string& filename)
+{
+    xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
+
+    xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("crossoverlist"), nullptr);
+    xmlDocSetRootElement(doc, node);
+
+    for (auto& from : m_crossover_list)
+    {
+        from.to_xml_node(node);
+    }
+
+    if (xmlSaveFile(filename.c_str(), doc) == -1)
+    {
+        throw std::runtime_error(_("CrossoverList: Could not save to ") + filename);
+    }
 }
 
-void CrossoverList::to_xml(const std::string& filename) {
+std::ostream& operator<<(std::ostream& output, const CrossoverList& crossover_list)
+{
+    output << "Crossover List\n";
 
-  xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
-
-  xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("crossoverlist"), nullptr);
-  xmlDocSetRootElement(doc, node);
-
-  /* Iterate through all crossovers */
-  for (auto& from : m_crossover_list) {
-    ((Crossover)from).to_xml_node(node);
-  }
-
-  /* Save xml file */
-  if (xmlSaveFile(filename.c_str(), doc) == -1) {
-    throw std::runtime_error(_("CrossoverList: Could not save to ") + filename);
-  }
+    for (const auto& from : crossover_list.m_crossover_list)
+    {
+        output << from;
+    }
+    return output;
 }
-
-std::ostream& operator<<(std::ostream& o, const CrossoverList& crossover_list) {
-  o << "Crossover List" << std::endl;
-
-  for (const auto& from : crossover_list.m_crossover_list) {
-    o << from;
-  }
-  return o;
-}
-
-std::vector<Crossover>* CrossoverList::crossover_list() { return &m_crossover_list; }

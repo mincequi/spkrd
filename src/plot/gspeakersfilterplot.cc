@@ -20,35 +20,42 @@
 
 #include "gspeakersfilterplot.h"
 
-GSpeakersFilterPlot::GSpeakersFilterPlot() : plot(1, 20000) {
+GSpeakersFilterPlot::GSpeakersFilterPlot() : m_plot(1, 20000)
+{
+    add(m_plot);
 
-  add(plot);
+    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
+    signal_crossover_selected.connect(
+        sigc::mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
 
-  signal_add_crossover_plot.connect(sigc::mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
-  signal_crossover_selected.connect(
-      sigc::mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
+    m_plot.set_y_label(_("Magnitude / dB"));
 
-  plot.set_y_label(_("Magnitude / dB"));
-
-  show_all();
+    show_all();
 }
 
-int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color& color,
-                                     int* i, Net* n) {
-  if (*i == -1) {
-    *i = plot.add_plot(points, color);
-  } else {
-    plot.replace_plot(*i, points, color);
-  }
-  plot.select_plot(-1);
-  return 0;
+int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
+                                     Gdk::Color& color,
+                                     int* i,
+                                     Net* n)
+{
+    if (*i == -1)
+    {
+        *i = m_plot.add_plot(points, color);
+    }
+    else
+    {
+        m_plot.replace_plot(*i, points, color);
+    }
+    m_plot.select_plot(-1);
+    return 0;
 }
 
-void GSpeakersFilterPlot::clear() { plot.remove_all_plots(); }
+void GSpeakersFilterPlot::clear() { m_plot.remove_all_plots(); }
 
 void GSpeakersFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 
-bool GSpeakersFilterPlot::on_delete_event(GdkEventAny* event) {
-  // Don't delete this window
-  return true;
+bool GSpeakersFilterPlot::on_delete_event(GdkEventAny* event)
+{
+    // Don't delete this window
+    return true;
 }

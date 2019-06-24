@@ -20,35 +20,38 @@
 #ifndef __GSPEAKERS_CELLITEM_CROSSOVER
 #define __GSPEAKERS_CELLITEM_CROSSOVER
 
-#include "part.h"
+#include "passive_component.hpp"
 
-#include <glib.h>
 #include <glibmm/ustring.h>
 
 #include <vector>
 
 /// This is a cellitem for a crossover used in the current crossover treeview
 /// CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
-class CellItem_Crossover {
+class CellItem_Crossover
+{
 public:
-  CellItem_Crossover() = default;
+    CellItem_Crossover() = default;
 
-  CellItem_Crossover(Part part);
+    CellItem_Crossover(passive_component const& part);
 
-  CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
+    CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
 
-  /// Construct a cellitem with children
-  CellItem_Crossover(Glib::ustring label, std::vector<CellItem_Crossover> const& children);
+    /// Construct a cellitem with children
+    CellItem_Crossover(Glib::ustring label, std::vector<CellItem_Crossover> const& children);
 
 public:
-  Glib::ustring m_label;
-  int m_id = 0;
-  int m_type = 0;
-  double m_value = 0.0;
-  Glib::ustring m_unit;
-  Glib::ustring m_type_str;
-  Glib::ustring m_value_str;
-  std::vector<CellItem_Crossover> m_children;
+    Glib::ustring m_label;
+
+    int m_id = 0;
+    int m_type = 0;
+    double m_value = 0.0;
+
+    Glib::ustring m_unit;
+    Glib::ustring m_type_str;
+    Glib::ustring m_value_str;
+
+    std::vector<CellItem_Crossover> m_children;
 };
 
 #endif

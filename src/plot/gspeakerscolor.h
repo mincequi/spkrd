@@ -21,21 +21,22 @@
 #include <string>
 #include <vector>
 
-class GSpeakersColor {
+class GSpeakersColor
+{
 public:
-  GSpeakersColor();
+    GSpeakersColor();
 
-  /// Get the color string and cycle to the next color
-  std::string const& get_color_string();
+    /// Get the color string and cycle to the next color
+    std::string const& get_color_string();
 
-  void unget_color_string(const std::string& s);
-
-private:
-  std::vector<std::string>::iterator get_iterator_from_string(const std::string& s);
+    void unget_color_string(const std::string& s);
 
 private:
-  std::vector<std::string> m_colors;
-  int m_counter = 0;
+    auto get_iterator_from_string(const std::string& s) -> std::vector<std::string>::iterator;
+
+private:
+    std::vector<std::string> m_colors;
+    int m_counter = 0;
 };
 
 #endif
