@@ -40,9 +40,9 @@ public:
 
     void clear() { m_plot.remove_all_plots(); }
 
-    void add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&);
+    void add_plot(std::vector<GSpeakers::Point>&, Gdk::Color const& colour);
 
-    void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color&);
+    void replace_plot(int, std::vector<GSpeakers::Point>&, Gdk::Color const& colour);
 
 private:
     plot m_plot;

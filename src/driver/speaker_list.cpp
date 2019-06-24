@@ -16,7 +16,11 @@
 */
 
 #include "speaker_list.hpp"
+
 #include "common.h"
+
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 speaker_list::speaker_list(const std::string& filename)
 {
@@ -101,7 +105,7 @@ Speaker speaker_list::get_speaker_by_id_string(std::string const& id_string)
 
     if (!m_speaker_list.empty())
     {
-        return m_speaker_list[0];
+        return m_speaker_list.front();
     }
 
     return Speaker();
