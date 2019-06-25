@@ -83,12 +83,13 @@ void main_window::set_title_and_icons()
 {
     try
     {
-#ifdef TARGET_WIN32
-        Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file("gspeakers.png");
-#else
         Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(
-            std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png");
+#ifdef TARGET_WIN32
+            "gspeakers.png"
+#else
+            std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png"
 #endif
+        );
         set_icon(main_icon);
     }
     catch (Gdk::PixbufError const& error)
