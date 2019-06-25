@@ -257,7 +257,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
 
             for (auto const& speaker : m_speaker_list->data())
             {
-                if (speaker.get_type() == SPEAKER_TYPE_BASS
+                if (is_bass_driver(speaker.get_type())
                     && m_current_speaker.get_id_string() != speaker.get_id_string())
                 {
                     m_bass_speaker_combo.append(speaker.get_id_string());
@@ -310,8 +310,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
     {
         for (auto const& speaker : m_speaker_list->data())
         {
-            if (speaker.get_type() == SPEAKER_TYPE_BASS
-                && m_box->get_speaker() != speaker.get_id_string())
+            if (is_bass_driver(speaker.get_type()) && m_box->get_speaker() != speaker.get_id_string())
             {
                 m_bass_speaker_combo.append(speaker.get_id_string());
             }
@@ -322,7 +321,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
     {
         for (auto const& speaker : m_speaker_list->data())
         {
-            if (speaker.get_type() == SPEAKER_TYPE_BASS)
+            if (is_bass_driver(speaker.get_type()))
             {
                 m_bass_speaker_combo.append(speaker.get_id_string());
             }

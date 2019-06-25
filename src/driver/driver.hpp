@@ -26,9 +26,16 @@
 #include <string>
 
 /// driver types
-#define SPEAKER_TYPE_BASS 1
-#define SPEAKER_TYPE_MIDRANGE 2
-#define SPEAKER_TYPE_TWEETER 4
+constexpr auto SPEAKER_TYPE_BASS = 1;
+constexpr auto SPEAKER_TYPE_MIDRANGE = 2;
+constexpr auto SPEAKER_TYPE_TWEETER = 4;
+
+/// \return True is the driver has a bass frequency response
+constexpr bool is_bass_driver(int const value) { return value & SPEAKER_TYPE_BASS; }
+/// \return True is the driver has a midrange frequency response
+constexpr bool is_midrange_driver(int const value) { return value & SPEAKER_TYPE_MIDRANGE; }
+/// \return True is the driver has a high frequency response
+constexpr bool is_tweeter_driver(int const value) { return value & SPEAKER_TYPE_TWEETER; }
 
 /// This class contains data for a speaker
 class driver : public GSpeakersObject
@@ -36,26 +43,26 @@ class driver : public GSpeakersObject
 public:
     /// Default values from Vifa P21WO-20-08
     driver(std::string id_string = "Vifa P21-20-08",
-            int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
-            double qts = 0.33,
-            double vas = 113,
-            double fs = 28,
-            double rdc = 5.6,
-            double lvc = 0.9,
-            double qms = 1.6,
-            double qes = 0.41,
-            double imp = 8,
-            double sens = 91,
-            std::string freq_resp_filename = "",
-            std::string imp_resp_filename = "",
-            double mmd = 0.04,
-            double ad = 0.0837,
-            double bl = 11,
-            double rms = 1.7,
-            double cms = 0.0012);
+           int type = SPEAKER_TYPE_BASS | SPEAKER_TYPE_MIDRANGE,
+           double qts = 0.33,
+           double vas = 113,
+           double fs = 28,
+           double rdc = 5.6,
+           double lvc = 0.9,
+           double qms = 1.6,
+           double qes = 0.41,
+           double imp = 8,
+           double sens = 91,
+           std::string freq_resp_filename = "",
+           std::string imp_resp_filename = "",
+           double mmd = 0.04,
+           double ad = 0.0837,
+           double bl = 11,
+           double rms = 1.7,
+           double cms = 0.0012);
 
     /// Construct a speaker from an xml node, throws an exception on error in xml
-    driver(xmlNodePtr parent);
+    driver(xmlNodePtr parent) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);

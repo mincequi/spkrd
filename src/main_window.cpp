@@ -28,6 +28,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include <iostream>
 

@@ -29,8 +29,6 @@
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/filechooserdialog.h>
-#include <gtkmm/handlebox.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/table.h>
@@ -38,8 +36,6 @@
 #include <gtkmm/toolbar.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/widget.h>
-#include <gtkmm/separatormenuitem.h>
 
 #include <sigc++/sigc++.h>
 
@@ -64,6 +60,7 @@ public:
 
 protected:
     bool open_xml(const std::string& filename);
+
     void append_xml(const std::string& filename);
 
     void on_cell_fixed_toggled(const Glib::ustring& path_string);
