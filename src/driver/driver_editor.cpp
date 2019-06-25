@@ -1108,23 +1108,25 @@ void driver_editor::on_browse_freq_resp()
     GSpeakersFileChooserDialog fc(_("Open frequency response file"));
     std::string const& filename = fc.get_filename();
 
-    if (!filename.empty())
+    if (filename.empty())
     {
-        // TODO: Check that selected file exists
-        m_FreqRespFileEntry.set_text(m_filename);
-        m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
-
-        m_speaker_list->data()[index].set_freq_resp_filename(filename);
-
-        on_selection_changed();
-        // FIXME gtk3 port
-        // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-        m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-
-        m_modified = true;
-
-        GSpeakers::driverlist_modified() = true;
+        return;
     }
+
+    // TODO: Check that selected file exists
+    m_FreqRespFileEntry.set_text(m_filename);
+    m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
+
+    m_speaker_list->data()[index].set_freq_resp_filename(filename);
+
+    on_selection_changed();
+    // FIXME gtk3 port
+    // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+
+    m_modified = true;
+
+    GSpeakers::driverlist_modified() = true;
 }
 
 void driver_editor::create_model()
