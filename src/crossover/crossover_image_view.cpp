@@ -658,9 +658,10 @@ void crossover_image_view::draw_connector(Cairo::RefPtr<Cairo::Context> const& c
                     x + std::round(half_space_x / 2.0),
                     y + std::round(half_space_y / 2.0));
 
+    context->begin_new_path();
+
     // Draw a "connector" circle
     context->arc(x + half_space_x, y + half_space_y, 2.0 * small_space_x, 0.0, 2.0 * M_PI);
-    context->stroke();
 
     // Draw line from connector to edge of this component
     context->move_to(x + half_space_x + 2 * small_space_x, y + half_space_y);
@@ -734,15 +735,14 @@ void crossover_image_view::draw_line(Cairo::RefPtr<Cairo::Context> const& contex
         auto const half_space_x = std::round(width / 2.0);
         context->move_to(x + half_space_x, y);
         context->line_to(x + half_space_x, y + height);
-        context->stroke();
     }
     else
     {
         auto const half_space_y = std::round(height / 2.0);
         context->move_to(x, y + half_space_y);
         context->line_to(x + width, y + half_space_y);
-        context->stroke();
     }
+    context->stroke();
 }
 
 void crossover_image_view::draw_woofer(Cairo::RefPtr<Cairo::Context> const& context,
@@ -868,8 +868,6 @@ void crossover_image_view::draw_text(Cairo::RefPtr<Cairo::Context> const& contex
                                      int const rectangle_width,
                                      int const rectangle_height)
 {
-    context->save();
-
     Pango::FontDescription font;
     font.set_family("Monospace");
 
@@ -888,6 +886,4 @@ void crossover_image_view::draw_text(Cairo::RefPtr<Cairo::Context> const& contex
     context->move_to(rectangle_width, rectangle_height);
 
     layout->show_in_cairo_context(context);
-
-    context->restore();
 }
