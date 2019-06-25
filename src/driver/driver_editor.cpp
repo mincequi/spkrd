@@ -513,7 +513,7 @@ void driver_editor::on_selection_changed()
 
     updating_entries = true;
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (auto const iter = refSelection->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
