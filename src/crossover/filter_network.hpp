@@ -53,7 +53,6 @@ constexpr auto NET_LINEARPHASE = 7;
 /// filter_network is a part of a crossover: one part of the crossover we want to simulate in SPICE
 /// For example: Lowpass filter with impedance correction network or
 ///              highpass filter with damping network.
-/// TODO: Use c++ streams for input in passive_component(xmlNodePtr)
 class filter_network : public GSpeakersObject
 {
 public:
