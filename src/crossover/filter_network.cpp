@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "net.h"
+#include "filter_network.hpp"
 #include "driver.hpp"
 
 #include <glibmm.h>
@@ -26,28 +26,28 @@
 #include <sstream>
 #include <utility>
 
-Net::Net(int type,
-         int lowpass_order,
-         int highpass_order,
-         bool has_imp_corr,
-         bool has_damp,
-         bool has_res,
-         int family,
-         int adv_imp_model,
-         bool inv_pol)
-    : GSpeakersObject()
+filter_network::filter_network(int type,
+                               int lowpass_order,
+                               int highpass_order,
+                               bool has_imp_corr,
+                               bool has_damp,
+                               bool has_res,
+                               int family,
+                               int adv_imp_model,
+                               bool inv_pol)
+    : GSpeakersObject(),
+      m_highpass_order(highpass_order),
+      m_lowpass_order(lowpass_order),
+      m_has_imp_corr(has_imp_corr),
+      m_has_damp(has_damp),
+      m_has_res(has_res),
+      m_lowpass_family(family),
+      m_highpass_family(family),
+      m_speaker(""),
+      m_adv_imp_model(adv_imp_model),
+      m_inv_pol(inv_pol)
 {
     m_type = type;
-    m_highpass_order = highpass_order;
-    m_lowpass_order = lowpass_order;
-    m_has_imp_corr = has_imp_corr;
-    m_has_damp = has_damp;
-    m_has_res = has_res;
-    m_lowpass_family = family;
-    m_highpass_family = family;
-    m_speaker = "";
-    m_adv_imp_model = adv_imp_model;
-    m_inv_pol = inv_pol;
 
     // Init lowpass filter if present
     if (m_type == NET_TYPE_LOWPASS)
@@ -118,7 +118,7 @@ Net::Net(int type,
     }
 }
 
-Net::Net(xmlNodePtr parent)
+filter_network::filter_network(xmlNodePtr parent)
 {
     if (parent != nullptr && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0))
     {
@@ -133,11 +133,11 @@ Net::Net(xmlNodePtr parent)
     }
     else
     {
-        throw std::runtime_error(_("Net: net node expected"));
+        throw std::runtime_error(_("filter_network: net node expected"));
     }
 }
 
-void Net::parse_type(xmlNodePtr node)
+void filter_network::parse_type(xmlNodePtr node)
 {
     if (node != nullptr && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0))
     {
@@ -153,11 +153,11 @@ void Net::parse_type(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: type node expected"));
+        throw std::runtime_error(_("filter_network: type node expected"));
     }
 }
 
-void Net::parse_lowpass_order(xmlNodePtr node)
+void filter_network::parse_lowpass_order(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0))
     {
@@ -173,11 +173,11 @@ void Net::parse_lowpass_order(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: lowpass_order node expected"));
+        throw std::runtime_error(_("filter_network: lowpass_order node expected"));
     }
 }
 
-void Net::parse_highpass_order(xmlNodePtr node)
+void filter_network::parse_highpass_order(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0))
     {
@@ -193,11 +193,11 @@ void Net::parse_highpass_order(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: highpass_order node expected"));
+        throw std::runtime_error(_("filter_network: highpass_order node expected"));
     }
 }
 
-void Net::parse_has_imp_corr(xmlNodePtr node)
+void filter_network::parse_has_imp_corr(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0))
     {
@@ -220,11 +220,11 @@ void Net::parse_has_imp_corr(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: has_imp_corr node expected"));
+        throw std::runtime_error(_("filter_network: has_imp_corr node expected"));
     }
 }
 
-void Net::parse_has_damp(xmlNodePtr node)
+void filter_network::parse_has_damp(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_damp", 8) == 0))
     {
@@ -241,11 +241,11 @@ void Net::parse_has_damp(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: has_damp node expected"));
+        throw std::runtime_error(_("filter_network: has_damp node expected"));
     }
 }
 
-void Net::parse_has_res(xmlNodePtr node)
+void filter_network::parse_has_res(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_res", 7) == 0))
     {
@@ -262,11 +262,11 @@ void Net::parse_has_res(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: has_res node expected"));
+        throw std::runtime_error(_("filter_network: has_res node expected"));
     }
 }
 
-void Net::parse_parts(xmlNodePtr node)
+void filter_network::parse_parts(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "parts", 5) == 0))
     {
@@ -373,11 +373,11 @@ void Net::parse_parts(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net: parts node expected"));
+        throw std::runtime_error(_("filter_network: parts node expected"));
     }
 }
 
-void Net::parse_lowpass_family(xmlNodePtr node)
+void filter_network::parse_lowpass_family(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0))
     {
@@ -393,11 +393,12 @@ void Net::parse_lowpass_family(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net::parse_lowpass_family: lowpass_family node expected"));
+        throw std::runtime_error(_("filter_network::parse_lowpass_family: lowpass_family node "
+                                   "expected"));
     }
 }
 
-void Net::parse_highpass_family(xmlNodePtr node)
+void filter_network::parse_highpass_family(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0))
     {
@@ -413,11 +414,12 @@ void Net::parse_highpass_family(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net::parse_highpass_family: highpass_family node expected"));
+        throw std::runtime_error(_("filter_network::parse_highpass_family: highpass_family node "
+                                   "expected"));
     }
 }
 
-void Net::parse_speaker(xmlNodePtr node)
+void filter_network::parse_speaker(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0))
     {
@@ -433,11 +435,11 @@ void Net::parse_speaker(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net::parse_speaker: speaker node expected"));
+        throw std::runtime_error(_("filter_network::parse_speaker: speaker node expected"));
     }
 }
 
-void Net::parse_adv_imp_model(xmlNodePtr node)
+void filter_network::parse_adv_imp_model(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0))
     {
@@ -453,11 +455,12 @@ void Net::parse_adv_imp_model(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net::parse_adv_imp_model: adv_imp_model node expected"));
+        throw std::runtime_error(_("filter_network::parse_adv_imp_model: adv_imp_model node "
+                                   "expected"));
     }
 }
 
-void Net::parse_inv_pol(xmlNodePtr node)
+void filter_network::parse_inv_pol(xmlNodePtr node)
 {
     if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "inv_pol", 7) == 0))
     {
@@ -465,11 +468,11 @@ void Net::parse_inv_pol(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("Net::parse_inv_pol: inv_pol node expected"));
+        throw std::runtime_error(_("filter_network::parse_inv_pol: inv_pol node expected"));
     }
 }
 
-xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
+xmlNodePtr filter_network::to_xml_node(xmlNodePtr parent)
 {
     xmlNodePtr net = xmlNewChild(parent, nullptr, (xmlChar*)("net"), nullptr);
     xmlNodePtr field = xmlNewChild(net, nullptr, (xmlChar*)("type"), nullptr);
@@ -524,7 +527,7 @@ xmlNodePtr Net::to_xml_node(xmlNodePtr parent)
     return net;
 }
 
-std::string Net::to_SPICE(driver& s, bool use_gnucap)
+std::string filter_network::to_SPICE(driver& s, bool use_gnucap)
 {
     std::string tmp_dir = Glib::get_tmp_dir();
 #ifdef TARGET_WIN32
@@ -707,15 +710,15 @@ std::string Net::to_SPICE(driver& s, bool use_gnucap)
         if (m_adv_imp_model == 1)
         {
             // Complex model
-            double const cmes = s.get_mmd() / (s.get_bl() * s.get_bl()) * 1000000;
-            double const lces = s.get_bl() * s.get_bl() * s.get_cms() * 1000;
+            double const cmes = s.get_mmd() / (s.get_bl() * s.get_bl()) * 1'000'000;
+            double const lces = s.get_bl() * s.get_bl() * s.get_cms() * 1'000;
             double const res = s.get_bl() * s.get_bl() / s.get_rms();
 
             // air density kg/m^3
             constexpr double po = 1.18;
 
             double const cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad()
-                                / (3 * s.get_bl() * s.get_bl()) * 1000000;
+                                / (3 * s.get_bl() * s.get_bl()) * 1'000'000;
 
             of << "R" << s.get_id() << " " << node_counter << " "
                << node_counter + next_node_cnt_inc << " " << s.get_rdc() << "\n";
@@ -762,14 +765,14 @@ std::string Net::to_SPICE(driver& s, bool use_gnucap)
     }
     else
     {
-        throw std::runtime_error("Net::to_SPICE: could not write " + tmp_file);
+        throw std::runtime_error("filter_network::to_SPICE: could not write " + tmp_file);
     }
     return tmp_file;
 }
 
-std::ostream& operator<<(std::ostream& output, const Net& net)
+std::ostream& operator<<(std::ostream& output, const filter_network& net)
 {
-    output << _("***Net*** ******") << "\n"
+    output << _("***filter_network*** ******") << "\n"
            << _("Id:       ") << net.m_id << "\n"
            << _("Type:     ") << net.m_type << "\n"
            << _("Highpass #") << net.m_highpass_order << "\n"
@@ -787,7 +790,7 @@ std::ostream& operator<<(std::ostream& output, const Net& net)
     return output << _("********* ******") << "\n";
 }
 
-void Net::set_highpass_order(int order)
+void filter_network::set_highpass_order(int order)
 {
     if (order >= 0 && order <= 4)
     {
@@ -797,7 +800,7 @@ void Net::set_highpass_order(int order)
     }
 }
 
-void Net::set_lowpass_order(int order)
+void filter_network::set_lowpass_order(int order)
 {
     if (order >= 0 && order <= 4)
     {
@@ -807,7 +810,7 @@ void Net::set_lowpass_order(int order)
     }
 }
 
-void Net::set_has_imp_corr(bool has_impedance_correction)
+void filter_network::set_has_imp_corr(bool has_impedance_correction)
 {
     m_has_imp_corr = has_impedance_correction;
     if (has_impedance_correction)
@@ -817,7 +820,7 @@ void Net::set_has_imp_corr(bool has_impedance_correction)
     }
 }
 
-void Net::set_has_damp(bool has_dampening)
+void filter_network::set_has_damp(bool has_dampening)
 {
     m_has_damp = has_dampening;
     if (has_dampening)
@@ -827,7 +830,7 @@ void Net::set_has_damp(bool has_dampening)
     }
 }
 
-void Net::setup_net_by_order(int new_order, int which_net)
+void filter_network::setup_net_by_order(int new_order, int which_net)
 {
     auto iter = m_parts.begin();
 

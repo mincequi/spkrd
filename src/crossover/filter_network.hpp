@@ -29,7 +29,7 @@
 
 #include <vector>
 
-/* Net types */
+/* filter_network types */
 constexpr auto NET_TYPE_LOWPASS = 1;
 constexpr auto NET_TYPE_HIGHPASS = 2;
 constexpr auto NET_TYPE_BANDPASS = 3;
@@ -50,38 +50,36 @@ constexpr auto NET_GAUSSIAN = 5;
 constexpr auto NET_LEGENDRE = 6;
 constexpr auto NET_LINEARPHASE = 7;
 
-/// Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
-/// For example: Lowpassfilter with impedance correction network or highpassfilter with
-///              damping network.
+/// filter_network is a part of a crossover: one part of the crossover we want to simulate in SPICE
+/// For example: Lowpass filter with impedance correction network or
+///              highpass filter with damping network.
 /// TODO: Use c++ streams for input in passive_component(xmlNodePtr)
-class Net : public GSpeakersObject
+class filter_network : public GSpeakersObject
 {
 public:
-    /*
-     * Construct new net object
-     * type = NET_TYPE_LOWPASS                        // lowpass filter
-     * type = NET_TYPE_HIGHPASS                       // highpass filter
-     * type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
-     */
-    Net(int type = NET_TYPE_LOWPASS,
-        int lowpass_order = NET_ORDER_1ST,
-        int highpass_order = NET_NOT_PRESENT,
-        bool has_imp_corr = false,
-        bool has_damp = false,
-        bool has_res = false,
-        int family = NET_BUTTERWORTH,
-        int adv_imp_model = 0,
-        bool inv_pol = false);
+    /// Construct new net object
+    /// type = NET_TYPE_LOWPASS                        // lowpass filter
+    /// type = NET_TYPE_HIGHPASS                       // highpass filter
+    /// type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
+    filter_network(int type = NET_TYPE_LOWPASS,
+                   int lowpass_order = NET_ORDER_1ST,
+                   int highpass_order = NET_NOT_PRESENT,
+                   bool has_imp_corr = false,
+                   bool has_damp = false,
+                   bool has_res = false,
+                   int family = NET_BUTTERWORTH,
+                   int adv_imp_model = 0,
+                   bool inv_pol = false);
 
     /// Construct a part from an xml node or create_from_xml(xmlNodePtr)
-    Net(xmlNodePtr parent);
+    filter_network(xmlNodePtr parent);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     /// Maybe this one should throw an exception
     xmlNodePtr to_xml_node(xmlNodePtr parent);
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const Net& net);
+    friend std::ostream& operator<<(std::ostream& o, const filter_network& net);
 
     std::string to_SPICE(driver& s, bool use_gnucap = false);
 
@@ -111,14 +109,14 @@ public:
     bool get_inv_pot() const { return m_inv_pol; }
 
     /*
-     * We return parts by ref to so that we not copy these parts.
+     * We return parts by ref to so that we do not copy these parts.
      * For example, if we have:
-     * Net n = net;
+     * filter_network n = net;
      * n.get_imp_corr_R().set_value(0.2);
      *
      * we don't access the part stored in n, we get a copy of that
      * part that we modify, but if we return a ref we modify the
-     * part stored in Net
+     * part stored in filter_network
      */
     passive_component& get_imp_corr_R() { return m_imp_corr_R; }
 

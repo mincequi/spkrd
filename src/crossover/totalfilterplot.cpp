@@ -40,7 +40,7 @@ TotalFilterPlot::~TotalFilterPlot() = default;
 int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
                                  Gdk::Color& color,
                                  int* output_plot_index,
-                                 Net* n)
+                                 filter_network* n)
 {
     auto const& plot_index = *output_plot_index;
 

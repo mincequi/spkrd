@@ -1,4 +1,4 @@
-/* crossoverimageview.h
+/* crossover_image_view.hpp
  *
  * $Id$
  *
@@ -34,12 +34,12 @@
 #include <string>
 #include <vector>
 
-/// The CrossoverImageView is a widget that will display the
+/// The crossover_image_view is a widget that will display the
 /// current crossover as an image of the component layout.
-class CrossoverImageView : public Gtk::DrawingArea
+class crossover_image_view : public Gtk::DrawingArea
 {
 public:
-    CrossoverImageView();
+    crossover_image_view();
 
 private:
     bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
@@ -173,6 +173,11 @@ private:
                      int part_width,
                      int part_height,
                      driver const& speaker);
+
+    void draw_text(Cairo::RefPtr<Cairo::Context> const& context,
+                   std::string const& text,
+                   int const center_x,
+                   int const center_y);
 
 private:
     bool m_visible{false};

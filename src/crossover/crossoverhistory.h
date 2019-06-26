@@ -69,7 +69,7 @@ protected:
     void save_as_xml(const std::string& filename);
     void on_selection_changed();
     void on_part_modified();
-    void on_net_modified_by_wizard(Net* net);
+    void on_net_modified_by_wizard(filter_network* net);
     void on_net_modified_by_user();
     void on_new_crossover_menu_action(int);
     void on_plot_crossover();

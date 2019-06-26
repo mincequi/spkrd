@@ -26,6 +26,8 @@
 #include <glibmm.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/separatortoolitem.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/separatormenuitem.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/stock.h>
 
@@ -511,7 +513,7 @@ void driver_editor::on_selection_changed()
 
     updating_entries = true;
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (auto const iter = refSelection->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -555,9 +557,9 @@ void driver_editor::on_selection_changed()
             m_CmsEntry.set_text(Glib::ustring(buffer->str));
 
             // Check buttons
-            m_BassCheckButton.set_active(s.get_type() == SPEAKER_TYPE_BASS);
-            m_MidrangeCheckButton.set_active(s.get_type() == SPEAKER_TYPE_MIDRANGE);
-            m_TweeterCheckButton.set_active(s.get_type() == SPEAKER_TYPE_TWEETER);
+            m_BassCheckButton.set_active(is_bass_driver(s.get_type()));
+            m_MidrangeCheckButton.set_active(is_midrange_driver(s.get_type()));
+            m_TweeterCheckButton.set_active(is_tweeter_driver(s.get_type()));
 
             m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
 
@@ -1106,23 +1108,25 @@ void driver_editor::on_browse_freq_resp()
     GSpeakersFileChooserDialog fc(_("Open frequency response file"));
     std::string const& filename = fc.get_filename();
 
-    if (!filename.empty())
+    if (filename.empty())
     {
-        // TODO: Check that selected file exists
-        m_FreqRespFileEntry.set_text(m_filename);
-        m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
-
-        m_speaker_list->data()[index].set_freq_resp_filename(filename);
-
-        on_selection_changed();
-        // FIXME gtk3 port
-        // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
-        m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-
-        m_modified = true;
-
-        GSpeakers::driverlist_modified() = true;
+        return;
     }
+
+    // TODO: Check that selected file exists
+    m_FreqRespFileEntry.set_text(m_filename);
+    m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
+
+    m_speaker_list->data()[index].set_freq_resp_filename(filename);
+
+    on_selection_changed();
+    // FIXME gtk3 port
+    // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+    m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
+
+    m_modified = true;
+
+    GSpeakers::driverlist_modified() = true;
 }
 
 void driver_editor::create_model()
@@ -1228,11 +1232,11 @@ void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::Tree
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     std::string s;
-    if ((*iter)[m_columns.type] == SPEAKER_TYPE_BASS)
+    if (is_bass_driver((*iter)[m_columns.type]))
     {
         s = _("Woofer");
     }
-    if ((*iter)[m_columns.type] == SPEAKER_TYPE_MIDRANGE)
+    if (is_midrange_driver((*iter)[m_columns.type]))
     {
         if (!s.empty())
         {
@@ -1243,7 +1247,7 @@ void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::Tree
             s = _("Midrange");
         }
     }
-    if ((*iter)[m_columns.type] == SPEAKER_TYPE_TWEETER)
+    if (is_tweeter_driver((*iter)[m_columns.type]))
     {
         if (!s.empty())
         {

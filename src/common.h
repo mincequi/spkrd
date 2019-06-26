@@ -45,9 +45,9 @@ Glib::ustring double_to_ustring(double d);
 Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
 Glib::ustring int_to_ustring(int d);
 
-Gtk::Widget& image_widget(const std::string& filename);
+Gtk::Widget& image_widget(std::string const& filename);
 
-Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
+Glib::ustring short_filename(Glib::ustring const& filename, unsigned length = 30);
 
 bool& driverlist_modified();
 bool& enclosurelist_modified();
@@ -58,7 +58,7 @@ bool& measurementlist_modified();
 class enclosure;
 class driver;
 class Crossover;
-class Net;
+class filter_network;
 class driver_list;
 
 extern Settings g_settings;
@@ -93,10 +93,11 @@ extern sigc::signal1<void, int> signal_select_plot;
 
 /* Define two signals for crossover parts updates */
 extern sigc::signal0<void> signal_net_modified_by_wizard; // listen to this in crossover treeview
-extern sigc::signal1<void, Net*> signal_net_modified_by_user; // listan to this in filter wizard
+extern sigc::signal1<void, filter_network*> signal_net_modified_by_user; // listan to this in filter wizard
 extern sigc::signal1<void, int> signal_new_crossover;
 extern sigc::signal0<void> signal_plot_crossover;
-extern sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*> signal_add_crossover_plot;
+extern sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*>
+    signal_add_crossover_plot;
 extern sigc::signal0<void> signal_save_open_files;
 
 #endif //__GFILTER_COMMON_H

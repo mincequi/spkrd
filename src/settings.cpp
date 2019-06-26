@@ -105,9 +105,9 @@ void Settings::save(const std::string& filename) noexcept(false)
 
 void Settings::save() noexcept(false)
 {
-    /* save to a temporary file first, then switch over, that way we
-       should behave better on systems run by muppets have let their
-       filesystem run down to no space left  */
+    // save to a temporary file first, then switch over, that way we
+    // should behave better on systems run by muppets have let their
+    // filesystem run down to no space left
     std::string tempfilename = m_filename + ".temp";
 
     std::ofstream of(tempfilename.c_str(), std::ios::out | std::ios::trunc);

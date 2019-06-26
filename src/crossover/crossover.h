@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "gspeakersobject.h"
-#include "net.h"
+#include "filter_network.hpp"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -51,9 +51,9 @@ public:
     /* Print part data to stdout */
     friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
-    std::vector<Net>& networks() { return m_networks; }
+    std::vector<filter_network>& networks() { return m_networks; }
 
-    std::vector<Net> const& networks() const { return m_networks; }
+    std::vector<filter_network> const& networks() const { return m_networks; }
 
     /* return id_string for this crossover */
     std::string const& get_id_string() const;
@@ -67,7 +67,7 @@ protected:
     void parse_id_string(xmlNodePtr node);
 
 protected:
-    std::vector<Net> m_networks;
+    std::vector<filter_network> m_networks;
     std::string m_id_string;
 };
 

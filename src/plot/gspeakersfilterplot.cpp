@@ -36,7 +36,7 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() : m_plot(1, 20000)
 int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
                                      Gdk::Color& color,
                                      int* i,
-                                     Net* n)
+                                     filter_network* n)
 {
     if (*i == -1)
     {

@@ -152,8 +152,8 @@ private:
     /// Draw a text box in a Cairo context using Pango
     void draw_text_box(Cairo::RefPtr<Cairo::Context> const& context,
                        std::string const& text,
-                       int const center_x,
-                       int const center_y);
+                       int const rectangle_width,
+                       int const rectangle_height);
 
 private:
     int m_linesize;

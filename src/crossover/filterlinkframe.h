@@ -33,7 +33,7 @@
 class FilterLinkFrame : public Gtk::Frame
 {
 public:
-    FilterLinkFrame(Net* net, const std::string& description, driver_list* driver_list);
+    FilterLinkFrame(filter_network* net, const std::string& description, driver_list* driver_list);
 
     ~FilterLinkFrame() override;
 
@@ -42,7 +42,7 @@ private:
 
     void on_param_changed();
 
-    void on_net_updated(Net* net);
+    void on_net_updated(filter_network* net);
 
     void on_plot_crossover();
 
@@ -56,8 +56,11 @@ private:
     void connect_signals();
 
     void initialise_speaker_combobox();
+
     void initialise_dampening();
+
     void initialise_highpass_filter();
+
     void initialise_lowpass_filter();
 
 private:
@@ -93,7 +96,7 @@ private:
     Gtk::CheckButton m_imp_corr_checkbutton;
     Gtk::CheckButton m_adv_imp_model_checkbutton;
 
-    Net* m_net;
+    filter_network* m_net;
     std::string m_description;
     driver_list* m_speaker_list;
     bool enable_edit{false};

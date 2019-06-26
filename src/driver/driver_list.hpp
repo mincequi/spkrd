@@ -18,7 +18,6 @@
 #ifndef __GFILTER_SPEAKERLIST
 #define __GFILTER_SPEAKERLIST
 
-#include "gspeakersobject.h"
 #include "driver.hpp"
 
 #include <iosfwd>

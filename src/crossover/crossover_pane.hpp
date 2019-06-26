@@ -23,7 +23,7 @@
 #include "common.h"
 
 #include "crossoverhistory.h"
-#include "crossoverimageview.h"
+#include "crossover_image_view.hpp"
 #include "crossovertreeview.h"
 #include "crossover_wizard.hpp"
 
@@ -63,12 +63,12 @@ private:
     Gtk::Notebook m_plot_notebook;
 
     crossover_wizard m_crossover_wizard;
-    CrossoverTreeView crossover_treeview;
-    CrossoverHistory crossover_history;
-    GSpeakersFilterPlot filter_plot;
-    TotalFilterPlot total_filter_plot;
-    SummedFreqRespPlot summed_freq_resp_plot;
-    CrossoverImageView crossover_image_view;
+    CrossoverTreeView m_crossover_treeview;
+    CrossoverHistory m_crossover_history;
+    GSpeakersFilterPlot m_filter_plot;
+    TotalFilterPlot m_total_filter_plot;
+    SummedFreqRespPlot m_summed_freq_resp_plot;
+    crossover_image_view m_crossover_image_view;
 
     Gtk::MenuItem m_menu_item;
     Gtk::Toolbar* m_toolbar{nullptr};

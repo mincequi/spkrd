@@ -89,7 +89,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
         /* Index is a counter for the extra circuits (impedance correction network, damping
            network...) we have Number of extra circuits + the crossover is the total number of "base
            nodes" after filter type nodes */
-        Net* n = &(cover->networks())[path[0]];
+        filter_network* n = &(cover->networks())[path[0]];
 
         int ndx = 0;
         bool mod = false;
