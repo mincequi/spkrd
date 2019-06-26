@@ -45,9 +45,9 @@ Glib::ustring double_to_ustring(double d);
 Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
 Glib::ustring int_to_ustring(int d);
 
-Gtk::Widget& image_widget(const std::string& filename);
+Gtk::Widget& image_widget(std::string const& filename);
 
-Glib::ustring short_filename(const Glib::ustring& filename, unsigned length = 30);
+Glib::ustring short_filename(Glib::ustring const& filename, unsigned length = 30);
 
 bool& driverlist_modified();
 bool& enclosurelist_modified();

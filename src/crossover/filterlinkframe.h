@@ -56,8 +56,11 @@ private:
     void connect_signals();
 
     void initialise_speaker_combobox();
+
     void initialise_dampening();
+
     void initialise_highpass_filter();
+
     void initialise_lowpass_filter();
 
 private:
