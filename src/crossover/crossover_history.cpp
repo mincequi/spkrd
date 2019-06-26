@@ -221,8 +221,8 @@ void crossover_history::append_xml(const std::string& filename)
                       sigc::mem_fun(*this, &crossover_history::add_item));
 
         m_crossover_list.data().insert(end(m_crossover_list.data()),
-                                       begin(temp_crossover_list),
-                                       end(temp_crossover_list));
+                                       begin(temp_crossover_list.data()),
+                                       end(temp_crossover_list.data()));
     }
     catch (std::runtime_error const& e)
     {
@@ -278,7 +278,7 @@ void crossover_history::on_new_copy()
                 Crossover c(node->children);
 
                 // Set time of day as this crossovers id_string
-                c.set_id_string(_("Crossover: ") + time_of_day();
+                c.set_id_string(_("Crossover: ") + time_of_day());
 
                 // the usual adding of items to the liststore and data-container
                 add_item(c);
