@@ -42,20 +42,20 @@ class Crossover : public GSpeakersObject
 public:
     Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");
 
-    /* Construct a part from an xml node */
+    /// Construct a part from an xml node
     Crossover(xmlNodePtr parent);
 
-    /* Convert data for a part to an xml node, throws std::runtime_error on failure */
+    /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent);
 
-    /* Print part data to stdout */
+    /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& o, const Crossover& crossover);
 
     std::vector<filter_network>& networks() { return m_networks; }
 
     std::vector<filter_network> const& networks() const { return m_networks; }
 
-    /* return id_string for this crossover */
+    /// \return id_string for this crossover
     std::string const& get_id_string() const;
 
     void set_id_string(std::string id_string);
@@ -63,7 +63,9 @@ public:
 protected:
     /// Used to parse xml
     void parse_type(xmlNodePtr node);
+
     void parse_networks(xmlNodePtr node);
+
     void parse_id_string(xmlNodePtr node);
 
 protected:

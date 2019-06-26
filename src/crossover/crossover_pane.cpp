@@ -136,47 +136,47 @@ Gtk::MenuItem& crossover_pane::get_menu()
     {
         auto copy = Gtk::manage(new Gtk::MenuItem("Copy"));
         copy->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_new_copy));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_new_copy));
         crossover_menu->append(*copy);
     }
     crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto new_xml = Gtk::manage(new Gtk::MenuItem("New XML"));
         new_xml->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_new_xml));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_new_xml));
         crossover_menu->append(*new_xml);
     }
     {
         auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
         append_xml->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_append_xml));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_append_xml));
         crossover_menu->append(*append_xml);
     }
     {
         auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
         open_xml->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_open_xml));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_open_xml));
         crossover_menu->append(*open_xml);
     }
     crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto save = Gtk::manage(new Gtk::MenuItem("Save"));
         save->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_save));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_save));
         save->set_sensitive(false);
         crossover_menu->append(*save);
     }
     {
         auto save_as = Gtk::manage(new Gtk::MenuItem("Save As"));
         save_as->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_save_as));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_save_as));
         crossover_menu->append(*save_as);
     }
     crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto delete_item = Gtk::manage(new Gtk::MenuItem("Delete"));
         delete_item->signal_activate().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_remove));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_remove));
         crossover_menu->append(*delete_item);
     }
     crossover_menu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
@@ -203,7 +203,7 @@ Gtk::Toolbar& crossover_pane::get_toolbar()
         auto im = Gtk::manage(new Gtk::Image(Gtk::Stock::COPY, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         auto t = Gtk::manage(new Gtk::ToolButton(*im, _("Copy")));
         t->signal_clicked().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_new_copy));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_new_copy));
         m_toolbar->append(*t);
     }
 
@@ -213,20 +213,20 @@ Gtk::Toolbar& crossover_pane::get_toolbar()
         auto im = Gtk::manage(new Gtk::Image(Gtk::Stock::OPEN, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         auto t = Gtk::manage(new Gtk::ToolButton(*im, _("Open")));
         t->signal_clicked().connect(
-            sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_open_xml));
+            sigc::mem_fun(m_crossover_history, &crossover_history::on_open_xml));
         m_toolbar->append(*t);
     }
     {
         auto im = Gtk::manage(new Gtk::Image(Gtk::Stock::SAVE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         auto t = Gtk::manage(new Gtk::ToolButton(*im, _("Save")));
-        t->signal_clicked().connect(sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_save));
+        t->signal_clicked().connect(sigc::mem_fun(m_crossover_history, &crossover_history::on_save));
         m_toolbar->append(*t);
     }
     m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
     {
         auto im = Gtk::manage(new Gtk::Image(Gtk::Stock::DELETE, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         auto t = Gtk::manage(new Gtk::ToolButton(*im, _("Delete")));
-        t->signal_clicked().connect(sigc::mem_fun(m_crossover_history, &CrossoverHistory::on_remove));
+        t->signal_clicked().connect(sigc::mem_fun(m_crossover_history, &crossover_history::on_remove));
         m_toolbar->append(*t);
     }
     m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));

@@ -15,18 +15,18 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "crossoverlist.h"
+#include "crossover_list.hpp"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-CrossoverList::CrossoverList(const std::string& filename)
+crossover_list::crossover_list(const std::string& filename)
 {
     xmlDocPtr doc = xmlParseFile(filename.c_str());
 
     if (doc == nullptr)
     {
-        throw std::runtime_error(_("CrossoverList: Xml file not found"));
+        throw std::runtime_error(_("crossover_list: Xml file not found"));
     }
 
     xmlNodePtr node = xmlDocGetRootElement(doc);
@@ -52,13 +52,13 @@ CrossoverList::CrossoverList(const std::string& filename)
     }
     else
     {
-        throw std::runtime_error(_("CrossoverList: crossoverlist node not found"));
+        throw std::runtime_error(_("crossover_list: crossoverlist node not found"));
     }
 }
 
-void CrossoverList::clear() { m_crossover_list.clear(); }
+void crossover_list::clear() { m_crossover_list.clear(); }
 
-void CrossoverList::to_xml(const std::string& filename)
+void crossover_list::to_xml(const std::string& filename)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
@@ -72,11 +72,11 @@ void CrossoverList::to_xml(const std::string& filename)
 
     if (xmlSaveFile(filename.c_str(), doc) == -1)
     {
-        throw std::runtime_error(_("CrossoverList: Could not save to ") + filename);
+        throw std::runtime_error(_("crossover_list: Could not save to ") + filename);
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const CrossoverList& crossover_list)
+std::ostream& operator<<(std::ostream& output, const crossover_list& crossover_list)
 {
     output << "Crossover List\n";
 

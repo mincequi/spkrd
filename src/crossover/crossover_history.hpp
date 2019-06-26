@@ -21,7 +21,7 @@
 #define __GSPEAKERS_CROSSOVERHISTORY
 
 #include "common.h"
-#include "crossoverlist.h"
+#include "crossover_list.hpp"
 
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/filechooserdialog.h>
@@ -45,40 +45,60 @@ extern sigc::signal1<void, bool> signal_crossover_set_save_state;
  * depend on the currently selected crossover can update thier
  * data.
  */
-class CrossoverHistory : public Gtk::Frame
+class crossover_history : public Gtk::Frame
 {
 public:
-    CrossoverHistory();
-    ~CrossoverHistory() override;
+    crossover_history();
+
+    ~crossover_history() override;
     /* public callbacks, for use in container class */
     void on_open_xml();
+
     void on_append_xml();
+
     void on_new_copy();
+
     void on_new();
+
     void on_new_from_menu(int type);
+
     void on_new_xml();
+
     void on_save();
+
     void on_save_as();
+
     void on_remove();
+
     void select_first_row();
 
 protected:
-    /* callbacks */
     void open_xml(const std::string& filename);
+
     void append_xml(const std::string& filename);
+
     void save_as_xml(const std::string& filename);
+
     void on_selection_changed();
+
     void on_part_modified();
+
     void on_net_modified_by_wizard(filter_network* net);
+
     void on_net_modified_by_user();
+
     void on_new_crossover_menu_action(int);
+
     void on_plot_crossover();
+
     void on_save_open_files();
+
     void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
-    /* Helper member functions */
     virtual void create_model();
+
     virtual void add_columns();
+
     virtual void add_item(Crossover const& foo);
 
 protected:
@@ -103,11 +123,11 @@ protected:
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::ListStore> m_refListStore;
 
-    CrossoverList m_crossover_list;
+    crossover_list m_crossover_list;
 
     std::string m_filename;
     bool new_xml_pressed;
-    int index;
+    int index = 0;
 
     model_columns m_columns;
 };
