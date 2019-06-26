@@ -832,15 +832,15 @@ void FilterLinkFrame::on_plot_crossover()
         /* send the spice data to the plot */
         /* TODO: improve color handling here */
         Gdk::Color c;
-        if (m_net->get_type() == NET_TYPE_LOWPASS)
+        if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0)
         {
             c = Gdk::Color("blue");
         }
-        else if (m_net->get_type() == NET_TYPE_HIGHPASS)
+        else if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0)
         {
             c = Gdk::Color("red");
         }
-        else if (m_net->get_type() == NET_TYPE_BANDPASS)
+        else if ((m_net->get_type() & NET_TYPE_BANDPASS) != 0)
         {
             c = Gdk::Color("darkgreen");
         }
@@ -855,18 +855,18 @@ void FilterLinkFrame::on_plot_crossover()
                     return point.get_y() > (-3 - m_damp_spinbutton.get_value());
                 });
 
-                auto const index1 = location == rend(points)
-                                        ? 0ul
-                                        : std::distance(location, rend(points)) - 1;
+                auto const index = location == rend(points)
+                                       ? 0ul
+                                       : std::distance(location, rend(points)) - 1;
 
-                points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
-                points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
+                points[index + 1].set_y(points[index + 1].get_y() + m_damp_spinbutton.get_value());
+                points[index].set_y(points[index].get_y() + m_damp_spinbutton.get_value());
 
-                double ydiff = points[index1 + 1].get_y() - points[index1].get_y();
-                int xdiff = points[index1 + 1].get_x() - points[index1].get_x();
-                double ytodbdiff = points[index1].get_y() + 3;
+                double ydiff = points[index + 1].get_y() - points[index].get_y();
+                int xdiff = points[index + 1].get_x() - points[index].get_x();
+                double ytodbdiff = points[index].get_y() + 3;
                 m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
-                                                      + points[index1 + 1].get_x());
+                                                      + points[index + 1].get_x());
             }
             if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0)
             {
@@ -874,16 +874,16 @@ void FilterLinkFrame::on_plot_crossover()
                     return point.get_y() >= (-3 - m_damp_spinbutton.get_value());
                 });
 
-                auto const index2 = std::distance(begin(points), location);
+                auto const index = std::distance(begin(points), location);
 
-                points[index2 - 1].set_y(points[index2 - 1].get_y() + m_damp_spinbutton.get_value());
-                points[index2].set_y(points[index2].get_y() + m_damp_spinbutton.get_value());
+                points[index - 1].set_y(points[index - 1].get_y() + m_damp_spinbutton.get_value());
+                points[index].set_y(points[index].get_y() + m_damp_spinbutton.get_value());
 
-                double ydiff = points[index2 - 1].get_y() - points[index2].get_y();
-                int xdiff = points[index2].get_x() - points[index2 - 1].get_x();
-                double ytodbdiff = points[index2].get_y() + 3;
+                double ydiff = points[index - 1].get_y() - points[index].get_y();
+                int xdiff = points[index].get_x() - points[index - 1].get_x();
+                double ytodbdiff = points[index].get_y() + 3;
                 m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
-                                                       + points[index2].get_x());
+                                                       + points[index].get_x());
             }
             m_enable_edit = true;
         }
