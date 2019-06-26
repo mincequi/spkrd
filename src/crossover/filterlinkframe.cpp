@@ -34,6 +34,7 @@ FilterLinkFrame::FilterLinkFrame(filter_network* net,
                                  const std::string& description,
                                  driver_list* driver_list)
     : Gtk::Frame(""),
+      m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_inv_pol_checkbutton(_("Invert polarity"), false),
@@ -87,8 +88,8 @@ FilterLinkFrame::FilterLinkFrame(filter_network* net,
 
     g_settings.defaultValueString("SPICECmdLine", "gnucap");
 
-    init = false;
-    enable_edit = true;
+    m_init = false;
+    m_enable_edit = true;
 }
 
 void FilterLinkFrame::initialise_dampening()
@@ -100,7 +101,7 @@ void FilterLinkFrame::initialise_dampening()
 
     if (m_speaker_list)
     {
-        speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
+        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
     m_damp_spinbutton.set_value(std::round(
@@ -293,7 +294,7 @@ void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
     {
         // Block the signal from being emitted until the end of the function
         // otherwise on_param_changed() will be called prematurely
-        enable_edit = false;
+        m_enable_edit = false;
         type_box->remove_all();
     }
 
@@ -327,7 +328,7 @@ void FilterLinkFrame::on_order_selected(Gtk::ComboBoxText const* order_box,
     }
     type_box->set_active(0);
 
-    enable_edit = true;
+    m_enable_edit = true;
 
     std::puts("returning from on_order_selected");
 }
@@ -342,17 +343,17 @@ void FilterLinkFrame::on_settings_changed(const std::string& setting)
 
 void FilterLinkFrame::on_param_changed()
 {
-    if (enable_edit)
+    if (m_enable_edit)
     {
         std::puts("FilterLinkFrame::on_param_changed");
 
-        enable_edit = false;
+        m_enable_edit = false;
 
         driver speaker;
 
         if (m_speaker_list != nullptr)
         {
-            speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
+            speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
         }
         m_net->set_speaker(speaker.get_id_string());
 
@@ -681,7 +682,7 @@ void FilterLinkFrame::on_param_changed()
 
             on_plot_crossover();
         }
-        enable_edit = true;
+        m_enable_edit = true;
 
         std::puts("Finalised update");
     }
@@ -752,7 +753,7 @@ void FilterLinkFrame::on_plot_crossover()
     driver speaker;
     if (m_speaker_list)
     {
-        speaker = m_speaker_list->get_speaker_by_id_string(m_speaker_combo.get_active_text());
+        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
     std::string spice_filename;
@@ -869,9 +870,9 @@ void FilterLinkFrame::on_plot_crossover()
         }
         signal_add_crossover_plot(points, c, &my_filter_plot_index, m_net);
 
-        if (enable_edit)
+        if (m_enable_edit)
         {
-            enable_edit = false;
+            m_enable_edit = false;
             if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0)
             {
                 auto const location = std::find_if(rbegin(points), rend(points), [&](auto const& point) {
@@ -908,15 +909,13 @@ void FilterLinkFrame::on_plot_crossover()
                 m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
                                                        + points[index2].get_x());
             }
-            enable_edit = true;
+            m_enable_edit = true;
         }
     }
 }
 
 std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
 {
-    std::puts("Populating filter parameters");
-
     std::vector<double> nums;
     switch (net_order)
     {
