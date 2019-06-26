@@ -30,7 +30,7 @@
 #include <fstream>
 #include <iostream>
 
-FilterLinkFrame::FilterLinkFrame(Net* net, const std::string& description, driver_list* driver_list)
+FilterLinkFrame::FilterLinkFrame(filter_network* net, const std::string& description, driver_list* driver_list)
     : Gtk::Frame(""),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -685,7 +685,7 @@ void FilterLinkFrame::on_param_changed()
     }
 }
 
-void FilterLinkFrame::on_net_updated(Net* net)
+void FilterLinkFrame::on_net_updated(filter_network* net)
 {
     if (m_net->get_id() == net->get_id())
     {

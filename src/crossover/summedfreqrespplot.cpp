@@ -21,7 +21,7 @@
 
 #include "summedfreqrespplot.h"
 
-#include "net.h"
+#include "filter_network.hpp"
 
 #include <cmath>
 #include <fstream>
@@ -82,7 +82,7 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
 int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
                                     Gdk::Color& color,
                                     int* output_plot_index,
-                                    Net* n)
+                                    filter_network* n)
 {
 #ifndef NDEBUG
     std::puts("SummedFreqRespPlot::on_add_plot");

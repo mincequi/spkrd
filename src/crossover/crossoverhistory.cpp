@@ -119,7 +119,7 @@ void CrossoverHistory::select_first_row()
     }
 }
 
-void CrossoverHistory::on_net_modified_by_wizard(Net* net)
+void CrossoverHistory::on_net_modified_by_wizard(filter_network* net)
 {
     signal_crossover_set_save_state(true);
 }

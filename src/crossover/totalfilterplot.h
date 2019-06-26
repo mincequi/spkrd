@@ -42,7 +42,7 @@ public:
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, Net*);
+    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*);
 
 private:
     bool on_delete_event(GdkEventAny* event) override;

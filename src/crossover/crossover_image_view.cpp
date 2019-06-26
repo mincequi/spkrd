@@ -151,7 +151,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                                                / static_cast<double>(vert_space_per_net_divider));
 
     // Draw first network here
-    std::vector<Net>& net_vector = m_crossover->networks();
+    std::vector<filter_network>& net_vector = m_crossover->networks();
 
     for (std::size_t i = 0; i < net_vector.size(); i++)
     {
