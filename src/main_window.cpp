@@ -223,34 +223,35 @@ bool main_window::on_delete_event(GdkEventAny* event)
 
         Gtk::Dialog dialog("", true);
         dialog.set_border_width(6);
-        dialog.get_vbox()->set_spacing(12);
+        // dialog.get_vbox()->set_spacing(6);
 
-        Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+        auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
         dialog.get_vbox()->pack_start(*hbox);
-        hbox->set_border_width(6);
-        hbox->set_spacing(12);
+
+        // hbox->set_border_width(6);
+        // hbox->set_spacing(6);
 
         auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
         hbox->pack_start(*image);
 
-        dialog.get_action_area()->set_border_width(12);
+        dialog.get_action_area()->set_border_width(6);
         dialog.get_action_area()->set_spacing(6);
 
-        Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
+        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
         auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
         label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?")
                            + Glib::ustring("</b>\n\n"));
         vbox->pack_start(*label1);
 
-        Gtk::Label* label3 = new Gtk::Label(_("There are unsaved files in GSpeakers. If you choose")
-                                                + Glib::ustring("\n")
-                                                + _("to quit without saving all changes since last "
-                                                    "save")
-                                                + Glib::ustring("\n") + _("will be lost."),
-                                            Gtk::ALIGN_START);
+        auto label3 = Gtk::Label(_("There are unsaved files in GSpeakers. If you choose")
+                                     + Glib::ustring("\n")
+                                     + _("to quit without saving all changes since last "
+                                         "save")
+                                     + Glib::ustring("\n") + _("will be lost."),
+                                 Gtk::ALIGN_START);
 
-        vbox->pack_start(*label3);
+        vbox->pack_start(label3);
         hbox->pack_start(*vbox);
 
         dialog.add_button("Close without saving", 0);
@@ -276,6 +277,7 @@ bool main_window::on_delete_event(GdkEventAny* event)
                 break;
         }
     }
+
     on_quit_common();
 
     return false;
@@ -293,7 +295,7 @@ void main_window::on_quit()
         dialog->set_border_width(6);
         dialog->get_vbox()->set_spacing(12);
 
-        Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox());
+        auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
         dialog->get_vbox()->pack_start(*hbox);
         hbox->set_border_width(6);
         hbox->set_spacing(12);
@@ -304,12 +306,12 @@ void main_window::on_quit()
         dialog->get_action_area()->set_border_width(12);
         dialog->get_action_area()->set_spacing(6);
 
-        Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
-        Gtk::Label* label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
+        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
         label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?")) + "</b>\n\n");
         vbox->pack_start(*label1);
 
-        Gtk::Label* label3 = Gtk::manage(
+        auto label3 = Gtk::manage(
             new Gtk::Label(Glib::ustring(_("There are unsaved files. If you choose")) + "\n"
                                + Glib::ustring(_("to quit without saving all changes since last "
                                                  "save"))
@@ -371,6 +373,7 @@ void main_window::on_quit_common()
     catch (std::runtime_error const& error)
     {
         std::puts("main_window::on_delete_event: could not save settings");
+        throw error;
     }
 }
 
