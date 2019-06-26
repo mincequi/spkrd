@@ -90,7 +90,7 @@ std::ostream& operator<<(std::ostream& output, const driver_list& driver_list)
     return output;
 }
 
-driver driver_list::get_speaker_by_id_string(std::string const& id_string)
+driver driver_list::get_by_id_string(std::string const& id_string)
 {
     auto const location = std::find_if(begin(m_speaker_list),
                                        end(m_speaker_list),

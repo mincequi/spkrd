@@ -250,7 +250,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
         {
-            m_current_speaker = m_speaker_list->get_speaker_by_id_string(b->get_speaker());
+            m_current_speaker = m_speaker_list->get_by_id_string(b->get_speaker());
 
             // Remove all the previous entries and populate again
             m_bass_speaker_combo.remove_all();
@@ -347,7 +347,7 @@ void enclosure_editor::on_combo_entry_changed()
     m_disable_signals = true;
 
     // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_speaker_by_id_string(
+    m_current_speaker = m_speaker_list->get_by_id_string(
         m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?

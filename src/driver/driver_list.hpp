@@ -43,7 +43,7 @@ public:
 
     std::vector<driver> const& data() const noexcept { return m_speaker_list; }
 
-    driver get_speaker_by_id_string(const std::string& id_string);
+    driver get_by_id_string(const std::string& id_string);
 
     /// Remove all items
     void clear();
