@@ -30,7 +30,9 @@
 #include <fstream>
 #include <iostream>
 
-FilterLinkFrame::FilterLinkFrame(filter_network* net, const std::string& description, driver_list* driver_list)
+FilterLinkFrame::FilterLinkFrame(filter_network* net,
+                                 const std::string& description,
+                                 driver_list* driver_list)
     : Gtk::Frame(""),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
       m_higher_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -873,15 +875,14 @@ void FilterLinkFrame::on_plot_crossover()
             if ((m_net->get_type() & NET_TYPE_LOWPASS) != 0)
             {
                 // TODO Use std::find_if
-                int i = 0, index1 = 0;
-                for (auto& point : points)
-                {
-                    if (point.get_y() > (-3 - m_damp_spinbutton.get_value()))
-                    {
-                        index1 = i;
-                    }
-                    i++;
-                }
+                auto const location = std::find_if(rbegin(points), rend(points), [&](auto const& point) {
+                    return point.get_y() > (-3 - m_damp_spinbutton.get_value());
+                });
+
+                auto const index1 = location == rend(points)
+                                        ? 0ul
+                                        : std::distance(location, rend(points)) - 1;
+
                 points[index1 + 1].set_y(points[index1 + 1].get_y() + m_damp_spinbutton.get_value());
                 points[index1].set_y(points[index1].get_y() + m_damp_spinbutton.get_value());
 
