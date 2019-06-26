@@ -51,18 +51,16 @@ constexpr auto NET_LEGENDRE = 6;
 constexpr auto NET_LINEARPHASE = 7;
 
 /// Net is a part of a crossover: one part of the crossover we want to simulate in SPICE
-/// For example: Lowpassfilter with impedance correction network or highpassfilter with
-///              damping network.
+/// For example: Lowpass filter with impedance correction network or
+///              highpass filter with damping network.
 /// TODO: Use c++ streams for input in passive_component(xmlNodePtr)
 class Net : public GSpeakersObject
 {
 public:
-    /*
-     * Construct new net object
-     * type = NET_TYPE_LOWPASS                        // lowpass filter
-     * type = NET_TYPE_HIGHPASS                       // highpass filter
-     * type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
-     */
+    /// Construct new net object
+    /// type = NET_TYPE_LOWPASS                        // lowpass filter
+    /// type = NET_TYPE_HIGHPASS                       // highpass filter
+    /// type = NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS    // bandpass filter
     Net(int type = NET_TYPE_LOWPASS,
         int lowpass_order = NET_ORDER_1ST,
         int highpass_order = NET_NOT_PRESENT,
@@ -111,7 +109,7 @@ public:
     bool get_inv_pot() const { return m_inv_pol; }
 
     /*
-     * We return parts by ref to so that we not copy these parts.
+     * We return parts by ref to so that we do not copy these parts.
      * For example, if we have:
      * Net n = net;
      * n.get_imp_corr_R().set_value(0.2);
