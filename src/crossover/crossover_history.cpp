@@ -181,13 +181,7 @@ void crossover_history::open_xml(const std::string& filename)
         {
             Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-            char* str = nullptr;
-            GString* buffer = g_string_new(str);
-            g_string_printf(buffer, "%d", 0);
-
-            GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-
-            Gtk::TreePath path(gpath);
+            Gtk::TreePath path(std::to_string(0));
 
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
             refSelection->select(row);
@@ -217,11 +211,10 @@ void crossover_history::append_xml(const std::string& filename)
         std::for_each(temp_crossover_list.data().begin(),
                       temp_crossover_list.data().end(),
                       sigc::mem_fun(*this, &crossover_history::add_item));
-        for (auto& from : temp_crossover_list.data())
-        {
-            m_crossover_list.data().push_back(from);
-        }
-        m_crossover_list.data().size();
+
+        m_crossover_list.data().insert(end(m_crossover_list.data()),
+                                       begin(temp_crossover_list),
+                                       end(temp_crossover_list));
     }
     catch (std::runtime_error const& e)
     {
