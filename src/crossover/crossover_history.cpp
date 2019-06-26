@@ -32,6 +32,15 @@ constexpr auto TOOLBAR_INDEX_SAVE = 4;
 
 sigc::signal1<void, bool> signal_crossover_set_save_state;
 
+namespace
+{
+auto time_of_day() -> std::string
+{
+    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    return {std::ctime(&time)};
+}
+}
+
 crossover_history::crossover_history() : Gtk::Frame("")
 {
     set_border_width(2);
@@ -193,15 +202,14 @@ void crossover_history::open_xml(const std::string& filename)
     }
     catch (std::runtime_error const& e)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
     }
 }
 
 void crossover_history::append_xml(const std::string& filename)
 {
 #ifndef NDEBUG
-    std::cout << "append xml ok: " << filename << std::endl;
+    std::cout << "append xml ok: " << filename << "\n";
 #endif
     crossover_list temp_crossover_list;
     try
@@ -218,8 +226,7 @@ void crossover_history::append_xml(const std::string& filename)
     }
     catch (std::runtime_error const& e)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
     }
     signal_crossover_set_save_state(true);
 }
@@ -251,9 +258,8 @@ void crossover_history::on_new_copy()
 
     if (!m_crossover_list.data().empty())
     {
-        /* Find out which row we selected */
-
-        if (const Gtk::TreeIter iter = refSelection->get_selected())
+        // Find out which row we selected
+        if (auto const iter = refSelection->get_selected())
         {
             Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -267,25 +273,21 @@ void crossover_history::on_new_copy()
                    Quick and easy solution...use the to_xml function which gets rid of the id */
                 xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
 
-                ((m_crossover_list.data())[path[0]]).to_xml_node(node);
+                (m_crossover_list.data()[path[0]]).to_xml_node(node);
 
                 Crossover c(node->children);
 
-                /* convert to nice time format */
+                // Set time of day as this crossovers id_string
+                c.set_id_string(_("Crossover: ") + time_of_day();
 
-                /* Set time of day as this crossovers id_string */
-                std::time_t time = std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now());
-                c.set_id_string(_("Crossover: ") + std::string(std::ctime(&time) + '\0'));
-
-                /* the usual adding of items to the liststore and data-container */
+                // the usual adding of items to the liststore and data-container
                 add_item(c);
                 m_crossover_list.data().push_back(c);
             }
         }
     }
 
-    /* Select the last crossover in the list: the new crossover */
+    // Select the last crossover in the list: the new crossover
     Gtk::TreePath path(Glib::ustring(std::to_string(m_crossover_list.data().size() - 1)));
 
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -296,19 +298,12 @@ void crossover_history::on_new_copy()
 void crossover_history::on_new_from_menu(int type)
 {
 #ifndef NDEBUG
-    std::cout << "crossover_history::on_new_from_menu: " << type << std::endl;
+    std::cout << "crossover_history::on_new_from_menu: " << type << "\n";
 #endif
-    /* add new crossover of appropriate type here */
-    time_t t;
-    time(&t);
-    /* convert to nice time format */
-    std::string s = std::string(ctime(&t));
-    int length = s.length();
-    s[length - 1] = '\0';
 
-    Crossover c(type, _("Crossover ") + s);
+    Crossover c(type, _("Crossover ") + time_of_day());
 
-    /* Add to liststore */
+    // Add to liststore
     add_item(c);
     m_crossover_list.data().push_back(c);
 
@@ -326,13 +321,7 @@ void crossover_history::on_new()
     Crossover c;
 
     // Set time of day as this crossovers id_string
-    time_t t;
-    time(&t);
-    // convert to nice time format
-    std::string s = std::string(ctime(&t));
-    int length = s.length();
-    s[length - 1] = '\0';
-    c.set_id_string(_("Crossover: ") + s);
+    c.set_id_string(_("Crossover: ") + time_of_day());
 
     add_item(c);
 
@@ -455,20 +444,10 @@ void crossover_history::create_model()
 
 void crossover_history::add_columns()
 {
-    /*
-      {
-        Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-        int cols_count =m_TreeView.append_column(_("Id"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
-      }
-    */
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
+        auto const cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
@@ -482,7 +461,6 @@ void crossover_history::add_columns()
 
         pColumn->set_cell_data_func(*pRenderer,
                                     sigc::mem_fun(*this, &crossover_history::type_cell_data_func));
-        //    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
     }
 }
 
@@ -493,62 +471,47 @@ void crossover_history::type_cell_data_func(Gtk::CellRenderer* cell,
     std::string s;
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) != 0)
     {
-        s = s + _("lowpass");
+        s += _("lowpass");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", subsonic");
+            s += (", ");
         }
-        else
-        {
-            s = s + _("subsonic");
-        }
+        s += _("subsonic");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", highpass");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("highpass");
-        }
+        s += _("highpass");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 2-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("2-way");
-        }
+        s += _("2-way");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 3-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("3-way");
-        }
+        s += _("3-way");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 4-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("4-way");
-        }
+        s += _("4-way");
     }
     renderer.property_text() = s;
 }
@@ -556,6 +519,7 @@ void crossover_history::type_cell_data_func(Gtk::CellRenderer* cell,
 void crossover_history::add_item(Crossover const& foo)
 {
     Gtk::TreeRow row = *(m_refListStore->append());
+
     row[m_columns.id] = foo.get_id();
     row[m_columns.id_string] = foo.get_id_string();
     row[m_columns.type] = foo.get_type();
