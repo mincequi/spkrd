@@ -89,7 +89,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         return;
     }
 
-    int vert_space_per_net_divider = 0;
+    std::int32_t vert_space_per_net_divider = 0;
 
     if (m_crossover->get_type() == CROSSOVER_TYPE_LOWPASS)
     {
@@ -127,7 +127,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                                                / static_cast<double>(vert_space_per_net_divider));
 
     // Draw first network here
-    std::vector<filter_network>& net_vector = m_crossover->networks();
+    auto const& net_vector = m_crossover->networks();
 
     for (std::size_t i = 0; i < net_vector.size(); i++)
     {
