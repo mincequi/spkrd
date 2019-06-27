@@ -1,7 +1,4 @@
-/* crossover_image_view.cc
- *
- * $Id$
- *
+/*
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * This program is free software; you can redistribute it and/or
@@ -47,46 +44,25 @@ crossover_image_view::crossover_image_view()
         sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
 }
 
-bool crossover_image_view::on_expose_event(GdkEventExpose* event)
-{
-    // get_window()->draw_drawable(get_style()->get_fg_gc(get_state()), m_refPixmap,
-    //                             // Only copy the area that was exposed
-    //                             event->area.x, event->area.y, event->area.x, event->area.y,
-    //                             event->area.width, event->area.height);
-    return false;
-}
+bool crossover_image_view::on_expose_event(GdkEventExpose* event) { return false; }
 
 bool crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
 {
-    Gtk::Allocation allocation = get_allocation();
-    auto const width = allocation.get_width();
-    auto const height = allocation.get_height();
-
     m_visible = true;
 
     this->redraw(context);
+
+    return true;
 }
 
 bool crossover_image_view::on_configure_event(GdkEventConfigure* event)
 {
     m_visible = true;
 
-    // m_refPixmap = Gdk::Pixmap::create(get_window(), get_allocation().get_width(),
-    //                                   get_allocation().get_height(), -1);
-
-    // m_refGC = get_style()->get_fg_gc(get_state());
-
-    // m_refColormap = m_refGC->get_colormap();
     white = Gdk::RGBA("rgb (0.0, 0.0, 0.0)");
     black = Gdk::RGBA("rgb (1.0, 1.0, 1.0)");
 
-    // m_refColormap->alloc_color(white);
-    // m_refColormap->alloc_color(black);
-
-    Glib::RefPtr<Pango::Context> refPangoContext = get_pango_context();
-    m_refLayout = Pango::Layout::create(refPangoContext);
-
-    // redraw();
+    m_refLayout = Pango::Layout::create(get_pango_context());
 
     // We've handled the configure event, no need for further processing
     return true;
@@ -651,7 +627,6 @@ void crossover_image_view::draw_connector(Cairo::RefPtr<Cairo::Context> const& c
     auto const half_space_x = std::round(width / 2.0);
     auto const half_space_y = std::round(height / 2.0);
     auto const small_space_x = std::round(width / 20.0);
-    auto const small_space_y = std::round(height / 20.0);
 
     this->draw_text(context,
                     (positive ? "+" : "-"),
