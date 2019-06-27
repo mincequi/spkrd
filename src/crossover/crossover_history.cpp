@@ -68,8 +68,8 @@ crossover_history::crossover_history() : Gtk::Frame("")
     }
     set_shadow_type(Gtk::SHADOW_NONE);
 
-    m_evbox = Gtk::manage(new Gtk::EventBox());
-    m_frame_label = Gtk::manage(new Gtk::Label());
+    m_evbox = Gtk::make_managed<Gtk::EventBox>();
+    m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ["))
                               + GSpeakers::short_filename(m_filename, 20) + "]</b>");
 
@@ -83,7 +83,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     // create tree view
     m_TreeView.set_model(m_refListStore);
 
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    auto selection = m_TreeView.get_selection();
     selection->signal_changed().connect(
         sigc::mem_fun(*this, &crossover_history::on_selection_changed));
 
@@ -118,8 +118,7 @@ void crossover_history::select_first_row()
     {
         Gtk::TreePath path(std::to_string(0));
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-        Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-        selection->select(row);
+        m_TreeView.get_selection()->select(row);
     }
 }
 
@@ -175,25 +174,24 @@ void crossover_history::open_xml(const std::string& filename)
         m_refListStore->clear();
 
         m_filename = filename;
+
         std::for_each(temp_crossover_list.data().begin(),
                       temp_crossover_list.data().end(),
                       sigc::mem_fun(*this, &crossover_history::add_item));
 
-        /* Delete items in crossover_list */
-        m_crossover_list.data().clear();
-        m_crossover_list.data().insert(begin(m_crossover_list.data()),
-                                       temp_crossover_list.data().begin(),
-                                       temp_crossover_list.data().end());
+        // Delete items in crossover_list
+        m_crossover_list.data().resize(temp_crossover_list.data().size());
+        std::copy(begin(temp_crossover_list.data()),
+                  end(temp_crossover_list.data()),
+                  begin(m_crossover_list.data()));
 
-        /* Select the first item in the list */
+        // Select the first item in the list
         if (!m_crossover_list.data().empty())
         {
-            Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
             Gtk::TreePath path(std::to_string(0));
 
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-            refSelection->select(row);
+            m_TreeView.get_selection()->select(row);
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
@@ -273,7 +271,7 @@ void crossover_history::on_new_copy()
                    Quick and easy solution...use the to_xml function which gets rid of the id */
                 xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
 
-                (m_crossover_list.data()[path[0]]).to_xml_node(node);
+                m_crossover_list.data()[path[0]].to_xml_node(node);
 
                 Crossover c(node->children);
 
@@ -398,7 +396,7 @@ void crossover_history::save_as_xml(const std::string& filename)
         m_filename = filename;
 
         {
-            auto crossover_label = Gtk::manage(new Gtk::Label());
+            auto crossover_label = Gtk::make_managed<Gtk::Label>();
             crossover_label->set_markup("<b>" + Glib::ustring(_("Crossover list ["))
                                         + GSpeakers::short_filename(m_filename, 20) + "]</b>");
             set_label_widget(*crossover_label);
@@ -445,7 +443,7 @@ void crossover_history::create_model()
 void crossover_history::add_columns()
 {
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
 
         auto const cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -454,7 +452,7 @@ void crossover_history::add_columns()
     }
 
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
 
         int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
