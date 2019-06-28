@@ -45,7 +45,7 @@ driver_list::driver_list(const std::string& filename)
 
             while (children != nullptr)
             {
-                m_speaker_list.emplace_back(children);
+                m_drivers.emplace_back(children);
 
                 children = children->next;
             }
@@ -57,8 +57,6 @@ driver_list::driver_list(const std::string& filename)
     }
 }
 
-void driver_list::clear() { m_speaker_list.clear(); }
-
 void driver_list::to_xml(const std::string& filename)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
@@ -67,7 +65,7 @@ void driver_list::to_xml(const std::string& filename)
     xmlDocSetRootElement(doc, node);
 
     // Iterate through all speakers
-    for (auto& from : m_speaker_list)
+    for (auto& from : m_drivers)
     {
         from.to_xml_node(node);
     }
@@ -83,7 +81,7 @@ std::ostream& operator<<(std::ostream& output, const driver_list& driver_list)
 {
     output << _("driver List") << "\n";
 
-    for (auto& from : driver_list.m_speaker_list)
+    for (auto& from : driver_list.m_drivers)
     {
         output << from;
     }
@@ -92,20 +90,20 @@ std::ostream& operator<<(std::ostream& output, const driver_list& driver_list)
 
 driver driver_list::get_by_id_string(std::string const& id_string)
 {
-    auto const location = std::find_if(begin(m_speaker_list),
-                                       end(m_speaker_list),
+    auto const location = std::find_if(begin(m_drivers),
+                                       end(m_drivers),
                                        [&id_string](auto const& speaker) {
                                            return speaker.get_id_string() == id_string;
                                        });
 
-    if (location != end(m_speaker_list))
+    if (location != end(m_drivers))
     {
         return *location;
     }
 
-    if (!m_speaker_list.empty())
+    if (!m_drivers.empty())
     {
-        return m_speaker_list.front();
+        return m_drivers.front();
     }
 
     return driver();

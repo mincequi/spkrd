@@ -69,12 +69,12 @@ driver_editor::driver_editor()
 
     try
     {
-        m_speaker_list = std::make_unique<driver_list>(m_filename);
-        signal_speakerlist_loaded(m_speaker_list.get());
+        m_driver_list = std::make_unique<driver_list>(m_filename);
+        signal_speakerlist_loaded(m_driver_list.get());
     }
     catch (std::runtime_error const& e)
     {
-        m_speaker_list = std::make_unique<driver_list>();
+        m_driver_list = std::make_unique<driver_list>();
         std::cout << "driver_editor::driver_editor: " << e.what() << std::endl;
     }
 
@@ -353,7 +353,7 @@ void driver_editor::on_settings_changed(const std::string& setting)
     }
 }
 
-void driver_editor::on_close() { signal_speakerlist_loaded(m_speaker_list.get()); }
+void driver_editor::on_close() { signal_speakerlist_loaded(m_driver_list.get()); }
 
 void driver_editor::set_entries_sensitive(bool const is_sensitive)
 {
@@ -396,11 +396,11 @@ void driver_editor::on_new()
     s.set_id_string(s.get_id_string() + " " + std::to_string(s.get_id()));
 
     add_item(s);
-    m_speaker_list->data().push_back(s);
+    m_driver_list->data().push_back(s);
 
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
-    Gtk::TreePath path(std::to_string(m_speaker_list->data().size() - 1));
+    Gtk::TreePath path(std::to_string(m_driver_list->data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
     refSelection->select(row);
 
@@ -414,14 +414,14 @@ void driver_editor::on_new()
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-    signal_speakerlist_loaded(m_speaker_list.get());
+    signal_speakerlist_loaded(m_driver_list.get());
     m_modified = true;
 }
 
 void driver_editor::on_new_xml()
 {
     m_refListStore->clear();
-    m_speaker_list->clear();
+    m_driver_list->clear();
 
     set_entries_sensitive(false);
     new_xml_pressed = true;
@@ -443,8 +443,8 @@ void driver_editor::on_remove()
             // Remove item from ListStore:
             m_refListStore->erase(iter);
 
-            if (index < (int)m_speaker_list->data().size())
-                m_speaker_list->data().erase(m_speaker_list->data().begin() + index);
+            if (index < (int)m_driver_list->data().size())
+                m_driver_list->data().erase(m_driver_list->data().begin() + index);
         }
     }
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
@@ -467,7 +467,7 @@ void driver_editor::on_save()
 #endif
         try
         {
-            m_speaker_list->to_xml(m_filename);
+            m_driver_list->to_xml(m_filename);
             // FIXME gtk3 port
             // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
             m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
@@ -498,7 +498,7 @@ void driver_editor::save_as(const std::string& filename)
 {
     try
     {
-        m_speaker_list->to_xml(filename);
+        m_driver_list->to_xml(filename);
         m_filename = filename;
     }
     catch (std::runtime_error const& error)
@@ -520,7 +520,7 @@ void driver_editor::on_selection_changed()
         if (!path.empty())
         {
             index = path[0];
-            driver const& s = m_speaker_list->data()[index];
+            driver const& s = m_driver_list->data()[index];
 
             m_IdStringEntry.set_text(s.get_id_string());
 
@@ -803,7 +803,7 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
 void driver_editor::on_clear()
 {
     m_refListStore->clear();
-    m_speaker_list->data().clear();
+    m_driver_list->data().clear();
     m_modified = true;
 }
 
@@ -831,136 +831,136 @@ void driver_editor::on_entry_changed(int i)
             case 0:
                 // the treestore
                 row[m_columns.id_string] = m_IdStringEntry.get_text();
-                m_speaker_list->data()[index].set_id_string(m_IdStringEntry.get_text());
+                m_driver_list->data()[index].set_id_string(m_IdStringEntry.get_text());
                 break;
             case 1:
                 // the treestore
                 row[m_columns.qts] = std::atof(m_QtsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qts(std::atof(m_QtsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qts(std::atof(m_QtsEntry.get_text().c_str()));
                 break;
             case 2:
                 // the treestore
                 row[m_columns.fs] = std::atof(m_FsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_fs(std::atof(m_FsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_fs(std::atof(m_FsEntry.get_text().c_str()));
                 break;
             case 3:
                 // the treestore
                 row[m_columns.vas] = std::atof(m_VasEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_vas(std::atof(m_VasEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_vas(std::atof(m_VasEntry.get_text().c_str()));
                 break;
             case 4:
                 d = std::atof(m_RdcEntry.get_text().c_str());
                 row[m_columns.rdc] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_rdc(d);
+                m_driver_list->data()[index].set_rdc(d);
                 update_imp_plot = true;
                 break;
             case 5:
                 d = std::atof(m_LvcEntry.get_text().c_str());
                 row[m_columns.lvc] = d;
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_lvc(d);
+                m_driver_list->data()[index].set_lvc(d);
                 break;
                 update_imp_plot = true;
             case 6:
                 // the treestore
                 row[m_columns.qms] = std::atof(m_QmsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qms(std::atof(m_QmsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qms(std::atof(m_QmsEntry.get_text().c_str()));
                 break;
             case 7:
                 // the treestore
                 row[m_columns.qes] = std::atof(m_QesEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qes(std::atof(m_QesEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qes(std::atof(m_QesEntry.get_text().c_str()));
                 break;
             case 8:
                 // the treestore
                 row[m_columns.imp] = std::atof(m_ImpEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_imp(std::atof(m_ImpEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_imp(std::atof(m_ImpEntry.get_text().c_str()));
                 break;
             case 9:
                 // the treestore
                 row[m_columns.sens] = std::atof(m_SensEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_sens(std::atof(m_SensEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_sens(std::atof(m_SensEntry.get_text().c_str()));
                 break;
             case 10:
                 if (m_BassCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_BASS);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_BASS);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
-                signal_speakerlist_loaded(m_speaker_list.get());
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
+                signal_speakerlist_loaded(m_driver_list.get());
                 break;
             case 11:
                 if (m_MidrangeCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_MIDRANGE);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_MIDRANGE);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
             case 12:
                 if (m_TweeterCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_TWEETER);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_TWEETER);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
             case 13:
                 d = std::atof(m_MmdEntry.get_text().c_str());
                 row[m_columns.mmd] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_mmd(d);
+                m_driver_list->data()[index].set_mmd(d);
                 update_imp_plot = true;
                 break;
             case 14:
                 d = std::atof(m_AdEntry.get_text().c_str());
                 row[m_columns.ad] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_ad(d);
+                m_driver_list->data()[index].set_ad(d);
                 update_imp_plot = true;
                 break;
             case 15:
                 d = std::atof(m_BlEntry.get_text().c_str());
                 row[m_columns.bl] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_bl(d);
+                m_driver_list->data()[index].set_bl(d);
                 update_imp_plot = true;
                 break;
             case 16:
                 d = std::atof(m_RmsEntry.get_text().c_str());
                 row[m_columns.rms] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_rms(d);
+                m_driver_list->data()[index].set_rms(d);
                 update_imp_plot = true;
                 break;
             case 17:
                 d = std::atof(m_CmsEntry.get_text().c_str());
                 row[m_columns.cms] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_cms(d);
+                m_driver_list->data()[index].set_cms(d);
                 update_imp_plot = true;
                 break;
         }
         if (update_imp_plot)
         {
-            draw_impedance_plot(m_speaker_list->data()[index], true);
+            draw_impedance_plot(m_driver_list->data()[index], true);
         }
     }
     // FIXME gtk3 port
@@ -994,19 +994,22 @@ void driver_editor::append_xml(const std::string& filename)
 {
     try
     {
-        auto const& temp_speaker_list = driver_list(filename);
+        auto const& temp_diver_list = driver_list(filename);
 
-        std::for_each(begin(temp_speaker_list.data()),
-                      end(temp_speaker_list.data()),
+        std::for_each(begin(temp_diver_list.data()),
+                      end(temp_diver_list.data()),
                       sigc::mem_fun(*this, &driver_editor::add_item));
-        for (auto& from : temp_speaker_list.data())
+
+        for (auto& from : temp_diver_list.data())
         {
-            m_speaker_list->data().push_back(from);
+            m_driver_list->data().push_back(from);
         }
 
         set_entries_sensitive(true);
         m_modified = true;
+
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         GSpeakers::driverlist_modified() = true;
     }
@@ -1025,7 +1028,7 @@ bool driver_editor::open_xml(const std::string& filename)
 
     try
     {
-        driver_list const& temp_speaker_list = driver_list(filename);
+        driver_list const& temp_diver_list = driver_list(filename);
 
         m_refListStore->clear();
 
@@ -1036,23 +1039,22 @@ bool driver_editor::open_xml(const std::string& filename)
                                   + GSpeakers::short_filename(m_filename, 40) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
 
-        std::for_each(temp_speaker_list.data().begin(),
-                      temp_speaker_list.data().end(),
+        std::for_each(temp_diver_list.data().begin(),
+                      temp_diver_list.data().end(),
                       sigc::mem_fun(*this, &driver_editor::add_item));
 
-        m_speaker_list->data().clear();
-        m_speaker_list->data().insert(begin(m_speaker_list->data()),
-                                      begin(temp_speaker_list.data()),
-                                      end(temp_speaker_list.data()));
+        m_driver_list->data().clear();
+        m_driver_list->data().insert(begin(m_driver_list->data()),
+                                     begin(temp_diver_list.data()),
+                                     end(temp_diver_list.data()));
 
         // Select the first item in the list
-        if (!m_speaker_list->data().empty())
+        if (!m_driver_list->data().empty())
         {
-            Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
             Gtk::TreeRow row = *(m_refListStore->get_iter(Gtk::TreePath(std::to_string(0))));
-            refSelection->select(row);
+            m_TreeView.get_selection()->select(row);
         }
+
         m_IdStringEntry.grab_focus();
         set_entries_sensitive(true);
 
@@ -1064,7 +1066,7 @@ bool driver_editor::open_xml(const std::string& filename)
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 
-        signal_speakerlist_loaded(m_speaker_list.get());
+        signal_speakerlist_loaded(m_driver_list.get());
 
         m_modified = true;
     }
@@ -1082,13 +1084,14 @@ void driver_editor::on_edit_freq_resp()
     std::cout << "SpeakerEditor::on_edit_freq_resp" << std::endl;
     std::cout << "SpeakerEditor::on_edit_freq_resp: index = " << index << std::endl;
 #endif
-    auto f = std::make_unique<frequency_response_editor>(m_FreqRespFileEntry.get_text());
-    f->run();
 
-    m_FreqRespFileEntry.set_text(f->get_filename());
+    frequency_response_editor f(m_FreqRespFileEntry.get_text());
+    f.run();
+
+    m_FreqRespFileEntry.set_text(f.get_filename());
     m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
-    m_speaker_list->data()[index].set_freq_resp_filename(f->get_filename());
+    m_driver_list->data()[index].set_freq_resp_filename(f.get_filename());
 
     on_selection_changed();
 
@@ -1117,7 +1120,7 @@ void driver_editor::on_browse_freq_resp()
     m_FreqRespFileEntry.set_text(m_filename);
     m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
-    m_speaker_list->data()[index].set_freq_resp_filename(filename);
+    m_driver_list->data()[index].set_freq_resp_filename(filename);
 
     on_selection_changed();
     // FIXME gtk3 port
@@ -1133,8 +1136,8 @@ void driver_editor::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
-    std::for_each(begin(m_speaker_list->data()),
-                  end(m_speaker_list->data()),
+    std::for_each(begin(m_driver_list->data()),
+                  end(m_driver_list->data()),
                   sigc::mem_fun(*this, &driver_editor::add_item));
 }
 

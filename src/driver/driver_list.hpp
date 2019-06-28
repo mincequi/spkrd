@@ -37,19 +37,19 @@ public:
     void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, const driver_list& driver_list);
+    friend std::ostream& operator<<(std::ostream& output, const driver_list& drivers);
 
-    std::vector<driver>& data() noexcept { return m_speaker_list; }
+    std::vector<driver>& data() noexcept { return m_drivers; }
 
-    std::vector<driver> const& data() const noexcept { return m_speaker_list; }
+    std::vector<driver> const& data() const noexcept { return m_drivers; }
 
     driver get_by_id_string(const std::string& id_string);
 
-    /// Remove all items
-    void clear();
+    /// Remove all drivers
+    void clear() { m_drivers.clear(); }
 
 protected:
-    std::vector<driver> m_speaker_list;
+    std::vector<driver> m_drivers;
 };
 
 #endif
