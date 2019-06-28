@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "crossoverhistory.h"
+#include "crossover_history.hpp"
 
 #include "gspeakersfilechooser.h"
 
@@ -32,7 +32,16 @@ constexpr auto TOOLBAR_INDEX_SAVE = 4;
 
 sigc::signal1<void, bool> signal_crossover_set_save_state;
 
-CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
+namespace
+{
+auto time_of_day() -> std::string
+{
+    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    return {std::ctime(&time)};
+}
+}
+
+crossover_history::crossover_history() : Gtk::Frame("")
 {
     set_border_width(2);
     m_ScrolledWindow.set_border_width(12);
@@ -42,25 +51,25 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
     m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 #ifdef TARGET_WIN32
-    g_settings.defaultValueString("CrossoverListXml", "crossover1.xml");
+    g_settings.defaultValueString("crossover_listXml", "crossover1.xml");
 #else
-    g_settings.defaultValueString("CrossoverListXml",
+    g_settings.defaultValueString("crossover_listXml",
                                   std::string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
 #endif
-    m_filename = g_settings.getValueString("CrossoverListXml");
+    m_filename = g_settings.getValueString("crossover_listXml");
 
     try
     {
-        m_crossover_list = CrossoverList(m_filename);
+        m_crossover_list = crossover_list(m_filename);
     }
     catch (std::runtime_error const& e)
     {
-        std::cout << "CrossoverHistory::CrossoverHistory: " << e.what() << std::endl;
+        std::cout << "crossover_history::crossover_history: " << e.what() << std::endl;
     }
     set_shadow_type(Gtk::SHADOW_NONE);
 
-    m_evbox = Gtk::manage(new Gtk::EventBox());
-    m_frame_label = Gtk::manage(new Gtk::Label());
+    m_evbox = Gtk::make_managed<Gtk::EventBox>();
+    m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ["))
                               + GSpeakers::short_filename(m_filename, 20) + "]</b>");
 
@@ -74,8 +83,9 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
     // create tree view
     m_TreeView.set_model(m_refListStore);
 
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-    selection->signal_changed().connect(sigc::mem_fun(*this, &CrossoverHistory::on_selection_changed));
+    auto selection = m_TreeView.get_selection();
+    selection->signal_changed().connect(
+        sigc::mem_fun(*this, &crossover_history::on_selection_changed));
 
     add_columns();
 
@@ -83,20 +93,18 @@ CrossoverHistory::CrossoverHistory() : Gtk::Frame("")
 
     show_all();
 
-    index = 0;
-
-    signal_new_crossover.connect(sigc::mem_fun(*this, &CrossoverHistory::on_new_from_menu));
+    signal_new_crossover.connect(sigc::mem_fun(*this, &crossover_history::on_new_from_menu));
 
     signal_net_modified_by_wizard.connect(
-        sigc::mem_fun(*this, &CrossoverHistory::on_net_modified_by_user));
+        sigc::mem_fun(*this, &crossover_history::on_net_modified_by_user));
 
     signal_net_modified_by_user.connect(
-        sigc::mem_fun(*this, &CrossoverHistory::on_net_modified_by_wizard));
+        sigc::mem_fun(*this, &crossover_history::on_net_modified_by_wizard));
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &CrossoverHistory::on_save_open_files));
+    signal_save_open_files.connect(sigc::mem_fun(*this, &crossover_history::on_save_open_files));
 }
 
-void CrossoverHistory::on_save_open_files()
+void crossover_history::on_save_open_files()
 {
     if (GSpeakers::crossoverlist_modified())
     {
@@ -104,45 +112,40 @@ void CrossoverHistory::on_save_open_files()
     }
 }
 
-void CrossoverHistory::select_first_row()
+void crossover_history::select_first_row()
 {
     if (!m_crossover_list.data().empty())
     {
-        char* str = nullptr;
-        GString* buffer = g_string_new(str);
-        g_string_printf(buffer, "%d", 0);
-        GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-        Gtk::TreePath path(gpath);
+        Gtk::TreePath path(std::to_string(0));
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-        Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-        selection->select(row);
+        m_TreeView.get_selection()->select(row);
     }
 }
 
-void CrossoverHistory::on_net_modified_by_wizard(filter_network* net)
+void crossover_history::on_net_modified_by_wizard(filter_network* net)
 {
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::on_net_modified_by_user() { signal_crossover_set_save_state(true); }
+void crossover_history::on_net_modified_by_user() { signal_crossover_set_save_state(true); }
 
-void CrossoverHistory::on_part_modified() { signal_crossover_set_save_state(true); }
+void crossover_history::on_part_modified() { signal_crossover_set_save_state(true); }
 
-CrossoverHistory::~CrossoverHistory()
+crossover_history::~crossover_history()
 {
-    g_settings.setValue("CrossoverListXml", m_filename);
+    g_settings.setValue("crossover_listXml", m_filename);
     try
     {
         g_settings.save();
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "CrossoverHistory::~CrossoverHistory: saving settings error: " << error.what()
+        std::cout << "crossover_history::~crossover_history: saving settings error: " << error.what()
                   << "\n";
     }
 }
 
-void CrossoverHistory::on_open_xml()
+void crossover_history::on_open_xml()
 {
     GSpeakersFileChooserDialog fc(_("Open crossover xml"));
     std::string const& filename = fc.get_filename();
@@ -152,7 +155,7 @@ void CrossoverHistory::on_open_xml()
     }
 }
 
-void CrossoverHistory::on_append_xml()
+void crossover_history::on_append_xml()
 {
     GSpeakersFileChooserDialog fc(_("Append crossover xml"));
     std::string const& filename = fc.get_filename();
@@ -162,40 +165,33 @@ void CrossoverHistory::on_append_xml()
     }
 }
 
-void CrossoverHistory::open_xml(const std::string& filename)
+void crossover_history::open_xml(const std::string& filename)
 {
-    CrossoverList temp_crossover_list;
+    crossover_list temp_crossover_list;
     try
     {
-        temp_crossover_list = CrossoverList(filename);
+        temp_crossover_list = crossover_list(filename);
         m_refListStore->clear();
 
         m_filename = filename;
+
         std::for_each(temp_crossover_list.data().begin(),
                       temp_crossover_list.data().end(),
-                      sigc::mem_fun(*this, &CrossoverHistory::add_item));
+                      sigc::mem_fun(*this, &crossover_history::add_item));
 
-        /* Delete items in crossover_list */
-        m_crossover_list.data().clear();
-        m_crossover_list.data().insert(begin(m_crossover_list.data()),
-                                                 temp_crossover_list.data().begin(),
-                                                 temp_crossover_list.data().end());
+        // Delete items in crossover_list
+        m_crossover_list.data().resize(temp_crossover_list.data().size());
+        std::copy(begin(temp_crossover_list.data()),
+                  end(temp_crossover_list.data()),
+                  begin(m_crossover_list.data()));
 
-        /* Select the first item in the list */
+        // Select the first item in the list
         if (!m_crossover_list.data().empty())
         {
-            Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-            char* str = nullptr;
-            GString* buffer = g_string_new(str);
-            g_string_printf(buffer, "%d", 0);
-
-            GtkTreePath* gpath = gtk_tree_path_new_from_string(buffer->str);
-
-            Gtk::TreePath path(gpath);
+            Gtk::TreePath path(std::to_string(0));
 
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-            refSelection->select(row);
+            m_TreeView.get_selection()->select(row);
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
@@ -204,39 +200,36 @@ void CrossoverHistory::open_xml(const std::string& filename)
     }
     catch (std::runtime_error const& e)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
     }
 }
 
-void CrossoverHistory::append_xml(const std::string& filename)
+void crossover_history::append_xml(const std::string& filename)
 {
 #ifndef NDEBUG
-    std::cout << "append xml ok: " << filename << std::endl;
+    std::cout << "append xml ok: " << filename << "\n";
 #endif
-    CrossoverList temp_crossover_list;
+    crossover_list temp_crossover_list;
     try
     {
-        temp_crossover_list = CrossoverList(filename);
+        temp_crossover_list = crossover_list(filename);
 
         std::for_each(temp_crossover_list.data().begin(),
                       temp_crossover_list.data().end(),
-                      sigc::mem_fun(*this, &CrossoverHistory::add_item));
-        for (auto& from : temp_crossover_list.data())
-        {
-            m_crossover_list.data().push_back(from);
-        }
-        m_crossover_list.data().size();
+                      sigc::mem_fun(*this, &crossover_history::add_item));
+
+        m_crossover_list.data().insert(end(m_crossover_list.data()),
+                                       begin(temp_crossover_list.data()),
+                                       end(temp_crossover_list.data()));
     }
     catch (std::runtime_error const& e)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(e.what(), false, Gtk::MESSAGE_ERROR).run();
     }
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::on_selection_changed()
+void crossover_history::on_selection_changed()
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -257,15 +250,14 @@ void CrossoverHistory::on_selection_changed()
     }
 }
 
-void CrossoverHistory::on_new_copy()
+void crossover_history::on_new_copy()
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
     if (!m_crossover_list.data().empty())
     {
-        /* Find out which row we selected */
-
-        if (const Gtk::TreeIter iter = refSelection->get_selected())
+        // Find out which row we selected
+        if (auto const iter = refSelection->get_selected())
         {
             Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -279,25 +271,21 @@ void CrossoverHistory::on_new_copy()
                    Quick and easy solution...use the to_xml function which gets rid of the id */
                 xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
 
-                ((m_crossover_list.data())[path[0]]).to_xml_node(node);
+                m_crossover_list.data()[path[0]].to_xml_node(node);
 
                 Crossover c(node->children);
 
-                /* convert to nice time format */
+                // Set time of day as this crossovers id_string
+                c.set_id_string(_("Crossover: ") + time_of_day());
 
-                /* Set time of day as this crossovers id_string */
-                std::time_t time = std::chrono::system_clock::to_time_t(
-                    std::chrono::system_clock::now());
-                c.set_id_string(_("Crossover: ") + std::string(std::ctime(&time) + '\0'));
-
-                /* the usual adding of items to the liststore and data-container */
+                // the usual adding of items to the liststore and data-container
                 add_item(c);
                 m_crossover_list.data().push_back(c);
             }
         }
     }
 
-    /* Select the last crossover in the list: the new crossover */
+    // Select the last crossover in the list: the new crossover
     Gtk::TreePath path(Glib::ustring(std::to_string(m_crossover_list.data().size() - 1)));
 
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -305,22 +293,15 @@ void CrossoverHistory::on_new_copy()
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::on_new_from_menu(int type)
+void crossover_history::on_new_from_menu(int type)
 {
 #ifndef NDEBUG
-    std::cout << "CrossoverHistory::on_new_from_menu: " << type << std::endl;
+    std::cout << "crossover_history::on_new_from_menu: " << type << "\n";
 #endif
-    /* add new crossover of appropriate type here */
-    time_t t;
-    time(&t);
-    /* convert to nice time format */
-    std::string s = std::string(ctime(&t));
-    int length = s.length();
-    s[length - 1] = '\0';
 
-    Crossover c(type, _("Crossover ") + s);
+    Crossover c(type, _("Crossover ") + time_of_day());
 
-    /* Add to liststore */
+    // Add to liststore
     add_item(c);
     m_crossover_list.data().push_back(c);
 
@@ -333,18 +314,12 @@ void CrossoverHistory::on_new_from_menu(int type)
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::on_new()
+void crossover_history::on_new()
 {
     Crossover c;
 
     // Set time of day as this crossovers id_string
-    time_t t;
-    time(&t);
-    // convert to nice time format
-    std::string s = std::string(ctime(&t));
-    int length = s.length();
-    s[length - 1] = '\0';
-    c.set_id_string(_("Crossover: ") + s);
+    c.set_id_string(_("Crossover: ") + time_of_day());
 
     add_item(c);
 
@@ -360,7 +335,7 @@ void CrossoverHistory::on_new()
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::on_new_xml()
+void crossover_history::on_new_xml()
 {
     m_refListStore->clear();
     m_crossover_list.clear();
@@ -371,10 +346,10 @@ void CrossoverHistory::on_new_xml()
         ->set_markup("<b>" + Glib::ustring(_("Crossover list [new file]")) + "</b>");
 }
 
-void CrossoverHistory::on_save()
+void crossover_history::on_save()
 {
 #ifndef NDEBUG
-    std::puts("CrossoverHistory::on_save");
+    std::puts("crossover_history::on_save");
 #endif
     if (new_xml_pressed)
     {
@@ -395,7 +370,7 @@ void CrossoverHistory::on_save()
     }
 }
 
-void CrossoverHistory::on_save_as()
+void crossover_history::on_save_as()
 {
 #ifndef NDEBUG
     std::cout << "save as" << std::endl;
@@ -410,7 +385,7 @@ void CrossoverHistory::on_save_as()
     }
 }
 
-void CrossoverHistory::save_as_xml(const std::string& filename)
+void crossover_history::save_as_xml(const std::string& filename)
 {
 #ifndef NDEBUG
     std::cout << _("save as ok") << "\n";
@@ -421,7 +396,7 @@ void CrossoverHistory::save_as_xml(const std::string& filename)
         m_filename = filename;
 
         {
-            auto crossover_label = Gtk::manage(new Gtk::Label());
+            auto crossover_label = Gtk::make_managed<Gtk::Label>();
             crossover_label->set_markup("<b>" + Glib::ustring(_("Crossover list ["))
                                         + GSpeakers::short_filename(m_filename, 20) + "]</b>");
             set_label_widget(*crossover_label);
@@ -434,7 +409,7 @@ void CrossoverHistory::save_as_xml(const std::string& filename)
     }
 }
 
-void CrossoverHistory::on_remove()
+void crossover_history::on_remove()
 {
     Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
 
@@ -447,8 +422,7 @@ void CrossoverHistory::on_remove()
             m_refListStore->erase(iter);
 
             if (index < (int)m_crossover_list.data().size())
-                m_crossover_list.data().erase(m_crossover_list.data().begin()
-                                                        + index);
+                m_crossover_list.data().erase(m_crossover_list.data().begin() + index);
         }
     }
     Gtk::TreePath path(std::to_string(index > 0 ? index - 1 : 0));
@@ -457,118 +431,93 @@ void CrossoverHistory::on_remove()
     signal_crossover_set_save_state(true);
 }
 
-void CrossoverHistory::create_model()
+void crossover_history::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
     std::for_each(m_crossover_list.data().begin(),
                   m_crossover_list.data().end(),
-                  sigc::mem_fun(*this, &CrossoverHistory::add_item));
+                  sigc::mem_fun(*this, &crossover_history::add_item));
 }
 
-void CrossoverHistory::add_columns()
+void crossover_history::add_columns()
 {
-    /*
-      {
-        Gtk::CellRendererText* pRenderer = Gtk::manage( new Gtk::CellRendererText() );
-
-        int cols_count =m_TreeView.append_column(_("Id"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn =m_TreeView.get_column(cols_count-1);
-
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.id);
-      }
-    */
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
 
-        int cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
+        auto const cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
     }
 
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
 
         int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &CrossoverHistory::type_cell_data_func));
-        //    pColumn->add_attribute(pRenderer->property_text(), m_columns.type);
+                                    sigc::mem_fun(*this, &crossover_history::type_cell_data_func));
     }
 }
 
-void CrossoverHistory::type_cell_data_func(Gtk::CellRenderer* cell,
-                                           const Gtk::TreeModel::iterator& iter)
+void crossover_history::type_cell_data_func(Gtk::CellRenderer* cell,
+                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     std::string s;
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) != 0)
     {
-        s = s + _("lowpass");
+        s += _("lowpass");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_SUBSONIC) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", subsonic");
+            s += (", ");
         }
-        else
-        {
-            s = s + _("subsonic");
-        }
+        s += _("subsonic");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_HIGHPASS) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", highpass");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("highpass");
-        }
+        s += _("highpass");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_TWOWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 2-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("2-way");
-        }
+        s += _("2-way");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_THREEWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 3-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("3-way");
-        }
+        s += _("3-way");
     }
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_FOURWAY) != 0)
     {
-        if (s.length() > 0)
+        if (!s.empty())
         {
-            s = s + _(", 4-way");
+            s += _(", ");
         }
-        else
-        {
-            s = s + _("4-way");
-        }
+        s += _("4-way");
     }
     renderer.property_text() = s;
 }
 
-void CrossoverHistory::add_item(Crossover const& foo)
+void crossover_history::add_item(Crossover const& foo)
 {
     Gtk::TreeRow row = *(m_refListStore->append());
+
     row[m_columns.id] = foo.get_id();
     row[m_columns.id_string] = foo.get_id_string();
     row[m_columns.type] = foo.get_type();

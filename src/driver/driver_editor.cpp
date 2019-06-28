@@ -69,12 +69,12 @@ driver_editor::driver_editor()
 
     try
     {
-        m_speaker_list = std::make_unique<driver_list>(m_filename);
-        signal_speakerlist_loaded(m_speaker_list.get());
+        m_driver_list = std::make_unique<driver_list>(m_filename);
+        signal_speakerlist_loaded(m_driver_list.get());
     }
     catch (std::runtime_error const& e)
     {
-        m_speaker_list = std::make_unique<driver_list>();
+        m_driver_list = std::make_unique<driver_list>();
         std::cout << "driver_editor::driver_editor: " << e.what() << std::endl;
     }
 
@@ -84,9 +84,9 @@ driver_editor::driver_editor()
     m_treeview_frame.add(m_inner_treeview_vbox);
     m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
 
-    m_evbox = Gtk::manage(new Gtk::EventBox());
+    m_evbox = Gtk::make_managed<Gtk::EventBox>();
 
-    m_frame_label = Gtk::manage(new Gtk::Label());
+    m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers ["))
                               + GSpeakers::short_filename(m_filename, 50) + "]</b>");
 
@@ -114,37 +114,37 @@ driver_editor::driver_editor()
     m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
     // All the entries
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 0);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Name:"), Gtk::ALIGN_START), 0, 0);
     m_grid.attach(m_IdStringEntry, 1, 0);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 1);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qts:"), Gtk::ALIGN_START), 0, 1);
     m_grid.attach(m_QtsEntry, 1, 1);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_START)), 0, 2);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Fs: (Hz)"), Gtk::ALIGN_START), 0, 2);
     m_grid.attach(m_FsEntry, 1, 2);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_START)), 0, 3);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Vas: (l)"), Gtk::ALIGN_START), 0, 3);
     m_grid.attach(m_VasEntry, 1, 3);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_START)), 0, 4);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Rdc: (Ohm)"), Gtk::ALIGN_START), 0, 4);
     m_grid.attach(m_RdcEntry, 1, 4);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_START)), 0, 5);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Lvc: (mH)"), Gtk::ALIGN_START), 0, 5);
     m_grid.attach(m_LvcEntry, 1, 5);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_START)), 0, 6);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qms:"), Gtk::ALIGN_START), 0, 6);
     m_grid.attach(m_QmsEntry, 1, 6);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_START)), 0, 7);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qes:"), Gtk::ALIGN_START), 0, 7);
     m_grid.attach(m_QesEntry, 1, 7);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 8);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Impedance: (Ohm)"), Gtk::ALIGN_START), 0, 8);
     m_grid.attach(m_ImpEntry, 1, 8);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 9);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START), 0, 9);
     m_grid.attach(m_SensEntry, 1, 9);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 10);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Cone mass: (kg)"), Gtk::ALIGN_START), 0, 10);
     m_grid.attach(m_MmdEntry, 1, 10);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)), 0, 11);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Effective radius: (m)"), Gtk::ALIGN_START), 0, 11);
     m_grid.attach(m_AdEntry, 1, 11);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_START)), 0, 12);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Force factor: (N/A)"), Gtk::ALIGN_START), 0, 12);
     m_grid.attach(m_BlEntry, 1, 12);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension resistance: (Ns/m)"), Gtk::ALIGN_START)),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension resistance: (Ns/m"), Gtk::ALIGN_START),
                   0,
                   13);
     m_grid.attach(m_RmsEntry, 1, 13);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START)),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START),
                   0,
                   14);
     m_grid.attach(m_CmsEntry, 1, 14);
@@ -160,7 +160,7 @@ driver_editor::driver_editor()
     m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
     m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
     hbox->pack_start(m_FreqRespFileEntry);
     m_FreqRespFileEntry.set_width_chars(15);
@@ -248,40 +248,40 @@ Gtk::MenuItem& driver_editor::get_menu()
     auto driver_submenu = Gtk::manage(new Gtk::Menu());
 
     {
-        auto new_driver = Gtk::manage(new Gtk::MenuItem("New Driver"));
+        auto new_driver = Gtk::make_managed<Gtk::MenuItem>("New Driver");
         new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         driver_submenu->append(*new_driver);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto new_driver = Gtk::manage(new Gtk::MenuItem("New"));
+        auto new_driver = Gtk::make_managed<Gtk::MenuItem>("New");
         new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new_xml));
         driver_submenu->append(*new_driver);
     }
     {
-        auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
+        auto append_xml = Gtk::make_managed<Gtk::MenuItem>("Append XML");
         append_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_append_xml));
         driver_submenu->append(*append_xml);
     }
     {
-        auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
+        auto open_xml = Gtk::make_managed<Gtk::MenuItem>("Open XML");
         open_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         driver_submenu->append(*open_xml);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto save = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE));
+        auto save = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::SAVE);
         save->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         driver_submenu->append(*save);
     }
     {
-        auto save_as = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE_AS));
+        auto save_as = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::SAVE_AS);
         save_as->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save_as));
         driver_submenu->append(*save_as);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto delete_item = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::DELETE));
+        auto delete_item = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::DELETE);
         delete_item->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         driver_submenu->append(*delete_item);
     }
@@ -298,25 +298,26 @@ Gtk::Toolbar& driver_editor::get_toolbar()
 {
     if (m_toolbar == nullptr)
     {
-        m_toolbar = Gtk::manage(new Gtk::Toolbar());
+        m_toolbar = Gtk::make_managed<Gtk::Toolbar>();
 
-        Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-        Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("New Driver")));
+        Gtk::Widget* im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::NEW,
+                                                        Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        Gtk::ToolButton* t = Gtk::make_managed<Gtk::ToolButton>(*im, _("New Driver"));
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         m_toolbar->append(*t);
 
-        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
+        m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
 
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::OPEN);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         m_toolbar->append(*t);
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::SAVE));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::SAVE);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         m_toolbar->append(*t);
 
-        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
+        m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
 
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::DELETE));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::DELETE);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         m_toolbar->append(*t);
 
@@ -353,7 +354,7 @@ void driver_editor::on_settings_changed(const std::string& setting)
     }
 }
 
-void driver_editor::on_close() { signal_speakerlist_loaded(m_speaker_list.get()); }
+void driver_editor::on_close() { signal_speakerlist_loaded(m_driver_list.get()); }
 
 void driver_editor::set_entries_sensitive(bool const is_sensitive)
 {
@@ -396,13 +397,11 @@ void driver_editor::on_new()
     s.set_id_string(s.get_id_string() + " " + std::to_string(s.get_id()));
 
     add_item(s);
-    m_speaker_list->data().push_back(s);
+    m_driver_list->data().push_back(s);
 
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-    Gtk::TreePath path(std::to_string(m_speaker_list->data().size() - 1));
+    Gtk::TreePath path(std::to_string(m_driver_list->data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-    refSelection->select(row);
+    m_TreeView.get_selection()->select(row);
 
     m_IdStringEntry.grab_focus();
 
@@ -414,14 +413,14 @@ void driver_editor::on_new()
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-    signal_speakerlist_loaded(m_speaker_list.get());
+    signal_speakerlist_loaded(m_driver_list.get());
     m_modified = true;
 }
 
 void driver_editor::on_new_xml()
 {
     m_refListStore->clear();
-    m_speaker_list->clear();
+    m_driver_list->clear();
 
     set_entries_sensitive(false);
     new_xml_pressed = true;
@@ -432,9 +431,7 @@ void driver_editor::on_new_xml()
 
 void driver_editor::on_remove()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -443,8 +440,8 @@ void driver_editor::on_remove()
             // Remove item from ListStore:
             m_refListStore->erase(iter);
 
-            if (index < (int)m_speaker_list->data().size())
-                m_speaker_list->data().erase(m_speaker_list->data().begin() + index);
+            if (index < (int)m_driver_list->data().size())
+                m_driver_list->data().erase(m_driver_list->data().begin() + index);
         }
     }
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
@@ -467,7 +464,7 @@ void driver_editor::on_save()
 #endif
         try
         {
-            m_speaker_list->to_xml(m_filename);
+            m_driver_list->to_xml(m_filename);
             // FIXME gtk3 port
             // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
             m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
@@ -498,7 +495,7 @@ void driver_editor::save_as(const std::string& filename)
 {
     try
     {
-        m_speaker_list->to_xml(filename);
+        m_driver_list->to_xml(filename);
         m_filename = filename;
     }
     catch (std::runtime_error const& error)
@@ -509,18 +506,16 @@ void driver_editor::save_as(const std::string& filename)
 
 void driver_editor::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
     updating_entries = true;
 
-    if (auto const iter = refSelection->get_selected())
+    if (auto const iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
         if (!path.empty())
         {
             index = path[0];
-            driver const& s = m_speaker_list->data()[index];
+            driver const& s = m_driver_list->data()[index];
 
             m_IdStringEntry.set_text(s.get_id_string());
 
@@ -803,7 +798,7 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
 void driver_editor::on_clear()
 {
     m_refListStore->clear();
-    m_speaker_list->data().clear();
+    m_driver_list->data().clear();
     m_modified = true;
 }
 
@@ -815,9 +810,7 @@ void driver_editor::on_entry_changed(int i)
     }
 
     // This treeview stuff is kind of weird...
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-    if (Gtk::TreeIter iter = refSelection->get_selected())
+    if (Gtk::TreeIter iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -831,136 +824,136 @@ void driver_editor::on_entry_changed(int i)
             case 0:
                 // the treestore
                 row[m_columns.id_string] = m_IdStringEntry.get_text();
-                m_speaker_list->data()[index].set_id_string(m_IdStringEntry.get_text());
+                m_driver_list->data()[index].set_id_string(m_IdStringEntry.get_text());
                 break;
             case 1:
                 // the treestore
                 row[m_columns.qts] = std::atof(m_QtsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qts(std::atof(m_QtsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qts(std::atof(m_QtsEntry.get_text().c_str()));
                 break;
             case 2:
                 // the treestore
                 row[m_columns.fs] = std::atof(m_FsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_fs(std::atof(m_FsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_fs(std::atof(m_FsEntry.get_text().c_str()));
                 break;
             case 3:
                 // the treestore
                 row[m_columns.vas] = std::atof(m_VasEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_vas(std::atof(m_VasEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_vas(std::atof(m_VasEntry.get_text().c_str()));
                 break;
             case 4:
                 d = std::atof(m_RdcEntry.get_text().c_str());
                 row[m_columns.rdc] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_rdc(d);
+                m_driver_list->data()[index].set_rdc(d);
                 update_imp_plot = true;
                 break;
             case 5:
                 d = std::atof(m_LvcEntry.get_text().c_str());
                 row[m_columns.lvc] = d;
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_lvc(d);
+                m_driver_list->data()[index].set_lvc(d);
                 break;
                 update_imp_plot = true;
             case 6:
                 // the treestore
                 row[m_columns.qms] = std::atof(m_QmsEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qms(std::atof(m_QmsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qms(std::atof(m_QmsEntry.get_text().c_str()));
                 break;
             case 7:
                 // the treestore
                 row[m_columns.qes] = std::atof(m_QesEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_qes(std::atof(m_QesEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qes(std::atof(m_QesEntry.get_text().c_str()));
                 break;
             case 8:
                 // the treestore
                 row[m_columns.imp] = std::atof(m_ImpEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_imp(std::atof(m_ImpEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_imp(std::atof(m_ImpEntry.get_text().c_str()));
                 break;
             case 9:
                 // the treestore
                 row[m_columns.sens] = std::atof(m_SensEntry.get_text().c_str());
-                m_speaker_list->data()[index].set_sens(std::atof(m_SensEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_sens(std::atof(m_SensEntry.get_text().c_str()));
                 break;
             case 10:
                 if (m_BassCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_BASS);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_BASS);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
-                signal_speakerlist_loaded(m_speaker_list.get());
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
+                signal_speakerlist_loaded(m_driver_list.get());
                 break;
             case 11:
                 if (m_MidrangeCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_MIDRANGE);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_MIDRANGE);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
             case 12:
                 if (m_TweeterCheckButton.get_active())
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           | SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          | SPEAKER_TYPE_TWEETER);
                 }
                 else
                 {
-                    m_speaker_list->data()[index].set_type(m_speaker_list->data()[index].get_type()
-                                                           & ~SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
+                                                          & ~SPEAKER_TYPE_TWEETER);
                 }
-                row[m_columns.type] = m_speaker_list->data()[index].get_type();
+                row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
             case 13:
                 d = std::atof(m_MmdEntry.get_text().c_str());
                 row[m_columns.mmd] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_mmd(d);
+                m_driver_list->data()[index].set_mmd(d);
                 update_imp_plot = true;
                 break;
             case 14:
                 d = std::atof(m_AdEntry.get_text().c_str());
                 row[m_columns.ad] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_ad(d);
+                m_driver_list->data()[index].set_ad(d);
                 update_imp_plot = true;
                 break;
             case 15:
                 d = std::atof(m_BlEntry.get_text().c_str());
                 row[m_columns.bl] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_bl(d);
+                m_driver_list->data()[index].set_bl(d);
                 update_imp_plot = true;
                 break;
             case 16:
                 d = std::atof(m_RmsEntry.get_text().c_str());
                 row[m_columns.rms] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_rms(d);
+                m_driver_list->data()[index].set_rms(d);
                 update_imp_plot = true;
                 break;
             case 17:
                 d = std::atof(m_CmsEntry.get_text().c_str());
                 row[m_columns.cms] = d; // the treestore
                 if (d == 0.0) d = 1.0;
-                m_speaker_list->data()[index].set_cms(d);
+                m_driver_list->data()[index].set_cms(d);
                 update_imp_plot = true;
                 break;
         }
         if (update_imp_plot)
         {
-            draw_impedance_plot(m_speaker_list->data()[index], true);
+            draw_impedance_plot(m_driver_list->data()[index], true);
         }
     }
     // FIXME gtk3 port
@@ -994,19 +987,22 @@ void driver_editor::append_xml(const std::string& filename)
 {
     try
     {
-        auto const& temp_speaker_list = driver_list(filename);
+        auto const& temp_diver_list = driver_list(filename);
 
-        std::for_each(begin(temp_speaker_list.data()),
-                      end(temp_speaker_list.data()),
+        std::for_each(begin(temp_diver_list.data()),
+                      end(temp_diver_list.data()),
                       sigc::mem_fun(*this, &driver_editor::add_item));
-        for (auto& from : temp_speaker_list.data())
+
+        for (auto& from : temp_diver_list.data())
         {
-            m_speaker_list->data().push_back(from);
+            m_driver_list->data().push_back(from);
         }
 
         set_entries_sensitive(true);
         m_modified = true;
+
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
+
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         GSpeakers::driverlist_modified() = true;
     }
@@ -1025,7 +1021,7 @@ bool driver_editor::open_xml(const std::string& filename)
 
     try
     {
-        driver_list const& temp_speaker_list = driver_list(filename);
+        driver_list const& temp_diver_list = driver_list(filename);
 
         m_refListStore->clear();
 
@@ -1036,23 +1032,22 @@ bool driver_editor::open_xml(const std::string& filename)
                                   + GSpeakers::short_filename(m_filename, 40) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
 
-        std::for_each(temp_speaker_list.data().begin(),
-                      temp_speaker_list.data().end(),
+        std::for_each(temp_diver_list.data().begin(),
+                      temp_diver_list.data().end(),
                       sigc::mem_fun(*this, &driver_editor::add_item));
 
-        m_speaker_list->data().clear();
-        m_speaker_list->data().insert(begin(m_speaker_list->data()),
-                                      begin(temp_speaker_list.data()),
-                                      end(temp_speaker_list.data()));
+        m_driver_list->data().clear();
+        m_driver_list->data().insert(begin(m_driver_list->data()),
+                                     begin(temp_diver_list.data()),
+                                     end(temp_diver_list.data()));
 
         // Select the first item in the list
-        if (!m_speaker_list->data().empty())
+        if (!m_driver_list->data().empty())
         {
-            Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
             Gtk::TreeRow row = *(m_refListStore->get_iter(Gtk::TreePath(std::to_string(0))));
-            refSelection->select(row);
+            m_TreeView.get_selection()->select(row);
         }
+
         m_IdStringEntry.grab_focus();
         set_entries_sensitive(true);
 
@@ -1064,7 +1059,7 @@ bool driver_editor::open_xml(const std::string& filename)
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 
-        signal_speakerlist_loaded(m_speaker_list.get());
+        signal_speakerlist_loaded(m_driver_list.get());
 
         m_modified = true;
     }
@@ -1082,13 +1077,14 @@ void driver_editor::on_edit_freq_resp()
     std::cout << "SpeakerEditor::on_edit_freq_resp" << std::endl;
     std::cout << "SpeakerEditor::on_edit_freq_resp: index = " << index << std::endl;
 #endif
-    auto f = std::make_unique<frequency_response_editor>(m_FreqRespFileEntry.get_text());
-    f->run();
 
-    m_FreqRespFileEntry.set_text(f->get_filename());
+    frequency_response_editor frequency_editor(m_FreqRespFileEntry.get_text());
+    frequency_editor.run();
+
+    m_FreqRespFileEntry.set_text(frequency_editor.get_filename());
     m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
-    m_speaker_list->data()[index].set_freq_resp_filename(f->get_filename());
+    m_driver_list->data()[index].set_freq_resp_filename(frequency_editor.get_filename());
 
     on_selection_changed();
 
@@ -1117,7 +1113,7 @@ void driver_editor::on_browse_freq_resp()
     m_FreqRespFileEntry.set_text(m_filename);
     m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
-    m_speaker_list->data()[index].set_freq_resp_filename(filename);
+    m_driver_list->data()[index].set_freq_resp_filename(filename);
 
     on_selection_changed();
     // FIXME gtk3 port
@@ -1133,8 +1129,8 @@ void driver_editor::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
-    std::for_each(begin(m_speaker_list->data()),
-                  end(m_speaker_list->data()),
+    std::for_each(begin(m_driver_list->data()),
+                  end(m_driver_list->data()),
                   sigc::mem_fun(*this, &driver_editor::add_item));
 }
 

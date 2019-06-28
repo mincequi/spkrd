@@ -93,7 +93,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     driver s;
     if (m_speakerlist != nullptr)
     {
-        s = m_speakerlist->get_speaker_by_id_string(n->get_speaker());
+        s = m_speakerlist->get_by_id_string(n->get_speaker());
     }
 
     std::vector<GSpeakers::Point> freq_resp_points;

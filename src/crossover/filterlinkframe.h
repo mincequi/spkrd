@@ -74,7 +74,7 @@ private:
 
 private:
     Gtk::Label m_label;
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
     Gtk::ComboBoxText m_speaker_combo;
 
     /* For lowpass filter */
@@ -99,8 +99,8 @@ private:
     filter_network* m_net;
     std::string m_description;
     driver_list* m_speaker_list;
-    bool enable_edit{false};
-    bool init{true};
+    bool m_enable_edit{false};
+    bool m_init{true};
 
     int my_filter_plot_index{-1};
     std::vector<GSpeakers::Point> points;

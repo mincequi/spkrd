@@ -63,6 +63,7 @@ protected:
 
     void append_xml(const std::string& filename);
 
+protected:
     void on_cell_fixed_toggled(const Glib::ustring& path_string);
 
     void on_open_xml();
@@ -97,20 +98,35 @@ protected:
 
     void on_settings_changed(const std::string&);
 
+protected:
     void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void vas_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void rdc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void lvc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void qms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void qes_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void imp_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void sens_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void ad_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void bl_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void rms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+
     void cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
 
     virtual void create_model();
@@ -225,7 +241,7 @@ protected:
     bool new_xml_pressed{false};
     int index{-1};
 
-    std::unique_ptr<driver_list> m_speaker_list{nullptr};
+    std::unique_ptr<driver_list> m_driver_list{nullptr};
     driver_frequency_response_plot plot;
 
     ModelColumns m_columns;

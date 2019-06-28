@@ -33,28 +33,24 @@ CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
 CellItem_Crossover::CellItem_Crossover(passive_component const& part)
     : m_id(part.get_id()), m_type(part.get_type()), m_value(part.get_value()), m_unit(part.get_unit())
 {
-    char* str = nullptr;
-    GString* buffer = g_string_new(str);
-
     switch (m_type)
     {
         case PART_TYPE_CAPACITOR:
-            g_string_printf(buffer, "C%d", m_id);
+            m_label = "C" + std::to_string(m_id);
             m_unit += "F";
             break;
         case PART_TYPE_INDUCTOR:
-            g_string_printf(buffer, "L%d", m_id);
+            m_label = "L" + std::to_string(m_id);
             m_unit += "H";
             break;
         case PART_TYPE_RESISTOR:
-            g_string_printf(buffer, "R%d", m_id);
+            m_label = "R" + std::to_string(m_id);
             m_unit += "Ohm";
             break;
         default:
-            g_string_printf(buffer, "%d", m_id);
+            m_label = std::to_string(m_id);
             break;
     }
-    m_label = Glib::ustring(buffer->str);
 }
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label,

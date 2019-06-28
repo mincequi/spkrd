@@ -53,7 +53,6 @@ constexpr auto NET_LINEARPHASE = 7;
 /// filter_network is a part of a crossover: one part of the crossover we want to simulate in SPICE
 /// For example: Lowpass filter with impedance correction network or
 ///              highpass filter with damping network.
-/// TODO: Use c++ streams for input in passive_component(xmlNodePtr)
 class filter_network : public GSpeakersObject
 {
 public:
@@ -118,37 +117,64 @@ public:
      * part that we modify, but if we return a ref we modify the
      * part stored in filter_network
      */
-    passive_component& get_imp_corr_R() { return m_imp_corr_R; }
+    auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
 
-    passive_component& get_imp_corr_C() { return m_imp_corr_C; }
+    auto get_imp_corr_R() const -> passive_component const& { return m_imp_corr_R; }
 
-    passive_component& get_damp_R1() { return m_damp_R1; }
+    auto get_imp_corr_C() -> passive_component& { return m_imp_corr_C; }
 
-    passive_component& get_damp_R2() { return m_damp_R2; }
+    auto get_imp_corr_C() const -> passive_component const& { return m_imp_corr_C; }
 
-    passive_component& get_res_R() { return m_res_R; }
+    auto get_damp_R1() -> passive_component& { return m_damp_R1; }
 
-    passive_component& get_res_C() { return m_res_C; }
+    auto get_damp_R1() const -> passive_component const& { return m_damp_R1; }
 
-    passive_component& get_res_L() { return m_res_L; }
+    auto get_damp_R2() -> passive_component& { return m_damp_R2; }
+
+    auto get_damp_R2() const -> passive_component const& { return m_damp_R2; }
+
+    auto get_res_R() -> passive_component& { return m_res_R; }
+
+    auto get_res_R() const -> passive_component const& { return m_res_R; }
+
+    auto get_res_C() -> passive_component& { return m_res_C; }
+
+    auto get_res_C() const -> passive_component const& { return m_res_C; }
+
+    auto get_res_L() -> passive_component& { return m_res_L; }
+
+    auto get_res_L() const -> passive_component const& { return m_res_L; }
 
     void set_highpass_order(int order);
+
     void set_lowpass_order(int order);
+
     void set_has_imp_corr(bool has_imp_corr);
+
     void set_has_damp(bool has_damp);
 
     void set_imp_corr_R(passive_component p) { m_imp_corr_R = std::move(p); }
+
     void set_imp_corr_C(passive_component p) { m_imp_corr_C = std::move(p); }
+
     void set_damp_R1(passive_component p) { m_damp_R1 = std::move(p); }
+
     void set_damp_R2(passive_component p) { m_damp_R2 = std::move(p); }
+
     void set_res_R(passive_component p) { m_res_R = std::move(p); }
+
     void set_res_C(passive_component p) { m_res_C = std::move(p); }
+
     void set_res_L(passive_component p) { m_res_L = std::move(p); }
 
     void set_lowpass_family(int family) { m_lowpass_family = family; }
+
     void set_highpass_family(int family) { m_highpass_family = family; }
+
     void set_speaker(std::string speaker) { m_speaker = std::move(speaker); }
+
     void set_adv_imp_model(int model) { m_adv_imp_model = model; }
+
     void set_inv_pol(bool pol) { m_inv_pol = pol; }
 
 protected:
