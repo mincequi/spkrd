@@ -114,37 +114,37 @@ driver_editor::driver_editor()
     m_TreeViewTable.attach(m_ScrolledWindow, 0, 4, 0, 10);
 
     // All the entries
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 0);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Name:"), Gtk::ALIGN_START), 0, 0);
     m_grid.attach(m_IdStringEntry, 1, 0);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qts:"), Gtk::ALIGN_START)), 0, 1);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qts:"), Gtk::ALIGN_START), 0, 1);
     m_grid.attach(m_QtsEntry, 1, 1);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fs: (Hz)"), Gtk::ALIGN_START)), 0, 2);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Fs: (Hz)"), Gtk::ALIGN_START), 0, 2);
     m_grid.attach(m_FsEntry, 1, 2);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Vas: (l)"), Gtk::ALIGN_START)), 0, 3);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Vas: (l)"), Gtk::ALIGN_START), 0, 3);
     m_grid.attach(m_VasEntry, 1, 3);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Rdc: (Ohm)"), Gtk::ALIGN_START)), 0, 4);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Rdc: (Ohm)"), Gtk::ALIGN_START), 0, 4);
     m_grid.attach(m_RdcEntry, 1, 4);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Lvc: (mH)"), Gtk::ALIGN_START)), 0, 5);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Lvc: (mH)"), Gtk::ALIGN_START), 0, 5);
     m_grid.attach(m_LvcEntry, 1, 5);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qms:"), Gtk::ALIGN_START)), 0, 6);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qms:"), Gtk::ALIGN_START), 0, 6);
     m_grid.attach(m_QmsEntry, 1, 6);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qes:"), Gtk::ALIGN_START)), 0, 7);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qes:"), Gtk::ALIGN_START), 0, 7);
     m_grid.attach(m_QesEntry, 1, 7);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Impedance: (Ohm)"), Gtk::ALIGN_START)), 0, 8);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Impedance: (Ohm)"), Gtk::ALIGN_START), 0, 8);
     m_grid.attach(m_ImpEntry, 1, 8);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START)), 0, 9);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START), 0, 9);
     m_grid.attach(m_SensEntry, 1, 9);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Cone mass: (kg)"), Gtk::ALIGN_START)), 0, 10);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Cone mass: (kg)"), Gtk::ALIGN_START), 0, 10);
     m_grid.attach(m_MmdEntry, 1, 10);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Effective radius: (m)"), Gtk::ALIGN_START)), 0, 11);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Effective radius: (m)"), Gtk::ALIGN_START), 0, 11);
     m_grid.attach(m_AdEntry, 1, 11);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Force factor: (N/A)"), Gtk::ALIGN_START)), 0, 12);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Force factor: (N/A)"), Gtk::ALIGN_START), 0, 12);
     m_grid.attach(m_BlEntry, 1, 12);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension resistance: (Ns/m)"), Gtk::ALIGN_START)),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension resistance: (Ns/m"), Gtk::ALIGN_START),
                   0,
                   13);
     m_grid.attach(m_RmsEntry, 1, 13);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START)),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START),
                   0,
                   14);
     m_grid.attach(m_CmsEntry, 1, 14);
@@ -160,7 +160,7 @@ driver_editor::driver_editor()
     m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
     m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
     hbox->pack_start(m_FreqRespFileEntry);
     m_FreqRespFileEntry.set_width_chars(15);
@@ -248,40 +248,40 @@ Gtk::MenuItem& driver_editor::get_menu()
     auto driver_submenu = Gtk::manage(new Gtk::Menu());
 
     {
-        auto new_driver = Gtk::manage(new Gtk::MenuItem("New Driver"));
+        auto new_driver = Gtk::make_managed<Gtk::MenuItem>("New Driver");
         new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         driver_submenu->append(*new_driver);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto new_driver = Gtk::manage(new Gtk::MenuItem("New"));
+        auto new_driver = Gtk::make_managed<Gtk::MenuItem>("New");
         new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new_xml));
         driver_submenu->append(*new_driver);
     }
     {
-        auto append_xml = Gtk::manage(new Gtk::MenuItem("Append XML"));
+        auto append_xml = Gtk::make_managed<Gtk::MenuItem>("Append XML");
         append_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_append_xml));
         driver_submenu->append(*append_xml);
     }
     {
-        auto open_xml = Gtk::manage(new Gtk::MenuItem("Open XML"));
+        auto open_xml = Gtk::make_managed<Gtk::MenuItem>("Open XML");
         open_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         driver_submenu->append(*open_xml);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto save = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE));
+        auto save = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::SAVE);
         save->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         driver_submenu->append(*save);
     }
     {
-        auto save_as = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::SAVE_AS));
+        auto save_as = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::SAVE_AS);
         save_as->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_save_as));
         driver_submenu->append(*save_as);
     }
-    driver_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+    driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
-        auto delete_item = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::DELETE));
+        auto delete_item = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::DELETE);
         delete_item->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         driver_submenu->append(*delete_item);
     }
@@ -298,25 +298,26 @@ Gtk::Toolbar& driver_editor::get_toolbar()
 {
     if (m_toolbar == nullptr)
     {
-        m_toolbar = Gtk::manage(new Gtk::Toolbar());
+        m_toolbar = Gtk::make_managed<Gtk::Toolbar>();
 
-        Gtk::Widget* im = Gtk::manage(new Gtk::Image(Gtk::Stock::NEW, Gtk::ICON_SIZE_LARGE_TOOLBAR));
-        Gtk::ToolButton* t = Gtk::manage(new Gtk::ToolButton(*im, _("New Driver")));
+        Gtk::Widget* im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::NEW,
+                                                        Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        Gtk::ToolButton* t = Gtk::make_managed<Gtk::ToolButton>(*im, _("New Driver"));
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_new));
         m_toolbar->append(*t);
 
-        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
+        m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
 
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::OPEN));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::OPEN);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
         m_toolbar->append(*t);
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::SAVE));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::SAVE);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_save));
         m_toolbar->append(*t);
 
-        m_toolbar->append(*Gtk::manage(new Gtk::SeparatorToolItem()));
+        m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
 
-        t = Gtk::manage(new Gtk::ToolButton(Gtk::Stock::DELETE));
+        t = Gtk::make_managed<Gtk::ToolButton>(Gtk::Stock::DELETE);
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         m_toolbar->append(*t);
 
@@ -398,11 +399,9 @@ void driver_editor::on_new()
     add_item(s);
     m_driver_list->data().push_back(s);
 
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
     Gtk::TreePath path(std::to_string(m_driver_list->data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-    refSelection->select(row);
+    m_TreeView.get_selection()->select(row);
 
     m_IdStringEntry.grab_focus();
 
@@ -432,9 +431,7 @@ void driver_editor::on_new_xml()
 
 void driver_editor::on_remove()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -509,11 +506,9 @@ void driver_editor::save_as(const std::string& filename)
 
 void driver_editor::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
     updating_entries = true;
 
-    if (auto const iter = refSelection->get_selected())
+    if (auto const iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -815,9 +810,7 @@ void driver_editor::on_entry_changed(int i)
     }
 
     // This treeview stuff is kind of weird...
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
-
-    if (Gtk::TreeIter iter = refSelection->get_selected())
+    if (Gtk::TreeIter iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -1085,13 +1078,13 @@ void driver_editor::on_edit_freq_resp()
     std::cout << "SpeakerEditor::on_edit_freq_resp: index = " << index << std::endl;
 #endif
 
-    frequency_response_editor f(m_FreqRespFileEntry.get_text());
-    f.run();
+    frequency_response_editor frequency_editor(m_FreqRespFileEntry.get_text());
+    frequency_editor.run();
 
-    m_FreqRespFileEntry.set_text(f.get_filename());
+    m_FreqRespFileEntry.set_text(frequency_editor.get_filename());
     m_FreqRespFileEntry.set_tooltip_text(m_FreqRespFileEntry.get_text());
 
-    m_driver_list->data()[index].set_freq_resp_filename(f.get_filename());
+    m_driver_list->data()[index].set_freq_resp_filename(frequency_editor.get_filename());
 
     on_selection_changed();
 
