@@ -98,8 +98,9 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
             }
             else if (index == 1)
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>
-                    (&network, _("Woofer/midrange filter"), m_speake_list)));
+                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
+                                                                      _("Woofer/midrange filter"),
+                                                                      m_speaker_list));
             }
             else
             {

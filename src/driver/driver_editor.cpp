@@ -84,9 +84,9 @@ driver_editor::driver_editor()
     m_treeview_frame.add(m_inner_treeview_vbox);
     m_treeview_frame.set_shadow_type(Gtk::SHADOW_NONE);
 
-    m_evbox = Gtk::manage(new Gtk::EventBox());
+    m_evbox = Gtk::make_managed<Gtk::EventBox>();
 
-    m_frame_label = Gtk::manage(new Gtk::Label());
+    m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers ["))
                               + GSpeakers::short_filename(m_filename, 50) + "]</b>");
 
