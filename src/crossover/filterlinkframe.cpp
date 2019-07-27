@@ -359,7 +359,7 @@ void FilterLinkFrame::on_param_changed()
         speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
-    m_net->set_speaker(speaker.get_id_string());
+    m_net->set_driver(speaker.get_id_string());
 
     int index = 0;
     std::vector<double> num_params;

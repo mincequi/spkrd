@@ -30,7 +30,7 @@ public:
     crossover_wizard();
 
 private:
-    void on_speaker_list_loaded(driver_list*);
+    void on_drivers_loaded(driver_list*);
     void on_button_plot_clicked();
     void on_button_update_clicked();
 

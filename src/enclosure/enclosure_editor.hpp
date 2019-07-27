@@ -57,7 +57,7 @@ public:
 protected:
     void on_box_selected(enclosure* b);
 
-    void on_speaker_list_loaded(driver_list*);
+    void on_drivers_loaded(driver_list*);
 
     void on_combo_entry_changed();
 

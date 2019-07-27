@@ -171,7 +171,7 @@ public:
 
     void set_highpass_family(int family) { m_highpass_family = family; }
 
-    void set_speaker(std::string speaker) { m_speaker = std::move(speaker); }
+    void set_driver(std::string speaker) { m_speaker = std::move(speaker); }
 
     void set_adv_imp_model(int model) { m_adv_imp_model = model; }
 

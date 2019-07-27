@@ -31,7 +31,7 @@ crossover_wizard::crossover_wizard()
 
     show_all();
 
-    signal_drivers_loaded.connect(sigc::mem_fun(*this, &crossover_wizard::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(sigc::mem_fun(*this, &crossover_wizard::on_drivers_loaded));
 }
 
 void crossover_wizard::on_crossover_selected(Crossover* crossover)
@@ -118,9 +118,9 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
     }
 }
 
-void crossover_wizard::on_speaker_list_loaded(driver_list* driver_list)
+void crossover_wizard::on_drivers_loaded(driver_list* driver_list)
 {
-    std::puts("crossover_wizard::on_speaker_list_loaded");
+    std::puts("crossover_wizard::on_drivers_loaded");
 
     m_driver_list = driver_list;
 }

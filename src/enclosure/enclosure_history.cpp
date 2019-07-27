@@ -410,7 +410,7 @@ void enclosure_history::on_box_modified(enclosure* b)
             /* Update the boxlist */
             m_box_list.box_list()[path[0]].set_type(b->get_type());
             m_box_list.box_list()[path[0]].set_id_string(b->get_id_string());
-            m_box_list.box_list()[path[0]].set_speaker(b->get_speaker());
+            m_box_list.box_list()[path[0]].set_driver(b->get_speaker());
             m_box_list.box_list()[path[0]].set_vb1(b->get_vb1());
             m_box_list.box_list()[path[0]].set_fb1(b->get_fb1());
             m_box_list.box_list()[path[0]].set_vb2(b->get_vb2());

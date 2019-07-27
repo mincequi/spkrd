@@ -91,7 +91,7 @@ enclosure_editor::enclosure_editor()
     m_fb1_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
-    signal_drivers_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_drivers_loaded));
 
     // Setup option menu
     m_box_type_combo.append("Sealed");
@@ -231,7 +231,7 @@ void enclosure_editor::on_calc_port_clicked() {}
 
 void enclosure_editor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_box); }
 
-void enclosure_editor::on_box_selected(enclosure* b)
+void enclosure_editor::on_box_selected(enclosure* box)
 {
     if (m_disable_signals)
     {
@@ -240,9 +240,9 @@ void enclosure_editor::on_box_selected(enclosure* b)
 
     m_disable_signals = true;
 
-    if (b != nullptr)
+    if (box != nullptr)
     {
-        m_box = b;
+        m_box = box;
         m_id_string_entry.set_text(b->get_id_string());
         m_vb1_entry.set_text(GSpeakers::double_to_ustring(b->get_vb1(), 2, 1));
         m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
@@ -282,17 +282,13 @@ void enclosure_editor::on_box_selected(enclosure* b)
     }
     else
     {
-        // Maybe we don't really need this one
-        if (b != nullptr)
-        {
-            delete b;
-        }
-        b = new enclosure();
+        delete box;
+        box = new enclosure();
     }
     m_disable_signals = false;
 }
 
-void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
+void enclosure_editor::on_drivers_loaded(driver_list* driver_list)
 {
     if (m_disable_signals)
     {
@@ -347,14 +343,13 @@ void enclosure_editor::on_combo_entry_changed()
     m_disable_signals = true;
 
     // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(
-        m_bass_speaker_combo.get_active_text());
+    m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
     m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
     m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
-    m_box->set_speaker(m_bass_speaker_combo.get_active_text());
+    m_box->set_driver(m_bass_speaker_combo.get_active_text());
     signal_box_modified(m_box);
     m_disable_signals = false;
 }

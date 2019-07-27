@@ -61,7 +61,7 @@ public:
 
     void set_fb2(double fb2) { m_fb2 = fb2; }
 
-    void set_speaker(const std::string& speaker) { m_speaker = speaker; }
+    void set_driver(const std::string& speaker) { m_speaker = speaker; }
 
     std::string const& get_id_string() const { return m_id_string; }
 
