@@ -1,0 +1,687 @@
+{
+    "crossovers": [
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "3",
+                    "highpass_order": "0",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "2",
+                                "value": "0.95525",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "16.3534",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.19116",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "Scan-Speak 15W/8530",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "3",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": [
+                        {
+                            "type": "3",
+                            "value": "9.63625",
+                            "unit": ""
+                        },
+                        {
+                            "type": "3",
+                            "value": "8.76892",
+                            "unit": ""
+                        },
+                        {
+                            "type": "1",
+                            "value": "6.81983",
+                            "unit": "u"
+                        },
+                        {
+                            "type": "2",
+                            "value": "0.38192",
+                            "unit": "m"
+                        },
+                        {
+                            "type": "1",
+                            "value": "34.0776",
+                            "unit": "u"
+                        }
+                    ],
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "Scan-Speak 15W/8530",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover: Sat Aug  3 12:56:10 2002"
+        },
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "3",
+                    "highpass_order": "0",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "6",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "19.4444",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.71609",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "17.6832",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.23880",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "1",
+                    "driver": "Seas L14RCY/P",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "3",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "1",
+                                "value": "7.91099",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.32923",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "39.5300",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "Morel MDT32-S",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover: Sat Aug  3 12:56:10 2002"
+        },
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "1",
+                    "highpass_order": "0",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": [
+                        {
+                            "type": "2",
+                            "value": "1",
+                            "unit": "m"
+                        }
+                    ],
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "1",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "1",
+                                "value": "14.1964",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "2",
+                    "driver": "Vifa H26TG-05-06",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover: Sat Aug  3 12:56:21 2002"
+        },
+        {
+            "type": "9",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "1",
+                    "highpass_order": "0",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "5",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "36",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "3.98089",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                },
+                {
+                    "type": "1",
+                    "lowpass_order": "1",
+                    "highpass_order": "0",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": [
+                        {
+                            "type": "3",
+                            "value": "5",
+                            "unit": ""
+                        },
+                        {
+                            "type": "1",
+                            "value": "36",
+                            "unit": "u"
+                        },
+                        {
+                            "type": "2",
+                            "value": "0.39807",
+                            "unit": "m"
+                        }
+                    ],
+                    "lowpass_family": "1",
+                    "highpass_family": "1",
+                    "driver": "",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "1",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "20.5441",
+                                "unit": ""
+                            },
+                            {
+                                "type": "3",
+                                "value": "2.47522",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "13.25",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "2",
+                    "driver": "Vifa D19TD-05-08",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover Sat Aug 31 18:48:51 2002"
+        },
+        {
+            "type": "16",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "3",
+                    "highpass_order": "0",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "6",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "75",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "9.548",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "235.776",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "3.18400",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "2",
+                    "driver": "Seas L21RN4X/P",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                },
+                {
+                    "type": "3",
+                    "lowpass_order": "3",
+                    "highpass_order": "2",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "6",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "19.4444",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "1.3",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "11.5",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "1.2",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "200",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "6",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "1",
+                    "driver": "Seas L14RCY/P",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "3",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "5",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "3.60000",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "3",
+                                "value": "10.0238",
+                                "unit": ""
+                            },
+                            {
+                                "type": "3",
+                                "value": "4.97630",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "6.79999",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.40000",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "47",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "1",
+                    "driver": "Morel MDT32-S",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover Tue Oct  1 01:24:25 2002"
+        },
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "2",
+                    "highpass_order": "0",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "2",
+                                "value": "0.6139",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "8.52271",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "2",
+                    "driver": "Seas L14RCY/P",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "2",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "1",
+                                "value": "10.2272",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.51158",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "1",
+                    "driver": "Morel MDT32-S",
+                    "advanced_impendance_model": false,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover Tue Oct 15 21:30:23 2002"
+        },
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "2",
+                    "highpass_order": "0",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "6",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "22",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.59999",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "10",
+                                "unit": "u"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "2",
+                    "driver": "Seas L14RCY/P",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "2",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "5",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "3.29999",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "1",
+                                "value": "10",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.5",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "2",
+                    "driver": "Morel MDT32-S",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover: Tue Oct 15 22:47:54 2002"
+        },
+        {
+            "type": "8",
+            "networks": [
+                {
+                    "type": "1",
+                    "lowpass_order": "3",
+                    "highpass_order": "0",
+                    "has_impendance_correction": false,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "2",
+                                "value": "2.79999",
+                                "unit": "m"
+                            },
+                            {
+                                "type": "1",
+                                "value": "10",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "0.10000",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "1",
+                    "highpass_family": "2",
+                    "driver": "Seas L14RCY/P",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                },
+                {
+                    "type": "2",
+                    "lowpass_order": "0",
+                    "highpass_order": "2",
+                    "has_impendance_correction": true,
+                    "has_dampening": false,
+                    "has_res": false,
+                    "parts": {
+                        "part": [
+                            {
+                                "type": "3",
+                                "value": "5",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "3.60000",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "3",
+                                "value": "6.44223",
+                                "unit": ""
+                            },
+                            {
+                                "type": "3",
+                                "value": "17.3340",
+                                "unit": ""
+                            },
+                            {
+                                "type": "1",
+                                "value": "29.8956",
+                                "unit": "u"
+                            },
+                            {
+                                "type": "2",
+                                "value": "1.49544",
+                                "unit": "m"
+                            }
+                        ]
+                    },
+                    "lowpass_family": "2",
+                    "highpass_family": "2",
+                    "driver": "Morel MDT32-S",
+                    "advanced_impendance_model": true,
+                    "inv_pol": false
+                }
+            ],
+            "id_string": "Crossover: Tue Oct 15 23:21:41 2002"
+        }
+    ]
+}
