@@ -19,7 +19,7 @@
  * USA
  */
 
-#include "summedfreqrespplot.h"
+#include "summed_frequency_response_plot.hpp"
 
 #include "filter_network.hpp"
 
@@ -27,7 +27,8 @@
 #include <fstream>
 #include <iostream>
 
-SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
+summed_frequency_response_plot::summed_frequency_response_plot()
+    : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
     m_speakerlist = nullptr;
 
@@ -40,13 +41,14 @@ SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
     signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
-    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &SummedFreqRespPlot::on_add_plot));
+        sigc::mem_fun(*this, &summed_frequency_response_plot::on_speakerlist_loaded));
+    signal_add_crossover_plot.connect(
+        sigc::mem_fun(*this, &summed_frequency_response_plot::on_add_plot));
     signal_crossover_selected.connect(
-        sigc::mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
+        sigc::mem_fun(*this, &summed_frequency_response_plot::on_crossover_selected));
 }
 
-SummedFreqRespPlot::~SummedFreqRespPlot() = default;
+summed_frequency_response_plot::~summed_frequency_response_plot() = default;
 
 double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
 {
@@ -79,28 +81,30 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
-                                    Gdk::Color& color,
-                                    int* output_plot_index,
-                                    filter_network* n)
+int summed_frequency_response_plot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
+                                                Gdk::Color& color,
+                                                int* output_plot_index,
+                                                filter_network* n)
 {
-#ifndef NDEBUG
-    std::puts("SummedFreqRespPlot::on_add_plot");
-#endif
+    std::puts("summed_frequency_response_plot::on_add_plot");
 
     auto const& plot_index = *output_plot_index;
 
-    driver s;
-    if (m_speakerlist != nullptr)
+    if (m_speakerlist == nullptr)
     {
-        s = m_speakerlist->get_by_id_string(n->get_speaker());
+        return 0;
     }
+
+    std::cout << "summed_frequency_response_plot::on_add_plot network driver name "
+              << n->get_speaker() << "\n";
+
+    driver s = m_speakerlist->get_by_id_string(n->get_speaker());
 
     std::vector<GSpeakers::Point> freq_resp_points;
 
     if (!s.get_freq_resp_filename().empty())
     {
-        std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = "
+        std::cout << "summed_frequency_response_plot::on_add_plot: freq_resp_file = "
                   << s.get_freq_resp_filename() << "\n";
 
         std::ifstream input_file(s.get_freq_resp_filename().c_str());
@@ -191,23 +195,22 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     return 0;
 }
 
-void SummedFreqRespPlot::clear()
+void summed_frequency_response_plot::clear()
 {
     m_points.clear();
     m_nets.clear();
     m_plot.remove_all_plots();
 }
 
-void SummedFreqRespPlot::on_crossover_selected(Crossover*)
+void summed_frequency_response_plot::on_crossover_selected(Crossover*)
 {
-    std::puts("SummedFreqRespPlot::on_crossover_selected");
+    std::puts("summed_frequency_response_plot::on_crossover_selected");
     clear();
 }
 
-void SummedFreqRespPlot::on_speakerlist_loaded(driver_list* driver_list)
+void summed_frequency_response_plot::on_speakerlist_loaded(driver_list* driver_list)
 {
-#ifndef NDEBUG
-    std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
-#endif
+    std::puts("summed_frequency_response_plot::on_speakerlist_loaded");
+
     m_speakerlist = driver_list;
 }

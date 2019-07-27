@@ -32,12 +32,12 @@
 #include <vector>
 
 /// This is a wrapper class for GSpeakersPlot
-class SummedFreqRespPlot : public Gtk::Frame
+class summed_frequency_response_plot : public Gtk::Frame
 {
 public:
-    SummedFreqRespPlot();
+    summed_frequency_response_plot();
 
-    ~SummedFreqRespPlot() override;
+    ~summed_frequency_response_plot() override;
 
     void clear();
 
