@@ -12,6 +12,7 @@ target_include_directories(gspeaker_core
                                    ${CMAKE_CURRENT_SOURCE_DIR}/driver
                                    ${CMAKE_CURRENT_SOURCE_DIR}/enclosure
                                    ${CMAKE_CURRENT_SOURCE_DIR}/plot
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/../external
                            PUBLIC ${GTK3_INCLUDE_DIRS})
 
 target_compile_definitions(gspeaker_core
