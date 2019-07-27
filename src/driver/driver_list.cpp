@@ -101,16 +101,5 @@ driver driver_list::get_by_id_string(std::string const& id_string)
         throw std::runtime_error("The driver " + id_string
                                  + " was not found in the list of available drivers");
     }
-
-    if (location != end(m_drivers))
-    {
-        return *location;
-    }
-
-    if (!m_drivers.empty())
-    {
-        return m_drivers.front();
-    }
-
-    return driver();
+    return location != end(m_drivers) ? *location : m_drivers.front();
 }

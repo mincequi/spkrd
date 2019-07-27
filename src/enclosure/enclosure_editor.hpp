@@ -78,11 +78,12 @@ protected:
 
 private:
     enclosure* m_box = nullptr;
-    driver_list* m_speaker_list;
+    driver_list* m_drivers = nullptr;
+
     driver m_current_speaker;
     colours m_color_list;
     bool m_disable_signals{false};
-    bool speaker_list_is_loaded{false};
+    bool m_are_drivers_loaded{false};
 };
 
 #endif

@@ -40,7 +40,7 @@ public:
               double fb1 = 40,
               double vb2 = 0,
               double fb2 = 0,
-              std::string speaker = "");
+              std::string const& driver = "");
 
     /// Construct from an xmlNode
     enclosure(xmlNodePtr parent);
@@ -61,7 +61,7 @@ public:
 
     void set_fb2(double fb2) { m_fb2 = fb2; }
 
-    void set_driver(const std::string& speaker) { m_speaker = speaker; }
+    void set_driver(std::string const& driver) { m_driver = driver; }
 
     std::string const& get_id_string() const { return m_id_string; }
 
@@ -73,7 +73,7 @@ public:
 
     double get_fb2() const { return m_fb2; }
 
-    const std::string& get_driver() const { return m_speaker; }
+    const std::string& get_driver() const { return m_driver; }
 
 protected:
     std::string m_id_string;
@@ -81,7 +81,7 @@ protected:
     double m_fb1;
     double m_vb2;
     double m_fb2;
-    std::string m_speaker;
+    std::string m_driver;
 };
 
 #endif

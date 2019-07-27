@@ -44,10 +44,10 @@ public:
     friend std::ostream& operator<<(std::ostream& o, const enclosure_list& box_list);
 
     /// \return box_list vector
-    std::vector<enclosure>& box_list() { return m_box_list; }
+    std::vector<enclosure>& data() { return m_box_list; }
 
     /// \return box_list vector
-    std::vector<enclosure> const& box_list() const { return m_box_list; }
+    std::vector<enclosure> const& data() const { return m_box_list; }
 
     /// Clear all items in the list
     void clear() { m_box_list.clear(); }

@@ -33,14 +33,14 @@ enclosure::enclosure(std::string id_string,
                      double fb1,
                      double vb2,
                      double fb2,
-                     std::string speaker)
+                     std::string const& driver)
     : GSpeakersObject(),
       m_id_string(std::move(id_string)),
       m_vb1(vb1),
       m_fb1(fb1),
       m_vb2(vb2),
       m_fb2(fb2),
-      m_speaker(std::move(speaker))
+      m_driver(driver)
 {
     m_type = type;
 }
@@ -73,7 +73,7 @@ enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
             m_fb2 = parse_double(node, "fb2");
             node = node->next;
 
-            m_speaker = parse_string(node, "speaker");
+            m_driver = parse_string(node, "driver");
         }
         catch (std::runtime_error const& error)
         {
@@ -104,8 +104,8 @@ xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
     xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_vb2));
     child = xmlNewChild(box, nullptr, (xmlChar*)("fb2"), nullptr);
     xmlNodeSetContent(child, (xmlChar*)g_ascii_dtostr(buffer.data(), 8, m_fb2));
-    child = xmlNewChild(box, nullptr, (xmlChar*)("speaker"), nullptr);
-    xmlNodeSetContent(child, (xmlChar*)m_speaker.c_str());
+    child = xmlNewChild(box, nullptr, (xmlChar*)("driver"), nullptr);
+    xmlNodeSetContent(child, (xmlChar*)m_driver.c_str());
 
     return box;
 }
@@ -118,6 +118,6 @@ std::ostream& operator<<(std::ostream& output, const enclosure& box)
            << _("Type:      ") << box.m_type << "\n"
            << _("Vb1:       ") << box.m_vb1 << "\n"
            << _("Fb1:       ") << box.m_fb1 << "\n"
-           << _("driver:   ") << box.m_speaker << "\n";
+           << _("driver:   ") << box.m_driver << "\n";
     return output;
 }

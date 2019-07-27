@@ -48,6 +48,8 @@ public:
     /// Remove all drivers
     void clear() { m_drivers.clear(); }
 
+    bool is_empty() const noexcept { return m_drivers.empty(); }
+
 protected:
     std::vector<driver> m_drivers;
 };
