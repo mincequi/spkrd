@@ -259,7 +259,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         if (m_speaker_list != nullptr)
         {
-            speaker = m_speaker_list->get_by_id_string(net_vector[i].get_speaker());
+            speaker = m_speaker_list->get_by_id_string(net_vector[i].get_driver());
         }
         draw_driver(context,
                     (1 + lowpass_order + highpass_order + driver_offset) * part_width,

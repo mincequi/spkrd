@@ -60,7 +60,7 @@ enclosure_editor::enclosure_editor()
 
     m_table.set_spacings(4);
     m_table.attach(*Gtk::manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_START)), 0, 1, 0, 1);
-    m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
+    m_table.attach(m_bass_driver_combo, 1, 5, 0, 1);
 
     m_table.attach(*Gtk::manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_START)), 0, 1, 1, 2);
     m_table.attach(m_speaker_qts_label, 1, 2, 1, 2);
@@ -80,7 +80,7 @@ enclosure_editor::enclosure_editor()
     m_table.attach(*Gtk::manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_END)), 3, 4, 4, 5);
     m_table.attach(m_fb1_entry, 4, 5, 4, 5);
 
-    m_bass_speaker_combo.signal_changed().connect(
+    m_bass_driver_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
 
     m_id_string_entry.signal_changed().connect(
@@ -243,32 +243,32 @@ void enclosure_editor::on_box_selected(enclosure* box)
     if (box != nullptr)
     {
         m_box = box;
-        m_id_string_entry.set_text(b->get_id_string());
-        m_vb1_entry.set_text(GSpeakers::double_to_ustring(b->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
+        m_id_string_entry.set_text(m_box->get_id_string());
+        m_vb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
 
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
         {
-            m_current_speaker = m_speaker_list->get_by_id_string(b->get_speaker());
+            m_current_speaker = m_speaker_list->get_by_id_string(m_box->get_driver());
 
             // Remove all the previous entries and populate again
-            m_bass_speaker_combo.remove_all();
+            m_bass_driver_combo.remove_all();
 
             for (auto const& speaker : m_speaker_list->data())
             {
                 if (is_bass_driver(speaker.get_type())
                     && m_current_speaker.get_id_string() != speaker.get_id_string())
                 {
-                    m_bass_speaker_combo.append(speaker.get_id_string());
+                    m_bass_driver_combo.append(speaker.get_id_string());
                 }
             }
-            m_bass_speaker_combo.prepend(m_current_speaker.get_id_string());
-            m_bass_speaker_combo.set_active(0);
+            m_bass_driver_combo.prepend(m_current_speaker.get_id_string());
+            m_bass_driver_combo.set_active(0);
         }
         // set state of option menu here
         // enclosure type is 1, 2, 3...therefor the '-1'
-        m_box_type_combo.set_active(b->get_type() - 1);
+        m_box_type_combo.set_active(m_box->get_type() - 1);
 
         m_fb1_entry.set_sensitive(m_box->get_type() != BOX_TYPE_SEALED);
 
@@ -297,7 +297,7 @@ void enclosure_editor::on_drivers_loaded(driver_list* driver_list)
     m_disable_signals = true;
     m_speaker_list = driver_list;
 
-    m_bass_speaker_combo.remove_all();
+    m_bass_driver_combo.remove_all();
 
     // If we have got a selected box, insert the items with the driver
     // belonging to the current speaker at the top position, if we haven't
@@ -306,12 +306,12 @@ void enclosure_editor::on_drivers_loaded(driver_list* driver_list)
     {
         for (auto const& speaker : m_speaker_list->data())
         {
-            if (is_bass_driver(speaker.get_type()) && m_box->get_speaker() != speaker.get_id_string())
+            if (is_bass_driver(speaker.get_type()) && m_box->get_driver() != speaker.get_id_string())
             {
-                m_bass_speaker_combo.append(speaker.get_id_string());
+                m_bass_driver_combo.append(speaker.get_id_string());
             }
         }
-        m_bass_speaker_combo.prepend(m_box->get_speaker());
+        m_bass_driver_combo.prepend(m_box->get_driver());
     }
     else
     {
@@ -319,12 +319,12 @@ void enclosure_editor::on_drivers_loaded(driver_list* driver_list)
         {
             if (is_bass_driver(speaker.get_type()))
             {
-                m_bass_speaker_combo.append(speaker.get_id_string());
+                m_bass_driver_combo.append(speaker.get_id_string());
             }
         }
     }
 
-    m_bass_speaker_combo.set_active(m_speaker_list->data().empty() ? -1 : 0);
+    m_bass_driver_combo.set_active(m_speaker_list->data().empty() ? -1 : 0);
 
     speaker_list_is_loaded = true;
     m_disable_signals = false;
@@ -332,7 +332,7 @@ void enclosure_editor::on_drivers_loaded(driver_list* driver_list)
 
 void enclosure_editor::on_combo_entry_changed()
 {
-    std::cout << "enclosure_editor: combo entry changed: " << m_bass_speaker_combo.get_active_text()
+    std::cout << "enclosure_editor: combo entry changed: " << m_bass_driver_combo.get_active_text()
               << "\n";
 
     if (m_disable_signals)
@@ -343,13 +343,13 @@ void enclosure_editor::on_combo_entry_changed()
     m_disable_signals = true;
 
     // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
+    m_current_speaker = m_speaker_list->get_by_id_string(m_bass_driver_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
     m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
     m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
-    m_box->set_driver(m_bass_speaker_combo.get_active_text());
+    m_box->set_driver(m_bass_driver_combo.get_active_text());
     signal_box_modified(m_box);
     m_disable_signals = false;
 }

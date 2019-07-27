@@ -401,7 +401,7 @@ void enclosure_history::on_box_modified(enclosure* b)
             /* Update the liststore */
             row[m_columns.type] = b->get_type();
             row[m_columns.id_string] = b->get_id_string();
-            row[m_columns.speaker] = b->get_speaker();
+            row[m_columns.speaker] = b->get_driver();
             row[m_columns.vb1] = b->get_vb1();
             row[m_columns.fb1] = b->get_fb1();
             row[m_columns.vb2] = b->get_vb2();
@@ -410,7 +410,7 @@ void enclosure_history::on_box_modified(enclosure* b)
             /* Update the boxlist */
             m_box_list.box_list()[path[0]].set_type(b->get_type());
             m_box_list.box_list()[path[0]].set_id_string(b->get_id_string());
-            m_box_list.box_list()[path[0]].set_driver(b->get_speaker());
+            m_box_list.box_list()[path[0]].set_driver(b->get_driver());
             m_box_list.box_list()[path[0]].set_vb1(b->get_vb1());
             m_box_list.box_list()[path[0]].set_fb1(b->get_fb1());
             m_box_list.box_list()[path[0]].set_vb2(b->get_vb2());
@@ -538,7 +538,7 @@ void enclosure_history::add_item(enclosure const& box)
 {
     Gtk::TreeRow row = *(m_refListStore->append());
     row[m_columns.id_string] = box.get_id_string();
-    row[m_columns.speaker] = box.get_speaker();
+    row[m_columns.speaker] = box.get_driver();
     row[m_columns.type] = box.get_type();
     row[m_columns.vb1] = box.get_vb1();
     row[m_columns.fb1] = box.get_fb1();

@@ -101,7 +101,7 @@ public:
 
     int get_highpass_family() const { return m_highpass_family; }
 
-    auto get_speaker() const -> std::string const& { return m_speaker; }
+    auto get_driver() const -> std::string const& { return m_speaker; }
 
     int get_adv_imp_model() const { return m_adv_imp_model; }
 

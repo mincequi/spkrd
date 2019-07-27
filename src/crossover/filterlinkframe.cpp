@@ -114,7 +114,7 @@ void FilterLinkFrame::initialise_dampening()
 
 void FilterLinkFrame::initialise_speaker_combobox()
 {
-    std::string const& speaker_name = m_net->get_speaker();
+    std::string const& speaker_name = m_net->get_driver();
 
     m_speaker_combo.remove_all();
 
@@ -669,7 +669,7 @@ void FilterLinkFrame::on_speakerlist_loaded(driver_list* driver_list)
 
     m_speaker_list = driver_list;
 
-    std::string const& speaker_name = m_net->get_speaker();
+    std::string const& speaker_name = m_net->get_driver();
 
     // Setup the speaker combo box
     bool is_found = false;

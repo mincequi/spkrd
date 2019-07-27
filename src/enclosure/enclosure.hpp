@@ -73,7 +73,7 @@ public:
 
     double get_fb2() const { return m_fb2; }
 
-    const std::string& get_speaker() const { return m_speaker; }
+    const std::string& get_driver() const { return m_speaker; }
 
 protected:
     std::string m_id_string;

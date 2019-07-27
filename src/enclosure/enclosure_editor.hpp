@@ -70,7 +70,7 @@ protected:
     Gtk::Table m_table;
     Gtk::Box m_vbox;
     Gtk::Box m_hbox;
-    Gtk::ComboBoxText m_bass_speaker_combo;
+    Gtk::ComboBoxText m_bass_driver_combo;
     Gtk::Label m_speaker_qts_label, m_speaker_vas_label, m_speaker_fs_label;
     Gtk::Label m_frame_label;
     Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;

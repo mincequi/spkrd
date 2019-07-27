@@ -96,9 +96,9 @@ int summed_frequency_response_plot::on_add_plot(std::vector<GSpeakers::Point> co
     }
 
     std::cout << "summed_frequency_response_plot::on_add_plot network driver name "
-              << n->get_speaker() << "\n";
+              << n->get_driver() << "\n";
 
-    driver s = m_speakerlist->get_by_id_string(n->get_speaker());
+    driver s = m_speakerlist->get_by_id_string(n->get_driver());
 
     std::vector<GSpeakers::Point> freq_resp_points;
 
