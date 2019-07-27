@@ -40,7 +40,7 @@ PopupEntry::PopupEntry(Glib::ustring path)
 {
     std::puts("PopupEntry::PopupEntry");
 
-    m_entry = m_spin_button = Gtk::manage(new Gtk::SpinButton(m_spin_digits, 0.0, 4));
+    m_entry = m_spin_button = Gtk::make_managed<Gtk::SpinButton>(m_spin_digits, 0.0, 4);
     m_entry->set_has_frame(false);
 
     add(*m_spin_button);
@@ -51,9 +51,9 @@ PopupEntry::PopupEntry(Glib::ustring path)
 
 Glib::ustring const& PopupEntry::get_path() const { return m_path; }
 
-void PopupEntry::set_text(const Glib::ustring& text)
+void PopupEntry::set_text(Glib::ustring const& text)
 {
-    m_spin_button->set_value(atof(text.c_str()));
+    m_spin_button->set_value(std::atof(text.c_str()));
 }
 
 Glib::ustring PopupEntry::get_text() const { return m_entry->get_text(); }

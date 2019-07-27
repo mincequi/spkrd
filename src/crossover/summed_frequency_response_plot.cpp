@@ -40,7 +40,7 @@ summed_frequency_response_plot::summed_frequency_response_plot()
 
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
-    signal_speakerlist_loaded.connect(
+    signal_drivers_loaded.connect(
         sigc::mem_fun(*this, &summed_frequency_response_plot::on_speakerlist_loaded));
     signal_add_crossover_plot.connect(
         sigc::mem_fun(*this, &summed_frequency_response_plot::on_add_plot));

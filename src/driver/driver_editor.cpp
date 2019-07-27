@@ -56,12 +56,6 @@ driver_editor::driver_editor()
       m_inner_treeview_vbox(Gtk::ORIENTATION_VERTICAL),
       m_treeview_frame("")
 {
-    // #ifdef TARGET_WIN32
-    //     g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
-    // #else
-    //     g_settings.defaultValueString("SpeakerListXml",
-    //                                   std::string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
-    // #endif
     m_filename = g_settings.getValueString("SpeakerListXml");
 
     g_settings.defaultValueBool("DrawDriverImpPlot", false);
@@ -72,12 +66,12 @@ driver_editor::driver_editor()
         // m_driver_list = std::make_unique<driver_list>(m_filename);
         m_driver_list = std::make_unique<driver_list>();
 
-        signal_speakerlist_loaded(m_driver_list.get());
+        signal_drivers_loaded(m_driver_list.get());
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const& error)
     {
         m_driver_list = std::make_unique<driver_list>();
-        std::cout << "driver_editor::driver_editor: " << e.what() << std::endl;
+        std::cout << "driver_editor::driver_editor: " << error.what();
     }
 
     m_treeview_vbox.set_border_width(5);
@@ -357,7 +351,7 @@ void driver_editor::on_settings_changed(const std::string& setting)
     }
 }
 
-void driver_editor::on_close() { signal_speakerlist_loaded(m_driver_list.get()); }
+void driver_editor::on_close() { signal_drivers_loaded(m_driver_list.get()); }
 
 void driver_editor::set_entries_sensitive(bool const is_sensitive)
 {
@@ -416,7 +410,7 @@ void driver_editor::on_new()
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
     GSpeakers::driverlist_modified() = true;
-    signal_speakerlist_loaded(m_driver_list.get());
+    signal_drivers_loaded(m_driver_list.get());
     m_modified = true;
 }
 
@@ -890,7 +884,7 @@ void driver_editor::on_entry_changed(int i)
                                                           & ~SPEAKER_TYPE_BASS);
                 }
                 row[m_columns.type] = m_driver_list->data()[index].get_type();
-                signal_speakerlist_loaded(m_driver_list.get());
+                signal_drivers_loaded(m_driver_list.get());
                 break;
             case 11:
                 if (m_MidrangeCheckButton.get_active())
@@ -1062,7 +1056,7 @@ bool driver_editor::open_xml(const std::string& filename)
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 
-        signal_speakerlist_loaded(m_driver_list.get());
+        signal_drivers_loaded(m_driver_list.get());
 
         m_modified = true;
     }

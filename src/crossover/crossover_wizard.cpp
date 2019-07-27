@@ -31,7 +31,7 @@ crossover_wizard::crossover_wizard()
 
     show_all();
 
-    signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &crossover_wizard::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(sigc::mem_fun(*this, &crossover_wizard::on_speaker_list_loaded));
 }
 
 void crossover_wizard::on_crossover_selected(Crossover* crossover)

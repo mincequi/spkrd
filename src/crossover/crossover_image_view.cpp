@@ -40,7 +40,7 @@ crossover_image_view::crossover_image_view()
     signal_net_modified_by_wizard.connect(
         sigc::mem_fun(*this, &crossover_image_view::on_net_modified));
 
-    signal_speakerlist_loaded.connect(
+    signal_drivers_loaded.connect(
         sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
 }
 

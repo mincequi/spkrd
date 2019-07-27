@@ -91,7 +91,7 @@ enclosure_editor::enclosure_editor()
     m_fb1_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), FB1_ENTRY_CHANGED));
 
-    signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
 
     // Setup option menu
     m_box_type_combo.append("Sealed");
