@@ -56,12 +56,12 @@ driver_editor::driver_editor()
       m_inner_treeview_vbox(Gtk::ORIENTATION_VERTICAL),
       m_treeview_frame("")
 {
-#ifdef TARGET_WIN32
-    g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
-#else
-    g_settings.defaultValueString("SpeakerListXml",
-                                  std::string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
-#endif
+    // #ifdef TARGET_WIN32
+    //     g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
+    // #else
+    //     g_settings.defaultValueString("SpeakerListXml",
+    //                                   std::string(GSPEAKERS_PREFIX) + "/share/xml/vifa.xml");
+    // #endif
     m_filename = g_settings.getValueString("SpeakerListXml");
 
     g_settings.defaultValueBool("DrawDriverImpPlot", false);
@@ -69,7 +69,9 @@ driver_editor::driver_editor()
 
     try
     {
-        m_driver_list = std::make_unique<driver_list>(m_filename);
+        // m_driver_list = std::make_unique<driver_list>(m_filename);
+        m_driver_list = std::make_unique<driver_list>();
+
         signal_speakerlist_loaded(m_driver_list.get());
     }
     catch (std::runtime_error const& e)
@@ -153,11 +155,12 @@ driver_editor::driver_editor()
     m_grid.attach(m_MidrangeCheckButton, 0, 16);
     m_grid.attach(m_TweeterCheckButton, 0, 17);
 
-    m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will work as a woofer (bass "
-                                         "speaker)"));
-    m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will work as a midrange "
-                                             "speaker"));
-    m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
+    m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will function as a woofer "
+                                         "(bass driver)"));
+    m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will function as a "
+                                             "midrange driver"));
+    m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will function as a "
+                                            "tweeter"));
     m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
 
     auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);

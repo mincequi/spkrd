@@ -28,7 +28,7 @@
 #include "crossover_wizard.hpp"
 
 #include "gspeakersfilterplot.h"
-#include "summedfreqrespplot.h"
+#include "summed_frequency_response_plot.hpp"
 #include "totalfilterplot.h"
 
 #include <gtkmm/menuitem.h>
@@ -67,7 +67,7 @@ private:
     crossover_history m_crossover_history;
     GSpeakersFilterPlot m_filter_plot;
     TotalFilterPlot m_total_filter_plot;
-    SummedFreqRespPlot m_summed_freq_resp_plot;
+    summed_frequency_response_plot m_summed_freq_resp_plot;
     crossover_image_view m_crossover_image_view;
 
     Gtk::MenuItem m_menu_item;

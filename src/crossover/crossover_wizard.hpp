@@ -19,7 +19,6 @@
 #define __CROSSOVER_WIZARD_H
 
 #include "common.h"
-#include "filterlinkframe.h"
 #include "driver_list.hpp"
 
 #include <gtkmm/box.h>
@@ -38,8 +37,9 @@ private:
     void on_crossover_selected(Crossover* crossover);
 
 private:
-    Gtk::VBox m_vbox;
-    driver_list* m_speaker_list{nullptr};
+    Gtk::Box m_vbox;
+
+    driver_list* m_driver_list{nullptr};
 };
 
 #endif

@@ -30,11 +30,11 @@ class driver_list
 public:
     driver_list() = default;
 
-    /// Construct a part from an xml file
+    /// Construct a part from an json file
     driver_list(const std::string& filename);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    void to_xml(const std::string& filename); // Maybe this one should throw an exception
+    void to_xml(const std::string& filename);
 
     /// Print part data to stdout
     friend std::ostream& operator<<(std::ostream& output, const driver_list& drivers);

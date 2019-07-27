@@ -22,6 +22,8 @@
 
 #include <libxml/parser.h>
 
+#include "nlohmann/json.hpp"
+
 #include <utility>
 
 using namespace spkrd;
@@ -66,68 +68,65 @@ driver::driver(std::string id_string,
     m_type = type;
 }
 
-driver::driver(xmlNodePtr parent)
+driver::driver(nlohmann::json const& driver_data)
 {
-    if (parent == nullptr || std::string((char*)parent->name) != "speaker")
+    auto error_message = [](std::string const& field) {
+        return "A " + field + " was not provided for the driver";
+    };
+
+    std::vector<std::string> fields = {"name",
+                                       "type",
+                                       "qts",
+                                       "vas",
+                                       "fs",
+                                       "rdc",
+                                       "lvc",
+                                       "qms",
+                                       "qes",
+                                       "imp",
+                                       "sens",
+                                       "mmd",
+                                       "ad",
+                                       "bl",
+                                       "rms",
+                                       "cms"};
+
+    for (auto const& field : fields)
     {
-        throw std::runtime_error(_("driver: speaker node not found"));
+        if (driver_data.find(field) == end(driver_data))
+        {
+            throw std::runtime_error(error_message(field));
+        }
     }
 
-    auto node = parent->children;
+    m_id_string = driver_data["name"].get<std::string>();
 
-    m_id_string = parse_string(node, "id_string");
-    node = node->next;
+    if (driver_data.find("frequency_response_file") != end(driver_data))
+    {
+        m_freq_resp_filename = driver_data["frequency_response_file"].get<std::string>();
+    }
 
-    m_type = parse_int(node, "type");
-    node = node->next;
+    if (driver_data.find("impedence_response_file") != end(driver_data))
+    {
+        m_imp_resp_filename = driver_data["impedence_response_file"].get<std::string>();
+    }
 
-    m_qts = parse_double(node, "qts");
-    node = node->next;
+    m_type = driver_data["type"].get<std::int32_t>();
 
-    m_vas = parse_double(node, "vas");
-    node = node->next;
-
-    m_fs = parse_double(node, "fs");
-    node = node->next;
-
-    m_rdc = parse_double(node, "rdc");
-    node = node->next;
-
-    m_lvc = parse_double(node, "lvc");
-    node = node->next;
-
-    m_qms = parse_double(node, "qms");
-    node = node->next;
-
-    m_qes = parse_double(node, "qes");
-    node = node->next;
-
-    m_imp = parse_double(node, "imp");
-    node = node->next;
-
-    m_sens = parse_double(node, "sens");
-    node = node->next;
-
-    m_freq_resp_filename = parse_string(node, "freq_resp_filename");
-    node = node->next;
-
-    m_imp_resp_filename = parse_string(node, "imp_resp_filename");
-    node = node->next;
-
-    m_mmd = parse_double(node, "mmd");
-    node = node->next;
-
-    m_ad = parse_double(node, "ad");
-    node = node->next;
-
-    m_bl = parse_double(node, "bl");
-    node = node->next;
-
-    m_rms = parse_double(node, "rms");
-    node = node->next;
-
-    m_cms = parse_double(node, "cms");
-    node = node->next;
+    m_qts = driver_data["qts"].get<double>();
+    m_vas = driver_data["vas"].get<double>();
+    m_fs = driver_data["fs"].get<double>();
+    m_rdc = driver_data["rdc"].get<double>();
+    m_lvc = driver_data["lvc"].get<double>();
+    m_qms = driver_data["qms"].get<double>();
+    m_qes = driver_data["qes"].get<double>();
+    m_imp = driver_data["imp"].get<double>();
+    m_sens = driver_data["sens"].get<double>();
+    m_mmd = driver_data["mmd"].get<double>();
+    m_ad = driver_data["ad"].get<double>();
+    m_bl = driver_data["bl"].get<double>();
+    m_rms = driver_data["rms"].get<double>();
+    m_cms = driver_data["cms"].get<double>();
 }
 
 xmlNodePtr driver::to_xml_node(xmlNodePtr parent)

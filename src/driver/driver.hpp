@@ -25,6 +25,8 @@
 #include <iosfwd>
 #include <string>
 
+#include "nlohmann/json_fwd.hpp"
+
 /// driver types
 constexpr auto SPEAKER_TYPE_BASS = 1;
 constexpr auto SPEAKER_TYPE_MIDRANGE = 2;
@@ -62,7 +64,7 @@ public:
            double cms = 0.0012);
 
     /// Construct a speaker from an xml node, throws an exception on error in xml
-    driver(xmlNodePtr parent) noexcept(false);
+    driver(nlohmann::json const& driver_data) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);

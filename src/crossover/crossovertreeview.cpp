@@ -37,7 +37,6 @@ CrossoverTreeView::CrossoverTreeView() : Gtk::Frame("")
     m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-    // create model
     create_model();
 
     // create tree view
@@ -58,19 +57,16 @@ CrossoverTreeView::~CrossoverTreeView() = default;
 
 void CrossoverTreeView::on_net_modified_by_wizard()
 {
-#ifndef NDEBUG
     std::puts("CrossoverTreeView::on_net_modified_by_wizard");
-#endif
+
     on_crossover_selected(cover);
 }
 
 void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
                                              const Glib::ustring& new_text)
 {
-#ifndef NDEBUG
     std::puts("CrossoverTreeView::on_cell_edited_value");
     std::cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string << "\n";
-#endif
 
     Gtk::TreePath path(path_string);
 
@@ -82,10 +78,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
     Gtk::TreeRow row = *(m_refTreeStore->get_iter(path));
     row[m_columns.value] = std::atof(new_text.c_str());
 
-#ifndef NDEBUG
     std::cout << "CrossoverTreeView::on_cell_edited_value: path[0:1:2:4] = " << path[0] << ":"
               << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
-#endif
     /* Since the stupid signals doesn't seem to work we have to go through the data-containers
        and update values for the particular part we change... */
 
@@ -171,9 +165,8 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
             n->parts()[path[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
         }
     }
-#ifndef NDEBUG
     std::cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id] << std::endl;
-#endif
+
     // Tell others that we have modified a part
     signal_net_modified_by_user(n);
 }
@@ -191,9 +184,7 @@ CrossoverTreeView::ModelColumns::ModelColumns()
 
 void CrossoverTreeView::on_crossover_selected(Crossover* new_crossover)
 {
-#ifndef NDEBUG
     std::puts("CrossoverTreeView::on_crossover_selected");
-#endif
 
     m_refTreeStore->clear();
     m_vecItems.clear();

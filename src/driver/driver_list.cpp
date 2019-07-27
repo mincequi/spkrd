@@ -22,42 +22,42 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-driver_list::driver_list(const std::string& filename)
+#include "nlohmann/json.hpp"
+
+#include <fstream>
+
+driver_list::driver_list(const std::string& file_name)
 {
-    // Allows human readable (formatted) XML documents without receiving
-    // whitespace errors
-    xmlKeepBlanksDefault(0);
-
-    xmlDocPtr doc = xmlParseFile(filename.c_str());
-
-    if (doc == nullptr)
+    if (file_name.empty())
     {
-        throw std::runtime_error(_("driver_list: XML file not found"));
+        return;
     }
 
-    xmlNodePtr node = xmlDocGetRootElement(doc);
+    // Read in the json file containing the drivers
+    nlohmann::json root;
 
-    if (node != nullptr && std::string((char*)node->name) == "speakerlist")
     {
-        if (node->children != nullptr)
+        std::ifstream file(file_name);
+
+        if (!file.is_open())
         {
-            xmlNodePtr children = node->children;
-
-            while (children != nullptr)
-            {
-                m_drivers.emplace_back(children);
-
-                children = children->next;
-            }
+            throw std::runtime_error("File " + file_name + " was not found.  Please ensure it exists");
         }
+        file >> root;
     }
-    else
+
+    if (root.find("drivers") == end(root))
     {
-        throw std::runtime_error(_("driver_list: speakerlist node not found"));
+        throw std::runtime_error("Input file for drivers was not valid");
+    }
+
+    for (auto const& driver : root["drivers"])
+    {
+        m_drivers.emplace_back(driver);
     }
 }
 
-void driver_list::to_xml(const std::string& filename)
+void driver_list::to_xml(const std::string& file_name)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
@@ -71,9 +71,9 @@ void driver_list::to_xml(const std::string& filename)
     }
 
     // Save xml file
-    if (xmlSaveFile(filename.c_str(), doc) == -1)
+    if (xmlSaveFile(file_name.c_str(), doc) == -1)
     {
-        throw std::runtime_error(_("driver_list: Could not save to ") + filename);
+        throw std::runtime_error(_("driver_list: Could not save to ") + file_name);
     }
 }
 
@@ -92,9 +92,15 @@ driver driver_list::get_by_id_string(std::string const& id_string)
 {
     auto const location = std::find_if(begin(m_drivers),
                                        end(m_drivers),
-                                       [&id_string](auto const& speaker) {
-                                           return speaker.get_id_string() == id_string;
+                                       [&id_string](auto const& driver) {
+                                           return driver.get_id_string() == id_string;
                                        });
+
+    if (location == end(m_drivers))
+    {
+        throw std::runtime_error("The driver " + id_string
+                                 + " was not found in the list of available drivers");
+    }
 
     if (location != end(m_drivers))
     {

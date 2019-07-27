@@ -42,7 +42,8 @@ inline bool is_state_modified()
 
 main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
 {
-    m_crossover_paned.select_first_crossover();
+    // TODO Refactor this
+    // m_crossover_paned.select_first_crossover();
 
     this->set_title_and_icons();
 
