@@ -21,13 +21,15 @@
 #ifndef __TOTAL_FILTER_PLOT
 #define __TOTAL_FILTER_PLOT
 
-#include "common.h"
 #include "plot.hpp"
 
 #include <gtkmm/frame.h>
 #include <gdkmm/color.h>
 
 #include <vector>
+
+class Net;
+class Crossover;
 
 /// This is a wrapper class for GSpeakersPlot
 /// The reason why we have this class is that we want an extra layer

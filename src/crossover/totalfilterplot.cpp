@@ -20,6 +20,8 @@
 
 #include "totalfilterplot.h"
 
+#include "common.h"
+
 #include <cmath>
 #include <iostream>
 
