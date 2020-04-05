@@ -77,15 +77,15 @@ private:
     void on_popup_hide();
 
 private:
-    sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;
-    sigc::signal0<void> signal_hide_popup_;
+    sigc::signal5<void, const Glib::ustring&, int, int, int, int> m_signal_show_popup;
+    sigc::signal0<void> m_signal_hide_popup;
 
     // Cached button width
-    mutable int button_width_{-1};
+    mutable int m_button_width{-1};
 
-    Gtk::Window popup_window_;
-    Gtk::Widget* focus_widget_{nullptr};
-    popup_entry* popup_entry_{nullptr};
-    bool shown_{false};
-    bool editing_canceled_{false};
+    Gtk::Window m_popup_window;
+    Gtk::Widget* m_focus_widget{nullptr};
+    popup_entry* m_popup_entry{nullptr};
+    bool m_shown{false};
+    bool m_editing_canceled{false};
 };
