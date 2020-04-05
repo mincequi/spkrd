@@ -50,7 +50,7 @@ public:
     void select_first_crossover();
 
 protected:
-    void on_settings_changed(const std::string&);
+    void on_settings_changed(std::string const& settings);
 
     void on_plot_crossover();
 
