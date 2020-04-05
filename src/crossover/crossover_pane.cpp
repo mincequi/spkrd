@@ -48,6 +48,9 @@ crossover_pane::crossover_pane()
 
     m_plot_notebook.set_scrollable();
 
+    m_plot_notebook.signal_switch_page().connect(
+        sigc::mem_fun(*this, &crossover_pane::on_plot_notebook_switch_page));
+
     signal_crossover_set_save_state.connect(sigc::mem_fun(*this, &crossover_pane::set_save_state));
 }
 
@@ -246,6 +249,11 @@ Gtk::Toolbar& crossover_pane::get_toolbar()
     return *m_toolbar;
 }
 
+void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num)
+{
+    std::cout << "Switching pesky page\n";
+}
+
 void crossover_pane::on_plot_crossover()
 {
     m_filter_plot.clear();
@@ -254,6 +262,8 @@ void crossover_pane::on_plot_crossover()
 
 void crossover_pane::on_settings_changed(std::string const& setting)
 {
+    std::cout << "crossover_pane::on_settings_changed\n";
+
     if (setting == "ToolbarStyle")
     {
         m_toolbar->set_toolbar_style(
@@ -261,6 +271,8 @@ void crossover_pane::on_settings_changed(std::string const& setting)
     }
     if (setting == "AutoUpdateFilterPlots" && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
+        std::cout << "auto updated filter plots\n";
+
         on_plot_crossover();
     }
 }
