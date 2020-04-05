@@ -18,24 +18,25 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_FILTER_PLOT
-#define __GSPEAKERS_FILTER_PLOT
+#pragma once
 
-#include "common.h"
 #include "plot.hpp"
 
 #include <gtkmm/frame.h>
+
+class Net;
+class Crossover;
 
 /// This is a wrapper class for GSpeakersPlot
 /// The reason why we have this class is that we want
 /// an extra layer (where we can connect signals and so on)
 /// between the program and the plot widget.
-class GSpeakersFilterPlot : public Gtk::Frame
+class filter_plot : public Gtk::Frame
 {
 public:
-    GSpeakersFilterPlot();
+    filter_plot();
 
-    ~GSpeakersFilterPlot() override = default;
+    ~filter_plot() override = default;
 
     void clear();
 
@@ -45,12 +46,8 @@ public:
                      Net* n) -> int;
 
 private:
-    [[deprecated]] auto on_delete_event(GdkEventAny* event) -> bool override;
-
     void on_crossover_selected(Crossover*);
 
 private:
     plot m_plot;
 };
-
-#endif

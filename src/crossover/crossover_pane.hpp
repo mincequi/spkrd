@@ -27,7 +27,7 @@
 #include "crossovertreeview.h"
 #include "crossover_wizard.hpp"
 
-#include "gspeakersfilterplot.h"
+#include "filter_plot.hpp"
 #include "summedfreqrespplot.h"
 #include "totalfilterplot.h"
 
@@ -67,7 +67,7 @@ private:
     crossover_wizard m_crossover_wizard;
     CrossoverTreeView m_crossover_treeview;
     crossover_history m_crossover_history;
-    GSpeakersFilterPlot m_filter_plot;
+    filter_plot m_filter_plot;
     TotalFilterPlot m_total_filter_plot;
     SummedFreqRespPlot m_summed_freq_resp_plot;
     crossover_image_view m_crossover_image_view;
