@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_CELLITEM_CROSSOVER
-#define __GSPEAKERS_CELLITEM_CROSSOVER
+#pragma once
 
 #include "passive_component.hpp"
 
@@ -53,5 +52,3 @@ public:
 
     std::vector<CellItem_Crossover> m_children;
 };
-
-#endif
