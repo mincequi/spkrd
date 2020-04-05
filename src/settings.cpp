@@ -61,7 +61,7 @@ void Settings::load(const std::string& filename) noexcept(false)
 void Settings::save(const std::string& filename) noexcept(false)
 {
     /* save to a temporary file first, then switch over, that way we
-       should behave better on systems run by muppets have let their
+       should behave better on systems that have let their
        filesystem run down to no space left  */
     std::string tempfilename = filename + ".temp";
 
