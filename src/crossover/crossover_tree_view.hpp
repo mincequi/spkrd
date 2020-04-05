@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "cellitemcrossover.h"
+#include "crossover_cell_item.hpp"
 #include "crossover.hpp"
 
 #include <gtkmm/box.h>
@@ -53,14 +53,14 @@ protected:
 
     virtual void add_columns();
 
-    virtual void treestore_add_item(CellItem_Crossover const& foo);
+    virtual void treestore_add_item(crossover_cell_item const& foo);
 
 protected:
     Gtk::VBox m_VBox;
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
-    std::vector<CellItem_Crossover> m_vecItems;
+    std::vector<crossover_cell_item> m_vecItems;
 
     // Pointer to currently selected crossover
     Crossover* cover;
