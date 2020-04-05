@@ -51,9 +51,9 @@ public:
 
     Point(int x, double y) : m_x(x), m_y(y) {}
 
-    int get_x() const { return m_x; }
+    auto get_x() const -> int { return m_x; }
 
-    double get_y() const { return m_y; }
+    auto get_y() const -> double { return m_y; }
 
     void set_x(int x) { m_x = x; }
 
@@ -66,14 +66,20 @@ private:
 
 struct comparison
 {
-    bool operator()(const Point& left, const Point& right) const noexcept
+    auto operator()(const Point& left, const Point& right) const noexcept -> bool
     {
         return left.get_x() <= right.get_x();
     }
 
-    bool operator()(const Point& left, int right) const noexcept { return left.get_x() <= right; }
+    auto operator()(const Point& left, int right) const noexcept -> bool
+    {
+        return left.get_x() <= right;
+    }
 
-    bool operator()(int left, const Point& right) const noexcept { return left <= right.get_x(); }
+    auto operator()(int left, const Point& right) const noexcept -> bool
+    {
+        return left <= right.get_x();
+    }
 };
 
 } // namespace GSpeakers
@@ -99,7 +105,7 @@ public:
          int y_zero_freq = 0,
          bool enable_sec_scale = false);
 
-    int add_plot(std::vector<GSpeakers::Point> const& points, Gdk::Color const& colour);
+    auto add_plot(std::vector<GSpeakers::Point> const& points, Gdk::Color const& colour) -> int;
 
     void remove_plot(int n);
 
@@ -122,7 +128,7 @@ public:
     void set_y_label2(std::string const& text);
 
 protected:
-    bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
+    auto on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool override;
 
     void draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
                     std::vector<Gdk::Point> const& points,
@@ -130,11 +136,11 @@ protected:
 
     /// Copy the area that needs to be updated from the pixmap
     /// to the window
-    [[deprecated]] bool on_expose_event(GdkEventExpose* event);
+    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
 
     // void on_show();
 
-    [[deprecated]] bool on_configure_event(GdkEventConfigure* event) override;
+    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)
@@ -145,7 +151,7 @@ protected:
     std::vector<bool> m_visible_plots;
 
 private:
-    Glib::ustring int_to_ustring3(int d);
+    auto int_to_ustring3(int d) -> Glib::ustring;
 
     /// Draw vertical lines in a logarithmic plot
     void draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context);

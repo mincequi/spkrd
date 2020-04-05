@@ -33,10 +33,10 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() : m_plot(1, 20000)
     show_all();
 }
 
-int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
-                                     Gdk::Color const& color,
-                                     int& i,
-                                     Net* n)
+auto GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+                                      Gdk::Color const& color,
+                                      int& i,
+                                      Net* n) -> int
 {
     if (i == -1)
     {
@@ -54,7 +54,7 @@ void GSpeakersFilterPlot::clear() { m_plot.remove_all_plots(); }
 
 void GSpeakersFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 
-bool GSpeakersFilterPlot::on_delete_event(GdkEventAny* event)
+auto GSpeakersFilterPlot::on_delete_event(GdkEventAny* event) -> bool
 {
     // Don't delete this window
     return true;

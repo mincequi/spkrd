@@ -35,7 +35,7 @@
 
 namespace
 {
-bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time)
+auto grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time) -> bool
 {
     std::puts("grab_on_window");
     return true;
@@ -207,7 +207,7 @@ void cell_renderer_popup::on_hide_popup()
     editing_canceled_ = false;
 }
 
-bool cell_renderer_popup::on_button_press_event(GdkEventButton* event)
+auto cell_renderer_popup::on_button_press_event(GdkEventButton* event) -> bool
 {
     std::puts("cell_renderer_popup::on_button_press");
 
@@ -243,7 +243,7 @@ bool cell_renderer_popup::on_button_press_event(GdkEventButton* event)
     return false;
 }
 
-bool cell_renderer_popup::on_key_press_event(GdkEventKey* event)
+auto cell_renderer_popup::on_key_press_event(GdkEventKey* event) -> bool
 {
     std::puts("cell_renderer_popup::on_key_press");
 

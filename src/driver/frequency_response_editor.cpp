@@ -216,7 +216,7 @@ void frequency_response_editor::on_close()
     hide();
 }
 
-std::vector<double> frequency_response_editor::get_x_vector()
+auto frequency_response_editor::get_x_vector() -> std::vector<double>
 {
     return {20.0, 25.2, 31.7, 39.9, 50.2, 63.2, 79.6, 100,   126,   159,
             200,  252,  317,  399,  502,  632,  796,  1000,  1260,  1590,

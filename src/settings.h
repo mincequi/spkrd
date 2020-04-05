@@ -41,12 +41,12 @@ public:
     void save(const std::string& filename) noexcept(false);
     void save() noexcept(false);
 
-    std::string getValueString(const std::string& k);
-    int getValueInt(const std::string& k);
-    unsigned int getValueUnsignedInt(const std::string& k);
-    unsigned short getValueUnsignedShort(const std::string& k);
-    unsigned char getValueUnsignedChar(const std::string& k);
-    bool getValueBool(const std::string& k);
+    auto getValueString(const std::string& k) -> std::string;
+    auto getValueInt(const std::string& k) -> int;
+    auto getValueUnsignedInt(const std::string& k) -> unsigned int;
+    auto getValueUnsignedShort(const std::string& k) -> unsigned short;
+    auto getValueUnsignedChar(const std::string& k) -> unsigned char;
+    auto getValueBool(const std::string& k) -> bool;
 
     void setValue(const std::string& k, const std::string& v);
     void setValue(const std::string& k, int v);
@@ -72,12 +72,12 @@ public:
 
     void defaultValueString(const std::string& k, const std::string& dflt);
 
-    bool exists(const std::string& k);
+    auto exists(const std::string& k) -> bool;
 
     virtual void defaultSettings() {}
 
-    static std::string Escape(const std::string& t);
-    static std::string Unescape(const std::string& t);
+    static auto Escape(const std::string& t) -> std::string;
+    static auto Unescape(const std::string& t) -> std::string;
 
     sigc::signal1<void, const std::string&> settings_changed;
 

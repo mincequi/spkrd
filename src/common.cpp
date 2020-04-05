@@ -49,7 +49,7 @@ sigc::signal0<void> signal_save_open_files;
 
 namespace GSpeakers
 {
-Glib::ustring double_to_ustring(double d)
+auto double_to_ustring(double d) -> Glib::ustring
 {
     char* str = nullptr;
     GString* buffer = g_string_new(str);
@@ -57,7 +57,7 @@ Glib::ustring double_to_ustring(double d)
     return Glib::ustring(buffer->str);
 }
 
-Glib::ustring double_to_ustring(double d, int format_len, int format_dec)
+auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring
 {
     char* str1 = nullptr;
     GString* buffer1 = g_string_new(str1);
@@ -68,9 +68,9 @@ Glib::ustring double_to_ustring(double d, int format_len, int format_dec)
     return Glib::ustring(buffer2->str);
 }
 
-Glib::ustring int_to_ustring(int d) { return Glib::ustring(std::to_string(d)); }
+auto int_to_ustring(int d) -> Glib::ustring { return Glib::ustring(std::to_string(d)); }
 
-Gtk::Widget& image_widget(std::string const& filename)
+auto image_widget(std::string const& filename) -> Gtk::Widget&
 {
     try
     {
@@ -88,7 +88,7 @@ Gtk::Widget& image_widget(std::string const& filename)
     }
 }
 
-Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
+auto short_filename(const Glib::ustring& filename, unsigned length) -> Glib::ustring
 {
     Glib::ustring shorted_filename;
     if (filename.length() >= length)
@@ -116,25 +116,25 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
     return shorted_filename;
 }
 
-bool& driverlist_modified()
+auto driverlist_modified() -> bool&
 {
     static bool driverlist_mod = false;
     return driverlist_mod;
 }
 
-bool& enclosurelist_modified()
+auto enclosurelist_modified() -> bool&
 {
     static bool enclosurelist_mod = false;
     return enclosurelist_mod;
 }
 
-bool& crossoverlist_modified()
+auto crossoverlist_modified() -> bool&
 {
     static bool crossoverlist_mod = false;
     return crossoverlist_mod;
 }
 
-bool& measurementlist_modified()
+auto measurementlist_modified() -> bool&
 {
     static bool meassurementlist_mod = false;
     return meassurementlist_mod;

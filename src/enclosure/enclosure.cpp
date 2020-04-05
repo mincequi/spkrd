@@ -86,7 +86,7 @@ enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
     }
 }
 
-xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
+auto enclosure::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     std::array<char, 8> buffer;
 
@@ -110,7 +110,7 @@ xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
     return box;
 }
 
-std::ostream& operator<<(std::ostream& output, const enclosure& box)
+auto operator<<(std::ostream& output, enclosure const& box) -> std::ostream&
 {
     output << _("enclosure") << "\n"
            << _("Id:        ") << box.m_id << "\n"

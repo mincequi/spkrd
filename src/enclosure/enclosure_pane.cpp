@@ -80,7 +80,7 @@ enclosure_pane::~enclosure_pane()
     }
 }
 
-Gtk::MenuItem& enclosure_pane::get_menu()
+auto enclosure_pane::get_menu() -> Gtk::MenuItem&
 {
     m_menu_item.set_label("Enclosure");
 
@@ -162,7 +162,7 @@ Gtk::MenuItem& enclosure_pane::get_menu()
     return m_menu_item;
 }
 
-Gtk::Toolbar& enclosure_pane::get_toolbar()
+auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
 {
     if (m_tbar == nullptr)
     {

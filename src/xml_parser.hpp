@@ -8,9 +8,9 @@
 
 namespace spkrd
 {
-double parse_double(xmlNodePtr node, std::string const& label);
+auto parse_double(xmlNodePtr node, std::string const& label) -> double;
 
-int parse_int(xmlNodePtr node, std::string const& label);
+auto parse_int(xmlNodePtr node, std::string const& label) -> int;
 
-std::string parse_string(xmlNodePtr node, std::string const& label);
+auto parse_string(xmlNodePtr node, std::string const& label) -> std::string;
 }

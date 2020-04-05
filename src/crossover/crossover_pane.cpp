@@ -70,7 +70,7 @@ crossover_pane::~crossover_pane()
     }
 }
 
-Gtk::MenuItem& crossover_pane::get_menu()
+auto crossover_pane::get_menu() -> Gtk::MenuItem&
 {
     m_menu_item.set_label("Crossover");
 
@@ -193,7 +193,7 @@ Gtk::MenuItem& crossover_pane::get_menu()
     return m_menu_item;
 }
 
-Gtk::Toolbar& crossover_pane::get_toolbar()
+auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
 {
     if (m_toolbar != nullptr)
     {

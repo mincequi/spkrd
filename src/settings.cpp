@@ -148,7 +148,7 @@ void Settings::save() noexcept(false)
     }
 }
 
-std::string Settings::Escape(const std::string& s)
+auto Settings::Escape(const std::string& s) -> std::string
 {
     std::ostringstream ostr;
     std::string::const_iterator curr = s.begin();
@@ -174,7 +174,7 @@ std::string Settings::Escape(const std::string& s)
     return ostr.str();
 }
 
-std::string Settings::Unescape(const std::string& s)
+auto Settings::Unescape(const std::string& s) -> std::string
 {
     std::ostringstream ostr;
     std::string::const_iterator curr = s.begin();
@@ -213,7 +213,7 @@ std::string Settings::Unescape(const std::string& s)
     return ostr.str();
 }
 
-std::string Settings::getValueString(const std::string& k)
+auto Settings::getValueString(const std::string& k) -> std::string
 {
     if (exists(k))
         return m_map[k];
@@ -221,7 +221,7 @@ std::string Settings::getValueString(const std::string& k)
         return std::string();
 }
 
-int Settings::getValueInt(const std::string& k)
+auto Settings::getValueInt(const std::string& k) -> int
 {
     int ret = 0;
     if (exists(k))
@@ -232,7 +232,7 @@ int Settings::getValueInt(const std::string& k)
     return ret;
 }
 
-unsigned int Settings::getValueUnsignedInt(const std::string& k)
+auto Settings::getValueUnsignedInt(const std::string& k) -> unsigned int
 {
     unsigned int v = 0;
     if (exists(k))
@@ -243,7 +243,7 @@ unsigned int Settings::getValueUnsignedInt(const std::string& k)
     return v;
 }
 
-unsigned short Settings::getValueUnsignedShort(const std::string& k)
+auto Settings::getValueUnsignedShort(const std::string& k) -> unsigned short
 {
     unsigned short v = 0;
     if (exists(k))
@@ -254,7 +254,7 @@ unsigned short Settings::getValueUnsignedShort(const std::string& k)
     return v;
 }
 
-unsigned char Settings::getValueUnsignedChar(const std::string& k)
+auto Settings::getValueUnsignedChar(const std::string& k) -> unsigned char
 {
     unsigned char v = 0;
     if (exists(k))
@@ -267,7 +267,10 @@ unsigned char Settings::getValueUnsignedChar(const std::string& k)
     return v;
 }
 
-bool Settings::getValueBool(const std::string& k) { return !(getValueUnsignedShort(k) == 0); }
+auto Settings::getValueBool(const std::string& k) -> bool
+{
+    return !(getValueUnsignedShort(k) == 0);
+}
 
 void Settings::defaultValueUnsignedInt(const std::string& k,
                                        unsigned int dflt,
@@ -392,4 +395,4 @@ void Settings::setValue(const std::string& k, bool v)
     }
 }
 
-bool Settings::exists(const std::string& k) { return m_map.count(k) != 0; }
+auto Settings::exists(const std::string& k) -> bool { return m_map.count(k) != 0; }

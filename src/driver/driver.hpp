@@ -65,10 +65,10 @@ public:
     driver(xmlNodePtr parent) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);
+    auto to_xml_node(xmlNodePtr parent) noexcept(false) -> xmlNodePtr;
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, driver const& speaker);
+    friend auto operator<<(std::ostream& output, driver const& speaker) -> std::ostream&;
 
     void set_qts(double const qts) { m_qts = qts; }
 
@@ -107,39 +107,39 @@ public:
 
     void set_cms(double const cms) { m_cms = cms; }
 
-    double get_qts() const { return m_qts; }
+    auto get_qts() const -> double { return m_qts; }
 
-    double get_vas() const { return m_vas; }
+    auto get_vas() const -> double { return m_vas; }
 
-    double get_fs() const { return m_fs; }
+    auto get_fs() const -> double { return m_fs; }
 
-    double get_rdc() const { return m_rdc; }
+    auto get_rdc() const -> double { return m_rdc; }
 
-    double get_lvc() const { return m_lvc; }
+    auto get_lvc() const -> double { return m_lvc; }
 
-    double get_qms() const { return m_qms; }
+    auto get_qms() const -> double { return m_qms; }
 
-    double get_qes() const { return m_qes; }
+    auto get_qes() const -> double { return m_qes; }
 
-    double get_imp() const { return m_imp; }
+    auto get_imp() const -> double { return m_imp; }
 
-    double get_sens() const { return m_sens; }
+    auto get_sens() const -> double { return m_sens; }
 
-    std::string get_freq_resp_filename() const { return m_freq_resp_filename; }
+    auto get_freq_resp_filename() const -> std::string { return m_freq_resp_filename; }
 
-    std::string get_imp_resp_filename() const { return m_imp_resp_filename; }
+    auto get_imp_resp_filename() const -> std::string { return m_imp_resp_filename; }
 
-    std::string const& get_id_string() const { return m_id_string; }
+    auto get_id_string() const -> std::string const& { return m_id_string; }
 
-    double get_mmd() const { return m_mmd; }
+    auto get_mmd() const -> double { return m_mmd; }
 
-    double get_ad() const { return m_ad; }
+    auto get_ad() const -> double { return m_ad; }
 
-    double get_bl() const { return m_bl; }
+    auto get_bl() const -> double { return m_bl; }
 
-    double get_rms() const { return m_rms; }
+    auto get_rms() const -> double { return m_rms; }
 
-    double get_cms() const { return m_cms; }
+    auto get_cms() const -> double { return m_cms; }
 
 protected:
     /// total Q

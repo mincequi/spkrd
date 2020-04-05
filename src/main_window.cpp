@@ -34,7 +34,7 @@
 
 enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
-inline bool is_state_modified()
+inline auto is_state_modified() -> bool
 {
     return GSpeakers::driverlist_modified() || GSpeakers::enclosurelist_modified()
            || GSpeakers::crossoverlist_modified() || GSpeakers::measurementlist_modified();
@@ -214,7 +214,7 @@ void main_window::connect_crossover_tab()
     m_main_notebook.append_page(m_crossover_paned, *Gtk::manage(new Gtk::Label("Crossover")));
 }
 
-bool main_window::on_delete_event(GdkEventAny* event)
+auto main_window::on_delete_event(GdkEventAny* event) -> bool
 {
     // Popup dialog and ask if user want to save changes
     if (is_state_modified())

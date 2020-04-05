@@ -99,7 +99,7 @@ void FilterLinkFrame::initialise_dampening()
 
     driver speaker;
 
-    if (m_speaker_list)
+    if (m_speaker_list != nullptr)
     {
         speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
     }
@@ -641,11 +641,11 @@ void FilterLinkFrame::on_param_changed()
             m_net->get_imp_corr_R().set_value(speaker.get_rdc());
         }
 
-        m_net->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
+        m_net->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
 
         m_net->set_has_damp(m_damp_spinbutton.get_value_as_int());
 
-        if (m_damp_spinbutton.get_value_as_int())
+        if (m_damp_spinbutton.get_value_as_int() != 0)
         {
             // Calculate resistors for damping network
             auto const r_ser = speaker.get_rdc()
@@ -700,7 +700,7 @@ void FilterLinkFrame::on_speakerlist_loaded(driver_list* driver_list)
 
     m_speaker_combo.remove_all();
 
-    if (m_speaker_list)
+    if (m_speaker_list != nullptr)
     {
         for (auto& iter : m_speaker_list->data())
         {
@@ -873,7 +873,8 @@ void FilterLinkFrame::on_plot_crossover()
     }
 }
 
-std::vector<double> FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
+auto FilterLinkFrame::get_filter_params(int net_name_type, int net_order, int net_type)
+    -> std::vector<double>
 {
     std::vector<double> nums;
     switch (net_order)

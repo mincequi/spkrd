@@ -36,7 +36,7 @@ public:
 
     ~frequency_response_editor() override = default;
 
-    std::string const& get_filename() const { return m_filename; }
+    auto get_filename() const -> std::string const& { return m_filename; }
 
 private:
     void on_save();
@@ -45,7 +45,7 @@ private:
 
     void on_close();
 
-    std::vector<double> get_x_vector();
+    auto get_x_vector() -> std::vector<double>;
 
 private:
     Gtk::Table m_table;

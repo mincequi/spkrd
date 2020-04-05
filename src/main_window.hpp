@@ -39,7 +39,7 @@ public:
 private:
     void on_quit();
 
-    bool on_delete_event(GdkEventAny* event) override;
+    auto on_delete_event(GdkEventAny* event) -> bool override;
 
     void on_quit_common();
 

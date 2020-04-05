@@ -48,7 +48,7 @@ SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m
 
 SummedFreqRespPlot::~SummedFreqRespPlot() = default;
 
-double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
+auto lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x) -> double
 {
     auto first_i = std::lower_bound(freq_resp_points.begin(),
                                     freq_resp_points.end(),
@@ -79,10 +79,10 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
-                                    Gdk::Color const& color,
-                                    int& output_plot_index,
-                                    Net* n)
+auto SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
+                                     Gdk::Color const& color,
+                                     int& output_plot_index,
+                                     Net* n) -> int
 {
 #ifndef NDEBUG
     std::puts("SummedFreqRespPlot::on_add_plot");

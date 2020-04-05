@@ -46,18 +46,18 @@ public:
     passive_component(xmlNodePtr fields) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr; // Maybe this one should throw an exception
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, const passive_component& part);
+    friend auto operator<<(std::ostream& output, const passive_component& part) -> std::ostream&;
 
     void set_value(double value);
 
     void set_unit(std::string unit);
 
-    double get_value() const;
+    auto get_value() const -> double;
 
-    std::string const& get_unit() const;
+    auto get_unit() const -> std::string const&;
 
     void on_part_value_changed(int id, double new_value);
     void on_part_unit_changed(int id, std::string new_unit);

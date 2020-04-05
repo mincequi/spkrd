@@ -62,7 +62,7 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox()
 
 PlotHistory::~PlotHistory() = default;
 
-bool PlotHistory::on_delete_event(GdkEventAny* event) { return true; }
+auto PlotHistory::on_delete_event(GdkEventAny* event) -> bool { return true; }
 
 void PlotHistory::on_selection_changed()
 {

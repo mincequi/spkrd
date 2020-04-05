@@ -8,7 +8,7 @@
 
 namespace spkrd
 {
-double parse_double(xmlNodePtr node, std::string const& label)
+auto parse_double(xmlNodePtr node, std::string const& label) -> double
 {
     double value = 0.0;
 
@@ -23,7 +23,7 @@ double parse_double(xmlNodePtr node, std::string const& label)
     return value;
 }
 
-int parse_int(xmlNodePtr node, std::string const& label)
+auto parse_int(xmlNodePtr node, std::string const& label) -> int
 {
     int value = 0;
 
@@ -38,7 +38,7 @@ int parse_int(xmlNodePtr node, std::string const& label)
     return value;
 }
 
-std::string parse_string(xmlNodePtr const node, std::string const& label)
+auto parse_string(xmlNodePtr const node, std::string const& label) -> std::string
 {
     std::string value;
 

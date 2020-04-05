@@ -46,10 +46,10 @@ public:
     enclosure(xmlNodePtr parent);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent);
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr;
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const enclosure& box);
+    friend auto operator<<(std::ostream& o, enclosure const& box) -> std::ostream&;
 
     void set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
@@ -63,17 +63,17 @@ public:
 
     void set_speaker(const std::string& speaker) { m_speaker = speaker; }
 
-    std::string const& get_id_string() const { return m_id_string; }
+    auto get_id_string() const -> std::string const& { return m_id_string; }
 
-    double get_vb1() const { return m_vb1; }
+    auto get_vb1() const -> double { return m_vb1; }
 
-    double get_fb1() const { return m_fb1; }
+    auto get_fb1() const -> double { return m_fb1; }
 
-    double get_vb2() const { return m_vb2; }
+    auto get_vb2() const -> double { return m_vb2; }
 
-    double get_fb2() const { return m_fb2; }
+    auto get_fb2() const -> double { return m_fb2; }
 
-    const std::string& get_speaker() const { return m_speaker; }
+    auto get_speaker() const -> const std::string& { return m_speaker; }
 
 protected:
     std::string m_id_string;

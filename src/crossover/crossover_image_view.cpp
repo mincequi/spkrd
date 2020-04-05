@@ -45,9 +45,9 @@ crossover_image_view::crossover_image_view()
         sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
 }
 
-bool crossover_image_view::on_expose_event(GdkEventExpose* event) { return false; }
+auto crossover_image_view::on_expose_event(GdkEventExpose* event) -> bool { return false; }
 
-bool crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
+auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
 {
     m_visible = true;
 
@@ -56,7 +56,7 @@ bool crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
     return true;
 }
 
-bool crossover_image_view::on_configure_event(GdkEventConfigure* event)
+auto crossover_image_view::on_configure_event(GdkEventConfigure* event) -> bool
 {
     m_visible = true;
 

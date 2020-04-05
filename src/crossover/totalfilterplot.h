@@ -41,10 +41,10 @@ public:
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*);
+    auto on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*) -> int;
 
 private:
-    bool on_delete_event(GdkEventAny* event) override;
+    auto on_delete_event(GdkEventAny* event) -> bool override;
 
     void on_crossover_selected(Crossover*);
 

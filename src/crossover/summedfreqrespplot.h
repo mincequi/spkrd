@@ -41,7 +41,7 @@ public:
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*);
+    auto on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*) -> int;
 
 private:
     void on_crossover_selected(Crossover*);

@@ -49,28 +49,28 @@ PopupEntry::PopupEntry(Glib::ustring path)
     show_all_children();
 }
 
-Glib::ustring const& PopupEntry::get_path() const { return m_path; }
+auto PopupEntry::get_path() const -> Glib::ustring const& { return m_path; }
 
 void PopupEntry::set_text(const Glib::ustring& text)
 {
     m_spin_button->set_value(atof(text.c_str()));
 }
 
-Glib::ustring PopupEntry::get_text() const { return m_entry->get_text(); }
+auto PopupEntry::get_text() const -> Glib::ustring { return m_entry->get_text(); }
 
 void PopupEntry::select_region(int start_pos, int end_pos)
 {
     m_entry->select_region(start_pos, end_pos);
 }
 
-bool PopupEntry::get_editing_canceled() const
+auto PopupEntry::get_editing_canceled() const -> bool
 {
     std::puts("PopupEntry::get_editing_canceled");
 
     return m_editing_canceled;
 }
 
-int PopupEntry::get_button_width()
+auto PopupEntry::get_button_width() -> int
 {
     std::puts("PopupEntry::get_button_width");
 
@@ -88,9 +88,9 @@ int PopupEntry::get_button_width()
     return width;
 }
 
-sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return m_signal_arrow_clicked; }
+auto PopupEntry::signal_arrow_clicked() -> sigc::signal0<void>& { return m_signal_arrow_clicked; }
 
-bool PopupEntry::on_key_press_event(GdkEventKey* event)
+auto PopupEntry::on_key_press_event(GdkEventKey* event) -> bool
 {
     std::puts("PopupEntry::on_key_press_event");
     if (event->keyval == GDK_KEY_Escape)
@@ -131,7 +131,7 @@ void PopupEntry::on_entry_activate()
     editing_done();
 }
 
-bool PopupEntry::on_entry_key_press_event(GdkEventKey* event)
+auto PopupEntry::on_entry_key_press_event(GdkEventKey* event) -> bool
 {
     std::puts("PopupEntry::on_entry_key_press_event");
 

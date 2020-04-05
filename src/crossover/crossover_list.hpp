@@ -40,11 +40,11 @@ public:
     void to_xml(const std::string& filename);
 
     // Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const crossover_list& crossover_list);
+    friend auto operator<<(std::ostream& o, const crossover_list& crossover_list) -> std::ostream&;
 
-    std::vector<Crossover>& data() { return m_crossover_list; }
+    auto data() -> std::vector<Crossover>& { return m_crossover_list; }
 
-    std::vector<Crossover> const& data() const { return m_crossover_list; }
+    auto data() const -> std::vector<Crossover> const& { return m_crossover_list; }
 
     // Remove all items
     void clear() { m_crossover_list.clear(); }

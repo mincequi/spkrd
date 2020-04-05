@@ -61,7 +61,7 @@ protected:
   void on_box_modified(enclosure* box);
   void on_add_plot(enclosure* box, driver* speaker, Gdk::Color&);
   void on_cell_plot_toggled(const Glib::ustring& path_string);
-  bool on_delete_event(GdkEventAny*) override;
+  auto on_delete_event(GdkEventAny*) -> bool override;
   void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
   void vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
   void fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);

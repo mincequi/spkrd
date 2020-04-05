@@ -81,7 +81,7 @@ void enclosure_list::to_xml(std::string const& filename)
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const enclosure_list& box_list)
+auto operator<<(std::ostream& output, const enclosure_list& box_list) -> std::ostream&
 {
     output << "enclosure List\n";
 

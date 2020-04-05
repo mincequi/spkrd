@@ -68,8 +68,8 @@ protected:
     virtual void on_hide_popup();
 
 private:
-    bool on_button_press_event(GdkEventButton* event);
-    bool on_key_press_event(GdkEventKey* event);
+    auto on_button_press_event(GdkEventButton* event) -> bool;
+    auto on_key_press_event(GdkEventKey* event) -> bool;
     void on_style_changed(Glib::RefPtr<Gtk::Style> const& previous_style);
 
     void on_popup_editing_done();

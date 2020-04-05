@@ -29,7 +29,7 @@
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
-enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
+enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL != 0u)
 {
     bool boxlist_found = false;
     set_border_width(2);
@@ -116,7 +116,7 @@ void enclosure_history::on_save_open_files()
     }
 }
 
-bool enclosure_history::on_delete_event(GdkEventAny* event)
+auto enclosure_history::on_delete_event(GdkEventAny* event) -> bool
 {
     // handle this since we don't want to close the window
     g_settings.setValue("BoxListXml", m_filename);

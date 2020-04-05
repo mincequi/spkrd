@@ -138,7 +138,7 @@ void Crossover::parse_id_string(xmlNodePtr node)
     }
 }
 
-xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
+auto Crossover::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     xmlNodePtr crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
 
@@ -158,7 +158,7 @@ xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
     return crossover;
 }
 
-std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
+auto operator<<(std::ostream& output, const Crossover& crossover) -> std::ostream&
 {
     output << _("Crossover type:") << crossover.m_type << "\n"
            << "Id: " << crossover.m_id << "\n---Nets----\n";

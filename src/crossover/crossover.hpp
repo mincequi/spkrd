@@ -46,10 +46,10 @@ public:
 
     /// Convert data for a part to an xml node
     /// \throw std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent) noexcept(false);
+    auto to_xml_node(xmlNodePtr parent) noexcept(false) -> xmlNodePtr;
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, Crossover const& crossover);
+    friend auto operator<<(std::ostream& o, Crossover const& crossover) -> std::ostream&;
 
     auto networks() -> std::vector<filter_network>& { return m_networks; }
 

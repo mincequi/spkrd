@@ -37,10 +37,10 @@ TotalFilterPlot::TotalFilterPlot() : m_plot(1, 20000), m_color("blue")
 
 TotalFilterPlot::~TotalFilterPlot() = default;
 
-int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
-                                 Gdk::Color const& color,
-                                 int& output_plot_index,
-                                 Net* n)
+auto TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+                                  Gdk::Color const& color,
+                                  int& output_plot_index,
+                                  Net* n) -> int
 {
     auto const& plot_index = output_plot_index;
 
@@ -99,7 +99,7 @@ void TotalFilterPlot::on_crossover_selected(Crossover*) { clear(); }
 
 void TotalFilterPlot::on_plot_crossover() {}
 
-bool TotalFilterPlot::on_delete_event(GdkEventAny* event)
+auto TotalFilterPlot::on_delete_event(GdkEventAny* event) -> bool
 {
     // Don't delete this window
     return true;

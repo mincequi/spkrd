@@ -75,36 +75,36 @@ public:
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     /// Maybe this one should throw an exception
-    xmlNodePtr to_xml_node(xmlNodePtr parent);
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr;
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const filter_network& net);
+    friend auto operator<<(std::ostream& o, filter_network const& net) -> std::ostream&;
 
-    std::string to_SPICE(driver& s, bool use_gnucap = false);
+    auto to_SPICE(driver& s, bool use_gnucap = false) -> std::string;
 
     auto parts() -> std::vector<passive_component>& { return m_parts; }
 
     auto parts() const -> std::vector<passive_component> const& { return m_parts; }
 
-    int get_highpass_order() const { return m_highpass_order; }
+    auto get_highpass_order() const -> int { return m_highpass_order; }
 
-    int get_lowpass_order() const { return m_lowpass_order; }
+    auto get_lowpass_order() const -> int { return m_lowpass_order; }
 
-    bool get_has_imp_corr() const { return m_has_imp_corr; }
+    auto get_has_imp_corr() const -> bool { return m_has_imp_corr; }
 
-    bool get_has_damp() const { return m_has_damp; }
+    auto get_has_damp() const -> bool { return m_has_damp; }
 
-    bool get_has_res() const { return m_has_res; }
+    auto get_has_res() const -> bool { return m_has_res; }
 
-    int get_lowpass_family() const { return m_lowpass_family; }
+    auto get_lowpass_family() const -> int { return m_lowpass_family; }
 
-    int get_highpass_family() const { return m_highpass_family; }
+    auto get_highpass_family() const -> int { return m_highpass_family; }
 
     auto get_speaker() const -> std::string const& { return m_speaker; }
 
-    int get_adv_imp_model() const { return m_adv_imp_model; }
+    auto get_adv_imp_model() const -> int { return m_adv_imp_model; }
 
-    bool get_inv_pot() const { return m_inv_pol; }
+    auto get_inv_pot() const -> bool { return m_inv_pol; }
 
     auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
 

@@ -104,7 +104,7 @@ void passive_component::parse_unit(xmlNodePtr node)
     }
 }
 
-xmlNodePtr passive_component::to_xml_node(xmlNodePtr parent)
+auto passive_component::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     std::array<gchar, 8> buffer;
 
@@ -123,9 +123,9 @@ void passive_component::set_value(double value) { m_value = value; }
 
 void passive_component::set_unit(std::string unit) { m_unit = std::move(unit); }
 
-double passive_component::get_value() const { return m_value; }
+auto passive_component::get_value() const -> double { return m_value; }
 
-std::string const& passive_component::get_unit() const { return m_unit; }
+auto passive_component::get_unit() const -> std::string const& { return m_unit; }
 
 void passive_component::on_part_value_changed(int id, double new_value)
 {
@@ -152,7 +152,7 @@ void passive_component::on_part_type_changed(int id, int new_type)
     }
 }
 
-std::ostream& operator<<(std::ostream& o, const passive_component& part)
+auto operator<<(std::ostream& o, const passive_component& part) -> std::ostream&
 {
     return o << _("***passive_component***") << "\n"
              << _("Id   : ") << part.m_id << "\n"

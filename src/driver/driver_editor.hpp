@@ -48,18 +48,18 @@ public:
 
     virtual ~driver_editor() = default;
 
-    Gtk::Widget& get_treeview_table() noexcept { return m_treeview_vbox; }
+    auto get_treeview_table() noexcept -> Gtk::Widget& { return m_treeview_vbox; }
 
-    Gtk::Widget& get_editor_table() noexcept { return m_vbox; }
+    auto get_editor_table() noexcept -> Gtk::Widget& { return m_vbox; }
 
-    Gtk::Widget& get_plot() noexcept { return plot; }
+    auto get_plot() noexcept -> Gtk::Widget& { return plot; }
 
-    Gtk::MenuItem& get_menu();
+    auto get_menu() -> Gtk::MenuItem&;
 
-    Gtk::Toolbar& get_toolbar();
+    auto get_toolbar() -> Gtk::Toolbar&;
 
 protected:
-    bool open_xml(const std::string& filename);
+    auto open_xml(std::string const& filename) -> bool;
 
     void append_xml(const std::string& filename);
 

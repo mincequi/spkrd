@@ -31,13 +31,13 @@ plot::plot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_
       m_lower_y{lower_y},
       m_upper_y{upper_y},
       m_y_zero_freq{y_zero_freq},
-      m_enable_sec_scale{enable_sec_scale},
+      m_enable_sec_scale{static_cast<int>(enable_sec_scale)},
       m_logx{logx},
       m_visible{false}
 {
 }
 
-bool plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
+auto plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
 {
     m_context = context;
 
@@ -46,14 +46,14 @@ bool plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
     return true;
 }
 
-bool plot::on_expose_event(GdkEventExpose* event)
+auto plot::on_expose_event(GdkEventExpose* event) -> bool
 {
     m_selected_plot = -1;
 
     return false;
 }
 
-bool plot::on_configure_event(GdkEventConfigure* event)
+auto plot::on_configure_event(GdkEventConfigure* event) -> bool
 {
     m_visible = true;
 
@@ -61,7 +61,8 @@ bool plot::on_configure_event(GdkEventConfigure* event)
     return true;
 }
 
-int plot::add_plot(std::vector<GSpeakers::Point> const& ref_point_vector, Gdk::Color const& ref_color)
+auto plot::add_plot(std::vector<GSpeakers::Point> const& ref_point_vector,
+                    Gdk::Color const& ref_color) -> int
 {
     auto const& allocation = get_allocation();
 
@@ -277,7 +278,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         this->draw_text_box(context, int_to_ustring3(i), BOX_FRAME_SIZE - 27, y - 8);
 
-        if (m_enable_sec_scale)
+        if (m_enable_sec_scale != 0)
         {
             this->draw_text_box(context,
                                 int_to_ustring3(i - m_lower_y),
@@ -603,7 +604,7 @@ void plot::set_y_label2(const std::string& text)
     }
 }
 
-Glib::ustring plot::int_to_ustring3(int d)
+auto plot::int_to_ustring3(int d) -> Glib::ustring
 {
     char* str = nullptr;
     GString* buffer = g_string_new(str);

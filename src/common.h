@@ -41,18 +41,18 @@
 namespace GSpeakers
 {
 class Point;
-Glib::ustring double_to_ustring(double d);
-Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
-Glib::ustring int_to_ustring(int d);
+auto double_to_ustring(double d) -> Glib::ustring;
+auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
+auto int_to_ustring(int d) -> Glib::ustring;
 
-Gtk::Widget& image_widget(std::string const& filename);
+auto image_widget(std::string const& filename) -> Gtk::Widget&;
 
-Glib::ustring short_filename(Glib::ustring const& filename, unsigned length = 30);
+auto short_filename(Glib::ustring const& filename, unsigned length = 30) -> Glib::ustring;
 
-bool& driverlist_modified();
-bool& enclosurelist_modified();
-bool& crossoverlist_modified();
-bool& measurementlist_modified();
+auto driverlist_modified() -> bool&;
+auto enclosurelist_modified() -> bool&;
+auto crossoverlist_modified() -> bool&;
+auto measurementlist_modified() -> bool&;
 } // namespace GSpeakers
 
 class enclosure;

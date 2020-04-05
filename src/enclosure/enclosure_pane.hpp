@@ -39,9 +39,9 @@ public:
 
     ~enclosure_pane() override;
 
-    Gtk::MenuItem& get_menu();
+    auto get_menu() -> Gtk::MenuItem&;
 
-    Gtk::Toolbar& get_toolbar();
+    auto get_toolbar() -> Gtk::Toolbar&;
 
 protected:
     void on_settings_changed(const std::string&);

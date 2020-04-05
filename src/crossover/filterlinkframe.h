@@ -68,7 +68,7 @@ private:
      * Numerical coefficients for the filter principles
      * net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
      * NET_TYPE_HIGHPASS */
-    std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
+    auto get_filter_params(int net_name_type, int net_order, int net_type) -> std::vector<double>;
 
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 

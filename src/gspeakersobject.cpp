@@ -26,8 +26,8 @@ GSpeakersObject::GSpeakersObject() : sigc::trackable()
 
 GSpeakersObject::GSpeakersObject(int type) : GSpeakersObject() { m_type = type; }
 
-int GSpeakersObject::get_id() const { return m_id; }
+auto GSpeakersObject::get_id() const -> int { return m_id; }
 
 void GSpeakersObject::set_type(int type) { m_type = type; }
 
-int GSpeakersObject::get_type() const { return m_type; }
+auto GSpeakersObject::get_type() const -> int { return m_type; }

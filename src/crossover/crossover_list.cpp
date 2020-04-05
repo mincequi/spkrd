@@ -76,7 +76,7 @@ void crossover_list::to_xml(std::string const& filename)
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const crossover_list& crossover_list)
+auto operator<<(std::ostream& output, crossover_list const& crossover_list) -> std::ostream&
 {
     output << "Crossover List\n";
 

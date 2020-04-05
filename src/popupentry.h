@@ -37,22 +37,22 @@ public:
 
   ~PopupEntry() override = default;
 
-  Glib::ustring const& get_path() const;
+  auto get_path() const -> Glib::ustring const&;
 
   void set_text(Glib::ustring const& text);
 
-  Glib::ustring get_text() const;
+  auto get_text() const -> Glib::ustring;
 
   void select_region(int start_pos, int end_pos);
 
-  bool get_editing_canceled() const;
+  auto get_editing_canceled() const -> bool;
 
-  static int get_button_width();
+  static auto get_button_width() -> int;
 
-  sigc::signal0<void>& signal_arrow_clicked();
+  auto signal_arrow_clicked() -> sigc::signal0<void>&;
 
-protected:
-  bool on_key_press_event(GdkEventKey* event) override;
+  protected:
+  auto on_key_press_event(GdkEventKey* event) -> bool override;
   void start_editing_vfunc(GdkEvent* event) override;
 
 private:
@@ -60,9 +60,9 @@ private:
 
 private:
   void on_entry_activate();
-  bool on_entry_key_press_event(GdkEventKey* event);
+  auto on_entry_key_press_event(GdkEventKey* event) -> bool;
 
-private:
+  private:
   Glib::ustring m_path;
   Gtk::Entry* m_entry;
   Gtk::SpinButton* m_spin_button;
