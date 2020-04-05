@@ -26,8 +26,6 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
                                                        const std::string& default_filename)
     : m_file_chooser(title, action)
 {
-    bool flag = false;
-
     m_file_chooser.add_button(Gtk::Stock::CANCEL, FILE_CHOOSER_CANCEL);
 
     switch (action)
@@ -46,6 +44,8 @@ GSpeakersFileChooserDialog::GSpeakersFileChooserDialog(const Glib::ustring& titl
     {
         m_file_chooser.set_filename(default_filename);
     }
+
+    bool flag = false;
 
     while (!flag)
     {
