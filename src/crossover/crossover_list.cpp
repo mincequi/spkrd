@@ -42,9 +42,9 @@ crossover_list::crossover_list(const std::string& filename)
                 {
                     m_crossover_list.emplace_back(children);
                 }
-                catch (std::runtime_error const& e)
+                catch (std::runtime_error const& error)
                 {
-                    throw e;
+                    throw error;
                 }
                 children = children->next;
             }
