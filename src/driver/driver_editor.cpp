@@ -21,7 +21,7 @@
 
 #include "common.h"
 #include "frequency_response_editor.hpp"
-#include "gspeakersfilechooser.h"
+#include "file_chooser.hpp"
 
 #include <glibmm.h>
 #include <gtkmm/messagedialog.h>
@@ -480,9 +480,9 @@ void driver_editor::on_save()
 
 void driver_editor::on_save_as()
 {
-    std::string const& filename = GSpeakersFileChooserDialog(_("Save speaker xml as"),
-                                                             Gtk::FILE_CHOOSER_ACTION_SAVE,
-                                                             m_filename)
+    std::string const& filename = file_chooser_dialog(_("Save speaker xml as"),
+                                                      Gtk::FILE_CHOOSER_ACTION_SAVE,
+                                                      m_filename)
                                       .get_filename();
 
     if (!filename.empty())
@@ -965,7 +965,7 @@ void driver_editor::on_entry_changed(int i)
 
 void driver_editor::on_append_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Append speaker xml"));
+    file_chooser_dialog fc(_("Append speaker xml"));
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
@@ -975,7 +975,7 @@ void driver_editor::on_append_xml()
 
 void driver_editor::on_open_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Open speaker xml"));
+    file_chooser_dialog fc(_("Open speaker xml"));
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
@@ -1101,7 +1101,7 @@ void driver_editor::on_browse_freq_resp()
 #ifndef NDEBUG
     std::puts("SpeakerEditor::on_browse_freq_resp");
 #endif
-    GSpeakersFileChooserDialog fc(_("Open frequency response file"));
+    file_chooser_dialog fc(_("Open frequency response file"));
     std::string const& filename = fc.get_filename();
 
     if (filename.empty())

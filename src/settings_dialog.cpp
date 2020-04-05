@@ -17,7 +17,7 @@
 
 #include "settings_dialog.hpp"
 
-#include "gspeakersfilechooser.h"
+#include "file_chooser.hpp"
 
 #include <gtkmm/frame.h>
 #include <gtkmm/stock.h>
@@ -137,7 +137,7 @@ void settings_dialog::on_close() { hide(); }
 
 void settings_dialog::on_spice_browse()
 {
-    auto fc = std::make_unique<GSpeakersFileChooserDialog>(_("Select SPICE executable"),
+    auto fc = std::make_unique<file_chooser_dialog>(_("Select SPICE executable"),
                                                            Gtk::FILE_CHOOSER_ACTION_OPEN);
     std::string const& filename = fc->get_filename();
     if (!filename.empty())
