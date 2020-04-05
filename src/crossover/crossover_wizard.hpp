@@ -31,7 +31,9 @@ public:
 
 private:
     void on_speaker_list_loaded(driver_list*);
+
     void on_button_plot_clicked();
+
     void on_button_update_clicked();
 
     void on_crossover_selected(Crossover* crossover);
