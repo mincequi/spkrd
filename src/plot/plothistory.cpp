@@ -168,8 +168,8 @@ void PlotHistory::add_columns()
         pColumn->add_attribute(pRenderer->property_weight(), m_columns.weight_);
     }
     {
-        Gtk::CellRendererToggle* pRenderer = Gtk::manage(new Gtk::CellRendererToggle());
-        pRenderer->signal_toggled().connect(mem_fun(*this, &PlotHistory::on_cell_plot_toggled));
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererToggle());
+        pRenderer->signal_toggled().connect(sigc::mem_fun(*this, &PlotHistory::on_cell_plot_toggled));
 
         int cols_count = m_TreeView.append_column(_("Plot"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -177,7 +177,7 @@ void PlotHistory::add_columns()
         pColumn->add_attribute(pRenderer->property_active(), m_columns.view_plot);
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -185,7 +185,7 @@ void PlotHistory::add_columns()
         pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("driver"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
