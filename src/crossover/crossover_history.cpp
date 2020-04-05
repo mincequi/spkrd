@@ -83,8 +83,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     // create tree view
     m_TreeView.set_model(m_refListStore);
 
-    auto selection = m_TreeView.get_selection();
-    selection->signal_changed().connect(
+    m_TreeView.get_selection()->signal_changed().connect(
         sigc::mem_fun(*this, &crossover_history::on_selection_changed));
 
     add_columns();
@@ -114,12 +113,16 @@ void crossover_history::on_save_open_files()
 
 void crossover_history::select_first_row()
 {
-    if (!m_crossover_list.data().empty())
+    if (m_crossover_list.data().empty())
     {
-        Gtk::TreePath path(std::to_string(0));
+        Gtk::TreePath(std::to_string(0));
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
         m_TreeView.get_selection()->select(row);
     }
+
+    Gtk::TreeRow row = *(m_refListStore->get_iter(Gtk::TreePath(std::to_string(0))));
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    selection->select(row);
 }
 
 void crossover_history::on_net_modified_by_wizard(filter_network* net)
