@@ -31,15 +31,15 @@
 /// The reason why we have this class is that we want
 /// an extra layer (where we can connect signals and so on)
 /// between the program and the plot widget.
-class GSpeakersBoxPlot : public Gtk::Frame
+class box_plot : public Gtk::Frame
 {
 public:
-    GSpeakersBoxPlot();
+    box_plot();
 
 private:
     Gtk::Label m_label;
     Gtk::VBox m_vbox;
-    Gtk::ScrolledWindow sw;
+    Gtk::ScrolledWindow m_scrolled_window;
 
     plot m_plot;
 };
