@@ -19,7 +19,7 @@
 
 #include "crossovertreeview.h"
 
-#include "cellrendererpopup.h"
+#include "cell_renderer_popup.hpp"
 #include "common.h"
 #include "popupentry.h"
 
@@ -354,7 +354,7 @@ void CrossoverTreeView::add_columns()
         }
     }
     {
-        CellRendererPopup* pRenderer = Gtk::manage(new CellRendererPopup());
+        cell_renderer_popup* pRenderer = Gtk::manage(new cell_renderer_popup());
         pRenderer->property_xalign().set_value(0.0);
         pRenderer->signal_edited().connect(
             sigc::mem_fun(*this, &CrossoverTreeView::on_cell_edited_value));

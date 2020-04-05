@@ -29,12 +29,12 @@
 
 class PopupEntry;
 
-class CellRendererPopup : public Gtk::CellRendererText
+class cell_renderer_popup : public Gtk::CellRendererText
 {
 public:
-    CellRendererPopup();
+    cell_renderer_popup();
 
-    ~CellRendererPopup() override;
+    ~cell_renderer_popup() override;
 
     auto get_popup_entry() -> PopupEntry*;
     auto get_popup_window() -> Gtk::Window*;
@@ -75,9 +75,6 @@ private:
     void on_popup_editing_done();
     void on_popup_arrow_clicked();
     void on_popup_hide();
-
-private:
-    using Self = CellRendererPopup;
 
 private:
     sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;

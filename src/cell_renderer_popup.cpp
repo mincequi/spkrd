@@ -21,7 +21,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "cellrendererpopup.h"
+#include "cell_renderer_popup.hpp"
 #include "popupentry.h"
 
 #include <gdkmm/general.h>
@@ -42,49 +42,50 @@ bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_ti
 }
 } // anonymous namespace
 
-CellRendererPopup::CellRendererPopup()
-    : Glib::ObjectBase(typeid(CellRendererPopup)), Gtk::CellRendererText(), popup_window_(Gtk::WINDOW_POPUP)
+cell_renderer_popup::cell_renderer_popup()
+    : Glib::ObjectBase(typeid(cell_renderer_popup)), Gtk::CellRendererText(), popup_window_(Gtk::WINDOW_POPUP)
 {
-    std::cout << "CellRendererPopup::CellRendererPopup\n";
+    std::cout << "cell_renderer_popup::cell_renderer_popup\n";
 
-    signal_show_popup_.connect(sigc::mem_fun(*this, &Self::on_show_popup));
-    signal_hide_popup_.connect(sigc::mem_fun(*this, &Self::on_hide_popup));
+    signal_show_popup_.connect(sigc::mem_fun(*this, &cell_renderer_popup::on_show_popup));
+    signal_hide_popup_.connect(sigc::mem_fun(*this, &cell_renderer_popup::on_hide_popup));
 
     popup_window_.signal_button_press_event().connect(
-        sigc::mem_fun(*this, &Self::on_button_press_event));
-    popup_window_.signal_key_press_event().connect(sigc::mem_fun(*this, &Self::on_key_press_event));
-    // popup_window_.signal_style_changed().connect(sigc::mem_fun(*this, &Self::on_style_changed));
+        sigc::mem_fun(*this, &cell_renderer_popup::on_button_press_event));
+    popup_window_.signal_key_press_event().connect(
+        sigc::mem_fun(*this, &cell_renderer_popup::on_key_press_event));
+    // popup_window_.signal_style_changed().connect(sigc::mem_fun(*this, &cell_renderer_popup::on_style_changed));
 }
 
-CellRendererPopup::~CellRendererPopup() = default;
+cell_renderer_popup::~cell_renderer_popup() = default;
 
-auto CellRendererPopup::get_popup_entry() -> PopupEntry* { return popup_entry_; }
+auto cell_renderer_popup::get_popup_entry() -> PopupEntry* { return popup_entry_; }
 
-auto CellRendererPopup::get_popup_window() -> Gtk::Window* { return &popup_window_; }
+auto cell_renderer_popup::get_popup_window() -> Gtk::Window* { return &popup_window_; }
 
-void CellRendererPopup::set_focus_widget(Gtk::Widget& focus_widget)
+void cell_renderer_popup::set_focus_widget(Gtk::Widget& focus_widget)
 {
     focus_widget_ = &focus_widget;
 }
 
-auto CellRendererPopup::get_focus_widget() -> Gtk::Widget* { return focus_widget_; }
+auto cell_renderer_popup::get_focus_widget() -> Gtk::Widget* { return focus_widget_; }
 
-auto CellRendererPopup::signal_show_popup()
+auto cell_renderer_popup::signal_show_popup()
     -> sigc::signal5<void, const Glib::ustring&, int, int, int, int>&
 {
     return signal_show_popup_;
 }
 
-auto CellRendererPopup::signal_hide_popup() -> sigc::signal0<void>& { return signal_hide_popup_; }
+auto cell_renderer_popup::signal_hide_popup() -> sigc::signal0<void>& { return signal_hide_popup_; }
 
-void CellRendererPopup::hide_popup() { signal_hide_popup_(); }
+void cell_renderer_popup::hide_popup() { signal_hide_popup_(); }
 
-void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget,
-                                       const Gdk::Rectangle* cell_area,
-                                       int* x_offset,
-                                       int* y_offset,
-                                       int* width,
-                                       int* height) const
+void cell_renderer_popup::get_size_vfunc(Gtk::Widget& widget,
+                                         const Gdk::Rectangle* cell_area,
+                                         int* x_offset,
+                                         int* y_offset,
+                                         int* width,
+                                         int* height) const
 {
     // BUG commented to get gtk3 port done
     // Gtk::CellRendererText::get_size_vfunc(widget, cell_area, x_offset, y_offset, width, height);
@@ -101,14 +102,14 @@ void CellRendererPopup::get_size_vfunc(Gtk::Widget& widget,
     }
 }
 
-auto CellRendererPopup::start_editing_vfunc(GdkEvent*,
-                                            Gtk::Widget&,
-                                            const Glib::ustring& path,
-                                            const Gdk::Rectangle&,
-                                            const Gdk::Rectangle&,
-                                            Gtk::CellRendererState) -> Gtk::CellEditable*
+auto cell_renderer_popup::start_editing_vfunc(GdkEvent*,
+                                              Gtk::Widget&,
+                                              const Glib::ustring& path,
+                                              const Gdk::Rectangle&,
+                                              const Gdk::Rectangle&,
+                                              Gtk::CellRendererState) -> Gtk::CellEditable*
 {
-    std::cout << "CellRendererPopup::start_editing_vfunc\n";
+    std::cout << "cell_renderer_popup::start_editing_vfunc\n";
 
     if (!property_editable())
     {
@@ -117,10 +118,11 @@ auto CellRendererPopup::start_editing_vfunc(GdkEvent*,
 
     std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
 
-    popup_entry->signal_editing_done().connect(sigc::mem_fun(*this, &Self::on_popup_editing_done));
+    popup_entry->signal_editing_done().connect(
+        sigc::mem_fun(*this, &cell_renderer_popup::on_popup_editing_done));
     // popup_entry->signal_arrow_clicked().connect(sigc::mem_fun(*this,
-    // &Self::on_popup_arrow_clicked));
-    popup_entry->signal_hide().connect(sigc::mem_fun(*this, &Self::on_popup_hide));
+    // &cell_renderer_popup::on_popup_arrow_clicked));
+    popup_entry->signal_hide().connect(sigc::mem_fun(*this, &cell_renderer_popup::on_popup_hide));
 
     std::cout << property_text() << std::endl;
 
@@ -133,9 +135,9 @@ auto CellRendererPopup::start_editing_vfunc(GdkEvent*,
     return popup_entry_;
 }
 
-void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2)
+void cell_renderer_popup::on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2)
 {
-    std::puts("CellRendererPopup::on_show_popup");
+    std::puts("cell_renderer_popup::on_show_popup");
     // I'm not sure this is ok to do, but we need to show the window to be
     // able to get the allocation right.
     popup_window_.move(-500, -500);
@@ -189,9 +191,9 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
     grab_on_window(popup_window_.get_window(), gtk_get_current_event_time());
 }
 
-void CellRendererPopup::on_hide_popup()
+void cell_renderer_popup::on_hide_popup()
 {
-    std::puts("CellRendererPopup::on_hide_popup");
+    std::puts("cell_renderer_popup::on_hide_popup");
     gtk_grab_remove(popup_window_.Gtk::Widget::gobj());
     popup_window_.hide();
 
@@ -205,9 +207,9 @@ void CellRendererPopup::on_hide_popup()
     editing_canceled_ = false;
 }
 
-bool CellRendererPopup::on_button_press_event(GdkEventButton* event)
+bool cell_renderer_popup::on_button_press_event(GdkEventButton* event)
 {
-    std::puts("CellRendererPopup::on_button_press");
+    std::puts("cell_renderer_popup::on_button_press");
 
     if (event->button != 1)
     {
@@ -241,9 +243,9 @@ bool CellRendererPopup::on_button_press_event(GdkEventButton* event)
     return false;
 }
 
-bool CellRendererPopup::on_key_press_event(GdkEventKey* event)
+bool cell_renderer_popup::on_key_press_event(GdkEventKey* event)
 {
-    std::puts("CellRendererPopup::on_key_press");
+    std::puts("cell_renderer_popup::on_key_press");
 
     switch (event->keyval)
     {
@@ -265,15 +267,15 @@ bool CellRendererPopup::on_key_press_event(GdkEventKey* event)
     return true;
 }
 
-void CellRendererPopup::on_style_changed(Glib::RefPtr<Gtk::Style> const&)
+void cell_renderer_popup::on_style_changed(Glib::RefPtr<Gtk::Style> const&)
 {
     // Invalidate the cache.
     button_width_ = -1;
 }
 
-void CellRendererPopup::on_popup_editing_done()
+void cell_renderer_popup::on_popup_editing_done()
 {
-    std::puts("CellRendererPopup::on_popup_editing_done");
+    std::puts("cell_renderer_popup::on_popup_editing_done");
 
     if (editing_canceled_ || popup_entry_->get_editing_canceled())
     {
@@ -283,9 +285,9 @@ void CellRendererPopup::on_popup_editing_done()
     edited(popup_entry_->get_path(), popup_entry_->get_text());
 }
 
-void CellRendererPopup::on_popup_arrow_clicked()
+void cell_renderer_popup::on_popup_arrow_clicked()
 {
-    std::puts("CellRendererPopup::on_popup_arrow_clicked");
+    std::puts("cell_renderer_popup::on_popup_arrow_clicked");
 
     if (shown_)
     {
@@ -309,8 +311,8 @@ void CellRendererPopup::on_popup_arrow_clicked()
     signal_show_popup_(popup_entry_->get_path(), x, y, x + alloc.get_width(), y + alloc.get_height());
 }
 
-void CellRendererPopup::on_popup_hide()
+void cell_renderer_popup::on_popup_hide()
 {
-    std::puts("CellRendererPopup::on_popup_hide");
+    std::puts("cell_renderer_popup::on_popup_hide");
     popup_entry_ = nullptr;
 }
