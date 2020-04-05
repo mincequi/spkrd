@@ -532,12 +532,13 @@ void FilterLinkFrame::on_param_changed()
                             m_net->set_highpass_family(NET_LINKWITZRILEY);
                             break;
                     }
-                    /* capacitor */
-                    m_net->parts()[index].set_value(num_params[0] / (speaker.get_rdc() * cutoff)
+                    // capacitor
+                    m_net->parts()[index].set_value((num_params[0] / (speaker.get_rdc() * cutoff))
                                                     * 1000000);
                     m_net->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_net->parts()[index].set_value(num_params[1] * speaker.get_rdc() / cutoff * 1000);
+                    // inductor
+                    m_net->parts()[index].set_value((num_params[1] * speaker.get_rdc() / cutoff)
+                                                    * 1000);
                     m_net->parts()[index++].set_unit("m");
                     break;
                 case NET_ORDER_3RD:
