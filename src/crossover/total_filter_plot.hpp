@@ -34,12 +34,12 @@ class Crossover;
 /// This is a wrapper class for GSpeakersPlot
 /// The reason why we have this class is that we want an extra layer
 // (where we can connect signals etc) between the program and the plot widget.
-class TotalFilterPlot : public Gtk::Frame
+class total_filter_plot : public Gtk::Frame
 {
 public:
-    TotalFilterPlot();
+    total_filter_plot();
 
-    ~TotalFilterPlot() override;
+    ~total_filter_plot() override;
 
     void clear();
 

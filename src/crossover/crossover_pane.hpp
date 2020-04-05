@@ -29,7 +29,7 @@
 
 #include "filter_plot.hpp"
 #include "summedfreqrespplot.h"
-#include "totalfilterplot.h"
+#include "total_filter_plot.hpp"
 
 #include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
@@ -68,7 +68,7 @@ private:
     CrossoverTreeView m_crossover_treeview;
     crossover_history m_crossover_history;
     filter_plot m_filter_plot;
-    TotalFilterPlot m_total_filter_plot;
+    total_filter_plot m_total_filter_plot;
     SummedFreqRespPlot m_summed_freq_resp_plot;
     crossover_image_view m_crossover_image_view;
 
