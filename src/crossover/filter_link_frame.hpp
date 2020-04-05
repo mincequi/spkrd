@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __FILTER_LINK_FRAME_H
-#define __FILTER_LINK_FRAME_H
+#pragma once
 
 #include "crossover.hpp"
 #include "plot.hpp"
@@ -105,5 +104,3 @@ private:
     int my_filter_plot_index{-1};
     std::vector<GSpeakers::Point> points;
 };
-
-#endif
