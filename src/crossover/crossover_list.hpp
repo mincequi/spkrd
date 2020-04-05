@@ -47,7 +47,7 @@ public:
     std::vector<Crossover> const& data() const { return m_crossover_list; }
 
     // Remove all items
-    void clear();
+    void clear() { m_crossover_list.clear(); }
 
 protected:
     std::vector<Crossover> m_crossover_list;
