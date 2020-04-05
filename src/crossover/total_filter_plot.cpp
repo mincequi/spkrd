@@ -44,7 +44,7 @@ auto total_filter_plot::on_add_plot(std::vector<GSpeakers::Point> const& points,
                                     int& output_plot_index,
                                     Net* n) -> int
 {
-    auto const& plot_index = output_plot_index;
+    auto const plot_index = output_plot_index;
 
     /* Search for plot_index in the graph */
     auto const position = std::find(cbegin(m_nets), cend(m_nets), plot_index);
