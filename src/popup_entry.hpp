@@ -21,8 +21,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __POPUPENTRY_H
-#define __POPUPENTRY_H
+#pragma once
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/button.h>
@@ -31,12 +30,12 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/spinbutton.h>
 
-class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable
+class popup_entry : public Gtk::EventBox, public Gtk::CellEditable
 {
 public:
-    explicit PopupEntry(Glib::ustring path);
+    explicit popup_entry(Glib::ustring path);
 
-    ~PopupEntry() override = default;
+    ~popup_entry() override = default;
 
     auto get_path() const -> Glib::ustring const&;
 
@@ -57,7 +56,7 @@ protected:
     void start_editing_vfunc(GdkEvent* event) override;
 
 private:
-    using Self = PopupEntry;
+    using Self = popup_entry;
 
 private:
     void on_entry_activate();
@@ -72,5 +71,3 @@ private:
 
     sigc::signal0<void> m_signal_arrow_clicked;
 };
-
-#endif

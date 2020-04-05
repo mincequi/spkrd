@@ -27,7 +27,7 @@
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/window.h>
 
-class PopupEntry;
+class popup_entry;
 
 class cell_renderer_popup : public Gtk::CellRendererText
 {
@@ -36,7 +36,7 @@ public:
 
     ~cell_renderer_popup() override;
 
-    auto get_popup_entry() -> PopupEntry*;
+    auto get_popup_entry() -> popup_entry*;
     auto get_popup_window() -> Gtk::Window*;
 
     void set_focus_widget(Gtk::Widget& focus_widget);
@@ -85,7 +85,7 @@ private:
 
     Gtk::Window popup_window_;
     Gtk::Widget* focus_widget_{nullptr};
-    PopupEntry* popup_entry_{nullptr};
+    popup_entry* popup_entry_{nullptr};
     bool shown_{false};
     bool editing_canceled_{false};
 };

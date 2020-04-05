@@ -22,7 +22,7 @@
 */
 
 #include "cell_renderer_popup.hpp"
-#include "popupentry.h"
+#include "popup_entry.hpp"
 
 #include <gdkmm/general.h>
 #include <gdkmm/monitor.h>
@@ -59,7 +59,7 @@ cell_renderer_popup::cell_renderer_popup()
 
 cell_renderer_popup::~cell_renderer_popup() = default;
 
-auto cell_renderer_popup::get_popup_entry() -> PopupEntry* { return popup_entry_; }
+auto cell_renderer_popup::get_popup_entry() -> popup_entry* { return popup_entry_; }
 
 auto cell_renderer_popup::get_popup_window() -> Gtk::Window* { return &popup_window_; }
 
@@ -93,7 +93,7 @@ void cell_renderer_popup::get_size_vfunc(Gtk::Widget& widget,
     // We cache this because it takes really long to get the width.
     if (button_width_ < 0)
     {
-        button_width_ = PopupEntry::get_button_width();
+        button_width_ = popup_entry::get_button_width();
     }
 
     if (width != nullptr)
@@ -116,7 +116,7 @@ auto cell_renderer_popup::start_editing_vfunc(GdkEvent*,
         return nullptr;
     }
 
-    std::unique_ptr<PopupEntry> popup_entry(new PopupEntry(path));
+    std::unique_ptr<popup_entry> popup_entry(new popup_entry(path));
 
     popup_entry->signal_editing_done().connect(
         sigc::mem_fun(*this, &cell_renderer_popup::on_popup_editing_done));
