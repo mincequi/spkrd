@@ -759,15 +759,12 @@ void FilterLinkFrame::on_plot_crossover()
     {
         cmd += " -b -o " + spice_filename + ".out " + spice_filename;
     }
-#ifndef NDEBUG
+
     std::cout << "FilterLinkFrame::on_plot_crossover: running SPICE with \"" + cmd + "\"\n";
-#endif
 
     system(cmd.c_str());
 
-#ifndef NDEBUG
     std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done\n";
-#endif
 
     // extract spice output into a vector
     std::string spice_output_file = spice_filename + ".out";
