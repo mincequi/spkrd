@@ -769,34 +769,19 @@ void FilterLinkFrame::on_plot_crossover()
     std::cout << "FilterLinkFrame::on_plot_crossover: SPICE done\n";
 #endif
 
-    /* extract spice output into a vector */
+    // extract spice output into a vector
     std::string spice_output_file = spice_filename + ".out";
     std::ifstream fin(spice_output_file.c_str());
 
     if (fin.good())
     {
-        bool output = false;
         points.clear();
         while (!fin.eof())
         {
             std::vector<char> buffer(100);
             fin.getline(buffer.data(), 100, '\n');
-            if (g_settings.getValueBool("SPICEUseGNUCAP"))
-            {
-                if (buffer[0] == ' ')
-                {
-                    output = true;
-                }
-            }
-            else
-            {
-                if (buffer[0] == '0')
-                {
-                    output = true;
-                }
-            }
 
-            if (output)
+            if ((g_settings.getValueBool("SPICEUseGNUCAP") && buffer[0] == ' ') || buffer[0] == '0')
             {
                 if (g_settings.getValueBool("SPICEUseGNUCAP"))
                 {
