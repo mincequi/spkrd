@@ -26,5 +26,6 @@ readability-simplify-boolean-expr,\
 bugprone-incorrect-roundings,\
 modernize-use-nullptr,\
 modernize-loop-convert,\
-modernize-use-equals-default \
+modernize-use-equals-default,\
+modernize-use-trailing-return-type \
 -p $(pwd)/build/ -fix -format -j 12
