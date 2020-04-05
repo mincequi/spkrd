@@ -116,21 +116,21 @@ auto cell_renderer_popup::start_editing_vfunc(GdkEvent*,
         return nullptr;
     }
 
-    std::unique_ptr<popup_entry> popup_entry(new popup_entry(path));
+    std::unique_ptr<popup_entry> popup_entry_box(new popup_entry(path));
 
-    popup_entry->signal_editing_done().connect(
+    popup_entry_box->signal_editing_done().connect(
         sigc::mem_fun(*this, &cell_renderer_popup::on_popup_editing_done));
-    // popup_entry->signal_arrow_clicked().connect(sigc::mem_fun(*this,
+    // popup_entry_box->signal_arrow_clicked().connect(sigc::mem_fun(*this,
     // &cell_renderer_popup::on_popup_arrow_clicked));
-    popup_entry->signal_hide().connect(sigc::mem_fun(*this, &cell_renderer_popup::on_popup_hide));
+    popup_entry_box->signal_hide().connect(sigc::mem_fun(*this, &cell_renderer_popup::on_popup_hide));
 
     std::cout << property_text() << std::endl;
 
-    popup_entry->set_text(property_text());
-    popup_entry->show();
+    popup_entry_box->set_text(property_text());
+    popup_entry_box->show();
 
     // Release auto_ptr<> ownership, and let gtkmm manage the widget.
-    popup_entry_ = Gtk::manage(popup_entry.release());
+    popup_entry_ = Gtk::manage(popup_entry_box.release());
 
     return popup_entry_;
 }
