@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_CROSSOVERLIST_H
-#define __GFILTER_CROSSOVERLIST_H
+#pragma once
 
 #include "common.h"
 #include "crossover.hpp"
@@ -52,5 +51,3 @@ public:
 protected:
     std::vector<Crossover> m_data;
 };
-
-#endif
