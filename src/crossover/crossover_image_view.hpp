@@ -29,13 +29,11 @@
 #include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
-#include <pangomm/layout.h>
-
 #include <string>
 #include <vector>
 
 /// The crossover_image_view is a widget that will display the
-/// current crossover as an image of the component layout.
+/// current crossover as an image of the component layout
 class crossover_image_view : public Gtk::DrawingArea
 {
 public:
@@ -44,12 +42,13 @@ public:
 private:
     bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
 
-    bool on_expose_event(GdkEventExpose* event);
-    bool on_configure_event(GdkEventConfigure* event) override;
+    [[deprecated]] bool on_expose_event(GdkEventExpose* event);
+    [[deprecated]] bool on_configure_event(GdkEventConfigure* event) override;
 
     void on_crossover_selected(Crossover* selected_crossover);
     void on_speakerlist_selected(driver_list* selected_speaker_list);
     void on_net_modified();
+
     void on_settings_changed(const std::string& s);
 
     void redraw(Cairo::RefPtr<Cairo::Context> const& context);
@@ -182,13 +181,6 @@ private:
 private:
     bool m_visible{false};
     bool m_scale_image_parts;
-
-    // /// Pixel map
-    // Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
-    // /// Graphics context
-    // Glib::RefPtr<Gdk::GC> m_refGC;
-    //
-    // Glib::RefPtr<Gdk::Colormap> m_refColormap;
 
     Glib::RefPtr<Pango::Layout> m_refLayout;
     Gdk::RGBA black, white;
