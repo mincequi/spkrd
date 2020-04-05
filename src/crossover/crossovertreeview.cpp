@@ -176,7 +176,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
     signal_net_modified_by_user(n);
 }
 
-CrossoverTreeView::ModelColumns::ModelColumns()
+CrossoverTreeView::model_columns::model_columns()
 {
     add(id_string);
     add(id);

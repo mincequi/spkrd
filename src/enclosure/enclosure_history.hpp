@@ -97,7 +97,7 @@ protected:
     enclosure_list m_box_list;
 
     // This is used in the treemodel
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModelColumnRecord
     {
         Gtk::TreeModelColumn<int> type;
         Gtk::TreeModelColumn<Glib::ustring> id_string;
@@ -107,7 +107,7 @@ protected:
         Gtk::TreeModelColumn<double> vb2;
         Gtk::TreeModelColumn<double> fb2;
 
-        ModelColumns()
+        model_columns()
         {
             add(type);
             add(id_string);
@@ -118,7 +118,7 @@ protected:
             add(fb2);
         }
     };
-    ModelColumns m_columns;
+    model_columns m_columns;
 
     std::string m_filename;
     bool new_xml_pressed;

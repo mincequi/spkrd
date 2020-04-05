@@ -62,7 +62,7 @@ protected:
     // Pointer to currently selected crossover
     Crossover* cover;
 
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModelColumnRecord
     {
         Gtk::TreeModelColumn<Glib::ustring> id_string;
         Gtk::TreeModelColumn<int> id;
@@ -71,10 +71,10 @@ protected:
         Gtk::TreeModelColumn<Glib::ustring> unit;
         Gtk::TreeModelColumn<bool> editable;
         Gtk::TreeModelColumn<bool> visible;
-        ModelColumns();
+        model_columns();
     };
 
-    const ModelColumns m_columns;
+    const model_columns m_columns;
 };
 
 #endif

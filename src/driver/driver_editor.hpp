@@ -140,10 +140,10 @@ protected:
     void set_entries_sensitive(bool value);
 
 protected:
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModelColumnRecord
     {
     public:
-        ModelColumns()
+        model_columns()
         {
             add(id);
             add(type);
@@ -244,7 +244,7 @@ protected:
     std::unique_ptr<driver_list> m_driver_list{nullptr};
     driver_frequency_response_plot plot;
 
-    ModelColumns m_columns;
+    model_columns m_columns;
     std::string m_filename;
 };
 
