@@ -76,8 +76,10 @@ int plot::add_plot(std::vector<GSpeakers::Point> const& ref_point_vector, Gdk::C
 
     std::vector<Gdk::Point> points;
 
-    for (auto& point : ref_point_vector)
+    for (auto const& ref_point : ref_point_vector)
     {
+        auto point = ref_point;
+
         int x, y;
 
         if (m_upper_x == 20000)
