@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_COLOR
-#define __GSPEAKERS_COLOR
+#pragma once
 
 #include <string>
 #include <vector>
@@ -39,5 +38,3 @@ private:
     std::vector<std::string> m_colors;
     int m_counter = 0;
 };
-
-#endif
