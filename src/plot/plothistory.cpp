@@ -157,7 +157,7 @@ void PlotHistory::create_model() { m_refListStore = Gtk::ListStore::create(m_col
 void PlotHistory::add_columns()
 {
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("Color"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -193,7 +193,7 @@ void PlotHistory::add_columns()
         pColumn->add_attribute(pRenderer->property_text(), m_columns.speaker_string);
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -202,7 +202,7 @@ void PlotHistory::add_columns()
                                     sigc::mem_fun(*this, &PlotHistory::type_cell_data_func));
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("Vb1"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -211,7 +211,7 @@ void PlotHistory::add_columns()
                                     sigc::mem_fun(*this, &PlotHistory::vb1_cell_data_func));
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
 
         int cols_count = m_TreeView.append_column(_("Fb1"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
