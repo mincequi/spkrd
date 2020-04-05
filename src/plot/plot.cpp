@@ -515,6 +515,7 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
                                 xaxis_y_position + 5);
         }
     }
+    context->set_line_width(1.0);
 }
 
 void plot::draw_linear_grid(Cairo::RefPtr<Cairo::Context> const& context)
@@ -548,6 +549,7 @@ void plot::draw_linear_grid(Cairo::RefPtr<Cairo::Context> const& context)
         context->line_to(BOX_FRAME_SIZE + i * x_inc_pixels, xaxis_y_position + 3);
         context->stroke();
     }
+    context->set_line_width(1.0);
 }
 
 void plot::draw_text_box(Cairo::RefPtr<Cairo::Context> const& context,
