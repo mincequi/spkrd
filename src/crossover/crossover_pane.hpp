@@ -24,7 +24,7 @@
 
 #include "crossover_history.hpp"
 #include "crossover_image_view.hpp"
-#include "crossovertreeview.h"
+#include "crossover_tree_view.hpp"
 #include "crossover_wizard.hpp"
 
 #include "filter_plot.hpp"
@@ -65,7 +65,7 @@ private:
     Gtk::Notebook m_plot_notebook;
 
     crossover_wizard m_crossover_wizard;
-    CrossoverTreeView m_crossover_treeview;
+    crossover_tree_view m_crossover_treeview;
     crossover_history m_crossover_history;
     filter_plot m_filter_plot;
     total_filter_plot m_total_filter_plot;

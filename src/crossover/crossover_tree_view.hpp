@@ -30,11 +30,12 @@
 #include <gtkmm/treeview.h>
 
 /// A TreeView that displays the currently selected crossover
-class CrossoverTreeView : public Gtk::Frame
+class crossover_tree_view : public Gtk::Frame
 {
 public:
-    CrossoverTreeView();
-    ~CrossoverTreeView() override;
+    crossover_tree_view();
+
+    ~crossover_tree_view() override;
 
 public:
     void on_crossover_selected(Crossover* new_crossover);
@@ -42,14 +43,16 @@ public:
 protected:
     void on_realize() override;
 
-    void on_cell_edited_value(const Glib::ustring& path_string, const Glib::ustring& new_text);
+    void on_cell_edited_value(Glib::ustring const& path_string, Glib::ustring const& new_text);
 
     void on_net_modified_by_wizard();
 
-    void value_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+    void value_cell_data_func(Gtk::CellRenderer* cell, Gtk::TreeModel::iterator const& iter);
 
     virtual void create_model();
+
     virtual void add_columns();
+
     virtual void treestore_add_item(CellItem_Crossover const& foo);
 
 protected:

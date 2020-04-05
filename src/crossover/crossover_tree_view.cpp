@@ -83,7 +83,7 @@ void crossover_tree_view::on_cell_edited_value(const Glib::ustring& path_string,
 
 #ifndef NDEBUG
     std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0] << ":"
-              << path[1] << ":" << path[2] << ":" << path[3] << '\n';
+              << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
 #endif
     /* Since the stupid signals doesn't seem to work we have to go through the data-containers
        and update values for the particular part we change... */
@@ -171,7 +171,7 @@ void crossover_tree_view::on_cell_edited_value(const Glib::ustring& path_string,
         }
     }
 #ifndef NDEBUG
-    std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id] << '\n';
+    std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id] << "\n";
 #endif
     // Tell others that we have modified a part
     signal_net_modified_by_user(n);

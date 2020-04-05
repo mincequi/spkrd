@@ -27,7 +27,7 @@
 #include <vector>
 
 /// This is a cellitem for a crossover used in the current crossover treeview
-/// CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
+/// crossover_tree_view syncs this class with the underlying data container (the Crossover class)
 class CellItem_Crossover
 {
 public:
