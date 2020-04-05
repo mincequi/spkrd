@@ -82,10 +82,9 @@ public:
 
     std::string to_SPICE(driver& s, bool use_gnucap = false);
 
-    /// Use this to add a component to the net
-    std::vector<passive_component>& parts() { return m_parts; }
-    /// Use this to get the parts
-    std::vector<passive_component> const& parts() const { return m_parts; }
+    auto parts() -> std::vector<passive_component>& { return m_parts; }
+
+    auto parts() const -> std::vector<passive_component> const& { return m_parts; }
 
     int get_highpass_order() const { return m_highpass_order; }
 
@@ -107,43 +106,19 @@ public:
 
     bool get_inv_pot() const { return m_inv_pol; }
 
-    /*
-     * We return parts by ref to so that we do not copy these parts.
-     * For example, if we have:
-     * filter_network n = net;
-     * n.get_imp_corr_R().set_value(0.2);
-     *
-     * we don't access the part stored in n, we get a copy of that
-     * part that we modify, but if we return a ref we modify the
-     * part stored in filter_network
-     */
     auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
-
-    auto get_imp_corr_R() const -> passive_component const& { return m_imp_corr_R; }
 
     auto get_imp_corr_C() -> passive_component& { return m_imp_corr_C; }
 
-    auto get_imp_corr_C() const -> passive_component const& { return m_imp_corr_C; }
-
     auto get_damp_R1() -> passive_component& { return m_damp_R1; }
-
-    auto get_damp_R1() const -> passive_component const& { return m_damp_R1; }
 
     auto get_damp_R2() -> passive_component& { return m_damp_R2; }
 
-    auto get_damp_R2() const -> passive_component const& { return m_damp_R2; }
-
     auto get_res_R() -> passive_component& { return m_res_R; }
-
-    auto get_res_R() const -> passive_component const& { return m_res_R; }
 
     auto get_res_C() -> passive_component& { return m_res_C; }
 
-    auto get_res_C() const -> passive_component const& { return m_res_C; }
-
     auto get_res_L() -> passive_component& { return m_res_L; }
-
-    auto get_res_L() const -> passive_component const& { return m_res_L; }
 
     void set_highpass_order(int order);
 
