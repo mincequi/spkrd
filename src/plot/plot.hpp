@@ -99,7 +99,7 @@ public:
          int y_zero_freq = 0,
          bool enable_sec_scale = false);
 
-    int add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color const& colour);
+    int add_plot(std::vector<GSpeakers::Point> const& points, Gdk::Color const& colour);
 
     void remove_plot(int n);
 
@@ -113,7 +113,9 @@ public:
 
     void select_plot(int index);
 
-    void replace_plot(int index, std::vector<GSpeakers::Point>& p, Gdk::Color const& ref_color);
+    void replace_plot(int plot_index,
+                      std::vector<GSpeakers::Point> const& p,
+                      Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
 

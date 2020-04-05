@@ -61,7 +61,7 @@ bool plot::on_configure_event(GdkEventConfigure* event)
     return true;
 }
 
-int plot::add_plot(std::vector<GSpeakers::Point>& ref_point_vector, Gdk::Color const& ref_color)
+int plot::add_plot(std::vector<GSpeakers::Point> const& ref_point_vector, Gdk::Color const& ref_color)
 {
     auto const& allocation = get_allocation();
 
@@ -169,10 +169,12 @@ void plot::draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
     context->restore();
 }
 
-void plot::replace_plot(int index, std::vector<GSpeakers::Point>& points, Gdk::Color const& ref_color)
+void plot::replace_plot(int const plot_index,
+                        std::vector<GSpeakers::Point> const& points,
+                        Gdk::Color const& ref_color)
 {
-    m_points[index] = points;
-    m_colors[index] = ref_color;
+    m_points[plot_index] = points;
+    m_colors[plot_index] = ref_color;
 }
 
 void plot::remove_plot(int n)
