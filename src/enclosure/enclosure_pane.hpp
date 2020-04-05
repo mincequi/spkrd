@@ -55,10 +55,10 @@ protected:
     void on_add_plot(enclosure*, driver*, Gdk::Color&);
 
 private:
-    enclosure_editor box_editor;
-    enclosure_history box_history;
-    PlotHistory plot_history;
-    GSpeakersBoxPlot box_plot;
+    enclosure_editor m_box_editor;
+    enclosure_history m_box_history;
+    PlotHistory m_plot_history;
+    GSpeakersBoxPlot m_box_plot;
 
     Gtk::VPaned m_edit_vpaned;
     Gtk::VPaned m_plot_vpaned;
