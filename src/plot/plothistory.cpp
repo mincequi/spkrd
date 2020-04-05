@@ -48,10 +48,10 @@ PlotHistory::PlotHistory() : Gtk::Frame(""), m_vbox()
     m_TreeView.set_rules_hint();
 
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-    selection->signal_changed().connect(mem_fun(*this, &PlotHistory::on_selection_changed));
+    selection->signal_changed().connect(sigc::mem_fun(*this, &PlotHistory::on_selection_changed));
 
-    signal_box_modified.connect(mem_fun(*this, &PlotHistory::on_box_modified));
-    signal_add_plot.connect(mem_fun(*this, &PlotHistory::on_add_plot));
+    signal_box_modified.connect(sigc::mem_fun(*this, &PlotHistory::on_box_modified));
+    signal_add_plot.connect(sigc::mem_fun(*this, &PlotHistory::on_add_plot));
 
     add_columns();
 
@@ -198,7 +198,8 @@ void PlotHistory::add_columns()
         int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::type_cell_data_func));
+        pColumn->set_cell_data_func(*pRenderer,
+                                    sigc::mem_fun(*this, &PlotHistory::type_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -206,7 +207,8 @@ void PlotHistory::add_columns()
         int cols_count = m_TreeView.append_column(_("Vb1"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::vb1_cell_data_func));
+        pColumn->set_cell_data_func(*pRenderer,
+                                    sigc::mem_fun(*this, &PlotHistory::vb1_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -214,7 +216,8 @@ void PlotHistory::add_columns()
         int cols_count = m_TreeView.append_column(_("Fb1"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer, mem_fun(*this, &PlotHistory::fb1_cell_data_func));
+        pColumn->set_cell_data_func(*pRenderer,
+                                    sigc::mem_fun(*this, &PlotHistory::fb1_cell_data_func));
     }
 }
 
