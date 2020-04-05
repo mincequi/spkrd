@@ -30,12 +30,12 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
-class FilterLinkFrame : public Gtk::Frame
+class filter_link_frame : public Gtk::Frame
 {
 public:
-    FilterLinkFrame(filter_network* net, const std::string& description, driver_list* driver_list);
+    filter_link_frame(filter_network* net, std::string const& description, driver_list* speaker_list);
 
-    ~FilterLinkFrame() override;
+    ~filter_link_frame() override;
 
 private:
     void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);

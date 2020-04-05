@@ -60,61 +60,55 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
         {
             if (index == 0)
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Woofer/midrange filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Woofer/midrange filter"), m_speaker_list)));
             }
             else
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Tweeter filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else if (type == CROSSOVER_TYPE_THREEWAY)
         {
             if (index == 0)
             {
-                m_vbox.pack_start(
-                    *Gtk::make_managed<FilterLinkFrame>(&network, _("Woofer filter"), m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Woofer filter"), m_speaker_list)));
             }
             else if (index == 1)
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Midrange filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Midrange filter"), m_speaker_list)));
             }
             else
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Tweeter filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else if (type == (CROSSOVER_TYPE_TWOWAY | CROSSOVER_TYPE_LOWPASS))
         {
             if (index == 0)
             {
-                m_vbox.pack_start(
-                    *Gtk::make_managed<FilterLinkFrame>(&network, _("Woofer filter"), m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Woofer filter"), m_speaker_list)));
             }
             else if (index == 1)
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Woofer/midrange filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Woofer/midrange filter"), m_speaker_list)));
             }
             else
             {
-                m_vbox.pack_start(*Gtk::make_managed<FilterLinkFrame>(&network,
-                                                                      _("Tweeter filter"),
-                                                                      m_speaker_list));
+                m_vbox.pack_start(*Gtk::manage(
+                    new filter_link_frame(&network, _("Tweeter filter"), m_speaker_list)));
             }
         }
         else
         {
             m_vbox.pack_start(
-                *Gtk::make_managed<FilterLinkFrame>(&network, _("filter"), m_speaker_list));
+                *Gtk::manage(new filter_link_frame(&network, _("filter"), m_speaker_list)));
         }
         ++index;
     }

@@ -18,7 +18,7 @@
 #ifndef __CROSSOVER_WIZARD_H
 #define __CROSSOVER_WIZARD_H
 
-#include "filterlinkframe.h"
+#include "filter_link_frame.hpp"
 #include "driver_list.hpp"
 
 #include <gtkmm/box.h>

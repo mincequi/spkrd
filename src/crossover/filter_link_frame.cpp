@@ -32,7 +32,7 @@
 
 filter_link_frame::filter_link_frame(filter_network* net,
                                      std::string const& description,
-                                     driver_list* driver_list)
+                                     driver_list* speaker_list)
     : Gtk::Frame(""),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -671,7 +671,7 @@ void filter_link_frame::on_net_updated(filter_network* net)
     if (m_net->get_id() == net->get_id())
     {
 #ifdef OUPUTDEBUG
-        std::puts("filter_link_frame::on_net_updated");
+        std::cout << "filter_link_frame::on_net_updated" << std::endl;
 #endif
 
         if (g_settings.getValueBool("AutoUpdateFilterPlots"))
@@ -687,7 +687,7 @@ void filter_link_frame::on_clear_and_plot()
     on_plot_crossover();
 }
 
-void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
+void filter_link_frame::on_speakerlist_loaded(driver_list* speaker_list)
 {
 #ifndef NDEBUG
     std::puts("filter_link_frame::on_speakerlist_loaded");
