@@ -51,7 +51,9 @@ public:
     crossover_history();
 
     ~crossover_history() override;
-    /* public callbacks, for use in container class */
+
+    // public callbacks, for use in container class
+
     void on_open_xml();
 
     void on_append_xml();
