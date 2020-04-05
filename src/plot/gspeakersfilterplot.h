@@ -39,14 +39,18 @@ public:
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*);
+    int on_add_plot(std::vector<GSpeakers::Point> const& points,
+                    Gdk::Color const& color,
+                    int& i,
+                    Net* n);
 
 private:
-    plot m_plot;
-
     [[deprecated]] bool on_delete_event(GdkEventAny* event) override;
 
     void on_crossover_selected(Crossover*);
+
+private:
+    plot m_plot;
 };
 
 #endif

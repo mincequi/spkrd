@@ -30,9 +30,8 @@
 #include <vector>
 
 /// This is a wrapper class for GSpeakersPlot
-/// The reason why we have this class is that we want
-/// an extra layer (where we can connect signals and so on)
-/// between the program and the plot widget.
+/// The reason why we have this class is that we want an extra layer
+// (where we can connect signals etc) between the program and the plot widget.
 class TotalFilterPlot : public Gtk::Frame
 {
 public:
@@ -42,7 +41,7 @@ public:
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*);
+    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*);
 
 private:
     bool on_delete_event(GdkEventAny* event) override;

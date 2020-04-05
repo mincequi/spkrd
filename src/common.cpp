@@ -43,7 +43,8 @@ sigc::signal0<void> signal_net_modified_by_wizard;
 sigc::signal1<void, filter_network*> signal_net_modified_by_user;
 sigc::signal1<void, int> signal_new_crossover;
 sigc::signal0<void> signal_plot_crossover;
-sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*> signal_add_crossover_plot;
+sigc::signal4<int, std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*>
+    signal_add_crossover_plot;
 sigc::signal0<void> signal_save_open_files;
 
 namespace GSpeakers

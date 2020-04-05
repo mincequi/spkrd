@@ -80,15 +80,15 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
 }
 
 int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
-                                    Gdk::Color& color,
-                                    int* output_plot_index,
-                                    filter_network* n)
+                                    Gdk::Color const& color,
+                                    int& output_plot_index,
+                                    Net* n)
 {
 #ifndef NDEBUG
     std::puts("SummedFreqRespPlot::on_add_plot");
 #endif
 
-    auto const& plot_index = *output_plot_index;
+    auto const& plot_index = output_plot_index;
 
     driver s;
     if (m_speakerlist != nullptr)

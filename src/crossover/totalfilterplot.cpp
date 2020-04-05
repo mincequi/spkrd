@@ -37,12 +37,12 @@ TotalFilterPlot::TotalFilterPlot() : m_plot(1, 20000), m_color("blue")
 
 TotalFilterPlot::~TotalFilterPlot() = default;
 
-int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
-                                 Gdk::Color& color,
-                                 int* output_plot_index,
-                                 filter_network* n)
+int TotalFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+                                 Gdk::Color const& color,
+                                 int& output_plot_index,
+                                 Net* n)
 {
-    auto const& plot_index = *output_plot_index;
+    auto const& plot_index = output_plot_index;
 
     /* Search for plot_index in the graph */
     auto const position = std::find(cbegin(m_nets), cend(m_nets), plot_index);
