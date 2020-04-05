@@ -35,7 +35,7 @@ filter_network::filter_network(int type,
                                int family,
                                int adv_imp_model,
                                bool inv_pol)
-    : GSpeakersObject(),
+    : GSpeakersObject(type),
       m_highpass_order(highpass_order),
       m_lowpass_order(lowpass_order),
       m_has_imp_corr(has_imp_corr),
@@ -43,12 +43,9 @@ filter_network::filter_network(int type,
       m_has_res(has_res),
       m_lowpass_family(family),
       m_highpass_family(family),
-      m_speaker(""),
       m_adv_imp_model(adv_imp_model),
       m_inv_pol(inv_pol)
 {
-    m_type = type;
-
     // Init lowpass filter if present
     if (m_type == NET_TYPE_LOWPASS)
     {
