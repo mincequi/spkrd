@@ -42,15 +42,15 @@ public:
     // Print part data to stdout
     friend auto operator<<(std::ostream& o, const crossover_list& crossover_list) -> std::ostream&;
 
-    auto data() -> std::vector<Crossover>& { return m_crossover_list; }
+    auto data() -> std::vector<Crossover>& { return m_data; }
 
-    auto data() const -> std::vector<Crossover> const& { return m_crossover_list; }
+    auto data() const -> std::vector<Crossover> const& { return m_data; }
 
     // Remove all items
-    void clear() { m_crossover_list.clear(); }
+    void clear() { m_data.clear(); }
 
 protected:
-    std::vector<Crossover> m_crossover_list;
+    std::vector<Crossover> m_data;
 };
 
 #endif
