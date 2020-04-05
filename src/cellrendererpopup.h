@@ -21,8 +21,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __CELLRENDERER_POPUP_H
-#define __CELLRENDERER_POPUP_H
+#pragma once
 
 #include <gdkmm/rectangle.h>
 #include <gtkmm/cellrenderertext.h>
@@ -41,6 +40,7 @@ public:
     Gtk::Window* get_popup_window();
 
     void set_focus_widget(Gtk::Widget& focus_widget);
+
     Gtk::Widget* get_focus_widget();
 
     sigc::signal5<void, const Glib::ustring&, int, int, int, int>& signal_show_popup();
@@ -70,7 +70,7 @@ protected:
 private:
     bool on_button_press_event(GdkEventButton* event);
     bool on_key_press_event(GdkEventKey* event);
-    void on_style_changed(const Glib::RefPtr<Gtk::Style>& previous_style);
+    void on_style_changed(Glib::RefPtr<Gtk::Style> const& previous_style);
 
     void on_popup_editing_done();
     void on_popup_arrow_clicked();
@@ -79,6 +79,7 @@ private:
 private:
     using Self = CellRendererPopup;
 
+private:
     sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;
     sigc::signal0<void> signal_hide_popup_;
 
@@ -91,5 +92,3 @@ private:
     bool shown_{false};
     bool editing_canceled_{false};
 };
-
-#endif
