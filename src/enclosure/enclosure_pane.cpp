@@ -154,7 +154,8 @@ auto enclosure_pane::get_menu() -> Gtk::MenuItem&
     enclosure_submenu->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
     {
         auto delete_plot = Gtk::manage(new Gtk::MenuItem("Delete Plot"));
-        delete_plot->signal_activate().connect(sigc::mem_fun(m_plot_history, &PlotHistory::on_remove));
+        delete_plot->signal_activate().connect(
+            sigc::mem_fun(m_plot_history, &plot_history::on_remove));
         delete_plot->set_sensitive(false);
         enclosure_submenu->append(*delete_plot);
     }
@@ -237,7 +238,7 @@ auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
                                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR)),
                                     _("Delete Plot")));
             tool_button->signal_clicked().connect(
-                sigc::mem_fun(m_plot_history, &PlotHistory::on_remove));
+                sigc::mem_fun(m_plot_history, &plot_history::on_remove));
             m_tbar->append(*tool_button);
         }
 

@@ -48,12 +48,12 @@
  * The list contains a list of all enclosures...you can select
  * to plot, not plot or whatever for each enclosure.
  */
-class PlotHistory : public Gtk::Frame
+class plot_history : public Gtk::Frame
 {
 public:
-    PlotHistory();
+    plot_history();
 
-    ~PlotHistory() override;
+    ~plot_history() override;
 
     void on_remove();
 

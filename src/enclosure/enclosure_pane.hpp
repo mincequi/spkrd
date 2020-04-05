@@ -25,7 +25,7 @@
 #include "enclosure_history.hpp"
 #include "common.h"
 #include "box_plot.hpp"
-#include "plothistory.h"
+#include "plot_history.hpp"
 
 #include <gtkmm/handlebox.h>
 #include <gtkmm/menu.h>
@@ -57,7 +57,7 @@ protected:
 private:
     enclosure_editor m_box_editor;
     enclosure_history m_box_history;
-    PlotHistory m_plot_history;
+    plot_history m_plot_history;
     box_plot m_box_plot;
 
     Gtk::VPaned m_edit_vpaned;
