@@ -31,45 +31,46 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/spinbutton.h>
 
-class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
+class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable
+{
 public:
-  explicit PopupEntry(Glib::ustring path);
+    explicit PopupEntry(Glib::ustring path);
 
-  ~PopupEntry() override = default;
+    ~PopupEntry() override = default;
 
-  auto get_path() const -> Glib::ustring const&;
+    auto get_path() const -> Glib::ustring const&;
 
-  void set_text(Glib::ustring const& text);
+    void set_text(Glib::ustring const& text);
 
-  auto get_text() const -> Glib::ustring;
+    auto get_text() const -> Glib::ustring;
 
-  void select_region(int start_pos, int end_pos);
+    void select_region(int start_pos, int end_pos);
 
-  auto get_editing_canceled() const -> bool;
+    auto get_editing_canceled() const -> bool;
 
-  static auto get_button_width() -> int;
+    static auto get_button_width() -> int;
 
-  auto signal_arrow_clicked() -> sigc::signal0<void>&;
+    auto signal_arrow_clicked() -> sigc::signal0<void>&;
 
-  protected:
-  auto on_key_press_event(GdkEventKey* event) -> bool override;
-  void start_editing_vfunc(GdkEvent* event) override;
-
-private:
-  using Self = PopupEntry;
+protected:
+    auto on_key_press_event(GdkEventKey* event) -> bool override;
+    void start_editing_vfunc(GdkEvent* event) override;
 
 private:
-  void on_entry_activate();
-  auto on_entry_key_press_event(GdkEventKey* event) -> bool;
+    using Self = PopupEntry;
 
-  private:
-  Glib::ustring m_path;
-  Gtk::Entry* m_entry;
-  Gtk::SpinButton* m_spin_button;
-  Glib::RefPtr<Gtk::Adjustment> m_spin_digits;
-  bool m_editing_canceled;
+private:
+    void on_entry_activate();
+    auto on_entry_key_press_event(GdkEventKey* event) -> bool;
 
-  sigc::signal0<void> m_signal_arrow_clicked;
+private:
+    Glib::ustring m_path;
+    Gtk::Entry* m_entry;
+    Gtk::SpinButton* m_spin_button;
+    Glib::RefPtr<Gtk::Adjustment> m_spin_digits;
+    bool m_editing_canceled;
+
+    sigc::signal0<void> m_signal_arrow_clicked;
 };
 
 #endif
