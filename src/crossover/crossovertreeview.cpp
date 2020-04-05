@@ -18,6 +18,7 @@
 */
 
 #include "crossovertreeview.h"
+
 #include "cellrendererpopup.h"
 #include "common.h"
 #include "popupentry.h"
