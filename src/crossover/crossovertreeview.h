@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_CROSSOVERTREEVIEW
-#define __GSPEAKERS_CROSSOVERTREEVIEW
+#pragma once
 
 #include "cellitemcrossover.h"
 #include "crossover.hpp"
@@ -51,8 +50,9 @@ protected:
 
     virtual void create_model();
     virtual void add_columns();
-    virtual void treestore_add_item(const CellItem_Crossover& foo);
+    virtual void treestore_add_item(CellItem_Crossover const& foo);
 
+protected:
     Gtk::VBox m_VBox;
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
@@ -76,5 +76,3 @@ protected:
 
     const model_columns m_columns;
 };
-
-#endif
