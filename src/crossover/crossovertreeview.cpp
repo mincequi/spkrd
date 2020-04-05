@@ -170,7 +170,7 @@ void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
         }
     }
 #ifndef NDEBUG
-    std::cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id] << std::endl;
+    std::cout << "CrossoverTreeView::on_cell_edited_value: Id = " << row[m_columns.id] << '\n';
 #endif
     // Tell others that we have modified a part
     signal_net_modified_by_user(n);
