@@ -493,7 +493,7 @@ void FilterLinkFrame::on_param_changed()
         {
             m_net->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
 
-            double cutoff = m_higher_co_freq_spinbutton->get_value();
+            auto const cutoff = m_higher_co_freq_spinbutton->get_value();
 
             switch (m_net->get_highpass_order())
             {
