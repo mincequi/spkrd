@@ -37,7 +37,7 @@ namespace
 {
 bool grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_time)
 {
-    std::cout << "grab_on_window\n";
+    std::puts("grab_on_window");
     return true;
 }
 } // anonymous namespace
@@ -134,7 +134,7 @@ Gtk::CellEditable* CellRendererPopup::start_editing_vfunc(GdkEvent*,
 
 void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2)
 {
-    std::cout << "CellRendererPopup::on_show_popup\n";
+    std::puts("CellRendererPopup::on_show_popup");
     // I'm not sure this is ok to do, but we need to show the window to be
     // able to get the allocation right.
     popup_window_.move(-500, -500);
@@ -190,7 +190,7 @@ void CellRendererPopup::on_show_popup(const Glib::ustring& path, int x1, int y1,
 
 void CellRendererPopup::on_hide_popup()
 {
-    std::cout << "CellRendererPopup::on_hide_popup\n";
+    std::puts("CellRendererPopup::on_hide_popup");
     gtk_grab_remove(popup_window_.Gtk::Widget::gobj());
     popup_window_.hide();
 
@@ -206,7 +206,7 @@ void CellRendererPopup::on_hide_popup()
 
 bool CellRendererPopup::on_button_press_event(GdkEventButton* event)
 {
-    std::cout << "CellRendererPopup::on_button_press\n";
+    std::puts("CellRendererPopup::on_button_press");
 
     if (event->button != 1) return false;
 
@@ -239,7 +239,7 @@ bool CellRendererPopup::on_button_press_event(GdkEventButton* event)
 
 bool CellRendererPopup::on_key_press_event(GdkEventKey* event)
 {
-    std::cout << "CellRendererPopup::on_key_press\n";
+    std::puts("CellRendererPopup::on_key_press");
 
     switch (event->keyval)
     {
@@ -269,15 +269,20 @@ void CellRendererPopup::on_style_changed(const Glib::RefPtr<Gtk::Style>&)
 
 void CellRendererPopup::on_popup_editing_done()
 {
-    std::cout << "CellRendererPopup::on_popup_editing_done\n";
-    if (editing_canceled_ || popup_entry_->get_editing_canceled()) return;
+    std::puts("CellRendererPopup::on_popup_editing_done");
+
+    if (editing_canceled_ || popup_entry_->get_editing_canceled())
+    {
+        return;
+    }
 
     edited(popup_entry_->get_path(), popup_entry_->get_text());
 }
 
 void CellRendererPopup::on_popup_arrow_clicked()
 {
-    std::cout << "CellRendererPopup::on_popup_arrow_clicked\n";
+    std::puts("CellRendererPopup::on_popup_arrow_clicked");
+
     if (shown_)
     {
         editing_canceled_ = true;
@@ -299,6 +304,6 @@ void CellRendererPopup::on_popup_arrow_clicked()
 
 void CellRendererPopup::on_popup_hide()
 {
-    std::cout << "CellRendererPopup::on_popup_hide\n";
+    std::puts("CellRendererPopup::on_popup_hide");
     popup_entry_ = nullptr;
 }
