@@ -18,8 +18,7 @@
  * USA
  */
 
-#ifndef __TOTAL_FILTER_PLOT
-#define __TOTAL_FILTER_PLOT
+#pragma once
 
 #include "plot.hpp"
 
@@ -58,5 +57,3 @@ private:
     Gdk::Color m_color;
     std::vector<std::vector<GSpeakers::Point>> m_points;
 };
-
-#endif
