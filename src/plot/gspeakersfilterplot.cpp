@@ -33,18 +33,18 @@ GSpeakersFilterPlot::GSpeakersFilterPlot() : m_plot(1, 20000)
     show_all();
 }
 
-int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
-                                     Gdk::Color& color,
-                                     int* i,
-                                     filter_network* n)
+int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+                                     Gdk::Color const& color,
+                                     int& i,
+                                     Net* n)
 {
-    if (*i == -1)
+    if (i == -1)
     {
-        *i = m_plot.add_plot(points, color);
+        i = m_plot.add_plot(points, color);
     }
     else
     {
-        m_plot.replace_plot(*i, points, color);
+        m_plot.replace_plot(i, points, color);
     }
     m_plot.select_plot(-1);
     return 0;
