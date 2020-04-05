@@ -178,15 +178,12 @@ void crossover_history::open_xml(const std::string& filename)
 
         m_filename = filename;
 
-        std::for_each(temp_crossover_list.data().begin(),
-                      temp_crossover_list.data().end(),
+        std::for_each(begin(temp_crossover_list.data()),
+                      end(temp_crossover_list.data()),
                       sigc::mem_fun(*this, &crossover_history::add_item));
 
         // Delete items in crossover_list
-        m_crossover_list.data().resize(temp_crossover_list.data().size());
-        std::copy(begin(temp_crossover_list.data()),
-                  end(temp_crossover_list.data()),
-                  begin(m_crossover_list.data()));
+        m_crossover_list = temp_crossover_list;
 
         // Select the first item in the list
         if (!m_crossover_list.data().empty())
