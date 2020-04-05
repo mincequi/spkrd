@@ -19,25 +19,26 @@
  * USA
  */
 
-#ifndef __SUMMED_FREQ_RESP_PLOT
-#define __SUMMED_FREQ_RESP_PLOT
+#pragma once
 
-#include "common.h"
 #include "plot.hpp"
-#include "driver_list.hpp"
 
 #include <gtkmm/frame.h>
 #include <gdkmm/color.h>
 
 #include <vector>
 
+class driver_list;
+class Crossover;
+class Net;
+
 /// This is a wrapper class for GSpeakersPlot
-class SummedFreqRespPlot : public Gtk::Frame
+class frequency_response_plot : public Gtk::Frame
 {
 public:
-    SummedFreqRespPlot();
+    frequency_response_plot();
 
-    ~SummedFreqRespPlot() override;
+    ~frequency_response_plot() override;
 
     void clear();
 
@@ -55,5 +56,3 @@ private:
     std::vector<std::vector<GSpeakers::Point>> m_points;
     driver_list* m_speakerlist;
 };
-
-#endif

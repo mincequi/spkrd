@@ -28,7 +28,7 @@
 #include "crossover_wizard.hpp"
 
 #include "filter_plot.hpp"
-#include "summedfreqrespplot.h"
+#include "frequency_response_plot.hpp"
 #include "total_filter_plot.hpp"
 
 #include <gtkmm/menuitem.h>
@@ -69,7 +69,7 @@ private:
     crossover_history m_crossover_history;
     filter_plot m_filter_plot;
     total_filter_plot m_total_filter_plot;
-    SummedFreqRespPlot m_summed_freq_resp_plot;
+    frequency_response_plot m_summed_freq_resp_plot;
     crossover_image_view m_crossover_image_view;
 
     Gtk::MenuItem m_menu_item;
