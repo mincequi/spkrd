@@ -20,8 +20,7 @@
  * USA
  */
 
-#ifndef __CROSSOVER_IMAGE_VIEW_H
-#define __CROSSOVER_IMAGE_VIEW_H
+#pragma once
 
 #include "crossover.h"
 #include "driver_list.hpp"
@@ -188,5 +187,3 @@ private:
     Crossover* m_crossover{nullptr};
     driver_list* m_speaker_list{nullptr};
 };
-
-#endif
