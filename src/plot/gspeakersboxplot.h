@@ -18,8 +18,7 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_BOX_PLOT
-#define __GSPEAKERS_BOX_PLOT
+#pragma once
 
 #include "plot.hpp"
 
@@ -44,5 +43,3 @@ private:
 
     plot m_plot;
 };
-
-#endif
