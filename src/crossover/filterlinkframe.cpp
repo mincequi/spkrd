@@ -785,16 +785,16 @@ void FilterLinkFrame::on_plot_crossover()
             {
                 if (g_settings.getValueBool("SPICEUseGNUCAP"))
                 {
-                    float const f_id = atof(buffer.data());
+                    float const f_id = std::atof(buffer.data());
                     if (f_id != 0)
                     {
-                        /* Check if we got a freq more than 10kHz */
+                        // Check if we got a freq more than 10kHz
                         char* substr_ptr = strstr(buffer.data(), "K");
-                        float const freq = substr_ptr != nullptr ? f_id * 1000 : f_id;
+                        auto const freq = substr_ptr != nullptr ? f_id * 1000.0 : f_id;
 
                         substr_ptr = strtok(buffer.data(), " ");
                         substr_ptr = strtok(nullptr, " ");
-                        float const db = g_ascii_strtod(substr_ptr, nullptr);
+                        auto const db = g_ascii_strtod(substr_ptr, nullptr);
                         points.emplace_back(std::round(freq), db);
                     }
                 }
