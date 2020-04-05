@@ -21,7 +21,7 @@
 #define __GSPEAKERS_CROSSOVERTREEVIEW
 
 #include "cellitemcrossover.h"
-#include "crossover.h"
+#include "crossover.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>

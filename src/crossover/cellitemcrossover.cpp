@@ -54,7 +54,7 @@ CellItem_Crossover::CellItem_Crossover(passive_component const& part)
 }
 
 CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
-                                       const std::vector<CellItem_Crossover>& children)
+                                       std::vector<CellItem_Crossover> const& children)
     : m_label(std::move(label)), m_children(children)
 {
 }

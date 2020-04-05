@@ -19,7 +19,7 @@
 #define __GFILTER_CROSSOVERLIST_H
 
 #include "common.h"
-#include "crossover.h"
+#include "crossover.hpp"
 
 #include <iosfwd>
 #include <string>

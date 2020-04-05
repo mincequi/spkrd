@@ -15,7 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "crossover.h"
+#include "crossover.hpp"
 
 #include <sstream>
 #include <utility>
@@ -170,6 +170,6 @@ std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
     return output;
 }
 
-std::string const& Crossover::get_id_string() const { return m_id_string; }
+auto Crossover::get_id_string() const -> std::string const& { return m_id_string; }
 
 void Crossover::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }

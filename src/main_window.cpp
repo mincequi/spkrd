@@ -19,7 +19,7 @@
 
 #include "main_window.hpp"
 
-#include "crossover.h"
+#include "crossover.hpp"
 #include "settings_dialog.hpp"
 
 #include <glibmm.h>

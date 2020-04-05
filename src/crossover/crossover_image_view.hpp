@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "crossover.h"
+#include "crossover.hpp"
 #include "driver_list.hpp"
 
 #include <gdkmm/rgba.h>
