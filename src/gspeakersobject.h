@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERSOBJECT_H
-#define __GSPEAKERSOBJECT_H
+#pragma once
 
 #include <sigc++/sigc++.h>
 
@@ -28,14 +27,16 @@ class GSpeakersObject : public sigc::trackable
 public:
     GSpeakersObject();
 
+    explicit GSpeakersObject(int type);
+
     /// The member variable m_id is a unique id for each instance of GSpeakersObject.
     /// We use this as a base class for all classes that needs a id, for example all
     /// parts definitely need a unique id.
     int get_id() const;
 
-    /// Since both filter_network, passive_component and crossover will use type constants it's probably pretty safe to put
-    /// logic for it in the base object so that it'll be easier to change if we want to do it
-    /// different in the future.
+    /// Since both filter_network, passive_component and crossover will use type constants it's
+    /// probably pretty safe to put logic for it in the base object so that it'll be easier to
+    /// change if we want to do it different in the future.
     int get_type() const;
 
     void set_type(int type);
@@ -44,5 +45,3 @@ protected:
     int m_id;
     int m_type;
 };
-
-#endif
