@@ -375,9 +375,7 @@ void crossover_history::on_save_as()
 #ifndef NDEBUG
     std::cout << "save as" << std::endl;
 #endif
-    file_chooser_dialog fc(_("Save crossover xml as"),
-                                  Gtk::FILE_CHOOSER_ACTION_SAVE,
-                                  m_filename);
+    file_chooser_dialog fc(_("Save crossover xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
     std::string const& filename = fc.get_filename();
     if (filename.empty())
     {

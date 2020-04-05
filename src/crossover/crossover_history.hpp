@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_CROSSOVERHISTORY
-#define __GSPEAKERS_CROSSOVERHISTORY
+#pragma once
 
 #include "common.h"
 #include "crossover_list.hpp"
@@ -133,5 +132,3 @@ protected:
 
     model_columns m_columns;
 };
-
-#endif
