@@ -18,7 +18,6 @@
 #ifndef __CROSSOVER_WIZARD_H
 #define __CROSSOVER_WIZARD_H
 
-#include "common.h"
 #include "filterlinkframe.h"
 #include "driver_list.hpp"
 

@@ -17,6 +17,8 @@
 
 #include "crossover_wizard.hpp"
 
+#include "common.h"
+
 crossover_wizard::crossover_wizard() : Gtk::ScrolledWindow(), m_vbox(), m_speaker_list{nullptr}
 {
     signal_crossover_selected.connect(sigc::mem_fun(*this, &crossover_wizard::on_crossover_selected));
