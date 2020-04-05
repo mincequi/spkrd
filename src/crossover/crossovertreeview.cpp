@@ -58,19 +58,16 @@ CrossoverTreeView::~CrossoverTreeView() = default;
 
 void CrossoverTreeView::on_net_modified_by_wizard()
 {
-#ifndef NDEBUG
     std::puts("CrossoverTreeView::on_net_modified_by_wizard");
-#endif
+
     on_crossover_selected(cover);
 }
 
 void CrossoverTreeView::on_cell_edited_value(const Glib::ustring& path_string,
                                              const Glib::ustring& new_text)
 {
-#ifndef NDEBUG
     std::puts("CrossoverTreeView::on_cell_edited_value");
-    std::cout << "CrossoverTreeView::on_cell_edited_value: pathstd::string = " << path_string << "\n";
-#endif
+    std::cout << "CrossoverTreeView::on_cell_edited_value: path string = " << path_string << "\n";
 
     Gtk::TreePath path(path_string);
 
