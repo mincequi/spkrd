@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __CROSSOVER_WIZARD_H
-#define __CROSSOVER_WIZARD_H
+#pragma once
 
 #include "filter_link_frame.hpp"
 #include "driver_list.hpp"
@@ -42,5 +41,3 @@ private:
     Gtk::Box m_vbox;
     driver_list* m_speaker_list{nullptr};
 };
-
-#endif
