@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 
 option(GSPK_ENABLE_PROFILE "Enable profiling flags" OFF)
 
+enable_testing()
+
 find_package(LibXml2 REQUIRED)
 
 find_package(PkgConfig REQUIRED)
