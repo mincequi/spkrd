@@ -149,7 +149,7 @@ protected:
     double m_qes;
     /// equivalent volume
     double m_vas;
-    /// free air resonanse frequency
+    /// free air resonant frequency
     double m_fs;
     /// voice coil resistance
     double m_rdc;
