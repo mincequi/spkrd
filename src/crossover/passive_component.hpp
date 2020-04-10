@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_PART_H
-#define __GFILTER_PART_H
+#pragma once
 
 #include "gspeakersobject.h"
 
@@ -76,5 +75,3 @@ protected:
     /// Value unit, for example u (used in SPICE)
     std::string m_unit;
 };
-
-#endif
