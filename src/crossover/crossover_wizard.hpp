@@ -39,7 +39,7 @@ private:
     void on_crossover_selected(Crossover* crossover);
 
 private:
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
     driver_list* m_speaker_list{nullptr};
 };
 
