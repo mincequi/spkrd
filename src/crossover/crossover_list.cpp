@@ -22,6 +22,8 @@
 
 crossover_list::crossover_list(const std::string& filename)
 {
+    xmlKeepBlanksDefault(0);
+
     xmlDocPtr doc = xmlParseFile(filename.c_str());
 
     if (doc == nullptr)
