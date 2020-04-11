@@ -282,12 +282,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
     }
     else
     {
-        // Maybe we don't really need this one
-        if (b != nullptr)
-        {
-            delete b;
-        }
-        b = new enclosure();
+        b = new Box();
     }
     m_disable_signals = false;
 }
@@ -347,8 +342,7 @@ void enclosure_editor::on_combo_entry_changed()
     m_disable_signals = true;
 
     // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(
-        m_bass_speaker_combo.get_active_text());
+    m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
