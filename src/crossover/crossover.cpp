@@ -21,10 +21,8 @@
 #include <utility>
 
 Crossover::Crossover(int type, std::string id_string)
-    : GSpeakersObject(), m_id_string(std::move(id_string))
+    : GSpeakersObject(type), m_id_string(std::move(id_string))
 {
-    m_type = type;
-
     if (m_type == CROSSOVER_TYPE_SUBSONIC)
     {
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
