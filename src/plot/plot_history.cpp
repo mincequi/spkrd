@@ -118,7 +118,7 @@ void plot_history::on_add_plot(enclosure* b, driver* s, Gdk::Color& color)
 {
     if (b != nullptr && s != nullptr)
     {
-        m_box_list.box_list().push_back(*b);
+        m_box_list.data().push_back(*b);
 
         m_speaker_list.data().emplace_back(*s);
 

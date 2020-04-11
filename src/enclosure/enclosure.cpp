@@ -46,12 +46,10 @@ enclosure::enclosure(std::string id_string,
 
 enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
 {
-    if (parent != nullptr && std::string((char*)parent->name) == "box")
+    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "box")
     {
         try
         {
-            // parse_id_string(parent->children);
-
             auto node = parent->children;
 
             m_id_string = parse_string(node, "id_string");

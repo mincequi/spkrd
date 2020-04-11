@@ -40,13 +40,13 @@ public:
     void to_xml(const std::string& filename);
 
     /// Print part data to stdout
-    friend auto operator<<(std::ostream& o, const enclosure_list& box_list) -> std::ostream&;
+    friend auto operator<<(std::ostream& o, const enclosure_list& data) -> std::ostream&;
 
-    /// \return box_list vector
-    auto box_list() -> std::vector<enclosure>& { return m_box_list; }
+    /// \return data vector
+    auto data() -> std::vector<enclosure>& { return m_box_list; }
 
-    /// \return box_list vector
-    auto box_list() const -> std::vector<enclosure> const& { return m_box_list; }
+    /// \return data vector
+    auto data() const -> std::vector<enclosure> const& { return m_box_list; }
 
     /// Clear all items in the list
     void clear() { m_box_list.clear(); }

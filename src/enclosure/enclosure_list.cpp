@@ -81,11 +81,11 @@ void enclosure_list::to_xml(std::string const& filename)
     }
 }
 
-auto operator<<(std::ostream& output, const enclosure_list& box_list) -> std::ostream&
+auto operator<<(std::ostream& output, const enclosure_list& data) -> std::ostream&
 {
     output << "enclosure List\n";
 
-    for (const auto& from : box_list.m_box_list)
+    for (const auto& from : data.m_box_list)
     {
         output << from;
     }
