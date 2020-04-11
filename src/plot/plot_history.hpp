@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_PLOTHISTORY
-#define __GSPEAKERS_PLOTHISTORY
+#pragma once
 
 #include "enclosure_list.hpp"
 #include "common.h"
@@ -134,5 +133,3 @@ protected:
     int m_index{0};
     int m_nof_plots{0};
 };
-
-#endif

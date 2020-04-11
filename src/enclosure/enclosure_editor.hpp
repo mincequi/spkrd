@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_BOXEDITOR
-#define __GSPEAKERS_BOXEDITOR
+#pragma once
 
 #include "enclosure.hpp"
 #include "colours.hpp"
@@ -84,5 +83,3 @@ private:
     bool m_disable_signals{false};
     bool speaker_list_is_loaded{false};
 };
-
-#endif

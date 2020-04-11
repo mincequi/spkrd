@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __ENCLOSURE_PANED_H
-#define __ENCLOSURE_PANED_H
+#pragma once
 
 #include "enclosure_editor.hpp"
 
@@ -69,5 +68,3 @@ private:
     int nof_plots{0};
     bool plot_selected{false};
 };
-
-#endif

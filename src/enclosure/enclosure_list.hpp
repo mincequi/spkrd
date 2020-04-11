@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_BOXLIST
-#define __GFILTER_BOXLIST
+#pragma once
 
 #include "enclosure.hpp"
 
@@ -55,5 +54,3 @@ public:
 protected:
     std::vector<enclosure> m_box_list;
 };
-
-#endif

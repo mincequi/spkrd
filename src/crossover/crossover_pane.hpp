@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __CROSSOVER_PANED_H
-#define __CROSSOVER_PANED_H
+#pragma once
 
 #include "common.h"
 
@@ -75,5 +74,3 @@ private:
     Gtk::MenuItem m_menu_item;
     Gtk::Toolbar* m_toolbar{nullptr};
 };
-
-#endif

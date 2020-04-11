@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_SETTINGSDLG_H
-#define __GSPEAKERS_SETTINGSDLG_H
+#pragma once
 
 #include "common.h"
 
@@ -92,5 +91,3 @@ private:
 
     std::string m_filename;
 };
-
-#endif

@@ -20,8 +20,7 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_PLOT_H
-#define __GSPEAKERS_PLOT_H
+#pragma once
 
 #include <gdkmm/color.h>
 #include <gtkmm/drawingarea.h>
@@ -180,5 +179,3 @@ private:
 
     Cairo::RefPtr<Cairo::Context> m_context;
 };
-
-#endif

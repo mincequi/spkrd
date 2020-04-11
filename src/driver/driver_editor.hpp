@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_SPEAKEREDITOR
-#define __GSPEAKERS_SPEAKEREDITOR
+#pragma once
 
 #include "driver_frequency_response_plot.hpp"
 #include "driver_list.hpp"
@@ -247,5 +246,3 @@ protected:
     model_columns m_columns;
     std::string m_filename;
 };
-
-#endif

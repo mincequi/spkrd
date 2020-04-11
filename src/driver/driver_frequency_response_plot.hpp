@@ -21,8 +21,7 @@
  * USA
  */
 
-#ifndef __DRIVER_FREQ_RESP_PLOT_H
-#define __DRIVER_FREQ_RESP_PLOT_H
+#pragma once
 
 #include "plot.hpp"
 
@@ -49,5 +48,3 @@ private:
     Gtk::Label m_label;
     Gtk::ScrolledWindow sw;
 };
-
-#endif

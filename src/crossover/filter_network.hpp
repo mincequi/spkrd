@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_NET_H
-#define __GFILTER_NET_H
+#pragma once
 
 #include "common.h"
 #include "gspeakersobject.h"
@@ -198,5 +197,3 @@ private:
     void parse_adv_imp_model(xmlNodePtr node);
     void parse_inv_pol(xmlNodePtr node);
 };
-
-#endif

@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_SPEAKERLIST
-#define __GFILTER_SPEAKERLIST
+#pragma once
 
 #include "driver.hpp"
 
@@ -51,5 +50,3 @@ public:
 protected:
     std::vector<driver> m_drivers;
 };
-
-#endif

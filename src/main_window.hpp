@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_MAINWINDOW
-#define __GSPEAKERS_MAINWINDOW
+#pragma once
 
 #include "common.h"
 #include "crossover/crossover_pane.hpp"
@@ -90,5 +89,3 @@ private:
 
     bool m_in_quit_phase{false};
 };
-
-#endif
