@@ -152,7 +152,7 @@ void filter_link_frame::initialise_highpass_filter()
     }
 
     m_vbox.pack_start(*frame);
-    auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vbox->set_border_width(12);
     frame->add(*vbox);
 
@@ -202,7 +202,7 @@ void filter_link_frame::initialise_lowpass_filter()
         frame->set_label_widget(*label);
     }
 
-    auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    auto* vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
     vbox->set_border_width(12);
     frame->add(*vbox);
 

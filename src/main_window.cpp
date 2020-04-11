@@ -237,7 +237,7 @@ auto main_window::on_delete_event(GdkEventAny* event) -> bool
         dialog.get_action_area()->set_border_width(6);
         dialog.get_action_area()->set_spacing(6);
 
-        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
         auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
         label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?")
@@ -306,8 +306,8 @@ void main_window::on_quit()
         dialog->get_action_area()->set_border_width(12);
         dialog->get_action_area()->set_spacing(6);
 
-        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-        auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
+        auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        auto* label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
         label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?")) + "</b>\n\n");
         vbox->pack_start(*label1);
 

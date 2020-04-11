@@ -24,7 +24,7 @@
 #include <ctime>
 #include <iostream>
 
-plot_history::plot_history() : Gtk::Frame(""), m_vbox()
+plot_history::plot_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     set_border_width(2);
     set_shadow_type(Gtk::SHADOW_NONE);

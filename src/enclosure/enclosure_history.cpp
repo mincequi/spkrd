@@ -29,7 +29,7 @@
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
-enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL != 0u)
+enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     bool boxlist_found = false;
     set_border_width(2);

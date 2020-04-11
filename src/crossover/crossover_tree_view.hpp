@@ -56,7 +56,6 @@ protected:
     virtual void treestore_add_item(crossover_cell_item const& foo);
 
 protected:
-    Gtk::VBox m_VBox;
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;

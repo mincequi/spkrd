@@ -90,7 +90,7 @@ protected:
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::ListStore> m_refListStore;
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
     Gtk::Label m_label;
 
     enclosure_list m_box_list;
