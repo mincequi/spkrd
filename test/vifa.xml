@@ -1,8 +1,129 @@
-<?xml version="1.0"?>
-<speakerlist><speaker><id_string>Seas L14RCY/P</id_string><type>3</type><qts>0.20999</qts><vas>14</vas><fs>39</fs><rdc>5.5</rdc><lvc>0.69999</lvc><qms>1.39999</qms><qes>0.23999</qes><imp>8</imp><sens>87</sens><freq_resp_filename>/usr/local/share/xml/seasl14rcyp.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.00958</mmd><ad>0.04889</ad><bl>7.29999</bl><rms>1.8</rms><cms>1.7</cms></speaker><speaker><id_string>Seas L21RN4X/P</id_string><type>1</type><qts>0.29998</qts><vas>58</vas><fs>23</fs><rdc>6</rdc><lvc>2.70000</lvc><qms>3.98</qms><qes>0.33000</qes><imp>8</imp><sens>86.5</sens><freq_resp_filename>/usr/local/share/xml/seasl21rn4xp.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.04000</mmd><ad>0.08369</ad><bl>11</bl><rms>1.7</rms><cms>0.00119</cms></speaker><speaker><id_string>Morel MDT32-S</id_string><type>4</type><qts>0.56999</qts><vas>0.01</vas><fs>700</fs><rdc>5.20000</rdc><lvc>0.08999</lvc><qms>0.108</qms><qes>0.12</qes><imp>8</imp><sens>90</sens><freq_resp_filename>/usr/local/share/xml/morelmdt32s.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.00044</mmd><ad>0.0138</ad><bl>3.5</bl><rms>1</rms><cms>0.0001</cms></speaker><speaker><id_string>Vifa P21WO-20-08</id_string><type>3</type><qts>0.33000</qts><vas>113</vas><fs>28</fs><rdc>5.70000</rdc><lvc>0.90000</lvc><qms>1.60000</qms><qes>0.40999</qes><imp>8</imp><sens>91</sens><freq_resp_filename>/usr/local/share/xml/vifap21wo-20-08.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.02249</mmd><ad>0.08648</ad><bl>7.40000</bl><rms>1.7</rms><cms>0.012</cms></speaker><speaker><id_string>Seas T14RCY/P-H</id_string><type>3</type><qts>0.20000</qts><vas>17.6000</vas><fs>40</fs><rdc>5.70000</rdc><lvc>0.65000</lvc><qms>1.27</qms><qes>0.23000</qes><imp>8</imp><sens>89</sens><freq_resp_filename>/usr/local/share/xml/seast14rcyph.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.0066</mmd><ad>0.04889</ad><bl>7</bl><rms>1.39999</rms><cms>0.00220</cms></speaker><speaker><id_string>Vifa D27TG-05-06</id_string><type>4</type><qts>0.77000</qts><vas>0.00600</vas><fs>1000</fs><rdc>4.59999</rdc><lvc>0.08999</lvc><qms>2.14997</qms><qes>1.18999</qes><imp>6</imp><sens>91</sens><freq_resp_filename>/usr/local/share/xml/vifad27tg-05-06.frf</freq_resp_filename><imp_resp_filename>
-    </imp_resp_filename><mmd>0.00029</mmd><ad>0.01499</ad><bl>2.70000</bl><rms>1</rms><cms>0.0001</cms></speaker></speakerlist>
+<?xml version="1.0" encoding="UTF-8"?>
+<speakerlist>
+  <speaker>
+    <id_string>Seas L14RCY/P</id_string>
+    <type>3</type>
+    <qts>0.20999</qts>
+    <vas>14</vas>
+    <fs>39</fs>
+    <rdc>5.5</rdc>
+    <lvc>0.69999</lvc>
+    <qms>1.39999</qms>
+    <qes>0.23999</qes>
+    <imp>8</imp>
+    <sens>87</sens>
+    <freq_resp_filename>/usr/local/share/xml/seasl14rcyp.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.00958</mmd>
+    <ad>0.04889</ad>
+    <bl>7.29999</bl>
+    <rms>1.8</rms>
+    <cms>1.7</cms>
+  </speaker>
+  <speaker>
+    <id_string>Seas L21RN4X/P</id_string>
+    <type>1</type>
+    <qts>0.29998</qts>
+    <vas>58</vas>
+    <fs>23</fs>
+    <rdc>6</rdc>
+    <lvc>2.70000</lvc>
+    <qms>3.98</qms>
+    <qes>0.33000</qes>
+    <imp>8</imp>
+    <sens>86.5</sens>
+    <freq_resp_filename>/usr/local/share/xml/seasl21rn4xp.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.04000</mmd>
+    <ad>0.08369</ad>
+    <bl>11</bl>
+    <rms>1.7</rms>
+    <cms>0.00119</cms>
+  </speaker>
+  <speaker>
+    <id_string>Morel MDT32-S</id_string>
+    <type>4</type>
+    <qts>0.56999</qts>
+    <vas>0.01</vas>
+    <fs>700</fs>
+    <rdc>5.20000</rdc>
+    <lvc>0.08999</lvc>
+    <qms>0.108</qms>
+    <qes>0.12</qes>
+    <imp>8</imp>
+    <sens>90</sens>
+    <freq_resp_filename>/usr/local/share/xml/morelmdt32s.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.00044</mmd>
+    <ad>0.0138</ad>
+    <bl>3.5</bl>
+    <rms>1</rms>
+    <cms>0.0001</cms>
+  </speaker>
+  <speaker>
+    <id_string>Vifa P21WO-20-08</id_string>
+    <type>3</type>
+    <qts>0.33000</qts>
+    <vas>113</vas>
+    <fs>28</fs>
+    <rdc>5.70000</rdc>
+    <lvc>0.90000</lvc>
+    <qms>1.60000</qms>
+    <qes>0.40999</qes>
+    <imp>8</imp>
+    <sens>91</sens>
+    <freq_resp_filename>/usr/local/share/xml/vifap21wo-20-08.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.02249</mmd>
+    <ad>0.08648</ad>
+    <bl>7.40000</bl>
+    <rms>1.7</rms>
+    <cms>0.012</cms>
+  </speaker>
+  <speaker>
+    <id_string>Seas T14RCY/P-H</id_string>
+    <type>3</type>
+    <qts>0.20000</qts>
+    <vas>17.6000</vas>
+    <fs>40</fs>
+    <rdc>5.70000</rdc>
+    <lvc>0.65000</lvc>
+    <qms>1.27</qms>
+    <qes>0.23000</qes>
+    <imp>8</imp>
+    <sens>89</sens>
+    <freq_resp_filename>/usr/local/share/xml/seast14rcyph.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.0066</mmd>
+    <ad>0.04889</ad>
+    <bl>7</bl>
+    <rms>1.39999</rms>
+    <cms>0.00220</cms>
+  </speaker>
+  <speaker>
+    <id_string>Vifa D27TG-05-06</id_string>
+    <type>4</type>
+    <qts>0.77000</qts>
+    <vas>0.00600</vas>
+    <fs>1000</fs>
+    <rdc>4.59999</rdc>
+    <lvc>0.08999</lvc>
+    <qms>2.14997</qms>
+    <qes>1.18999</qes>
+    <imp>6</imp>
+    <sens>91</sens>
+    <freq_resp_filename>/usr/local/share/xml/vifad27tg-05-06.frf</freq_resp_filename>
+    <imp_resp_filename>
+    </imp_resp_filename>
+    <mmd>0.00029</mmd>
+    <ad>0.01499</ad>
+    <bl>2.70000</bl>
+    <rms>1</rms>
+    <cms>0.0001</cms>
+  </speaker>
+</speakerlist>
