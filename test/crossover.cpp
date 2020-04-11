@@ -4,6 +4,8 @@
 #include "passive_component.hpp"
 #include "crossover_list.hpp"
 
+std::string const path = GSPK_TEST_FILE_DIRECTORY;
+
 TEST_CASE("Populate crossover list from xml")
 {
     SECTION("Empty case") { REQUIRE(crossover_list().data().empty()); }
@@ -13,8 +15,8 @@ TEST_CASE("Populate crossover list from xml")
     }
     SECTION("Crossover1.xml")
     {
-        // auto crossovers = crossover_list("");
-        // REQUIRE(crossovers.data().size() == 8);
+        auto crossovers = crossover_list(path + "/crossover1.xml");
+        REQUIRE(crossovers.data().size() == 8);
     }
 }
 

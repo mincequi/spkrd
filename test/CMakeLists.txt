@@ -2,7 +2,7 @@
 add_library(catch_main STATIC test_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 
-set(test_names crossover_input)
+set(test_names crossover enclosure)
 
 foreach(test_name IN LISTS test_names)
 
@@ -18,7 +18,8 @@ foreach(test_name IN LISTS test_names)
                                                        CXX_STANDARD_REQUIRED YES
                                                        CXX_EXTENSIONS NO
                                             COMPILE_FLAGS "-Wall")
-
+    target_compile_definitions(${test_name}_test
+                               PRIVATE GSPK_TEST_FILE_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(${test_name}_test ${CMAKE_CURRENT_BINARY_DIR}/${test_name}_test)
 
 endforeach()
