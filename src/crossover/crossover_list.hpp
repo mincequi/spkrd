@@ -35,11 +35,11 @@ public:
     crossover_list(const std::string& filename);
 
     // Convert data for a part to an xml node, throws std::runtime_error on failure
-    // Maybe this one should throw an exception?
-    void to_xml(const std::string& filename);
+    void to_xml(const std::string& filename) noexcept(false);
 
     // Print part data to stdout
-    friend auto operator<<(std::ostream& o, const crossover_list& crossover_list) -> std::ostream&;
+    friend auto operator<<(std::ostream& output, const crossover_list& crossover_list)
+        -> std::ostream&;
 
     auto data() -> std::vector<Crossover>& { return m_data; }
 
