@@ -34,7 +34,7 @@ enclosure::enclosure(std::string id_string,
                      double vb2,
                      double fb2,
                      std::string speaker)
-    : GSpeakersObject(),
+    : GSpeakersObject(type),
       m_id_string(std::move(id_string)),
       m_vb1(vb1),
       m_fb1(fb1),
@@ -42,7 +42,6 @@ enclosure::enclosure(std::string id_string,
       m_fb2(fb2),
       m_speaker(std::move(speaker))
 {
-    m_type = type;
 }
 
 enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
