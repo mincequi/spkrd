@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_COMMON_H
-#define __GFILTER_COMMON_H
+#pragma once
 
 #include "settings.h"
 
@@ -99,5 +98,3 @@ extern sigc::signal0<void> signal_plot_crossover;
 extern sigc::signal4<int, std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*>
     signal_add_crossover_plot;
 extern sigc::signal0<void> signal_save_open_files;
-
-#endif //__GFILTER_COMMON_H
