@@ -2,6 +2,21 @@
 #include <catch2/catch.hpp>
 
 #include "passive_component.hpp"
+#include "crossover_list.hpp"
+
+TEST_CASE("Populate crossover list from xml")
+{
+    SECTION("Empty case") { REQUIRE(crossover_list().data().empty()); }
+    SECTION("File not found exception")
+    {
+        REQUIRE_THROWS_AS(crossover_list(""), std::runtime_error);
+    }
+    SECTION("Crossover1.xml")
+    {
+        // auto crossovers = crossover_list("");
+        // REQUIRE(crossovers.data().size() == 8);
+    }
+}
 
 TEST_CASE("Part type interface")
 {
