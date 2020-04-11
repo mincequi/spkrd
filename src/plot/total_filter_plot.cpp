@@ -39,7 +39,7 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 
 total_filter_plot::~total_filter_plot() = default;
 
-auto total_filter_plot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
                                     Gdk::Color const& color,
                                     int& output_plot_index,
                                     Net* n) -> int
@@ -62,7 +62,7 @@ auto total_filter_plot::on_add_plot(std::vector<GSpeakers::Point> const& points,
     }
 
     // sum the plots into one master plot
-    std::vector<GSpeakers::Point> pnts;
+    std::vector<gspk::point> pnts;
 
     auto c = Gdk::Color("red");
 

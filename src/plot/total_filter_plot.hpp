@@ -42,7 +42,7 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*) -> int;
+    auto on_add_plot(std::vector<gspk::point> const&, Gdk::Color const&, int&, Net*) -> int;
 
 private:
     auto on_delete_event(GdkEventAny* event) -> bool override;
@@ -55,5 +55,5 @@ private:
     plot m_plot;
     std::vector<int> m_nets;
     Gdk::Color m_color;
-    std::vector<std::vector<GSpeakers::Point>> m_points;
+    std::vector<std::vector<gspk::point>> m_points;
 };

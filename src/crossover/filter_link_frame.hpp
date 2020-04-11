@@ -102,5 +102,5 @@ private:
     bool m_init{true};
 
     int my_filter_plot_index{-1};
-    std::vector<GSpeakers::Point> points;
+    std::vector<gspk::point> points;
 };

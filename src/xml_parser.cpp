@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <sstream>
 
-namespace spkrd
+namespace gspk
 {
 auto parse_double(xmlNodePtr node, std::string const& label) -> double
 {

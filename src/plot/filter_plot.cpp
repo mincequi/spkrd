@@ -34,7 +34,7 @@ filter_plot::filter_plot() : m_plot(1, 20000)
     show_all();
 }
 
-auto filter_plot::on_add_plot(std::vector<GSpeakers::Point> const& points,
+auto filter_plot::on_add_plot(std::vector<gspk::point> const& points,
                               Gdk::Color const& color,
                               int& i,
                               Net* n) -> int

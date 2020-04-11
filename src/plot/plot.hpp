@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "point.hpp"
+
 #include <gdkmm/color.h>
 #include <gtkmm/drawingarea.h>
 
@@ -37,51 +39,6 @@ constexpr auto BOX_FRAME_SIZE = 30;
 constexpr auto N_VERTICAL_LINES = 2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10 - 1;
 /// Upper frequency limit
 constexpr auto UPPER_LIMIT = 1000;
-
-/// Point class to exchange plot coordinates between classes.
-/// I need a double on the y-axis since decimal values are required
-/// in the conversion to axis mappes coordinates
-namespace GSpeakers
-{
-class Point
-{
-public:
-    Point() = default;
-
-    Point(int x, double y) : m_x(x), m_y(y) {}
-
-    auto get_x() const -> int { return m_x; }
-
-    auto get_y() const -> double { return m_y; }
-
-    void set_x(int x) { m_x = x; }
-
-    void set_y(double y) { m_y = y; }
-
-private:
-    int m_x;
-    double m_y;
-};
-
-struct comparison
-{
-    auto operator()(const Point& left, const Point& right) const noexcept -> bool
-    {
-        return left.get_x() <= right.get_x();
-    }
-
-    auto operator()(const Point& left, int right) const noexcept -> bool
-    {
-        return left.get_x() <= right;
-    }
-
-    auto operator()(int left, const Point& right) const noexcept -> bool
-    {
-        return left <= right.get_x();
-    }
-};
-
-} // namespace GSpeakers
 
 /// This is a class that can draw plots. It has add_plot, remove_plot
 /// and a few other methods you can use. It has logarithmic x-axis and
@@ -104,7 +61,7 @@ public:
          int y_zero_freq = 0,
          bool enable_sec_scale = false);
 
-    auto add_plot(std::vector<GSpeakers::Point> const& points, Gdk::Color const& colour) -> int;
+    auto add_plot(std::vector<gspk::point> const& points, Gdk::Color const& colour) -> int;
 
     void remove_plot(int n);
 
@@ -118,9 +75,7 @@ public:
 
     void select_plot(int index);
 
-    void replace_plot(int plot_index,
-                      std::vector<GSpeakers::Point> const& p,
-                      Gdk::Color const& ref_color);
+    void replace_plot(int plot_index, std::vector<gspk::point> const& p, Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
 
@@ -143,7 +98,7 @@ protected:
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)
-    std::vector<std::vector<GSpeakers::Point>> m_points;
+    std::vector<std::vector<gspk::point>> m_points;
     /// Plot line colours
     std::vector<Gdk::Color> m_colors;
     /// Visible plots

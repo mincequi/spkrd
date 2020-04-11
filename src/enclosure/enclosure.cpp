@@ -25,7 +25,7 @@
 #include <sstream>
 #include <utility>
 
-using namespace spkrd;
+using namespace gspk;
 
 enclosure::enclosure(std::string id_string,
                      int type,

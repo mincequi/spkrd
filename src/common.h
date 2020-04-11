@@ -37,9 +37,13 @@
 #define gettext_noop(string) string
 #define N_(string) gettext_noop(string)
 
+namespace gspk
+{
+class point;
+}
+
 namespace GSpeakers
 {
-class Point;
 auto double_to_ustring(double d) -> Glib::ustring;
 auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
 auto int_to_ustring(int d) -> Glib::ustring;
@@ -85,7 +89,7 @@ extern sigc::signal1<void, enclosure*> signal_box_selected;
 extern sigc::signal1<void, enclosure*> signal_box_modified;
 extern sigc::signal1<void, enclosure*> signal_add_to_boxlist;
 extern sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
-extern sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
+extern sigc::signal2<int, std::vector<gspk::point>&, Gdk::Color&> signal_add_box_plot;
 extern sigc::signal1<void, int> signal_remove_box_plot;
 extern sigc::signal1<void, int> signal_hide_box_plot;
 extern sigc::signal1<void, int> signal_select_plot;
@@ -95,6 +99,6 @@ extern sigc::signal0<void> signal_net_modified_by_wizard; // listen to this in c
 extern sigc::signal1<void, filter_network*> signal_net_modified_by_user; // listan to this in filter wizard
 extern sigc::signal1<void, int> signal_new_crossover;
 extern sigc::signal0<void> signal_plot_crossover;
-extern sigc::signal4<int, std::vector<GSpeakers::Point> const&, Gdk::Color const&, int&, Net*>
+extern sigc::signal4<int, std::vector<gspk::point> const&, Gdk::Color const&, int&, Net*>
     signal_add_crossover_plot;
 extern sigc::signal0<void> signal_save_open_files;

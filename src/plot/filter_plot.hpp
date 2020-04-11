@@ -40,7 +40,7 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<GSpeakers::Point> const& points,
+    auto on_add_plot(std::vector<gspk::point> const& points,
                      Gdk::Color const& color,
                      int& i,
                      Net* n) -> int;

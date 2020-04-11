@@ -24,7 +24,7 @@
 
 #include <utility>
 
-using namespace spkrd;
+using namespace gspk;
 
 driver::driver(std::string id_string,
                int type,

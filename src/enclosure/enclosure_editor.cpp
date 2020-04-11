@@ -180,9 +180,9 @@ void enclosure_editor::on_append_to_plot_clicked()
     Gdk::Color color(m_color_list.get_color_string());
 
     // Calculate the frequency response graph for current enclosure and the current speaker
-    std::vector<GSpeakers::Point> points;
+    std::vector<gspk::point> points;
 
-    GSpeakers::Point point;
+    gspk::point point;
     switch (m_box->get_type())
     {
         case BOX_TYPE_PORTED:
