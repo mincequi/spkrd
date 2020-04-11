@@ -55,9 +55,9 @@ Crossover::Crossover(int type, std::string id_string)
     }
 }
 
-Crossover::Crossover(xmlNodePtr parent)
+Crossover::Crossover(xmlNodePtr parent) : GSpeakersObject()
 {
-    if (parent != nullptr && g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)
+    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "crossover")
     {
         try
         {
