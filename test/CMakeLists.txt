@@ -2,7 +2,7 @@
 add_library(catch_main STATIC test_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 
-set(test_names crossover enclosure)
+set(test_names crossover enclosure driver)
 
 foreach(test_name IN LISTS test_names)
 
