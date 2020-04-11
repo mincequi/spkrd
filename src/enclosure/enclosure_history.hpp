@@ -120,7 +120,7 @@ protected:
     model_columns m_columns;
 
     std::string m_filename;
-    bool new_xml_pressed;
+    bool m_new_xml_pressed;
     int index;
     int selected_plot;
 };
