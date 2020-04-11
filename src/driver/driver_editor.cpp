@@ -392,12 +392,12 @@ void driver_editor::set_entries_sensitive(bool const is_sensitive)
 
 void driver_editor::on_new()
 {
-    driver s(_("New driver"));
+    driver speaker(_("New driver"));
 
-    s.set_id_string(s.get_id_string() + " " + std::to_string(s.get_id()));
+    speaker.set_id_string(speaker.get_id_string() + " " + std::to_string(speaker.get_id()));
 
-    add_item(s);
-    m_driver_list->data().push_back(s);
+    add_item(speaker);
+    m_driver_list->data().push_back(speaker);
 
     Gtk::TreePath path(std::to_string(m_driver_list->data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
@@ -515,60 +515,60 @@ void driver_editor::on_selection_changed()
         if (!path.empty())
         {
             index = path[0];
-            driver const& s = m_driver_list->data()[index];
+            driver const& speaker = m_driver_list->data()[index];
 
-            m_IdStringEntry.set_text(s.get_id_string());
+            m_IdStringEntry.set_text(speaker.get_id_string());
 
             char* str = nullptr;
             GString* buffer = g_string_new(str);
-            g_string_printf(buffer, "%3.3f", s.get_qts());
+            g_string_printf(buffer, "%3.3f", speaker.get_qts());
             m_QtsEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%1.0f", s.get_fs());
+            g_string_printf(buffer, "%1.0f", speaker.get_fs());
             m_FsEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%1.3f", s.get_vas());
+            g_string_printf(buffer, "%1.3f", speaker.get_vas());
             m_VasEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%1.1f", s.get_rdc());
+            g_string_printf(buffer, "%1.1f", speaker.get_rdc());
             m_RdcEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.2f", s.get_lvc());
+            g_string_printf(buffer, "%0.2f", speaker.get_lvc());
             m_LvcEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.3f", s.get_qms());
+            g_string_printf(buffer, "%0.3f", speaker.get_qms());
             m_QmsEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.3f", s.get_qes());
+            g_string_printf(buffer, "%0.3f", speaker.get_qes());
             m_QesEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.2f", s.get_imp());
+            g_string_printf(buffer, "%0.2f", speaker.get_imp());
             m_ImpEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.2f", s.get_sens());
+            g_string_printf(buffer, "%0.2f", speaker.get_sens());
             m_SensEntry.set_text(Glib::ustring(buffer->str));
 
-            g_string_printf(buffer, "%0.2f", s.get_mmd());
+            g_string_printf(buffer, "%0.2f", speaker.get_mmd());
             m_MmdEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.4f", s.get_ad());
+            g_string_printf(buffer, "%0.4f", speaker.get_ad());
             m_AdEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.2f", s.get_bl());
+            g_string_printf(buffer, "%0.2f", speaker.get_bl());
             m_BlEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.2f", s.get_rms());
+            g_string_printf(buffer, "%0.2f", speaker.get_rms());
             m_RmsEntry.set_text(Glib::ustring(buffer->str));
-            g_string_printf(buffer, "%0.4f", s.get_cms());
+            g_string_printf(buffer, "%0.4f", speaker.get_cms());
             m_CmsEntry.set_text(Glib::ustring(buffer->str));
 
             // Check buttons
-            m_BassCheckButton.set_active(is_bass_driver(s.get_type()));
-            m_MidrangeCheckButton.set_active(is_midrange_driver(s.get_type()));
-            m_TweeterCheckButton.set_active(is_tweeter_driver(s.get_type()));
+            m_BassCheckButton.set_active(speaker.get_type() == SPEAKER_TYPE_BASS);
+            m_MidrangeCheckButton.set_active(speaker.get_type() == SPEAKER_TYPE_MIDRANGE);
+            m_TweeterCheckButton.set_active(speaker.get_type() == SPEAKER_TYPE_TWEETER);
 
-            m_FreqRespFileEntry.set_text(s.get_freq_resp_filename());
+            m_FreqRespFileEntry.set_text(speaker.get_freq_resp_filename());
 
             plot.clear();
 
             // Plot frequency response if it exists
             if (g_settings.getValueBool("DrawDriverFreqRespPlot")
-                && !s.get_freq_resp_filename().empty())
+                && !speaker.get_freq_resp_filename().empty())
             {
-                std::ifstream input_file(s.get_freq_resp_filename().c_str());
+                std::ifstream input_file(speaker.get_freq_resp_filename().c_str());
 
                 if (!input_file.is_open())
                 {
-                    throw std::runtime_error("Could not open " + s.get_freq_resp_filename());
+                    throw std::runtime_error("Could not open " + speaker.get_freq_resp_filename());
                 }
 
                 std::vector<gspk::point> points;
@@ -585,14 +585,14 @@ void driver_editor::on_selection_changed()
                     {
                         throw std::runtime_error("Expected comma separated file for driver "
                                                  "frequency response curve "
-                                                 + s.get_freq_resp_filename());
+                                                 + speaker.get_freq_resp_filename());
                     }
                     points.emplace_back(std::round(frequency), magnitude);
                 }
                 plot.add_plot(points, Gdk::Color("blue"));
             }
             // Plot impedance response increase impedance y coordinate 50 to align to imp scale
-            draw_impedance_plot(s);
+            draw_impedance_plot(speaker);
         }
     }
     updating_entries = false;
