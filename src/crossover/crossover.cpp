@@ -98,7 +98,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 {
     xmlNodePtr child;
 
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0))
+    if (node != nullptr && g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)
     {
         child = node->children;
         while (child != nullptr)
@@ -126,7 +126,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 
 void Crossover::parse_id_string(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0))
+    if (node != nullptr && g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)
     {
         m_id_string = std::string((char*)xmlNodeGetContent(node));
     }
