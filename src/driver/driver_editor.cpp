@@ -153,12 +153,28 @@ driver_editor::driver_editor()
     m_grid.attach(m_MidrangeCheckButton, 0, 16);
     m_grid.attach(m_TweeterCheckButton, 0, 17);
 
-    m_BassCheckButton.set_tooltip_text(_("Check this box if the driver will work as a woofer (bass "
-                                         "speaker)"));
-    m_MidrangeCheckButton.set_tooltip_text(_("Check this box if the driver will work as a midrange "
-                                             "speaker"));
-    m_TweeterCheckButton.set_tooltip_text(_("Check this box if the driver will work as a tweeter"));
     m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
+    m_FsEntry.set_tooltip_text(_("Free air resonance frequency"));
+    m_VasEntry.set_tooltip_text(_("Equivalent volume of air that has a compliance equal to that of "
+                                  "the air displaced by the driver"));
+    m_RdcEntry.set_tooltip_text(_("Voice coil DC resistance"));
+    m_LvcEntry.set_tooltip_text(_("Voice coil inductance"));
+    m_QtsEntry.set_tooltip_text(_("Parallel combination of Qms and Qes"));
+    m_QmsEntry.set_tooltip_text(_("Ratio of the driver electrical equivalent frictional resistance "
+                                  "to the reflected motional reactance at Fs"));
+    m_QesEntry.set_tooltip_text(_("Ratio of the voice coil DC resistance to the reflected motional "
+                                  "reactance at fs."));
+    m_ImpEntry.set_tooltip_text(_(""));
+    m_SensEntry.set_tooltip_text(_(""));
+    m_MmdEntry.set_tooltip_text(_(""));
+    m_AdEntry.set_tooltip_text(_(""));
+    m_BlEntry.set_tooltip_text(_(""));
+    m_RmsEntry.set_tooltip_text(_(""));
+    m_CmsEntry.set_tooltip_text(_(""));
+
+    m_BassCheckButton.set_tooltip_text(_("Check if a woofer"));
+    m_MidrangeCheckButton.set_tooltip_text(_("Check if a midrange driver"));
+    m_TweeterCheckButton.set_tooltip_text(_("Check if a tweeter"));
 
     auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
