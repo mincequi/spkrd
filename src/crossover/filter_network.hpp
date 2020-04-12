@@ -79,7 +79,7 @@ public:
     /// Print part data to stdout
     friend auto operator<<(std::ostream& o, filter_network const& net) -> std::ostream&;
 
-    auto to_SPICE(driver& s, bool use_gnucap = false) -> std::string;
+    auto to_SPICE(driver const& s, bool use_gnucap = false) -> std::string;
 
     auto parts() -> std::vector<passive_component>& { return m_parts; }
 

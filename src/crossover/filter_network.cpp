@@ -517,7 +517,7 @@ auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
     return net;
 }
 
-auto filter_network::to_SPICE(driver& s, bool use_gnucap) -> std::string
+auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 {
     std::string tmp_dir = Glib::get_tmp_dir();
 #ifdef TARGET_WIN32
