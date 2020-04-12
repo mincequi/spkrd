@@ -37,14 +37,14 @@ constexpr auto FB2_ENTRY_CHANGED = 6;
 
 enclosure_editor::enclosure_editor()
     : Gtk::Frame(_("Enclosure editor")),
-      m_table(5, 5, true),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_hbox(Gtk::ORIENTATION_HORIZONTAL),
       m_speaker_qts_label("", Gtk::ALIGN_START),
       m_speaker_vas_label("", Gtk::ALIGN_START),
-      m_speaker_fs_label("", Gtk::ALIGN_START)
+      m_speaker_fs_label("", Gtk::ALIGN_START),
+      m_efficiency_bandwidth_product_label("", Gtk::ALIGN_START)
 {
-    m_vbox.pack_start(m_table);
+    m_vbox.pack_start(m_grid);
 
     set_border_width(2);
     add(m_vbox);
@@ -58,27 +58,33 @@ enclosure_editor::enclosure_editor()
     m_fb1_entry.set_width_chars(10);
     m_id_string_entry.set_width_chars(10);
 
-    m_table.set_spacings(4);
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_START)), 0, 1, 0, 1);
-    m_table.attach(m_bass_speaker_combo, 1, 5, 0, 1);
+    m_grid.set_row_spacing(10);
+    m_grid.set_column_spacing(10);
 
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_START)), 0, 1, 1, 2);
-    m_table.attach(m_speaker_qts_label, 1, 2, 1, 2);
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_END)), 3, 4, 1, 2);
-    m_table.attach(m_speaker_vas_label, 4, 5, 1, 2);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_START)), 0, 0);
+    m_grid.attach(m_bass_speaker_combo, 1, 0);
 
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_START)), 0, 1, 2, 3);
-    m_table.attach(m_speaker_fs_label, 1, 2, 2, 3);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_START)), 0, 1);
+    m_grid.attach(m_speaker_qts_label, 1, 1);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_END)), 2, 1);
+    m_grid.attach(m_speaker_vas_label, 3, 1);
 
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_START)), 0, 1, 3, 4);
-    m_table.attach(m_id_string_entry, 1, 3, 3, 4);
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("  Type: "), Gtk::ALIGN_END)), 3, 4, 3, 4);
-    m_table.attach(m_box_type_combo, 4, 5, 3, 4);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_START)), 0, 2);
+    m_grid.attach(m_speaker_fs_label, 1, 2);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("EBC: "), Gtk::ALIGN_END)), 2, 2);
+    m_grid.attach(m_efficiency_bandwidth_product_label, 3, 2);
 
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("Vb1: "), Gtk::ALIGN_START)), 0, 1, 4, 5);
-    m_table.attach(m_vb1_entry, 1, 2, 4, 5);
-    m_table.attach(*Gtk::manage(new Gtk::Label(_("  Fb1: "), Gtk::ALIGN_END)), 3, 4, 4, 5);
-    m_table.attach(m_fb1_entry, 4, 5, 4, 5);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_START)), 0, 3);
+    m_grid.attach(m_id_string_entry, 1, 3);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Type: "), Gtk::ALIGN_END)), 2, 3);
+    m_grid.attach(m_box_type_combo, 3, 3);
+
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Volume: "), Gtk::ALIGN_START)), 0, 4);
+    m_grid.attach(m_vb1_entry, 1, 4);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fb1: "), Gtk::ALIGN_END)), 2, 4);
+    m_grid.attach(m_fb1_entry, 3, 4);
+
+    m_vb1_entry->set_tooltip_text(_("Enclosure volume"));
 
     m_bass_speaker_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
@@ -142,11 +148,11 @@ void enclosure_editor::on_optimize_button_clicked()
                 // Sealed box
                 // qr=(1/qts)/(1/std::sqrt(2.0)-0.1);
                 // fb=qr*fs;
-                // vr=qr^2-1;
-                // vb=vas/vr;
                 auto const qr = 1.0 / m_current_speaker.get_qts() / (1.0 / std::sqrt(2.0) - 0.1);
                 m_box->set_fb1(qr * m_current_speaker.get_fs());
 
+                // vr=qr^2-1;
+                // vb=vas/vr;
                 auto const vr = std::pow(qr, 2) - 1.0;
                 m_box->set_vb1(m_current_speaker.get_vas() / vr);
                 break;
@@ -349,6 +355,8 @@ void enclosure_editor::on_combo_entry_changed()
     m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
     m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
     m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+    m_efficiency_bandwidth_product_label.set_text(
+        GSpeakers::double_to_ustring(m_current_speaker.get_fs() / m_current_speaker.get_qes(), 2, 1));
     m_box->set_speaker(m_bass_speaker_combo.get_active_text());
     signal_box_modified(m_box);
     m_disable_signals = false;
