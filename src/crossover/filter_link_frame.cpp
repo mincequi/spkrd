@@ -41,7 +41,7 @@ filter_link_frame::filter_link_frame(filter_network* net,
       m_dampening_digits(Gtk::Adjustment::create(0, 0, 100, 1, 5.0)),
       m_damp_spinbutton(m_dampening_digits),
       m_imp_corr_checkbutton(_("Impedance correction")),
-      m_adv_imp_model_checkbutton(_("Use advance driver impendance model")),
+      m_adv_imp_model_checkbutton(_("Use advanced driver impendance model")),
       m_net(net),
       m_description(description),
       m_speaker_list(driver_list)
