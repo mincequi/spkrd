@@ -182,13 +182,11 @@ void enclosure_editor::on_append_to_plot_clicked()
     // Calculate the frequency response graph for current enclosure and the current speaker
     std::vector<gspk::point> points;
 
-    gspk::point point;
     switch (m_box->get_type())
     {
         case BOX_TYPE_PORTED:
             for (int f = 10; f < 1000; f++)
             {
-                point.set_x(f);
                 auto const A = std::pow(m_box->get_fb1() / m_current_speaker.get_fs(), 2);
                 auto const B = A / m_current_speaker.get_qts()
                                + m_box->get_fb1()
@@ -202,24 +200,27 @@ void enclosure_editor::on_append_to_plot_clicked()
                                + m_box->get_fb1() / (7.0 * m_current_speaker.get_fs());
                 auto const fn2 = std::pow(f / m_current_speaker.get_fs(), 2);
                 auto const fn4 = std::pow(fn2, 2);
-                point.set_y(10
-                            * std::log10(std::pow(fn4, 2)
-                                         / (std::pow(fn4 - C * fn2 + A, 2)
-                                            + fn2 * std::pow(D * fn2 - B, 2))));
-                points.push_back(point);
+
+                auto const y = (10
+                                * std::log10(std::pow(fn4, 2)
+                                             / (std::pow(fn4 - C * fn2 + A, 2)
+                                                + fn2 * std::pow(D * fn2 - B, 2))));
+                points.emplace_back(f, y);
             }
             break;
         case BOX_TYPE_SEALED:
             for (int f = 10; f < 1000; f++)
             {
-                point.set_x(f);
                 auto const fr = std::pow(f / m_box->get_fb1(), 2);
                 auto const vr = m_current_speaker.get_vas() / m_box->get_vb1();
                 auto const qr = std::sqrt(vr + 1.0);
                 auto const qb = 1.0 / (1.0 / m_current_speaker.get_qts() / qr + 0.1);
-                point.set_y(
-                    10 * std::log10(std::pow(fr, 2) / (std::pow(fr - 1.0, 2) + fr / std::pow(qb, 2))));
-                points.push_back(point);
+
+                points.emplace_back(f,
+                                    10
+                                        * std::log10(
+                                              std::pow(fr, 2)
+                                              / (std::pow(fr - 1.0, 2) + fr / std::pow(qb, 2))));
             }
             break;
     }
