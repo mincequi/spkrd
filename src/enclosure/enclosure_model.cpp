@@ -31,8 +31,8 @@ auto resonance_frequency(double const Qtc,
 
 auto minus_3dB_rolloff(double const Qtc, double const resonant_frequency) noexcept -> double
 {
-    assert(Qtc);
-    assert(resonant_frequency);
+    assert(Qtc > 0);
+    assert(resonant_frequency > 0);
 
     return resonant_frequency
            * std::sqrt((1.0 / std::pow(Qtc, 2) - 2.0
