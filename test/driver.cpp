@@ -8,11 +8,14 @@ std::string const path = GSPK_TEST_FILE_DIRECTORY;
 TEST_CASE("Populate enclosure list from xml")
 {
     SECTION("Empty case") { REQUIRE(speaker_list().data().empty()); }
-    SECTION("File not found exception") { REQUIRE_THROWS_AS(speaker_list(""), std::runtime_error); }
+    SECTION("File not found exception")
+    {
+        REQUIRE_THROWS_AS(speaker_list(""), std::runtime_error);
+    }
     SECTION("Test xml parsing")
     {
         auto drivers = speaker_list(path + "/vifa.xml");
-        REQUIRE(drivers.data().size() == 6);
+        REQUIRE(drivers.data().size() == 7);
 
         {
             auto const& driver = drivers.data().at(0);

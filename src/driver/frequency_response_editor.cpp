@@ -131,7 +131,7 @@ frequency_response_editor::frequency_response_editor(std::string filename)
                 substr_ptr = strtok(nullptr, ",");
                 auto const f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-                dbmag_entries[i]->set_text(GSpeakers::double_to_ustring(f2, 2, 1));
+                dbmag_entries[i]->set_text(gspk::double_to_ustring(f2, 2, 1));
                 dbmag_entries[i]->signal_changed().connect(
                     sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
             }

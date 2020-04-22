@@ -9,7 +9,8 @@ namespace gspk
 {
 namespace sealed
 {
-auto volume(double const Qtc, double const equivalent_volume, double const Qts) noexcept -> double
+auto volume(double const Qtc, double const equivalent_volume, double const Qts) noexcept
+    -> double
 {
     assert(equivalent_volume > 0.0);
     assert(Qtc > 0.0);
@@ -29,7 +30,8 @@ auto resonance_frequency(double const Qtc,
     return Qtc * driver_resonance_frequency / Qts;
 }
 
-auto minus_3dB_rolloff(double const Qtc, double const resonant_frequency) noexcept -> double
+auto minus_3dB_rolloff(double const Qtc, double const resonant_frequency) noexcept
+    -> double
 {
     assert(Qtc > 0);
     assert(resonant_frequency > 0);

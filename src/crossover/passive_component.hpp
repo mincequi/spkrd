@@ -30,7 +30,7 @@ constexpr auto PART_TYPE_INDUCTOR = 2;
 constexpr auto PART_TYPE_RESISTOR = 3;
 
 /// passive_component, for example an inductor or capacitor
-class passive_component : public GSpeakersObject
+class passive_component : public gspkObject
 {
 public:
     /// Create a new component

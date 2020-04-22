@@ -37,7 +37,7 @@ constexpr bool is_midrange_driver(int const value) { return value & SPEAKER_TYPE
 constexpr bool is_tweeter_driver(int const value) { return value & SPEAKER_TYPE_TWEETER; }
 
 /// This class contains data for a speaker
-class driver : public GSpeakersObject
+class driver : public gspkObject
 {
 public:
     /// Default values from Vifa P21WO-20-08

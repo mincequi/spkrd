@@ -63,44 +63,44 @@ settings_dialog::settings_dialog()
     this->connect_signals();
 }
 
-void settings_dialog::on_config_option_change(GSpeakers::Settings setting)
+void settings_dialog::on_config_option_change(gspk::Settings setting)
 {
     std::cout << "settings_dialog::on_config_option_change: " << setting << "\n";
 
     switch (setting)
     {
-        case GSpeakers::SAVE_MAIN_WINDOW_SIZE:
+        case gspk::SAVE_MAIN_WINDOW_SIZE:
             g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
             break;
-        case GSpeakers::SAVE_MAIN_WINDOW_POSITION:
+        case gspk::SAVE_MAIN_WINDOW_POSITION:
             g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
             break;
-        case GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT:
+        case gspk::AUTO_UPDATE_CROSSOVER_PLOT:
             g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
             break;
-        case GSpeakers::DRAW_DRIVER_IMP_PLOT:
+        case gspk::DRAW_DRIVER_IMP_PLOT:
             g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
             break;
-        case GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT:
+        case gspk::DRAW_DRIVER_FREQ_RESP_PLOT:
             g_settings.setValue("DrawDriverFreqRespPlot", m_draw_driver_freq_resp_plot.get_active());
             break;
-        case GSpeakers::DISABLE_FILTER_AMP:
+        case gspk::DISABLE_FILTER_AMP:
             g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
             break;
-        case GSpeakers::SCALE_FILTER_PARTS:
+        case gspk::SCALE_FILTER_PARTS:
             g_settings.setValue("ScaleCrossoverImageParts",
                                 m_scale_crossover_image_parts.get_active());
             break;
-        case GSpeakers::USE_DRIVER_IMPEDANCE:
+        case gspk::USE_DRIVER_IMPEDANCE:
             g_settings.setValue("UseDriverImpedance", m_use_driver_impedance.get_active());
             break;
-        case GSpeakers::SPICE_PATH:
+        case gspk::SPICE_PATH:
             g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
             break;
-        case GSpeakers::TOOLBAR_STYLE:
+        case gspk::TOOLBAR_STYLE:
             g_settings.setValue("ToolbarStyle", m_toolbar_style.get_active_row_number());
             break;
-        case GSpeakers::SPICE_TYPE:
+        case gspk::SPICE_TYPE:
             if (m_spice_use_berkley.get_active())
             {
                 g_settings.setValue("SPICEUseNGSPICE", false);
@@ -179,46 +179,46 @@ void settings_dialog::connect_signals()
     /* Setup configuration option change handlers */
     m_save_mainwindow_size.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SAVE_MAIN_WINDOW_SIZE));
+                   gspk::SAVE_MAIN_WINDOW_SIZE));
     m_save_mainwindow_position.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SAVE_MAIN_WINDOW_SIZE));
+                   gspk::SAVE_MAIN_WINDOW_SIZE));
 
     m_autoupdate_filter_plots.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::AUTO_UPDATE_CROSSOVER_PLOT));
+                   gspk::AUTO_UPDATE_CROSSOVER_PLOT));
     m_draw_driver_imp_plot.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::DRAW_DRIVER_IMP_PLOT));
+                   gspk::DRAW_DRIVER_IMP_PLOT));
     m_draw_driver_freq_resp_plot.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::DRAW_DRIVER_FREQ_RESP_PLOT));
+                   gspk::DRAW_DRIVER_FREQ_RESP_PLOT));
     m_disable_filter_amp.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::DISABLE_FILTER_AMP));
+                   gspk::DISABLE_FILTER_AMP));
     m_scale_crossover_image_parts.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SCALE_FILTER_PARTS));
+                   gspk::SCALE_FILTER_PARTS));
     m_use_driver_impedance.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::USE_DRIVER_IMPEDANCE));
+                   gspk::USE_DRIVER_IMPEDANCE));
 
     m_spice_path_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SPICE_PATH));
+                   gspk::SPICE_PATH));
     m_spice_use_ngspice.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SPICE_TYPE));
+                   gspk::SPICE_TYPE));
     m_spice_use_berkley.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SPICE_TYPE));
+                   gspk::SPICE_TYPE));
     m_spice_use_gnucap.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::SPICE_TYPE));
+                   gspk::SPICE_TYPE));
 
     m_toolbar_style.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   GSpeakers::TOOLBAR_STYLE));
+                   gspk::TOOLBAR_STYLE));
 }
 
 void settings_dialog::initialise_general_page()

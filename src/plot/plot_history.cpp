@@ -241,14 +241,14 @@ void plot_history::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeM
 void plot_history::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
+    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
 void plot_history::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";
+    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 

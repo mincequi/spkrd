@@ -31,7 +31,6 @@
 
 #include <vector>
 
-/// This is a wrapper class for GSpeakersPlot
 class driver_frequency_response_plot : public Gtk::Frame
 {
 public:

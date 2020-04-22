@@ -71,7 +71,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     m_evbox = Gtk::make_managed<Gtk::EventBox>();
     m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ["))
-                              + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                              + gspk::short_filename(m_filename, 20) + "]</b>");
 
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
     set_label_widget(*m_evbox);
@@ -105,7 +105,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
 
 void crossover_history::on_save_open_files()
 {
-    if (GSpeakers::crossoverlist_modified())
+    if (gspk::crossoverlist_modified())
     {
         on_save();
     }
@@ -195,7 +195,7 @@ void crossover_history::open_xml(const std::string& filename)
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
-                                  + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                                  + gspk::short_filename(m_filename, 20) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
     }
     catch (std::runtime_error const& e)
@@ -396,7 +396,7 @@ void crossover_history::save_as_xml(const std::string& filename)
         {
             auto crossover_label = Gtk::make_managed<Gtk::Label>();
             crossover_label->set_markup("<b>" + Glib::ustring(_("Crossover list ["))
-                                        + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                                        + gspk::short_filename(m_filename, 20) + "]</b>");
             set_label_widget(*crossover_label);
         }
         signal_crossover_set_save_state(false);

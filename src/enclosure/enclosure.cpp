@@ -34,7 +34,7 @@ enclosure::enclosure(std::string id_string,
                      double vb2,
                      double fb2,
                      std::string speaker)
-    : GSpeakersObject(type),
+    : gspkObject(type),
       m_id_string(std::move(id_string)),
       m_vb1(vb1),
       m_fb1(fb1),
@@ -44,7 +44,7 @@ enclosure::enclosure(std::string id_string,
 {
 }
 
-enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
+enclosure::enclosure(xmlNodePtr parent) : gspkObject()
 {
     if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "box")
     {

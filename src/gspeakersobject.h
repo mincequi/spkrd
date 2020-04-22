@@ -22,14 +22,14 @@
 /// This is a base object for data-containers in this project
 /// Since every part and every net will have an unique id this
 /// is probably a pretty nice base-class
-class GSpeakersObject : public sigc::trackable
+class gspkObject : public sigc::trackable
 {
 public:
-    GSpeakersObject();
+    gspkObject();
 
-    explicit GSpeakersObject(int type);
+    explicit gspkObject(int type);
 
-    /// The member variable m_id is a unique id for each instance of GSpeakersObject.
+    /// The member variable m_id is a unique id for each instance of gspkObject.
     /// We use this as a base class for all classes that needs a id, for example all
     /// parts definitely need a unique id.
     auto get_id() const -> int;

@@ -21,7 +21,7 @@
 #include <utility>
 
 Crossover::Crossover(int type, std::string id_string)
-    : GSpeakersObject(type), m_id_string(std::move(id_string))
+    : gspkObject(type), m_id_string(std::move(id_string))
 {
     if (m_type == CROSSOVER_TYPE_SUBSONIC)
     {
@@ -55,7 +55,7 @@ Crossover::Crossover(int type, std::string id_string)
     }
 }
 
-Crossover::Crossover(xmlNodePtr parent) : GSpeakersObject()
+Crossover::Crossover(xmlNodePtr parent) : gspkObject()
 {
     if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "crossover")
     {

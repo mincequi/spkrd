@@ -30,7 +30,7 @@
 class Net;
 class Crossover;
 
-/// This is a wrapper class for GSpeakersPlot
+/// This is a wrapper class for gspkPlot
 /// The reason why we have this class is that we want an extra layer
 // (where we can connect signals etc) between the program and the plot widget.
 class total_filter_plot : public Gtk::Frame

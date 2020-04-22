@@ -36,7 +36,7 @@ constexpr auto CROSSOVER_TYPE_TWOWAY = 8;
 constexpr auto CROSSOVER_TYPE_THREEWAY = 16;
 constexpr auto CROSSOVER_TYPE_FOURWAY = 32;
 
-class Crossover : public GSpeakersObject
+class Crossover : public gspkObject
 {
 public:
     Crossover(int type = CROSSOVER_TYPE_TWOWAY, std::string id_string = "Crossover");

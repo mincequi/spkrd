@@ -219,14 +219,14 @@ auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
         }
         {
             auto tool_button = Gtk::manage(
-                new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Optimize")));
+                new Gtk::ToolButton(gspk::image_widget("opt_enclosure_24.png"), _("Optimize")));
             tool_button->signal_clicked().connect(
                 sigc::mem_fun(m_box_editor, &enclosure_editor::on_optimize_button_clicked));
             m_tbar->append(*tool_button);
         }
         {
             auto tool_button = Gtk::manage(
-                new Gtk::ToolButton(GSpeakers::image_widget("opt_enclosure_24.png"), _("Plot")));
+                new Gtk::ToolButton(gspk::image_widget("opt_enclosure_24.png"), _("Plot")));
             tool_button->signal_clicked().connect(
                 sigc::mem_fun(m_box_editor, &enclosure_editor::on_append_to_plot_clicked));
             m_tbar->append(*tool_button);
@@ -268,7 +268,7 @@ void enclosure_pane::set_save_state(bool b)
     if (!m_tbar->get_children().empty())
     {
         //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
-        GSpeakers::enclosurelist_modified() = b;
+        gspk::enclosurelist_modified() = b;
     }
 }
 

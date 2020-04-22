@@ -46,7 +46,7 @@ sigc::signal0<void> signal_plot_crossover;
 sigc::signal4<int, std::vector<gspk::point> const&, Gdk::Color const&, int&, Net*> signal_add_crossover_plot;
 sigc::signal0<void> signal_save_open_files;
 
-namespace GSpeakers
+namespace gspk
 {
 auto double_to_ustring(double d) -> Glib::ustring
 {
@@ -139,4 +139,4 @@ auto measurementlist_modified() -> bool&
     return meassurementlist_mod;
 }
 
-} // namespace GSpeakers
+} // namespace gspk

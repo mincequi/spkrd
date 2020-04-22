@@ -52,7 +52,7 @@ constexpr auto NET_LINEARPHASE = 7;
 /// filter_network is a part of a crossover: one part of the crossover we want to simulate in SPICE
 /// For example: Lowpass filter with impedance correction network or
 ///              highpass filter with damping network.
-class filter_network : public GSpeakersObject
+class filter_network : public gspkObject
 {
 public:
     /// Construct new net object

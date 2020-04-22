@@ -42,7 +42,7 @@ namespace gspk
 class point;
 }
 
-namespace GSpeakers
+namespace gspk
 {
 auto double_to_ustring(double d) -> Glib::ustring;
 auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
@@ -56,7 +56,7 @@ auto driverlist_modified() -> bool&;
 auto enclosurelist_modified() -> bool&;
 auto crossoverlist_modified() -> bool&;
 auto measurementlist_modified() -> bool&;
-} // namespace GSpeakers
+} // namespace gspk
 
 class enclosure;
 class driver;

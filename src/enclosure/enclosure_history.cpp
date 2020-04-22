@@ -65,7 +65,7 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     std::cout << "boxlist_found = " << boxlist_found << "\n";
 
     m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                       + GSpeakers::short_filename(m_filename) + "]</b>");
+                       + gspk::short_filename(m_filename) + "]</b>");
     set_label_widget(m_label);
 
     create_model();
@@ -110,7 +110,7 @@ void enclosure_history::on_plot_selected(int i) { selected_plot = i; }
 
 void enclosure_history::on_save_open_files()
 {
-    if (GSpeakers::enclosurelist_modified())
+    if (gspk::enclosurelist_modified())
     {
         on_save();
     }
@@ -180,7 +180,7 @@ void enclosure_history::open_xml(const std::string& filename)
         signal_enclosure_set_save_state(false);
         static_cast<Gtk::Label*>(get_label_widget())
             ->set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                         + GSpeakers::short_filename(m_filename) + "]</b>");
+                         + gspk::short_filename(m_filename) + "]</b>");
         g_settings.setValue("BoxListXml", m_filename);
     }
     catch (std::runtime_error const& error)
@@ -279,7 +279,7 @@ void enclosure_history::on_new()
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
     GtkTreePath* gpath = gtk_tree_path_new_from_string(
-        GSpeakers::int_to_ustring(m_box_list.data().size() - 1).c_str());
+        gspk::int_to_ustring(m_box_list.data().size() - 1).c_str());
     Gtk::TreePath path(gpath);
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
     selection->select(row);
@@ -339,7 +339,7 @@ void enclosure_history::save_as_xml(const std::string& filename)
         m_filename = filename;
 
         m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                           + GSpeakers::short_filename(m_filename) + "]</b>");
+                           + gspk::short_filename(m_filename) + "]</b>");
         set_label_widget(m_label);
 
         g_settings.setValue("BoxListXml", m_filename);
@@ -513,7 +513,7 @@ void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
 
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
+    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
@@ -521,7 +521,7 @@ void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
+    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 

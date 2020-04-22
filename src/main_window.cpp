@@ -36,8 +36,8 @@ enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
 inline auto is_state_modified() -> bool
 {
-    return GSpeakers::driverlist_modified() || GSpeakers::enclosurelist_modified()
-           || GSpeakers::crossoverlist_modified() || GSpeakers::measurementlist_modified();
+    return gspk::driverlist_modified() || gspk::enclosurelist_modified()
+           || gspk::crossoverlist_modified() || gspk::measurementlist_modified();
 }
 
 main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
@@ -100,7 +100,7 @@ void main_window::set_title_and_icons()
     {
         std::cout << error.code() << "\n";
     }
-    set_title("GSpeakers " + std::string(VERSION));
+    set_title("gspk " + std::string(VERSION));
 }
 
 void main_window::set_defaults()
@@ -196,8 +196,10 @@ void main_window::connect_driver_tab()
     g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
     g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
 
-    m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPosition"));
-    m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPosition"));
+    m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPositio"
+                                                                "n"));
+    m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPositio"
+                                                                "n"));
 
     m_driver_hpaned.add2(m_driver_vpaned);
     m_driver_vpaned.add1(m_speaker_editor.get_plot());
@@ -313,7 +315,8 @@ void main_window::on_quit()
 
         auto label3 = Gtk::manage(
             new Gtk::Label(Glib::ustring(_("There are unsaved files. If you choose")) + "\n"
-                               + Glib::ustring(_("to quit without saving all changes since last "
+                               + Glib::ustring(_("to quit without saving all changes "
+                                                 "since last "
                                                  "save"))
                                + "\n" + Glib::ustring(_("will be lost.")),
                            Gtk::ALIGN_START));
@@ -447,7 +450,7 @@ void main_window::on_switch_page(Gtk::Widget* page, int page_number)
 void main_window::on_about()
 {
     Gtk::MessageDialog(*this,
-                       "GSpeakers-" + std::string(VERSION)
+                       "gspk-" + std::string(VERSION)
                            + "\n\n(C) Daniel Sundberg "
                              "<sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net",
                        false,

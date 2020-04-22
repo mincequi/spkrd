@@ -17,17 +17,17 @@
 
 #include "gspeakersobject.h"
 
-GSpeakersObject::GSpeakersObject() : sigc::trackable()
+gspkObject::gspkObject() : sigc::trackable()
 {
     static int next_id = 0;
 
     m_id = next_id++;
 }
 
-GSpeakersObject::GSpeakersObject(int type) : GSpeakersObject() { m_type = type; }
+gspkObject::gspkObject(int type) : gspkObject() { m_type = type; }
 
-auto GSpeakersObject::get_id() const -> int { return m_id; }
+auto gspkObject::get_id() const -> int { return m_id; }
 
-void GSpeakersObject::set_type(int type) { m_type = type; }
+void gspkObject::set_type(int type) { m_type = type; }
 
-auto GSpeakersObject::get_type() const -> int { return m_type; }
+auto gspkObject::get_type() const -> int { return m_type; }

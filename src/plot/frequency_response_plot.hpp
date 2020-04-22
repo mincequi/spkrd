@@ -32,7 +32,7 @@ class driver_list;
 class Crossover;
 class Net;
 
-/// This is a wrapper class for GSpeakersPlot
+/// This is a wrapper class for gspkPlot
 class frequency_response_plot : public Gtk::Frame
 {
 public:
