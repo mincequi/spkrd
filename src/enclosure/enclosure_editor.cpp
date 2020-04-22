@@ -19,6 +19,7 @@
 
 #include "enclosure_editor.hpp"
 
+#include "enclosure_model.hpp"
 #include "common.h"
 #include "plot.hpp"
 
@@ -39,7 +40,6 @@ enclosure_editor::enclosure_editor()
     : Gtk::Frame(_("Enclosure editor")),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_hbox(Gtk::ORIENTATION_HORIZONTAL),
-      m_speaker_qts_label("", Gtk::ALIGN_START),
       m_speaker_vas_label("", Gtk::ALIGN_START),
       m_speaker_fs_label("", Gtk::ALIGN_START),
       m_efficiency_bandwidth_product_label("", Gtk::ALIGN_START)
@@ -58,50 +58,89 @@ enclosure_editor::enclosure_editor()
     m_fb1_entry.set_width_chars(10);
     m_id_string_entry.set_width_chars(10);
 
+    m_box_damping_combo.append("Perfect transient (0.5)");
+    m_box_damping_combo.append("Bessel (D2 - 0.577)");
+    m_box_damping_combo.append("Butterworth (B2 - 0.707)");
+    m_box_damping_combo.append("Chebychev (C2 - 0.8)");
+    m_box_damping_combo.append("Chebychev (C2 - 0.9)");
+    m_box_damping_combo.append("Chebychev (C2 - 1.0)");
+    m_box_damping_combo.append("Chebychev (C2 - 1.1)");
+    m_box_damping_combo.append("Chebychev (C2 - 1.2)");
+
+    m_box_damping_combo.set_active(2);
+    m_system_damping = 1.0 / std::sqrt(2.0);
+
+    m_box_type_combo.append("Sealed");
+    m_box_type_combo.append("Ported");
+
+    this->arrange_grid();
+
+    m_vb1_entry.set_tooltip_text(_("Enclosure volume"));
+
+    this->connect_signals();
+
+    show_all();
+}
+
+void enclosure_editor::arrange_grid()
+{
     m_grid.set_row_spacing(10);
     m_grid.set_column_spacing(10);
 
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Woofer: "), Gtk::ALIGN_START)), 0, 0);
-    m_grid.attach(m_bass_speaker_combo, 1, 0);
+    // Indices for grid are given as x, y
 
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Qts: "), Gtk::ALIGN_START)), 0, 1);
-    m_grid.attach(m_speaker_qts_label, 1, 1);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Vas: "), Gtk::ALIGN_END)), 2, 1);
-    m_grid.attach(m_speaker_vas_label, 3, 1);
+    // Left column
 
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fs: "), Gtk::ALIGN_START)), 0, 2);
-    m_grid.attach(m_speaker_fs_label, 1, 2);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("EBC: "), Gtk::ALIGN_END)), 2, 2);
-    m_grid.attach(m_efficiency_bandwidth_product_label, 3, 2);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Name:"), Gtk::ALIGN_START)), 0, 0);
+    m_grid.attach(m_id_string_entry, 1, 0);
 
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Id string: "), Gtk::ALIGN_START)), 0, 3);
-    m_grid.attach(m_id_string_entry, 1, 3);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Type: "), Gtk::ALIGN_END)), 2, 3);
-    m_grid.attach(m_box_type_combo, 3, 3);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Woofer:"), Gtk::ALIGN_START)), 0, 1);
+    m_grid.attach(m_bass_speaker_combo, 1, 1);
 
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Volume: "), Gtk::ALIGN_START)), 0, 4);
-    m_grid.attach(m_vb1_entry, 1, 4);
-    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Fb1: "), Gtk::ALIGN_END)), 2, 4);
-    m_grid.attach(m_fb1_entry, 3, 4);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Type:"), Gtk::ALIGN_START)), 0, 2);
+    m_grid.attach(m_box_type_combo, 1, 2);
 
-    m_vb1_entry->set_tooltip_text(_("Enclosure volume"));
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Alignment:"), Gtk::ALIGN_START)), 0, 3);
+    m_grid.attach(m_box_damping_combo, 1, 3);
 
+    // Right column
+
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("EBP:"), Gtk::ALIGN_END)), 2, 1);
+    m_grid.attach(m_efficiency_bandwidth_product_label, 3, 1);
+
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Resonance\nfrequency:"), Gtk::ALIGN_END)),
+                  2,
+                  2);
+    m_grid.attach(m_fb1_entry, 3, 2);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Hz"), Gtk::ALIGN_START)), 4, 2);
+
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("Volume:"), Gtk::ALIGN_END)), 2, 3);
+    m_grid.attach(m_vb1_entry, 3, 3);
+    m_grid.attach(*Gtk::manage(new Gtk::Label(_("L"), Gtk::ALIGN_START)), 4, 3);
+}
+
+void enclosure_editor::connect_signals()
+{
     m_bass_speaker_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
+
+    m_box_damping_combo.signal_changed().connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_alignment_changed));
 
     m_id_string_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
                    ID_STRING_ENTRY_CHANGED));
     m_vb1_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), VB1_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
+                   VB1_ENTRY_CHANGED));
     m_fb1_entry.signal_changed().connect(
-        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed), FB1_ENTRY_CHANGED));
+        sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
+                   FB1_ENTRY_CHANGED));
 
-    signal_speakerlist_loaded.connect(sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
+    signal_speakerlist_loaded.connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
 
     // Setup option menu
-    m_box_type_combo.append("Sealed");
-    m_box_type_combo.append("Ported");
     m_box_type_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_enclosure_changed));
 
@@ -112,8 +151,6 @@ enclosure_editor::enclosure_editor()
         sigc::mem_fun(*this, &enclosure_editor::on_vb1_entry_activated));
     m_fb1_entry.signal_activate().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_append_to_boxlist_clicked));
-
-    show_all();
 }
 
 void enclosure_editor::on_vb1_entry_activated()
@@ -145,30 +182,30 @@ void enclosure_editor::on_optimize_button_clicked()
         {
             case BOX_TYPE_SEALED:
             {
-                // Sealed box
-                // qr=(1/qts)/(1/std::sqrt(2.0)-0.1);
-                // fb=qr*fs;
-                auto const qr = 1.0 / m_current_speaker.get_qts() / (1.0 / std::sqrt(2.0) - 0.1);
-                m_box->set_fb1(qr * m_current_speaker.get_fs());
+                using namespace gspk;
 
-                // vr=qr^2-1;
-                // vb=vas/vr;
-                auto const vr = std::pow(qr, 2) - 1.0;
-                m_box->set_vb1(m_current_speaker.get_vas() / vr);
+                m_box->set_fb1(sealed::resonance_frequency(m_system_damping,
+                                                           m_current_speaker.get_fs(),
+                                                           m_current_speaker.get_qts()));
+
+                m_box->set_vb1(sealed::volume(m_system_damping,
+                                              m_current_speaker.get_vas(),
+                                              m_current_speaker.get_qts()));
                 break;
             }
             case BOX_TYPE_PORTED:
                 // Ported box
                 // vb=20*vas*qts^3.3;
                 // fb=fs*(vas/vb)^0.31;
-                m_box->set_vb1(20 * m_current_speaker.get_vas()
+                m_box->set_vb1(20.0 * m_current_speaker.get_vas()
                                * std::pow(m_current_speaker.get_qts(), 3.3));
-                m_box->set_fb1(m_current_speaker.get_fs()
-                               * std::pow(m_current_speaker.get_vas() / m_box->get_vb1(), 0.31));
+                m_box->set_fb1(
+                    m_current_speaker.get_fs()
+                    * std::pow(m_current_speaker.get_vas() / m_box->get_vb1(), 0.31));
                 break;
         }
-        m_vb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
+        m_vb1_entry.set_text(gspk::double_to_ustring(m_box->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
     }
     signal_box_modified(m_box);
     m_disable_signals = false;
@@ -215,18 +252,20 @@ void enclosure_editor::on_append_to_plot_clicked()
             }
             break;
         case BOX_TYPE_SEALED:
-            for (int f = 10; f < 1000; f++)
+
+            auto const vr = m_current_speaker.get_vas() / m_box->get_vb1();
+            auto const qr = std::sqrt(vr + 1.0);
+            auto const qb = 1.0 / (1.0 / m_current_speaker.get_qts() / qr + 0.1);
+
+            for (int f = 10; f < 1000; ++f)
             {
                 auto const fr = std::pow(f / m_box->get_fb1(), 2);
-                auto const vr = m_current_speaker.get_vas() / m_box->get_vb1();
-                auto const qr = std::sqrt(vr + 1.0);
-                auto const qb = 1.0 / (1.0 / m_current_speaker.get_qts() / qr + 0.1);
 
                 points.emplace_back(f,
                                     10
-                                        * std::log10(
-                                              std::pow(fr, 2)
-                                              / (std::pow(fr - 1.0, 2) + fr / std::pow(qb, 2))));
+                                        * std::log10(std::pow(fr, 2)
+                                                     / (std::pow(fr - 1.0, 2)
+                                                        + fr / std::pow(qb, 2))));
             }
             break;
     }
@@ -251,8 +290,8 @@ void enclosure_editor::on_box_selected(enclosure* b)
     {
         m_box = b;
         m_id_string_entry.set_text(b->get_id_string());
-        m_vb1_entry.set_text(GSpeakers::double_to_ustring(b->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(GSpeakers::double_to_ustring(b->get_fb1(), 2, 1));
+        m_vb1_entry.set_text(gspk::double_to_ustring(b->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(gspk::double_to_ustring(b->get_fb1(), 2, 1));
 
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
@@ -281,10 +320,11 @@ void enclosure_editor::on_box_selected(enclosure* b)
 
         if (m_box->get_type() == BOX_TYPE_SEALED)
         {
-            auto const qr = (1.0 / m_current_speaker.get_qts()) / (1.0 / std::sqrt(2.0) - 0.1);
-            m_box->set_fb1(qr * m_current_speaker.get_fs());
+            m_box->set_fb1(gspk::sealed::resonance_frequency(m_system_damping,
+                                                             m_current_speaker.get_fs(),
+                                                             m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
         }
     }
     else
@@ -338,8 +378,8 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
 
 void enclosure_editor::on_combo_entry_changed()
 {
-    std::cout << "enclosure_editor: combo entry changed: " << m_bass_speaker_combo.get_active_text()
-              << "\n";
+    std::cout << "enclosure_editor: combo entry changed: "
+              << m_bass_speaker_combo.get_active_text() << "\n";
 
     if (m_disable_signals)
     {
@@ -352,14 +392,75 @@ void enclosure_editor::on_combo_entry_changed()
     m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
-    m_speaker_qts_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_qts(), 2, 3));
-    m_speaker_vas_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
-    m_speaker_fs_label.set_text(GSpeakers::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
-    m_efficiency_bandwidth_product_label.set_text(
-        GSpeakers::double_to_ustring(m_current_speaker.get_fs() / m_current_speaker.get_qes(), 2, 1));
+    m_speaker_vas_label.set_text(gspk::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
+    m_speaker_fs_label.set_text(gspk::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+
+    {
+        auto const ebp = m_current_speaker.get_fs() / m_current_speaker.get_qes();
+        m_efficiency_bandwidth_product_label.set_text(gspk::double_to_ustring(ebp, 2, 1));
+
+        // Select the best enclosure based on the efficiency bandwidth product
+        if (ebp <= 50.0)
+        {
+            m_box_type_combo.set_active(BOX_TYPE_SEALED - 1);
+        }
+        else if (ebp >= 100.0)
+        {
+            m_box_type_combo.set_active(BOX_TYPE_PORTED - 1);
+        }
+    }
+
     m_box->set_speaker(m_bass_speaker_combo.get_active_text());
+
     signal_box_modified(m_box);
+
     m_disable_signals = false;
+}
+
+void enclosure_editor::on_alignment_changed()
+{
+    std::cout << "enclosure_editor: combo entry changed: "
+              << m_box_damping_combo.get_active_text() << '\n';
+
+    if (m_disable_signals)
+    {
+        return;
+    }
+
+    m_disable_signals = true;
+
+    auto const alignment_index = m_box_damping_combo.get_active_row_number();
+
+    switch (alignment_index)
+    {
+        case static_cast<int>(gspk::sealed::RESPONSE::PERFECT_TRANSIENT):
+            m_system_damping = 0.5;
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::BESSEL):
+            m_system_damping = std::sqrt(1.0 / 3.0);
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::BUTTERWORTH):
+            m_system_damping = std::sqrt(1.0 / 2.0);
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::CHEBYCHEV_08):
+            m_system_damping = 0.8;
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::CHEBYCHEV_09):
+            m_system_damping = 0.9;
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::CHEBYCHEV_10):
+            m_system_damping = 1.0;
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::CHEBYCHEV_11):
+            m_system_damping = 1.1;
+            break;
+        case static_cast<int>(gspk::sealed::RESPONSE::CHEBYCHEV_12):
+            m_system_damping = 1.2;
+            break;
+    }
+    m_disable_signals = false;
+
+    this->on_optimize_button_clicked();
 }
 
 void enclosure_editor::on_enclosure_changed()
@@ -374,13 +475,16 @@ void enclosure_editor::on_enclosure_changed()
     {
         case SEALED_SELECTED:
         {
+            using namespace gspk;
+
             m_box->set_type(BOX_TYPE_SEALED);
             m_fb1_entry.set_sensitive(false);
 
-            auto const qr = 1.0 / m_current_speaker.get_qts() / (1.0 / std::sqrt(2.0) - 0.1);
-            m_box->set_fb1(qr * m_current_speaker.get_fs());
+            m_box->set_fb1(sealed::resonance_frequency(m_system_damping,
+                                                       m_current_speaker.get_fs(),
+                                                       m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(GSpeakers::double_to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
             break;
         }
         case PORTED_SELECTED:
