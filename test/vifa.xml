@@ -126,4 +126,24 @@
     <rms>1</rms>
     <cms>0.0001</cms>
   </speaker>
+  <speaker>
+    <id_string> Scan Speak 26W/4558-T00</id_string>
+    <type>1</type>
+    <qts>0.31</qts>
+    <vas>94.9000</vas>
+    <fs>21</fs>
+    <rdc>2.60000</rdc>
+    <lvc>0.82999</lvc>
+    <qms>5.55999</qms>
+    <qes>0.33000</qes>
+    <imp>4</imp>
+    <sens>88</sens>
+    <freq_resp_filename/>
+    <imp_resp_filename/>
+    <mmd>0.1022</mmd>
+    <ad>0.106</ad>
+    <bl>10.5</bl>
+    <rms>1.7</rms>
+    <cms>0.00119</cms>
+  </speaker>
 </speakerlist>
