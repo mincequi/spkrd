@@ -54,9 +54,9 @@ auto frequency_response(double const Qtc,
 
     return 10.0
            * std::log10(std::pow(f / fc, 2)
-                        / (std::pow(f / fc, 4)
-                           + std::pow(f / fc, 2) * (std::pow(Qtc, -2) - 2.0) + 1.0));
+                        / std::sqrt(std::pow(f / fc, 4)
+                                    + std::pow(f / fc, 2) * (std::pow(Qtc, -2) - 2.0)
+                                    + 1.0));
 }
-
 }
 }

@@ -225,6 +225,8 @@ void enclosure_editor::on_append_to_plot_clicked()
     // Calculate the frequency response graph for current enclosure and the current speaker
     std::vector<gspk::point> points;
 
+    using namespace gspk;
+
     switch (m_box->get_type())
     {
         case BOX_TYPE_PORTED:
@@ -253,19 +255,12 @@ void enclosure_editor::on_append_to_plot_clicked()
             break;
         case BOX_TYPE_SEALED:
 
-            auto const vr = m_current_speaker.get_vas() / m_box->get_vb1();
-            auto const qr = std::sqrt(vr + 1.0);
-            auto const qb = 1.0 / (1.0 / m_current_speaker.get_qts() / qr + 0.1);
-
             for (int f = 10; f < 1000; ++f)
             {
-                auto const fr = std::pow(f / m_box->get_fb1(), 2);
-
                 points.emplace_back(f,
-                                    10
-                                        * std::log10(std::pow(fr, 2)
-                                                     / (std::pow(fr - 1.0, 2)
-                                                        + fr / std::pow(qb, 2))));
+                                    sealed::frequency_response(m_system_damping,
+                                                               f,
+                                                               m_box->get_fb1()));
             }
             break;
     }
