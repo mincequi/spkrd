@@ -30,16 +30,33 @@ auto resonance_frequency(double const Qtc,
     return Qtc * driver_resonance_frequency / Qts;
 }
 
-auto minus_3dB_rolloff(double const Qtc, double const resonant_frequency) noexcept
-    -> double
+auto minus_3dB_rolloff(double const Qtc, double const resonance_frequency) noexcept -> double
 {
     assert(Qtc > 0);
-    assert(resonant_frequency > 0);
+    assert(resonance_frequency > 0);
 
-    return resonant_frequency
+    return resonance_frequency
            * std::sqrt((1.0 / std::pow(Qtc, 2) - 2.0
                         + std::sqrt(std::pow(1.0 / std::pow(Qtc, 2) - 2.0, 2) + 4.0))
                        / 2.0);
 }
+
+auto frequency_response(double const Qtc,
+                        double const frequency,
+                        double const enclosure_resonance_frequency) noexcept -> double
+{
+    assert(Qtc >= 0.0);
+    assert(enclosure_resonance_frequency >= 0.0);
+    assert(frequency >= 0.0);
+
+    auto const& f = frequency;
+    auto const& fc = enclosure_resonance_frequency;
+
+    return 10.0
+           * std::log10(std::pow(f / fc, 2)
+                        / (std::pow(f / fc, 4)
+                           + std::pow(f / fc, 2) * (std::pow(Qtc, -2) - 2.0) + 1.0));
+}
+
 }
 }
