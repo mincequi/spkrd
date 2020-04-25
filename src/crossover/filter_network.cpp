@@ -541,7 +541,6 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
     int node_counter = 0;
     int part_index = 0;
     int next_node_cnt_inc = 1;
-    auto* buffer = new gchar[8];
 
     std::ofstream of(tmp_file.c_str());
     if (of.good())
