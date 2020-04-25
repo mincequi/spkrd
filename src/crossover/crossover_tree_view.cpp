@@ -65,11 +65,12 @@ void crossover_tree_view::on_net_modified_by_wizard()
     on_crossover_selected(cover);
 }
 
-void crossover_tree_view::on_cell_edited_value(const Glib::ustring& path_string,
-                                               const Glib::ustring& new_text)
+void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
+                                               Glib::ustring const& new_text)
 {
     std::puts("crossover_tree_view::on_cell_edited_value");
-    std::cout << "crossover_tree_view::on_cell_edited_value: path string = " << path_string << "\n";
+    std::cout << "crossover_tree_view::on_cell_edited_value: path string = " << path_string
+              << "\n";
 
     Gtk::TreePath path(path_string);
 
@@ -82,15 +83,15 @@ void crossover_tree_view::on_cell_edited_value(const Glib::ustring& path_string,
     row[m_columns.value] = std::atof(new_text.c_str());
 
 #ifndef NDEBUG
-    std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0] << ":"
-              << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
+    std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0]
+              << ":" << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
 #endif
-    /* Since the stupid signals doesn't seem to work we have to go through the data-containers
-       and update values for the particular part we change... */
+    /* Since the stupid signals doesn't seem to work we have to go through the
+       data-containers and update values for the particular part we change... */
 
     /* Index is a counter for the extra circuits (impedance correction network, damping
-       network...) we have Number of extra circuits + the crossover is the total number of "base
-       nodes" after filter type nodes */
+       network...) we have Number of extra circuits + the crossover is the total number of
+       "base nodes" after filter type nodes */
     filter_network* n = &(cover->networks())[path[0]];
 
     int ndx = 0;
@@ -171,7 +172,8 @@ void crossover_tree_view::on_cell_edited_value(const Glib::ustring& path_string,
         }
     }
 #ifndef NDEBUG
-    std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id] << "\n";
+    std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id]
+              << "\n";
 #endif
     // Tell others that we have modified a part
     signal_net_modified_by_user(n);
@@ -212,7 +214,8 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
         {
             imp_corr.emplace_back(crossover_cell_item(n.get_imp_corr_C()));
             imp_corr.emplace_back(crossover_cell_item(n.get_imp_corr_R()));
-            crossover_elements.emplace_back(crossover_cell_item(_("Impedance correction"), imp_corr));
+            crossover_elements.emplace_back(
+                crossover_cell_item(_("Impedance correction"), imp_corr));
         }
         if (n.get_has_damp())
         {
@@ -300,6 +303,7 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
         child_row[m_columns.id] = 0;
         child_row[m_columns.visible] = false;
         child_row[m_columns.editable] = false;
+
         for (crossover_cell_item const& child2 : child.m_children)
         {
             Gtk::TreeRow child_row2 = *(m_refTreeStore->append(child_row.children()));
@@ -315,7 +319,8 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
                 /* Then insert the parts */
                 for (const crossover_cell_item& child3 : child2.m_children)
                 {
-                    Gtk::TreeRow child_row3 = *(m_refTreeStore->append(child_row2.children()));
+                    Gtk::TreeRow child_row3 = *(
+                        m_refTreeStore->append(child_row2.children()));
                     child_row3[m_columns.id_string] = child3.m_label;
                     child_row3[m_columns.id] = child3.m_id;
                     child_row3[m_columns.type] = child3.m_type;
@@ -343,50 +348,50 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
 void crossover_tree_view::add_columns()
 {
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
-        pRenderer->property_xalign().set_value(0.0);
+        auto* renderer = Gtk::manage(new Gtk::CellRendererText());
+        renderer->property_xalign().set_value(0.0);
 
-        auto const col_cnt = m_TreeView.append_column(_("Id_string"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
-        if (pColumn != nullptr)
+        auto* column = m_TreeView.get_column(
+            m_TreeView.append_column(_("Id_string"), *renderer) - 1);
+        if (column != nullptr)
         {
-            pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
-            pColumn->set_resizable();
+            column->add_attribute(renderer->property_text(), m_columns.id_string);
+            column->set_resizable();
         }
     }
     {
-        cell_renderer_popup* pRenderer = Gtk::manage(new cell_renderer_popup());
-        pRenderer->property_xalign().set_value(0.0);
-        pRenderer->signal_edited().connect(
+        cell_renderer_popup* renderer = Gtk::manage(new cell_renderer_popup());
+        renderer->property_xalign().set_value(0.0);
+        renderer->signal_edited().connect(
             sigc::mem_fun(*this, &crossover_tree_view::on_cell_edited_value));
 
-        auto const col_cnt = m_TreeView.insert_column(_("Value"), *pRenderer, -1);
+        auto* column = m_TreeView.get_column(
+            m_TreeView.insert_column(_("Value"), *renderer, -1) - 1);
 
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
-        if (pColumn != nullptr)
+        if (column != nullptr)
         {
-            pColumn->set_cell_data_func(*pRenderer,
-                                        sigc::mem_fun(*this,
-                                                      &crossover_tree_view::value_cell_data_func));
+            column->set_cell_data_func(*renderer,
+                                       sigc::mem_fun(*this,
+                                                     &crossover_tree_view::value_cell_data_func));
 
-            pColumn->add_attribute(pRenderer->property_editable(), m_columns.editable);
-            pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
+            column->add_attribute(renderer->property_editable(), m_columns.editable);
+            column->add_attribute(renderer->property_visible(), m_columns.visible);
             // Set width to 55 px, looks ok on my screen when we get the spinbutton widget
-            pColumn->set_min_width(55);
-            pColumn->set_resizable();
+            column->set_min_width(55);
+            column->set_resizable();
         }
     }
     {
-        Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
-        pRenderer->property_xalign().set_value(0.0);
+        Gtk::CellRendererText* renderer = Gtk::manage(new Gtk::CellRendererText());
+        renderer->property_xalign().set_value(0.0);
 
-        auto const col_cnt = m_TreeView.append_column(_("Unit"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
-        if (pColumn != nullptr)
+        auto* column = m_TreeView.get_column(
+            m_TreeView.append_column(_("Unit"), *renderer) - 1);
+        if (column != nullptr)
         {
-            pColumn->add_attribute(pRenderer->property_text(), m_columns.unit);
-            pColumn->add_attribute(pRenderer->property_visible(), m_columns.visible);
-            pColumn->set_resizable();
+            column->add_attribute(renderer->property_text(), m_columns.unit);
+            column->add_attribute(renderer->property_visible(), m_columns.visible);
+            column->set_resizable();
         }
     }
 }

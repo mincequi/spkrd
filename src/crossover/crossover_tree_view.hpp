@@ -43,11 +43,13 @@ public:
 protected:
     void on_realize() override;
 
-    void on_cell_edited_value(Glib::ustring const& path_string, Glib::ustring const& new_text);
+    void on_cell_edited_value(Glib::ustring const& path_string,
+                              Glib::ustring const& new_text);
 
     void on_net_modified_by_wizard();
 
-    void value_cell_data_func(Gtk::CellRenderer* cell, Gtk::TreeModel::iterator const& iter);
+    void value_cell_data_func(Gtk::CellRenderer* cell,
+                              Gtk::TreeModel::iterator const& iter);
 
     virtual void create_model();
 
@@ -76,5 +78,5 @@ protected:
         model_columns();
     };
 
-    const model_columns m_columns;
+    model_columns const m_columns;
 };
