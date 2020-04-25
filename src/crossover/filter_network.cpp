@@ -156,7 +156,8 @@ void filter_network::parse_type(xmlNodePtr node)
 
 void filter_network::parse_lowpass_order(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0))
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_order;
         try
@@ -176,7 +177,8 @@ void filter_network::parse_lowpass_order(xmlNodePtr node)
 
 void filter_network::parse_highpass_order(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0))
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_order;
         try
@@ -196,7 +198,8 @@ void filter_network::parse_highpass_order(xmlNodePtr node)
 
 void filter_network::parse_has_imp_corr(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0))
     {
         m_has_imp_corr = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
         try
@@ -369,7 +372,8 @@ void filter_network::parse_parts(xmlNodePtr node)
 
 void filter_network::parse_lowpass_family(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0))
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_family;
         try
@@ -383,14 +387,16 @@ void filter_network::parse_lowpass_family(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("filter_network::parse_lowpass_family: lowpass_family node "
+        throw std::runtime_error(_("filter_network::parse_lowpass_family: lowpass_family "
+                                   "node "
                                    "expected"));
     }
 }
 
 void filter_network::parse_highpass_family(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0))
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_family;
         try
@@ -404,7 +410,8 @@ void filter_network::parse_highpass_family(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("filter_network::parse_highpass_family: highpass_family node "
+        throw std::runtime_error(_("filter_network::parse_highpass_family: "
+                                   "highpass_family node "
                                    "expected"));
     }
 }
@@ -425,13 +432,15 @@ void filter_network::parse_speaker(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("filter_network::parse_speaker: speaker node expected"));
+        throw std::runtime_error(_("filter_network::parse_speaker: speaker node "
+                                   "expected"));
     }
 }
 
 void filter_network::parse_adv_imp_model(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0))
+    if ((node != nullptr)
+        && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0))
     {
         std::istringstream((char*)xmlNodeGetContent(node)) >> m_adv_imp_model;
         try
@@ -445,7 +454,8 @@ void filter_network::parse_adv_imp_model(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("filter_network::parse_adv_imp_model: adv_imp_model node "
+        throw std::runtime_error(_("filter_network::parse_adv_imp_model: adv_imp_model "
+                                   "node "
                                    "expected"));
     }
 }
@@ -458,7 +468,8 @@ void filter_network::parse_inv_pol(xmlNodePtr node)
     }
     else
     {
-        throw std::runtime_error(_("filter_network::parse_inv_pol: inv_pol node expected"));
+        throw std::runtime_error(_("filter_network::parse_inv_pol: inv_pol node "
+                                   "expected"));
     }
 }
 
@@ -474,7 +485,8 @@ auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
     xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_highpass_order));
 
     field = xmlNewChild(net, nullptr, (xmlChar*)("has_imp_corr"), nullptr);
-    xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_imp_corr)));
+    xmlNodeSetContent(field,
+                      (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_imp_corr)));
     field = xmlNewChild(net, nullptr, (xmlChar*)("has_damp"), nullptr);
     xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_has_damp)));
     field = xmlNewChild(net, nullptr, (xmlChar*)("has_res"), nullptr);
@@ -534,7 +546,8 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
     std::ofstream of(tmp_file.c_str());
     if (of.good())
     {
-        of << "Crossover network SPICE code generated by gspk " << std::string(VERSION) << "\n";
+        of << "Crossover network SPICE code generated by gspk " << std::string(VERSION)
+           << "\n";
         of << "vamp " << ++node_counter << " " << 0 << " dc 0 ac 1"
            << "\n";
         if (m_lowpass_order > 0)
@@ -543,61 +556,65 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
             {
                 case NET_ORDER_1ST:
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_2ND:
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_3RD:
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_4TH:
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
@@ -609,61 +626,65 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
             {
                 case NET_ORDER_1ST:
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_2ND:
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_3RD:
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
                 case NET_ORDER_4TH:
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << node_counter - 1 << " "
+                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
                        << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " " << 0
-                       << " " << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
+                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << g_ascii_dtostr(buffer, 8, m_parts[part_index].get_value())
                        << m_parts[part_index].get_unit() << "\n";
                     part_index++;
                     break;
@@ -672,11 +693,12 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 
         if (m_has_imp_corr)
         {
-            of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " " << node_counter + 1
-               << " " << g_ascii_dtostr(buffer, 8, m_imp_corr_R.get_value()) << "\n";
-            of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0 << " "
-               << g_ascii_dtostr(buffer, 8, m_imp_corr_C.get_value()) << m_imp_corr_C.get_unit()
-               << "\n";
+            of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " "
+               << node_counter + 1 << " "
+               << g_ascii_dtostr(buffer, 8, m_imp_corr_R.get_value()) << "\n";
+            of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0
+               << " " << g_ascii_dtostr(buffer, 8, m_imp_corr_C.get_value())
+               << m_imp_corr_C.get_unit() << "\n";
             next_node_cnt_inc = 2;
         }
         else
@@ -713,19 +735,20 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
             of << "R" << s.get_id() << " " << node_counter << " "
                << node_counter + next_node_cnt_inc << " " << s.get_rdc() << "\n";
             node_counter = node_counter + next_node_cnt_inc;
-            of << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1 << " "
-               << s.get_lvc() << "mH"
+            of << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1
+               << " " << s.get_lvc() << "mH"
                << "\n";
             node_counter = node_counter + 1;
-            of << "lces " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, lces)
-               << "mH"
+            of << "lces " << node_counter << " " << 0 << " "
+               << g_ascii_dtostr(buffer, 8, lces) << "mH"
                << "\n";
-            of << "cmes " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmes)
-               << "uF"
+            of << "cmes " << node_counter << " " << 0 << " "
+               << g_ascii_dtostr(buffer, 8, cmes) << "uF"
                << "\n";
-            of << "res " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, res) << "\n";
-            of << "cmef " << node_counter << " " << 0 << " " << g_ascii_dtostr(buffer, 8, cmef)
-               << "uF"
+            of << "res " << node_counter << " " << 0 << " "
+               << g_ascii_dtostr(buffer, 8, res) << "\n";
+            of << "cmef " << node_counter << " " << 0 << " "
+               << g_ascii_dtostr(buffer, 8, cmef) << "uF"
                << "\n";
         }
         else
@@ -855,16 +878,18 @@ void filter_network::setup_net_by_order(int new_order, int which_net)
                     {
                         case NET_NOT_PRESENT:
                         case NET_ORDER_2ND:
-                            /* Since we're inserting the parts...last one comes first in the
-                               std::vector, we insert them in reversed order */
+                            /* Since we're inserting the parts...last one comes first in
+                               the std::vector, we insert them in reversed order */
                             iter = m_parts.insert(iter + m_lowpass_order,
                                                   passive_component(PART_TYPE_CAPACITOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_INDUCTOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_INDUCTOR));
                             break;
                         case NET_ORDER_1ST:
                             iter = m_parts.insert(iter + m_lowpass_order,
                                                   passive_component(PART_TYPE_INDUCTOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_CAPACITOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_CAPACITOR));
                             break;
                     }
                     break;
@@ -874,14 +899,18 @@ void filter_network::setup_net_by_order(int new_order, int which_net)
                         case NET_NOT_PRESENT:
                             iter = m_parts.insert(iter + m_lowpass_order,
                                                   passive_component(PART_TYPE_INDUCTOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_CAPACITOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_INDUCTOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_CAPACITOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_INDUCTOR));
                             break;
                         case NET_ORDER_1ST:
                             iter = m_parts.insert(iter + m_lowpass_order,
                                                   passive_component(PART_TYPE_CAPACITOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_INDUCTOR));
-                            iter = m_parts.insert(iter, passive_component(PART_TYPE_CAPACITOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_INDUCTOR));
+                            iter = m_parts.insert(iter,
+                                                  passive_component(PART_TYPE_CAPACITOR));
                             break;
                     }
                     break;
