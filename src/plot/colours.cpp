@@ -79,7 +79,7 @@ auto colours::get_iterator_from_string(const std::string& colour_value)
     auto const location = std::find(begin(m_colors), end(m_colors), colour_value);
     if (location != end(m_colors))
     {
-        m_colors.erase(location);
+        return location;
     }
-    m_colors.insert(m_colors.begin() + m_counter, colour_value);
+    return m_colors.insert(m_colors.begin() + m_counter, colour_value);
 }

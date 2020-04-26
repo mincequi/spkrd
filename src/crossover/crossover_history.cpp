@@ -20,6 +20,7 @@
 #include "crossover_history.hpp"
 
 #include "file_chooser.hpp"
+#include "signal.hpp"
 
 #include <gtkmm/eventbox.h>
 #include <gtkmm/messagedialog.h>
@@ -36,7 +37,8 @@ namespace
 {
 auto time_of_day() -> std::string
 {
-    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::time_t const time = std::chrono::system_clock::to_time_t(
+        std::chrono::system_clock::now());
     return {std::ctime(&time)};
 }
 }
@@ -54,7 +56,8 @@ crossover_history::crossover_history() : Gtk::Frame("")
     g_settings.defaultValueString("crossover_listXml", "crossover1.xml");
 #else
     g_settings.defaultValueString("crossover_listXml",
-                                  std::string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
+                                  std::string(GSPEAKERS_PREFIX)
+                                      + "/share/xml/crossover1.xml");
 #endif
     m_filename = g_settings.getValueString("crossover_listXml");
 
@@ -100,7 +103,8 @@ crossover_history::crossover_history() : Gtk::Frame("")
     signal_net_modified_by_user.connect(
         sigc::mem_fun(*this, &crossover_history::on_net_modified_by_wizard));
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &crossover_history::on_save_open_files));
+    signal_save_open_files.connect(
+        sigc::mem_fun(*this, &crossover_history::on_save_open_files));
 }
 
 void crossover_history::on_save_open_files()
@@ -115,7 +119,7 @@ void crossover_history::select_first_row()
 {
     if (m_crossover_list.data().empty())
     {
-        Gtk::TreePath(std::to_string(0));
+        Gtk::TreePath path(std::to_string(0));
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
         m_TreeView.get_selection()->select(row);
     }
@@ -130,7 +134,10 @@ void crossover_history::on_net_modified_by_wizard(filter_network* net)
     signal_crossover_set_save_state(true);
 }
 
-void crossover_history::on_net_modified_by_user() { signal_crossover_set_save_state(true); }
+void crossover_history::on_net_modified_by_user()
+{
+    signal_crossover_set_save_state(true);
+}
 
 void crossover_history::on_part_modified() { signal_crossover_set_save_state(true); }
 
@@ -143,8 +150,8 @@ crossover_history::~crossover_history()
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "crossover_history::~crossover_history: saving settings error: " << error.what()
-                  << "\n";
+        std::cout << "crossover_history::~crossover_history: saving settings error: "
+                  << error.what() << "\n";
     }
 }
 
@@ -263,13 +270,17 @@ void crossover_history::on_new_copy()
 
             if (!path.empty())
             {
-                /* Here we have the row in indices[0], we want to make a copy of this Crossover
-                   and put it last in the list */
+                /* Here we have the row in indices[0], we want to make a copy of this
+                   Crossover and put it last in the list */
 
-                /* Here we want a copy of the original Crossover, not a crossover that has the
-                   same id and so on, as we would get if we used the operator = or something similar,
-                   Quick and easy solution...use the to_xml function which gets rid of the id */
-                xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
+                /* Here we want a copy of the original Crossover, not a crossover that has
+                   the same id and so on, as we would get if we used the operator = or
+                   something similar, Quick and easy solution...use the to_xml function
+                   which gets rid of the id */
+                xmlNodePtr node = xmlNewDocNode(nullptr,
+                                                nullptr,
+                                                (xmlChar*)("parent"),
+                                                nullptr);
 
                 m_crossover_list.data()[path[0]].to_xml_node(node);
 
@@ -375,7 +386,9 @@ void crossover_history::on_save_as()
 #ifndef NDEBUG
     std::cout << "save as" << std::endl;
 #endif
-    file_chooser_dialog fc(_("Save crossover xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
+    file_chooser_dialog fc(_("Save crossover xml as"),
+                           Gtk::FILE_CHOOSER_ACTION_SAVE,
+                           m_filename);
     std::string const& filename = fc.get_filename();
     if (filename.empty())
     {
@@ -456,7 +469,8 @@ void crossover_history::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &crossover_history::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &crossover_history::type_cell_data_func));
     }
 }
 

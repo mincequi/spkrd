@@ -18,7 +18,9 @@
 */
 
 #include "plot_history.hpp"
+
 #include "plot.hpp"
+#include "signal.hpp"
 
 #include <cmath>
 #include <ctime>
@@ -48,7 +50,8 @@ plot_history::plot_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
     m_TreeView.set_rules_hint();
 
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
-    selection->signal_changed().connect(sigc::mem_fun(*this, &plot_history::on_selection_changed));
+    selection->signal_changed().connect(
+        sigc::mem_fun(*this, &plot_history::on_selection_changed));
 
     signal_box_modified.connect(sigc::mem_fun(*this, &plot_history::on_box_modified));
     signal_add_plot.connect(sigc::mem_fun(*this, &plot_history::on_add_plot));
@@ -169,7 +172,8 @@ void plot_history::add_columns()
     }
     {
         auto pRenderer = Gtk::manage(new Gtk::CellRendererToggle());
-        pRenderer->signal_toggled().connect(sigc::mem_fun(*this, &plot_history::on_cell_plot_toggled));
+        pRenderer->signal_toggled().connect(
+            sigc::mem_fun(*this, &plot_history::on_cell_plot_toggled));
 
         int cols_count = m_TreeView.append_column(_("Plot"), *pRenderer);
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
@@ -199,7 +203,8 @@ void plot_history::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &plot_history::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &plot_history::type_cell_data_func));
     }
     {
         auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -221,7 +226,8 @@ void plot_history::add_columns()
     }
 }
 
-void plot_history::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void plot_history::type_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     switch ((*iter)[m_columns.type])
@@ -238,14 +244,16 @@ void plot_history::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeM
     }
 }
 
-void plot_history::vb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void plot_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
+                                      const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
-void plot_history::fb1_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void plot_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
+                                      const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";

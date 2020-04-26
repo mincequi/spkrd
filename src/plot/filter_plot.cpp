@@ -21,13 +21,15 @@
 #include "filter_plot.hpp"
 
 #include "common.h"
+#include "signal.hpp"
 
 filter_plot::filter_plot() : m_plot(1, 20000)
 {
     add(m_plot);
 
     signal_add_crossover_plot.connect(sigc::mem_fun(*this, &filter_plot::on_add_plot));
-    signal_crossover_selected.connect(sigc::mem_fun(*this, &filter_plot::on_crossover_selected));
+    signal_crossover_selected.connect(
+        sigc::mem_fun(*this, &filter_plot::on_crossover_selected));
 
     m_plot.set_y_label(_("Magnitude / dB"));
 
@@ -37,7 +39,7 @@ filter_plot::filter_plot() : m_plot(1, 20000)
 auto filter_plot::on_add_plot(std::vector<gspk::point> const& points,
                               Gdk::Color const& color,
                               int& i,
-                              Net* n) -> int
+                              filter_network* n) -> int
 {
     if (i == -1)
     {

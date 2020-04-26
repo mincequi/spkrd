@@ -19,6 +19,7 @@
 
 #include "crossover_tree_view.hpp"
 
+#include "signal.hpp"
 #include "common.h"
 #include "cell_renderer_popup.hpp"
 #include "popup_entry.hpp"

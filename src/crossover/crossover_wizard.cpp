@@ -17,6 +17,7 @@
 
 #include "crossover_wizard.hpp"
 
+#include "signal.hpp"
 #include "common.h"
 
 crossover_wizard::crossover_wizard()

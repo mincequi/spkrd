@@ -24,7 +24,7 @@
 
 #include <gtkmm/frame.h>
 
-class Net;
+class filter_network;
 class Crossover;
 
 /// This is a wrapper class for gspkPlot
@@ -43,7 +43,7 @@ public:
     auto on_add_plot(std::vector<gspk::point> const& points,
                      Gdk::Color const& color,
                      int& i,
-                     Net* n) -> int;
+                     filter_network* n) -> int;
 
 private:
     void on_crossover_selected(Crossover*);

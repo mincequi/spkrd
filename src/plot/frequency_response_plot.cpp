@@ -22,6 +22,8 @@
 #include "frequency_response_plot.hpp"
 
 #include "filter_network.hpp"
+#include "signal.hpp"
+#include "driver_list.hpp"
 
 #include <cmath>
 #include <fstream>
@@ -42,7 +44,8 @@ frequency_response_plot::frequency_response_plot()
 
     signal_speakerlist_loaded.connect(
         sigc::mem_fun(*this, &frequency_response_plot::on_speakerlist_loaded));
-    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &frequency_response_plot::on_add_plot));
+    signal_add_crossover_plot.connect(
+        sigc::mem_fun(*this, &frequency_response_plot::on_add_plot));
     signal_crossover_selected.connect(
         sigc::mem_fun(*this, &frequency_response_plot::on_crossover_selected));
 }
@@ -83,7 +86,7 @@ auto lerp(std::vector<gspk::point> const& freq_resp_points, double x) -> double
 auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter_points,
                                           Gdk::Color const& color,
                                           int& output_plot_index,
-                                          Net* n) -> int
+                                          filter_network* n) -> int
 {
 #ifndef NDEBUG
     std::puts("frequency_response_plot::on_add_plot");
@@ -121,7 +124,8 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter
 
             if (comma != ',')
             {
-                throw std::runtime_error("Frequency response requires comma separated values in "
+                throw std::runtime_error("Frequency response requires comma separated "
+                                         "values in "
                                          + s.get_freq_resp_filename());
             }
             freq_resp_points.emplace_back(std::round(frequency), magnitude);
@@ -150,8 +154,8 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter
     // Search for plot_index in the graph
     auto const location = std::find(begin(m_nets), end(m_nets), plot_index);
 
-    // If plot_index is in the graph, replace the old point-vector, if plot_index not in graph
-    // insert it at the end of the vector
+    // If plot_index is in the graph, replace the old point-vector, if plot_index not in
+    // graph insert it at the end of the vector
     if (location != end(m_nets) && !m_points.empty())
     {
         m_points[std::distance(begin(m_nets), location)] = points;
@@ -205,7 +209,7 @@ void frequency_response_plot::on_crossover_selected(Crossover*)
     clear();
 }
 
-void frequency_response_plot::on_speakerlist_loaded(driver_list* speaker_list)
+void frequency_response_plot::on_speakerlist_loaded(driver_list* driver_list)
 {
 #ifndef NDEBUG
     std::puts("frequency_response_plot::on_speakerlist_loaded");

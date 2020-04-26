@@ -22,6 +22,7 @@
 #include "common.h"
 #include "frequency_response_editor.hpp"
 #include "file_chooser.hpp"
+#include "signal.hpp"
 
 #include <glibmm.h>
 #include <gtkmm/messagedialog.h>
@@ -88,7 +89,7 @@ driver_editor::driver_editor()
 
     m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers ["))
-                              + GSpeakers::short_filename(m_filename, 50) + "]</b>");
+                              + gspk::short_filename(m_filename, 50) + "]</b>");
 
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
 
@@ -130,21 +131,35 @@ driver_editor::driver_editor()
     m_grid.attach(m_QmsEntry, 1, 6);
     m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Qes:"), Gtk::ALIGN_START), 0, 7);
     m_grid.attach(m_QesEntry, 1, 7);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Impedance: (Ohm)"), Gtk::ALIGN_START), 0, 8);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Impedance: (Ohm)"), Gtk::ALIGN_START),
+                  0,
+                  8);
     m_grid.attach(m_ImpEntry, 1, 8);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Sensitivity: (dB/W/m)"), Gtk::ALIGN_START), 0, 9);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Sensitivity: (dB/W/m)"),
+                                                 Gtk::ALIGN_START),
+                  0,
+                  9);
     m_grid.attach(m_SensEntry, 1, 9);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Cone mass: (kg)"), Gtk::ALIGN_START), 0, 10);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Cone mass: (kg)"), Gtk::ALIGN_START),
+                  0,
+                  10);
     m_grid.attach(m_MmdEntry, 1, 10);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Effective radius: (m)"), Gtk::ALIGN_START), 0, 11);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Effective radius: (m)"),
+                                                 Gtk::ALIGN_START),
+                  0,
+                  11);
     m_grid.attach(m_AdEntry, 1, 11);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Force factor: (N/A)"), Gtk::ALIGN_START), 0, 12);
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Force factor: (N/A)"), Gtk::ALIGN_START),
+                  0,
+                  12);
     m_grid.attach(m_BlEntry, 1, 12);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension resistance: (Ns/m"), Gtk::ALIGN_START),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension resistance: (Ns/m"),
+                                                 Gtk::ALIGN_START),
                   0,
                   13);
     m_grid.attach(m_RmsEntry, 1, 13);
-    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension compliance: (m/N)"), Gtk::ALIGN_START),
+    m_grid.attach(*Gtk::make_managed<Gtk::Label>(_("Suspension compliance: (m/N)"),
+                                                 Gtk::ALIGN_START),
                   0,
                   14);
     m_grid.attach(m_CmsEntry, 1, 14);
@@ -153,16 +168,20 @@ driver_editor::driver_editor()
     m_grid.attach(m_MidrangeCheckButton, 0, 16);
     m_grid.attach(m_TweeterCheckButton, 0, 17);
 
-    m_IdStringEntry.set_tooltip_text(_("The name or identification string for the driver"));
+    m_IdStringEntry.set_tooltip_text(_("The name or identification string for the "
+                                       "driver"));
     m_FsEntry.set_tooltip_text(_("Free air resonance frequency"));
-    m_VasEntry.set_tooltip_text(_("Equivalent volume of air that has a compliance equal to that of "
+    m_VasEntry.set_tooltip_text(_("Equivalent volume of air that has a compliance equal "
+                                  "to that of "
                                   "the air displaced by the driver"));
     m_RdcEntry.set_tooltip_text(_("Voice coil DC resistance"));
     m_LvcEntry.set_tooltip_text(_("Voice coil inductance"));
     m_QtsEntry.set_tooltip_text(_("Parallel combination of Qms and Qes"));
-    m_QmsEntry.set_tooltip_text(_("Ratio of the driver electrical equivalent frictional resistance "
+    m_QmsEntry.set_tooltip_text(_("Ratio of the driver electrical equivalent frictional "
+                                  "resistance "
                                   "to the reflected motional reactance at Fs"));
-    m_QesEntry.set_tooltip_text(_("Ratio of the voice coil DC resistance to the reflected motional "
+    m_QesEntry.set_tooltip_text(_("Ratio of the voice coil DC resistance to the "
+                                  "reflected motional "
                                   "reactance at fs."));
     m_ImpEntry.set_tooltip_text(_(""));
     m_SensEntry.set_tooltip_text(_(""));
@@ -177,7 +196,8 @@ driver_editor::driver_editor()
     m_TweeterCheckButton.set_tooltip_text(_("Check if a tweeter"));
 
     auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
-    hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
+    hbox->pack_start(
+        *Gtk::make_managed<Gtk::Label>(_("Frequency response file:"), Gtk::ALIGN_START));
     hbox->pack_start(m_FreqRespFileEntry);
     m_FreqRespFileEntry.set_width_chars(15);
     hbox->pack_start(m_BrowseFreqRespButton);
@@ -246,9 +266,11 @@ driver_editor::driver_editor()
     m_TreeView.set_rules_hint();
     auto selection = m_TreeView.get_selection();
 
-    selection->signal_changed().connect(sigc::mem_fun(*this, &driver_editor::on_selection_changed));
+    selection->signal_changed().connect(
+        sigc::mem_fun(*this, &driver_editor::on_selection_changed));
 
-    g_settings.settings_changed.connect(sigc::mem_fun(*this, &driver_editor::on_settings_changed));
+    g_settings.settings_changed.connect(
+        sigc::mem_fun(*this, &driver_editor::on_settings_changed));
 
     add_columns();
     m_ScrolledWindow.add(m_TreeView);
@@ -271,17 +293,20 @@ auto driver_editor::get_menu() -> Gtk::MenuItem&
     driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
         auto new_driver = Gtk::make_managed<Gtk::MenuItem>("New");
-        new_driver->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_new_xml));
+        new_driver->signal_activate().connect(
+            sigc::mem_fun(*this, &driver_editor::on_new_xml));
         driver_submenu->append(*new_driver);
     }
     {
         auto append_xml = Gtk::make_managed<Gtk::MenuItem>("Append XML");
-        append_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_append_xml));
+        append_xml->signal_activate().connect(
+            sigc::mem_fun(*this, &driver_editor::on_append_xml));
         driver_submenu->append(*append_xml);
     }
     {
         auto open_xml = Gtk::make_managed<Gtk::MenuItem>("Open XML");
-        open_xml->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_open_xml));
+        open_xml->signal_activate().connect(
+            sigc::mem_fun(*this, &driver_editor::on_open_xml));
         driver_submenu->append(*open_xml);
     }
     driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
@@ -298,7 +323,8 @@ auto driver_editor::get_menu() -> Gtk::MenuItem&
     driver_submenu->append(*Gtk::make_managed<Gtk::SeparatorMenuItem>());
     {
         auto delete_item = Gtk::make_managed<Gtk::ImageMenuItem>(Gtk::Stock::DELETE);
-        delete_item->signal_activate().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
+        delete_item->signal_activate().connect(
+            sigc::mem_fun(*this, &driver_editor::on_remove));
         driver_submenu->append(*delete_item);
     }
 
@@ -337,8 +363,8 @@ auto driver_editor::get_toolbar() -> Gtk::Toolbar&
         t->signal_clicked().connect(sigc::mem_fun(*this, &driver_editor::on_remove));
         m_toolbar->append(*t);
 
-        m_toolbar->set_toolbar_style(
-            static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyle")));
+        m_toolbar->set_toolbar_style(static_cast<Gtk::ToolbarStyle>(
+            g_settings.getValueUnsignedInt("ToolbarStyle")));
 
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
         m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(false);
@@ -348,7 +374,7 @@ auto driver_editor::get_toolbar() -> Gtk::Toolbar&
 
 void driver_editor::on_save_open_files()
 {
-    if (GSpeakers::driverlist_modified())
+    if (gspk::driverlist_modified())
     {
         on_save();
     }
@@ -358,8 +384,8 @@ void driver_editor::on_settings_changed(const std::string& setting)
 {
     if (setting == "ToolbarStyle")
     {
-        m_toolbar->set_toolbar_style(
-            static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyle")));
+        m_toolbar->set_toolbar_style(static_cast<Gtk::ToolbarStyle>(
+            g_settings.getValueUnsignedInt("ToolbarStyle")));
     }
     if (setting == "DrawDriverImpPlot" || setting == "DrawDriverFreqRespPlot")
     {
@@ -428,7 +454,7 @@ void driver_editor::on_new()
     // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
-    GSpeakers::driverlist_modified() = true;
+    gspk::driverlist_modified() = true;
     signal_speakerlist_loaded(m_driver_list.get());
     m_modified = true;
 }
@@ -484,7 +510,7 @@ void driver_editor::on_save()
             // FIXME gtk3 port
             // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
             m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
-            GSpeakers::driverlist_modified() = false;
+            gspk::driverlist_modified() = false;
             m_modified = false;
         }
         catch (std::runtime_error const& e)
@@ -584,7 +610,8 @@ void driver_editor::on_selection_changed()
 
                 if (!input_file.is_open())
                 {
-                    throw std::runtime_error("Could not open " + speaker.get_freq_resp_filename());
+                    throw std::runtime_error("Could not open "
+                                             + speaker.get_freq_resp_filename());
                 }
 
                 std::vector<gspk::point> points;
@@ -599,7 +626,8 @@ void driver_editor::on_selection_changed()
 
                     if (comma != ',')
                     {
-                        throw std::runtime_error("Expected comma separated file for driver "
+                        throw std::runtime_error("Expected comma separated file for "
+                                                 "driver "
                                                  "frequency response curve "
                                                  + speaker.get_freq_resp_filename());
                     }
@@ -630,10 +658,11 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
         std::vector<gspk::point> points;
         // Produce SPICE input-file
 #ifdef TARGET_WIN32
-        std::string tmp_file = Glib::get_tmp_dir() + "\\speaker" + std::to_string(s.get_id())
-                               + ".tmp";
+        std::string tmp_file = Glib::get_tmp_dir() + "\\speaker"
+                               + std::to_string(s.get_id()) + ".tmp";
 #else
-        std::string tmp_file = Glib::get_tmp_dir() + "/speaker" + std::to_string(s.get_id()) + ".tmp";
+        std::string tmp_file = Glib::get_tmp_dir() + "/speaker"
+                               + std::to_string(s.get_id()) + ".tmp";
 #endif
 
         std::ofstream of(tmp_file.c_str());
@@ -653,10 +682,10 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
             auto const cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad()
                               / (3 * s.get_bl() * s.get_bl()) * 1000000;
 
-            of << "R" << s.get_id() << " 1 2 " << g_ascii_dtostr(buffer.data(), 8, s.get_rdc())
-               << "\n";
-            of << "L" << s.get_id() << " 2 3 " << g_ascii_dtostr(buffer.data(), 8, s.get_lvc())
-               << "mH"
+            of << "R" << s.get_id() << " 1 2 "
+               << g_ascii_dtostr(buffer.data(), 8, s.get_rdc()) << "\n";
+            of << "L" << s.get_id() << " 2 3 "
+               << g_ascii_dtostr(buffer.data(), 8, s.get_lvc()) << "mH"
                << "\n";
             of << "lces 3 0 " << g_ascii_dtostr(buffer.data(), 8, lces) << "mH\n";
             of << "cmes 3 0 " << g_ascii_dtostr(buffer.data(), 8, cmes) << "uF\n";
@@ -683,17 +712,18 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
             if (g_settings.getValueBool("SPICEUseNGSPICE")
                 || g_settings.getValueBool("SPICEUseGNUCAP"))
             {
-                cmd = g_settings.getValueString("SPICECmdLine") + " -b " + tmp_file + " > "
-                      + tmp_file + ".out";
+                cmd = g_settings.getValueString("SPICECmdLine") + " -b " + tmp_file
+                      + " > " + tmp_file + ".out";
             }
             else
             {
-                cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out "
-                      + tmp_file;
+                cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file
+                      + ".out " + tmp_file;
             }
             // g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
 #ifndef NDEBUG
-            std::cout << "driver_editor::draw_impedance_plot: running SPICE with \"" + cmd + "\"\n";
+            std::cout << "driver_editor::draw_impedance_plot: running SPICE with \"" + cmd
+                             + "\"\n";
 #endif
             system(cmd.c_str());
 #ifndef NDEBUG
@@ -775,7 +805,8 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
                                 {
                                     f3 /= 1000000000000.0;
                                 }
-                                points.emplace_back(std::round(f1), 50 + (1 / std::hypot(f2, f3)));
+                                points.emplace_back(std::round(f1),
+                                                    50 + (1 / std::hypot(f2, f3)));
                             }
                         }
                         else
@@ -797,9 +828,10 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
 
                 if (update)
                 {
-                    plot.replace_plot(static_cast<int>(!(s.get_freq_resp_filename().empty()
-                                                         || !g_settings.getValueBool("DrawDriverFre"
-                                                                                     "qRespPlot"))),
+                    plot.replace_plot(static_cast<int>(
+                                          !(s.get_freq_resp_filename().empty()
+                                            || !g_settings.getValueBool("DrawDriverFre"
+                                                                        "qRespPlot"))),
                                       points,
                                       Gdk::Color("red"));
                 }
@@ -846,7 +878,8 @@ void driver_editor::on_entry_changed(int i)
             case 1:
                 // the treestore
                 row[m_columns.qts] = std::atof(m_QtsEntry.get_text().c_str());
-                m_driver_list->data()[index].set_qts(std::atof(m_QtsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qts(
+                    std::atof(m_QtsEntry.get_text().c_str()));
                 break;
             case 2:
                 // the treestore
@@ -856,7 +889,8 @@ void driver_editor::on_entry_changed(int i)
             case 3:
                 // the treestore
                 row[m_columns.vas] = std::atof(m_VasEntry.get_text().c_str());
-                m_driver_list->data()[index].set_vas(std::atof(m_VasEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_vas(
+                    std::atof(m_VasEntry.get_text().c_str()));
                 break;
             case 4:
                 d = std::atof(m_RdcEntry.get_text().c_str());
@@ -875,33 +909,37 @@ void driver_editor::on_entry_changed(int i)
             case 6:
                 // the treestore
                 row[m_columns.qms] = std::atof(m_QmsEntry.get_text().c_str());
-                m_driver_list->data()[index].set_qms(std::atof(m_QmsEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qms(
+                    std::atof(m_QmsEntry.get_text().c_str()));
                 break;
             case 7:
                 // the treestore
                 row[m_columns.qes] = std::atof(m_QesEntry.get_text().c_str());
-                m_driver_list->data()[index].set_qes(std::atof(m_QesEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_qes(
+                    std::atof(m_QesEntry.get_text().c_str()));
                 break;
             case 8:
                 // the treestore
                 row[m_columns.imp] = std::atof(m_ImpEntry.get_text().c_str());
-                m_driver_list->data()[index].set_imp(std::atof(m_ImpEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_imp(
+                    std::atof(m_ImpEntry.get_text().c_str()));
                 break;
             case 9:
                 // the treestore
                 row[m_columns.sens] = std::atof(m_SensEntry.get_text().c_str());
-                m_driver_list->data()[index].set_sens(std::atof(m_SensEntry.get_text().c_str()));
+                m_driver_list->data()[index].set_sens(
+                    std::atof(m_SensEntry.get_text().c_str()));
                 break;
             case 10:
                 if (m_BassCheckButton.get_active())
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          | SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() | SPEAKER_TYPE_BASS);
                 }
                 else
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          & ~SPEAKER_TYPE_BASS);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() & ~SPEAKER_TYPE_BASS);
                 }
                 row[m_columns.type] = m_driver_list->data()[index].get_type();
                 signal_speakerlist_loaded(m_driver_list.get());
@@ -909,26 +947,26 @@ void driver_editor::on_entry_changed(int i)
             case 11:
                 if (m_MidrangeCheckButton.get_active())
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          | SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() | SPEAKER_TYPE_MIDRANGE);
                 }
                 else
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          & ~SPEAKER_TYPE_MIDRANGE);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() & ~SPEAKER_TYPE_MIDRANGE);
                 }
                 row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
             case 12:
                 if (m_TweeterCheckButton.get_active())
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          | SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() | SPEAKER_TYPE_TWEETER);
                 }
                 else
                 {
-                    m_driver_list->data()[index].set_type(m_driver_list->data()[index].get_type()
-                                                          & ~SPEAKER_TYPE_TWEETER);
+                    m_driver_list->data()[index].set_type(
+                        m_driver_list->data()[index].get_type() & ~SPEAKER_TYPE_TWEETER);
                 }
                 row[m_columns.type] = m_driver_list->data()[index].get_type();
                 break;
@@ -976,7 +1014,7 @@ void driver_editor::on_entry_changed(int i)
     // FIXME gtk3 port
     // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-    GSpeakers::driverlist_modified() = true;
+    gspk::driverlist_modified() = true;
     m_modified = true;
 }
 
@@ -1021,7 +1059,7 @@ void driver_editor::append_xml(const std::string& filename)
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
 
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-        GSpeakers::driverlist_modified() = true;
+        gspk::driverlist_modified() = true;
     }
     catch (std::runtime_error const& e)
     {
@@ -1046,7 +1084,7 @@ auto driver_editor::open_xml(const std::string& filename) -> bool
 
         g_settings.setValue("SpeakerListXml", m_filename);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Drivers ["))
-                                  + GSpeakers::short_filename(m_filename, 40) + "]</b>");
+                                  + gspk::short_filename(m_filename, 40) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
 
         std::for_each(temp_diver_list.data().begin(),
@@ -1072,7 +1110,7 @@ auto driver_editor::open_xml(const std::string& filename) -> bool
         // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
         // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(true);
 
-        GSpeakers::driverlist_modified() = true;
+        gspk::driverlist_modified() = true;
         m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
         m_toolbar->get_nth_item(TOOLBAR_INDEX_DELETE)->set_sensitive(true);
 
@@ -1109,7 +1147,7 @@ void driver_editor::on_edit_freq_resp()
     // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(true);
 
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(true);
-    GSpeakers::driverlist_modified() = true;
+    gspk::driverlist_modified() = true;
     m_modified = true;
 }
 
@@ -1139,7 +1177,7 @@ void driver_editor::on_browse_freq_resp()
 
     m_modified = true;
 
-    GSpeakers::driverlist_modified() = true;
+    gspk::driverlist_modified() = true;
 }
 
 void driver_editor::create_model()
@@ -1192,7 +1230,8 @@ void driver_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &driver_editor::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &driver_editor::type_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1201,7 +1240,8 @@ void driver_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &driver_editor::qts_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &driver_editor::qts_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1219,7 +1259,8 @@ void driver_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &driver_editor::vas_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &driver_editor::vas_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1228,7 +1269,8 @@ void driver_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &driver_editor::imp_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &driver_editor::imp_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -1237,11 +1279,13 @@ void driver_editor::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &driver_editor::sens_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &driver_editor::sens_cell_data_func));
     }
 }
 
-void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell,
+                                        const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     std::string s;
@@ -1278,102 +1322,115 @@ void driver_editor::type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::Tree
     renderer.property_text() = s;
 }
 
-void driver_editor::qts_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qts_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.qts], 3, 3);
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.qts], 3, 3);
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::fs_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::fs_cell_data_func(Gtk::CellRenderer* cell,
+                                      const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.fs], 3, 0) + " Hz";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fs], 3, 0) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::vas_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::vas_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.vas], 3, 3) + " l";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vas], 3, 3) + " l";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::rdc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::rdc_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.rdc], 3, 1) + " Ohm";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.rdc], 3, 1) + " Ohm";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::lvc_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::lvc_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.lvc], 3, 2) + " mH";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.lvc], 3, 2) + " mH";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::qms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qms_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.qms], 3, 3);
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.qms], 3, 3);
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::qes_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::qes_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.qes], 3, 2);
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.qes], 3, 2);
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::imp_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::imp_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.imp], 3, 1) + " Ohm";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.imp], 3, 1) + " Ohm";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::sens_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::sens_cell_data_func(Gtk::CellRenderer* cell,
+                                        const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.sens], 3, 1) + " dB";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.sens], 3, 1) + " dB";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::mmd_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::mmd_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.mmd] * 1000, 3, 2)
-                               + " g";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.mmd] * 1000, 3, 2) + " g";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::ad_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::ad_cell_data_func(Gtk::CellRenderer* cell,
+                                      const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.ad], 3, 3) + " m";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.ad], 3, 3) + " m";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::bl_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::bl_cell_data_func(Gtk::CellRenderer* cell,
+                                      const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.bl], 3, 1) + " N/A";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.bl], 3, 1) + " N/A";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::rms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::rms_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.rms], 3, 2) + " Ns/m";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.rms], 3, 2) + " Ns/m";
     renderer.property_xalign() = 1.0;
 }
 
-void driver_editor::cms_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter)
+void driver_editor::cms_cell_data_func(Gtk::CellRenderer* cell,
+                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gpsk::to_ustring((*iter)[m_columns.cms], 3, 4) + " m/N";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.cms], 3, 4) + " m/N";
     renderer.property_xalign() = 1.0;
 }
 

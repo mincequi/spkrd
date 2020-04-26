@@ -21,6 +21,7 @@
 #include "crossover_image_view.hpp"
 
 #include "common.h"
+#include "signal.hpp"
 
 #include <gdkmm/rectangle.h>
 #include <pangomm/context.h>

@@ -20,6 +20,7 @@
 #include "enclosure_history.hpp"
 
 #include "file_chooser.hpp"
+#include "signal.hpp"
 
 #include <gtkmm/messagedialog.h>
 
@@ -50,7 +51,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
 #endif
     m_filename = g_settings.getValueString("BoxListXml");
 #ifdef __OUTPUT_DEBUG
-    std::cout << "enclosure_history::enclosure_history: m_filename = " << m_filename << std::endl;
+    std::cout << "enclosure_history::enclosure_history: m_filename = " << m_filename
+              << std::endl;
 #endif
 
     try
@@ -74,7 +76,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     m_TreeView.set_model(m_refListStore);
     m_TreeView.set_rules_hint();
 
-    signal_add_to_boxlist.connect(sigc::mem_fun(*this, &enclosure_history::on_add_to_boxlist));
+    signal_add_to_boxlist.connect(
+        sigc::mem_fun(*this, &enclosure_history::on_add_to_boxlist));
     signal_box_modified.connect(sigc::mem_fun(*this, &enclosure_history::on_box_modified));
 
     add_columns();
@@ -99,7 +102,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     selected_plot = -1;
     signal_select_plot.connect(sigc::mem_fun(*this, &enclosure_history::on_plot_selected));
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &enclosure_history::on_save_open_files));
+    signal_save_open_files.connect(
+        sigc::mem_fun(*this, &enclosure_history::on_save_open_files));
 }
 
 enclosure_history::~enclosure_history() { g_settings.setValue("BoxListXml", m_filename); }
@@ -242,7 +246,10 @@ void enclosure_history::on_new_copy()
 
             if (!path.empty())
             {
-                xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
+                xmlNodePtr node = xmlNewDocNode(nullptr,
+                                                nullptr,
+                                                (xmlChar*)("parent"),
+                                                nullptr);
                 m_box_list.data()[path[0]].to_xml_node(node);
                 enclosure b(node->children);
 
@@ -270,7 +277,8 @@ void enclosure_history::on_new()
     enclosure b;
 
     // Use time of day as identifier
-    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::time_t const time = std::chrono::system_clock::to_time_t(
+        std::chrono::system_clock::now());
     b.set_id_string(_("enclosure: ") + std::string(std::ctime(&time)));
 
     add_item(b);
@@ -466,7 +474,8 @@ void enclosure_history::add_columns()
 
         // pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::type_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -475,7 +484,8 @@ void enclosure_history::add_columns()
 
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::vb1_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::vb1_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -484,7 +494,8 @@ void enclosure_history::add_columns()
 
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::fb1_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::fb1_cell_data_func));
     }
 }
 

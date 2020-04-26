@@ -19,6 +19,7 @@
  */
 
 #include "common.h"
+#include "signal.hpp"
 
 #include "box_plot.hpp"
 

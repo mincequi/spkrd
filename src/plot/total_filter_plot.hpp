@@ -27,7 +27,7 @@
 
 #include <vector>
 
-class Net;
+class filter_network;
 class Crossover;
 
 /// This is a wrapper class for gspkPlot
@@ -42,7 +42,10 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<gspk::point> const&, Gdk::Color const&, int&, Net*) -> int;
+    auto on_add_plot(std::vector<gspk::point> const&,
+                     Gdk::Color const&,
+                     int&,
+                     filter_network*) -> int;
 
 private:
     auto on_delete_event(GdkEventAny* event) -> bool override;

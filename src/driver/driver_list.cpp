@@ -77,11 +77,11 @@ void driver_list::to_xml(const std::string& filename)
     }
 }
 
-auto operator<<(std::ostream& output, driver_list const& speaker_list) -> std::ostream&
+auto operator<<(std::ostream& output, driver_list const& driver_list) -> std::ostream&
 {
     output << _("driver List") << "\n";
 
-    for (auto& from : driver_list.m_data)
+    for (auto& from : driver_list.data())
     {
         output << from;
     }

@@ -21,6 +21,7 @@
 #include "total_filter_plot.hpp"
 
 #include "common.h"
+#include "signal.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -29,7 +30,8 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 {
     add(m_plot);
 
-    signal_plot_crossover.connect(sigc::mem_fun(*this, &total_filter_plot::on_plot_crossover));
+    signal_plot_crossover.connect(
+        sigc::mem_fun(*this, &total_filter_plot::on_plot_crossover));
     signal_add_crossover_plot.connect(sigc::mem_fun(*this, &total_filter_plot::on_add_plot));
 
     m_plot.set_y_label(_("Magnitude / dB"));
@@ -42,7 +44,7 @@ total_filter_plot::~total_filter_plot() = default;
 auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
                                     Gdk::Color const& color,
                                     int& output_plot_index,
-                                    Net* n) -> int
+                                    filter_network* n) -> int
 {
     auto const plot_index = output_plot_index;
 

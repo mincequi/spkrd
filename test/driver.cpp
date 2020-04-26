@@ -1,20 +1,20 @@
 
 #include <catch2/catch.hpp>
 
-#include "speaker_list.hpp"
+#include "driver_list.hpp"
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
 
 TEST_CASE("Populate enclosure list from xml")
 {
-    SECTION("Empty case") { REQUIRE(speaker_list().data().empty()); }
+    SECTION("Empty case") { REQUIRE(driver_list().data().empty()); }
     SECTION("File not found exception")
     {
-        REQUIRE_THROWS_AS(speaker_list(""), std::runtime_error);
+        REQUIRE_THROWS_AS(driver_list(""), std::runtime_error);
     }
     SECTION("Test xml parsing")
     {
-        auto drivers = speaker_list(path + "/vifa.xml");
+        auto drivers = driver_list(path + "/vifa.xml");
         REQUIRE(drivers.data().size() == 7);
 
         {

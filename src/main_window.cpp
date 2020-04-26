@@ -21,6 +21,7 @@
 
 #include "crossover.hpp"
 #include "settings_dialog.hpp"
+#include "signal.hpp"
 
 #include <glibmm.h>
 
@@ -159,7 +160,8 @@ void main_window::initialise_menu_bar()
         m_edit_menu_item.set_submenu(*edit_submenu);
 
         auto preferences = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::PREFERENCES));
-        preferences->signal_activate().connect(sigc::mem_fun(*this, &main_window::on_edit_settings));
+        preferences->signal_activate().connect(
+            sigc::mem_fun(*this, &main_window::on_edit_settings));
         edit_submenu->append(*preferences);
     }
     {
@@ -208,12 +210,14 @@ void main_window::connect_driver_tab()
 
 void main_window::connect_enclosure_tab()
 {
-    m_main_notebook.append_page(m_enclosure_paned, *Gtk::manage(new Gtk::Label("Enclosure")));
+    m_main_notebook.append_page(m_enclosure_paned,
+                                *Gtk::manage(new Gtk::Label("Enclosure")));
 }
 
 void main_window::connect_crossover_tab()
 {
-    m_main_notebook.append_page(m_crossover_paned, *Gtk::manage(new Gtk::Label("Crossover")));
+    m_main_notebook.append_page(m_crossover_paned,
+                                *Gtk::manage(new Gtk::Label("Crossover")));
 }
 
 auto main_window::on_delete_event(GdkEventAny* event) -> bool
@@ -233,7 +237,8 @@ auto main_window::on_delete_event(GdkEventAny* event) -> bool
         // hbox->set_border_width(6);
         // hbox->set_spacing(6);
 
-        auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+        auto image = Gtk::manage(
+            new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
         hbox->pack_start(*image);
 
         dialog.get_action_area()->set_border_width(6);
@@ -302,7 +307,8 @@ void main_window::on_quit()
         hbox->set_border_width(6);
         hbox->set_spacing(12);
 
-        auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+        auto image = Gtk::manage(
+            new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
         hbox->pack_start(*image);
 
         dialog->get_action_area()->set_border_width(12);
@@ -310,7 +316,8 @@ void main_window::on_quit()
 
         auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
         auto* label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
-        label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?")) + "</b>\n\n");
+        label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?"))
+                           + "</b>\n\n");
         vbox->pack_start(*label1);
 
         auto label3 = Gtk::manage(

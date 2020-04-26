@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_COLOR
-#define __GSPEAKERS_COLOR
+#pragma once
 
 #include <string>
 #include <vector>
@@ -32,8 +31,10 @@ public:
     void unget_color_string(std::string const& colour);
 
 private:
+    auto get_iterator_from_string(const std::string& colour_value)
+        -> std::vector<std::string>::iterator;
+
+private:
     std::vector<std::string> m_colors;
     int m_counter = 0;
 };
-
-#endif

@@ -22,6 +22,7 @@
 #include "enclosure_model.hpp"
 #include "common.h"
 #include "plot.hpp"
+#include "signal.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -324,7 +325,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
     }
     else
     {
-        b = new Box();
+        b = new enclosure();
     }
     m_disable_signals = false;
 }
@@ -347,7 +348,8 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
     {
         for (auto const& speaker : m_speaker_list->data())
         {
-            if (is_bass_driver(speaker.get_type()) && m_box->get_speaker() != speaker.get_id_string())
+            if (is_bass_driver(speaker.get_type())
+                && m_box->get_speaker() != speaker.get_id_string())
             {
                 m_bass_speaker_combo.append(speaker.get_id_string());
             }
@@ -384,7 +386,8 @@ void enclosure_editor::on_combo_entry_changed()
     m_disable_signals = true;
 
     // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
+    m_current_speaker = m_speaker_list->get_by_id_string(
+        m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_vas_label.set_text(gspk::to_ustring(m_current_speaker.get_vas(), 2, 1));

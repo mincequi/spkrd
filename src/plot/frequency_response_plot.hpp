@@ -30,7 +30,7 @@
 
 class driver_list;
 class Crossover;
-class Net;
+class filter_network;
 
 /// This is a wrapper class for gspkPlot
 class frequency_response_plot : public Gtk::Frame
@@ -42,7 +42,10 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<gspk::point> const&, Gdk::Color const&, int&, Net*) -> int;
+    auto on_add_plot(std::vector<gspk::point> const&,
+                     Gdk::Color const&,
+                     int&,
+                     filter_network*) -> int;
 
 private:
     void on_crossover_selected(Crossover*);
