@@ -120,9 +120,9 @@ protected:
 protected:
     Gtk::Widget* m_evbox;
     Gtk::Label* m_frame_label;
-    Gtk::ScrolledWindow m_ScrolledWindow;
-    Gtk::TreeView m_TreeView;
-    Glib::RefPtr<Gtk::ListStore> m_refListStore;
+    Gtk::ScrolledWindow m_scrolled_window;
+    Gtk::TreeView m_tree_view;
+    Glib::RefPtr<Gtk::ListStore> m_list_store;
 
     crossover_list m_crossover_list;
 

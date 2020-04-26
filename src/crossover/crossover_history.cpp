@@ -46,11 +46,11 @@ auto time_of_day() -> std::string
 crossover_history::crossover_history() : Gtk::Frame("")
 {
     set_border_width(2);
-    m_ScrolledWindow.set_border_width(12);
-    add(m_ScrolledWindow);
+    m_scrolled_window.set_border_width(12);
+    add(m_scrolled_window);
 
-    m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-    m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+    m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 #ifdef TARGET_WIN32
     g_settings.defaultValueString("crossover_listXml", "crossover1.xml");
@@ -65,9 +65,9 @@ crossover_history::crossover_history() : Gtk::Frame("")
     {
         m_crossover_list = crossover_list(m_filename);
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const& error)
     {
-        std::cout << "crossover_history::crossover_history: " << e.what() << std::endl;
+        std::cout << "crossover_history::crossover_history: " << error.what() << '\n';
     }
     set_shadow_type(Gtk::SHADOW_NONE);
 
@@ -84,14 +84,14 @@ crossover_history::crossover_history() : Gtk::Frame("")
     create_model();
 
     // create tree view
-    m_TreeView.set_model(m_refListStore);
+    m_tree_view.set_model(m_list_store);
 
-    m_TreeView.get_selection()->signal_changed().connect(
+    m_tree_view.get_selection()->signal_changed().connect(
         sigc::mem_fun(*this, &crossover_history::on_selection_changed));
 
     add_columns();
 
-    m_ScrolledWindow.add(m_TreeView);
+    m_scrolled_window.add(m_tree_view);
 
     show_all();
 
@@ -120,12 +120,12 @@ void crossover_history::select_first_row()
     if (m_crossover_list.data().empty())
     {
         Gtk::TreePath path(std::to_string(0));
-        Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-        m_TreeView.get_selection()->select(row);
+        Gtk::TreeRow row = *(m_list_store->get_iter(path));
+        m_tree_view.get_selection()->select(row);
     }
 
-    Gtk::TreeRow row = *(m_refListStore->get_iter(Gtk::TreePath(std::to_string(0))));
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    Gtk::TreeRow row = *(m_list_store->get_iter(Gtk::TreePath(std::to_string(0))));
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
     selection->select(row);
 }
 
@@ -181,7 +181,7 @@ void crossover_history::open_xml(const std::string& filename)
     try
     {
         temp_crossover_list = crossover_list(filename);
-        m_refListStore->clear();
+        m_list_store->clear();
 
         m_filename = filename;
 
@@ -197,8 +197,8 @@ void crossover_history::open_xml(const std::string& filename)
         {
             Gtk::TreePath path(std::to_string(0));
 
-            Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-            m_TreeView.get_selection()->select(row);
+            Gtk::TreeRow row = *(m_list_store->get_iter(path));
+            m_tree_view.get_selection()->select(row);
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
@@ -238,11 +238,11 @@ void crossover_history::append_xml(const std::string& filename)
 
 void crossover_history::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_tree_view.get_selection();
 
     if (const Gtk::TreeIter iter = refSelection->get_selected())
     {
-        Gtk::TreePath path = m_refListStore->get_path(iter);
+        Gtk::TreePath path = m_list_store->get_path(iter);
 
         if (!path.empty())
         {
@@ -259,14 +259,14 @@ void crossover_history::on_selection_changed()
 
 void crossover_history::on_new_copy()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_tree_view.get_selection();
 
     if (!m_crossover_list.data().empty())
     {
         // Find out which row we selected
         if (auto const iter = refSelection->get_selected())
         {
-            Gtk::TreePath path = m_refListStore->get_path(iter);
+            Gtk::TreePath path = m_list_store->get_path(iter);
 
             if (!path.empty())
             {
@@ -299,7 +299,7 @@ void crossover_history::on_new_copy()
     // Select the last crossover in the list: the new crossover
     Gtk::TreePath path(Glib::ustring(std::to_string(m_crossover_list.data().size() - 1)));
 
-    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Gtk::TreeRow row = *(m_list_store->get_iter(path));
     refSelection->select(row);
     signal_crossover_set_save_state(true);
 }
@@ -316,11 +316,11 @@ void crossover_history::on_new_from_menu(int type)
     add_item(c);
     m_crossover_list.data().push_back(c);
 
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_tree_view.get_selection();
 
     // make our new crossover the selected crossover
     Gtk::TreePath path(std::to_string(m_crossover_list.data().size() - 1));
-    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Gtk::TreeRow row = *(m_list_store->get_iter(path));
     refSelection->select(row);
     signal_crossover_set_save_state(true);
 }
@@ -336,11 +336,11 @@ void crossover_history::on_new()
 
     m_crossover_list.data().push_back(c);
 
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_tree_view.get_selection();
 
     Gtk::TreePath path(std::to_string(m_crossover_list.data().size() - 1));
 
-    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Gtk::TreeRow row = *(m_list_store->get_iter(path));
 
     refSelection->select(row);
     signal_crossover_set_save_state(true);
@@ -348,7 +348,7 @@ void crossover_history::on_new()
 
 void crossover_history::on_new_xml()
 {
-    m_refListStore->clear();
+    m_list_store->clear();
     m_crossover_list.clear();
     new_xml_pressed = true;
     on_new();
@@ -422,29 +422,29 @@ void crossover_history::save_as_xml(const std::string& filename)
 
 void crossover_history::on_remove()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_tree_view.get_selection();
 
     if (const Gtk::TreeIter iter = refSelection->get_selected())
     {
-        Gtk::TreePath path = m_refListStore->get_path(iter);
+        Gtk::TreePath path = m_list_store->get_path(iter);
         if (!path.empty())
         {
             // Remove item from ListStore:
-            m_refListStore->erase(iter);
+            m_list_store->erase(iter);
 
             if (index < (int)m_crossover_list.data().size())
                 m_crossover_list.data().erase(m_crossover_list.data().begin() + index);
         }
     }
     Gtk::TreePath path(std::to_string(index > 0 ? index - 1 : 0));
-    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Gtk::TreeRow row = *(m_list_store->get_iter(path));
     refSelection->select(row);
     signal_crossover_set_save_state(true);
 }
 
 void crossover_history::create_model()
 {
-    m_refListStore = Gtk::ListStore::create(m_columns);
+    m_list_store = Gtk::ListStore::create(m_columns);
 
     std::for_each(m_crossover_list.data().begin(),
                   m_crossover_list.data().end(),
@@ -454,31 +454,33 @@ void crossover_history::create_model()
 void crossover_history::add_columns()
 {
     {
-        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
+        auto renderer = Gtk::make_managed<Gtk::CellRendererText>();
 
-        auto const cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Identifier"), *renderer);
+        Gtk::TreeViewColumn* pColumn = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
+        pColumn->add_attribute(renderer->property_text(), m_columns.id_string);
     }
 
     {
-        auto pRenderer = Gtk::make_managed<Gtk::CellRendererText>();
+        auto renderer = Gtk::make_managed<Gtk::CellRendererText>();
 
-        int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        int cols_count = m_tree_view.append_column(_("Type"), *renderer);
+        Gtk::TreeViewColumn* pColumn = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer,
+        pColumn->set_cell_data_func(*renderer,
                                     sigc::mem_fun(*this,
                                                   &crossover_history::type_cell_data_func));
     }
 }
 
 void crossover_history::type_cell_data_func(Gtk::CellRenderer* cell,
-                                            const Gtk::TreeModel::iterator& iter)
+                                            Gtk::TreeModel::iterator const& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
+
     std::string s;
+
     if (((*iter)[m_columns.type] & CROSSOVER_TYPE_LOWPASS) != 0)
     {
         s += _("lowpass");
@@ -528,7 +530,7 @@ void crossover_history::type_cell_data_func(Gtk::CellRenderer* cell,
 
 void crossover_history::add_item(Crossover const& foo)
 {
-    Gtk::TreeRow row = *(m_refListStore->append());
+    Gtk::TreeRow row = *(m_list_store->append());
 
     row[m_columns.id] = foo.get_id();
     row[m_columns.id_string] = foo.get_id_string();
