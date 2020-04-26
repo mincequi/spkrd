@@ -103,7 +103,7 @@ public:
 
     auto get_adv_imp_model() const -> int { return m_adv_imp_model; }
 
-    auto get_inv_pot() const -> bool { return m_inv_pol; }
+    auto get_inv_pot() const -> bool { return m_invert_polarity; }
 
     auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
 
@@ -163,7 +163,7 @@ public:
 
     void set_adv_imp_model(int model) { m_adv_imp_model = model; }
 
-    void set_inv_pol(bool pol) { m_inv_pol = pol; }
+    void set_inv_pol(bool pol) { m_invert_polarity = pol; }
 
 protected:
     int m_highpass_order;
@@ -189,7 +189,7 @@ protected:
     std::string m_speaker;
 
     int m_adv_imp_model;
-    bool m_inv_pol;
+    bool m_invert_polarity;
 
 private:
     /// This function will set a new order in one subfilter
