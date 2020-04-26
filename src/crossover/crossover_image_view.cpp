@@ -64,9 +64,6 @@ auto crossover_image_view::on_configure_event(GdkEventConfigure* event) -> bool
 {
     m_visible = true;
 
-    white = Gdk::RGBA("rgb (0.0, 0.0, 0.0)");
-    black = Gdk::RGBA("rgb (1.0, 1.0, 1.0)");
-
     m_refLayout = Pango::Layout::create(get_pango_context());
 
     // We've handled the configure event, no need for further processing

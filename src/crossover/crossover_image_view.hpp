@@ -25,7 +25,6 @@
 #include "crossover.hpp"
 #include "driver_list.hpp"
 
-#include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
 #include <string>
@@ -182,7 +181,6 @@ private:
     bool m_scale_image_parts;
 
     Glib::RefPtr<Pango::Layout> m_refLayout;
-    Gdk::RGBA black, white;
 
     Crossover* m_crossover{nullptr};
     driver_list* m_speaker_list{nullptr};
