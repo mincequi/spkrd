@@ -119,6 +119,20 @@ public:
 
     auto get_res_L() -> passive_component& { return m_res_L; }
 
+    auto get_imp_corr_R() const -> passive_component const& { return m_imp_corr_R; }
+
+    auto get_imp_corr_C() const -> passive_component const& { return m_imp_corr_C; }
+
+    auto get_damp_R1() const -> passive_component const& { return m_damp_R1; }
+
+    auto get_damp_R2() const -> passive_component const& { return m_damp_R2; }
+
+    auto get_res_R() const -> passive_component const& { return m_res_R; }
+
+    auto get_res_C() const -> passive_component const& { return m_res_C; }
+
+    auto get_res_L() const -> passive_component const& { return m_res_L; }
+
     void set_highpass_order(int order);
 
     void set_lowpass_order(int order);
