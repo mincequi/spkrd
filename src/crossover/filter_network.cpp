@@ -543,10 +543,6 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 #endif
                            + gspk::int_to_ustring(m_id) + ".tmp";
 
-    int node_counter = 0;
-    int part_index = 0;
-    int next_node_cnt_inc = 1;
-
     std::ofstream output(tmp_file.c_str());
 
     if (!output.good())
@@ -559,68 +555,76 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
     output << "vamp " << ++node_counter << " " << 0 << " dc 0 ac 1"
            << "\n";
 
+    int node_counter = 0;
+    int part_index = 0;
+    int next_node_cnt_inc = 1;
+
     if (m_lowpass_order > 0)
     {
         switch (m_lowpass_order)
         {
             case NET_ORDER_1ST:
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_2ND:
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_3RD:
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_4TH:
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 ++node_counter;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
         }
@@ -631,62 +635,66 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
         {
             case NET_ORDER_1ST:
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_2ND:
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_3RD:
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
             case NET_ORDER_4TH:
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 ++node_counter;
-                output << "C" << m_parts[part_index].get_id() << " " << node_counter
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
                        << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
-                output << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
                 ++part_index;
                 break;
         }
@@ -706,6 +714,7 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
     {
         next_node_cnt_inc = 1;
     }
+
     if (m_has_damp)
     {
         output << "R" << m_damp_R1.get_id() << " " << node_counter << " " << 0 << " "
@@ -713,7 +722,7 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
         output << "R" << m_damp_R2.get_id() << " " << node_counter << " "
                << node_counter + next_node_cnt_inc << " "
                << std::to_string(m_damp_R2.get_value()) << "\n";
-        node_counter = node_counter + next_node_cnt_inc;
+        node_counter += next_node_cnt_inc;
         next_node_cnt_inc = 1;
     }
 
@@ -757,20 +766,15 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 
     if (use_gnucap)
     {
-        output << ".print ac vdb(" << spk_node << ")"
-               << "\n";
-        output << ".ac DEC 50 20 20k"
-               << "\n";
+        output << ".print ac vdb(" << spk_node << ")\n";
+        output << ".ac DEC 50 20 20k\n";
     }
     else
     {
-        output << ".ac DEC 50 20 20k"
-               << "\n";
-        output << ".print ac db(v(" << spk_node << "))"
-               << "\n";
+        output << ".ac DEC 50 20 20k\n";
+        output << ".print ac db(v(" << spk_node << "))\n";
     }
-    output << ".end"
-           << "\n";
+    output << ".end\n";
     output.close();
 
     return tmp_file;
@@ -785,7 +789,7 @@ auto operator<<(std::ostream& output, filter_network const& net) -> std::ostream
            << _("Lowpass  #") << net.m_lowpass_order << "\n"
            << _("Has imp corr: ") << net.m_has_imp_corr << "\n"
            << _("Has damping : ") << net.m_has_damp << "\n"
-           << _("Has resonanse circuit: ") << net.m_has_res << "\n";
+           << _("Has resonance circuit: ") << net.m_has_res << "\n";
     output << _("Parts:") << "\n";
 
     // Print every part in this net
@@ -826,10 +830,10 @@ void filter_network::set_has_imp_corr(bool has_impedance_correction)
     }
 }
 
-void filter_network::set_has_damp(bool has_dampening)
+void filter_network::set_has_damp(bool has_damping)
 {
-    m_has_damp = has_dampening;
-    if (has_dampening)
+    m_has_damp = has_damping;
+    if (has_damping)
     {
         m_damp_R1 = passive_component(PART_TYPE_RESISTOR, 1, "");
         m_damp_R2 = passive_component(PART_TYPE_RESISTOR, 1, "");

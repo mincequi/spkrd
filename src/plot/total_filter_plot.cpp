@@ -95,7 +95,6 @@ void total_filter_plot::clear()
 {
     m_points.clear();
     m_nets.clear();
-
     m_plot.remove_all_plots();
 }
 

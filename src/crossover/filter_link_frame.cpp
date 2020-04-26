@@ -211,19 +211,19 @@ void filter_link_frame::initialise_lowpass_filter()
     frame->add(*vbox);
 
     // Setup menus
-    m_lower_order_combo = Gtk::manage(new Gtk::ComboBoxText());
+    m_lower_order_combo = Gtk::make_managed<Gtk::ComboBoxText>();
     m_lower_order_combo->append("1");
     m_lower_order_combo->append("2");
     m_lower_order_combo->append("3");
     m_lower_order_combo->append("4");
     m_lower_order_combo->set_active(m_net->get_lowpass_order() - 1);
 
-    m_lower_type_combo = Gtk::manage(new Gtk::ComboBoxText());
+    m_lower_type_combo = Gtk::make_managed<Gtk::ComboBoxText>();
 
     on_order_selected(m_lower_order_combo, m_lower_type_combo);
 
-    /* menus ready */
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    // menus ready
+    auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
     vbox->pack_start(*hbox);
     hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Order: "))));
     hbox->pack_start(*m_lower_order_combo);
@@ -766,10 +766,10 @@ void filter_link_frame::on_plot_crossover()
         spice_filename = m_net->to_SPICE(speaker,
                                          g_settings.getValueBool("SPICEUseGNUCAP"));
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const& error)
     {
         Gtk::MessageDialog(_("filter_link_frame::on_plot_crossover: ERROR: ")
-                               + Glib::ustring(e.what()),
+                               + Glib::ustring(error.what()),
                            false,
                            Gtk::MESSAGE_ERROR,
                            Gtk::BUTTONS_OK,
