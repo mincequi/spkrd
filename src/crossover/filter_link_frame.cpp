@@ -71,7 +71,7 @@ filter_link_frame::filter_link_frame(filter_network* net,
 
     if (m_net->get_has_damp())
     {
-        this->initialise_dampening();
+        this->initialise_damping();
     }
     if (net->get_type() & NET_TYPE_HIGHPASS)
     {
@@ -93,7 +93,7 @@ filter_link_frame::filter_link_frame(filter_network* net,
     m_enable_edit = true;
 }
 
-void filter_link_frame::initialise_dampening()
+void filter_link_frame::initialise_damping()
 {
     // Set damp value in dB here
     auto const r_ser = m_net->get_damp_R1().get_value();

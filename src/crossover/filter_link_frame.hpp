@@ -32,7 +32,9 @@
 class filter_link_frame : public Gtk::Frame
 {
 public:
-    filter_link_frame(filter_network* net, std::string const& description, driver_list* speaker_list);
+    filter_link_frame(filter_network* net,
+                      std::string const& description,
+                      driver_list* speaker_list);
 
     ~filter_link_frame() override;
 
@@ -56,7 +58,7 @@ private:
 
     void initialise_speaker_combobox();
 
-    void initialise_dampening();
+    void initialise_damping();
 
     void initialise_highpass_filter();
 
@@ -67,7 +69,8 @@ private:
     /// net_name_type = NET_BESSEL, ...,
     /// net_order = NET_ORDER_1ST, ...,
     /// net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
-    auto get_filter_params(int net_name_type, int net_order, int net_type) -> std::vector<double>;
+    auto get_filter_params(int net_name_type, int net_order, int net_type)
+        -> std::vector<double>;
 
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
