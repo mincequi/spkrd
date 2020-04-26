@@ -71,7 +71,7 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
 {
     std::puts("crossover_tree_view::on_cell_edited_value");
     std::cout << "crossover_tree_view::on_cell_edited_value: path string = " << path_string
-              << "\n";
+              << "\network";
 
     Gtk::TreePath path(path_string);
 
@@ -93,11 +93,11 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     /* Index is a counter for the extra circuits (impedance correction network, damping
        network...) we have Number of extra circuits + the crossover is the total number of
        "base nodes" after filter type nodes */
-    filter_network* n = &(cover->networks())[path[0]];
+    filter_network* network = &(cover->networks())[path[0]];
 
     int ndx = 0;
     bool mod = false;
-    if (n->get_has_imp_corr())
+    if (network->get_has_imp_corr())
     {
         // Check if we have edited imp corr
         if (path[1] == ndx)
@@ -106,51 +106,51 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
             switch (path[2])
             {
                 case 0:
-                    n->get_imp_corr_C().set_value(row[m_columns.value]);
+                    network->get_imp_corr_C().set_value(row[m_columns.value]);
                     mod = true;
                     break;
                 case 1:
-                    n->get_imp_corr_R().set_value(row[m_columns.value]);
+                    network->get_imp_corr_R().set_value(row[m_columns.value]);
                     mod = true;
                     break;
             }
         }
         ndx++;
     }
-    if (n->get_has_damp())
+    if (network->get_has_damp())
     {
         if (path[1] == ndx)
         {
             switch (path[2])
             {
                 case 0:
-                    n->get_damp_R1().set_value(row[m_columns.value]);
+                    network->get_damp_R1().set_value(row[m_columns.value]);
                     mod = true;
                     break;
                 case 1:
-                    n->get_damp_R2().set_value(row[m_columns.value]);
+                    network->get_damp_R2().set_value(row[m_columns.value]);
                     mod = true;
                     break;
             }
         }
         ndx++;
     }
-    if (n->get_has_res())
+    if (network->get_has_res())
     {
         if (path[1] == ndx)
         {
             switch (path[2])
             {
                 case 0:
-                    n->get_res_L().set_value(row[m_columns.value]);
+                    network->get_res_L().set_value(row[m_columns.value]);
                     mod = true;
                     break;
                 case 1:
-                    n->get_res_C().set_value(row[m_columns.value]);
+                    network->get_res_C().set_value(row[m_columns.value]);
                     mod = true;
                     break;
                 case 2:
-                    n->get_res_R().set_value(row[m_columns.value]);
+                    network->get_res_R().set_value(row[m_columns.value]);
                     mod = true;
                     break;
             }
@@ -165,19 +165,20 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
            lowpassfilter order to path[3] which is the index of the highpass part to change */
         if (path[2] == 0)
         {
-            n->parts()[path[3]].set_value(row[m_columns.value]);
+            network->parts()[path[3]].set_value(row[m_columns.value]);
         }
         else if (path[2] == 1)
         {
-            n->parts()[path[3] + n->get_lowpass_order()].set_value(row[m_columns.value]);
+            network->parts()[path[3] + network->get_lowpass_order()].set_value(
+                row[m_columns.value]);
         }
     }
 #ifndef NDEBUG
     std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id]
-              << "\n";
+              << "\network";
 #endif
     // Tell others that we have modified a part
-    signal_net_modified_by_user(n);
+    signal_net_modified_by_user(network);
 }
 
 crossover_tree_view::model_columns::model_columns()
@@ -202,7 +203,7 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
 
     cover = new_crossover;
 
-    for (auto n : cover->networks())
+    for (auto network : cover->networks())
     {
         std::vector<crossover_cell_item> crossover_elements;
         std::vector<crossover_cell_item> filter;
@@ -211,28 +212,28 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
         std::vector<crossover_cell_item> imp_corr;
         std::vector<crossover_cell_item> damp;
 
-        if (n.get_has_imp_corr())
+        if (network.get_has_imp_corr())
         {
-            imp_corr.emplace_back(crossover_cell_item(n.get_imp_corr_C()));
-            imp_corr.emplace_back(crossover_cell_item(n.get_imp_corr_R()));
+            imp_corr.emplace_back(crossover_cell_item(network.get_imp_corr_C()));
+            imp_corr.emplace_back(crossover_cell_item(network.get_imp_corr_R()));
             crossover_elements.emplace_back(
                 crossover_cell_item(_("Impedance correction"), imp_corr));
         }
-        if (n.get_has_damp())
+        if (network.get_has_damp())
         {
-            damp.emplace_back(crossover_cell_item(n.get_damp_R1()));
-            damp.emplace_back(crossover_cell_item(n.get_damp_R2()));
+            damp.emplace_back(crossover_cell_item(network.get_damp_R1()));
+            damp.emplace_back(crossover_cell_item(network.get_damp_R2()));
             crossover_elements.emplace_back(crossover_cell_item(_("Damping network"), damp));
         }
 
         // The rest of the parts
-        auto const type = n.get_type();
+        auto const type = network.get_type();
 
-        std::vector<passive_component> const& parts = n.parts();
+        std::vector<passive_component> const& parts = network.parts();
         int counter = 0;
         if (type == NET_TYPE_LOWPASS)
         {
-            int nof_lowpass_parts = n.get_lowpass_order();
+            int nof_lowpass_parts = network.get_lowpass_order();
 
             for (int i = counter; i < nof_lowpass_parts; i++, counter++)
             {
