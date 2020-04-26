@@ -46,27 +46,12 @@ crossover_image_view::crossover_image_view()
         sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
 }
 
-auto crossover_image_view::on_expose_event(GdkEventExpose* event) -> bool
-{
-    return false;
-}
-
 auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
 {
     m_visible = true;
 
     this->redraw(context);
 
-    return true;
-}
-
-auto crossover_image_view::on_configure_event(GdkEventConfigure* event) -> bool
-{
-    m_visible = true;
-
-    m_refLayout = Pango::Layout::create(get_pango_context());
-
-    // We've handled the configure event, no need for further processing
     return true;
 }
 

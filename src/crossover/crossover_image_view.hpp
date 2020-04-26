@@ -40,11 +40,10 @@ public:
 private:
     auto on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool override;
 
-    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
-    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
-
     void on_crossover_selected(Crossover* selected_crossover);
+
     void on_speakerlist_selected(driver_list* selected_speaker_list);
+
     void on_net_modified();
 
     void on_settings_changed(const std::string& s);
