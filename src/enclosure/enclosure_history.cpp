@@ -513,7 +513,7 @@ void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
 
-    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
@@ -521,7 +521,7 @@ void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gspk::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 

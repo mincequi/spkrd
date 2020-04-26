@@ -44,8 +44,8 @@ class point;
 
 namespace gspk
 {
-auto double_to_ustring(double d) -> Glib::ustring;
-auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
+auto to_ustring(double d) -> Glib::ustring;
+auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
 auto int_to_ustring(int d) -> Glib::ustring;
 
 auto image_widget(std::string const& filename) -> Gtk::Widget&;

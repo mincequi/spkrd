@@ -395,7 +395,7 @@ void crossover_tree_view::value_cell_data_func(Gtk::CellRenderer* cell,
                                                const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.value], 3, 1);
+    renderer.property_text() = GSpeakers::to_ustring((*iter)[m_columns.value], 3, 1);
     renderer.property_xalign() = 1.0;
 }
 

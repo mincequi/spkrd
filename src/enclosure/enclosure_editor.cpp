@@ -204,8 +204,8 @@ void enclosure_editor::on_optimize_button_clicked()
                     * std::pow(m_current_speaker.get_vas() / m_box->get_vb1(), 0.31));
                 break;
         }
-        m_vb1_entry.set_text(gspk::double_to_ustring(m_box->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
+        m_vb1_entry.set_text(gspk::to_ustring(m_box->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
     }
     signal_box_modified(m_box);
     m_disable_signals = false;
@@ -285,8 +285,8 @@ void enclosure_editor::on_box_selected(enclosure* b)
     {
         m_box = b;
         m_id_string_entry.set_text(b->get_id_string());
-        m_vb1_entry.set_text(gspk::double_to_ustring(b->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(gspk::double_to_ustring(b->get_fb1(), 2, 1));
+        m_vb1_entry.set_text(gspk::to_ustring(b->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(gspk::to_ustring(b->get_fb1(), 2, 1));
 
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
@@ -319,7 +319,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
                                                              m_current_speaker.get_fs(),
                                                              m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
         }
     }
     else
@@ -387,12 +387,12 @@ void enclosure_editor::on_combo_entry_changed()
     m_current_speaker = m_speaker_list->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
-    m_speaker_vas_label.set_text(gspk::double_to_ustring(m_current_speaker.get_vas(), 2, 1));
-    m_speaker_fs_label.set_text(gspk::double_to_ustring(m_current_speaker.get_fs(), 2, 1));
+    m_speaker_vas_label.set_text(gspk::to_ustring(m_current_speaker.get_vas(), 2, 1));
+    m_speaker_fs_label.set_text(gspk::to_ustring(m_current_speaker.get_fs(), 2, 1));
 
     {
         auto const ebp = m_current_speaker.get_fs() / m_current_speaker.get_qes();
-        m_efficiency_bandwidth_product_label.set_text(gspk::double_to_ustring(ebp, 2, 1));
+        m_efficiency_bandwidth_product_label.set_text(gspk::to_ustring(ebp, 2, 1));
 
         // Select the best enclosure based on the efficiency bandwidth product
         if (ebp <= 50.0)
@@ -479,7 +479,7 @@ void enclosure_editor::on_enclosure_changed()
                                                        m_current_speaker.get_fs(),
                                                        m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(gspk::double_to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
             break;
         }
         case PORTED_SELECTED:

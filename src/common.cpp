@@ -48,7 +48,7 @@ sigc::signal0<void> signal_save_open_files;
 
 namespace gspk
 {
-auto double_to_ustring(double d) -> Glib::ustring
+auto to_ustring(double d) -> Glib::ustring
 {
     char* str = nullptr;
     GString* buffer = g_string_new(str);
@@ -56,7 +56,7 @@ auto double_to_ustring(double d) -> Glib::ustring
     return Glib::ustring(buffer->str);
 }
 
-auto double_to_ustring(double d, int format_len, int format_dec) -> Glib::ustring
+auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring
 {
     char* str1 = nullptr;
     GString* buffer1 = g_string_new(str1);
