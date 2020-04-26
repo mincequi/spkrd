@@ -81,7 +81,7 @@ auto operator<<(std::ostream& output, driver_list const& speaker_list) -> std::o
 {
     output << _("driver List") << "\n";
 
-    for (auto& from : driver_list.m_drivers)
+    for (auto& from : driver_list.m_data)
     {
         output << from;
     }
