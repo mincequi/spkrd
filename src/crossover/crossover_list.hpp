@@ -15,11 +15,10 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_CROSSOVERLIST_H
-#define __GFILTER_CROSSOVERLIST_H
+#pragma once
 
 #include "common.h"
-#include "crossover.h"
+#include "crossover.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -36,21 +35,19 @@ public:
     crossover_list(const std::string& filename);
 
     // Convert data for a part to an xml node, throws std::runtime_error on failure
-    // Maybe this one should throw an exception?
-    void to_xml(const std::string& filename);
+    void to_xml(const std::string& filename) noexcept(false);
 
     // Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const crossover_list& crossover_list);
+    friend auto operator<<(std::ostream& output, const crossover_list& crossover_list)
+        -> std::ostream&;
 
-    std::vector<Crossover>& data() { return m_crossover_list; }
+    auto data() -> std::vector<Crossover>& { return m_data; }
 
-    std::vector<Crossover> const& data() const { return m_crossover_list; }
+    auto data() const -> std::vector<Crossover> const& { return m_data; }
 
     // Remove all items
-    void clear();
+    void clear() { m_data.clear(); }
 
 protected:
-    std::vector<Crossover> m_crossover_list;
+    std::vector<Crossover> m_data;
 };
-
-#endif

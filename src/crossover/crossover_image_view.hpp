@@ -20,36 +20,34 @@
  * USA
  */
 
-#ifndef __CROSSOVER_IMAGE_VIEW_H
-#define __CROSSOVER_IMAGE_VIEW_H
+#pragma once
 
-#include "crossover.h"
+#include "crossover.hpp"
 #include "driver_list.hpp"
 
 #include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
-#include <pangomm/layout.h>
-
 #include <string>
 #include <vector>
 
 /// The crossover_image_view is a widget that will display the
-/// current crossover as an image of the component layout.
+/// current crossover as an image of the component layout
 class crossover_image_view : public Gtk::DrawingArea
 {
 public:
     crossover_image_view();
 
 private:
-    bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
+    auto on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool override;
 
-    bool on_expose_event(GdkEventExpose* event);
-    bool on_configure_event(GdkEventConfigure* event) override;
+    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
+    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
 
     void on_crossover_selected(Crossover* selected_crossover);
     void on_speakerlist_selected(driver_list* selected_speaker_list);
     void on_net_modified();
+
     void on_settings_changed(const std::string& s);
 
     void redraw(Cairo::RefPtr<Cairo::Context> const& context);
@@ -183,18 +181,9 @@ private:
     bool m_visible{false};
     bool m_scale_image_parts;
 
-    // /// Pixel map
-    // Glib::RefPtr<Gdk::Pixmap> m_refPixmap;
-    // /// Graphics context
-    // Glib::RefPtr<Gdk::GC> m_refGC;
-    //
-    // Glib::RefPtr<Gdk::Colormap> m_refColormap;
-
     Glib::RefPtr<Pango::Layout> m_refLayout;
     Gdk::RGBA black, white;
 
     Crossover* m_crossover{nullptr};
     driver_list* m_speaker_list{nullptr};
 };
-
-#endif

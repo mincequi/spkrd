@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<boxlist>
+  <box>
+    <id_string>Box: Wed Sep 18 14:59:49 2002</id_string>
+    <type>2</type>
+    <vb1>23</vb1>
+    <fb1>33</fb1>
+    <vb2>0</vb2>
+    <fb2>0</fb2>
+    <speaker>Seas L21RN4X/P</speaker>
+  </box>
+  <box>
+    <id_string>Box: Wed Sep 18 15:00:18 2002</id_string>
+    <type>1</type>
+    <vb1>10.6792</vb1>
+    <fb1>58.3290</fb1>
+    <vb2>0</vb2>
+    <fb2>0</fb2>
+    <speaker>Seas L21RN4X/P</speaker>
+  </box>
+  <box>
+    <id_string>Box: Wed Sep 18 15:00:18 2002</id_string>
+    <type>1</type>
+    <vb1>1.15467</vb1>
+    <fb1>58.3290</fb1>
+    <vb2>0</vb2>
+    <fb2>0</fb2>
+    <speaker>Seas L14RCY/P</speaker>
+  </box>
+  <box>
+    <id_string>Box: Wed Sep 18 15:01:05 2002</id_string>
+    <type>2</type>
+    <vb1>1.62361</vb1>
+    <fb1>76.0527</fb1>
+    <vb2>0</vb2>
+    <fb2>0</fb2>
+    <speaker>Seas L14RCY/P</speaker>
+  </box>
+</boxlist>

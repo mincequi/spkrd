@@ -15,8 +15,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_PART_H
-#define __GFILTER_PART_H
+#pragma once
 
 #include "gspeakersobject.h"
 
@@ -30,8 +29,8 @@ constexpr auto PART_TYPE_CAPACITOR = 1;
 constexpr auto PART_TYPE_INDUCTOR = 2;
 constexpr auto PART_TYPE_RESISTOR = 3;
 
-/// passive_component, for example a inductor or capacitor
-class passive_component : public GSpeakersObject
+/// passive_component, for example an inductor or capacitor
+class passive_component : public gspkObject
 {
 public:
     /// Create a new component
@@ -46,18 +45,18 @@ public:
     passive_component(xmlNodePtr fields) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    xmlNodePtr to_xml_node(xmlNodePtr parent); // Maybe this one should throw an exception
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr; // Maybe this one should throw an exception
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& output, const passive_component& part);
+    friend auto operator<<(std::ostream& output, const passive_component& part) -> std::ostream&;
 
     void set_value(double value);
 
     void set_unit(std::string unit);
 
-    double get_value() const;
+    auto get_value() const -> double;
 
-    std::string const& get_unit() const;
+    auto get_unit() const -> std::string const&;
 
     void on_part_value_changed(int id, double new_value);
     void on_part_unit_changed(int id, std::string new_unit);
@@ -76,5 +75,3 @@ protected:
     /// Value unit, for example u (used in SPICE)
     std::string m_unit;
 };
-
-#endif

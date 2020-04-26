@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_NET_H
-#define __GFILTER_NET_H
+#pragma once
 
 #include "common.h"
 #include "gspeakersobject.h"
@@ -50,10 +49,10 @@ constexpr auto NET_GAUSSIAN = 5;
 constexpr auto NET_LEGENDRE = 6;
 constexpr auto NET_LINEARPHASE = 7;
 
-/// filter_network is a part of a crossover: one part of the crossover we want to simulate in SPICE
-/// For example: Lowpass filter with impedance correction network or
+/// filter_network is a part of a crossover: one part of the crossover we want to simulate
+/// in SPICE For example: Lowpass filter with impedance correction network or
 ///              highpass filter with damping network.
-class filter_network : public GSpeakersObject
+class filter_network : public gspkObject
 {
 public:
     /// Construct new net object
@@ -75,73 +74,62 @@ public:
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
     /// Maybe this one should throw an exception
-    xmlNodePtr to_xml_node(xmlNodePtr parent);
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr;
 
     /// Print part data to stdout
-    friend std::ostream& operator<<(std::ostream& o, const filter_network& net);
+    friend auto operator<<(std::ostream& o, filter_network const& net) -> std::ostream&;
 
-    std::string to_SPICE(driver& s, bool use_gnucap = false);
+    auto to_SPICE(driver const& s, bool use_gnucap = false) -> std::string;
 
-    /// Use this to add a component to the net
-    std::vector<passive_component>& parts() { return m_parts; }
-    /// Use this to get the parts
-    std::vector<passive_component> const& parts() const { return m_parts; }
+    auto parts() -> std::vector<passive_component>& { return m_parts; }
 
-    int get_highpass_order() const { return m_highpass_order; }
+    auto parts() const -> std::vector<passive_component> const& { return m_parts; }
 
-    int get_lowpass_order() const { return m_lowpass_order; }
+    auto get_highpass_order() const -> int { return m_highpass_order; }
 
-    bool get_has_imp_corr() const { return m_has_imp_corr; }
+    auto get_lowpass_order() const -> int { return m_lowpass_order; }
 
-    bool get_has_damp() const { return m_has_damp; }
+    auto get_has_imp_corr() const -> bool { return m_has_imp_corr; }
 
-    bool get_has_res() const { return m_has_res; }
+    auto get_has_damp() const -> bool { return m_has_damp; }
 
-    int get_lowpass_family() const { return m_lowpass_family; }
+    auto get_has_res() const -> bool { return m_has_res; }
 
-    int get_highpass_family() const { return m_highpass_family; }
+    auto get_lowpass_family() const -> int { return m_lowpass_family; }
+
+    auto get_highpass_family() const -> int { return m_highpass_family; }
 
     auto get_speaker() const -> std::string const& { return m_speaker; }
 
-    int get_adv_imp_model() const { return m_adv_imp_model; }
+    auto get_adv_imp_model() const -> int { return m_adv_imp_model; }
 
-    bool get_inv_pot() const { return m_inv_pol; }
+    auto get_inv_pot() const -> bool { return m_inv_pol; }
 
-    /*
-     * We return parts by ref to so that we do not copy these parts.
-     * For example, if we have:
-     * filter_network n = net;
-     * n.get_imp_corr_R().set_value(0.2);
-     *
-     * we don't access the part stored in n, we get a copy of that
-     * part that we modify, but if we return a ref we modify the
-     * part stored in filter_network
-     */
     auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
-
-    auto get_imp_corr_R() const -> passive_component const& { return m_imp_corr_R; }
 
     auto get_imp_corr_C() -> passive_component& { return m_imp_corr_C; }
 
-    auto get_imp_corr_C() const -> passive_component const& { return m_imp_corr_C; }
-
     auto get_damp_R1() -> passive_component& { return m_damp_R1; }
-
-    auto get_damp_R1() const -> passive_component const& { return m_damp_R1; }
 
     auto get_damp_R2() -> passive_component& { return m_damp_R2; }
 
-    auto get_damp_R2() const -> passive_component const& { return m_damp_R2; }
-
     auto get_res_R() -> passive_component& { return m_res_R; }
-
-    auto get_res_R() const -> passive_component const& { return m_res_R; }
 
     auto get_res_C() -> passive_component& { return m_res_C; }
 
-    auto get_res_C() const -> passive_component const& { return m_res_C; }
-
     auto get_res_L() -> passive_component& { return m_res_L; }
+
+    auto get_imp_corr_R() const -> passive_component const& { return m_imp_corr_R; }
+
+    auto get_imp_corr_C() const -> passive_component const& { return m_imp_corr_C; }
+
+    auto get_damp_R1() const -> passive_component const& { return m_damp_R1; }
+
+    auto get_damp_R2() const -> passive_component const& { return m_damp_R2; }
+
+    auto get_res_R() const -> passive_component const& { return m_res_R; }
+
+    auto get_res_C() const -> passive_component const& { return m_res_C; }
 
     auto get_res_L() const -> passive_component const& { return m_res_L; }
 
@@ -223,5 +211,3 @@ private:
     void parse_adv_imp_model(xmlNodePtr node);
     void parse_inv_pol(xmlNodePtr node);
 };
-
-#endif

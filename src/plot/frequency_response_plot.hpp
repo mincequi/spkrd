@@ -1,4 +1,5 @@
-/* gspeakersboxplot
+/*
+ * $Id$
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
@@ -18,36 +19,43 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_FILTER_PLOT
-#define __GSPEAKERS_FILTER_PLOT
+#pragma once
 
-#include "common.h"
 #include "plot.hpp"
 
 #include <gtkmm/frame.h>
+#include <gdkmm/color.h>
 
-/// This is a wrapper class for GSpeakersPlot
-/// The reason why we have this class is that we want
-/// an extra layer (where we can connect signals and so on)
-/// between the program and the plot widget.
-class GSpeakersFilterPlot : public Gtk::Frame
+#include <vector>
+
+class driver_list;
+class Crossover;
+class filter_network;
+
+/// This is a wrapper class for gspkPlot
+class frequency_response_plot : public Gtk::Frame
 {
 public:
-    GSpeakersFilterPlot();
+    frequency_response_plot();
 
-    ~GSpeakersFilterPlot() override = default;
+    ~frequency_response_plot() override;
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*);
+    auto on_add_plot(std::vector<gspk::point> const&,
+                     Gdk::Color const&,
+                     int&,
+                     filter_network*) -> int;
 
 private:
-    [[deprecated]] bool on_delete_event(GdkEventAny* event) override;
-
     void on_crossover_selected(Crossover*);
+
+    void on_speakerlist_loaded(driver_list* driver_list);
 
 private:
     plot m_plot;
+    std::vector<int> m_nets;
+    Gdk::Color m_color;
+    std::vector<std::vector<gspk::point>> m_points;
+    driver_list* m_speakerlist;
 };
-
-#endif

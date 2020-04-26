@@ -77,18 +77,18 @@ void driver_list::to_xml(const std::string& filename)
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const driver_list& driver_list)
+auto operator<<(std::ostream& output, driver_list const& driver_list) -> std::ostream&
 {
     output << _("driver List") << "\n";
 
-    for (auto& from : driver_list.m_drivers)
+    for (auto& from : driver_list.data())
     {
         output << from;
     }
     return output;
 }
 
-driver driver_list::get_by_id_string(std::string const& id_string)
+auto driver_list::get_by_id_string(std::string const& id_string) -> driver
 {
     auto const location = std::find_if(begin(m_drivers),
                                        end(m_drivers),

@@ -17,20 +17,20 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "cellitemcrossover.h"
+#include "crossover_cell_item.hpp"
 
 #include <utility>
 
-CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
-                                       int type,
-                                       double value,
-                                       Glib::ustring unit,
-                                       int id)
+crossover_cell_item::crossover_cell_item(Glib::ustring label,
+                                         int type,
+                                         double value,
+                                         Glib::ustring unit,
+                                         int id)
     : m_label(std::move(label)), m_id(id), m_type(type), m_value(value), m_unit(std::move(unit))
 {
 }
 
-CellItem_Crossover::CellItem_Crossover(passive_component const& part)
+crossover_cell_item::crossover_cell_item(passive_component const& part)
     : m_id(part.get_id()), m_type(part.get_type()), m_value(part.get_value()), m_unit(part.get_unit())
 {
     switch (m_type)
@@ -53,8 +53,8 @@ CellItem_Crossover::CellItem_Crossover(passive_component const& part)
     }
 }
 
-CellItem_Crossover::CellItem_Crossover(Glib::ustring label,
-                                       const std::vector<CellItem_Crossover>& children)
+crossover_cell_item::crossover_cell_item(Glib::ustring label,
+                                         std::vector<crossover_cell_item> const& children)
     : m_label(std::move(label)), m_children(children)
 {
 }

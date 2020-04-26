@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_CELLITEM_CROSSOVER
-#define __GSPEAKERS_CELLITEM_CROSSOVER
+#pragma once
 
 #include "passive_component.hpp"
 
@@ -27,18 +26,24 @@
 #include <vector>
 
 /// This is a cellitem for a crossover used in the current crossover treeview
-/// CrossoverTreeView syncs this class with the underlying data container (the Crossover class)
-class CellItem_Crossover
+/// crossover_tree_view syncs this class with the underlying data container
+/// (the Crossover class)
+class crossover_cell_item
 {
 public:
-    CellItem_Crossover() = default;
+    crossover_cell_item() = default;
 
-    CellItem_Crossover(passive_component const& part);
+    crossover_cell_item(passive_component const& part);
 
-    CellItem_Crossover(Glib::ustring label, int type, double value, Glib::ustring unit, int id);
+    crossover_cell_item(Glib::ustring label,
+                        int type,
+                        double value,
+                        Glib::ustring unit,
+                        int id);
 
     /// Construct a cellitem with children
-    CellItem_Crossover(Glib::ustring label, std::vector<CellItem_Crossover> const& children);
+    crossover_cell_item(Glib::ustring label,
+                        std::vector<crossover_cell_item> const& children);
 
 public:
     Glib::ustring m_label;
@@ -51,7 +56,5 @@ public:
     Glib::ustring m_type_str;
     Glib::ustring m_value_str;
 
-    std::vector<CellItem_Crossover> m_children;
+    std::vector<crossover_cell_item> m_children;
 };
-
-#endif

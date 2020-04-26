@@ -22,6 +22,8 @@
 
 crossover_list::crossover_list(const std::string& filename)
 {
+    xmlKeepBlanksDefault(0);
+
     xmlDocPtr doc = xmlParseFile(filename.c_str());
 
     if (doc == nullptr)
@@ -40,11 +42,11 @@ crossover_list::crossover_list(const std::string& filename)
             {
                 try
                 {
-                    m_crossover_list.emplace_back(children);
+                    m_data.emplace_back(children);
                 }
-                catch (std::runtime_error const& e)
+                catch (std::runtime_error const& error)
                 {
-                    throw e;
+                    throw error;
                 }
                 children = children->next;
             }
@@ -56,16 +58,14 @@ crossover_list::crossover_list(const std::string& filename)
     }
 }
 
-void crossover_list::clear() { m_crossover_list.clear(); }
-
-void crossover_list::to_xml(const std::string& filename)
+void crossover_list::to_xml(std::string const& filename)
 {
     xmlDocPtr doc = xmlNewDoc((xmlChar*)("1.0"));
 
     xmlNodePtr node = xmlNewDocNode(doc, nullptr, (xmlChar*)("crossoverlist"), nullptr);
     xmlDocSetRootElement(doc, node);
 
-    for (auto& from : m_crossover_list)
+    for (auto& from : m_data)
     {
         from.to_xml_node(node);
     }
@@ -76,11 +76,11 @@ void crossover_list::to_xml(const std::string& filename)
     }
 }
 
-std::ostream& operator<<(std::ostream& output, const crossover_list& crossover_list)
+auto operator<<(std::ostream& output, crossover_list const& crossover_list) -> std::ostream&
 {
     output << "Crossover List\n";
 
-    for (const auto& from : crossover_list.m_crossover_list)
+    for (const auto& from : crossover_list.m_data)
     {
         output << from;
     }

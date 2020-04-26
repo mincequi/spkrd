@@ -30,11 +30,11 @@ class sidebar_notebook : public Gtk::Box
 public:
     sidebar_notebook();
 
-    int append_page(Gtk::Widget& child, Gtk::Widget& tab_label);
+    auto append_page(Gtk::Widget& child, Gtk::Widget& tab_label) -> int;
 
     void set_current_page(int page_num);
 
-    int get_current_page() const;
+    auto get_current_page() const -> int;
 
     auto data() -> Gtk::Notebook& { return m_notebook; }
 

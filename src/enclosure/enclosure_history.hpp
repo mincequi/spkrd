@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_BOXHISTORY
-#define __GSPEAKERS_BOXHISTORY
+#pragma once
 
 #include "enclosure_list.hpp"
 #include "common.h"
@@ -75,7 +74,7 @@ protected:
     void on_add_plot(enclosure* box, driver* speaker);
     void on_append_box(enclosure* box);
     void on_add_to_boxlist(enclosure* b);
-    bool on_delete_event(GdkEventAny* event) override;
+    auto on_delete_event(GdkEventAny* event) -> bool override;
     void on_plot_selected(int i);
     void on_save_open_files();
     void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
@@ -91,13 +90,13 @@ protected:
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::ListStore> m_refListStore;
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
     Gtk::Label m_label;
 
     enclosure_list m_box_list;
 
     // This is used in the treemodel
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModelColumnRecord
     {
         Gtk::TreeModelColumn<int> type;
         Gtk::TreeModelColumn<Glib::ustring> id_string;
@@ -107,7 +106,7 @@ protected:
         Gtk::TreeModelColumn<double> vb2;
         Gtk::TreeModelColumn<double> fb2;
 
-        ModelColumns()
+        model_columns()
         {
             add(type);
             add(id_string);
@@ -118,12 +117,10 @@ protected:
             add(fb2);
         }
     };
-    ModelColumns m_columns;
+    model_columns m_columns;
 
     std::string m_filename;
-    bool new_xml_pressed;
+    bool m_new_xml_pressed;
     int index;
     int selected_plot;
 };
-
-#endif

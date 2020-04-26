@@ -20,6 +20,10 @@ target_compile_definitions(gspeaker_core
                            VERSION="0.13")
 target_compile_options(gspeaker_core PRIVATE -Wall -Wpedantic)
 
+set_target_properties(gspeaker_core PROPERTIES CXX_STANDARD 14
+                                               CXX_STANDARD_REQUIRED YES
+                                               CXX_EXTENSIONS NO)
+
 if(GSPK_ENABLE_PROFILE)
   set_target_properties(gspeaker_core PROPERTIES COMPILE_FLAGS "-fno-omit-frame-pointer")
 endif()

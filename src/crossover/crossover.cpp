@@ -15,16 +15,14 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "crossover.h"
+#include "crossover.hpp"
 
 #include <sstream>
 #include <utility>
 
 Crossover::Crossover(int type, std::string id_string)
-    : GSpeakersObject(), m_id_string(std::move(id_string))
+    : gspkObject(type), m_id_string(std::move(id_string))
 {
-    m_type = type;
-
     if (m_type == CROSSOVER_TYPE_SUBSONIC)
     {
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
@@ -57,9 +55,9 @@ Crossover::Crossover(int type, std::string id_string)
     }
 }
 
-Crossover::Crossover(xmlNodePtr parent)
+Crossover::Crossover(xmlNodePtr parent) : gspkObject()
 {
-    if (parent != nullptr && g_ascii_strncasecmp((char*)parent->name, "crossover", 9) == 0)
+    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "crossover")
     {
         try
         {
@@ -100,7 +98,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 {
     xmlNodePtr child;
 
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0))
+    if (node != nullptr && g_ascii_strncasecmp((char*)node->name, "networks", 8) == 0)
     {
         child = node->children;
         while (child != nullptr)
@@ -128,7 +126,7 @@ void Crossover::parse_networks(xmlNodePtr node)
 
 void Crossover::parse_id_string(xmlNodePtr node)
 {
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0))
+    if (node != nullptr && g_ascii_strncasecmp((char*)node->name, "id_string", 9) == 0)
     {
         m_id_string = std::string((char*)xmlNodeGetContent(node));
     }
@@ -138,7 +136,7 @@ void Crossover::parse_id_string(xmlNodePtr node)
     }
 }
 
-xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
+auto Crossover::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     xmlNodePtr crossover = xmlNewChild(parent, nullptr, (xmlChar*)("crossover"), nullptr);
 
@@ -158,7 +156,7 @@ xmlNodePtr Crossover::to_xml_node(xmlNodePtr parent)
     return crossover;
 }
 
-std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
+auto operator<<(std::ostream& output, const Crossover& crossover) -> std::ostream&
 {
     output << _("Crossover type:") << crossover.m_type << "\n"
            << "Id: " << crossover.m_id << "\n---Nets----\n";
@@ -170,6 +168,6 @@ std::ostream& operator<<(std::ostream& output, const Crossover& crossover)
     return output;
 }
 
-std::string const& Crossover::get_id_string() const { return m_id_string; }
+auto Crossover::get_id_string() const -> std::string const& { return m_id_string; }
 
 void Crossover::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }

@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <iostream>
 
-int main(int argc, char* argv[])
+auto main(int argc, char* argv[]) -> int
 {
     // Initialize gettext
 #if ENABLE_NLS

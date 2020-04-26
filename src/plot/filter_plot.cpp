@@ -18,44 +18,41 @@
  * USA
  */
 
-#include "gspeakersfilterplot.h"
+#include "filter_plot.hpp"
 
-GSpeakersFilterPlot::GSpeakersFilterPlot() : m_plot(1, 20000)
+#include "common.h"
+#include "signal.hpp"
+
+filter_plot::filter_plot() : m_plot(1, 20000)
 {
     add(m_plot);
 
-    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &GSpeakersFilterPlot::on_add_plot));
+    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &filter_plot::on_add_plot));
     signal_crossover_selected.connect(
-        sigc::mem_fun(*this, &GSpeakersFilterPlot::on_crossover_selected));
+        sigc::mem_fun(*this, &filter_plot::on_crossover_selected));
 
     m_plot.set_y_label(_("Magnitude / dB"));
 
     show_all();
 }
 
-int GSpeakersFilterPlot::on_add_plot(std::vector<GSpeakers::Point>& points,
-                                     Gdk::Color& color,
-                                     int* i,
-                                     filter_network* n)
+auto filter_plot::on_add_plot(std::vector<gspk::point> const& points,
+                              Gdk::Color const& color,
+                              int& i,
+                              filter_network* n) -> int
 {
-    if (*i == -1)
+    if (i == -1)
     {
-        *i = m_plot.add_plot(points, color);
+        i = m_plot.add_plot(points, color);
     }
     else
     {
-        m_plot.replace_plot(*i, points, color);
+        m_plot.replace_plot(i, points, color);
     }
     m_plot.select_plot(-1);
     return 0;
 }
 
-void GSpeakersFilterPlot::clear() { m_plot.remove_all_plots(); }
+void filter_plot::clear() { m_plot.remove_all_plots(); }
 
-void GSpeakersFilterPlot::on_crossover_selected(Crossover*) { clear(); }
-
-bool GSpeakersFilterPlot::on_delete_event(GdkEventAny* event)
-{
-    // Don't delete this window
-    return true;
-}
+void filter_plot::on_crossover_selected(Crossover*) { clear(); }

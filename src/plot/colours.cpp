@@ -43,7 +43,7 @@ colours::colours()
     m_colors.emplace_back("PaleVioletRed");  // 219 112 147
     m_colors.emplace_back("CadetBlue");      // 95, 158, 160
     m_colors.emplace_back("IndianRed");      // 205, 92, 92
-    m_colors.emplace_back("orange");         // 255, 165,   0
+    m_colors.emplace_back("orange");         // 255, 165, 0
     m_colors.emplace_back("green");
     m_colors.emplace_back("MediumPurple");  // 147 112 219
     m_colors.emplace_back("DarkGreen");     // 0, 100, 0
@@ -60,19 +60,26 @@ colours::colours()
     m_colors.emplace_back("coral");         // 255 127  80
 }
 
-std::string const& colours::get_color_string()
+auto colours::get_color_string() -> std::string const&
 {
     std::string const& colour_value = m_colors[m_counter];
     m_counter = (m_counter + 1) % m_colors.size();
     return colour_value;
 }
 
-void colours::unget_color_string(const std::string& colour_value)
+void colours::unget_color_string(std::string const& colour_value)
+{
+    m_colors.erase(get_iterator_from_string(colour_value));
+    m_colors.insert(m_colors.begin() + m_counter, colour_value);
+}
+
+auto colours::get_iterator_from_string(const std::string& colour_value)
+    -> std::vector<std::string>::iterator
 {
     auto const location = std::find(begin(m_colors), end(m_colors), colour_value);
     if (location != end(m_colors))
     {
-        m_colors.erase(location);
+        return location;
     }
-    m_colors.insert(m_colors.begin() + m_counter, colour_value);
+    return m_colors.insert(m_colors.begin() + m_counter, colour_value);
 }

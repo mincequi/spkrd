@@ -1,4 +1,4 @@
-/* totalfilterplot
+/* gspeakersboxplot
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
@@ -18,44 +18,27 @@
  * USA
  */
 
-#ifndef __TOTAL_FILTER_PLOT
-#define __TOTAL_FILTER_PLOT
+#pragma once
 
-#include "common.h"
 #include "plot.hpp"
 
+#include <gtkmm/box.h>
 #include <gtkmm/frame.h>
-#include <gdkmm/color.h>
+#include <gtkmm/label.h>
+#include <gtkmm/scrolledwindow.h>
 
-#include <vector>
-
-/// This is a wrapper class for GSpeakersPlot
 /// The reason why we have this class is that we want
 /// an extra layer (where we can connect signals and so on)
 /// between the program and the plot widget.
-class TotalFilterPlot : public Gtk::Frame
+class box_plot : public Gtk::Frame
 {
 public:
-    TotalFilterPlot();
-
-    ~TotalFilterPlot() override;
-
-    void clear();
-
-    int on_add_plot(std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*);
+    box_plot();
 
 private:
-    bool on_delete_event(GdkEventAny* event) override;
+    Gtk::Label m_label;
+    Gtk::VBox m_vbox;
+    Gtk::ScrolledWindow m_scrolled_window;
 
-    void on_crossover_selected(Crossover*);
-
-    void on_plot_crossover();
-
-private:
     plot m_plot;
-    std::vector<int> m_nets;
-    Gdk::Color m_color;
-    std::vector<std::vector<GSpeakers::Point>> m_points;
 };
-
-#endif

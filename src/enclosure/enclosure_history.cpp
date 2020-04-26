@@ -19,7 +19,8 @@
 
 #include "enclosure_history.hpp"
 
-#include "gspeakersfilechooser.h"
+#include "file_chooser.hpp"
+#include "signal.hpp"
 
 #include <gtkmm/messagedialog.h>
 
@@ -50,7 +51,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
 #endif
     m_filename = g_settings.getValueString("BoxListXml");
 #ifdef __OUTPUT_DEBUG
-    std::cout << "enclosure_history::enclosure_history: m_filename = " << m_filename << std::endl;
+    std::cout << "enclosure_history::enclosure_history: m_filename = " << m_filename
+              << std::endl;
 #endif
 
     try
@@ -65,7 +67,7 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     std::cout << "boxlist_found = " << boxlist_found << "\n";
 
     m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                       + GSpeakers::short_filename(m_filename) + "]</b>");
+                       + gspk::short_filename(m_filename) + "]</b>");
     set_label_widget(m_label);
 
     create_model();
@@ -74,7 +76,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     m_TreeView.set_model(m_refListStore);
     m_TreeView.set_rules_hint();
 
-    signal_add_to_boxlist.connect(sigc::mem_fun(*this, &enclosure_history::on_add_to_boxlist));
+    signal_add_to_boxlist.connect(
+        sigc::mem_fun(*this, &enclosure_history::on_add_to_boxlist));
     signal_box_modified.connect(sigc::mem_fun(*this, &enclosure_history::on_box_modified));
 
     add_columns();
@@ -99,7 +102,8 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     selected_plot = -1;
     signal_select_plot.connect(sigc::mem_fun(*this, &enclosure_history::on_plot_selected));
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &enclosure_history::on_save_open_files));
+    signal_save_open_files.connect(
+        sigc::mem_fun(*this, &enclosure_history::on_save_open_files));
 }
 
 enclosure_history::~enclosure_history() { g_settings.setValue("BoxListXml", m_filename); }
@@ -110,13 +114,13 @@ void enclosure_history::on_plot_selected(int i) { selected_plot = i; }
 
 void enclosure_history::on_save_open_files()
 {
-    if (GSpeakers::enclosurelist_modified())
+    if (gspk::enclosurelist_modified())
     {
         on_save();
     }
 }
 
-bool enclosure_history::on_delete_event(GdkEventAny* event)
+auto enclosure_history::on_delete_event(GdkEventAny* event) -> bool
 {
     // handle this since we don't want to close the window
     g_settings.setValue("BoxListXml", m_filename);
@@ -128,7 +132,7 @@ bool enclosure_history::on_delete_event(GdkEventAny* event)
 
 void enclosure_history::on_open_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Open box xml"));
+    file_chooser_dialog fc(_("Open box xml"));
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
@@ -138,7 +142,7 @@ void enclosure_history::on_open_xml()
 
 void enclosure_history::on_append_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Append box xml"));
+    file_chooser_dialog fc(_("Append box xml"));
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
@@ -156,31 +160,31 @@ void enclosure_history::open_xml(const std::string& filename)
         m_refListStore->clear();
 
         m_filename = filename;
-        for_each(temp_box_list.box_list().begin(),
-                 temp_box_list.box_list().end(),
+        for_each(temp_box_list.data().begin(),
+                 temp_box_list.data().end(),
                  sigc::mem_fun(*this, &enclosure_history::add_item));
 
-        // Delete items in box_list
-        m_box_list.box_list().clear();
-        m_box_list.box_list().insert(end(m_box_list.box_list()),
-                                     begin(temp_box_list.box_list()),
-                                     end(temp_box_list.box_list()));
+        // Delete items in data
+        m_box_list.data().clear();
+        m_box_list.data().insert(end(m_box_list.data()),
+                                 begin(temp_box_list.data()),
+                                 end(temp_box_list.data()));
 
         // Select the first item in the list
-        if (!m_box_list.box_list().empty())
+        if (!m_box_list.data().empty())
         {
-            Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+            Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
             Gtk::TreePath path(std::to_string(0));
 
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
-            refSelection->select(row);
+            selection->select(row);
         }
         signal_enclosure_set_save_state(false);
         static_cast<Gtk::Label*>(get_label_widget())
             ->set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                         + GSpeakers::short_filename(m_filename) + "]</b>");
+                         + gspk::short_filename(m_filename) + "]</b>");
         g_settings.setValue("BoxListXml", m_filename);
     }
     catch (std::runtime_error const& error)
@@ -196,13 +200,13 @@ void enclosure_history::append_xml(const std::string& filename)
     try
     {
         temp_box_list = enclosure_list(filename);
-        std::for_each(temp_box_list.box_list().begin(),
-                      temp_box_list.box_list().end(),
+        std::for_each(temp_box_list.data().begin(),
+                      temp_box_list.data().end(),
                       sigc::mem_fun(*this, &enclosure_history::add_item));
 
-        for (auto& from : temp_box_list.box_list())
+        for (auto& from : temp_box_list.data())
         {
-            m_box_list.box_list().push_back(from);
+            m_box_list.data().push_back(from);
         }
     }
     catch (std::runtime_error const& e)
@@ -215,42 +219,38 @@ void enclosure_history::append_xml(const std::string& filename)
 
 void enclosure_history::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = selection->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
         if (!path.empty())
         {
             index = path[0];
-            signal_box_selected(&(m_box_list.box_list()[path[0]]));
+            signal_box_selected(&(m_box_list.data()[path[0]]));
         }
     }
 }
 
 void enclosure_history::on_new_copy()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
-    if (!m_box_list.box_list().empty())
+    if (!m_box_list.data().empty())
     {
         // Find out which row we selected
-        if (const Gtk::TreeIter iter = refSelection->get_selected())
+        if (const Gtk::TreeIter iter = selection->get_selected())
         {
             Gtk::TreePath path = m_refListStore->get_path(iter);
 
             if (!path.empty())
             {
-                /* Here we have the row in path[0], we want to make a copy of this Crossover
-                   and put it last in the list */
-
-                /* Here we want a copy of the original Crossover, not a crossover that has the
-                   same id and so on, as we would get if we used the operator = or something similar,
-                   Quick and easy solution...use the to_xml function which gets rid of the id */
-
-                xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
-                m_box_list.box_list()[path[0]].to_xml_node(node);
+                xmlNodePtr node = xmlNewDocNode(nullptr,
+                                                nullptr,
+                                                (xmlChar*)("parent"),
+                                                nullptr);
+                m_box_list.data()[path[0]].to_xml_node(node);
                 enclosure b(node->children);
 
                 // Set time of day as this id_string
@@ -258,16 +258,16 @@ void enclosure_history::on_new_copy()
                     std::chrono::system_clock::now());
                 b.set_id_string(_("enclosure: ") + std::string(std::ctime(&time)));
 
-                /* the usual adding of items to the liststore and data-container */
+                // the usual adding of items to the liststore and data-container
                 add_item(b);
-                m_box_list.box_list().push_back(b);
+                m_box_list.data().push_back(b);
             }
         }
     }
-    Gtk::TreePath path(std::to_string(m_box_list.box_list().size() - 1));
+    Gtk::TreePath path(std::to_string(m_box_list.data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
-    refSelection->select(row);
+    selection->select(row);
 
     signal_enclosure_set_save_state(true);
 }
@@ -277,19 +277,20 @@ void enclosure_history::on_new()
     enclosure b;
 
     // Use time of day as identifier
-    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::time_t const time = std::chrono::system_clock::to_time_t(
+        std::chrono::system_clock::now());
     b.set_id_string(_("enclosure: ") + std::string(std::ctime(&time)));
 
     add_item(b);
-    m_box_list.box_list().push_back(b);
+    m_box_list.data().push_back(b);
 
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
     GtkTreePath* gpath = gtk_tree_path_new_from_string(
-        GSpeakers::int_to_ustring(m_box_list.box_list().size() - 1).c_str());
+        gspk::int_to_ustring(m_box_list.data().size() - 1).c_str());
     Gtk::TreePath path(gpath);
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-    refSelection->select(row);
+    selection->select(row);
     signal_enclosure_set_save_state(true);
 }
 
@@ -298,7 +299,7 @@ void enclosure_history::on_new_xml()
     m_refListStore->clear();
     m_box_list.clear();
 
-    new_xml_pressed = true;
+    m_new_xml_pressed = true;
     on_new();
     signal_enclosure_set_save_state(true);
 
@@ -308,10 +309,10 @@ void enclosure_history::on_new_xml()
 
 void enclosure_history::on_save()
 {
-    if (new_xml_pressed)
+    if (m_new_xml_pressed)
     {
         on_save_as();
-        new_xml_pressed = false;
+        m_new_xml_pressed = false;
     }
     else
     {
@@ -322,15 +323,14 @@ void enclosure_history::on_save()
         }
         catch (std::runtime_error const& error)
         {
-            Gtk::MessageDialog message(error.what(), false, Gtk::MESSAGE_ERROR);
-            message.run();
+            Gtk::MessageDialog(error.what(), false, Gtk::MESSAGE_ERROR).run();
         }
     }
 }
 
 void enclosure_history::on_save_as()
 {
-    GSpeakersFileChooserDialog fc(_("Save box xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
+    file_chooser_dialog fc(_("Save box xml as"), Gtk::FILE_CHOOSER_ACTION_SAVE, m_filename);
 
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
@@ -347,24 +347,23 @@ void enclosure_history::save_as_xml(const std::string& filename)
         m_filename = filename;
 
         m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                           + GSpeakers::short_filename(m_filename) + "]</b>");
+                           + gspk::short_filename(m_filename) + "]</b>");
         set_label_widget(m_label);
 
         g_settings.setValue("BoxListXml", m_filename);
         signal_enclosure_set_save_state(false);
     }
-    catch (std::runtime_error const& e)
+    catch (std::runtime_error const& error)
     {
-        Gtk::MessageDialog m(e.what(), false, Gtk::MESSAGE_ERROR);
-        m.run();
+        Gtk::MessageDialog(error.what(), false, Gtk::MESSAGE_ERROR).run();
     }
 }
 
 void enclosure_history::on_remove()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = selection->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -373,14 +372,14 @@ void enclosure_history::on_remove()
             // Remove item from ListStore:
             m_refListStore->erase(iter);
 
-            if (index < (int)m_box_list.box_list().size())
-                m_box_list.box_list().erase(m_box_list.box_list().begin() + index);
+            if (index < (int)m_box_list.data().size())
+                m_box_list.data().erase(begin(m_box_list.data()) + index);
         }
     }
     Gtk::TreePath path(std::to_string(index > 0 ? index - 1 : 0));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
-    refSelection->select(row);
+    selection->select(row);
 
     signal_enclosure_set_save_state(true);
 }
@@ -388,9 +387,9 @@ void enclosure_history::on_remove()
 void enclosure_history::on_box_modified(enclosure* b)
 {
     // get the row from selection
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = selection->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -398,7 +397,7 @@ void enclosure_history::on_box_modified(enclosure* b)
         {
             Gtk::TreeRow row = *(m_refListStore->get_iter(path));
 
-            /* Update the liststore */
+            // Update the liststore
             row[m_columns.type] = b->get_type();
             row[m_columns.id_string] = b->get_id_string();
             row[m_columns.speaker] = b->get_speaker();
@@ -407,14 +406,14 @@ void enclosure_history::on_box_modified(enclosure* b)
             row[m_columns.vb2] = b->get_vb2();
             row[m_columns.fb2] = b->get_fb2();
 
-            /* Update the boxlist */
-            m_box_list.box_list()[path[0]].set_type(b->get_type());
-            m_box_list.box_list()[path[0]].set_id_string(b->get_id_string());
-            m_box_list.box_list()[path[0]].set_speaker(b->get_speaker());
-            m_box_list.box_list()[path[0]].set_vb1(b->get_vb1());
-            m_box_list.box_list()[path[0]].set_fb1(b->get_fb1());
-            m_box_list.box_list()[path[0]].set_vb2(b->get_vb2());
-            m_box_list.box_list()[path[0]].set_fb2(b->get_fb2());
+            // Update the boxlist
+            m_box_list.data()[path[0]].set_type(b->get_type());
+            m_box_list.data()[path[0]].set_id_string(b->get_id_string());
+            m_box_list.data()[path[0]].set_speaker(b->get_speaker());
+            m_box_list.data()[path[0]].set_vb1(b->get_vb1());
+            m_box_list.data()[path[0]].set_fb1(b->get_fb1());
+            m_box_list.data()[path[0]].set_vb2(b->get_vb2());
+            m_box_list.data()[path[0]].set_fb2(b->get_fb2());
 
             signal_enclosure_set_save_state(true);
         }
@@ -423,28 +422,28 @@ void enclosure_history::on_box_modified(enclosure* b)
 
 void enclosure_history::on_add_to_boxlist(enclosure* b)
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
     add_item(*b);
-    m_box_list.box_list().push_back(*b);
+    m_box_list.data().push_back(*b);
 
     /* Select the last crossover in the list: the added crossover */
-    Gtk::TreePath path(std::to_string(m_box_list.box_list().size() - 1));
+    Gtk::TreePath path(std::to_string(m_box_list.data().size() - 1));
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-    refSelection->select(row);
+    selection->select(row);
 }
 
 void enclosure_history::on_add_plot(enclosure* b, driver* s)
 {
     add_item(*b);
-    m_box_list.box_list().push_back(*b);
+    m_box_list.data().push_back(*b);
 }
 
 void enclosure_history::create_model()
 {
     m_refListStore = Gtk::ListStore::create(m_columns);
 
-    std::for_each(m_box_list.box_list().begin(),
-                  m_box_list.box_list().end(),
+    std::for_each(m_box_list.data().begin(),
+                  m_box_list.data().end(),
                   sigc::mem_fun(*this, &enclosure_history::add_item));
 }
 
@@ -475,7 +474,8 @@ void enclosure_history::add_columns()
 
         // pColumn->add_attribute(pRenderer->property_text(), m_columns.type_str);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::type_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -484,7 +484,8 @@ void enclosure_history::add_columns()
 
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::vb1_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::vb1_cell_data_func));
     }
     {
         Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
@@ -493,7 +494,8 @@ void enclosure_history::add_columns()
 
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(col_cnt - 1);
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &enclosure_history::fb1_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &enclosure_history::fb1_cell_data_func));
     }
 }
 
@@ -522,7 +524,7 @@ void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
 
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
@@ -530,7 +532,7 @@ void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = GSpeakers::double_to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
+    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 

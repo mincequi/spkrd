@@ -1,4 +1,5 @@
 /*
+ *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
  * This program is free software; you can redistribute it and/or
@@ -20,6 +21,7 @@
 #include "crossover_image_view.hpp"
 
 #include "common.h"
+#include "signal.hpp"
 
 #include <gdkmm/rectangle.h>
 #include <pangomm/context.h>
@@ -44,9 +46,12 @@ crossover_image_view::crossover_image_view()
         sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
 }
 
-bool crossover_image_view::on_expose_event(GdkEventExpose* event) { return false; }
+auto crossover_image_view::on_expose_event(GdkEventExpose* event) -> bool
+{
+    return false;
+}
 
-bool crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
+auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
 {
     m_visible = true;
 
@@ -55,7 +60,7 @@ bool crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
     return true;
 }
 
-bool crossover_image_view::on_configure_event(GdkEventConfigure* event)
+auto crossover_image_view::on_configure_event(GdkEventConfigure* event) -> bool
 {
     m_visible = true;
 
@@ -123,20 +128,21 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
     auto const window_height = allocation.get_height();
     auto const window_width = allocation.get_width();
-    auto const vert_space_per_net = std::round(window_height
-                                               / static_cast<double>(vert_space_per_net_divider));
+    auto const vert_space_per_net = std::round(
+        window_height / static_cast<double>(vert_space_per_net_divider));
 
     // Draw first network here
-    auto const& net_vector = m_crossover->networks();
+    auto const& networks = m_crossover->networks();
 
-    for (std::size_t i = 0; i < net_vector.size(); i++)
+    for (std::size_t i = 0; i < networks.size(); i++)
     {
         int net_vert_divider = 3;
         int net_horz_divider = 2;
 
-        int part_height = std::round(vert_space_per_net / static_cast<double>(net_vert_divider));
+        int part_height = std::round(vert_space_per_net
+                                     / static_cast<double>(net_vert_divider));
 
-        switch (net_vector[i].get_lowpass_order())
+        switch (networks[i].get_lowpass_order())
         {
             case NET_ORDER_1ST:
                 net_horz_divider += 1;
@@ -151,7 +157,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 net_horz_divider += 4;
                 break;
         }
-        switch (net_vector[i].get_highpass_order())
+        switch (networks[i].get_highpass_order())
         {
             case NET_ORDER_1ST:
                 net_horz_divider += 1;
@@ -167,11 +173,11 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 break;
         }
 
-        if (net_vector[i].get_has_imp_corr())
+        if (networks[i].get_has_imp_corr())
         {
             net_horz_divider += 1;
         }
-        if (net_vector[i].get_has_damp())
+        if (networks[i].get_has_damp())
         {
             net_horz_divider += 2;
         }
@@ -180,7 +186,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         if (m_scale_image_parts)
         {
-            if (part_width > 1.5 * part_height && net_vector[i].parts().size() <= 4)
+            if (part_width > (1.5 * part_height) && networks[i].parts().size() <= 4)
             {
                 part_width = part_height;
             }
@@ -198,16 +204,17 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                        part_height,
                        false);
 
-        auto const lowpass_order = net_vector[i].get_lowpass_order();
-        auto const highpass_order = net_vector[i].get_highpass_order();
+        auto const lowpass_order = networks[i].get_lowpass_order();
+        auto const highpass_order = networks[i].get_highpass_order();
 
-        std::vector<passive_component> const& part_vector = net_vector[i].parts();
+        std::vector<passive_component> const& part_vector = networks[i].parts();
 
         // lowpass part
         if (lowpass_order > 0)
         {
             std::vector<passive_component> lowpass_parts(part_vector.begin(),
-                                                         part_vector.begin() + lowpass_order);
+                                                         part_vector.begin()
+                                                             + lowpass_order);
             draw_lowpass_net(context,
                              part_width,
                              i * vert_space_per_net,
@@ -219,7 +226,8 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         // highpass part
         if (highpass_order > 0)
         {
-            std::vector<passive_component> highpass_parts(part_vector.begin() + lowpass_order,
+            std::vector<passive_component> highpass_parts(part_vector.begin()
+                                                              + lowpass_order,
                                                           part_vector.begin() + lowpass_order
                                                               + highpass_order);
             this->draw_highpass_net(context,
@@ -232,26 +240,26 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         int driver_offset = 0;
 
-        if (net_vector[i].get_has_imp_corr())
+        if (networks[i].get_has_imp_corr())
         {
             draw_imp_corr_net(context,
                               (1 + lowpass_order + highpass_order) * part_width,
                               i * vert_space_per_net,
                               part_width,
                               part_height,
-                              net_vector[i].get_imp_corr_R(),
-                              net_vector[i].get_imp_corr_C());
+                              networks[i].get_imp_corr_R(),
+                              networks[i].get_imp_corr_C());
             driver_offset++;
         }
-        if (net_vector[i].get_has_damp())
+        if (networks[i].get_has_damp())
         {
             draw_damp_net(context,
                           (1 + lowpass_order + highpass_order + driver_offset) * part_width,
                           i * vert_space_per_net,
                           part_width,
                           part_height,
-                          net_vector[i].get_damp_R1(),
-                          net_vector[i].get_damp_R2());
+                          networks[i].get_damp_R1(),
+                          networks[i].get_damp_R2());
             driver_offset += 2;
         }
 
@@ -259,7 +267,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         if (m_speaker_list != nullptr)
         {
-            speaker = m_speaker_list->get_by_id_string(net_vector[i].get_speaker());
+            speaker = m_speaker_list->get_by_id_string(networks[i].get_speaker());
         }
         draw_driver(context,
                     (1 + lowpass_order + highpass_order + driver_offset) * part_width,
@@ -278,11 +286,11 @@ void crossover_image_view::on_settings_changed(const std::string& setting)
 
         if (m_visible)
         {
-            Gdk::Rectangle update_rect(0,
-                                       0,
-                                       get_allocation().get_width(),
-                                       get_allocation().get_height());
-            get_window()->invalidate_rect(update_rect, true);
+            get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                         0,
+                                                         get_allocation().get_width(),
+                                                         get_allocation().get_height()),
+                                          true);
         }
     }
 }
@@ -292,7 +300,10 @@ void crossover_image_view::on_crossover_selected(Crossover* selected_crossover)
     m_crossover = selected_crossover;
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        Gdk::Rectangle update_rect(0,
+                                   0,
+                                   get_allocation().get_width(),
+                                   get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, true);
     }
 }
@@ -310,7 +321,10 @@ void crossover_image_view::on_speakerlist_selected(driver_list* selected_speaker
     m_speaker_list = selected_speaker_list;
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
+        Gdk::Rectangle update_rect(0,
+                                   0,
+                                   get_allocation().get_width(),
+                                   get_allocation().get_height());
         get_window()->invalidate_rect(update_rect, true);
     }
 }
@@ -326,8 +340,17 @@ void crossover_image_view::draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const&
     {
         if (parts[i].get_type() == PART_TYPE_INDUCTOR)
         {
-            draw_inductor(context, parts[i].get_id(), x + part_width * i, y, part_width, part_height);
-            draw_line(context, x + part_width * i, y + 2 * part_height, part_width, part_height);
+            draw_inductor(context,
+                          parts[i].get_id(),
+                          x + part_width * i,
+                          y,
+                          part_width,
+                          part_height);
+            draw_line(context,
+                      x + part_width * i,
+                      y + 2 * part_height,
+                      part_width,
+                      part_height);
         }
         else
         {
@@ -339,7 +362,12 @@ void crossover_image_view::draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const&
                            part_width,
                            part_height,
                            true);
-            draw_t_cross(context, x + part_width * i, y + 2 * part_height, part_width, part_height, false);
+            draw_t_cross(context,
+                         x + part_width * i,
+                         y + 2 * part_height,
+                         part_width,
+                         part_height,
+                         false);
         }
     }
 }
@@ -355,8 +383,17 @@ void crossover_image_view::draw_highpass_net(Cairo::RefPtr<Cairo::Context> const
     {
         if (parts[i].get_type() == PART_TYPE_CAPACITOR)
         {
-            draw_capacitor(context, parts[i].get_id(), x + part_width * i, y, part_width, part_height);
-            draw_line(context, x + part_width * i, y + 2 * part_height, part_width, part_height);
+            draw_capacitor(context,
+                           parts[i].get_id(),
+                           x + part_width * i,
+                           y,
+                           part_width,
+                           part_height);
+            draw_line(context,
+                      x + part_width * i,
+                      y + 2 * part_height,
+                      part_width,
+                      part_height);
         }
         else
         {
@@ -368,7 +405,12 @@ void crossover_image_view::draw_highpass_net(Cairo::RefPtr<Cairo::Context> const
                           part_width,
                           part_height,
                           true);
-            draw_t_cross(context, x + part_width * i, y + 2 * part_height, part_width, part_height, false);
+            draw_t_cross(context,
+                         x + part_width * i,
+                         y + 2 * part_height,
+                         part_width,
+                         part_height,
+                         false);
         }
     }
 }
@@ -385,7 +427,13 @@ void crossover_image_view::draw_imp_corr_net(Cairo::RefPtr<Cairo::Context> const
 
     draw_t_cross(context, x, y, part_width, part_height, true);
 
-    draw_capacitor(context, capacitor.get_id(), x, y + part_height, part_width, local_part_height, true);
+    draw_capacitor(context,
+                   capacitor.get_id(),
+                   x,
+                   y + part_height,
+                   part_width,
+                   local_part_height,
+                   true);
 
     draw_resistor(context,
                   resistor.get_id(),
@@ -409,7 +457,13 @@ void crossover_image_view::draw_damp_net(Cairo::RefPtr<Cairo::Context> const& co
     draw_resistor(context, r1.get_id(), x, y, part_width, part_height, false);
     draw_line(context, x, y + 2 * part_height, part_width, part_height, false);
     draw_t_cross(context, x + part_width, y, part_width, part_height, true);
-    draw_resistor(context, r2.get_id(), x + part_width, y + part_height, part_width, part_height, true);
+    draw_resistor(context,
+                  r2.get_id(),
+                  x + part_width,
+                  y + part_height,
+                  part_width,
+                  part_height,
+                  true);
     draw_t_cross(context, x + part_width, y + 2 * part_height, part_width, part_height, false);
 }
 
@@ -450,16 +504,23 @@ void crossover_image_view::draw_capacitor(Cairo::RefPtr<Cairo::Context> const& c
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, "C" + std::to_string(id), x, y);
+    context->set_font_size(18);
+    context->move_to(x, y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text("C" + std::to_string(id));
 
     if (rotate)
     {
         // Horizontal line in capacitor
         context->move_to(std::round(x + half_space_x), y);
-        context->line_to(std::round(x + half_space_x), std::round(y + half_space_y - small_space_y));
+        context->line_to(std::round(x + half_space_x),
+                         std::round(y + half_space_y - small_space_y));
         context->stroke();
 
-        context->move_to(std::round(x + half_space_x), y + std::round(half_space_y + small_space_y));
+        context->move_to(std::round(x + half_space_x),
+                         y + std::round(half_space_y + small_space_y));
         context->line_to(std::round(x + half_space_x), y + height);
         context->stroke();
 
@@ -480,10 +541,12 @@ void crossover_image_view::draw_capacitor(Cairo::RefPtr<Cairo::Context> const& c
     {
         // Horizontal line in capacitor
         context->move_to(x, std::round(y + half_space_y));
-        context->line_to(std::round(x + half_space_x - small_space_x), std::round(y + half_space_y));
+        context->line_to(std::round(x + half_space_x - small_space_x),
+                         std::round(y + half_space_y));
         context->stroke();
 
-        context->move_to(std::round(x + half_space_x + small_space_x), std::round(y + half_space_y));
+        context->move_to(std::round(x + half_space_x + small_space_x),
+                         std::round(y + half_space_y));
         context->line_to(x + width, std::round(y + half_space_y));
         context->stroke();
 
@@ -515,7 +578,12 @@ void crossover_image_view::draw_inductor(Cairo::RefPtr<Cairo::Context> const& co
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, "L" + std::to_string(id), x, y);
+    context->set_font_size(18);
+    context->move_to(x, y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text("L" + std::to_string(id));
 
     // Vertical inductor
     if (rotate)
@@ -577,7 +645,12 @@ void crossover_image_view::draw_resistor(Cairo::RefPtr<Cairo::Context> const& co
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, "R" + std::to_string(id), x, y);
+    context->set_font_size(18);
+    context->move_to(x, y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text("R" + std::to_string(id));
 
     if (rotate)
     {
@@ -628,12 +701,14 @@ void crossover_image_view::draw_connector(Cairo::RefPtr<Cairo::Context> const& c
     auto const half_space_y = std::round(height / 2.0);
     auto const small_space_x = std::round(width / 20.0);
 
-    this->draw_text(context,
-                    (positive ? "+" : "-"),
-                    x + std::round(half_space_x / 2.0),
-                    y + std::round(half_space_y / 2.0));
-
-    context->begin_new_path();
+    context->set_font_size(18);
+    context->move_to(x + std::round(half_space_x / 2.0),
+                     y + std::round(half_space_y / 2.0));
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text((positive ? "+" : "-"));
+    context->stroke();
 
     // Draw a "connector" circle
     context->arc(x + half_space_x, y + half_space_y, 2.0 * small_space_x, 0.0, 2.0 * M_PI);
@@ -732,7 +807,13 @@ void crossover_image_view::draw_woofer(Cairo::RefPtr<Cairo::Context> const& cont
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, (positive_up ? "+" : "-"), x + 3 * small_space_x, y + small_space_y);
+    context->set_font_size(18);
+    context->move_to(x + 3 * small_space_x, y + small_space_y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text((positive_up ? "+" : "-"));
+    context->stroke();
 
     // Draw a vertical line through the driver
     context->move_to(x + half_space_x, y);
@@ -771,7 +852,13 @@ void crossover_image_view::draw_midrange(Cairo::RefPtr<Cairo::Context> const& co
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, (positive_up ? "+" : "-"), x + 5 * small_space_x, y + 3 * small_space_y);
+    context->set_font_size(18);
+    context->move_to(x + 5 * small_space_x, y + 3 * small_space_y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text((positive_up ? "+" : "-"));
+    context->stroke();
 
     // Draw a vertical line through the driver
     context->move_to(x + half_space_x, y);
@@ -810,7 +897,13 @@ void crossover_image_view::draw_tweeter(Cairo::RefPtr<Cairo::Context> const& con
     auto const small_space_x = std::round(width / 20.0);
     auto const small_space_y = std::round(height / 20.0);
 
-    this->draw_text(context, (positive_up ? "+" : "-"), x + 5 * small_space_x, y + 3 * small_space_y);
+    context->set_font_size(18);
+    context->move_to(x + 5 * small_space_x, y + 3 * small_space_y);
+    context->select_font_face("FreeSans",
+                              Cairo::FONT_SLANT_NORMAL,
+                              Cairo::FONT_WEIGHT_NORMAL);
+    context->show_text((positive_up ? "+" : "-"));
+    context->stroke();
 
     // Draw a vertical line through the driver
     context->move_to(x + half_space_x, y);
@@ -833,8 +926,10 @@ void crossover_image_view::draw_tweeter(Cairo::RefPtr<Cairo::Context> const& con
     context->stroke();
 
     // Draw flat plate
-    context->move_to(x + half_space_x + 2 * small_space_x, y + half_space_y - 5 * small_space_y);
-    context->line_to(x + half_space_x + 2 * small_space_x, y + half_space_y + 5 * small_space_y);
+    context->move_to(x + half_space_x + 2 * small_space_x,
+                     y + half_space_y - 5 * small_space_y);
+    context->line_to(x + half_space_x + 2 * small_space_x,
+                     y + half_space_y + 5 * small_space_y);
     context->stroke();
 }
 

@@ -21,30 +21,30 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __CELLRENDERER_POPUP_H
-#define __CELLRENDERER_POPUP_H
+#pragma once
 
 #include <gdkmm/rectangle.h>
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/window.h>
 
-class PopupEntry;
+class popup_entry;
 
-class CellRendererPopup : public Gtk::CellRendererText
+class cell_renderer_popup : public Gtk::CellRendererText
 {
 public:
-    CellRendererPopup();
+    cell_renderer_popup();
 
-    ~CellRendererPopup() override;
+    ~cell_renderer_popup() override;
 
-    PopupEntry* get_popup_entry();
-    Gtk::Window* get_popup_window();
+    auto get_popup_entry() -> popup_entry*;
+    auto get_popup_window() -> Gtk::Window*;
 
     void set_focus_widget(Gtk::Widget& focus_widget);
-    Gtk::Widget* get_focus_widget();
+    auto get_focus_widget() -> Gtk::Widget*;
 
-    sigc::signal5<void, const Glib::ustring&, int, int, int, int>& signal_show_popup();
-    sigc::signal0<void>& signal_hide_popup();
+    auto signal_show_popup() -> sigc::signal5<void, const Glib::ustring&, int, int, int, int>&;
+
+    auto signal_hide_popup() -> sigc::signal0<void>&;
 
     void hide_popup();
 
@@ -56,40 +56,36 @@ protected:
                                 int* width,
                                 int* height) const;
 
-    Gtk::CellEditable* start_editing_vfunc(GdkEvent* event,
-                                           Gtk::Widget& widget,
-                                           const Glib::ustring& path,
-                                           const Gdk::Rectangle& background_area,
-                                           const Gdk::Rectangle& cell_area,
-                                           Gtk::CellRendererState flags) override;
+    auto start_editing_vfunc(GdkEvent* event,
+                             Gtk::Widget& widget,
+                             const Glib::ustring& path,
+                             const Gdk::Rectangle& background_area,
+                             const Gdk::Rectangle& cell_area,
+                             Gtk::CellRendererState flags) -> Gtk::CellEditable* override;
 
     virtual void on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2);
 
     virtual void on_hide_popup();
 
 private:
-    bool on_button_press_event(GdkEventButton* event);
-    bool on_key_press_event(GdkEventKey* event);
-    void on_style_changed(const Glib::RefPtr<Gtk::Style>& previous_style);
+    auto on_button_press_event(GdkEventButton* event) -> bool;
+    auto on_key_press_event(GdkEventKey* event) -> bool;
+    void on_style_changed(Glib::RefPtr<Gtk::Style> const& previous_style);
 
     void on_popup_editing_done();
     void on_popup_arrow_clicked();
     void on_popup_hide();
 
 private:
-    using Self = CellRendererPopup;
-
-    sigc::signal5<void, const Glib::ustring&, int, int, int, int> signal_show_popup_;
-    sigc::signal0<void> signal_hide_popup_;
+    sigc::signal5<void, const Glib::ustring&, int, int, int, int> m_signal_show_popup;
+    sigc::signal0<void> m_signal_hide_popup;
 
     // Cached button width
-    mutable int button_width_{-1};
+    mutable int m_button_width{-1};
 
-    Gtk::Window popup_window_;
-    Gtk::Widget* focus_widget_{nullptr};
-    PopupEntry* popup_entry_{nullptr};
-    bool shown_{false};
-    bool editing_canceled_{false};
+    Gtk::Window m_popup_window;
+    Gtk::Widget* m_focus_widget{nullptr};
+    popup_entry* m_popup_entry{nullptr};
+    bool m_shown{false};
+    bool m_editing_canceled{false};
 };
-
-#endif

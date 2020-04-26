@@ -21,7 +21,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#include "popupentry.h"
+#include "popup_entry.hpp"
 
 #include <gtkmm/window.h>
 
@@ -29,8 +29,8 @@
 #include <cstring>
 #include <utility>
 
-PopupEntry::PopupEntry(Glib::ustring path)
-    : Glib::ObjectBase(typeid(PopupEntry)),
+popup_entry::popup_entry(Glib::ustring path)
+    : Glib::ObjectBase(typeid(popup_entry)),
       Gtk::EventBox(),
       Gtk::CellEditable(),
       m_path(std::move(path)),
@@ -38,7 +38,7 @@ PopupEntry::PopupEntry(Glib::ustring path)
       m_spin_digits(Gtk::Adjustment::create(0, 0, 1000, 0.1, 1.0)),
       m_editing_canceled(false)
 {
-    std::puts("PopupEntry::PopupEntry");
+    std::puts("popup_entry::popup_entry");
 
     m_entry = m_spin_button = Gtk::manage(new Gtk::SpinButton(m_spin_digits, 0.0, 4));
     m_entry->set_has_frame(false);
@@ -49,30 +49,30 @@ PopupEntry::PopupEntry(Glib::ustring path)
     show_all_children();
 }
 
-Glib::ustring const& PopupEntry::get_path() const { return m_path; }
+auto popup_entry::get_path() const -> Glib::ustring const& { return m_path; }
 
-void PopupEntry::set_text(const Glib::ustring& text)
+void popup_entry::set_text(const Glib::ustring& text)
 {
     m_spin_button->set_value(atof(text.c_str()));
 }
 
-Glib::ustring PopupEntry::get_text() const { return m_entry->get_text(); }
+auto popup_entry::get_text() const -> Glib::ustring { return m_entry->get_text(); }
 
-void PopupEntry::select_region(int start_pos, int end_pos)
+void popup_entry::select_region(int start_pos, int end_pos)
 {
     m_entry->select_region(start_pos, end_pos);
 }
 
-bool PopupEntry::get_editing_canceled() const
+auto popup_entry::get_editing_canceled() const -> bool
 {
-    std::puts("PopupEntry::get_editing_canceled");
+    std::puts("popup_entry::get_editing_canceled");
 
     return m_editing_canceled;
 }
 
-int PopupEntry::get_button_width()
+auto popup_entry::get_button_width() -> int
 {
-    std::puts("PopupEntry::get_button_width");
+    std::puts("popup_entry::get_button_width");
 
     Gtk::Window window(Gtk::WINDOW_POPUP);
 
@@ -88,11 +88,11 @@ int PopupEntry::get_button_width()
     return width;
 }
 
-sigc::signal0<void>& PopupEntry::signal_arrow_clicked() { return m_signal_arrow_clicked; }
+auto popup_entry::signal_arrow_clicked() -> sigc::signal0<void>& { return m_signal_arrow_clicked; }
 
-bool PopupEntry::on_key_press_event(GdkEventKey* event)
+auto popup_entry::on_key_press_event(GdkEventKey* event) -> bool
 {
-    std::puts("PopupEntry::on_key_press_event");
+    std::puts("popup_entry::on_key_press_event");
     if (event->keyval == GDK_KEY_Escape)
     {
         m_editing_canceled = true;
@@ -117,23 +117,23 @@ bool PopupEntry::on_key_press_event(GdkEventKey* event)
     return Gtk::EventBox::on_key_press_event(event);
 }
 
-void PopupEntry::start_editing_vfunc(GdkEvent* event)
+void popup_entry::start_editing_vfunc(GdkEvent* event)
 {
-    std::puts("PopupEntry::start_editing_vfunc");
+    std::puts("popup_entry::start_editing_vfunc");
 
     m_entry->select_region(0, -1);
     m_entry->signal_activate().connect(sigc::mem_fun(*this, &Self::on_entry_activate));
 }
 
-void PopupEntry::on_entry_activate()
+void popup_entry::on_entry_activate()
 {
-    std::puts("PopupEntry::on_entry_activate");
+    std::puts("popup_entry::on_entry_activate");
     editing_done();
 }
 
-bool PopupEntry::on_entry_key_press_event(GdkEventKey* event)
+auto popup_entry::on_entry_key_press_event(GdkEventKey* event) -> bool
 {
-    std::puts("PopupEntry::on_entry_key_press_event");
+    std::puts("popup_entry::on_entry_key_press_event");
 
     if (event->keyval != GDK_KEY_Escape)
     {

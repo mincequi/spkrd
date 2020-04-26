@@ -131,7 +131,7 @@ frequency_response_editor::frequency_response_editor(std::string filename)
                 substr_ptr = strtok(nullptr, ",");
                 auto const f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-                dbmag_entries[i]->set_text(GSpeakers::double_to_ustring(f2, 2, 1));
+                dbmag_entries[i]->set_text(gspk::to_ustring(f2, 2, 1));
                 dbmag_entries[i]->signal_changed().connect(
                     sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
             }
@@ -216,7 +216,7 @@ void frequency_response_editor::on_close()
     hide();
 }
 
-std::vector<double> frequency_response_editor::get_x_vector()
+auto frequency_response_editor::get_x_vector() -> std::vector<double>
 {
     return {20.0, 25.2, 31.7, 39.9, 50.2, 63.2, 79.6, 100,   126,   159,
             200,  252,  317,  399,  502,  632,  796,  1000,  1260,  1590,

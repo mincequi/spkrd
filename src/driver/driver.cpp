@@ -24,7 +24,7 @@
 
 #include <utility>
 
-using namespace spkrd;
+using namespace gspk;
 
 driver::driver(std::string id_string,
                int type,
@@ -44,7 +44,7 @@ driver::driver(std::string id_string,
                double bl,
                double rms,
                double cms)
-    : GSpeakersObject(),
+    : gspkObject(type),
       m_qts(qts),
       m_qms(qms),
       m_qes(qes),
@@ -63,7 +63,6 @@ driver::driver(std::string id_string,
       m_imp_resp_filename(std::move(imp_resp_filename)),
       m_id_string(std::move(id_string))
 {
-    m_type = type;
 }
 
 driver::driver(xmlNodePtr parent)
@@ -130,7 +129,7 @@ driver::driver(xmlNodePtr parent)
     node = node->next;
 }
 
-xmlNodePtr driver::to_xml_node(xmlNodePtr parent)
+auto driver::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     std::array<gchar, 10> buffer;
 
@@ -193,7 +192,7 @@ xmlNodePtr driver::to_xml_node(xmlNodePtr parent)
     return speaker;
 }
 
-std::ostream& operator<<(std::ostream& output, const driver& speaker)
+auto operator<<(std::ostream& output, driver const& speaker) -> std::ostream&
 {
     output << speaker.m_id_string << "\n"
            << _("Id:   ") << speaker.m_id << "\n"

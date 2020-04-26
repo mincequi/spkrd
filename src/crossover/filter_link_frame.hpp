@@ -17,10 +17,9 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __FILTER_LINK_FRAME_H
-#define __FILTER_LINK_FRAME_H
+#pragma once
 
-#include "crossover.h"
+#include "crossover.hpp"
 #include "plot.hpp"
 #include "driver_list.hpp"
 
@@ -30,12 +29,12 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
-class FilterLinkFrame : public Gtk::Frame
+class filter_link_frame : public Gtk::Frame
 {
 public:
-    FilterLinkFrame(filter_network* net, const std::string& description, driver_list* driver_list);
+    filter_link_frame(filter_network* net, std::string const& description, driver_list* speaker_list);
 
-    ~FilterLinkFrame() override;
+    ~filter_link_frame() override;
 
 private:
     void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);
@@ -64,11 +63,11 @@ private:
     void initialise_lowpass_filter();
 
 private:
-    /*
-     * Numerical coefficients for the filter principles
-     * net_name_type = NET_BESSEL, ..., net_order = NET_ORDER_1ST, ..., net_type = NET_TYPE_LOWPASS,
-     * NET_TYPE_HIGHPASS */
-    std::vector<double> get_filter_params(int net_name_type, int net_order, int net_type);
+    /// Numerical coefficients for the filter principles
+    /// net_name_type = NET_BESSEL, ...,
+    /// net_order = NET_ORDER_1ST, ...,
+    /// net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
+    auto get_filter_params(int net_name_type, int net_order, int net_type) -> std::vector<double>;
 
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
@@ -103,7 +102,5 @@ private:
     bool m_init{true};
 
     int my_filter_plot_index{-1};
-    std::vector<GSpeakers::Point> points;
+    std::vector<gspk::point> points;
 };
-
-#endif

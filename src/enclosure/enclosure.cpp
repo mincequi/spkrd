@@ -25,7 +25,7 @@
 #include <sstream>
 #include <utility>
 
-using namespace spkrd;
+using namespace gspk;
 
 enclosure::enclosure(std::string id_string,
                      int type,
@@ -34,7 +34,7 @@ enclosure::enclosure(std::string id_string,
                      double vb2,
                      double fb2,
                      std::string speaker)
-    : GSpeakersObject(),
+    : gspkObject(type),
       m_id_string(std::move(id_string)),
       m_vb1(vb1),
       m_fb1(fb1),
@@ -42,17 +42,14 @@ enclosure::enclosure(std::string id_string,
       m_fb2(fb2),
       m_speaker(std::move(speaker))
 {
-    m_type = type;
 }
 
-enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
+enclosure::enclosure(xmlNodePtr parent) : gspkObject()
 {
-    if (parent != nullptr && std::string((char*)parent->name) == "box")
+    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "box")
     {
         try
         {
-            // parse_id_string(parent->children);
-
             auto node = parent->children;
 
             m_id_string = parse_string(node, "id_string");
@@ -86,7 +83,7 @@ enclosure::enclosure(xmlNodePtr parent) : GSpeakersObject()
     }
 }
 
-xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
+auto enclosure::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 {
     std::array<char, 8> buffer;
 
@@ -110,7 +107,7 @@ xmlNodePtr enclosure::to_xml_node(xmlNodePtr parent)
     return box;
 }
 
-std::ostream& operator<<(std::ostream& output, const enclosure& box)
+auto operator<<(std::ostream& output, enclosure const& box) -> std::ostream&
 {
     output << _("enclosure") << "\n"
            << _("Id:        ") << box.m_id << "\n"

@@ -17,15 +17,14 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __ENCLOSURE_PANED_H
-#define __ENCLOSURE_PANED_H
+#pragma once
 
 #include "enclosure_editor.hpp"
 
 #include "enclosure_history.hpp"
 #include "common.h"
-#include "gspeakersboxplot.h"
-#include "plothistory.h"
+#include "box_plot.hpp"
+#include "plot_history.hpp"
 
 #include <gtkmm/handlebox.h>
 #include <gtkmm/menu.h>
@@ -39,9 +38,9 @@ public:
 
     ~enclosure_pane() override;
 
-    Gtk::MenuItem& get_menu();
+    auto get_menu() -> Gtk::MenuItem&;
 
-    Gtk::Toolbar& get_toolbar();
+    auto get_toolbar() -> Gtk::Toolbar&;
 
 protected:
     void on_settings_changed(const std::string&);
@@ -55,10 +54,10 @@ protected:
     void on_add_plot(enclosure*, driver*, Gdk::Color&);
 
 private:
-    enclosure_editor box_editor;
-    enclosure_history box_history;
-    PlotHistory plot_history;
-    GSpeakersBoxPlot box_plot;
+    enclosure_editor m_box_editor;
+    enclosure_history m_box_history;
+    plot_history m_plot_history;
+    box_plot m_box_plot;
 
     Gtk::VPaned m_edit_vpaned;
     Gtk::VPaned m_plot_vpaned;
@@ -69,5 +68,3 @@ private:
     int nof_plots{0};
     bool plot_selected{false};
 };
-
-#endif

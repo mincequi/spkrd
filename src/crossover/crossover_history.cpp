@@ -19,7 +19,8 @@
 
 #include "crossover_history.hpp"
 
-#include "gspeakersfilechooser.h"
+#include "file_chooser.hpp"
+#include "signal.hpp"
 
 #include <gtkmm/eventbox.h>
 #include <gtkmm/messagedialog.h>
@@ -36,7 +37,8 @@ namespace
 {
 auto time_of_day() -> std::string
 {
-    std::time_t const time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::time_t const time = std::chrono::system_clock::to_time_t(
+        std::chrono::system_clock::now());
     return {std::ctime(&time)};
 }
 }
@@ -54,7 +56,8 @@ crossover_history::crossover_history() : Gtk::Frame("")
     g_settings.defaultValueString("crossover_listXml", "crossover1.xml");
 #else
     g_settings.defaultValueString("crossover_listXml",
-                                  std::string(GSPEAKERS_PREFIX) + "/share/xml/crossover1.xml");
+                                  std::string(GSPEAKERS_PREFIX)
+                                      + "/share/xml/crossover1.xml");
 #endif
     m_filename = g_settings.getValueString("crossover_listXml");
 
@@ -71,7 +74,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     m_evbox = Gtk::make_managed<Gtk::EventBox>();
     m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ["))
-                              + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                              + gspk::short_filename(m_filename, 20) + "]</b>");
 
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
     set_label_widget(*m_evbox);
@@ -83,8 +86,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     // create tree view
     m_TreeView.set_model(m_refListStore);
 
-    auto selection = m_TreeView.get_selection();
-    selection->signal_changed().connect(
+    m_TreeView.get_selection()->signal_changed().connect(
         sigc::mem_fun(*this, &crossover_history::on_selection_changed));
 
     add_columns();
@@ -101,12 +103,13 @@ crossover_history::crossover_history() : Gtk::Frame("")
     signal_net_modified_by_user.connect(
         sigc::mem_fun(*this, &crossover_history::on_net_modified_by_wizard));
 
-    signal_save_open_files.connect(sigc::mem_fun(*this, &crossover_history::on_save_open_files));
+    signal_save_open_files.connect(
+        sigc::mem_fun(*this, &crossover_history::on_save_open_files));
 }
 
 void crossover_history::on_save_open_files()
 {
-    if (GSpeakers::crossoverlist_modified())
+    if (gspk::crossoverlist_modified())
     {
         on_save();
     }
@@ -114,12 +117,16 @@ void crossover_history::on_save_open_files()
 
 void crossover_history::select_first_row()
 {
-    if (!m_crossover_list.data().empty())
+    if (m_crossover_list.data().empty())
     {
         Gtk::TreePath path(std::to_string(0));
         Gtk::TreeRow row = *(m_refListStore->get_iter(path));
         m_TreeView.get_selection()->select(row);
     }
+
+    Gtk::TreeRow row = *(m_refListStore->get_iter(Gtk::TreePath(std::to_string(0))));
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    selection->select(row);
 }
 
 void crossover_history::on_net_modified_by_wizard(filter_network* net)
@@ -127,7 +134,10 @@ void crossover_history::on_net_modified_by_wizard(filter_network* net)
     signal_crossover_set_save_state(true);
 }
 
-void crossover_history::on_net_modified_by_user() { signal_crossover_set_save_state(true); }
+void crossover_history::on_net_modified_by_user()
+{
+    signal_crossover_set_save_state(true);
+}
 
 void crossover_history::on_part_modified() { signal_crossover_set_save_state(true); }
 
@@ -140,14 +150,14 @@ crossover_history::~crossover_history()
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "crossover_history::~crossover_history: saving settings error: " << error.what()
-                  << "\n";
+        std::cout << "crossover_history::~crossover_history: saving settings error: "
+                  << error.what() << "\n";
     }
 }
 
 void crossover_history::on_open_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Open crossover xml"));
+    file_chooser_dialog fc(_("Open crossover xml"));
     std::string const& filename = fc.get_filename();
     if (!filename.empty())
     {
@@ -157,7 +167,7 @@ void crossover_history::on_open_xml()
 
 void crossover_history::on_append_xml()
 {
-    GSpeakersFileChooserDialog fc(_("Append crossover xml"));
+    file_chooser_dialog fc(_("Append crossover xml"));
     std::string const& filename = fc.get_filename();
     if (filename.empty())
     {
@@ -175,15 +185,12 @@ void crossover_history::open_xml(const std::string& filename)
 
         m_filename = filename;
 
-        std::for_each(temp_crossover_list.data().begin(),
-                      temp_crossover_list.data().end(),
+        std::for_each(begin(temp_crossover_list.data()),
+                      end(temp_crossover_list.data()),
                       sigc::mem_fun(*this, &crossover_history::add_item));
 
         // Delete items in crossover_list
-        m_crossover_list.data().resize(temp_crossover_list.data().size());
-        std::copy(begin(temp_crossover_list.data()),
-                  end(temp_crossover_list.data()),
-                  begin(m_crossover_list.data()));
+        m_crossover_list = temp_crossover_list;
 
         // Select the first item in the list
         if (!m_crossover_list.data().empty())
@@ -195,7 +202,7 @@ void crossover_history::open_xml(const std::string& filename)
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
-                                  + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                                  + gspk::short_filename(m_filename, 20) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
     }
     catch (std::runtime_error const& e)
@@ -263,13 +270,17 @@ void crossover_history::on_new_copy()
 
             if (!path.empty())
             {
-                /* Here we have the row in indices[0], we want to make a copy of this Crossover
-                   and put it last in the list */
+                /* Here we have the row in indices[0], we want to make a copy of this
+                   Crossover and put it last in the list */
 
-                /* Here we want a copy of the original Crossover, not a crossover that has the
-                   same id and so on, as we would get if we used the operator = or something similar,
-                   Quick and easy solution...use the to_xml function which gets rid of the id */
-                xmlNodePtr node = xmlNewDocNode(nullptr, nullptr, (xmlChar*)("parent"), nullptr);
+                /* Here we want a copy of the original Crossover, not a crossover that has
+                   the same id and so on, as we would get if we used the operator = or
+                   something similar, Quick and easy solution...use the to_xml function
+                   which gets rid of the id */
+                xmlNodePtr node = xmlNewDocNode(nullptr,
+                                                nullptr,
+                                                (xmlChar*)("parent"),
+                                                nullptr);
 
                 m_crossover_list.data()[path[0]].to_xml_node(node);
 
@@ -375,9 +386,9 @@ void crossover_history::on_save_as()
 #ifndef NDEBUG
     std::cout << "save as" << std::endl;
 #endif
-    GSpeakersFileChooserDialog fc(_("Save crossover xml as"),
-                                  Gtk::FILE_CHOOSER_ACTION_SAVE,
-                                  m_filename);
+    file_chooser_dialog fc(_("Save crossover xml as"),
+                           Gtk::FILE_CHOOSER_ACTION_SAVE,
+                           m_filename);
     std::string const& filename = fc.get_filename();
     if (filename.empty())
     {
@@ -398,7 +409,7 @@ void crossover_history::save_as_xml(const std::string& filename)
         {
             auto crossover_label = Gtk::make_managed<Gtk::Label>();
             crossover_label->set_markup("<b>" + Glib::ustring(_("Crossover list ["))
-                                        + GSpeakers::short_filename(m_filename, 20) + "]</b>");
+                                        + gspk::short_filename(m_filename, 20) + "]</b>");
             set_label_widget(*crossover_label);
         }
         signal_crossover_set_save_state(false);
@@ -458,7 +469,8 @@ void crossover_history::add_columns()
         Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
 
         pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &crossover_history::type_cell_data_func));
+                                    sigc::mem_fun(*this,
+                                                  &crossover_history::type_cell_data_func));
     }
 }
 

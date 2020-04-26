@@ -1,5 +1,4 @@
-/*
- * $Id$
+/* gspeakersboxplot
  *
  * Copyright (C) 2001-2002 Daniel Sundberg <dss@home.se>
  *
@@ -19,41 +18,36 @@
  * USA
  */
 
-#ifndef __SUMMED_FREQ_RESP_PLOT
-#define __SUMMED_FREQ_RESP_PLOT
+#pragma once
 
-#include "common.h"
 #include "plot.hpp"
-#include "driver_list.hpp"
 
 #include <gtkmm/frame.h>
-#include <gdkmm/color.h>
 
-#include <vector>
+class filter_network;
+class Crossover;
 
-/// This is a wrapper class for GSpeakersPlot
-class SummedFreqRespPlot : public Gtk::Frame
+/// This is a wrapper class for gspkPlot
+/// The reason why we have this class is that we want
+/// an extra layer (where we can connect signals and so on)
+/// between the program and the plot widget.
+class filter_plot : public Gtk::Frame
 {
 public:
-    SummedFreqRespPlot();
+    filter_plot();
 
-    ~SummedFreqRespPlot() override;
+    ~filter_plot() override = default;
 
     void clear();
 
-    int on_add_plot(std::vector<GSpeakers::Point> const&, Gdk::Color&, int*, filter_network*);
+    auto on_add_plot(std::vector<gspk::point> const& points,
+                     Gdk::Color const& color,
+                     int& i,
+                     filter_network* n) -> int;
 
 private:
     void on_crossover_selected(Crossover*);
 
-    void on_speakerlist_loaded(driver_list* driver_list);
-
 private:
     plot m_plot;
-    std::vector<int> m_nets;
-    Gdk::Color m_color;
-    std::vector<std::vector<GSpeakers::Point>> m_points;
-    driver_list* m_speakerlist;
 };
-
-#endif

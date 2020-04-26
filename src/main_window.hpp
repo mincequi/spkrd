@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_MAINWINDOW
-#define __GSPEAKERS_MAINWINDOW
+#pragma once
 
 #include "common.h"
 #include "crossover/crossover_pane.hpp"
@@ -39,7 +38,7 @@ public:
 private:
     void on_quit();
 
-    bool on_delete_event(GdkEventAny* event) override;
+    auto on_delete_event(GdkEventAny* event) -> bool override;
 
     void on_quit_common();
 
@@ -90,5 +89,3 @@ private:
 
     bool m_in_quit_phase{false};
 };
-
-#endif

@@ -20,8 +20,9 @@
  * USA
  */
 
-#ifndef __GSPEAKERS_PLOT_H
-#define __GSPEAKERS_PLOT_H
+#pragma once
+
+#include "point.hpp"
 
 #include <gdkmm/color.h>
 #include <gtkmm/drawingarea.h>
@@ -38,45 +39,6 @@ constexpr auto BOX_FRAME_SIZE = 30;
 constexpr auto N_VERTICAL_LINES = 2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10 - 1;
 /// Upper frequency limit
 constexpr auto UPPER_LIMIT = 1000;
-
-/// Point class to exchange plot coordinates between classes.
-/// I need a double on the y-axis since decimal values are required
-/// in the conversion to axis mappes coordinates
-namespace GSpeakers
-{
-class Point
-{
-public:
-    Point() = default;
-
-    Point(int x, double y) : m_x(x), m_y(y) {}
-
-    int get_x() const { return m_x; }
-
-    double get_y() const { return m_y; }
-
-    void set_x(int x) { m_x = x; }
-
-    void set_y(double y) { m_y = y; }
-
-private:
-    int m_x;
-    double m_y;
-};
-
-struct comparison
-{
-    bool operator()(const Point& left, const Point& right) const noexcept
-    {
-        return left.get_x() <= right.get_x();
-    }
-
-    bool operator()(const Point& left, int right) const noexcept { return left.get_x() <= right; }
-
-    bool operator()(int left, const Point& right) const noexcept { return left <= right.get_x(); }
-};
-
-} // namespace GSpeakers
 
 /// This is a class that can draw plots. It has add_plot, remove_plot
 /// and a few other methods you can use. It has logarithmic x-axis and
@@ -99,7 +61,7 @@ public:
          int y_zero_freq = 0,
          bool enable_sec_scale = false);
 
-    int add_plot(std::vector<GSpeakers::Point>& points, Gdk::Color const& colour);
+    auto add_plot(std::vector<gspk::point> const& points, Gdk::Color const& colour) -> int;
 
     void remove_plot(int n);
 
@@ -113,14 +75,14 @@ public:
 
     void select_plot(int index);
 
-    void replace_plot(int index, std::vector<GSpeakers::Point>& p, Gdk::Color const& ref_color);
+    void replace_plot(int plot_index, std::vector<gspk::point> const& p, Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
 
     void set_y_label2(std::string const& text);
 
 protected:
-    bool on_draw(Cairo::RefPtr<Cairo::Context> const& context) override;
+    auto on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool override;
 
     void draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
                     std::vector<Gdk::Point> const& points,
@@ -128,22 +90,22 @@ protected:
 
     /// Copy the area that needs to be updated from the pixmap
     /// to the window
-    [[deprecated]] bool on_expose_event(GdkEventExpose* event);
+    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
 
     // void on_show();
 
-    [[deprecated]] bool on_configure_event(GdkEventConfigure* event) override;
+    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)
-    std::vector<std::vector<GSpeakers::Point>> m_points;
+    std::vector<std::vector<gspk::point>> m_points;
     /// Plot line colours
     std::vector<Gdk::Color> m_colors;
     /// Visible plots
     std::vector<bool> m_visible_plots;
 
 private:
-    Glib::ustring int_to_ustring3(int d);
+    auto int_to_ustring3(int d) -> Glib::ustring;
 
     /// Draw vertical lines in a logarithmic plot
     void draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context);
@@ -172,5 +134,3 @@ private:
 
     Cairo::RefPtr<Cairo::Context> m_context;
 };
-
-#endif

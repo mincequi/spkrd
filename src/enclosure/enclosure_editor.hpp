@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_BOXEDITOR
-#define __GSPEAKERS_BOXEDITOR
+#pragma once
 
 #include "enclosure.hpp"
 #include "colours.hpp"
@@ -29,7 +28,24 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
-#include <gtkmm/table.h>
+#include <gtkmm/grid.h>
+
+namespace gspk
+{
+namespace sealed
+{
+enum class RESPONSE : int {
+    PERFECT_TRANSIENT,
+    BESSEL,
+    BUTTERWORTH,
+    CHEBYCHEV_08,
+    CHEBYCHEV_09,
+    CHEBYCHEV_10,
+    CHEBYCHEV_11,
+    CHEBYCHEV_12
+};
+}
+}
 
 /// This class will contain the control panel where you can adjust
 /// settings for the enclosure you're working with.
@@ -64,25 +80,46 @@ protected:
     void on_box_data_changed(int i);
     /// Callback when enclosure type has been changed
     void on_enclosure_changed();
+    /// Callback when the alignment type of the system
+    /// has changed
+    void on_alignment_changed();
+
+    void arrange_grid();
+
+    void connect_signals();
 
 protected:
-    // TODO Use Gtk::Grid
-    Gtk::Table m_table;
+    Gtk::Grid m_grid;
+
     Gtk::Box m_vbox;
     Gtk::Box m_hbox;
+
     Gtk::ComboBoxText m_bass_speaker_combo;
-    Gtk::Label m_speaker_qts_label, m_speaker_vas_label, m_speaker_fs_label;
-    Gtk::Label m_frame_label;
-    Gtk::Entry m_id_string_entry, m_vb1_entry, m_fb1_entry, m_vb2_entry, m_fb2_entry;
+    Gtk::ComboBoxText m_box_damping_combo;
     Gtk::ComboBoxText m_box_type_combo;
+
+    Gtk::Label m_speaker_qts_label;
+    Gtk::Label m_speaker_vas_label;
+    Gtk::Label m_speaker_fs_label;
+    Gtk::Label m_efficiency_bandwidth_product_label;
+    Gtk::Label m_frame_label;
+
+    Gtk::Entry m_id_string_entry;
+    Gtk::Entry m_vb1_entry;
+    Gtk::Entry m_fb1_entry;
+    Gtk::Entry m_vb2_entry;
+    Gtk::Entry m_fb2_entry;
 
 private:
     enclosure* m_box = nullptr;
-    driver_list* m_speaker_list;
+    driver_list* m_speaker_list = nullptr;
+
     driver m_current_speaker;
     colours m_color_list;
+
+    /// Damping of the enclosure and driver (Qtc)
+    double m_system_damping;
+
     bool m_disable_signals{false};
     bool speaker_list_is_loaded{false};
 };
-
-#endif

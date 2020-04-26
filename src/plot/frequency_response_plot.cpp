@@ -19,15 +19,18 @@
  * USA
  */
 
-#include "summedfreqrespplot.h"
+#include "frequency_response_plot.hpp"
 
 #include "filter_network.hpp"
+#include "signal.hpp"
+#include "driver_list.hpp"
 
 #include <cmath>
 #include <fstream>
 #include <iostream>
 
-SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
+frequency_response_plot::frequency_response_plot()
+    : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
     m_speakerlist = nullptr;
 
@@ -40,20 +43,21 @@ SummedFreqRespPlot::SummedFreqRespPlot() : m_plot(1, 20000, 50, 110, true, 0), m
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
     signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &SummedFreqRespPlot::on_speakerlist_loaded));
-    signal_add_crossover_plot.connect(sigc::mem_fun(*this, &SummedFreqRespPlot::on_add_plot));
+        sigc::mem_fun(*this, &frequency_response_plot::on_speakerlist_loaded));
+    signal_add_crossover_plot.connect(
+        sigc::mem_fun(*this, &frequency_response_plot::on_add_plot));
     signal_crossover_selected.connect(
-        sigc::mem_fun(*this, &SummedFreqRespPlot::on_crossover_selected));
+        sigc::mem_fun(*this, &frequency_response_plot::on_crossover_selected));
 }
 
-SummedFreqRespPlot::~SummedFreqRespPlot() = default;
+frequency_response_plot::~frequency_response_plot() = default;
 
-double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
+auto lerp(std::vector<gspk::point> const& freq_resp_points, double x) -> double
 {
     auto first_i = std::lower_bound(freq_resp_points.begin(),
                                     freq_resp_points.end(),
                                     x,
-                                    GSpeakers::comparison{});
+                                    gspk::comparison{});
 
     if (first_i != begin(freq_resp_points))
     {
@@ -63,7 +67,7 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
     auto second_i = std::upper_bound(begin(freq_resp_points),
                                      end(freq_resp_points),
                                      x,
-                                     GSpeakers::comparison{});
+                                     gspk::comparison{});
 
     double x0 = first_i->get_x();
     double x1 = second_i->get_x();
@@ -79,16 +83,16 @@ double lerp(std::vector<GSpeakers::Point> const& freq_resp_points, double x)
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_points,
-                                    Gdk::Color& color,
-                                    int* output_plot_index,
-                                    filter_network* n)
+auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter_points,
+                                          Gdk::Color const& color,
+                                          int& output_plot_index,
+                                          filter_network* n) -> int
 {
 #ifndef NDEBUG
-    std::puts("SummedFreqRespPlot::on_add_plot");
+    std::puts("frequency_response_plot::on_add_plot");
 #endif
 
-    auto const& plot_index = *output_plot_index;
+    auto const& plot_index = output_plot_index;
 
     driver s;
     if (m_speakerlist != nullptr)
@@ -96,11 +100,11 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
         s = m_speakerlist->get_by_id_string(n->get_speaker());
     }
 
-    std::vector<GSpeakers::Point> freq_resp_points;
+    std::vector<gspk::point> freq_resp_points;
 
     if (!s.get_freq_resp_filename().empty())
     {
-        std::cout << "SummedFreqRespPlot::on_add_plot: freq_resp_file = "
+        std::cout << "frequency_response_plot::on_add_plot: freq_resp_file = "
                   << s.get_freq_resp_filename() << "\n";
 
         std::ifstream input_file(s.get_freq_resp_filename().c_str());
@@ -120,7 +124,8 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
             if (comma != ',')
             {
-                throw std::runtime_error("Frequency response requires comma separated values in "
+                throw std::runtime_error("Frequency response requires comma separated "
+                                         "values in "
                                          + s.get_freq_resp_filename());
             }
             freq_resp_points.emplace_back(std::round(frequency), magnitude);
@@ -132,7 +137,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
         freq_resp_points.emplace_back(20000, 0);
     }
 
-    std::vector<GSpeakers::Point> points;
+    std::vector<gspk::point> points;
 
     for (auto const& filter_point : filter_points)
     {
@@ -149,8 +154,8 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     // Search for plot_index in the graph
     auto const location = std::find(begin(m_nets), end(m_nets), plot_index);
 
-    // If plot_index is in the graph, replace the old point-vector, if plot_index not in graph
-    // insert it at the end of the vector
+    // If plot_index is in the graph, replace the old point-vector, if plot_index not in
+    // graph insert it at the end of the vector
     if (location != end(m_nets) && !m_points.empty())
     {
         m_points[std::distance(begin(m_nets), location)] = points;
@@ -163,7 +168,7 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
 
     m_plot.remove_all_plots();
 
-    std::vector<GSpeakers::Point> pnts;
+    std::vector<gspk::point> pnts;
 
     if (!m_points.empty())
     {
@@ -191,23 +196,23 @@ int SummedFreqRespPlot::on_add_plot(std::vector<GSpeakers::Point> const& filter_
     return 0;
 }
 
-void SummedFreqRespPlot::clear()
+void frequency_response_plot::clear()
 {
     m_points.clear();
     m_nets.clear();
     m_plot.remove_all_plots();
 }
 
-void SummedFreqRespPlot::on_crossover_selected(Crossover*)
+void frequency_response_plot::on_crossover_selected(Crossover*)
 {
-    std::puts("SummedFreqRespPlot::on_crossover_selected");
+    std::puts("frequency_response_plot::on_crossover_selected");
     clear();
 }
 
-void SummedFreqRespPlot::on_speakerlist_loaded(driver_list* driver_list)
+void frequency_response_plot::on_speakerlist_loaded(driver_list* driver_list)
 {
 #ifndef NDEBUG
-    std::puts("SummedFreqRespPlot::on_speakerlist_loaded");
+    std::puts("frequency_response_plot::on_speakerlist_loaded");
 #endif
     m_speakerlist = driver_list;
 }

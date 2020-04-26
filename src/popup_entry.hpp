@@ -21,8 +21,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __POPUPENTRY_H
-#define __POPUPENTRY_H
+#pragma once
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/button.h>
@@ -31,45 +30,44 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/spinbutton.h>
 
-class PopupEntry : public Gtk::EventBox, public Gtk::CellEditable {
+class popup_entry : public Gtk::EventBox, public Gtk::CellEditable
+{
 public:
-  explicit PopupEntry(Glib::ustring path);
+    explicit popup_entry(Glib::ustring path);
 
-  ~PopupEntry() override = default;
+    ~popup_entry() override = default;
 
-  Glib::ustring const& get_path() const;
+    auto get_path() const -> Glib::ustring const&;
 
-  void set_text(Glib::ustring const& text);
+    void set_text(Glib::ustring const& text);
 
-  Glib::ustring get_text() const;
+    auto get_text() const -> Glib::ustring;
 
-  void select_region(int start_pos, int end_pos);
+    void select_region(int start_pos, int end_pos);
 
-  bool get_editing_canceled() const;
+    auto get_editing_canceled() const -> bool;
 
-  static int get_button_width();
+    static auto get_button_width() -> int;
 
-  sigc::signal0<void>& signal_arrow_clicked();
+    auto signal_arrow_clicked() -> sigc::signal0<void>&;
 
 protected:
-  bool on_key_press_event(GdkEventKey* event) override;
-  void start_editing_vfunc(GdkEvent* event) override;
+    auto on_key_press_event(GdkEventKey* event) -> bool override;
+    void start_editing_vfunc(GdkEvent* event) override;
 
 private:
-  using Self = PopupEntry;
+    using Self = popup_entry;
 
 private:
-  void on_entry_activate();
-  bool on_entry_key_press_event(GdkEventKey* event);
+    void on_entry_activate();
+    auto on_entry_key_press_event(GdkEventKey* event) -> bool;
 
 private:
-  Glib::ustring m_path;
-  Gtk::Entry* m_entry;
-  Gtk::SpinButton* m_spin_button;
-  Glib::RefPtr<Gtk::Adjustment> m_spin_digits;
-  bool m_editing_canceled;
+    Glib::ustring m_path;
+    Gtk::Entry* m_entry;
+    Gtk::SpinButton* m_spin_button;
+    Glib::RefPtr<Gtk::Adjustment> m_spin_digits;
+    bool m_editing_canceled;
 
-  sigc::signal0<void> m_signal_arrow_clicked;
+    sigc::signal0<void> m_signal_arrow_clicked;
 };
-
-#endif

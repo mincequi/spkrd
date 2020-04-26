@@ -29,26 +29,9 @@
 
 Settings g_settings;
 
-sigc::signal1<void, Crossover*> signal_crossover_selected;
-sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
-sigc::signal1<void, enclosure*> signal_box_selected;
-sigc::signal1<void, enclosure*> signal_add_to_boxlist;
-sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
-sigc::signal1<void, enclosure*> signal_box_modified;
-sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
-sigc::signal1<void, int> signal_remove_box_plot;
-sigc::signal1<void, int> signal_hide_box_plot;
-sigc::signal1<void, int> signal_select_plot;
-sigc::signal0<void> signal_net_modified_by_wizard;
-sigc::signal1<void, filter_network*> signal_net_modified_by_user;
-sigc::signal1<void, int> signal_new_crossover;
-sigc::signal0<void> signal_plot_crossover;
-sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*> signal_add_crossover_plot;
-sigc::signal0<void> signal_save_open_files;
-
-namespace GSpeakers
+namespace gspk
 {
-Glib::ustring double_to_ustring(double d)
+auto to_ustring(double d) -> Glib::ustring
 {
     char* str = nullptr;
     GString* buffer = g_string_new(str);
@@ -56,7 +39,7 @@ Glib::ustring double_to_ustring(double d)
     return Glib::ustring(buffer->str);
 }
 
-Glib::ustring double_to_ustring(double d, int format_len, int format_dec)
+auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring
 {
     char* str1 = nullptr;
     GString* buffer1 = g_string_new(str1);
@@ -67,17 +50,17 @@ Glib::ustring double_to_ustring(double d, int format_len, int format_dec)
     return Glib::ustring(buffer2->str);
 }
 
-Glib::ustring int_to_ustring(int d) { return Glib::ustring(std::to_string(d)); }
+auto int_to_ustring(int d) -> Glib::ustring { return Glib::ustring(std::to_string(d)); }
 
-Gtk::Widget& image_widget(std::string const& filename)
+auto image_widget(std::string const& filename) -> Gtk::Widget&
 {
     try
     {
 #ifdef TARGET_WIN32
         auto pixbuf = Gdk::Pixbuf::create_from_file(filename);
 #else
-        auto pixbuf = Gdk::Pixbuf::create_from_file(std::string(GSPEAKERS_PREFIX)
-                                                    + std::string("/share/pixmaps/") + filename);
+        auto pixbuf = Gdk::Pixbuf::create_from_file(
+            std::string(GSPEAKERS_PREFIX) + std::string("/share/pixmaps/") + filename);
 #endif
         return *Gtk::manage(new Gtk::Image(pixbuf));
     }
@@ -87,7 +70,7 @@ Gtk::Widget& image_widget(std::string const& filename)
     }
 }
 
-Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
+auto short_filename(const Glib::ustring& filename, unsigned length) -> Glib::ustring
 {
     Glib::ustring shorted_filename;
     if (filename.length() >= length)
@@ -106,7 +89,8 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
         {
             space_left = 1;
         }
-        shorted_filename += "..." + dir.substr(dir.length() - space_left, dir.length()) + "/" + file;
+        shorted_filename += "..." + dir.substr(dir.length() - space_left, dir.length())
+                            + "/" + file;
     }
     else
     {
@@ -115,28 +99,28 @@ Glib::ustring short_filename(const Glib::ustring& filename, unsigned length)
     return shorted_filename;
 }
 
-bool& driverlist_modified()
+auto driverlist_modified() -> bool&
 {
     static bool driverlist_mod = false;
     return driverlist_mod;
 }
 
-bool& enclosurelist_modified()
+auto enclosurelist_modified() -> bool&
 {
     static bool enclosurelist_mod = false;
     return enclosurelist_mod;
 }
 
-bool& crossoverlist_modified()
+auto crossoverlist_modified() -> bool&
 {
     static bool crossoverlist_mod = false;
     return crossoverlist_mod;
 }
 
-bool& measurementlist_modified()
+auto measurementlist_modified() -> bool&
 {
     static bool meassurementlist_mod = false;
     return meassurementlist_mod;
 }
 
-} // namespace GSpeakers
+} // namespace gspk

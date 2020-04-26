@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GFILTER_COMMON_H
-#define __GFILTER_COMMON_H
+#pragma once
 
 #include "settings.h"
 
@@ -38,22 +37,26 @@
 #define gettext_noop(string) string
 #define N_(string) gettext_noop(string)
 
-namespace GSpeakers
+namespace gspk
 {
-class Point;
-Glib::ustring double_to_ustring(double d);
-Glib::ustring double_to_ustring(double d, int format_len, int format_dec);
-Glib::ustring int_to_ustring(int d);
+class point;
+}
 
-Gtk::Widget& image_widget(std::string const& filename);
+namespace gspk
+{
+auto to_ustring(double d) -> Glib::ustring;
+auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
+auto int_to_ustring(int d) -> Glib::ustring;
 
-Glib::ustring short_filename(Glib::ustring const& filename, unsigned length = 30);
+auto image_widget(std::string const& filename) -> Gtk::Widget&;
 
-bool& driverlist_modified();
-bool& enclosurelist_modified();
-bool& crossoverlist_modified();
-bool& measurementlist_modified();
-} // namespace GSpeakers
+auto short_filename(Glib::ustring const& filename, unsigned length = 30) -> Glib::ustring;
+
+auto driverlist_modified() -> bool&;
+auto enclosurelist_modified() -> bool&;
+auto crossoverlist_modified() -> bool&;
+auto measurementlist_modified() -> bool&;
+} // namespace gspk
 
 class enclosure;
 class driver;
@@ -62,42 +65,3 @@ class filter_network;
 class driver_list;
 
 extern Settings g_settings;
-
-/*
- * signal_crossover_selected
- * Emit this signal when you want to change current crossover.
- * SigC::Object is the new crossover
- */
-extern sigc::signal1<void, Crossover*> signal_crossover_selected;
-
-/*
- * signal_speakerlist_loaded
- * Emit this signal when you want to change current speakerlist.
- * driver_list arg is the new driver_list
- */
-extern sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
-
-/*
- * signal_box_selected
- * Emit this signal when you want to change the current box
- * enclosure * is a ptr to the new box
- */
-extern sigc::signal1<void, enclosure*> signal_box_selected;
-extern sigc::signal1<void, enclosure*> signal_box_modified;
-extern sigc::signal1<void, enclosure*> signal_add_to_boxlist;
-extern sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
-extern sigc::signal2<int, std::vector<GSpeakers::Point>&, Gdk::Color&> signal_add_box_plot;
-extern sigc::signal1<void, int> signal_remove_box_plot;
-extern sigc::signal1<void, int> signal_hide_box_plot;
-extern sigc::signal1<void, int> signal_select_plot;
-
-/* Define two signals for crossover parts updates */
-extern sigc::signal0<void> signal_net_modified_by_wizard; // listen to this in crossover treeview
-extern sigc::signal1<void, filter_network*> signal_net_modified_by_user; // listan to this in filter wizard
-extern sigc::signal1<void, int> signal_new_crossover;
-extern sigc::signal0<void> signal_plot_crossover;
-extern sigc::signal4<int, std::vector<GSpeakers::Point>&, Gdk::Color&, int*, filter_network*>
-    signal_add_crossover_plot;
-extern sigc::signal0<void> signal_save_open_files;
-
-#endif //__GFILTER_COMMON_H

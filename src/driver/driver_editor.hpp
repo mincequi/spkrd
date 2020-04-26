@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_SPEAKEREDITOR
-#define __GSPEAKERS_SPEAKEREDITOR
+#pragma once
 
 #include "driver_frequency_response_plot.hpp"
 #include "driver_list.hpp"
@@ -48,18 +47,18 @@ public:
 
     virtual ~driver_editor() = default;
 
-    Gtk::Widget& get_treeview_table() noexcept { return m_treeview_vbox; }
+    auto get_treeview_table() noexcept -> Gtk::Widget& { return m_treeview_vbox; }
 
-    Gtk::Widget& get_editor_table() noexcept { return m_vbox; }
+    auto get_editor_table() noexcept -> Gtk::Widget& { return m_vbox; }
 
-    Gtk::Widget& get_plot() noexcept { return plot; }
+    auto get_plot() noexcept -> Gtk::Widget& { return plot; }
 
-    Gtk::MenuItem& get_menu();
+    auto get_menu() -> Gtk::MenuItem&;
 
-    Gtk::Toolbar& get_toolbar();
+    auto get_toolbar() -> Gtk::Toolbar&;
 
 protected:
-    bool open_xml(const std::string& filename);
+    auto open_xml(std::string const& filename) -> bool;
 
     void append_xml(const std::string& filename);
 
@@ -140,10 +139,10 @@ protected:
     void set_entries_sensitive(bool value);
 
 protected:
-    struct ModelColumns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModelColumnRecord
     {
     public:
-        ModelColumns()
+        model_columns()
         {
             add(id);
             add(type);
@@ -244,8 +243,6 @@ protected:
     std::unique_ptr<driver_list> m_driver_list{nullptr};
     driver_frequency_response_plot plot;
 
-    ModelColumns m_columns;
+    model_columns m_columns;
     std::string m_filename;
 };
-
-#endif

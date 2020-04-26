@@ -19,8 +19,9 @@
 
 #include "main_window.hpp"
 
-#include "crossover.h"
+#include "crossover.hpp"
 #include "settings_dialog.hpp"
+#include "signal.hpp"
 
 #include <glibmm.h>
 
@@ -34,10 +35,10 @@
 
 enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
-inline bool is_state_modified()
+inline auto is_state_modified() -> bool
 {
-    return GSpeakers::driverlist_modified() || GSpeakers::enclosurelist_modified()
-           || GSpeakers::crossoverlist_modified() || GSpeakers::measurementlist_modified();
+    return gspk::driverlist_modified() || gspk::enclosurelist_modified()
+           || gspk::crossoverlist_modified() || gspk::measurementlist_modified();
 }
 
 main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
@@ -100,7 +101,7 @@ void main_window::set_title_and_icons()
     {
         std::cout << error.code() << "\n";
     }
-    set_title("GSpeakers " + std::string(VERSION));
+    set_title("gspk " + std::string(VERSION));
 }
 
 void main_window::set_defaults()
@@ -159,7 +160,8 @@ void main_window::initialise_menu_bar()
         m_edit_menu_item.set_submenu(*edit_submenu);
 
         auto preferences = Gtk::manage(new Gtk::ImageMenuItem(Gtk::Stock::PREFERENCES));
-        preferences->signal_activate().connect(sigc::mem_fun(*this, &main_window::on_edit_settings));
+        preferences->signal_activate().connect(
+            sigc::mem_fun(*this, &main_window::on_edit_settings));
         edit_submenu->append(*preferences);
     }
     {
@@ -196,8 +198,10 @@ void main_window::connect_driver_tab()
     g_settings.defaultValueUnsignedInt("DriverMainPanedPosition", 400);
     g_settings.defaultValueUnsignedInt("DriverPlotPanedPosition", 250);
 
-    m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPosition"));
-    m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPosition"));
+    m_driver_hpaned.set_position(g_settings.getValueUnsignedInt("DriverMainPanedPositio"
+                                                                "n"));
+    m_driver_vpaned.set_position(g_settings.getValueUnsignedInt("DriverPlotPanedPositio"
+                                                                "n"));
 
     m_driver_hpaned.add2(m_driver_vpaned);
     m_driver_vpaned.add1(m_speaker_editor.get_plot());
@@ -206,15 +210,17 @@ void main_window::connect_driver_tab()
 
 void main_window::connect_enclosure_tab()
 {
-    m_main_notebook.append_page(m_enclosure_paned, *Gtk::manage(new Gtk::Label("Enclosure")));
+    m_main_notebook.append_page(m_enclosure_paned,
+                                *Gtk::manage(new Gtk::Label("Enclosure")));
 }
 
 void main_window::connect_crossover_tab()
 {
-    m_main_notebook.append_page(m_crossover_paned, *Gtk::manage(new Gtk::Label("Crossover")));
+    m_main_notebook.append_page(m_crossover_paned,
+                                *Gtk::manage(new Gtk::Label("Crossover")));
 }
 
-bool main_window::on_delete_event(GdkEventAny* event)
+auto main_window::on_delete_event(GdkEventAny* event) -> bool
 {
     // Popup dialog and ask if user want to save changes
     if (is_state_modified())
@@ -231,13 +237,14 @@ bool main_window::on_delete_event(GdkEventAny* event)
         // hbox->set_border_width(6);
         // hbox->set_spacing(6);
 
-        auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+        auto image = Gtk::manage(
+            new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
         hbox->pack_start(*image);
 
         dialog.get_action_area()->set_border_width(6);
         dialog.get_action_area()->set_spacing(6);
 
-        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 
         auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
         label1->set_markup(Glib::ustring("<b>") + _("Save changes before closing?")
@@ -300,20 +307,23 @@ void main_window::on_quit()
         hbox->set_border_width(6);
         hbox->set_spacing(12);
 
-        auto image = Gtk::manage(new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
+        auto image = Gtk::manage(
+            new Gtk::Image(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_DIALOG));
         hbox->pack_start(*image);
 
         dialog->get_action_area()->set_border_width(12);
         dialog->get_action_area()->set_spacing(6);
 
-        auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-        auto label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
-        label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?")) + "</b>\n\n");
+        auto* vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+        auto* label1 = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START));
+        label1->set_markup("<b>" + Glib::ustring(_("Save changes before closing?"))
+                           + "</b>\n\n");
         vbox->pack_start(*label1);
 
         auto label3 = Gtk::manage(
             new Gtk::Label(Glib::ustring(_("There are unsaved files. If you choose")) + "\n"
-                               + Glib::ustring(_("to quit without saving all changes since last "
+                               + Glib::ustring(_("to quit without saving all changes "
+                                                 "since last "
                                                  "save"))
                                + "\n" + Glib::ustring(_("will be lost.")),
                            Gtk::ALIGN_START));
@@ -447,7 +457,7 @@ void main_window::on_switch_page(Gtk::Widget* page, int page_number)
 void main_window::on_about()
 {
     Gtk::MessageDialog(*this,
-                       "GSpeakers-" + std::string(VERSION)
+                       "gspk-" + std::string(VERSION)
                            + "\n\n(C) Daniel Sundberg "
                              "<sumpan@sumpan.com>\n\nhttp://gspeakers.sf.net",
                        false,

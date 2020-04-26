@@ -19,10 +19,11 @@
  */
 
 #include "common.h"
+#include "signal.hpp"
 
-#include "gspeakersboxplot.h"
+#include "box_plot.hpp"
 
-GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), m_plot(1, 1000)
+box_plot::box_plot() : Gtk::Frame(""), m_plot(1, 1000)
 {
     set_border_width(2);
     set_shadow_type(Gtk::SHADOW_NONE);
@@ -31,11 +32,11 @@ GSpeakersBoxPlot::GSpeakersBoxPlot() : Gtk::Frame(""), m_plot(1, 1000)
     set_label_widget(m_label);
 
     m_vbox.set_border_width(12);
-    m_vbox.pack_start(sw);
+    m_vbox.pack_start(m_scrolled_window);
 
-    sw.add(m_plot);
-    sw.set_shadow_type(Gtk::SHADOW_IN);
-    sw.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    m_scrolled_window.add(m_plot);
+    m_scrolled_window.set_shadow_type(Gtk::SHADOW_IN);
+    m_scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
 
     add(m_vbox);
 

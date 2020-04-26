@@ -17,8 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-#ifndef __GSPEAKERS_SETTINGSDLG_H
-#define __GSPEAKERS_SETTINGSDLG_H
+#pragma once
 
 #include "common.h"
 
@@ -28,7 +27,7 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
 
-namespace GSpeakers
+namespace gspk
 {
 enum Settings {
     SAVE_MAIN_WINDOW_SIZE,
@@ -55,7 +54,7 @@ public:
 private:
     void on_close();
     void on_spice_browse();
-    void on_config_option_change(GSpeakers::Settings setting);
+    void on_config_option_change(gspk::Settings setting);
 
 private:
     void initialise_general_page();
@@ -92,5 +91,3 @@ private:
 
     std::string m_filename;
 };
-
-#endif
