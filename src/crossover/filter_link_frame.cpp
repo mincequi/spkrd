@@ -31,7 +31,7 @@
 #include <fstream>
 #include <iostream>
 
-filter_link_frame::filter_link_frame(filter_network* net,
+filter_link_frame::filter_link_frame(filter_network* network,
                                      std::string const& description,
                                      driver_list* driver_list)
     : Gtk::Frame(""),
@@ -43,7 +43,7 @@ filter_link_frame::filter_link_frame(filter_network* net,
       m_damp_spinbutton(m_dampening_digits),
       m_imp_corr_checkbutton(_("Impedance correction")),
       m_adv_imp_model_checkbutton(_("Use advanced driver impendance model")),
-      m_net(net),
+      m_network(network),
       m_description(description),
       m_speaker_list(driver_list)
 {
@@ -58,10 +58,10 @@ filter_link_frame::filter_link_frame(filter_network* net,
     this->initialise_speaker_combobox();
 
     m_vbox.pack_start(m_imp_corr_checkbutton);
-    m_imp_corr_checkbutton.set_active(m_net->get_has_imp_corr());
+    m_imp_corr_checkbutton.set_active(m_network->get_has_imp_corr());
 
     m_vbox.pack_start(m_adv_imp_model_checkbutton);
-    m_adv_imp_model_checkbutton.set_active(m_net->get_adv_imp_model() == 1);
+    m_adv_imp_model_checkbutton.set_active(m_network->get_adv_imp_model() == 1);
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     m_vbox.pack_start(*hbox);
@@ -69,15 +69,15 @@ filter_link_frame::filter_link_frame(filter_network* net,
     hbox->pack_start(m_damp_spinbutton);
     hbox->pack_start(*Gtk::manage(new Gtk::Label("dB")));
 
-    if (m_net->get_has_damp())
+    if (m_network->get_has_damp())
     {
         this->initialise_damping();
     }
-    if (net->get_type() & NET_TYPE_HIGHPASS)
+    if (network->get_type() & NET_TYPE_HIGHPASS)
     {
         this->initialise_highpass_filter();
     }
-    if (m_net->get_type() & NET_TYPE_LOWPASS)
+    if (m_network->get_type() & NET_TYPE_LOWPASS)
     {
         this->initialise_lowpass_filter();
     }
@@ -96,7 +96,7 @@ filter_link_frame::filter_link_frame(filter_network* net,
 void filter_link_frame::initialise_damping()
 {
     // Set damp value in dB here
-    auto const r_ser = m_net->get_damp_R1().get_value();
+    auto const r_ser = m_network->get_damp_R1().get_value();
 
     driver speaker;
 
@@ -116,7 +116,7 @@ void filter_link_frame::initialise_damping()
 
 void filter_link_frame::initialise_speaker_combobox()
 {
-    std::string const& speaker_name = m_net->get_speaker();
+    std::string const& speaker_name = m_network->get_speaker();
 
     m_speaker_combo.remove_all();
 
@@ -164,7 +164,7 @@ void filter_link_frame::initialise_highpass_filter()
     m_higher_order_combo->append("2");
     m_higher_order_combo->append("3");
     m_higher_order_combo->append("4");
-    m_higher_order_combo->set_active(m_net->get_highpass_order() - 1);
+    m_higher_order_combo->set_active(m_network->get_highpass_order() - 1);
 
     m_higher_type_combo = Gtk::manage(new Gtk::ComboBoxText());
 
@@ -189,8 +189,8 @@ void filter_link_frame::initialise_highpass_filter()
     vbox->pack_start(*hbox);
 
     this->set_family(m_higher_type_combo,
-                     m_net->get_highpass_order(),
-                     m_net->get_highpass_family());
+                     m_network->get_highpass_order(),
+                     m_network->get_highpass_family());
 }
 
 void filter_link_frame::initialise_lowpass_filter()
@@ -216,7 +216,7 @@ void filter_link_frame::initialise_lowpass_filter()
     m_lower_order_combo->append("2");
     m_lower_order_combo->append("3");
     m_lower_order_combo->append("4");
-    m_lower_order_combo->set_active(m_net->get_lowpass_order() - 1);
+    m_lower_order_combo->set_active(m_network->get_lowpass_order() - 1);
 
     m_lower_type_combo = Gtk::make_managed<Gtk::ComboBoxText>();
 
@@ -240,8 +240,8 @@ void filter_link_frame::initialise_lowpass_filter()
     vbox->pack_start(*hbox);
 
     this->set_family(m_lower_type_combo,
-                     m_net->get_lowpass_order(),
-                     m_net->get_lowpass_family());
+                     m_network->get_lowpass_order(),
+                     m_network->get_lowpass_family());
 }
 
 void filter_link_frame::connect_signals()
@@ -249,7 +249,7 @@ void filter_link_frame::connect_signals()
     m_speaker_combo.signal_changed().connect(
         sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
 
-    if (m_net->get_type() & NET_TYPE_LOWPASS)
+    if (m_network->get_type() & NET_TYPE_LOWPASS)
     {
         m_lower_order_combo->signal_changed().connect(
             sigc::bind(sigc::mem_fun(*this, &filter_link_frame::on_order_selected),
@@ -262,7 +262,7 @@ void filter_link_frame::connect_signals()
         m_lower_co_freq_spinbutton->signal_value_changed().connect(
             sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
     }
-    if (m_net->get_type() & NET_TYPE_HIGHPASS)
+    if (m_network->get_type() & NET_TYPE_HIGHPASS)
     {
         m_higher_order_combo->signal_changed().connect(
             sigc::bind(sigc::mem_fun(*this, &filter_link_frame::on_order_selected),
@@ -367,26 +367,26 @@ void filter_link_frame::on_param_changed()
             speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
         }
 
-        m_net->set_speaker(speaker.get_id_string());
+        m_network->set_speaker(speaker.get_id_string());
 
         int index = 0;
         std::vector<double> num_params;
 
-        if (m_net->get_type() == NET_TYPE_LOWPASS)
+        if (m_network->get_type() == NET_TYPE_LOWPASS)
         {
-            m_net->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
+            m_network->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
             double const cutoff = m_lower_co_freq_spinbutton->get_value();
 
-            switch (m_net->get_lowpass_order())
+            switch (m_network->get_lowpass_order())
             {
                 case NET_ORDER_1ST:
                     num_params = get_filter_params(NET_BUTTERWORTH,
                                                    NET_ORDER_1ST,
                                                    NET_TYPE_LOWPASS);
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
-                    m_net->parts()[index++].set_unit("m");
-                    m_net->set_lowpass_family(NET_BUTTERWORTH);
+                    m_network->parts()[index++].set_unit("m");
+                    m_network->set_lowpass_family(NET_BUTTERWORTH);
                     break;
                 case NET_ORDER_2ND:
                     switch (m_lower_type_combo->get_active_row_number())
@@ -395,35 +395,35 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BESSEL);
+                            m_network->set_lowpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BUTTERWORTH);
+                            m_network->set_lowpass_family(NET_BUTTERWORTH);
                             break;
                         case 2: // chebychev
                             num_params = get_filter_params(NET_CHEBYCHEV,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_CHEBYCHEV);
+                            m_network->set_lowpass_family(NET_CHEBYCHEV);
                             break;
                         case 3: // linkwitz-riley
                             num_params = get_filter_params(NET_LINKWITZRILEY,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_LINKWITZRILEY);
+                            m_network->set_lowpass_family(NET_LINKWITZRILEY);
                             break;
                     }
                     /* inductor */
-                    m_net->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     break;
                 case NET_ORDER_3RD:
                     switch (m_lower_type_combo->get_active_row_number())
@@ -432,27 +432,27 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_3RD,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BESSEL);
+                            m_network->set_lowpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_3RD,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BUTTERWORTH);
+                            m_network->set_lowpass_family(NET_BUTTERWORTH);
                             break;
                     }
                     /* inductor */
-                    m_net->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     /* inductor */
-                    m_net->parts()[index].set_value(speaker.get_rdc() * num_params[2]
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     break;
                 case NET_ORDER_4TH:
                     switch (m_lower_type_combo->get_active_row_number())
@@ -461,74 +461,74 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BESSEL);
+                            m_network->set_lowpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_BUTTERWORTH);
+                            m_network->set_lowpass_family(NET_BUTTERWORTH);
                             break;
                         case 2: // gaussian
                             num_params = get_filter_params(NET_GAUSSIAN,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_GAUSSIAN);
+                            m_network->set_lowpass_family(NET_GAUSSIAN);
                             break;
                         case 3: // legendre
                             num_params = get_filter_params(NET_LEGENDRE,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_LEGENDRE);
+                            m_network->set_lowpass_family(NET_LEGENDRE);
                             break;
                         case 4: // liner-phase
                             num_params = get_filter_params(NET_LINEARPHASE,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_LINEARPHASE);
+                            m_network->set_lowpass_family(NET_LINEARPHASE);
                             break;
                         case 5: // linkwitz-riley
                             num_params = get_filter_params(NET_LINKWITZRILEY,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_LOWPASS);
-                            m_net->set_lowpass_family(NET_LINKWITZRILEY);
+                            m_network->set_lowpass_family(NET_LINKWITZRILEY);
                             break;
                     }
                     // inductor
-                    m_net->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     /* inductor */
-                    m_net->parts()[index].set_value(speaker.get_rdc() * num_params[2]
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[3] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     break;
             }
         }
-        if (m_net->get_type() == NET_TYPE_HIGHPASS)
+        if (m_network->get_type() == NET_TYPE_HIGHPASS)
         {
-            m_net->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
+            m_network->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
 
             auto const cutoff = m_higher_co_freq_spinbutton->get_value();
 
-            switch (m_net->get_highpass_order())
+            switch (m_network->get_highpass_order())
             {
                 case NET_ORDER_1ST:
                     num_params = get_filter_params(NET_BUTTERWORTH,
                                                    NET_ORDER_1ST,
                                                    NET_TYPE_HIGHPASS);
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
-                    m_net->set_highpass_family(NET_BUTTERWORTH);
+                    m_network->parts()[index++].set_unit("u");
+                    m_network->set_highpass_family(NET_BUTTERWORTH);
                     break;
                 case NET_ORDER_2ND:
                     switch (m_higher_type_combo->get_active_row_number())
@@ -537,35 +537,35 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BESSEL);
+                            m_network->set_highpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BUTTERWORTH);
+                            m_network->set_highpass_family(NET_BUTTERWORTH);
                             break;
                         case 2: // chebychev
                             num_params = get_filter_params(NET_CHEBYCHEV,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_CHEBYCHEV);
+                            m_network->set_highpass_family(NET_CHEBYCHEV);
                             break;
                         case 3: // linkwitz-riley
                             num_params = get_filter_params(NET_LINKWITZRILEY,
                                                            NET_ORDER_2ND,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_LINKWITZRILEY);
+                            m_network->set_highpass_family(NET_LINKWITZRILEY);
                             break;
                     }
                     // capacitor
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     // inductor
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index++].set_unit("m");
                     break;
                 case NET_ORDER_3RD:
                     switch (m_higher_type_combo->get_active_row_number())
@@ -574,27 +574,27 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_3RD,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BESSEL);
+                            m_network->set_highpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_3RD,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BUTTERWORTH);
+                            m_network->set_highpass_family(NET_BUTTERWORTH);
                             break;
                     }
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     /* inductor */
-                    m_net->parts()[index].set_value(num_params[1] * speaker.get_rdc()
-                                                    / cutoff * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index].set_value(num_params[1] * speaker.get_rdc()
+                                                        / cutoff * 1000);
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         num_params[2] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     break;
                 case NET_ORDER_4TH:
                     switch (m_higher_type_combo->get_active_row_number())
@@ -603,74 +603,75 @@ void filter_link_frame::on_param_changed()
                             num_params = get_filter_params(NET_BESSEL,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BESSEL);
+                            m_network->set_highpass_family(NET_BESSEL);
                             break;
                         case 1: // butterworth
                             num_params = get_filter_params(NET_BUTTERWORTH,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_BUTTERWORTH);
+                            m_network->set_highpass_family(NET_BUTTERWORTH);
                             break;
                         case 2: // gaussian
                             num_params = get_filter_params(NET_GAUSSIAN,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_GAUSSIAN);
+                            m_network->set_highpass_family(NET_GAUSSIAN);
                             break;
                         case 3: // legendre
                             num_params = get_filter_params(NET_LEGENDRE,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_LEGENDRE);
+                            m_network->set_highpass_family(NET_LEGENDRE);
                             break;
                         case 4: // liner-phase
                             num_params = get_filter_params(NET_LINEARPHASE,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_LINEARPHASE);
+                            m_network->set_highpass_family(NET_LINEARPHASE);
                             break;
                         case 5: // linkwitz-riley
                             num_params = get_filter_params(NET_LINKWITZRILEY,
                                                            NET_ORDER_4TH,
                                                            NET_TYPE_HIGHPASS);
-                            m_net->set_highpass_family(NET_LINKWITZRILEY);
+                            m_network->set_highpass_family(NET_LINKWITZRILEY);
                             break;
                     }
 
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     /* inductor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index++].set_unit("m");
                     /* capacitor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_net->parts()[index++].set_unit("u");
+                    m_network->parts()[index++].set_unit("u");
                     /* inductor */
-                    m_net->parts()[index].set_value(
+                    m_network->parts()[index].set_value(
                         (num_params[3] * speaker.get_rdc() / cutoff) * 1000);
-                    m_net->parts()[index++].set_unit("m");
+                    m_network->parts()[index++].set_unit("m");
                     break;
             }
         }
 
-        m_net->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
+        m_network->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
 
         if (m_imp_corr_checkbutton.get_active())
         {
             // calc imp corr here
-            m_net->get_imp_corr_C().set_value(speaker.get_lvc() / 1000
-                                              / std::pow(speaker.get_rdc(), 2) * 1000000);
-            m_net->get_imp_corr_C().set_unit("u");
-            m_net->get_imp_corr_R().set_value(speaker.get_rdc());
+            m_network->get_imp_corr_C().set_value(
+                speaker.get_lvc() / 1000 / std::pow(speaker.get_rdc(), 2) * 1000000);
+            m_network->get_imp_corr_C().set_unit("u");
+            m_network->get_imp_corr_R().set_value(speaker.get_rdc());
         }
 
-        m_net->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
+        m_network->set_adv_imp_model(
+            static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
 
-        m_net->set_has_damp(m_damp_spinbutton.get_value_as_int());
+        m_network->set_has_damp(m_damp_spinbutton.get_value_as_int());
 
         if (m_damp_spinbutton.get_value_as_int() != 0)
         {
@@ -678,8 +679,8 @@ void filter_link_frame::on_param_changed()
             auto const r_ser = speaker.get_rdc()
                                * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
             auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
-            m_net->get_damp_R2().set_value(r_ser);
-            m_net->get_damp_R1().set_value(r_par);
+            m_network->get_damp_R2().set_value(r_ser);
+            m_network->get_damp_R1().set_value(r_par);
         }
 
         signal_net_modified_by_wizard();
@@ -692,17 +693,17 @@ void filter_link_frame::on_param_changed()
     }
 }
 
-void filter_link_frame::on_net_updated(filter_network* net)
+void filter_link_frame::on_net_updated(filter_network* network)
 {
-    if (m_net->get_id() == net->get_id())
+    if (m_network->get_id() == network->get_id())
     {
 #ifdef OUPUTDEBUG
-        std::cout << "filter_link_frame::on_net_updated" << std::endl;
+        std::cout << "filter_link_frame::on_net_updated\n";
 #endif
 
         if (g_settings.getValueBool("AutoUpdateFilterPlots"))
         {
-            on_plot_crossover();
+            this->on_plot_crossover();
         }
     }
 }
@@ -710,7 +711,7 @@ void filter_link_frame::on_net_updated(filter_network* net)
 void filter_link_frame::on_clear_and_plot()
 {
     my_filter_plot_index = -1;
-    on_plot_crossover();
+    this->on_plot_crossover();
 }
 
 void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
@@ -720,7 +721,7 @@ void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
 #endif
     m_speaker_list = driver_list;
 
-    std::string const& speaker_name = m_net->get_speaker();
+    std::string const& speaker_name = m_network->get_speaker();
 
     // Setup the speaker combo box
     bool speaker_is_in_speakerlist = false;
@@ -753,7 +754,74 @@ void filter_link_frame::on_plot_crossover()
 {
     std::puts("DEBUG: plotting cross-over");
 
-    // Create spice code for this net
+    this->perform_spice_simulation();
+
+    Gdk::Color const line_colour = m_network->get_type() & NET_TYPE_LOWPASS
+                                       ? Gdk::Color("blue")
+                                       : m_network->get_type() & NET_TYPE_HIGHPASS
+                                             ? Gdk::Color("red")
+                                             : Gdk::Color("darkgreen");
+    // send the spice data to the plot
+    signal_add_crossover_plot(m_points, line_colour, my_filter_plot_index, m_network);
+
+    if (!m_enable_edit)
+    {
+        return;
+    }
+
+    m_enable_edit = false;
+
+    if (m_network->get_type() & NET_TYPE_LOWPASS)
+    {
+        auto const location = std::find_if(rbegin(m_points),
+                                           rend(m_points),
+                                           [&](auto const& point) {
+                                               return point.get_y()
+                                                      > (-3 - m_damp_spinbutton.get_value());
+                                           });
+
+        auto const index = location == rend(m_points)
+                               ? 0ul
+                               : std::distance(location, rend(m_points)) - 1;
+
+        m_points[index + 1].set_y(m_points[index + 1].get_y()
+                                  + m_damp_spinbutton.get_value());
+        m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
+
+        double ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
+        int xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
+        double ytodbdiff = m_points[index].get_y() + 3;
+        m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
+                                              + m_points[index + 1].get_x());
+    }
+    if (m_network->get_type() & NET_TYPE_HIGHPASS)
+    {
+        auto const location = std::find_if(begin(m_points),
+                                           end(m_points),
+                                           [&](auto const& point) {
+                                               return point.get_y()
+                                                      >= (-3
+                                                          - m_damp_spinbutton.get_value());
+                                           });
+
+        auto const index = std::distance(begin(m_points), location);
+
+        m_points[index - 1].set_y(m_points[index - 1].get_y()
+                                  + m_damp_spinbutton.get_value());
+        m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
+
+        double ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
+        int xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
+        double ytodbdiff = m_points[index].get_y() + 3;
+        m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
+                                               + m_points[index].get_x());
+    }
+    m_enable_edit = true;
+}
+
+void filter_link_frame::perform_spice_simulation()
+{
+    // Create spice code for this network
     driver speaker;
     if (m_speaker_list)
     {
@@ -763,8 +831,8 @@ void filter_link_frame::on_plot_crossover()
     std::string spice_filename;
     try
     {
-        spice_filename = m_net->to_SPICE(speaker,
-                                         g_settings.getValueBool("SPICEUseGNUCAP"));
+        spice_filename = m_network->to_SPICE(speaker,
+                                             g_settings.getValueBool("SPICEUseGNUCAP"));
     }
     catch (std::runtime_error const& error)
     {
@@ -801,105 +869,51 @@ void filter_link_frame::on_plot_crossover()
     std::string spice_output_file = spice_filename + ".out";
     std::ifstream fin(spice_output_file.c_str());
 
-    if (fin.good())
+    if (!fin.good())
     {
-        points.clear();
-        while (!fin.eof())
+        throw std::runtime_error("Result file from SPICE simulation could not be read");
+    }
+
+    m_points.clear();
+
+    while (!fin.eof())
+    {
+        std::vector<char> buffer(100);
+        fin.getline(buffer.data(), 100, '\n');
+
+        if ((g_settings.getValueBool("SPICEUseGNUCAP") && buffer[0] == ' ')
+            || buffer[0] == '0')
         {
-            std::vector<char> buffer(100);
-            fin.getline(buffer.data(), 100, '\n');
-
-            if ((g_settings.getValueBool("SPICEUseGNUCAP") && buffer[0] == ' ')
-                || buffer[0] == '0')
+            if (g_settings.getValueBool("SPICEUseGNUCAP"))
             {
-                if (g_settings.getValueBool("SPICEUseGNUCAP"))
+                float const f_id = std::atof(buffer.data());
+                if (f_id != 0)
                 {
-                    float const f_id = std::atof(buffer.data());
-                    if (f_id != 0)
-                    {
-                        // Check if we got a freq more than 10kHz
-                        char* substr_ptr = strstr(buffer.data(), "K");
-                        auto const freq = substr_ptr != nullptr ? f_id * 1000.0 : f_id;
+                    // Check if we got a freq more than 10kHz
+                    char* substr_ptr = strstr(buffer.data(), "K");
+                    auto const freq = substr_ptr != nullptr ? f_id * 1000.0 : f_id;
 
-                        substr_ptr = strtok(buffer.data(), " ");
-                        substr_ptr = strtok(nullptr, " ");
-                        auto const db = g_ascii_strtod(substr_ptr, nullptr);
-                        points.emplace_back(std::round(freq), db);
-                    }
-                }
-                else
-                {
-                    if ((buffer[0] >= '0') && (buffer[0] <= '9'))
-                    {
-                        strtok(buffer.data(), "\t");
-                        char* substr_ptr = strtok(nullptr, "\t");
-
-                        float const freq = g_ascii_strtod(substr_ptr, nullptr);
-
-                        substr_ptr = strtok(nullptr, "\t");
-
-                        float const db = g_ascii_strtod(substr_ptr, nullptr);
-                        points.emplace_back(std::round(freq), db);
-                    }
+                    substr_ptr = strtok(buffer.data(), " ");
+                    substr_ptr = strtok(nullptr, " ");
+                    auto const db = g_ascii_strtod(substr_ptr, nullptr);
+                    m_points.emplace_back(std::round(freq), db);
                 }
             }
-        }
-        Gdk::Color c = m_net->get_type() & NET_TYPE_LOWPASS
-                           ? Gdk::Color("blue")
-                           : m_net->get_type() & NET_TYPE_HIGHPASS
-                                 ? Gdk::Color("red")
-                                 : Gdk::Color("darkgreen");
-        // send the spice data to the plot
-        signal_add_crossover_plot(points, c, my_filter_plot_index, m_net);
-
-        if (m_enable_edit)
-        {
-            m_enable_edit = false;
-            if (m_net->get_type() & NET_TYPE_LOWPASS)
+            else
             {
-                auto const location = std::find_if(rbegin(points),
-                                                   rend(points),
-                                                   [&](auto const& point) {
-                                                       return point.get_y()
-                                                              > (-3
-                                                                 - m_damp_spinbutton
-                                                                       .get_value());
-                                                   });
+                if ((buffer[0] >= '0') && (buffer[0] <= '9'))
+                {
+                    strtok(buffer.data(), "\t");
+                    char* substr_ptr = strtok(nullptr, "\t");
 
-                auto const index = location == rend(points)
-                                       ? 0ul
-                                       : std::distance(location, rend(points)) - 1;
+                    float const freq = g_ascii_strtod(substr_ptr, nullptr);
 
-                points[index + 1].set_y(points[index + 1].get_y()
-                                        + m_damp_spinbutton.get_value());
-                points[index].set_y(points[index].get_y() + m_damp_spinbutton.get_value());
+                    substr_ptr = strtok(nullptr, "\t");
 
-                double ydiff = points[index + 1].get_y() - points[index].get_y();
-                int xdiff = points[index + 1].get_x() - points[index].get_x();
-                double ytodbdiff = points[index].get_y() + 3;
-                m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
-                                                      + points[index + 1].get_x());
+                    float const db = g_ascii_strtod(substr_ptr, nullptr);
+                    m_points.emplace_back(std::round(freq), db);
+                }
             }
-            if ((m_net->get_type() & NET_TYPE_HIGHPASS) != 0)
-            {
-                auto const
-                    location = std::find_if(begin(points), end(points), [&](auto const& point) {
-                        return point.get_y() >= (-3 - m_damp_spinbutton.get_value());
-                    });
-
-                auto const index = std::distance(begin(points), location);
-
-                points[index - 1].set_y(points[index - 1].get_y()
-                                        + m_damp_spinbutton.get_value());
-                points[index].set_y(points[index].get_y() + m_damp_spinbutton.get_value());
-
-                double ydiff = points[index - 1].get_y() - points[index].get_y();
-                int xdiff = points[index].get_x() - points[index - 1].get_x();
-                double ytodbdiff = points[index].get_y() + 3;
-                m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
-                                                       + points[index].get_x());
-            }
-            m_enable_edit = true;
         }
     }
 }
