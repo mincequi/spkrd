@@ -88,14 +88,6 @@ protected:
                     std::vector<Gdk::Point> const& points,
                     Gdk::Color const& colour);
 
-    /// Copy the area that needs to be updated from the pixmap
-    /// to the window
-    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
-
-    // void on_show();
-
-    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
-
 protected:
     /// Y axis magnitude points for the plots (dbmag)
     std::vector<std::vector<gspk::point>> m_points;

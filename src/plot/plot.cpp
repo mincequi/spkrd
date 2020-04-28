@@ -46,20 +46,6 @@ auto plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
     return true;
 }
 
-auto plot::on_expose_event(GdkEventExpose* event) -> bool
-{
-    m_selected_plot = -1;
-
-    return false;
-}
-
-auto plot::on_configure_event(GdkEventConfigure* event) -> bool
-{
-    m_visible = true;
-
-    // We've handled the configure event, no need for further processing.
-    return true;
-}
 
 auto plot::add_plot(std::vector<gspk::point> const& ref_point_vector,
                     Gdk::Color const& ref_color) -> int
