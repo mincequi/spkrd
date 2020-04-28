@@ -127,8 +127,8 @@ protected:
     crossover_list m_crossover_list;
 
     std::string m_filename;
-    bool new_xml_pressed;
-    int index = 0;
+    bool m_new_xml_pressed;
+    std::size_t m_index = 0;
 
     model_columns m_columns;
 };
