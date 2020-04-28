@@ -48,7 +48,7 @@ auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
 {
     auto const plot_index = output_plot_index;
 
-    /* Search for plot_index in the graph */
+    // Search for plot_index in the graph
     auto const position = std::find(cbegin(m_nets), cend(m_nets), plot_index);
 
     // If plot_index is in the graph, replace the old point-vector, if ,
@@ -66,14 +66,14 @@ auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
     // sum the plots into one master plot
     std::vector<gspk::point> pnts;
 
-    auto c = Gdk::Color("red");
+    auto const red_colour = Gdk::Color("red");
 
     m_plot.remove_all_plots();
 
     if (m_points.size() > 1)
     {
         pnts = m_points[0];
-        m_plot.add_plot(m_points[0], c);
+        m_plot.add_plot(m_points[0], red_colour);
 
         for (std::size_t j = 1; j < m_points.size(); j++)
         {
@@ -81,9 +81,9 @@ auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
             {
                 pnts[k].set_y(10
                               * std::log10(std::pow(10, pnts[k].get_y() / 10.0)
-                                           + std::pow(10, (m_points[j])[k].get_y() / 10.0)));
+                                           + std::pow(10, m_points[j][k].get_y() / 10.0)));
             }
-            m_plot.add_plot(m_points[j], c);
+            m_plot.add_plot(m_points[j], red_colour);
         }
     }
     m_plot.select_plot(m_plot.add_plot(pnts, m_color));
