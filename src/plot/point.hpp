@@ -5,13 +5,11 @@ namespace gspk
 {
 /// Point class to exchange plot coordinates between classes.
 /// I need a double on the y-axis since decimal values are required
-/// in the conversion to axis mappes coordinates
+/// in the conversion to axis mapped coordinates
 class point
 {
 public:
-    point() = default;
-
-    point(int x, double y) : m_x(x), m_y(y) {}
+    explicit point(int x, double y) : m_x(x), m_y(y) {}
 
     auto get_x() const -> int { return m_x; }
 
