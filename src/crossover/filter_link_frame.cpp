@@ -354,343 +354,344 @@ void filter_link_frame::on_settings_changed(const std::string& setting)
 
 void filter_link_frame::on_param_changed()
 {
-    if (m_enable_edit)
+    if (!m_enable_edit)
     {
-        std::puts("filter_link_frame::on_param_changed");
-
-        m_enable_edit = false;
-
-        driver speaker;
-
-        if (m_speaker_list != nullptr)
-        {
-            speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
-        }
-
-        m_network->set_speaker(speaker.get_id_string());
-
-        int index = 0;
-        std::vector<double> num_params;
-
-        if (m_network->get_type() == NET_TYPE_LOWPASS)
-        {
-            m_network->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
-            double const cutoff = m_lower_co_freq_spinbutton->get_value();
-
-            switch (m_network->get_lowpass_order())
-            {
-                case NET_ORDER_1ST:
-                    num_params = get_filter_params(NET_BUTTERWORTH,
-                                                   NET_ORDER_1ST,
-                                                   NET_TYPE_LOWPASS);
-                    m_network->parts()[index].set_value(
-                        (speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    m_network->set_lowpass_family(NET_BUTTERWORTH);
-                    break;
-                case NET_ORDER_2ND:
-                    switch (m_lower_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BUTTERWORTH);
-                            break;
-                        case 2: // chebychev
-                            num_params = get_filter_params(NET_CHEBYCHEV,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_CHEBYCHEV);
-                            break;
-                        case 3: // linkwitz-riley
-                            num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_LINKWITZRILEY);
-                            break;
-                    }
-                    /* inductor */
-                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    break;
-                case NET_ORDER_3RD:
-                    switch (m_lower_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_3RD,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_3RD,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BUTTERWORTH);
-                            break;
-                    }
-                    /* inductor */
-                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    break;
-                case NET_ORDER_4TH:
-                    switch (m_lower_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_BUTTERWORTH);
-                            break;
-                        case 2: // gaussian
-                            num_params = get_filter_params(NET_GAUSSIAN,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_GAUSSIAN);
-                            break;
-                        case 3: // legendre
-                            num_params = get_filter_params(NET_LEGENDRE,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_LEGENDRE);
-                            break;
-                        case 4: // liner-phase
-                            num_params = get_filter_params(NET_LINEARPHASE,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_LINEARPHASE);
-                            break;
-                        case 5: // linkwitz-riley
-                            num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_LOWPASS);
-                            m_network->set_lowpass_family(NET_LINKWITZRILEY);
-                            break;
-                    }
-                    // inductor
-                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[3] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    break;
-            }
-        }
-        if (m_network->get_type() == NET_TYPE_HIGHPASS)
-        {
-            m_network->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
-
-            auto const cutoff = m_higher_co_freq_spinbutton->get_value();
-
-            switch (m_network->get_highpass_order())
-            {
-                case NET_ORDER_1ST:
-                    num_params = get_filter_params(NET_BUTTERWORTH,
-                                                   NET_ORDER_1ST,
-                                                   NET_TYPE_HIGHPASS);
-                    m_network->parts()[index].set_value(
-                        num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    m_network->set_highpass_family(NET_BUTTERWORTH);
-                    break;
-                case NET_ORDER_2ND:
-                    switch (m_higher_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BUTTERWORTH);
-                            break;
-                        case 2: // chebychev
-                            num_params = get_filter_params(NET_CHEBYCHEV,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_CHEBYCHEV);
-                            break;
-                        case 3: // linkwitz-riley
-                            num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                           NET_ORDER_2ND,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_LINKWITZRILEY);
-                            break;
-                    }
-                    // capacitor
-                    m_network->parts()[index].set_value(
-                        (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    // inductor
-                    m_network->parts()[index].set_value(
-                        (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    break;
-                case NET_ORDER_3RD:
-                    switch (m_higher_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_3RD,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_3RD,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BUTTERWORTH);
-                            break;
-                    }
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_network->parts()[index].set_value(num_params[1] * speaker.get_rdc()
-                                                        / cutoff * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        num_params[2] / (speaker.get_rdc() * cutoff) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    break;
-                case NET_ORDER_4TH:
-                    switch (m_higher_type_combo->get_active_row_number())
-                    {
-                        case 0: // bessel
-                            num_params = get_filter_params(NET_BESSEL,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BESSEL);
-                            break;
-                        case 1: // butterworth
-                            num_params = get_filter_params(NET_BUTTERWORTH,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_BUTTERWORTH);
-                            break;
-                        case 2: // gaussian
-                            num_params = get_filter_params(NET_GAUSSIAN,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_GAUSSIAN);
-                            break;
-                        case 3: // legendre
-                            num_params = get_filter_params(NET_LEGENDRE,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_LEGENDRE);
-                            break;
-                        case 4: // liner-phase
-                            num_params = get_filter_params(NET_LINEARPHASE,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_LINEARPHASE);
-                            break;
-                        case 5: // linkwitz-riley
-                            num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                           NET_ORDER_4TH,
-                                                           NET_TYPE_HIGHPASS);
-                            m_network->set_highpass_family(NET_LINKWITZRILEY);
-                            break;
-                    }
-
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_network->parts()[index].set_value(
-                        (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    /* capacitor */
-                    m_network->parts()[index].set_value(
-                        (num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
-                    m_network->parts()[index++].set_unit("u");
-                    /* inductor */
-                    m_network->parts()[index].set_value(
-                        (num_params[3] * speaker.get_rdc() / cutoff) * 1000);
-                    m_network->parts()[index++].set_unit("m");
-                    break;
-            }
-        }
-
-        m_network->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
-
-        if (m_imp_corr_checkbutton.get_active())
-        {
-            // calc imp corr here
-            m_network->get_imp_corr_C().set_value(
-                speaker.get_lvc() / 1000 / std::pow(speaker.get_rdc(), 2) * 1000000);
-            m_network->get_imp_corr_C().set_unit("u");
-            m_network->get_imp_corr_R().set_value(speaker.get_rdc());
-        }
-
-        m_network->set_adv_imp_model(
-            static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
-
-        m_network->set_has_damp(m_damp_spinbutton.get_value_as_int());
-
-        if (m_damp_spinbutton.get_value_as_int() != 0)
-        {
-            // Calculate resistors for damping network
-            auto const r_ser = speaker.get_rdc()
-                               * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
-            auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
-            m_network->get_damp_R2().set_value(r_ser);
-            m_network->get_damp_R1().set_value(r_par);
-        }
-
-        signal_net_modified_by_wizard();
-
-        if (g_settings.getValueBool("AutoUpdateFilterPlots"))
-        {
-            on_plot_crossover();
-        }
-        m_enable_edit = true;
+        return;
     }
+
+    std::puts("filter_link_frame::on_param_changed");
+
+    m_enable_edit = false;
+
+    driver speaker;
+
+    if (m_speaker_list != nullptr)
+    {
+        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
+    }
+
+    m_network->set_speaker(speaker.get_id_string());
+
+    int index = 0;
+    std::vector<double> num_params;
+
+    if (m_network->get_type() == NET_TYPE_LOWPASS)
+    {
+        m_network->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
+        double const cutoff = m_lower_co_freq_spinbutton->get_value();
+
+        switch (m_network->get_lowpass_order())
+        {
+            case NET_ORDER_1ST:
+                num_params = get_filter_params(NET_BUTTERWORTH,
+                                               NET_ORDER_1ST,
+                                               NET_TYPE_LOWPASS);
+                m_network->parts()[index].set_value(
+                    (speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
+                m_network->parts()[index++].set_unit("m");
+                m_network->set_lowpass_family(NET_BUTTERWORTH);
+                break;
+            case NET_ORDER_2ND:
+                switch (m_lower_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BUTTERWORTH);
+                        break;
+                    case 2: // chebychev
+                        num_params = get_filter_params(NET_CHEBYCHEV,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_CHEBYCHEV);
+                        break;
+                    case 3: // linkwitz-riley
+                        num_params = get_filter_params(NET_LINKWITZRILEY,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_LINKWITZRILEY);
+                        break;
+                }
+                /* inductor */
+                m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                break;
+            case NET_ORDER_3RD:
+                switch (m_lower_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_3RD,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_3RD,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BUTTERWORTH);
+                        break;
+                }
+                /* inductor */
+                m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                /* inductor */
+                m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                break;
+            case NET_ORDER_4TH:
+                switch (m_lower_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_BUTTERWORTH);
+                        break;
+                    case 2: // gaussian
+                        num_params = get_filter_params(NET_GAUSSIAN,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_GAUSSIAN);
+                        break;
+                    case 3: // legendre
+                        num_params = get_filter_params(NET_LEGENDRE,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_LEGENDRE);
+                        break;
+                    case 4: // liner-phase
+                        num_params = get_filter_params(NET_LINEARPHASE,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_LINEARPHASE);
+                        break;
+                    case 5: // linkwitz-riley
+                        num_params = get_filter_params(NET_LINKWITZRILEY,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_LOWPASS);
+                        m_network->set_lowpass_family(NET_LINKWITZRILEY);
+                        break;
+                }
+                // inductor
+                m_network->parts()[index].set_value(speaker.get_rdc() * num_params[0]
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[1] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                /* inductor */
+                m_network->parts()[index].set_value(speaker.get_rdc() * num_params[2]
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[3] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                break;
+        }
+    }
+    if (m_network->get_type() == NET_TYPE_HIGHPASS)
+    {
+        m_network->set_highpass_order(m_higher_order_combo->get_active_row_number() + 1);
+
+        auto const cutoff = m_higher_co_freq_spinbutton->get_value();
+
+        switch (m_network->get_highpass_order())
+        {
+            case NET_ORDER_1ST:
+                num_params = get_filter_params(NET_BUTTERWORTH,
+                                               NET_ORDER_1ST,
+                                               NET_TYPE_HIGHPASS);
+                m_network->parts()[index].set_value(
+                    num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                m_network->set_highpass_family(NET_BUTTERWORTH);
+                break;
+            case NET_ORDER_2ND:
+                switch (m_higher_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BUTTERWORTH);
+                        break;
+                    case 2: // chebychev
+                        num_params = get_filter_params(NET_CHEBYCHEV,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_CHEBYCHEV);
+                        break;
+                    case 3: // linkwitz-riley
+                        num_params = get_filter_params(NET_LINKWITZRILEY,
+                                                       NET_ORDER_2ND,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_LINKWITZRILEY);
+                        break;
+                }
+                // capacitor
+                m_network->parts()[index].set_value(
+                    (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                // inductor
+                m_network->parts()[index].set_value(
+                    (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+                m_network->parts()[index++].set_unit("m");
+                break;
+            case NET_ORDER_3RD:
+                switch (m_higher_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_3RD,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_3RD,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BUTTERWORTH);
+                        break;
+                }
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                /* inductor */
+                m_network->parts()[index].set_value(num_params[1] * speaker.get_rdc()
+                                                    / cutoff * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    num_params[2] / (speaker.get_rdc() * cutoff) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                break;
+            case NET_ORDER_4TH:
+                switch (m_higher_type_combo->get_active_row_number())
+                {
+                    case 0: // bessel
+                        num_params = get_filter_params(NET_BESSEL,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BESSEL);
+                        break;
+                    case 1: // butterworth
+                        num_params = get_filter_params(NET_BUTTERWORTH,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_BUTTERWORTH);
+                        break;
+                    case 2: // gaussian
+                        num_params = get_filter_params(NET_GAUSSIAN,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_GAUSSIAN);
+                        break;
+                    case 3: // legendre
+                        num_params = get_filter_params(NET_LEGENDRE,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_LEGENDRE);
+                        break;
+                    case 4: // liner-phase
+                        num_params = get_filter_params(NET_LINEARPHASE,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_LINEARPHASE);
+                        break;
+                    case 5: // linkwitz-riley
+                        num_params = get_filter_params(NET_LINKWITZRILEY,
+                                                       NET_ORDER_4TH,
+                                                       NET_TYPE_HIGHPASS);
+                        m_network->set_highpass_family(NET_LINKWITZRILEY);
+                        break;
+                }
+
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                /* inductor */
+                m_network->parts()[index].set_value(
+                    (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+                m_network->parts()[index++].set_unit("m");
+                /* capacitor */
+                m_network->parts()[index].set_value(
+                    (num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
+                m_network->parts()[index++].set_unit("u");
+                /* inductor */
+                m_network->parts()[index].set_value(
+                    (num_params[3] * speaker.get_rdc() / cutoff) * 1000);
+                m_network->parts()[index++].set_unit("m");
+                break;
+        }
+    }
+
+    m_network->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
+
+    if (m_imp_corr_checkbutton.get_active())
+    {
+        // calc imp corr here
+        m_network->get_imp_corr_C().set_value(speaker.get_lvc() / 1000
+                                              / std::pow(speaker.get_rdc(), 2) * 1000000);
+        m_network->get_imp_corr_C().set_unit("u");
+        m_network->get_imp_corr_R().set_value(speaker.get_rdc());
+    }
+
+    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
+
+    m_network->set_has_damp(m_damp_spinbutton.get_value_as_int());
+
+    if (m_damp_spinbutton.get_value_as_int() != 0)
+    {
+        // Calculate resistors for damping network
+        auto const r_ser = speaker.get_rdc()
+                           * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
+        auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
+        m_network->get_damp_R2().set_value(r_ser);
+        m_network->get_damp_R1().set_value(r_par);
+    }
+
+    signal_net_modified_by_wizard();
+
+    if (g_settings.getValueBool("AutoUpdateFilterPlots"))
+    {
+        on_plot_crossover();
+    }
+    m_enable_edit = true;
 }
 
 void filter_link_frame::on_net_updated(filter_network* network)
