@@ -39,6 +39,11 @@ crossover_wizard::crossover_wizard()
 
 void crossover_wizard::on_crossover_selected(Crossover* crossover)
 {
+    // Remove all previous filter settings
+    for (auto* children : m_vbox.get_children())
+    {
+        m_vbox.remove(*children);
+    }
 
     int index = 0;
 
