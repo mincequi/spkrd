@@ -182,5 +182,5 @@ private:
     Glib::RefPtr<Pango::Layout> m_refLayout;
 
     Crossover* m_crossover{nullptr};
-    driver_list* m_speaker_list{nullptr};
+    driver_list const* m_speaker_list{nullptr};
 };
