@@ -58,16 +58,10 @@ protected:
     virtual void treestore_add_item(crossover_cell_item const& foo);
 
 protected:
-    Gtk::ScrolledWindow m_ScrolledWindow;
-    Gtk::TreeView m_TreeView;
-    Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
-    std::vector<crossover_cell_item> m_vecItems;
-
-    // Pointer to currently selected crossover
-    Crossover* cover;
-
     struct model_columns : public Gtk::TreeModelColumnRecord
     {
+        model_columns();
+
         Gtk::TreeModelColumn<Glib::ustring> id_string;
         Gtk::TreeModelColumn<int> id;
         Gtk::TreeModelColumn<int> type;
@@ -75,8 +69,16 @@ protected:
         Gtk::TreeModelColumn<Glib::ustring> unit;
         Gtk::TreeModelColumn<bool> editable;
         Gtk::TreeModelColumn<bool> visible;
-        model_columns();
     };
+
+protected:
+    Gtk::ScrolledWindow m_ScrolledWindow;
+    Gtk::TreeView m_TreeView;
+    Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
+    std::vector<crossover_cell_item> m_vecItems;
+
+    // Pointer to currently selected crossover
+    Crossover* cover;
 
     model_columns const m_columns;
 };
