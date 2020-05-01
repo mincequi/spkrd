@@ -71,11 +71,13 @@ public:
 
     void redraw(Cairo::RefPtr<Cairo::Context> const& context);
 
-    void set_font(const std::string& font);
+    void set_font(std::string const& font);
 
     void select_plot(int index);
 
-    void replace_plot(int plot_index, std::vector<gspk::point> const& p, Gdk::Color const& ref_color);
+    void replace_plot(int plot_index,
+                      std::vector<gspk::point> const& p,
+                      Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
 

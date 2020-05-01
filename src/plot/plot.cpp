@@ -24,7 +24,13 @@
 #include <cmath>
 #include <iostream>
 
-plot::plot(int lower_x, int upper_x, int lower_y, int upper_y, bool logx, int y_zero_freq, bool enable_sec_scale)
+plot::plot(int lower_x,
+           int upper_x,
+           int lower_y,
+           int upper_y,
+           bool logx,
+           int y_zero_freq,
+           bool enable_sec_scale)
     : m_linesize{1},
       m_lower_x{lower_x},
       m_upper_x{upper_x > 10000 ? 20000 : 1000},
@@ -296,7 +302,10 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
     if (!m_y_label2.empty())
     {
-        this->draw_text_box(context, m_y_label2, box_width - 2.5 * BOX_FRAME_SIZE, BOX_FRAME_SIZE / 3);
+        this->draw_text_box(context,
+                            m_y_label2,
+                            box_width - 2.5 * BOX_FRAME_SIZE,
+                            BOX_FRAME_SIZE / 3);
     }
 
     auto const total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
@@ -343,7 +352,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                         f_div = point.get_x() / 1000.0;
                         f_mapped = std::log10(f_div);
                         // This is the x coordinate
-                        x = BOX_FRAME_SIZE + half_space_x + std::round((half_space_x / 2) * f_mapped);
+                        x = BOX_FRAME_SIZE + half_space_x
+                            + std::round((half_space_x / 2) * f_mapped);
                     }
                     else if (point.get_x() >= 10000)
                     {
@@ -371,7 +381,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                         f_div = point.get_x() / 100.0;
                         f_mapped = std::log10(f_div);
                         // This is the x coordinate
-                        x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
+                        x = BOX_FRAME_SIZE + half_space_x
+                            + std::round(half_space_x * f_mapped);
                     }
                 }
 
@@ -409,7 +420,9 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
                 auto const& color = m_colors.at(i);
 
-                context->set_source_rgb(color.get_red_p(), color.get_green_p(), color.get_blue_p());
+                context->set_source_rgb(color.get_red_p(),
+                                        color.get_green_p(),
+                                        color.get_blue_p());
 
                 context->move_to(points.front().get_x(), points.front().get_y());
 
@@ -542,7 +555,8 @@ void plot::draw_linear_grid(Cairo::RefPtr<Cairo::Context> const& context)
                            : frequency_range > 2000 && frequency_range <= 20000 ? 1000 : 10;
 
     // Calculate number of pixels between each vertical line
-    auto const x_inc_pixels = std::round(x_inc / static_cast<double>(frequency_range) * total_space_x);
+    auto const x_inc_pixels = std::round(x_inc / static_cast<double>(frequency_range)
+                                         * total_space_x);
 
     // Calculate number of lines we're going to draw
     auto const n_lines = std::round(frequency_range / static_cast<double>(x_inc));
