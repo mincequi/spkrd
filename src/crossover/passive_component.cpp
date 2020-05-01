@@ -26,11 +26,8 @@
 #include <utility>
 
 passive_component::passive_component(int type, double value, std::string unit)
-    : gspkObject()
+    : gspkObject(type), m_value{value}, m_unit{std::move(unit)}
 {
-    m_type = type;
-    m_value = value;
-    m_unit = std::move(unit);
 }
 
 passive_component::passive_component(xmlNodePtr parent) : gspkObject()
