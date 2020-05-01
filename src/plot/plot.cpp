@@ -127,9 +127,13 @@ auto plot::add_plot(std::vector<gspk::point> const& ref_point_vector,
 
         select_plot(m_colors.size() - 1);
 
-        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
-        get_window()->invalidate_rect(update_rect, false);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     allocation.get_width(),
+                                                     allocation.get_height()),
+                                      false);
     }
+
     // Return index of the new plot so that the owner of
     // this plot can keep track of plots
     return m_colors.size() - 1;
@@ -181,8 +185,11 @@ void plot::remove_plot(int n)
 
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, false);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      false);
     }
 }
 
@@ -194,8 +201,11 @@ void plot::remove_all_plots()
 
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, false);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      false);
     }
 }
 
@@ -204,8 +214,11 @@ void plot::hide_plot(int n)
     m_visible_plots[n] = !m_visible_plots[n];
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, false);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      false);
     }
 }
 
@@ -215,8 +228,11 @@ void plot::select_plot(int index)
 
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0, 0, get_allocation().get_width(), get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, false);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      false);
     }
 }
 
