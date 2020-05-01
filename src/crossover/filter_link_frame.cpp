@@ -33,7 +33,7 @@
 
 filter_link_frame::filter_link_frame(filter_network* network,
                                      std::string const& description,
-                                     driver_list* driver_list)
+                                     driver_list const* driver_list)
     : Gtk::Frame(""),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -89,7 +89,6 @@ filter_link_frame::filter_link_frame(filter_network* network,
 
     g_settings.defaultValueString("SPICECmdLine", "gnucap");
 
-    m_init = false;
     m_enable_edit = true;
 }
 
@@ -97,9 +96,6 @@ filter_link_frame::~filter_link_frame() = default;
 
 void filter_link_frame::initialise_damping()
 {
-    // Set damp value in dB here
-    auto const r_ser = m_network->get_damp_R1().get_value();
-
     driver speaker;
 
     if (m_speaker_list != nullptr)
@@ -109,7 +105,7 @@ void filter_link_frame::initialise_damping()
 
     m_damp_spinbutton.set_value(
         std::round(20
-                   * std::log10(r_ser
+                   * std::log10(m_network->get_damp_R1().get_value()
                                     / (g_settings.getValueBool("UseDriverImpedance")
                                            ? speaker.get_imp()
                                            : speaker.get_rdc())
@@ -118,23 +114,24 @@ void filter_link_frame::initialise_damping()
 
 void filter_link_frame::initialise_speaker_combobox()
 {
-    std::string const& speaker_name = m_network->get_speaker();
-
     m_speaker_combo.remove_all();
 
-    if (!speaker_name.empty())
+    std::string const& driver_name = m_network->get_speaker();
+
+    if (!driver_name.empty())
     {
-        m_speaker_combo.append(speaker_name);
+        m_speaker_combo.append(driver_name);
     }
 
     if (m_speaker_list != nullptr)
     {
-        for (auto& iter : m_speaker_list->data())
+        for (auto& driver : m_speaker_list->data())
         {
             // TODO: only insert speakers appropriate for this particular crossover
-            if (speaker_name != iter.get_id_string())
+            if (is_driver_and_filter_matched(driver, *m_network)
+                && driver_name != driver.get_id_string())
             {
-                m_speaker_combo.append(iter.get_id_string());
+                m_speaker_combo.append(driver.get_id_string());
             }
         }
     }
@@ -312,23 +309,19 @@ void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* order_box,
     switch (order_box->get_active_row_number() + 1)
     {
         case NET_ORDER_1ST:
-            std::puts("first order");
             type_box->append("Butterworth");
             break;
         case NET_ORDER_2ND:
-            std::puts("second order");
             type_box->append("Bessel");
             type_box->append("Butterworth");
             type_box->append("Chebychev");
             type_box->append("Linkwitz-Riley");
             break;
         case NET_ORDER_3RD:
-            std::puts("third order");
             type_box->append("Bessel");
             type_box->append("Butterworth");
             break;
         case NET_ORDER_4TH:
-            std::puts("fourth order");
             type_box->append("Bessel");
             type_box->append("Butterworth");
             type_box->append("Gaussian");
@@ -696,16 +689,10 @@ void filter_link_frame::on_param_changed()
 
 void filter_link_frame::on_net_updated(filter_network* network)
 {
-    if (m_network->get_id() == network->get_id())
+    if (m_network->get_id() == network->get_id()
+        && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
-#ifdef OUPUTDEBUG
-        std::cout << "filter_link_frame::on_net_updated\n";
-#endif
-
-        if (g_settings.getValueBool("AutoUpdateFilterPlots"))
-        {
-            this->on_plot_crossover();
-        }
+        this->on_plot_crossover();
     }
 }
 
@@ -717,12 +704,11 @@ void filter_link_frame::on_clear_and_plot()
 
 void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
 {
-#ifndef NDEBUG
     std::puts("filter_link_frame::on_speakerlist_loaded");
-#endif
+
     m_speaker_list = driver_list;
 
-    std::string const& speaker_name = m_network->get_speaker();
+    std::string const& driver_name = m_network->get_speaker();
 
     // Setup the speaker combo box
     bool speaker_is_in_speakerlist = false;
@@ -731,12 +717,12 @@ void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
 
     if (m_speaker_list != nullptr)
     {
-        for (auto& iter : m_speaker_list->data())
+        for (auto& driver : m_speaker_list->data())
         {
-            /* TODO: only insert speakers appropriate for this particular crossover */
-            if (speaker_name != iter.get_id_string())
+            if (is_driver_and_filter_matched(driver, *m_network)
+                && driver_name != driver.get_id_string())
             {
-                m_speaker_combo.append(iter.get_id_string());
+                m_speaker_combo.append(driver.get_id_string());
             }
             else
             {
@@ -746,7 +732,7 @@ void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
     }
     if (speaker_is_in_speakerlist)
     {
-        m_speaker_combo.prepend(speaker_name);
+        m_speaker_combo.prepend(driver_name);
         m_speaker_combo.set_active(0);
     }
 }

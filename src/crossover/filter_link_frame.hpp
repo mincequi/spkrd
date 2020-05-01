@@ -29,12 +29,19 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
+inline auto is_driver_and_filter_matched(driver const& driver,
+                                         filter_network const& network) -> bool
+{
+    return (is_tweeter_driver(driver.get_type()) && (network.get_type() & NET_TYPE_HIGHPASS))
+           || (is_bass_driver(driver.get_type()) && (network.get_type() & NET_TYPE_LOWPASS));
+}
+
 class filter_link_frame : public Gtk::Frame
 {
 public:
-    filter_link_frame(filter_network* net,
+    filter_link_frame(filter_network* network,
                       std::string const& description,
-                      driver_list* speaker_list);
+                      driver_list const* speaker_list);
 
     ~filter_link_frame() override;
 
@@ -104,7 +111,6 @@ private:
     std::string m_description;
     driver_list const* m_speaker_list;
     bool m_enable_edit{false};
-    bool m_init{true};
 
     int my_filter_plot_index{-1};
     std::vector<gspk::point> m_points;
