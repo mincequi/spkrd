@@ -671,7 +671,7 @@ void filter_link_frame::on_param_changed()
         m_network->get_imp_corr_R().set_value(speaker.get_rdc());
     }
 
-    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
+    m_network->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
 
     m_network->set_has_damp(m_damp_spinbutton.get_value_as_int());
 
