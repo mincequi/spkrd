@@ -473,7 +473,7 @@ void driver_editor::on_new_xml()
 
 void driver_editor::on_remove()
 {
-    if (const Gtk::TreeIter iter = m_TreeView.get_selection()->get_selected())
+    if (Gtk::TreeIter const iter = m_TreeView.get_selection()->get_selected())
     {
         Gtk::TreePath path = m_refListStore->get_path(iter);
 
@@ -486,14 +486,12 @@ void driver_editor::on_remove()
                 m_driver_list->data().erase(m_driver_list->data().begin() + index);
         }
     }
-    // m_menu.items()[MENU_INDEX_DELETE].set_sensitive(false);
 }
 
 void driver_editor::on_save()
 {
-#ifndef NDEBUG
     std::puts("SpeakerEditor: save");
-#endif
+
     if (new_xml_pressed)
     {
         on_save_as();
@@ -501,14 +499,11 @@ void driver_editor::on_save()
     }
     else
     {
-#ifndef NDEBUG
         std::cout << "SpeakerEditor: Filename = " << m_filename << "\n";
-#endif
+
         try
         {
             m_driver_list->to_xml(m_filename);
-            // FIXME gtk3 port
-            // m_menu.items()[MENU_INDEX_SAVE].set_sensitive(false);
             m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
             gspk::driverlist_modified() = false;
             m_modified = false;
