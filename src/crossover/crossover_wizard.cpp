@@ -29,6 +29,7 @@ crossover_wizard::crossover_wizard()
     set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     set_border_width(2);
 
+    m_vbox.set_valign(Gtk::ALIGN_START);
     add(m_vbox);
 
     show_all();
