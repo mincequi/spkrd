@@ -23,9 +23,6 @@
 #include "gspeakersobject.h"
 #include "passive_component.hpp"
 
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <vector>
 
 /* filter_network types */
@@ -101,7 +98,7 @@ public:
 
     auto get_speaker() const -> std::string const& { return m_speaker; }
 
-    auto get_adv_imp_model() const -> int { return m_adv_imp_model; }
+    auto get_adv_imp_model() const -> int { return m_advanced_impedance_model; }
 
     auto get_inv_pot() const -> bool { return m_invert_polarity; }
 
@@ -161,7 +158,7 @@ public:
 
     void set_speaker(std::string speaker) { m_speaker = std::move(speaker); }
 
-    void set_adv_imp_model(int model) { m_adv_imp_model = model; }
+    void set_adv_imp_model(int model) { m_advanced_impedance_model = model; }
 
     void set_inv_pol(bool pol) { m_invert_polarity = pol; }
 
@@ -188,7 +185,7 @@ protected:
 
     std::string m_speaker;
 
-    int m_adv_imp_model;
+    int m_advanced_impedance_model;
     bool m_invert_polarity;
 
 private:
@@ -197,17 +194,4 @@ private:
     /// new order: the new order for selected filter, NET_ORDER_1ST, ...
     /// which filter: filter link to work on, NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
     void setup_net_by_order(int new_order, int which_net);
-
-    void parse_type(xmlNodePtr node);
-    void parse_highpass_order(xmlNodePtr node);
-    void parse_lowpass_order(xmlNodePtr node);
-    void parse_has_imp_corr(xmlNodePtr node);
-    void parse_has_damp(xmlNodePtr node);
-    void parse_has_res(xmlNodePtr node);
-    void parse_parts(xmlNodePtr node);
-    void parse_lowpass_family(xmlNodePtr node);
-    void parse_highpass_family(xmlNodePtr node);
-    void parse_speaker(xmlNodePtr node);
-    void parse_adv_imp_model(xmlNodePtr node);
-    void parse_inv_pol(xmlNodePtr node);
 };
