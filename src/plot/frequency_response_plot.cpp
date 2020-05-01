@@ -83,10 +83,51 @@ auto lerp(std::vector<gspk::point> const& freq_resp_points, double x) -> double
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
 
-auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter_points,
+auto frequency_response_plot::parse_frequency_response_file(std::string const& filename)
+    -> std::vector<gspk::point>
+{
+    std::vector<gspk::point> points;
+
+    if (filename.empty())
+    {
+        points.emplace_back(0, 0);
+        points.emplace_back(20000, 0);
+        return points;
+    }
+
+    std::cout << "frequency_response_plot::on_add_plot: freq_resp_file = " << filename
+              << '\n';
+
+    std::ifstream input_file(filename.c_str());
+
+    if (!input_file.is_open())
+    {
+        throw std::runtime_error(_("Could not open ") + filename);
+    }
+
+    while (input_file)
+    {
+        double frequency;
+        double magnitude;
+        char comma;
+
+        input_file >> frequency >> comma >> magnitude;
+
+        if (comma != ',')
+        {
+            throw std::runtime_error("Frequency response requires comma separated "
+                                     "values in "
+                                     + filename);
+        }
+        points.emplace_back(std::round(frequency), magnitude);
+    }
+    return points;
+}
+
+auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_points,
                                           Gdk::Color const& color,
                                           int& output_plot_index,
-                                          filter_network* n) -> int
+                                          filter_network* network) -> int
 {
 #ifndef NDEBUG
     std::puts("frequency_response_plot::on_add_plot");
@@ -94,52 +135,18 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& filter
 
     auto const& plot_index = output_plot_index;
 
-    driver s;
+    driver current_driver;
     if (m_speakerlist != nullptr)
     {
-        s = m_speakerlist->get_by_id_string(n->get_speaker());
+        current_driver = m_speakerlist->get_by_id_string(network->get_speaker());
     }
 
-    std::vector<gspk::point> freq_resp_points;
-
-    if (!s.get_freq_resp_filename().empty())
-    {
-        std::cout << "frequency_response_plot::on_add_plot: freq_resp_file = "
-                  << s.get_freq_resp_filename() << "\n";
-
-        std::ifstream input_file(s.get_freq_resp_filename().c_str());
-
-        if (!input_file.is_open())
-        {
-            throw std::runtime_error(_("Could not open ") + s.get_freq_resp_filename());
-        }
-
-        while (input_file)
-        {
-            double frequency;
-            double magnitude;
-            char comma;
-
-            input_file >> frequency >> comma >> magnitude;
-
-            if (comma != ',')
-            {
-                throw std::runtime_error("Frequency response requires comma separated "
-                                         "values in "
-                                         + s.get_freq_resp_filename());
-            }
-            freq_resp_points.emplace_back(std::round(frequency), magnitude);
-        }
-    }
-    else
-    {
-        freq_resp_points.emplace_back(0, 0);
-        freq_resp_points.emplace_back(20000, 0);
-    }
+    std::vector<gspk::point> freq_resp_points = this->parse_frequency_response_file(
+        current_driver.get_freq_resp_filename());
 
     std::vector<gspk::point> points;
 
-    for (auto const& filter_point : filter_points)
+    for (auto const& filter_point : plot_points)
     {
         double filter_y = filter_point.get_y();
 
