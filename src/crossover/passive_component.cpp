@@ -18,15 +18,15 @@
 #include "passive_component.hpp"
 
 #include "common.h"
-
-#include <libxml/parser.h>
+#include "xml_parser.hpp"
 
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <utility>
 
-passive_component::passive_component(int type, double value, std::string unit) : gspkObject()
+passive_component::passive_component(int type, double value, std::string unit)
+    : gspkObject()
 {
     m_type = type;
     m_value = value;
@@ -35,73 +35,25 @@ passive_component::passive_component(int type, double value, std::string unit) :
 
 passive_component::passive_component(xmlNodePtr parent) : gspkObject()
 {
-    if (parent != nullptr && std::string((char*)parent->name) == "part")
-    {
-        try
-        {
-            parse_type(parent->children);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("passive_component: part node not found"));
-    }
-}
+    gspk::check_name(parent, "part");
 
-void passive_component::parse_type(xmlNodePtr node)
-{
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("type")))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
-        try
-        {
-            parse_value(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("passive_component: type node not found"));
-    }
-}
+    auto* child = parent->children;
 
-void passive_component::parse_value(xmlNodePtr node)
-{
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("value")))
+    // Check all fields exist
+    for (auto const& label : {"type", "value", "unit"})
     {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_value;
-        try
-        {
-            parse_unit(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
+        gspk::check_name(child, label);
+        child = child->next;
     }
-    else
-    {
-        throw std::runtime_error(_("passive_component: value node not found"));
-    }
-}
 
-void passive_component::parse_unit(xmlNodePtr node)
-{
-    if ((node != nullptr) && (std::string((char*)node->name) == std::string("unit")))
-    {
-        m_unit = std::string((char*)xmlNodeGetContent(node));
-    }
-    else
-    {
-        throw std::runtime_error(_("passive_component: unit node not found"));
-    }
+    child = parent->children;
+    m_type = gspk::parse_int(child, "type");
+
+    child = child->next;
+    m_value = gspk::parse_double(child, "value");
+
+    child = child->next;
+    m_unit = gspk::parse_string(child, "unit");
 }
 
 auto passive_component::to_xml_node(xmlNodePtr parent) -> xmlNodePtr

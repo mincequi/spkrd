@@ -17,6 +17,37 @@ TEST_CASE("Populate crossover list from xml")
     {
         auto crossovers = crossover_list(path + "/crossover1.xml");
         REQUIRE(crossovers.data().size() == 8);
+
+        {
+            auto const& crossover = crossovers.data().at(0);
+
+            REQUIRE(crossover.get_type() == 8);
+
+            {
+                auto const& network = crossover.networks().at(0);
+                REQUIRE(network.get_type() == 1);
+                REQUIRE(network.get_has_imp_corr() == false);
+                REQUIRE(network.get_has_damp() == false);
+                REQUIRE(network.get_has_res() == false);
+                REQUIRE(network.get_adv_imp_model() == 0);
+                REQUIRE(network.get_inv_pot() == false);
+                REQUIRE(network.get_speaker() == "Scan-Speak 15W/8530");
+                REQUIRE(network.get_lowpass_family() == 1);
+                REQUIRE(network.get_highpass_family() == 1);
+
+                REQUIRE(network.parts().at(0).get_value() == Approx(0.95525));
+                REQUIRE(network.parts().at(0).get_unit() == "m");
+                REQUIRE(network.parts().at(0).get_type() == 2);
+
+                REQUIRE(network.parts().at(1).get_value() == Approx(16.3534));
+                REQUIRE(network.parts().at(1).get_unit() == "u");
+                REQUIRE(network.parts().at(1).get_type() == 1);
+
+                REQUIRE(network.parts().at(2).get_value() == Approx(0.19116));
+                REQUIRE(network.parts().at(2).get_unit() == "m");
+                REQUIRE(network.parts().at(2).get_type() == 2);
+            }
+        }
     }
 }
 
