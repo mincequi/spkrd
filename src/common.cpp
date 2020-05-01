@@ -31,13 +31,7 @@ Settings g_settings;
 
 namespace gspk
 {
-auto to_ustring(double d) -> Glib::ustring
-{
-    char* str = nullptr;
-    GString* buffer = g_string_new(str);
-    g_string_printf(buffer, "%f", d);
-    return Glib::ustring(buffer->str);
-}
+auto to_ustring(double d) -> Glib::ustring { return Glib::ustring(std::to_string(d)); }
 
 auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring
 {
