@@ -41,13 +41,11 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 
 total_filter_plot::~total_filter_plot() = default;
 
-auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
-                                    Gdk::Color const& color,
-                                    int& output_plot_index,
-                                    filter_network* n) -> int
+auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& line_points,
+                                    Gdk::Color const& line_colour,
+                                    int& plot_index,
+                                    filter_network*) -> int
 {
-    auto const plot_index = output_plot_index;
-
     // Search for plot_index in the graph
     auto const position = std::find(cbegin(m_nets), cend(m_nets), plot_index);
 
@@ -55,38 +53,48 @@ auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& points,
     // plot_index not in graph insert it at the end of the vector */
     if (position != end(m_nets) && !m_points.empty())
     {
-        m_points[std::distance(cbegin(m_nets), position)] = points;
+        m_points[std::distance(cbegin(m_nets), position)] = line_points;
     }
     else
     {
-        m_points.push_back(points);
+        m_points.push_back(line_points);
         m_nets.push_back(plot_index);
     }
 
-    // sum the plots into one master plot
-    std::vector<gspk::point> pnts;
-
-    auto const red_colour = Gdk::Color("red");
-
     m_plot.remove_all_plots();
 
-    if (m_points.size() > 1)
+    if (m_points.empty())
     {
-        pnts = m_points[0];
-        m_plot.add_plot(m_points[0], red_colour);
-
-        for (std::size_t j = 1; j < m_points.size(); j++)
-        {
-            for (std::size_t k = 0; k < m_points[j].size(); k++)
-            {
-                pnts[k].set_y(10
-                              * std::log10(std::pow(10, pnts[k].get_y() / 10.0)
-                                           + std::pow(10, m_points[j][k].get_y() / 10.0)));
-            }
-            m_plot.add_plot(m_points[j], red_colour);
-        }
+        return 0;
     }
-    m_plot.select_plot(m_plot.add_plot(pnts, m_color));
+
+    // Plot individual contributions
+    std::for_each(cbegin(m_points), cend(m_points), [this](auto const& point) {
+        m_plot.add_plot(point, Gdk::Color("red"));
+    });
+
+    // Superimpose the plots to visualise complete frequency response
+    std::vector<gspk::point> summed_points = m_points.front();
+
+    auto dB_to_magnitude = [](auto const dB) { return std::pow(10, dB / 10.0); };
+    auto magnitude_to_dB = [](auto const magnitude) {
+        return 10.0 * std::log10(magnitude);
+    };
+
+    std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& line_points) {
+        std::transform(begin(line_points),
+                       end(line_points),
+                       begin(summed_points),
+                       begin(summed_points),
+                       [&](auto const& line_point, auto const& summed_point) {
+                           return gspk::point{summed_point.get_x(),
+                                              magnitude_to_dB(
+                                                  dB_to_magnitude(summed_point.get_y())
+                                                  + dB_to_magnitude(line_point.get_y()))};
+                       });
+    });
+
+    m_plot.select_plot(m_plot.add_plot(summed_points, m_color));
 
     return 0;
 }
