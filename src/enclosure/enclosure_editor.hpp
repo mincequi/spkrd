@@ -112,7 +112,7 @@ protected:
 
 private:
     enclosure* m_box = nullptr;
-    driver_list* m_speaker_list = nullptr;
+    driver_list const* m_speaker_list = nullptr;
 
     driver m_current_speaker;
     colours m_color_list;
