@@ -52,15 +52,14 @@ auto plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
     return true;
 }
 
-
-auto plot::add_plot(std::vector<gspk::point> const& ref_point_vector,
-                    Gdk::Color const& ref_color) -> int
+auto plot::add_plot(std::vector<gspk::point> const& plot_points,
+                    Gdk::Color const& line_colour) -> int
 {
     auto const& allocation = get_allocation();
 
     m_visible_plots.push_back(true);
-    m_colors.push_back(ref_color);
-    m_points.push_back(ref_point_vector);
+    m_colors.push_back(line_colour);
+    m_points.push_back(plot_points);
 
     int total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
     int half_space_x = std::round(total_space_x / 2);
@@ -69,10 +68,8 @@ auto plot::add_plot(std::vector<gspk::point> const& ref_point_vector,
 
     std::vector<Gdk::Point> points;
 
-    for (auto const& ref_point : ref_point_vector)
+    for (auto point : plot_points)
     {
-        auto point = ref_point;
-
         int x, y;
 
         if (m_upper_x == 20000)
@@ -129,7 +126,7 @@ auto plot::add_plot(std::vector<gspk::point> const& ref_point_vector,
     // Don't draw the line until we have it all done
     if (m_visible)
     {
-        this->draw_lines(m_context, points, ref_color);
+        this->draw_lines(m_context, points, line_colour);
 
         select_plot(m_colors.size() - 1);
 
@@ -155,9 +152,7 @@ void plot::draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
     }
 
     context->save();
-
     context->set_source_rgb(colour.get_red_p(), colour.get_green_p(), colour.get_blue_p());
-
     context->move_to(points.front().get_x(), points.front().get_y());
 
     std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
@@ -170,22 +165,23 @@ void plot::draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
 
 void plot::replace_plot(int const plot_index,
                         std::vector<gspk::point> const& points,
-                        Gdk::Color const& ref_color)
+                        Gdk::Color const& line_colour)
 {
     m_points[plot_index] = points;
-    m_colors[plot_index] = ref_color;
+    m_colors[plot_index] = line_colour;
 }
 
-void plot::remove_plot(int n)
+void plot::remove_plot(int const plot_index)
 {
-    if (n > static_cast<int>(m_points.size()))
+    if (plot_index > static_cast<int>(m_points.size()))
     {
-        throw std::runtime_error("Plot removed was greater than number of available plots");
+        throw std::runtime_error("Plot removed was greater than number of available "
+                                 "plots");
     }
 
-    m_points.erase(std::next(begin(m_points), n));
-    m_colors.erase(std::next(begin(m_colors), n));
-    m_visible_plots.erase(std::next(begin(m_visible_plots), n));
+    m_points.erase(std::next(begin(m_points), plot_index));
+    m_colors.erase(std::next(begin(m_colors), plot_index));
+    m_visible_plots.erase(std::next(begin(m_visible_plots), plot_index));
 
     m_selected_plot = -1;
 
@@ -215,9 +211,9 @@ void plot::remove_all_plots()
     }
 }
 
-void plot::hide_plot(int n)
+void plot::hide_plot(int const plot_index)
 {
-    m_visible_plots[n] = !m_visible_plots[n];
+    m_visible_plots[plot_index] = !m_visible_plots[plot_index];
     if (m_visible)
     {
         get_window()->invalidate_rect(Gdk::Rectangle(0,
