@@ -102,7 +102,7 @@ private:
 
     filter_network* m_network;
     std::string m_description;
-    driver_list* m_speaker_list;
+    driver_list const* m_speaker_list;
     bool m_enable_edit{false};
     bool m_init{true};
 
