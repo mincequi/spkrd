@@ -829,6 +829,7 @@ void filter_link_frame::perform_spice_simulation()
     }
 
     std::string spice_filename;
+
     try
     {
         spice_filename = m_network->to_SPICE(speaker,
@@ -925,6 +926,7 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
     switch (net_order)
     {
         case NET_ORDER_1ST:
+        {
             switch (net_type)
             {
                 case NET_TYPE_LOWPASS:
@@ -935,10 +937,13 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                     break;
             }
             break;
+        }
         case NET_ORDER_2ND:
+        {
             switch (net_name_type)
             {
                 case NET_BESSEL:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -951,7 +956,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_BUTTERWORTH:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -964,7 +971,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_CHEBYCHEV:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -977,7 +986,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_LINKWITZRILEY:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -990,12 +1001,16 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
             }
             break;
+        }
         case NET_ORDER_3RD:
+        {
             switch (net_name_type)
             {
                 case NET_BESSEL:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1010,7 +1025,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_BUTTERWORTH:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1025,12 +1042,16 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
             }
             break;
+        }
         case NET_ORDER_4TH:
+        {
             switch (net_name_type)
             {
                 case NET_BESSEL:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1047,7 +1068,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_BUTTERWORTH:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1064,7 +1087,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_GAUSSIAN:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1081,7 +1106,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_LEGENDRE:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1097,7 +1124,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             nums.push_back(0.2783);
                             break;
                     }
+                }
                 case NET_LINEARPHASE:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1114,7 +1143,9 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
                 case NET_LINKWITZRILEY:
+                {
                     switch (net_type)
                     {
                         case NET_TYPE_LOWPASS:
@@ -1131,8 +1162,10 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
                             break;
                     }
                     break;
+                }
             }
             break;
+        }
     }
 
     if (nums.empty())
@@ -1151,6 +1184,7 @@ void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, in
     switch (order)
     {
         case NET_ORDER_2ND:
+        {
             switch (family)
             {
                 case NET_BESSEL:
@@ -1167,7 +1201,9 @@ void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, in
                     break;
             }
             break;
+        }
         case NET_ORDER_3RD:
+        {
             switch (family)
             {
                 case NET_BUTTERWORTH:
@@ -1178,7 +1214,9 @@ void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, in
                     break;
             }
             break;
+        }
         case NET_ORDER_4TH:
+        {
             switch (family)
             {
                 case NET_BESSEL:
@@ -1201,5 +1239,6 @@ void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, in
                     break;
             }
             break;
+        }
     }
 }
