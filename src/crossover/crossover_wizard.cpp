@@ -42,15 +42,6 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
 #ifndef NDEBUG
     std::puts("crossover_wizard::on_crossover_selected");
 #endif
-    // We want to make sure the content of m_vbox get deleted
-    if (!m_vbox.get_children().empty())
-    {
-        for (int i = m_vbox.get_children().size() - 1; i >= 0; i--)
-        {
-            // FIXME remove this hack with Gtk::make_managed<>
-            // delete m_vbox.get_children()[i];
-        }
-    }
 
     int index = 0;
 
