@@ -138,8 +138,8 @@ void enclosure_editor::connect_signals()
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
                    FB1_ENTRY_CHANGED));
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_drivers_loaded));
 
     // Setup option menu
     m_box_type_combo.signal_changed().connect(
@@ -292,12 +292,12 @@ void enclosure_editor::on_box_selected(enclosure* b)
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
         {
-            m_current_speaker = m_speaker_list->get_by_id_string(b->get_speaker());
+            m_current_speaker = m_drivers->get_by_id_string(b->get_speaker());
 
             // Remove all the previous entries and populate again
             m_bass_speaker_combo.remove_all();
 
-            for (auto const& speaker : m_speaker_list->data())
+            for (auto const& speaker : m_drivers->data())
             {
                 if (is_bass_driver(speaker.get_type())
                     && m_current_speaker.get_id_string() != speaker.get_id_string())
@@ -330,14 +330,14 @@ void enclosure_editor::on_box_selected(enclosure* b)
     m_disable_signals = false;
 }
 
-void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
+void enclosure_editor::on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers)
 {
     if (m_disable_signals)
     {
         return;
     }
     m_disable_signals = true;
-    m_speaker_list = driver_list;
+    m_drivers = drivers;
 
     m_bass_speaker_combo.remove_all();
 
@@ -346,7 +346,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
     // got a selected box: insert all drivers and don't care about the order
     if (m_box != nullptr)
     {
-        for (auto const& speaker : m_speaker_list->data())
+        for (auto const& speaker : m_drivers->data())
         {
             if (is_bass_driver(speaker.get_type())
                 && m_box->get_speaker() != speaker.get_id_string())
@@ -358,7 +358,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
     }
     else
     {
-        for (auto const& speaker : m_speaker_list->data())
+        for (auto const& speaker : m_drivers->data())
         {
             if (is_bass_driver(speaker.get_type()))
             {
@@ -367,7 +367,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
         }
     }
 
-    m_bass_speaker_combo.set_active(m_speaker_list->data().empty() ? -1 : 0);
+    m_bass_speaker_combo.set_active(m_drivers->data().empty() ? -1 : 0);
 
     speaker_list_is_loaded = true;
     m_disable_signals = false;
@@ -385,9 +385,8 @@ void enclosure_editor::on_combo_entry_changed()
 
     m_disable_signals = true;
 
-    // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(
-        m_bass_speaker_combo.get_active_text());
+    // Search for the new entry string in the driver list
+    m_current_speaker = m_drivers->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_vas_label.set_text(gspk::to_ustring(m_current_speaker.get_vas(), 2, 1));

@@ -42,7 +42,7 @@ private:
 
     void on_crossover_selected(Crossover* selected_crossover);
 
-    void on_speakerlist_selected(driver_list* selected_speaker_list);
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& selected_speaker_list);
 
     void on_net_modified();
 
@@ -182,5 +182,5 @@ private:
     Glib::RefPtr<Pango::Layout> m_refLayout;
 
     Crossover* m_crossover{nullptr};
-    driver_list const* m_speaker_list{nullptr};
+    std::shared_ptr<driver_list const> m_drivers{nullptr};
 };

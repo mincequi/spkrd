@@ -42,8 +42,8 @@ crossover_image_view::crossover_image_view()
     signal_net_modified_by_wizard.connect(
         sigc::mem_fun(*this, &crossover_image_view::on_net_modified));
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &crossover_image_view::on_drivers_loaded));
 }
 
 auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
@@ -249,9 +249,9 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         driver speaker;
 
-        if (m_speaker_list != nullptr)
+        if (m_drivers != nullptr)
         {
-            speaker = m_speaker_list->get_by_id_string(networks[i].get_speaker());
+            speaker = m_drivers->get_by_id_string(networks[i].get_speaker());
         }
         draw_driver(context,
                     (1 + lowpass_order + highpass_order + driver_offset) * part_width,
@@ -301,9 +301,10 @@ void crossover_image_view::on_net_modified()
     }
 }
 
-void crossover_image_view::on_speakerlist_selected(driver_list* selected_speaker_list)
+void crossover_image_view::on_drivers_loaded(
+    std::shared_ptr<driver_list const> const& selected_speaker_list)
 {
-    m_speaker_list = selected_speaker_list;
+    m_drivers = selected_speaker_list;
 
     if (m_visible)
     {

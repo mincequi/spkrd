@@ -124,7 +124,7 @@ protected:
     Gtk::Label m_label;
 
     enclosure_list m_box_list;
-    driver_list m_speaker_list;
+    driver_list m_drivers;
 
     colours m_color_list;
 

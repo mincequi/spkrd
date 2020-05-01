@@ -21,7 +21,7 @@
 #include "common.h"
 
 crossover_wizard::crossover_wizard()
-    : Gtk::ScrolledWindow(), m_vbox(Gtk::ORIENTATION_VERTICAL), m_speaker_list{nullptr}
+    : Gtk::ScrolledWindow(), m_vbox(Gtk::ORIENTATION_VERTICAL), m_drivers{nullptr}
 {
     signal_crossover_selected.connect(
         sigc::mem_fun(*this, &crossover_wizard::on_crossover_selected));
@@ -34,8 +34,8 @@ crossover_wizard::crossover_wizard()
 
     show_all();
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &crossover_wizard::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &crossover_wizard::on_drivers_loaded));
 }
 
 void crossover_wizard::on_crossover_selected(Crossover* crossover)
@@ -62,14 +62,14 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
                                                                         _("Woofer/"
                                                                           "midrange "
                                                                           "filter"),
-                                                                        m_speaker_list));
+                                                                        m_drivers));
             }
             else
             {
                 m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
                                                                         _("Tweeter "
                                                                           "filter"),
-                                                                        m_speaker_list));
+                                                                        m_drivers));
             }
         }
         else if (type == CROSSOVER_TYPE_THREEWAY)
@@ -81,7 +81,7 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
                                                            : index == 1
                                                                  ? _("Midrange filter")
                                                                  : _("Tweeter filter")),
-                                                      m_speaker_list));
+                                                      m_drivers));
         }
         else if (type == (CROSSOVER_TYPE_TWOWAY | CROSSOVER_TYPE_LOWPASS))
         {
@@ -90,7 +90,7 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
                 m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
                                                                         _("Woofer "
                                                                           "filter"),
-                                                                        m_speaker_list));
+                                                                        m_drivers));
             }
             else if (index == 1)
             {
@@ -98,27 +98,26 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
                                                                         _("Woofer/"
                                                                           "midrange "
                                                                           "filter"),
-                                                                        m_speaker_list));
+                                                                        m_drivers));
             }
             else
             {
                 m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
                                                                         _("Tweeter "
                                                                           "filter"),
-                                                                        m_speaker_list));
+                                                                        m_drivers));
             }
         }
         else
         {
-            m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                    _("filter"),
-                                                                    m_speaker_list));
+            m_vbox.pack_start(
+                *Gtk::make_managed<filter_link_frame>(&network, _("filter"), m_drivers));
         }
         ++index;
     }
 }
 
-void crossover_wizard::on_speaker_list_loaded(driver_list* driver_list)
+void crossover_wizard::on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers)
 {
-    m_speaker_list = driver_list;
+    m_drivers = drivers;
 }

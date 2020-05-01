@@ -41,7 +41,7 @@ class filter_link_frame : public Gtk::Frame
 public:
     filter_link_frame(filter_network* network,
                       std::string const& description,
-                      driver_list const* speaker_list);
+                      std::shared_ptr<driver_list const> const& drivers);
 
     ~filter_link_frame() override;
 
@@ -56,7 +56,7 @@ private:
 
     void on_clear_and_plot();
 
-    void on_speakerlist_loaded(driver_list* driver_list);
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
     void on_settings_changed(std::string const& s);
 
@@ -109,7 +109,7 @@ private:
 
     filter_network* m_network;
     std::string m_description;
-    driver_list const* m_speaker_list;
+    std::shared_ptr<driver_list const> m_drivers;
     bool m_enable_edit{false};
 
     int my_filter_plot_index{-1};

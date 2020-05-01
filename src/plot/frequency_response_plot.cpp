@@ -42,8 +42,8 @@ frequency_response_plot::frequency_response_plot()
 
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &frequency_response_plot::on_speakerlist_loaded));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &frequency_response_plot::on_drivers_loaded));
     signal_add_crossover_plot.connect(
         sigc::mem_fun(*this, &frequency_response_plot::on_add_plot));
     signal_crossover_selected.connect(
@@ -216,10 +216,10 @@ void frequency_response_plot::on_crossover_selected(Crossover*)
     clear();
 }
 
-void frequency_response_plot::on_speakerlist_loaded(driver_list* driver_list)
+void frequency_response_plot::on_drivers_loaded(std::shared_ptr<driver_list const> const& driver_list)
 {
 #ifndef NDEBUG
-    std::puts("frequency_response_plot::on_speakerlist_loaded");
+    std::puts("frequency_response_plot::on_drivers_loaded");
 #endif
     m_speakerlist = driver_list;
 }

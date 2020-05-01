@@ -5,6 +5,8 @@
 
 #include <sigc++/signal.h>
 #include <gdkmm/color.h>
+
+#include <memory>
 #include <vector>
 
 class enclosure;
@@ -21,11 +23,11 @@ class driver_list;
 extern sigc::signal1<void, Crossover*> signal_crossover_selected;
 
 /*
- * signal_speakerlist_loaded
+ * signal_drivers_loaded
  * Emit this signal when you want to change current speakerlist.
  * driver_list arg is the new driver_list
  */
-extern sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
+extern sigc::signal1<void, std::shared_ptr<driver_list const>> signal_drivers_loaded;
 
 /*
  * signal_box_selected

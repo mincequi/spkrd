@@ -73,7 +73,7 @@ public:
 protected:
     void on_box_selected(enclosure* b);
 
-    void on_speaker_list_loaded(driver_list*);
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
     void on_combo_entry_changed();
 
@@ -112,7 +112,7 @@ protected:
 
 private:
     enclosure* m_box = nullptr;
-    driver_list const* m_speaker_list = nullptr;
+    std::shared_ptr<driver_list const> m_drivers;
 
     driver m_current_speaker;
     colours m_color_list;

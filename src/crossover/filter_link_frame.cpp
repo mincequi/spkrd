@@ -33,7 +33,7 @@
 
 filter_link_frame::filter_link_frame(filter_network* network,
                                      std::string const& description,
-                                     driver_list const* driver_list)
+                                     std::shared_ptr<driver_list const> const& drivers)
     : Gtk::Frame(""),
       m_vbox(Gtk::ORIENTATION_VERTICAL),
       m_lower_co_freq_digits(Gtk::Adjustment::create(2000, 1, 20000, 1, 100)),
@@ -45,7 +45,7 @@ filter_link_frame::filter_link_frame(filter_network* network,
       m_adv_imp_model_checkbutton(_("Use advanced driver impendance model")),
       m_network(network),
       m_description(description),
-      m_speaker_list(driver_list)
+      m_drivers(drivers)
 {
     set_border_width(2);
     set_shadow_type(Gtk::SHADOW_NONE);
@@ -98,9 +98,9 @@ void filter_link_frame::initialise_damping()
 {
     driver speaker;
 
-    if (m_speaker_list != nullptr)
+    if (m_drivers != nullptr)
     {
-        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
+        speaker = m_drivers->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
     m_damp_spinbutton.set_value(
@@ -123,9 +123,9 @@ void filter_link_frame::initialise_speaker_combobox()
         m_speaker_combo.append(driver_name);
     }
 
-    if (m_speaker_list != nullptr)
+    if (m_drivers != nullptr)
     {
-        for (auto& driver : m_speaker_list->data())
+        for (auto& driver : m_drivers->data())
         {
             // TODO: only insert speakers appropriate for this particular crossover
             if (is_driver_and_filter_matched(driver, *m_network)
@@ -289,8 +289,8 @@ void filter_link_frame::connect_signals()
     signal_plot_crossover.connect(
         sigc::mem_fun(*this, &filter_link_frame::on_clear_and_plot));
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &filter_link_frame::on_speakerlist_loaded));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &filter_link_frame::on_drivers_loaded));
     g_settings.settings_changed.connect(
         sigc::mem_fun(*this, &filter_link_frame::on_settings_changed));
 }
@@ -358,9 +358,9 @@ void filter_link_frame::on_param_changed()
 
     driver speaker;
 
-    if (m_speaker_list != nullptr)
+    if (m_drivers != nullptr)
     {
-        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
+        speaker = m_drivers->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
     m_network->set_speaker(speaker.get_id_string());
@@ -702,11 +702,11 @@ void filter_link_frame::on_clear_and_plot()
     this->on_plot_crossover();
 }
 
-void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
+void filter_link_frame::on_drivers_loaded(std::shared_ptr<driver_list const> const& driver_list)
 {
-    std::puts("filter_link_frame::on_speakerlist_loaded");
+    std::puts("filter_link_frame::on_drivers_loaded");
 
-    m_speaker_list = driver_list;
+    m_drivers = driver_list;
 
     std::string const& driver_name = m_network->get_speaker();
 
@@ -715,9 +715,9 @@ void filter_link_frame::on_speakerlist_loaded(driver_list* driver_list)
 
     m_speaker_combo.remove_all();
 
-    if (m_speaker_list != nullptr)
+    if (m_drivers != nullptr)
     {
-        for (auto& driver : m_speaker_list->data())
+        for (auto& driver : m_drivers->data())
         {
             if (is_driver_and_filter_matched(driver, *m_network)
                 && driver_name != driver.get_id_string())
@@ -810,9 +810,9 @@ void filter_link_frame::perform_spice_simulation()
 {
     // Create spice code for this network
     driver speaker;
-    if (m_speaker_list)
+    if (m_drivers)
     {
-        speaker = m_speaker_list->get_by_id_string(m_speaker_combo.get_active_text());
+        speaker = m_drivers->get_by_id_string(m_speaker_combo.get_active_text());
     }
 
     std::string spice_filename;

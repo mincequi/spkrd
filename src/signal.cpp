@@ -2,7 +2,9 @@
 #include "signal.hpp"
 
 sigc::signal1<void, Crossover*> signal_crossover_selected;
-sigc::signal1<void, driver_list*> signal_speakerlist_loaded;
+
+sigc::signal1<void, std::shared_ptr<driver_list const>> signal_drivers_loaded;
+
 sigc::signal1<void, enclosure*> signal_box_selected;
 sigc::signal1<void, enclosure*> signal_add_to_boxlist;
 sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
