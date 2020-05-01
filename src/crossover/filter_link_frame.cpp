@@ -93,6 +93,8 @@ filter_link_frame::filter_link_frame(filter_network* network,
     m_enable_edit = true;
 }
 
+filter_link_frame::~filter_link_frame() = default;
+
 void filter_link_frame::initialise_damping()
 {
     // Set damp value in dB here
@@ -295,8 +297,6 @@ void filter_link_frame::connect_signals()
     g_settings.settings_changed.connect(
         sigc::mem_fun(*this, &filter_link_frame::on_settings_changed));
 }
-
-filter_link_frame::~filter_link_frame() = default;
 
 void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* order_box,
                                           Gtk::ComboBoxText* type_box)
