@@ -8,9 +8,13 @@
 
 namespace gspk
 {
-auto parse_double(xmlNodePtr node, std::string const& label) -> double;
+auto parse_double(xmlNodePtr const node, std::string const& label) noexcept(false)
+    -> double;
 
-auto parse_int(xmlNodePtr node, std::string const& label) -> int;
+auto parse_int(xmlNodePtr const node, std::string const& label) noexcept(false) -> int;
 
-auto parse_string(xmlNodePtr node, std::string const& label) -> std::string;
+auto parse_string(xmlNodePtr const node, std::string const& label) noexcept(false)
+    -> std::string;
+
+void check_name(xmlNodePtr const node, std::string const& label) noexcept(false);
 }

@@ -52,4 +52,12 @@ auto parse_string(xmlNodePtr const node, std::string const& label) -> std::strin
     }
     return value;
 }
+
+void check_name(xmlNodePtr const node, std::string const& label)
+{
+    if (!node || std::string((char*)node->name) != label)
+    {
+        throw std::runtime_error(_("Node") + label + _("not found"));
+    }
+}
 }
