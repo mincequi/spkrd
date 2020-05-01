@@ -60,5 +60,5 @@ private:
     std::vector<int> m_nets;
     Gdk::Color m_color;
     std::vector<std::vector<gspk::point>> m_points;
-    driver_list* m_speakerlist;
+    driver_list const* m_speakerlist;
 };
