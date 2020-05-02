@@ -95,8 +95,8 @@ protected:
     Gtk::Box m_hbox;
 
     Gtk::ComboBoxText m_bass_speaker_combo;
-    Gtk::ComboBoxText m_box_damping_combo;
-    Gtk::ComboBoxText m_box_type_combo;
+    Gtk::ComboBoxText m_enclosure_damping_combo;
+    Gtk::ComboBoxText m_enclosure_type_combo;
 
     Gtk::Label m_speaker_qts_label;
     Gtk::Label m_speaker_vas_label;
@@ -111,7 +111,7 @@ protected:
     Gtk::Entry m_fb2_entry;
 
 private:
-    enclosure* m_box = nullptr;
+    enclosure* m_enclosure;
     std::shared_ptr<driver_list const> m_drivers;
 
     driver m_current_speaker;
