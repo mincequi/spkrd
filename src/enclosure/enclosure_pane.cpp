@@ -37,6 +37,7 @@ constexpr auto TOOLBAR_INDEX_DELETE = 5;
 constexpr auto TOOLBAR_INDEX_DELETE_BOXPLOT = 10;
 
 enclosure_pane::enclosure_pane()
+    : m_edit_vpaned(Gtk::ORIENTATION_VERTICAL), m_plot_vpaned(Gtk::ORIENTATION_VERTICAL)
 {
     g_settings.settings_changed.connect(
         sigc::mem_fun(*this, &enclosure_pane::on_settings_changed));

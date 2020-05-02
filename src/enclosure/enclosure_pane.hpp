@@ -59,8 +59,8 @@ private:
     plot_history m_plot_history;
     box_plot m_box_plot;
 
-    Gtk::VPaned m_edit_vpaned;
-    Gtk::VPaned m_plot_vpaned;
+    Gtk::Paned m_edit_vpaned;
+    Gtk::Paned m_plot_vpaned;
 
     Gtk::MenuItem m_menu_item;
     Gtk::Toolbar* m_tbar{nullptr};

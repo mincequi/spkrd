@@ -23,7 +23,7 @@
 
 #include "box_plot.hpp"
 
-box_plot::box_plot() : Gtk::Frame(""), m_plot(1, 1000)
+box_plot::box_plot() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL), m_plot(1, 1000)
 {
     set_border_width(2);
     set_shadow_type(Gtk::SHADOW_NONE);
