@@ -73,11 +73,11 @@ filter_link_frame::filter_link_frame(filter_network* network,
     {
         this->initialise_damping();
     }
-    if (network->get_type() & NET_TYPE_HIGHPASS)
+    if ((network->get_type() & NET_TYPE_HIGHPASS) != 0)
     {
         this->initialise_highpass_filter();
     }
-    if (m_network->get_type() & NET_TYPE_LOWPASS)
+    if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
         this->initialise_lowpass_filter();
     }
@@ -247,7 +247,7 @@ void filter_link_frame::connect_signals()
     m_speaker_combo.signal_changed().connect(
         sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
 
-    if (m_network->get_type() & NET_TYPE_LOWPASS)
+    if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
         m_lower_order_combo->signal_changed().connect(
             sigc::bind(sigc::mem_fun(*this, &filter_link_frame::on_order_selected),
@@ -260,7 +260,7 @@ void filter_link_frame::connect_signals()
         m_lower_co_freq_spinbutton->signal_value_changed().connect(
             sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
     }
-    if (m_network->get_type() & NET_TYPE_HIGHPASS)
+    if ((m_network->get_type() & NET_TYPE_HIGHPASS) != 0)
     {
         m_higher_order_combo->signal_changed().connect(
             sigc::bind(sigc::mem_fun(*this, &filter_link_frame::on_order_selected),
@@ -663,9 +663,9 @@ void filter_link_frame::on_param_changed()
         m_network->get_imp_corr_R().set_value(speaker.get_rdc());
     }
 
-    m_network->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
+    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
 
-    m_network->set_has_damp(m_damp_spinbutton.get_value_as_int());
+    m_network->set_has_damp(m_damp_spinbutton.get_value_as_int() != 0);
 
     if (m_damp_spinbutton.get_value_as_int() != 0)
     {
@@ -742,9 +742,9 @@ void filter_link_frame::on_plot_crossover()
 
     this->perform_spice_simulation();
 
-    Gdk::Color const line_colour = m_network->get_type() & NET_TYPE_LOWPASS
+    Gdk::Color const line_colour = (m_network->get_type() & NET_TYPE_LOWPASS) != 0
                                        ? Gdk::Color("blue")
-                                       : m_network->get_type() & NET_TYPE_HIGHPASS
+                                       : (m_network->get_type() & NET_TYPE_HIGHPASS) != 0
                                              ? Gdk::Color("red")
                                              : Gdk::Color("darkgreen");
     // send the spice data to the plot
@@ -757,7 +757,7 @@ void filter_link_frame::on_plot_crossover()
 
     m_enable_edit = false;
 
-    if (m_network->get_type() & NET_TYPE_LOWPASS)
+    if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
         auto const location = std::find_if(rbegin(m_points),
                                            rend(m_points),
@@ -780,7 +780,7 @@ void filter_link_frame::on_plot_crossover()
         m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
                                               + m_points[index + 1].get_x());
     }
-    if (m_network->get_type() & NET_TYPE_HIGHPASS)
+    if ((m_network->get_type() & NET_TYPE_HIGHPASS) != 0)
     {
         auto const location = std::find_if(begin(m_points),
                                            end(m_points),

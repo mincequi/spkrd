@@ -30,11 +30,20 @@ constexpr auto SPEAKER_TYPE_MIDRANGE = 2;
 constexpr auto SPEAKER_TYPE_TWEETER = 4;
 
 /// \return True is the driver has a bass frequency response
-constexpr bool is_bass_driver(int const value) { return value & SPEAKER_TYPE_BASS; }
+constexpr auto is_bass_driver(int const value) -> bool
+{
+    return (value & SPEAKER_TYPE_BASS) != 0;
+}
 /// \return True is the driver has a midrange frequency response
-constexpr bool is_midrange_driver(int const value) { return value & SPEAKER_TYPE_MIDRANGE; }
+constexpr auto is_midrange_driver(int const value) -> bool
+{
+    return (value & SPEAKER_TYPE_MIDRANGE) != 0;
+}
 /// \return True is the driver has a high frequency response
-constexpr bool is_tweeter_driver(int const value) { return value & SPEAKER_TYPE_TWEETER; }
+constexpr auto is_tweeter_driver(int const value) -> bool
+{
+    return (value & SPEAKER_TYPE_TWEETER) != 0;
+}
 
 /// This class contains data for a speaker
 class driver : public gspkObject

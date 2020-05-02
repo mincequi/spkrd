@@ -32,8 +32,10 @@
 inline auto is_driver_and_filter_matched(driver const& driver,
                                          filter_network const& network) -> bool
 {
-    return (is_tweeter_driver(driver.get_type()) && (network.get_type() & NET_TYPE_HIGHPASS))
-           || (is_bass_driver(driver.get_type()) && (network.get_type() & NET_TYPE_LOWPASS));
+    return (is_tweeter_driver(driver.get_type())
+            && ((network.get_type() & NET_TYPE_HIGHPASS) != 0))
+           || (is_bass_driver(driver.get_type())
+               && ((network.get_type() & NET_TYPE_LOWPASS) != 0));
 }
 
 class filter_link_frame : public Gtk::Frame

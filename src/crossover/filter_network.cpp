@@ -149,13 +149,13 @@ filter_network::filter_network(xmlNodePtr parent)
     m_highpass_order = gspk::parse_int(child, "highpass_order");
 
     child = child->next;
-    m_has_imp_corr = gspk::parse_int(child, "has_imp_corr");
+    m_has_imp_corr = (gspk::parse_int(child, "has_imp_corr") != 0);
 
     child = child->next;
-    m_has_damp = gspk::parse_int(child, "has_damp");
+    m_has_damp = (gspk::parse_int(child, "has_damp") != 0);
 
     child = child->next;
-    m_has_res = gspk::parse_int(child, "has_res");
+    m_has_res = (gspk::parse_int(child, "has_res") != 0);
 
     child = child->next;
     // Parse the parts from the xml file
@@ -209,7 +209,7 @@ filter_network::filter_network(xmlNodePtr parent)
     m_advanced_impedance_model = gspk::parse_int(child, "adv_imp_model");
 
     child = child->next;
-    m_invert_polarity = gspk::parse_int(child, "inv_pol");
+    m_invert_polarity = (gspk::parse_int(child, "inv_pol") != 0);
 }
 
 auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
