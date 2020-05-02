@@ -268,10 +268,7 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     return *m_toolbar;
 }
 
-void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num)
-{
-    std::cout << "Switching pesky page\n";
-}
+void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num) {}
 
 void crossover_pane::on_plot_crossover()
 {
