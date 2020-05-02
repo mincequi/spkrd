@@ -114,7 +114,6 @@ protected:
     };
 
 protected:
-    // Member widgets:
     Gtk::Table m_Table;
     Gtk::ScrolledWindow m_ScrolledWindow;
     Gtk::TreeView m_TreeView;
@@ -123,6 +122,7 @@ protected:
     Gtk::Box m_vbox;
     Gtk::Label m_label;
 
+protected:
     enclosure_list m_box_list;
     driver_list m_drivers;
 
