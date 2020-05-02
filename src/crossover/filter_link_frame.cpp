@@ -127,7 +127,6 @@ void filter_link_frame::initialise_speaker_combobox()
     {
         for (auto& driver : m_drivers->data())
         {
-            // TODO: only insert speakers appropriate for this particular crossover
             if (is_driver_and_filter_matched(driver, *m_network)
                 && driver_name != driver.get_id_string())
             {
