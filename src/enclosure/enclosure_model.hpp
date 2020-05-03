@@ -5,9 +5,13 @@ namespace gspk
 {
 namespace sealed
 {
+/// Compute the volume of a sealed enclsoure.
 auto volume(double const Qtc, double const equivalent_volume, double const Qts) noexcept
     -> double;
 
+/// Compute the resonance frequency of the sealed enclosure for a given
+/// alignment, driver resonance frequency and damping
+/// \return Resonance frequency (Hz)
 auto resonance_frequency(double const Qtc,
                          double const driver_resonance_frequency,
                          double const Qts) noexcept -> double;
@@ -25,4 +29,32 @@ auto frequency_response(double const Qtc,
                         double const enclosure_resonance_frequency) noexcept -> double;
 
 }
+
+namespace ported
+{
+/// Compute the length of the port
+/// \param port_radius Port radius in cm
+/// \param enclosure_volume Enclosure volume in litres
+/// \param tuning_frequency Enclosure tuning frequency in Hz
+/// \return Vent length in cm
+auto port_length(double const port_radius,
+                 double const enclosure_volume,
+                 double const tuning_frequency) noexcept -> double;
+
+/// Compute the length of the port
+/// \param cone_displacement_volume Cone displacement volume in litres
+/// \param tuning_frequency Enclosure tuning frequency in Hz
+/// \return Vent diameter in cm
+auto minimum_port_diameter(double const cone_displacement_volume,
+                           double const tuning_frequency) noexcept -> double;
+
+/// Compute the length of the port
+/// \param cone_displacement_volume Cone displacement volume in cubic metres
+/// \param tuning_frequency Enclosure tuning frequency in Hz
+/// \return Vent diameter in cm
+auto minimum_port_diameter_conservative(double const cone_displacement_volume,
+                                        double const tuning_frequency) noexcept -> double;
+
+}
+
 }
