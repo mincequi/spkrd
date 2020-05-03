@@ -88,7 +88,7 @@ auto operator<<(std::ostream& output, driver_list const& driver_list) -> std::os
     return output;
 }
 
-auto driver_list::get_by_id_string(std::string const& id_string) -> driver
+auto driver_list::get_by_id_string(std::string const& id_string) const -> driver
 {
     auto const location = std::find_if(begin(m_drivers),
                                        end(m_drivers),
@@ -105,6 +105,5 @@ auto driver_list::get_by_id_string(std::string const& id_string) -> driver
     {
         return m_drivers.front();
     }
-
     return driver();
 }

@@ -25,7 +25,6 @@
 #include "crossover.hpp"
 #include "driver_list.hpp"
 
-#include <gdkmm/rgba.h>
 #include <gtkmm/drawingarea.h>
 
 #include <string>
@@ -41,11 +40,10 @@ public:
 private:
     auto on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool override;
 
-    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
-    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
-
     void on_crossover_selected(Crossover* selected_crossover);
-    void on_speakerlist_selected(driver_list* selected_speaker_list);
+
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& selected_speaker_list);
+
     void on_net_modified();
 
     void on_settings_changed(const std::string& s);
@@ -182,8 +180,7 @@ private:
     bool m_scale_image_parts;
 
     Glib::RefPtr<Pango::Layout> m_refLayout;
-    Gdk::RGBA black, white;
 
     Crossover* m_crossover{nullptr};
-    driver_list* m_speaker_list{nullptr};
+    std::shared_ptr<driver_list const> m_drivers{nullptr};
 };

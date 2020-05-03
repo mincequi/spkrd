@@ -42,9 +42,9 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<gspk::point> const&,
-                     Gdk::Color const&,
-                     int&,
+    auto on_add_plot(std::vector<gspk::point> const& line_points,
+                     Gdk::Color const& line_colour,
+                     int& plot_index,
                      filter_network*) -> int;
 
 private:

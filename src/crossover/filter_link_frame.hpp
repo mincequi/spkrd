@@ -29,10 +29,21 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
+inline auto is_driver_and_filter_matched(driver const& driver,
+                                         filter_network const& network) -> bool
+{
+    return (is_tweeter_driver(driver.get_type())
+            && ((network.get_type() & NET_TYPE_HIGHPASS) != 0))
+           || (is_bass_driver(driver.get_type())
+               && ((network.get_type() & NET_TYPE_LOWPASS) != 0));
+}
+
 class filter_link_frame : public Gtk::Frame
 {
 public:
-    filter_link_frame(filter_network* net, std::string const& description, driver_list* speaker_list);
+    filter_link_frame(filter_network* network,
+                      std::string const& description,
+                      std::shared_ptr<driver_list const> const& drivers);
 
     ~filter_link_frame() override;
 
@@ -47,7 +58,7 @@ private:
 
     void on_clear_and_plot();
 
-    void on_speakerlist_loaded(driver_list* driver_list);
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
     void on_settings_changed(std::string const& s);
 
@@ -56,18 +67,21 @@ private:
 
     void initialise_speaker_combobox();
 
-    void initialise_dampening();
+    void initialise_damping();
 
     void initialise_highpass_filter();
 
     void initialise_lowpass_filter();
+
+    void perform_spice_simulation();
 
 private:
     /// Numerical coefficients for the filter principles
     /// net_name_type = NET_BESSEL, ...,
     /// net_order = NET_ORDER_1ST, ...,
     /// net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
-    auto get_filter_params(int net_name_type, int net_order, int net_type) -> std::vector<double>;
+    auto get_filter_params(int net_name_type, int net_order, int net_type)
+        -> std::vector<double>;
 
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
@@ -95,12 +109,11 @@ private:
     Gtk::CheckButton m_imp_corr_checkbutton;
     Gtk::CheckButton m_adv_imp_model_checkbutton;
 
-    filter_network* m_net;
+    filter_network* m_network;
     std::string m_description;
-    driver_list* m_speaker_list;
+    std::shared_ptr<driver_list const> m_drivers;
     bool m_enable_edit{false};
-    bool m_init{true};
 
     int my_filter_plot_index{-1};
-    std::vector<gspk::point> points;
+    std::vector<gspk::point> m_points;
 };

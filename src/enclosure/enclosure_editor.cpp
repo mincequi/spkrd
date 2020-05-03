@@ -59,20 +59,20 @@ enclosure_editor::enclosure_editor()
     m_fb1_entry.set_width_chars(10);
     m_id_string_entry.set_width_chars(10);
 
-    m_box_damping_combo.append("Perfect transient (0.5)");
-    m_box_damping_combo.append("Bessel (D2 - 0.577)");
-    m_box_damping_combo.append("Butterworth (B2 - 0.707)");
-    m_box_damping_combo.append("Chebychev (C2 - 0.8)");
-    m_box_damping_combo.append("Chebychev (C2 - 0.9)");
-    m_box_damping_combo.append("Chebychev (C2 - 1.0)");
-    m_box_damping_combo.append("Chebychev (C2 - 1.1)");
-    m_box_damping_combo.append("Chebychev (C2 - 1.2)");
+    m_enclosure_damping_combo.append("Perfect transient (0.5)");
+    m_enclosure_damping_combo.append("Bessel (D2 - 0.577)");
+    m_enclosure_damping_combo.append("Butterworth (B2 - 0.707)");
+    m_enclosure_damping_combo.append("Chebychev (C2 - 0.8)");
+    m_enclosure_damping_combo.append("Chebychev (C2 - 0.9)");
+    m_enclosure_damping_combo.append("Chebychev (C2 - 1.0)");
+    m_enclosure_damping_combo.append("Chebychev (C2 - 1.1)");
+    m_enclosure_damping_combo.append("Chebychev (C2 - 1.2)");
 
-    m_box_damping_combo.set_active(2);
+    m_enclosure_damping_combo.set_active(2);
     m_system_damping = 1.0 / std::sqrt(2.0);
 
-    m_box_type_combo.append("Sealed");
-    m_box_type_combo.append("Ported");
+    m_enclosure_type_combo.append("Sealed");
+    m_enclosure_type_combo.append("Ported");
 
     this->arrange_grid();
 
@@ -99,10 +99,10 @@ void enclosure_editor::arrange_grid()
     m_grid.attach(m_bass_speaker_combo, 1, 1);
 
     m_grid.attach(*Gtk::manage(new Gtk::Label(_("Type:"), Gtk::ALIGN_START)), 0, 2);
-    m_grid.attach(m_box_type_combo, 1, 2);
+    m_grid.attach(m_enclosure_type_combo, 1, 2);
 
     m_grid.attach(*Gtk::manage(new Gtk::Label(_("Alignment:"), Gtk::ALIGN_START)), 0, 3);
-    m_grid.attach(m_box_damping_combo, 1, 3);
+    m_grid.attach(m_enclosure_damping_combo, 1, 3);
 
     // Right column
 
@@ -125,7 +125,7 @@ void enclosure_editor::connect_signals()
     m_bass_speaker_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_combo_entry_changed));
 
-    m_box_damping_combo.signal_changed().connect(
+    m_enclosure_damping_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_alignment_changed));
 
     m_id_string_entry.signal_changed().connect(
@@ -138,11 +138,11 @@ void enclosure_editor::connect_signals()
         sigc::bind(sigc::mem_fun(*this, &enclosure_editor::on_box_data_changed),
                    FB1_ENTRY_CHANGED));
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &enclosure_editor::on_speaker_list_loaded));
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &enclosure_editor::on_drivers_loaded));
 
     // Setup option menu
-    m_box_type_combo.signal_changed().connect(
+    m_enclosure_type_combo.signal_changed().connect(
         sigc::mem_fun(*this, &enclosure_editor::on_enclosure_changed));
 
     signal_box_selected.connect(sigc::mem_fun(*this, &enclosure_editor::on_box_selected));
@@ -156,7 +156,7 @@ void enclosure_editor::connect_signals()
 
 void enclosure_editor::on_vb1_entry_activated()
 {
-    switch (m_box->get_type())
+    switch (m_enclosure->get_type())
     {
         case BOX_TYPE_SEALED:
             on_append_to_boxlist_clicked();
@@ -179,47 +179,48 @@ void enclosure_editor::on_optimize_button_clicked()
     if (!m_disable_signals)
     {
         m_disable_signals = true;
-        switch (m_box_type_combo.get_active_row_number() + 1)
+        switch (m_enclosure_type_combo.get_active_row_number() + 1)
         {
             case BOX_TYPE_SEALED:
             {
                 using namespace gspk;
 
-                m_box->set_fb1(sealed::resonance_frequency(m_system_damping,
-                                                           m_current_speaker.get_fs(),
-                                                           m_current_speaker.get_qts()));
+                m_enclosure->set_fb1(
+                    sealed::resonance_frequency(m_system_damping,
+                                                m_current_speaker.get_fs(),
+                                                m_current_speaker.get_qts()));
 
-                m_box->set_vb1(sealed::volume(m_system_damping,
-                                              m_current_speaker.get_vas(),
-                                              m_current_speaker.get_qts()));
+                m_enclosure->set_vb1(sealed::volume(m_system_damping,
+                                                    m_current_speaker.get_vas(),
+                                                    m_current_speaker.get_qts()));
                 break;
             }
             case BOX_TYPE_PORTED:
                 // Ported box
                 // vb=20*vas*qts^3.3;
                 // fb=fs*(vas/vb)^0.31;
-                m_box->set_vb1(20.0 * m_current_speaker.get_vas()
-                               * std::pow(m_current_speaker.get_qts(), 3.3));
-                m_box->set_fb1(
+                m_enclosure->set_vb1(20.0 * m_current_speaker.get_vas()
+                                     * std::pow(m_current_speaker.get_qts(), 3.3));
+                m_enclosure->set_fb1(
                     m_current_speaker.get_fs()
-                    * std::pow(m_current_speaker.get_vas() / m_box->get_vb1(), 0.31));
+                    * std::pow(m_current_speaker.get_vas() / m_enclosure->get_vb1(), 0.31));
                 break;
         }
-        m_vb1_entry.set_text(gspk::to_ustring(m_box->get_vb1(), 2, 1));
-        m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
+        m_vb1_entry.set_text(gspk::to_ustring(m_enclosure->get_vb1(), 2, 1));
+        m_fb1_entry.set_text(gspk::to_ustring(m_enclosure->get_fb1(), 2, 1));
     }
-    signal_box_modified(m_box);
+    signal_box_modified(m_enclosure);
     m_disable_signals = false;
 }
 
 void enclosure_editor::on_append_to_plot_clicked()
 {
-    m_box = new enclosure();
+    m_enclosure = new enclosure();
 
-    m_box->set_id_string(m_id_string_entry.get_text());
-    m_box->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
-    m_box->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
-    m_box->set_type(m_box_type_combo.get_active_row_number() + 1);
+    m_enclosure->set_id_string(m_id_string_entry.get_text());
+    m_enclosure->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
+    m_enclosure->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
+    m_enclosure->set_type(m_enclosure_type_combo.get_active_row_number() + 1);
 
     Gdk::Color color(m_color_list.get_color_string());
 
@@ -228,22 +229,25 @@ void enclosure_editor::on_append_to_plot_clicked()
 
     using namespace gspk;
 
-    switch (m_box->get_type())
+    switch (m_enclosure->get_type())
     {
         case BOX_TYPE_PORTED:
             for (int f = 10; f < 1000; f++)
             {
-                auto const A = std::pow(m_box->get_fb1() / m_current_speaker.get_fs(), 2);
+                auto const A = std::pow(m_enclosure->get_fb1() / m_current_speaker.get_fs(),
+                                        2);
                 auto const B = A / m_current_speaker.get_qts()
-                               + m_box->get_fb1()
+                               + m_enclosure->get_fb1()
                                      / (7.0 * m_current_speaker.get_fs()
                                         * m_current_speaker.get_qts());
-                auto const C = 1.0 + A + m_current_speaker.get_vas() / m_box->get_vb1()
-                               + m_box->get_fb1()
+                auto const C = 1.0 + A
+                               + m_current_speaker.get_vas() / m_enclosure->get_vb1()
+                               + m_enclosure->get_fb1()
                                      / (7.0 * m_current_speaker.get_fs()
                                         * m_current_speaker.get_qts());
                 auto const D = 1.0 / m_current_speaker.get_qts()
-                               + m_box->get_fb1() / (7.0 * m_current_speaker.get_fs());
+                               + m_enclosure->get_fb1()
+                                     / (7.0 * m_current_speaker.get_fs());
                 auto const fn2 = std::pow(f / m_current_speaker.get_fs(), 2);
                 auto const fn4 = std::pow(fn2, 2);
 
@@ -261,17 +265,20 @@ void enclosure_editor::on_append_to_plot_clicked()
                 points.emplace_back(f,
                                     sealed::frequency_response(m_system_damping,
                                                                f,
-                                                               m_box->get_fb1()));
+                                                               m_enclosure->get_fb1()));
             }
             break;
     }
     signal_add_box_plot(points, color);
-    signal_add_plot(m_box, &m_current_speaker, color);
+    signal_add_plot(m_enclosure, &m_current_speaker, color);
 }
 
 void enclosure_editor::on_calc_port_clicked() {}
 
-void enclosure_editor::on_append_to_boxlist_clicked() { signal_add_to_boxlist(m_box); }
+void enclosure_editor::on_append_to_boxlist_clicked()
+{
+    signal_add_to_boxlist(m_enclosure);
+}
 
 void enclosure_editor::on_box_selected(enclosure* b)
 {
@@ -284,7 +291,7 @@ void enclosure_editor::on_box_selected(enclosure* b)
 
     if (b != nullptr)
     {
-        m_box = b;
+        m_enclosure = b;
         m_id_string_entry.set_text(b->get_id_string());
         m_vb1_entry.set_text(gspk::to_ustring(b->get_vb1(), 2, 1));
         m_fb1_entry.set_text(gspk::to_ustring(b->get_fb1(), 2, 1));
@@ -292,12 +299,12 @@ void enclosure_editor::on_box_selected(enclosure* b)
         // Set combo to proper speaker
         if (speaker_list_is_loaded)
         {
-            m_current_speaker = m_speaker_list->get_by_id_string(b->get_speaker());
+            m_current_speaker = m_drivers->get_by_id_string(b->get_speaker());
 
             // Remove all the previous entries and populate again
             m_bass_speaker_combo.remove_all();
 
-            for (auto const& speaker : m_speaker_list->data())
+            for (auto const& speaker : m_drivers->data())
             {
                 if (is_bass_driver(speaker.get_type())
                     && m_current_speaker.get_id_string() != speaker.get_id_string())
@@ -310,17 +317,18 @@ void enclosure_editor::on_box_selected(enclosure* b)
         }
         // set state of option menu here
         // enclosure type is 1, 2, 3...therefor the '-1'
-        m_box_type_combo.set_active(b->get_type() - 1);
+        m_enclosure_type_combo.set_active(b->get_type() - 1);
 
-        m_fb1_entry.set_sensitive(m_box->get_type() != BOX_TYPE_SEALED);
+        m_fb1_entry.set_sensitive(m_enclosure->get_type() != BOX_TYPE_SEALED);
 
-        if (m_box->get_type() == BOX_TYPE_SEALED)
+        if (m_enclosure->get_type() == BOX_TYPE_SEALED)
         {
-            m_box->set_fb1(gspk::sealed::resonance_frequency(m_system_damping,
-                                                             m_current_speaker.get_fs(),
-                                                             m_current_speaker.get_qts()));
+            m_enclosure->set_fb1(
+                gspk::sealed::resonance_frequency(m_system_damping,
+                                                  m_current_speaker.get_fs(),
+                                                  m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::to_ustring(m_enclosure->get_fb1(), 2, 1));
         }
     }
     else
@@ -330,35 +338,35 @@ void enclosure_editor::on_box_selected(enclosure* b)
     m_disable_signals = false;
 }
 
-void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
+void enclosure_editor::on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers)
 {
     if (m_disable_signals)
     {
         return;
     }
     m_disable_signals = true;
-    m_speaker_list = driver_list;
+    m_drivers = drivers;
 
     m_bass_speaker_combo.remove_all();
 
     // If we have got a selected box, insert the items with the driver
     // belonging to the current speaker at the top position, if we haven't
     // got a selected box: insert all drivers and don't care about the order
-    if (m_box != nullptr)
+    if (m_enclosure != nullptr)
     {
-        for (auto const& speaker : m_speaker_list->data())
+        for (auto const& speaker : m_drivers->data())
         {
             if (is_bass_driver(speaker.get_type())
-                && m_box->get_speaker() != speaker.get_id_string())
+                && m_enclosure->get_speaker() != speaker.get_id_string())
             {
                 m_bass_speaker_combo.append(speaker.get_id_string());
             }
         }
-        m_bass_speaker_combo.prepend(m_box->get_speaker());
+        m_bass_speaker_combo.prepend(m_enclosure->get_speaker());
     }
     else
     {
-        for (auto const& speaker : m_speaker_list->data())
+        for (auto const& speaker : m_drivers->data())
         {
             if (is_bass_driver(speaker.get_type()))
             {
@@ -367,7 +375,7 @@ void enclosure_editor::on_speaker_list_loaded(driver_list* driver_list)
         }
     }
 
-    m_bass_speaker_combo.set_active(m_speaker_list->data().empty() ? -1 : 0);
+    m_bass_speaker_combo.set_active(m_drivers->data().empty() ? -1 : 0);
 
     speaker_list_is_loaded = true;
     m_disable_signals = false;
@@ -385,9 +393,8 @@ void enclosure_editor::on_combo_entry_changed()
 
     m_disable_signals = true;
 
-    // Search for the new entry string in the driver_list
-    m_current_speaker = m_speaker_list->get_by_id_string(
-        m_bass_speaker_combo.get_active_text());
+    // Search for the new entry string in the driver list
+    m_current_speaker = m_drivers->get_by_id_string(m_bass_speaker_combo.get_active_text());
 
     // maybe set_markup here?
     m_speaker_vas_label.set_text(gspk::to_ustring(m_current_speaker.get_vas(), 2, 1));
@@ -400,17 +407,17 @@ void enclosure_editor::on_combo_entry_changed()
         // Select the best enclosure based on the efficiency bandwidth product
         if (ebp <= 50.0)
         {
-            m_box_type_combo.set_active(BOX_TYPE_SEALED - 1);
+            m_enclosure_type_combo.set_active(BOX_TYPE_SEALED - 1);
         }
         else if (ebp >= 100.0)
         {
-            m_box_type_combo.set_active(BOX_TYPE_PORTED - 1);
+            m_enclosure_type_combo.set_active(BOX_TYPE_PORTED - 1);
         }
     }
 
-    m_box->set_speaker(m_bass_speaker_combo.get_active_text());
+    m_enclosure->set_speaker(m_bass_speaker_combo.get_active_text());
 
-    signal_box_modified(m_box);
+    signal_box_modified(m_enclosure);
 
     m_disable_signals = false;
 }
@@ -418,7 +425,7 @@ void enclosure_editor::on_combo_entry_changed()
 void enclosure_editor::on_alignment_changed()
 {
     std::cout << "enclosure_editor: combo entry changed: "
-              << m_box_damping_combo.get_active_text() << '\n';
+              << m_enclosure_damping_combo.get_active_text() << '\n';
 
     if (m_disable_signals)
     {
@@ -427,7 +434,7 @@ void enclosure_editor::on_alignment_changed()
 
     m_disable_signals = true;
 
-    auto const alignment_index = m_box_damping_combo.get_active_row_number();
+    auto const alignment_index = m_enclosure_damping_combo.get_active_row_number();
 
     switch (alignment_index)
     {
@@ -469,29 +476,29 @@ void enclosure_editor::on_enclosure_changed()
     }
     m_disable_signals = true;
 
-    switch (m_box_type_combo.get_active_row_number())
+    switch (m_enclosure_type_combo.get_active_row_number())
     {
         case SEALED_SELECTED:
         {
             using namespace gspk;
 
-            m_box->set_type(BOX_TYPE_SEALED);
+            m_enclosure->set_type(BOX_TYPE_SEALED);
             m_fb1_entry.set_sensitive(false);
 
-            m_box->set_fb1(sealed::resonance_frequency(m_system_damping,
-                                                       m_current_speaker.get_fs(),
-                                                       m_current_speaker.get_qts()));
+            m_enclosure->set_fb1(sealed::resonance_frequency(m_system_damping,
+                                                             m_current_speaker.get_fs(),
+                                                             m_current_speaker.get_qts()));
 
-            m_fb1_entry.set_text(gspk::to_ustring(m_box->get_fb1(), 2, 1));
+            m_fb1_entry.set_text(gspk::to_ustring(m_enclosure->get_fb1(), 2, 1));
             break;
         }
         case PORTED_SELECTED:
-            m_box->set_type(BOX_TYPE_PORTED);
+            m_enclosure->set_type(BOX_TYPE_PORTED);
             m_fb1_entry.set_sensitive(true);
             break;
     }
-    signal_box_selected(m_box);
-    signal_box_modified(m_box);
+    signal_box_selected(m_enclosure);
+    signal_box_modified(m_enclosure);
 
     m_disable_signals = false;
 }
@@ -508,23 +515,23 @@ void enclosure_editor::on_box_data_changed(int i)
     switch (i)
     {
         case ID_STRING_ENTRY_CHANGED:
-            m_box->set_id_string(m_id_string_entry.get_text());
+            m_enclosure->set_id_string(m_id_string_entry.get_text());
             break;
         case VB1_ENTRY_CHANGED:
-            m_box->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
+            m_enclosure->set_vb1(std::atof(m_vb1_entry.get_text().c_str()));
             break;
         case FB1_ENTRY_CHANGED:
-            m_box->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
+            m_enclosure->set_fb1(std::atof(m_fb1_entry.get_text().c_str()));
             break;
         case VB2_ENTRY_CHANGED:
-            m_box->set_vb2(std::atof(m_vb2_entry.get_text().c_str()));
+            m_enclosure->set_vb2(std::atof(m_vb2_entry.get_text().c_str()));
             break;
         case FB2_ENTRY_CHANGED:
-            m_box->set_fb2(std::atof(m_fb2_entry.get_text().c_str()));
+            m_enclosure->set_fb2(std::atof(m_fb2_entry.get_text().c_str()));
             break;
     }
-    signal_box_selected(m_box);
-    signal_box_modified(m_box);
+    signal_box_selected(m_enclosure);
+    signal_box_modified(m_enclosure);
 
     m_disable_signals = false;
 }

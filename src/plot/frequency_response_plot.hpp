@@ -38,7 +38,7 @@ class frequency_response_plot : public Gtk::Frame
 public:
     frequency_response_plot();
 
-    ~frequency_response_plot() override;
+    virtual ~frequency_response_plot() override;
 
     void clear();
 
@@ -50,12 +50,15 @@ public:
 private:
     void on_crossover_selected(Crossover*);
 
-    void on_speakerlist_loaded(driver_list* driver_list);
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
+
+    auto parse_frequency_response_file(std::string const& filename)
+        -> std::vector<gspk::point>;
 
 private:
     plot m_plot;
     std::vector<int> m_nets;
     Gdk::Color m_color;
     std::vector<std::vector<gspk::point>> m_points;
-    driver_list* m_speakerlist;
+    std::shared_ptr<driver_list const> m_speakerlist;
 };

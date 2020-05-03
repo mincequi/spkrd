@@ -19,8 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SIDEBAR_NOTEBOOK_H
-#define __SIDEBAR_NOTEBOOK_H
+#pragma once
 
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
@@ -41,5 +40,3 @@ public:
 private:
     Gtk::Notebook m_notebook;
 };
-
-#endif

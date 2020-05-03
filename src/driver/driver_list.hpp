@@ -36,13 +36,14 @@ public:
     void to_xml(const std::string& filename); // Maybe this one should throw an exception
 
     /// Print part data to stdout
-    friend auto operator<<(std::ostream& output, driver_list const& drivers) -> std::ostream&;
+    friend auto operator<<(std::ostream& output, driver_list const& drivers)
+        -> std::ostream&;
 
     auto data() noexcept -> std::vector<driver>& { return m_drivers; }
 
     auto data() const noexcept -> std::vector<driver> const& { return m_drivers; }
 
-    auto get_by_id_string(std::string const& id_string) -> driver;
+    auto get_by_id_string(std::string const& id_string) const -> driver;
 
     /// Remove all drivers
     void clear() { m_drivers.clear(); }

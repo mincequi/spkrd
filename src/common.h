@@ -40,10 +40,7 @@
 namespace gspk
 {
 class point;
-}
 
-namespace gspk
-{
 auto to_ustring(double d) -> Glib::ustring;
 auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring;
 auto int_to_ustring(int d) -> Glib::ustring;

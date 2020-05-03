@@ -123,7 +123,7 @@ void plot_history::on_add_plot(enclosure* b, driver* s, Gdk::Color& color)
     {
         m_box_list.data().push_back(*b);
 
-        m_speaker_list.data().emplace_back(*s);
+        m_drivers.data().emplace_back(*s);
 
         add_item(*b, *s, color);
     }

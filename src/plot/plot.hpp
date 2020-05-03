@@ -71,11 +71,13 @@ public:
 
     void redraw(Cairo::RefPtr<Cairo::Context> const& context);
 
-    void set_font(const std::string& font);
+    void set_font(std::string const& font);
 
     void select_plot(int index);
 
-    void replace_plot(int plot_index, std::vector<gspk::point> const& p, Gdk::Color const& ref_color);
+    void replace_plot(int plot_index,
+                      std::vector<gspk::point> const& p,
+                      Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
 
@@ -87,14 +89,6 @@ protected:
     void draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
                     std::vector<Gdk::Point> const& points,
                     Gdk::Color const& colour);
-
-    /// Copy the area that needs to be updated from the pixmap
-    /// to the window
-    [[deprecated]] auto on_expose_event(GdkEventExpose* event) -> bool;
-
-    // void on_show();
-
-    [[deprecated]] auto on_configure_event(GdkEventConfigure* event) -> bool override;
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)

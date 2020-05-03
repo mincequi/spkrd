@@ -240,7 +240,7 @@ protected:
     bool new_xml_pressed{false};
     int index{-1};
 
-    std::unique_ptr<driver_list> m_driver_list{nullptr};
+    std::shared_ptr<driver_list> m_drivers{nullptr};
     driver_frequency_response_plot plot;
 
     model_columns m_columns;

@@ -29,15 +29,11 @@ public:
     crossover_wizard();
 
 private:
-    void on_speaker_list_loaded(driver_list*);
-
-    void on_button_plot_clicked();
-
-    void on_button_update_clicked();
+    void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
     void on_crossover_selected(Crossover* crossover);
 
 private:
     Gtk::Box m_vbox;
-    driver_list* m_speaker_list{nullptr};
+    std::shared_ptr<driver_list const> m_drivers{nullptr};
 };

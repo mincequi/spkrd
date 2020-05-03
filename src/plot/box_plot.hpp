@@ -37,7 +37,7 @@ public:
 
 private:
     Gtk::Label m_label;
-    Gtk::VBox m_vbox;
+    Gtk::Box m_vbox;
     Gtk::ScrolledWindow m_scrolled_window;
 
     plot m_plot;

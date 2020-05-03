@@ -42,13 +42,8 @@ crossover_image_view::crossover_image_view()
     signal_net_modified_by_wizard.connect(
         sigc::mem_fun(*this, &crossover_image_view::on_net_modified));
 
-    signal_speakerlist_loaded.connect(
-        sigc::mem_fun(*this, &crossover_image_view::on_speakerlist_selected));
-}
-
-auto crossover_image_view::on_expose_event(GdkEventExpose* event) -> bool
-{
-    return false;
+    signal_drivers_loaded.connect(
+        sigc::mem_fun(*this, &crossover_image_view::on_drivers_loaded));
 }
 
 auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
@@ -57,19 +52,6 @@ auto crossover_image_view::on_draw(Cairo::RefPtr<Cairo::Context> const& context)
 
     this->redraw(context);
 
-    return true;
-}
-
-auto crossover_image_view::on_configure_event(GdkEventConfigure* event) -> bool
-{
-    m_visible = true;
-
-    white = Gdk::RGBA("rgb (0.0, 0.0, 0.0)");
-    black = Gdk::RGBA("rgb (1.0, 1.0, 1.0)");
-
-    m_refLayout = Pango::Layout::create(get_pango_context());
-
-    // We've handled the configure event, no need for further processing
     return true;
 }
 
@@ -157,6 +139,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 net_horz_divider += 4;
                 break;
         }
+
         switch (networks[i].get_highpass_order())
         {
             case NET_ORDER_1ST:
@@ -177,6 +160,7 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         {
             net_horz_divider += 1;
         }
+
         if (networks[i].get_has_damp())
         {
             net_horz_divider += 2;
@@ -265,9 +249,9 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         driver speaker;
 
-        if (m_speaker_list != nullptr)
+        if (m_drivers != nullptr)
         {
-            speaker = m_speaker_list->get_by_id_string(networks[i].get_speaker());
+            speaker = m_drivers->get_by_id_string(networks[i].get_speaker());
         }
         draw_driver(context,
                     (1 + lowpass_order + highpass_order + driver_offset) * part_width,
@@ -298,6 +282,7 @@ void crossover_image_view::on_settings_changed(const std::string& setting)
 void crossover_image_view::on_crossover_selected(Crossover* selected_crossover)
 {
     m_crossover = selected_crossover;
+
     if (m_visible)
     {
         Gdk::Rectangle update_rect(0,
@@ -316,16 +301,18 @@ void crossover_image_view::on_net_modified()
     }
 }
 
-void crossover_image_view::on_speakerlist_selected(driver_list* selected_speaker_list)
+void crossover_image_view::on_drivers_loaded(
+    std::shared_ptr<driver_list const> const& selected_speaker_list)
 {
-    m_speaker_list = selected_speaker_list;
+    m_drivers = selected_speaker_list;
+
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0,
-                                   0,
-                                   get_allocation().get_width(),
-                                   get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, true);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      true);
     }
 }
 

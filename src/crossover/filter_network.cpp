@@ -4,21 +4,22 @@
   net Copyright (C) 2002 Daniel Sundberg
 
   This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 2
+  it under the terms output the GNU General Public License version 2
   as published by the Free Software Foundation.
 
   This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  but WITHOUT ANY WARRANTY; without even the implied warranty output
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
+  You should have received a copy output the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
 #include "filter_network.hpp"
 #include "driver.hpp"
+#include "xml_parser.hpp"
 
 #include <glibmm.h>
 
@@ -43,8 +44,8 @@ filter_network::filter_network(int type,
       m_has_res(has_res),
       m_lowpass_family(family),
       m_highpass_family(family),
-      m_adv_imp_model(adv_imp_model),
-      m_inv_pol(inv_pol)
+      m_advanced_impedance_model(adv_imp_model),
+      m_invert_polarity(inv_pol)
 {
     // Init lowpass filter if present
     if (m_type == NET_TYPE_LOWPASS)
@@ -117,360 +118,98 @@ filter_network::filter_network(int type,
 
 filter_network::filter_network(xmlNodePtr parent)
 {
-    if (parent != nullptr && (g_ascii_strncasecmp((char*)parent->name, "net", 3) == 0))
-    {
-        try
-        {
-            parse_type(parent->children);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: net node expected"));
-    }
-}
+    gspk::check_name(parent, "net");
 
-void filter_network::parse_type(xmlNodePtr node)
-{
-    if (node != nullptr && (g_ascii_strncasecmp((char*)node->name, "type", 4) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_type;
-        try
-        {
-            parse_lowpass_order(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: type node expected"));
-    }
-}
+    auto* child = parent->children;
 
-void filter_network::parse_lowpass_order(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "lowpass_order", 13) == 0))
+    for (auto const& label : {"type",
+                              "lowpass_order",
+                              "highpass_order",
+                              "has_imp_corr",
+                              "has_damp",
+                              "has_res",
+                              "parts",
+                              "lowpass_family",
+                              "highpass_family",
+                              "speaker",
+                              "adv_imp_model",
+                              "inv_pol"})
     {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_order;
-        try
-        {
-            parse_highpass_order(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
+        gspk::check_name(child, label);
+        child = child->next;
     }
-    else
-    {
-        throw std::runtime_error(_("filter_network: lowpass_order node expected"));
-    }
-}
 
-void filter_network::parse_highpass_order(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "highpass_order", 14) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_order;
-        try
-        {
-            parse_has_imp_corr(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: highpass_order node expected"));
-    }
-}
+    child = parent->children;
+    m_type = gspk::parse_int(child, "type");
 
-void filter_network::parse_has_imp_corr(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "has_imp_corr", 12) == 0))
-    {
-        m_has_imp_corr = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
-        try
-        {
-            parse_has_damp(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: has_imp_corr node expected"));
-    }
-}
+    child = child->next;
+    m_lowpass_order = gspk::parse_int(child, "lowpass_order");
 
-void filter_network::parse_has_damp(xmlNodePtr node)
-{
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_damp", 8) == 0))
-    {
-        m_has_damp = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
+    child = child->next;
+    m_highpass_order = gspk::parse_int(child, "highpass_order");
 
-        try
-        {
-            parse_has_res(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: has_damp node expected"));
-    }
-}
+    child = child->next;
+    m_has_imp_corr = (gspk::parse_int(child, "has_imp_corr") != 0);
 
-void filter_network::parse_has_res(xmlNodePtr node)
-{
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "has_res", 7) == 0))
-    {
-        m_has_res = g_ascii_strncasecmp((char*)xmlNodeGetContent(node), "1", 1) == 0;
+    child = child->next;
+    m_has_damp = (gspk::parse_int(child, "has_damp") != 0);
 
-        try
-        {
-            parse_parts(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: has_res node expected"));
-    }
-}
+    child = child->next;
+    m_has_res = (gspk::parse_int(child, "has_res") != 0);
 
-void filter_network::parse_parts(xmlNodePtr node)
-{
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "parts", 5) == 0))
+    child = child->next;
+    // Parse the parts from the xml file
     {
-        // Iterate over node->children, first comes the imp corr and damping network
-        xmlNodePtr child = node->children;
+        auto* subchild = child->children;
 
-        // Impedance correction parts
         if (m_has_imp_corr)
         {
-            try
-            {
-                m_imp_corr_R = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-            try
-            {
-                m_imp_corr_C = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
+            m_imp_corr_R = passive_component(subchild);
+            subchild = subchild->next;
+
+            m_imp_corr_C = passive_component(subchild);
+            subchild = subchild->next;
         }
-        /* Damping network parts */
         if (m_has_damp)
         {
-            try
-            {
-                m_damp_R1 = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-            try
-            {
-                m_damp_R2 = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
+            m_damp_R1 = passive_component(subchild);
+            subchild = subchild->next;
+
+            m_damp_R2 = passive_component(subchild);
+            subchild = subchild->next;
         }
-        // Resonance circuit
         if (m_has_res)
         {
-            try
-            {
-                m_res_R = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-            try
-            {
-                m_res_C = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-            try
-            {
-                m_res_L = passive_component(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-        }
+            m_res_R = passive_component(subchild);
+            subchild = subchild->next;
 
-        // Other parts
-        while (child != nullptr)
-        {
-            try
-            {
-                m_parts.emplace_back(child);
-            }
-            catch (std::runtime_error const& error)
-            {
-                throw error;
-            }
-            child = child->next;
-        }
-        try
-        {
-            parse_lowpass_family(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network: parts node expected"));
-    }
-}
+            m_res_C = passive_component(subchild);
+            subchild = subchild->next;
 
-void filter_network::parse_lowpass_family(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "lowpass_family", 14) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_lowpass_family;
-        try
-        {
-            parse_highpass_family(node->next);
+            m_res_L = passive_component(subchild);
+            subchild = subchild->next;
         }
-        catch (std::runtime_error const& error)
+        while (subchild != nullptr)
         {
-            throw error;
+            m_parts.emplace_back(subchild);
+            subchild = subchild->next;
         }
     }
-    else
-    {
-        throw std::runtime_error(_("filter_network::parse_lowpass_family: lowpass_family "
-                                   "node "
-                                   "expected"));
-    }
-}
 
-void filter_network::parse_highpass_family(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "highpass_family", 15) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_highpass_family;
-        try
-        {
-            parse_speaker(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network::parse_highpass_family: "
-                                   "highpass_family node "
-                                   "expected"));
-    }
-}
+    child = child->next;
+    m_lowpass_family = gspk::parse_int(child, "lowpass_family");
 
-void filter_network::parse_speaker(xmlNodePtr node)
-{
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "speaker", 7) == 0))
-    {
-        m_speaker = std::string((char*)xmlNodeGetContent(node));
-        try
-        {
-            parse_adv_imp_model(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network::parse_speaker: speaker node "
-                                   "expected"));
-    }
-}
+    child = child->next;
+    m_highpass_family = gspk::parse_int(child, "highpass_family");
 
-void filter_network::parse_adv_imp_model(xmlNodePtr node)
-{
-    if ((node != nullptr)
-        && (g_ascii_strncasecmp((char*)node->name, "adv_imp_model", 13) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_adv_imp_model;
-        try
-        {
-            parse_inv_pol(node->next);
-        }
-        catch (std::runtime_error const& error)
-        {
-            throw error;
-        }
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network::parse_adv_imp_model: adv_imp_model "
-                                   "node "
-                                   "expected"));
-    }
-}
+    child = child->next;
+    m_speaker = gspk::parse_string(child, "speaker");
 
-void filter_network::parse_inv_pol(xmlNodePtr node)
-{
-    if ((node != nullptr) && (g_ascii_strncasecmp((char*)node->name, "inv_pol", 7) == 0))
-    {
-        std::istringstream((char*)xmlNodeGetContent(node)) >> m_inv_pol;
-    }
-    else
-    {
-        throw std::runtime_error(_("filter_network::parse_inv_pol: inv_pol node "
-                                   "expected"));
-    }
+    child = child->next;
+    m_advanced_impedance_model = gspk::parse_int(child, "adv_imp_model");
+
+    child = child->next;
+    m_invert_polarity = (gspk::parse_int(child, "inv_pol") != 0);
 }
 
 auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
@@ -515,6 +254,7 @@ auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
     {
         m_part.to_xml_node(field);
     }
+
     field = xmlNewChild(net, nullptr, (xmlChar*)("lowpass_family"), nullptr);
     xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_lowpass_family));
     field = xmlNewChild(net, nullptr, (xmlChar*)("highpass_family"), nullptr);
@@ -522,9 +262,10 @@ auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
     field = xmlNewChild(net, nullptr, (xmlChar*)("speaker"), nullptr);
     xmlNodeSetContent(field, (xmlChar*)m_speaker.c_str());
     field = xmlNewChild(net, nullptr, (xmlChar*)("adv_imp_model"), nullptr);
-    xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_adv_imp_model));
+    xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", m_advanced_impedance_model));
     field = xmlNewChild(net, nullptr, (xmlChar*)("inv_pol"), nullptr);
-    xmlNodeSetContent(field, (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_inv_pol)));
+    xmlNodeSetContent(field,
+                      (xmlChar*)g_strdup_printf("%d", static_cast<int>(m_invert_polarity)));
 
     return net;
 }
@@ -532,241 +273,249 @@ auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
 auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 {
     std::string tmp_dir = Glib::get_tmp_dir();
+
+    std::string tmp_file = tmp_dir +
 #ifdef TARGET_WIN32
-    std::string tmp_file = tmp_dir + "\\net" + gspk::int_to_ustring(m_id) + ".tmp";
+                           "\\net"
 #else
-    std::string tmp_file = tmp_dir + "/net" + gspk::int_to_ustring(m_id) + ".tmp";
+                           "/net"
 #endif
+                           + gspk::int_to_ustring(m_id) + ".tmp";
+
+    std::ofstream output(tmp_file.c_str());
+
+    if (!output.good())
+    {
+        throw std::runtime_error("filter_network::to_SPICE: could not write " + tmp_file);
+    }
 
     int node_counter = 0;
     int part_index = 0;
     int next_node_cnt_inc = 1;
 
-    std::ofstream of(tmp_file.c_str());
-    if (of.good())
-    {
-        of << "Crossover network SPICE code generated by gspk " << std::string(VERSION)
+    output << "Crossover network SPICE code generated by gspk " << std::string(VERSION)
            << "\n";
-        of << "vamp " << ++node_counter << " " << 0 << " dc 0 ac 1"
+    output << "vamp " << ++node_counter << " " << 0 << " dc 0 ac 1"
            << "\n";
-        if (m_lowpass_order > 0)
-        {
-            switch (m_lowpass_order)
-            {
-                case NET_ORDER_1ST:
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_2ND:
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_3RD:
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_4TH:
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    node_counter++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-            }
-        }
-        if (m_highpass_order > 0)
-        {
-            switch (m_highpass_order)
-            {
-                case NET_ORDER_1ST:
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_2ND:
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_3RD:
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-                case NET_ORDER_4TH:
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    node_counter++;
-                    of << "C" << m_parts[part_index].get_id() << " " << node_counter
-                       << " " << node_counter - 1 << " "
-                       << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    of << "L" << m_parts[part_index].get_id() << " " << node_counter << " "
-                       << 0 << " " << std::to_string(m_parts[part_index].get_value())
-                       << m_parts[part_index].get_unit() << "\n";
-                    part_index++;
-                    break;
-            }
-        }
 
-        if (m_has_imp_corr)
+    if (m_lowpass_order > 0)
+    {
+        switch (m_lowpass_order)
         {
-            of << "R" << m_imp_corr_R.get_id() << " " << node_counter << " "
+            case NET_ORDER_1ST:
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_2ND:
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_3RD:
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_4TH:
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                ++node_counter;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+        }
+    }
+    if (m_highpass_order > 0)
+    {
+        switch (m_highpass_order)
+        {
+            case NET_ORDER_1ST:
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_2ND:
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_3RD:
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+            case NET_ORDER_4TH:
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                ++node_counter;
+                output << "C" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << node_counter - 1 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                output << "L" << m_parts.at(part_index).get_id() << " " << node_counter
+                       << " " << 0 << " "
+                       << std::to_string(m_parts.at(part_index).get_value())
+                       << m_parts.at(part_index).get_unit() << "\n";
+                ++part_index;
+                break;
+        }
+    }
+
+    if (m_has_imp_corr)
+    {
+        output << "R" << m_imp_corr_R.get_id() << " " << node_counter << " "
                << node_counter + 1 << " " << std::to_string(m_imp_corr_R.get_value())
                << "\n";
-            of << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0
+        output << "C" << m_imp_corr_C.get_id() << " " << node_counter + 1 << " " << 0
                << " " << std::to_string(m_imp_corr_C.get_value())
                << m_imp_corr_C.get_unit() << "\n";
-            next_node_cnt_inc = 2;
-        }
-        else
-        {
-            next_node_cnt_inc = 1;
-        }
-        if (m_has_damp)
-        {
-            of << "R" << m_damp_R1.get_id() << " " << node_counter << " " << 0 << " "
-               << std::to_string(m_damp_R1.get_value()) << "\n";
-            of << "R" << m_damp_R2.get_id() << " " << node_counter << " "
-               << node_counter + next_node_cnt_inc << " "
-               << std::to_string(m_damp_R2.get_value()) << "\n";
-            node_counter = node_counter + next_node_cnt_inc;
-            next_node_cnt_inc = 1;
-        }
-
-        int spk_node = node_counter;
-
-        // insert speaker resistance, TODO: insert speaker impedance table
-        if (m_adv_imp_model == 1)
-        {
-            // Complex model
-            double const cmes = s.get_mmd() / (s.get_bl() * s.get_bl()) * 1'000'000;
-            double const lces = s.get_bl() * s.get_bl() * s.get_cms() * 1'000;
-            double const res = s.get_bl() * s.get_bl() / s.get_rms();
-
-            // air density kg/m^3
-            constexpr double po = 1.18;
-
-            double const cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad()
-                                / (3 * s.get_bl() * s.get_bl()) * 1'000'000;
-
-            of << "R" << s.get_id() << " " << node_counter << " "
-               << node_counter + next_node_cnt_inc << " " << s.get_rdc() << "\n";
-            node_counter = node_counter + next_node_cnt_inc;
-            of << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1
-               << " " << s.get_lvc() << "mH"
-               << "\n";
-            node_counter = node_counter + 1;
-            of << "lces " << node_counter << " " << 0 << " " << std::to_string(lces)
-               << "mH\n";
-            of << "cmes " << node_counter << " " << 0 << " " << std::to_string(cmes)
-               << "uF\n";
-            of << "res " << node_counter << " " << 0 << " " << std::to_string(res) << "\n";
-            of << "cmef " << node_counter << " " << 0 << " " << std::to_string(cmef)
-               << "uF\n";
-        }
-        else
-        {
-            // simple model, model speaker as resistor
-            of << "R" << s.get_id() << " " << node_counter << " " << 0 << " "
-               << std::to_string(s.get_rdc()) << "\n";
-        }
-
-        if (use_gnucap)
-        {
-            of << ".print ac vdb(" << spk_node << ")"
-               << "\n";
-            of << ".ac DEC 50 20 20k"
-               << "\n";
-        }
-        else
-        {
-            of << ".ac DEC 50 20 20k"
-               << "\n";
-            of << ".print ac db(v(" << spk_node << "))"
-               << "\n";
-        }
-        of << ".end"
-           << "\n";
-        of.close();
+        next_node_cnt_inc = 2;
     }
     else
     {
-        throw std::runtime_error("filter_network::to_SPICE: could not write " + tmp_file);
+        next_node_cnt_inc = 1;
     }
+
+    if (m_has_damp)
+    {
+        output << "R" << m_damp_R1.get_id() << " " << node_counter << " " << 0 << " "
+               << std::to_string(m_damp_R1.get_value()) << "\n";
+        output << "R" << m_damp_R2.get_id() << " " << node_counter << " "
+               << node_counter + next_node_cnt_inc << " "
+               << std::to_string(m_damp_R2.get_value()) << "\n";
+        node_counter += next_node_cnt_inc;
+        next_node_cnt_inc = 1;
+    }
+
+    int spk_node = node_counter;
+
+    // insert speaker resistance, TODO: insert speaker impedance table
+    if (m_advanced_impedance_model == 1)
+    {
+        // Complex model
+        double const cmes = s.get_mmd() / (s.get_bl() * s.get_bl()) * 1'000'000;
+        double const lces = s.get_bl() * s.get_bl() * s.get_cms() * 1'000;
+        double const res = s.get_bl() * s.get_bl() / s.get_rms();
+
+        // air density kg/m^3
+        constexpr double po = 1.18;
+
+        double const cmef = 8 * po * s.get_ad() * s.get_ad() * s.get_ad()
+                            / (3 * s.get_bl() * s.get_bl()) * 1'000'000;
+
+        output << "R" << s.get_id() << " " << node_counter << " "
+               << node_counter + next_node_cnt_inc << " " << s.get_rdc() << "\n";
+        node_counter = node_counter + next_node_cnt_inc;
+        output << "L" << s.get_id() << " " << node_counter << " " << node_counter + 1
+               << " " << s.get_lvc() << "mH"
+               << "\n";
+        node_counter = node_counter + 1;
+        output << "lces " << node_counter << " " << 0 << " " << std::to_string(lces)
+               << "mH\n";
+        output << "cmes " << node_counter << " " << 0 << " " << std::to_string(cmes)
+               << "uF\n";
+        output << "res " << node_counter << " " << 0 << " " << std::to_string(res) << "\n";
+        output << "cmef " << node_counter << " " << 0 << " " << std::to_string(cmef)
+               << "uF\n";
+    }
+    else
+    {
+        // simple model, model speaker as resistor
+        output << "R" << s.get_id() << " " << node_counter << " " << 0 << " "
+               << std::to_string(s.get_rdc()) << "\n";
+    }
+
+    if (use_gnucap)
+    {
+        output << ".print ac vdb(" << spk_node << ")\n";
+        output << ".ac DEC 50 20 20k\n";
+    }
+    else
+    {
+        output << ".ac DEC 50 20 20k\n";
+        output << ".print ac db(v(" << spk_node << "))\n";
+    }
+    output << ".end\n";
+    output.close();
+
     return tmp_file;
 }
 
@@ -779,7 +528,7 @@ auto operator<<(std::ostream& output, filter_network const& net) -> std::ostream
            << _("Lowpass  #") << net.m_lowpass_order << "\n"
            << _("Has imp corr: ") << net.m_has_imp_corr << "\n"
            << _("Has damping : ") << net.m_has_damp << "\n"
-           << _("Has resonanse circuit: ") << net.m_has_res << "\n";
+           << _("Has resonance circuit: ") << net.m_has_res << "\n";
     output << _("Parts:") << "\n";
 
     // Print every part in this net
@@ -820,10 +569,10 @@ void filter_network::set_has_imp_corr(bool has_impedance_correction)
     }
 }
 
-void filter_network::set_has_damp(bool has_dampening)
+void filter_network::set_has_damp(bool has_damping)
 {
-    m_has_damp = has_dampening;
-    if (has_dampening)
+    m_has_damp = has_damping;
+    if (has_damping)
     {
         m_damp_R1 = passive_component(PART_TYPE_RESISTOR, 1, "");
         m_damp_R2 = passive_component(PART_TYPE_RESISTOR, 1, "");
@@ -840,7 +589,7 @@ void filter_network::setup_net_by_order(int new_order, int which_net)
         int diff = new_order - m_lowpass_order;
         if (diff > 0)
         {
-            // increase filter order: add parts to the lowpass part of the net
+            // increase filter order: add parts to the lowpass part output the net
             switch (diff)
             {
                 case 1: // add one part

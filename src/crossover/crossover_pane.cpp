@@ -212,9 +212,7 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     {
         return *m_toolbar;
     }
-
     m_toolbar = Gtk::make_managed<Gtk::Toolbar>();
-
     {
         auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::COPY,
                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR);
@@ -223,9 +221,7 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
             sigc::mem_fun(m_crossover_history, &crossover_history::on_new_copy));
         m_toolbar->append(*t);
     }
-
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
-
     {
         auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::OPEN,
                                                 Gtk::ICON_SIZE_LARGE_TOOLBAR);
@@ -262,8 +258,8 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
         m_toolbar->append(*t);
     }
     m_toolbar->set_toolbar_style(
-        (Gtk::ToolbarStyle)g_settings.getValueUnsignedInt("ToolbarStyl"
-                                                          "e"));
+        static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyl"
+                                                                      "e")));
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
 
     g_settings.settings_changed.connect(
@@ -272,10 +268,7 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     return *m_toolbar;
 }
 
-void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num)
-{
-    std::cout << "Switching pesky page\n";
-}
+void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num) {}
 
 void crossover_pane::on_plot_crossover()
 {
@@ -314,16 +307,6 @@ void crossover_pane::set_save_state(bool state)
     }
     if (m_menu_item.has_submenu())
     {
-        // FIXME gtk3 port
-        // for (auto& child : m_menu_item.get_children())
-        // {
-        //     if (child->get_name() == "Save")
-        //     {
-        //         child->set_sensitive(state);
-        //     }
-        // }
-        // m_menu_item.get_children().at(MENU_INDEX_SAVE)->set_sensitive(state);
-
         gspk::crossoverlist_modified() = state;
     }
 }

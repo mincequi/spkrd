@@ -23,8 +23,7 @@
  *
  */
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #include <sigc++/sigc++.h>
 
@@ -85,5 +84,3 @@ private:
     std::map<std::string, std::string> m_map;
     std::string m_filename;
 };
-
-#endif

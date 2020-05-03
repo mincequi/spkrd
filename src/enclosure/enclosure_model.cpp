@@ -1,6 +1,8 @@
 
 
-#include <enclosure_model.hpp>
+#include "enclosure_model.hpp"
+
+#include "unit_conversion.hpp"
 
 #include <cassert>
 #include <cmath>
@@ -59,4 +61,35 @@ auto frequency_response(double const Qtc,
                                     + 1.0));
 }
 }
+
+namespace ported
+{
+auto port_length(double const port_radius,
+                 double const enclosure_volume,
+                 double const tuning_frequency) noexcept -> double
+{
+    // The formula has the constants written in freedom units. We can do the
+    // conversion with a few calls to some functions (should all be inlined and
+    // optimised away) and then convert back to units that make sense.
+    return inch_to_cm(
+        1.463E7 * std::pow(cm_to_inch(port_radius), 2)
+            / (std::pow(tuning_frequency, 2) * litre_to_cubic_inches(enclosure_volume))
+        - 1.463 * cm_to_inch(port_radius));
+}
+
+auto minimum_port_diameter(double const cone_displacement_volume,
+                           double const tuning_frequency) noexcept -> double
+{
+    return 100.0
+           * std::sqrt(411.25 * cone_displacement_volume / std::sqrt(tuning_frequency));
+}
+
+auto minimum_port_diameter_conservative(double const cone_displacement_volume,
+                                        double const tuning_frequency) noexcept -> double
+{
+    return 100.0 * std::sqrt(tuning_frequency * cone_displacement_volume);
+}
+
+}
+
 }
