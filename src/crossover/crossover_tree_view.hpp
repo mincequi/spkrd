@@ -72,13 +72,13 @@ protected:
     };
 
 protected:
-    Gtk::ScrolledWindow m_ScrolledWindow;
-    Gtk::TreeView m_TreeView;
-    Glib::RefPtr<Gtk::TreeStore> m_refTreeStore;
-    std::vector<crossover_cell_item> m_vecItems;
+    Gtk::ScrolledWindow m_scrolled_window;
+    Gtk::TreeView m_tree_view;
+    Glib::RefPtr<Gtk::TreeStore> m_tree_store;
+    std::vector<crossover_cell_item> m_items;
 
     // Pointer to currently selected crossover
-    Crossover* cover;
+    Crossover* m_cover;
 
     model_columns const m_columns;
 };

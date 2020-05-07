@@ -33,21 +33,21 @@ crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
     static_cast<Gtk::Label*>(get_label_widget())
         ->set_markup("<b>" + Glib::ustring(_("Currently selected crossover")) + "</b>");
 
-    m_ScrolledWindow.set_border_width(12);
-    add(m_ScrolledWindow);
+    m_scrolled_window.set_border_width(12);
+    add(m_scrolled_window);
 
-    m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-    m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+    m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     // create model
     create_model();
 
     // create tree view
-    m_TreeView.set_model(m_refTreeStore);
-    m_TreeView.set_rules_hint();
+    m_tree_view.set_model(m_tree_store);
+    m_tree_view.set_rules_hint();
 
     add_columns();
-    m_ScrolledWindow.add(m_TreeView);
+    m_scrolled_window.add(m_tree_view);
 
     signal_crossover_selected.connect(
         sigc::mem_fun(*this, &crossover_tree_view::on_crossover_selected));
@@ -63,15 +63,14 @@ void crossover_tree_view::on_net_modified_by_wizard()
 {
     std::puts("crossover_tree_view::on_net_modified_by_wizard");
 
-    on_crossover_selected(cover);
+    on_crossover_selected(m_cover);
 }
 
 void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
                                                Glib::ustring const& new_text)
 {
-    std::puts("crossover_tree_view::on_cell_edited_value");
     std::cout << "crossover_tree_view::on_cell_edited_value: path string = " << path_string
-              << "\network";
+              << "network";
 
     Gtk::TreePath path(path_string);
 
@@ -80,26 +79,26 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
         return;
     }
 
-    Gtk::TreeRow row = *(m_refTreeStore->get_iter(path));
+    Gtk::TreeRow row = *(m_tree_store->get_iter(path));
     row[m_columns.value] = std::atof(new_text.c_str());
 
-#ifndef NDEBUG
     std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0]
               << ":" << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
-#endif
-    /* Since the stupid signals doesn't seem to work we have to go through the
-       data-containers and update values for the particular part we change... */
 
-    /* Index is a counter for the extra circuits (impedance correction network, damping
-       network...) we have Number of extra circuits + the crossover is the total number of
-       "base nodes" after filter type nodes */
-    filter_network* network = &(cover->networks())[path[0]];
+    // Since the stupid signals doesn't seem to work we have to go through the
+    // data-containers and update values for the particular part we change.
+
+    // Index is a counter for the extra circuits (impedance correction network,
+    // damping network...) we have a number of extra circuits + the crossover
+    // is the total number of "base nodes" after filter type nodes
+    filter_network* network = &(m_cover->networks())[path[0]];
 
     int ndx = 0;
     bool mod = false;
+
     if (network->get_has_imp_corr())
     {
-        // Check if we have edited imp corr
+        // Check if we have edited the impedance correction
         if (path[1] == ndx)
         {
             // If we have edited imp corr, update the appropriate component
@@ -157,12 +156,15 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
         }
         ndx++;
     }
-    // If we did not modified anything until here, the actual crossover is the circuit to modify
+
+    // If we did not modified anything until here, the actual crossover is
+    // the circuit to modify
     if (!mod)
     {
-        /* check path[2], if this is 0 we edit the part with offset 0
-           if path[2] = 1 we have a bandpassfilter and we should add an offset of the
-           lowpassfilter order to path[3] which is the index of the highpass part to change */
+        // check path[2], if this is 0 we edit the part with offset 0
+        // if path[2] = 1 we have a bandpassfilter and we should add an offset
+        // of the lowpass filter order to path[3] which is the index of the
+        // highpass part to change
         if (path[2] == 0)
         {
             network->parts()[path[3]].set_value(row[m_columns.value]);
@@ -173,10 +175,10 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
                 row[m_columns.value]);
         }
     }
-#ifndef NDEBUG
+
     std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id]
-              << "\network";
-#endif
+              << "network";
+
     // Tell others that we have modified a part
     signal_net_modified_by_user(network);
 }
@@ -194,16 +196,14 @@ crossover_tree_view::model_columns::model_columns()
 
 void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
 {
-#ifndef NDEBUG
     std::puts("crossover_tree_view::on_crossover_selected");
-#endif
 
-    m_refTreeStore->clear();
-    m_vecItems.clear();
+    m_tree_store->clear();
+    m_items.clear();
 
-    cover = new_crossover;
+    m_cover = new_crossover;
 
-    for (auto network : cover->networks())
+    for (auto network : m_cover->networks())
     {
         std::vector<crossover_cell_item> crossover_elements;
         std::vector<crossover_cell_item> filter;
@@ -229,8 +229,10 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
         // The rest of the parts
         auto const type = network.get_type();
 
-        std::vector<passive_component> const& parts = network.parts();
+        auto const& parts = network.parts();
+
         int counter = 0;
+
         if (type == NET_TYPE_LOWPASS)
         {
             int nof_lowpass_parts = network.get_lowpass_order();
@@ -254,43 +256,41 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
         switch (type)
         {
             case NET_TYPE_LOWPASS:
-                m_vecItems.emplace_back(_("Lowpass"), crossover_elements);
+                m_items.emplace_back(_("Lowpass"), crossover_elements);
                 break;
             case NET_TYPE_BANDPASS:
-                m_vecItems.emplace_back(_("Bandpass"), crossover_elements);
+                m_items.emplace_back(_("Bandpass"), crossover_elements);
                 break;
             case NET_TYPE_HIGHPASS:
-                m_vecItems.emplace_back(_("Highpass"), crossover_elements);
+                m_items.emplace_back(_("Highpass"), crossover_elements);
                 break;
             default:
-                m_vecItems.emplace_back(_("Other"), crossover_elements);
+                m_items.emplace_back(_("Other"), crossover_elements);
         }
     }
-    std::for_each(begin(m_vecItems),
-                  end(m_vecItems),
+    std::for_each(begin(m_items),
+                  end(m_items),
                   sigc::mem_fun(*this, &crossover_tree_view::treestore_add_item));
 
-    m_TreeView.expand_all();
+    m_tree_view.expand_all();
 
-#ifndef NDEBUG
     std::puts("crossover_tree_view::on_crossover_selected finished");
-#endif
 }
 
 void crossover_tree_view::create_model()
 {
-    m_refTreeStore = Gtk::TreeStore::create(m_columns);
+    m_tree_store = Gtk::TreeStore::create(m_columns);
 
-    std::for_each(begin(m_vecItems),
-                  end(m_vecItems),
+    std::for_each(begin(m_items),
+                  end(m_items),
                   sigc::mem_fun(*this, &crossover_tree_view::treestore_add_item));
 }
 
-void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
+void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
 {
-    Gtk::TreeRow row = *(m_refTreeStore->append());
+    Gtk::TreeRow row = *(m_tree_store->append());
 
-    row[m_columns.id_string] = foo.m_label;
+    row[m_columns.id_string] = item.m_label;
     row[m_columns.type] = 0;
     row[m_columns.value] = 0.0;
     row[m_columns.unit] = "";
@@ -298,9 +298,9 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
     row[m_columns.id] = 0;
     row[m_columns.visible] = false;
 
-    for (crossover_cell_item const& child : foo.m_children)
+    for (crossover_cell_item const& child : item.m_children)
     {
-        Gtk::TreeRow child_row = *(m_refTreeStore->append(row.children()));
+        Gtk::TreeRow child_row = *(m_tree_store->append(row.children()));
         child_row[m_columns.id_string] = child.m_label;
         child_row[m_columns.id] = 0;
         child_row[m_columns.visible] = false;
@@ -308,8 +308,8 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
 
         for (crossover_cell_item const& child2 : child.m_children)
         {
-            Gtk::TreeRow child_row2 = *(m_refTreeStore->append(child_row.children()));
-            /* If this is the filter parts node */
+            Gtk::TreeRow child_row2 = *(m_tree_store->append(child_row.children()));
+            // If this is the filter parts node
             if ((child2.m_label == _("Highpass")) || (child2.m_label == _("Lowpass")))
             {
                 /* One more node with the filter type */
@@ -318,11 +318,10 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
                 child_row2[m_columns.visible] = false;
                 child_row2[m_columns.editable] = false;
 
-                /* Then insert the parts */
-                for (const crossover_cell_item& child3 : child2.m_children)
+                // Then insert the parts
+                for (crossover_cell_item const& child3 : child2.m_children)
                 {
-                    Gtk::TreeRow child_row3 = *(
-                        m_refTreeStore->append(child_row2.children()));
+                    Gtk::TreeRow child_row3 = *(m_tree_store->append(child_row2.children()));
                     child_row3[m_columns.id_string] = child3.m_label;
                     child_row3[m_columns.id] = child3.m_id;
                     child_row3[m_columns.type] = child3.m_type;
@@ -350,11 +349,11 @@ void crossover_tree_view::treestore_add_item(const crossover_cell_item& foo)
 void crossover_tree_view::add_columns()
 {
     {
-        auto* renderer = Gtk::manage(new Gtk::CellRendererText());
+        auto* renderer = Gtk::make_managed<Gtk::CellRendererText>();
         renderer->property_xalign().set_value(0.0);
 
-        auto* column = m_TreeView.get_column(
-            m_TreeView.append_column(_("Id_string"), *renderer) - 1);
+        auto* column = m_tree_view.get_column(
+            m_tree_view.append_column(_("Id_string"), *renderer) - 1);
         if (column != nullptr)
         {
             column->add_attribute(renderer->property_text(), m_columns.id_string);
@@ -362,13 +361,13 @@ void crossover_tree_view::add_columns()
         }
     }
     {
-        cell_renderer_popup* renderer = Gtk::manage(new cell_renderer_popup());
+        auto* renderer = Gtk::make_managed<cell_renderer_popup>();
         renderer->property_xalign().set_value(0.0);
         renderer->signal_edited().connect(
             sigc::mem_fun(*this, &crossover_tree_view::on_cell_edited_value));
 
-        auto* column = m_TreeView.get_column(
-            m_TreeView.insert_column(_("Value"), *renderer, -1) - 1);
+        auto* column = m_tree_view.get_column(
+            m_tree_view.insert_column(_("Value"), *renderer, -1) - 1);
 
         if (column != nullptr)
         {
@@ -384,11 +383,11 @@ void crossover_tree_view::add_columns()
         }
     }
     {
-        Gtk::CellRendererText* renderer = Gtk::manage(new Gtk::CellRendererText());
+        auto* renderer = Gtk::make_managed<Gtk::CellRendererText>();
         renderer->property_xalign().set_value(0.0);
 
-        auto* column = m_TreeView.get_column(
-            m_TreeView.append_column(_("Unit"), *renderer) - 1);
+        auto* column = m_tree_view.get_column(
+            m_tree_view.append_column(_("Unit"), *renderer) - 1);
         if (column != nullptr)
         {
             column->add_attribute(renderer->property_text(), m_columns.unit);
@@ -399,7 +398,7 @@ void crossover_tree_view::add_columns()
 }
 
 void crossover_tree_view::value_cell_data_func(Gtk::CellRenderer* cell,
-                                               const Gtk::TreeModel::iterator& iter)
+                                               Gtk::TreeModel::iterator const& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = gspk::to_ustring((*iter)[m_columns.value], 3, 1);
@@ -408,8 +407,6 @@ void crossover_tree_view::value_cell_data_func(Gtk::CellRenderer* cell,
 
 void crossover_tree_view::on_realize()
 {
-    m_TreeView.expand_all();
-
-    // call base class:
+    m_tree_view.expand_all();
     Frame::on_realize();
 }
