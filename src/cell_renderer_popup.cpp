@@ -43,7 +43,9 @@ auto grab_on_window(const Glib::RefPtr<Gdk::Window>& window, guint32 activate_ti
 } // anonymous namespace
 
 cell_renderer_popup::cell_renderer_popup()
-    : Glib::ObjectBase(typeid(cell_renderer_popup)), Gtk::CellRendererText(), m_popup_window(Gtk::WINDOW_POPUP)
+    : Glib::ObjectBase(typeid(cell_renderer_popup)),
+      Gtk::CellRendererText(),
+      m_popup_window(Gtk::WINDOW_POPUP)
 {
     std::cout << "cell_renderer_popup::cell_renderer_popup\n";
 
@@ -125,7 +127,8 @@ auto cell_renderer_popup::start_editing_vfunc(GdkEvent*,
         sigc::mem_fun(*this, &cell_renderer_popup::on_popup_editing_done));
     // popup_entry_box->signal_arrow_clicked().connect(sigc::mem_fun(*this,
     // &cell_renderer_popup::on_popup_arrow_clicked));
-    popup_entry_box->signal_hide().connect(sigc::mem_fun(*this, &cell_renderer_popup::on_popup_hide));
+    popup_entry_box->signal_hide().connect(
+        sigc::mem_fun(*this, &cell_renderer_popup::on_popup_hide));
 
     std::cout << property_text() << std::endl;
 
@@ -138,7 +141,11 @@ auto cell_renderer_popup::start_editing_vfunc(GdkEvent*,
     return m_popup_entry;
 }
 
-void cell_renderer_popup::on_show_popup(const Glib::ustring& path, int x1, int y1, int x2, int y2)
+void cell_renderer_popup::on_show_popup(const Glib::ustring& path,
+                                        int x1,
+                                        int y1,
+                                        int x2,
+                                        int y2)
 {
     std::puts("cell_renderer_popup::on_show_popup");
     // I'm not sure this is ok to do, but we need to show the window to be
@@ -200,7 +207,9 @@ void cell_renderer_popup::on_show_popup(const Glib::ustring& path, int x1, int y
 void cell_renderer_popup::on_hide_popup()
 {
     std::puts("cell_renderer_popup::on_hide_popup");
+
     gtk_grab_remove(m_popup_window.Gtk::Widget::gobj());
+
     m_popup_window.hide();
 
     if (m_popup_entry != nullptr)
@@ -246,7 +255,10 @@ auto cell_renderer_popup::on_button_press_event(GdkEventButton* event) -> bool
     const int x2 = x1 + alloc.get_width();
     const int y2 = y1 + alloc.get_height();
 
-    if (x > x1 && x < x2 && y > y1 && y < y2) return false;
+    if (x > x1 && x < x2 && y > y1 && y < y2)
+    {
+        return false;
+    }
 
     m_editing_canceled = true;
     m_signal_hide_popup();
@@ -319,7 +331,11 @@ void cell_renderer_popup::on_popup_arrow_clicked()
 
     Gtk::Allocation const alloc = m_popup_entry->get_allocation();
 
-    m_signal_show_popup(m_popup_entry->get_path(), x, y, x + alloc.get_width(), y + alloc.get_height());
+    m_signal_show_popup(m_popup_entry->get_path(),
+                        x,
+                        y,
+                        x + alloc.get_width(),
+                        y + alloc.get_height());
 }
 
 void cell_renderer_popup::on_popup_hide()

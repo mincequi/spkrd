@@ -42,7 +42,8 @@ public:
     void set_focus_widget(Gtk::Widget& focus_widget);
     auto get_focus_widget() -> Gtk::Widget*;
 
-    auto signal_show_popup() -> sigc::signal5<void, const Glib::ustring&, int, int, int, int>&;
+    auto signal_show_popup()
+        -> sigc::signal5<void, const Glib::ustring&, int, int, int, int>&;
 
     auto signal_hide_popup() -> sigc::signal0<void>&;
 
@@ -77,7 +78,7 @@ private:
     void on_popup_hide();
 
 private:
-    sigc::signal5<void, const Glib::ustring&, int, int, int, int> m_signal_show_popup;
+    sigc::signal5<void, Glib::ustring const&, int, int, int, int> m_signal_show_popup;
     sigc::signal0<void> m_signal_hide_popup;
 
     // Cached button width
