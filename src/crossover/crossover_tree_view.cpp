@@ -39,7 +39,6 @@ crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
     m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-    // create model
     create_model();
 
     // create tree view
