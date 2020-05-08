@@ -21,8 +21,6 @@
 
 #include "signal.hpp"
 #include "common.h"
-#include "cell_renderer_popup.hpp"
-#include "popup_entry.hpp"
 
 #include <iostream>
 
@@ -39,7 +37,7 @@ crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
     m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-    create_model();
+    this->create_model();
 
     // create tree view
     m_tree_view.set_model(m_tree_store);
@@ -78,7 +76,7 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
         return;
     }
 
-    Gtk::TreeRow row = *(m_tree_store->get_iter(path));
+    auto row = *(m_tree_store->get_iter(path));
     row[m_columns.value] = std::atof(new_text.c_str());
 
     std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0]
@@ -287,7 +285,7 @@ void crossover_tree_view::create_model()
 
 void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
 {
-    Gtk::TreeRow row = *(m_tree_store->append());
+    auto row = *(m_tree_store->append());
 
     row[m_columns.id_string] = item.m_label;
     row[m_columns.type] = 0;
@@ -299,7 +297,7 @@ void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
 
     for (crossover_cell_item const& child : item.m_children)
     {
-        Gtk::TreeRow child_row = *(m_tree_store->append(row.children()));
+        auto child_row = *(m_tree_store->append(row.children()));
         child_row[m_columns.id_string] = child.m_label;
         child_row[m_columns.id] = 0;
         child_row[m_columns.visible] = false;
@@ -307,7 +305,7 @@ void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
 
         for (crossover_cell_item const& child2 : child.m_children)
         {
-            Gtk::TreeRow child_row2 = *(m_tree_store->append(child_row.children()));
+            auto child_row2 = *(m_tree_store->append(child_row.children()));
             // If this is the filter parts node
             if ((child2.m_label == _("Highpass")) || (child2.m_label == _("Lowpass")))
             {
@@ -320,7 +318,7 @@ void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
                 // Then insert the parts
                 for (crossover_cell_item const& child3 : child2.m_children)
                 {
-                    Gtk::TreeRow child_row3 = *(m_tree_store->append(child_row2.children()));
+                    auto child_row3 = *(m_tree_store->append(child_row2.children()));
                     child_row3[m_columns.id_string] = child3.m_label;
                     child_row3[m_columns.id] = child3.m_id;
                     child_row3[m_columns.type] = child3.m_type;
@@ -348,38 +346,33 @@ void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
 void crossover_tree_view::add_columns()
 {
     {
-        auto* renderer = Gtk::make_managed<Gtk::CellRendererText>();
-        renderer->property_xalign().set_value(0.0);
-
-        auto* column = m_tree_view.get_column(
-            m_tree_view.append_column(_("Id_string"), *renderer) - 1);
-        if (column != nullptr)
-        {
-            column->add_attribute(renderer->property_text(), m_columns.id_string);
-            column->set_resizable();
-        }
+        auto const column_sizes = m_tree_view.append_column(_("Identifier"),
+                                                            m_columns.id_string);
+        m_tree_view.get_column(column_sizes - 1)->set_resizable();
     }
     {
-        auto* renderer = Gtk::make_managed<cell_renderer_popup>();
-        renderer->property_xalign().set_value(0.0);
-        renderer->signal_edited().connect(
+        m_treeviewcolumn_validated.set_title("Value");
+        m_treeviewcolumn_validated.pack_start(m_cellrenderer_validated);
+
+        m_tree_view.append_column(m_treeviewcolumn_validated);
+
+        m_cellrenderer_validated.property_editable() = true;
+
+        m_cellrenderer_validated.signal_edited().connect(
             sigc::mem_fun(*this, &crossover_tree_view::on_cell_edited_value));
 
-        auto* column = m_tree_view.get_column(
-            m_tree_view.insert_column(_("Value"), *renderer, -1) - 1);
+        m_treeviewcolumn_validated
+            .set_cell_data_func(m_cellrenderer_validated,
+                                sigc::mem_fun(*this,
+                                              &crossover_tree_view::value_cell_data_func));
 
-        if (column != nullptr)
-        {
-            column->set_cell_data_func(*renderer,
-                                       sigc::mem_fun(*this,
-                                                     &crossover_tree_view::value_cell_data_func));
-
-            column->add_attribute(renderer->property_editable(), m_columns.editable);
-            column->add_attribute(renderer->property_visible(), m_columns.visible);
-            // Set width to 55 px, looks ok on my screen when we get the spinbutton widget
-            column->set_min_width(55);
-            column->set_resizable();
-        }
+        m_treeviewcolumn_validated.add_attribute(m_cellrenderer_validated.property_editable(),
+                                                 m_columns.editable);
+        m_treeviewcolumn_validated.add_attribute(m_cellrenderer_validated.property_visible(),
+                                                 m_columns.visible);
+        // Set width to 55 px, looks ok on my screen when we get the spinbutton widget
+        m_treeviewcolumn_validated.set_min_width(55);
+        m_treeviewcolumn_validated.set_resizable();
     }
     {
         auto* renderer = Gtk::make_managed<Gtk::CellRendererText>();

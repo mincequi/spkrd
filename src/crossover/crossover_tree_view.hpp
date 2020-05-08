@@ -58,7 +58,7 @@ protected:
     virtual void treestore_add_item(crossover_cell_item const& foo);
 
 protected:
-    struct model_columns : public Gtk::TreeModelColumnRecord
+    struct model_columns : public Gtk::TreeModel::ColumnRecord
     {
         model_columns();
 
@@ -81,4 +81,9 @@ protected:
     Crossover* m_cover;
 
     model_columns const m_columns;
+
+    Gtk::CellRendererText m_cellrenderer_validated;
+    Gtk::TreeView::Column m_treeviewcolumn_validated;
+    bool m_validate_retry;
+    Glib::ustring m_invalid_text_for_retry;
 };
