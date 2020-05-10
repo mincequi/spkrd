@@ -51,7 +51,7 @@ private:
     void redraw(Cairo::RefPtr<Cairo::Context> const& context);
 
     /*
-     * Draw capacitor to refPixmap
+     * Draw capacitor to Cairo context
      *
      * id     = component id
      * x      = horizontal position
