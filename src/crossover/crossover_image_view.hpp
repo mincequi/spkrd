@@ -179,8 +179,6 @@ private:
     bool m_visible{false};
     bool m_scale_image_parts;
 
-    Glib::RefPtr<Pango::Layout> m_refLayout;
-
     Crossover* m_crossover{nullptr};
     std::shared_ptr<driver_list const> m_drivers{nullptr};
 };
