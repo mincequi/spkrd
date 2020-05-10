@@ -46,7 +46,7 @@ extern sigc::signal1<void, int> signal_select_plot;
 /* Define two signals for crossover parts updates */
 extern sigc::signal0<void> signal_net_modified_by_wizard; // listen to this in crossover treeview
 extern sigc::signal1<void, filter_network*>
-    signal_net_modified_by_user; // listan to this in filter wizard
+    signal_net_modified_by_user; // listen to this in filter wizard
 extern sigc::signal1<void, int> signal_new_crossover;
 extern sigc::signal0<void> signal_plot_crossover;
 extern sigc::signal4<int, std::vector<gspk::point> const&, Gdk::Color const&, int&, filter_network*>
