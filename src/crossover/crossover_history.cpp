@@ -124,8 +124,8 @@ void crossover_history::select_first_row()
         m_tree_view.get_selection()->select(row);
     }
 
-    Gtk::TreeRow row = *(m_list_store->get_iter(Gtk::TreePath(std::to_string(0))));
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
+    auto row = *(m_list_store->get_iter(Gtk::TreePath(std::to_string(0))));
+    auto selection = m_tree_view.get_selection();
     selection->select(row);
 }
 
@@ -238,17 +238,18 @@ void crossover_history::append_xml(const std::string& filename)
 
 void crossover_history::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
+    auto selection = m_tree_view.get_selection();
 
     if (const Gtk::TreeIter iter = selection->get_selected())
     {
-        Gtk::TreePath path = m_list_store->get_path(iter);
+        auto path = m_list_store->get_path(iter);
 
         if (!path.empty())
         {
             m_index = path[0];
             signal_crossover_selected(&((m_crossover_list.data())[path[0]]));
-            /* Plot the crossover immediately after we selected it */
+
+            // Plot the crossover immediately after we selected it
             if (g_settings.getValueBool("AutoUpdateFilterPlots"))
             {
                 signal_plot_crossover();
@@ -259,14 +260,14 @@ void crossover_history::on_selection_changed()
 
 void crossover_history::on_new_copy()
 {
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
+    auto selection = m_tree_view.get_selection();
 
     if (!m_crossover_list.data().empty())
     {
         // Find out which row we selected
         if (auto const iter = selection->get_selected())
         {
-            Gtk::TreePath path = m_list_store->get_path(iter);
+            auto path = m_list_store->get_path(iter);
 
             if (!path.empty())
             {
@@ -306,9 +307,7 @@ void crossover_history::on_new_copy()
 
 void crossover_history::on_new_from_menu(int type)
 {
-#ifndef NDEBUG
     std::cout << "crossover_history::on_new_from_menu: " << type << "\n";
-#endif
 
     Crossover c(type, _("Crossover ") + time_of_day());
 
