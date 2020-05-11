@@ -736,19 +736,26 @@ void filter_link_frame::on_drivers_loaded(std::shared_ptr<driver_list const> con
     }
 }
 
+auto filter_link_frame::plot_line_colour() -> Gdk::Color
+{
+    return (m_network->get_type() & NET_TYPE_LOWPASS) != 0
+               ? Gdk::Color("blue")
+               : (m_network->get_type() & NET_TYPE_HIGHPASS) != 0
+                     ? Gdk::Color("red")
+                     : Gdk::Color("darkgreen");
+}
+
 void filter_link_frame::on_plot_crossover()
 {
-    std::puts("DEBUG: plotting cross-over");
+    std::puts("filter_link_frame::on_plot_crossover: plotting crossover");
 
     this->perform_spice_simulation();
 
-    Gdk::Color const line_colour = (m_network->get_type() & NET_TYPE_LOWPASS) != 0
-                                       ? Gdk::Color("blue")
-                                       : (m_network->get_type() & NET_TYPE_HIGHPASS) != 0
-                                             ? Gdk::Color("red")
-                                             : Gdk::Color("darkgreen");
     // send the spice data to the plot
-    signal_add_crossover_plot(m_points, line_colour, my_filter_plot_index, m_network);
+    signal_add_crossover_plot(m_points,
+                              this->plot_line_colour(),
+                              my_filter_plot_index,
+                              m_network);
 
     if (!m_enable_edit)
     {
@@ -823,7 +830,7 @@ void filter_link_frame::perform_spice_simulation()
     }
     catch (std::runtime_error const& error)
     {
-        Gtk::MessageDialog(_("filter_link_frame::on_plot_crossover: ERROR: ")
+        Gtk::MessageDialog(_("Error during SPICE circuit simulation: ")
                                + Glib::ustring(error.what()),
                            false,
                            Gtk::MESSAGE_ERROR,

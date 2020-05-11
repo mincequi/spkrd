@@ -75,6 +75,8 @@ private:
 
     void perform_spice_simulation();
 
+    auto plot_line_colour() -> Gdk::Color;
+
 private:
     /// Numerical coefficients for the filter principles
     /// net_name_type = NET_BESSEL, ...,
