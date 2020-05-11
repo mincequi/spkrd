@@ -32,7 +32,7 @@
 frequency_response_plot::frequency_response_plot()
     : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
-    m_speakerlist = nullptr;
+    m_drivers = nullptr;
 
     add(m_plot);
 
@@ -95,8 +95,9 @@ auto frequency_response_plot::parse_frequency_response_file(std::string const& f
         return points;
     }
 
-    std::cout << "frequency_response_plot::on_add_plot: freq_resp_file = " << filename
-              << '\n';
+    std::cout << "frequency_response_plot::parse_frequency_response_file: freq_resp_file "
+                 "= "
+              << filename << '\n';
 
     std::ifstream input_file(filename.c_str());
 
@@ -129,19 +130,17 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
                                           int& output_plot_index,
                                           filter_network* network) -> int
 {
-#ifndef NDEBUG
     std::puts("frequency_response_plot::on_add_plot");
-#endif
 
     auto const& plot_index = output_plot_index;
 
     driver current_driver;
-    if (m_speakerlist != nullptr)
+    if (m_drivers != nullptr)
     {
-        current_driver = m_speakerlist->get_by_id_string(network->get_speaker());
+        current_driver = m_drivers->get_by_id_string(network->get_speaker());
     }
 
-    std::vector<gspk::point> freq_resp_points = this->parse_frequency_response_file(
+    auto freq_resp_points = this->parse_frequency_response_file(
         current_driver.get_freq_resp_filename());
 
     std::vector<gspk::point> points;
@@ -159,18 +158,18 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
     }
 
     // Search for plot_index in the graph
-    auto const location = std::find(begin(m_nets), end(m_nets), plot_index);
+    auto const location = std::find(begin(m_networks), end(m_networks), plot_index);
 
     // If plot_index is in the graph, replace the old point-vector, if plot_index not in
     // graph insert it at the end of the vector
-    if (location != end(m_nets) && !m_points.empty())
+    if (location != end(m_networks) && !m_points.empty())
     {
-        m_points[std::distance(begin(m_nets), location)] = points;
+        m_points[std::distance(begin(m_networks), location)] = points;
     }
     else
     {
         m_points.push_back(points);
-        m_nets.push_back(plot_index);
+        m_networks.push_back(plot_index);
     }
 
     m_plot.remove_all_plots();
@@ -206,20 +205,14 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
 void frequency_response_plot::clear()
 {
     m_points.clear();
-    m_nets.clear();
+    m_networks.clear();
     m_plot.remove_all_plots();
 }
 
-void frequency_response_plot::on_crossover_selected(Crossover*)
-{
-    std::puts("frequency_response_plot::on_crossover_selected");
-    clear();
-}
+void frequency_response_plot::on_crossover_selected(Crossover*) { this->clear(); }
 
-void frequency_response_plot::on_drivers_loaded(std::shared_ptr<driver_list const> const& driver_list)
+void frequency_response_plot::on_drivers_loaded(
+    std::shared_ptr<driver_list const> const& driver_list)
 {
-#ifndef NDEBUG
-    std::puts("frequency_response_plot::on_drivers_loaded");
-#endif
-    m_speakerlist = driver_list;
+    m_drivers = driver_list;
 }

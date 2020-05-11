@@ -57,8 +57,8 @@ private:
 
 private:
     plot m_plot;
-    std::vector<int> m_nets;
+    std::vector<int> m_networks;
     Gdk::Color m_color;
     std::vector<std::vector<gspk::point>> m_points;
-    std::shared_ptr<driver_list const> m_speakerlist;
+    std::shared_ptr<driver_list const> m_drivers;
 };
