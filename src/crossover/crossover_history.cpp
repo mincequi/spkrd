@@ -213,9 +213,8 @@ void crossover_history::open_xml(const std::string& filename)
 
 void crossover_history::append_xml(const std::string& filename)
 {
-#ifndef NDEBUG
-    std::cout << "append xml ok: " << filename << "\n";
-#endif
+    std::cout << "crossover_history::append_xml Append xml ok: " << filename << "\n";
+
     crossover_list temp_crossover_list;
     try
     {
