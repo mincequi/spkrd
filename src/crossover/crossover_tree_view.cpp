@@ -22,6 +22,8 @@
 #include "signal.hpp"
 #include "common.h"
 
+#include <gtkmm/messagedialog.h>
+
 #include <iostream>
 
 crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
@@ -51,7 +53,7 @@ crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
     signal_net_modified_by_wizard.connect(
         sigc::mem_fun(*this, &crossover_tree_view::on_net_modified_by_wizard));
 
-    show_all();
+    show_all_children();
 }
 
 crossover_tree_view::~crossover_tree_view() = default;
@@ -77,7 +79,17 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     }
 
     auto row = *(m_tree_store->get_iter(path));
-    row[m_columns.value] = std::atof(new_text.c_str());
+
+    auto const new_value = std::atof(new_text.c_str());
+
+    if (new_value < 0.0)
+    {
+        Gtk::MessageDialog(_("The input value must be positive"), false, Gtk::MESSAGE_ERROR)
+            .run();
+        return;
+    }
+
+    row[m_columns.value] = new_value;
 
     std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0]
               << ":" << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
@@ -91,7 +103,7 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     filter_network* network = &(m_cover->networks())[path[0]];
 
     int ndx = 0;
-    bool mod = false;
+    bool is_modified = false;
 
     if (network->get_has_imp_corr())
     {
@@ -103,11 +115,11 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
             {
                 case 0:
                     network->get_imp_corr_C().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
                 case 1:
                     network->get_imp_corr_R().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
             }
         }
@@ -121,11 +133,11 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
             {
                 case 0:
                     network->get_damp_R1().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
                 case 1:
                     network->get_damp_R2().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
             }
         }
@@ -139,15 +151,15 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
             {
                 case 0:
                     network->get_res_L().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
                 case 1:
                     network->get_res_C().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
                 case 2:
                     network->get_res_R().set_value(row[m_columns.value]);
-                    mod = true;
+                    is_modified = true;
                     break;
             }
         }
@@ -156,7 +168,7 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
 
     // If we did not modified anything until here, the actual crossover is
     // the circuit to modify
-    if (!mod)
+    if (!is_modified)
     {
         // check path[2], if this is 0 we edit the part with offset 0
         // if path[2] = 1 we have a bandpassfilter and we should add an offset
@@ -176,7 +188,6 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id]
               << "network";
 
-    // Tell others that we have modified a part
     signal_net_modified_by_user(network);
 }
 
@@ -234,11 +245,11 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
         {
             int nof_lowpass_parts = network.get_lowpass_order();
 
-            for (int i = counter; i < nof_lowpass_parts; i++, counter++)
+            for (; counter < nof_lowpass_parts; ++counter)
             {
                 lowpass_filter.emplace_back(parts[counter]);
             }
-            filter.emplace_back(_("Lowpass"), lowpass_filter);
+            filter.emplace_back(_("Low pass"), lowpass_filter);
         }
         if (type == NET_TYPE_HIGHPASS)
         {
@@ -246,25 +257,26 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
             {
                 highpass_filter.emplace_back(parts[counter]);
             }
-            filter.emplace_back(_("Highpass"), highpass_filter);
+            filter.emplace_back(_("High pass"), highpass_filter);
         }
         crossover_elements.emplace_back(_("Filter"), filter);
 
         switch (type)
         {
             case NET_TYPE_LOWPASS:
-                m_items.emplace_back(_("Lowpass"), crossover_elements);
+                m_items.emplace_back(_("Low pass"), crossover_elements);
                 break;
             case NET_TYPE_BANDPASS:
-                m_items.emplace_back(_("Bandpass"), crossover_elements);
+                m_items.emplace_back(_("Band pass"), crossover_elements);
                 break;
             case NET_TYPE_HIGHPASS:
-                m_items.emplace_back(_("Highpass"), crossover_elements);
+                m_items.emplace_back(_("High pass"), crossover_elements);
                 break;
             default:
                 m_items.emplace_back(_("Other"), crossover_elements);
         }
     }
+
     std::for_each(begin(m_items),
                   end(m_items),
                   sigc::mem_fun(*this, &crossover_tree_view::treestore_add_item));
@@ -307,7 +319,7 @@ void crossover_tree_view::treestore_add_item(crossover_cell_item const& item)
         {
             auto child_row2 = *(m_tree_store->append(child_row.children()));
             // If this is the filter parts node
-            if ((child2.m_label == _("Highpass")) || (child2.m_label == _("Lowpass")))
+            if ((child2.m_label == _("High pass")) || (child2.m_label == _("Low pass")))
             {
                 /* One more node with the filter type */
                 child_row2[m_columns.id_string] = child2.m_label;
@@ -357,6 +369,8 @@ void crossover_tree_view::add_columns()
         m_tree_view.append_column(m_treeviewcolumn_validated);
 
         m_cellrenderer_validated.property_editable() = true;
+        m_cellrenderer_validated.property_xalign().set_value(0.0);
+        m_cellrenderer_validated.property_yalign().set_value(0.5);
 
         m_cellrenderer_validated.signal_edited().connect(
             sigc::mem_fun(*this, &crossover_tree_view::on_cell_edited_value));
@@ -370,13 +384,14 @@ void crossover_tree_view::add_columns()
                                                  m_columns.editable);
         m_treeviewcolumn_validated.add_attribute(m_cellrenderer_validated.property_visible(),
                                                  m_columns.visible);
-        // Set width to 55 px, looks ok on my screen when we get the spinbutton widget
+
         m_treeviewcolumn_validated.set_min_width(55);
         m_treeviewcolumn_validated.set_resizable();
     }
     {
         auto* renderer = Gtk::make_managed<Gtk::CellRendererText>();
         renderer->property_xalign().set_value(0.0);
+        renderer->property_yalign().set_value(0.5);
 
         auto* column = m_tree_view.get_column(
             m_tree_view.append_column(_("Unit"), *renderer) - 1);
@@ -395,6 +410,7 @@ void crossover_tree_view::value_cell_data_func(Gtk::CellRenderer* cell,
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
     renderer.property_text() = gspk::to_ustring((*iter)[m_columns.value], 3, 1);
     renderer.property_xalign() = 1.0;
+    renderer.property_yalign() = 1.0;
 }
 
 void crossover_tree_view::on_realize()
