@@ -30,15 +30,12 @@
 #include <string>
 #include <vector>
 
-/// This is max and min y-axis-values
-constexpr auto MAX_NEG_VALUE = -40;
-constexpr auto MAX_POS_VALUE = 10;
+namespace spkrd
+{
 /// 30 is a nice little space to have between the graph and the window-border
 constexpr auto BOX_FRAME_SIZE = 30;
-/// We want vertical lines on every 5 dB
-constexpr auto N_VERTICAL_LINES = 2 * (-MAX_NEG_VALUE + MAX_POS_VALUE) / 10 - 1;
 /// Upper frequency limit
-constexpr auto UPPER_LIMIT = 1000;
+}
 
 /// This is a class that can draw plots. It has add_plot, remove_plot
 /// and a few other methods you can use. It has logarithmic x-axis and

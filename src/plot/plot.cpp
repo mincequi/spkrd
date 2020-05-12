@@ -55,6 +55,8 @@ auto plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
 auto plot::add_plot(std::vector<gspk::point> const& plot_points,
                     Gdk::Color const& line_colour) -> int
 {
+    using spkrd::BOX_FRAME_SIZE;
+
     auto const& allocation = get_allocation();
 
     m_visible_plots.push_back(true);
@@ -62,7 +64,7 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
     m_points.push_back(plot_points);
 
     int total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
-    int half_space_x = std::round(total_space_x / 2);
+    int decade_width = std::round(total_space_x / 2);
 
     auto const box_height = allocation.get_height() - 2 * BOX_FRAME_SIZE;
 
@@ -79,15 +81,15 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
                 // Divide by 10 to only log numbers 0 < number < 10
                 auto const f_mapped = std::log10(point.get_x() / 10.0);
                 // This is the x coordinate
-                x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
+                x = BOX_FRAME_SIZE + std::round(decade_width / 2 * f_mapped);
             }
             else if (point.get_x() >= 100)
             {
                 // Divide by 100 to only log numbers 0 < number < 10
                 auto const f_mapped = std::log10(point.get_x() / 100.0);
                 // This is the x coordinate
-                x = std::round(BOX_FRAME_SIZE + half_space_x / 2
-                               + std::round(half_space_x / 2 * f_mapped));
+                x = std::round(BOX_FRAME_SIZE + decade_width / 2
+                               + std::round(decade_width / 2 * f_mapped));
             }
         }
         else
@@ -97,14 +99,14 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
                 // Divide by 10 to only log numbers 0 < number < 10
                 auto const f_mapped = std::log10(point.get_x() / 10.0);
                 // This is the x coordinate
-                x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
+                x = BOX_FRAME_SIZE + std::round(decade_width * f_mapped);
             }
             else if (point.get_x() >= 100)
             {
                 // Divide by 100 to only log numbers 0 < number < 10
                 auto const f_mapped = std::log10(point.get_x() / 100.0);
                 // This is the x coordinate
-                x = BOX_FRAME_SIZE + half_space_x + std::round(half_space_x * f_mapped);
+                x = BOX_FRAME_SIZE + decade_width + std::round(decade_width * f_mapped);
             }
         }
 
@@ -115,6 +117,8 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
         y = std::round(box_height + BOX_FRAME_SIZE
                        - (point.get_y() - m_lower_y) * box_height
                              / static_cast<double>(m_upper_y - m_lower_y));
+
+        std::cout << "x, y = " << x << ", " << y << '\n';
 
         // Don't draw anything if we got zeros
         if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
@@ -167,16 +171,16 @@ void plot::replace_plot(int const plot_index,
                         std::vector<gspk::point> const& points,
                         Gdk::Color const& line_colour)
 {
-    m_points[plot_index] = points;
-    m_colors[plot_index] = line_colour;
+    m_points.at(plot_index) = points;
+    m_colors.at(plot_index) = line_colour;
 }
 
 void plot::remove_plot(int const plot_index)
 {
     if (plot_index > static_cast<int>(m_points.size()))
     {
-        throw std::runtime_error("Plot removed was greater than number of available "
-                                 "plots");
+        throw std::out_of_range("Plot removed was greater than number of available "
+                                "plots");
     }
 
     m_points.erase(std::next(begin(m_points), plot_index));
@@ -185,42 +189,50 @@ void plot::remove_plot(int const plot_index)
 
     m_selected_plot = -1;
 
-    if (m_visible)
+    auto const& window = get_window();
+
+    if (window)
     {
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     get_allocation().get_width(),
-                                                     get_allocation().get_height()),
-                                      false);
+        window->invalidate_rect(Gdk::Rectangle(0,
+                                               0,
+                                               get_allocation().get_width(),
+                                               get_allocation().get_height()),
+                                false);
     }
 }
 
 void plot::remove_all_plots()
 {
+    std::cout << "REMOVING ALL PLOTS" << std::endl;
+
     m_points.clear();
     m_colors.clear();
     m_visible_plots.clear();
 
-    if (m_visible)
+    auto const& window = get_window();
+
+    if (window)
     {
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     get_allocation().get_width(),
-                                                     get_allocation().get_height()),
-                                      false);
+        window->invalidate_rect(Gdk::Rectangle(0,
+                                               0,
+                                               get_allocation().get_width(),
+                                               get_allocation().get_height()),
+                                false);
     }
 }
 
 void plot::hide_plot(int const plot_index)
 {
     m_visible_plots[plot_index] = !m_visible_plots[plot_index];
-    if (m_visible)
+
+    auto const& window = get_window();
+    if (window)
     {
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     get_allocation().get_width(),
-                                                     get_allocation().get_height()),
-                                      false);
+        window->invalidate_rect(Gdk::Rectangle(0,
+                                               0,
+                                               get_allocation().get_width(),
+                                               get_allocation().get_height()),
+                                false);
     }
 }
 
@@ -228,18 +240,21 @@ void plot::select_plot(int index)
 {
     m_selected_plot = index;
 
-    if (m_visible)
+    auto const& window = get_window();
+    if (window)
     {
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     get_allocation().get_width(),
-                                                     get_allocation().get_height()),
-                                      false);
+        window->invalidate_rect(Gdk::Rectangle(0,
+                                               0,
+                                               get_allocation().get_width(),
+                                               get_allocation().get_height()),
+                                false);
     }
 }
 
 void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 {
+    using spkrd::BOX_FRAME_SIZE;
+
     auto const& allocation = get_allocation();
 
     // Clear to white background color
@@ -273,8 +288,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     for (int i = m_lower_y; i < m_upper_y; i += 5)
     {
         int y = std::round(box_height + BOX_FRAME_SIZE
-                           - (-m_lower_y + i) * box_height
-                                 / static_cast<double>(-m_lower_y + m_upper_y));
+                           - (i - m_lower_y) * box_height
+                                 / static_cast<double>(m_upper_y - m_lower_y));
 
         context->move_to(BOX_FRAME_SIZE - 3, y);
         context->line_to(allocation.get_width() - BOX_FRAME_SIZE + 3, y);
@@ -305,7 +320,8 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     }
 
     auto const total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
-    auto const half_space_x = std::round(total_space_x / 2);
+    auto const decade_width = m_upper_x == 20000 ? std::round(total_space_x / 4.0)
+                                                 : std::round(total_space_x / 2.0);
 
     // Map points in m_points to screen points
     auto const n_plots = m_points.size();
@@ -316,69 +332,41 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         {
             std::vector<Gdk::Point> points;
 
-            double f_div, f_mapped;
-            int x, y;
-
             for (auto& point : m_points[i])
             {
-                if (m_upper_x == 20000)
+                int x = 0, y = 0;
+
+                if (point.get_x() < 100)
                 {
-                    if (point.get_x() < 100)
-                    {
-                        // Divide by 10 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 10.0;
-                        f_mapped = std::log10(f_div);
-
-                        // This is the x coordinate
-                        x = BOX_FRAME_SIZE + std::round(half_space_x / 2 * f_mapped);
-                    }
-                    else if (point.get_x() >= 100)
-                    {
-                        // Divide by 100 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 100.0;
-                        f_mapped = std::log10(f_div);
-
-                        // This is the x coordinate
-                        x = std::round(BOX_FRAME_SIZE + half_space_x / 2
-                                       + std::round(half_space_x / 2 * f_mapped));
-                    }
-                    else if (point.get_x() >= 1000)
+                    // Divide by 10 to only log numbers 0 < number < 10
+                    // This is the x coordinate
+                    x = BOX_FRAME_SIZE
+                        + std::round(decade_width * std::log10(point.get_x() / 10.0));
+                }
+                else if (point.get_x() >= 100 && point.get_x() < 1000)
+                {
+                    // Divide by 100 to only log numbers 0 < number < 10
+                    // This is the x coordinate
+                    x = std::round(
+                        BOX_FRAME_SIZE + decade_width
+                        + std::round(decade_width * std::log10(point.get_x() / 100.0)));
+                }
+                else if (m_upper_x == 20000)
+                {
+                    if (point.get_x() >= 1000 && point.get_x() < 10000)
                     {
                         // Divide by 1000 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 1000.0;
-                        f_mapped = std::log10(f_div);
                         // This is the x coordinate
-                        x = BOX_FRAME_SIZE + half_space_x
-                            + std::round((half_space_x / 2) * f_mapped);
+                        x = BOX_FRAME_SIZE + 2.0 * decade_width
+                            + std::round(decade_width * std::log10(point.get_x() / 1000.0));
                     }
                     else if (point.get_x() >= 10000)
                     {
-                        // Divide by 1000 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 10000.0;
-                        f_mapped = std::log10(f_div);
+                        // Divide by 10000 to only log numbers 0 < number < 10
                         // This is the x coordinate
-                        x = std::round(BOX_FRAME_SIZE + 1.5 * half_space_x
-                                       + std::round((half_space_x / 2) * f_mapped));
-                    }
-                }
-                else
-                {
-                    if (point.get_x() < 100)
-                    {
-                        // Divide by 10 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 10.0;
-                        f_mapped = std::log10(f_div);
-                        // This is the x coordinate
-                        x = BOX_FRAME_SIZE + std::round(half_space_x * f_mapped);
-                    }
-                    else if (point.get_x() >= 100)
-                    {
-                        // Divide by 100 to only log numbers 0 < number < 10
-                        f_div = point.get_x() / 100.0;
-                        f_mapped = std::log10(f_div);
-                        // This is the x coordinate
-                        x = BOX_FRAME_SIZE + half_space_x
-                            + std::round(half_space_x * f_mapped);
+                        x = std::round(BOX_FRAME_SIZE + 3.0 * decade_width
+                                       + std::round(decade_width
+                                                    * std::log10(point.get_x() / 10000.0)));
                     }
                 }
 
@@ -436,57 +424,77 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
 void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
 {
+    using spkrd::BOX_FRAME_SIZE;
+
     auto const& allocation = get_allocation();
 
     context->set_line_width(0.5);
     context->set_source_rgb(0.0, 0.0, 0.0);
 
-    auto total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
-    auto quarter_space_x = std::round(total_space_x / 4);
-    auto half_space_x = std::round(total_space_x / 2);
-    auto xaxis_y_position = allocation.get_height() - BOX_FRAME_SIZE;
+    //              Frequency response graph
+    //
+    //    |-------------------------------------------|
+    // M  |                                           |
+    // a  |                                           |
+    // g  |                                           |
+    //    |                                           |
+    //    |-------------------------------------------|
+    //    20Hz                                      20kHz
+    //
+    //                 Frequency (Hz)
+
+    auto const total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
+    auto const xaxis_y_position = allocation.get_height() - BOX_FRAME_SIZE;
 
     // Draw the logarithmic vertical x-lines
-    if (m_upper_x == 20000)
-    {
-        half_space_x = quarter_space_x;
-    }
+    auto decade_width = m_upper_x == 20000 ? std::round(total_space_x / 3.0)
+                                           : std::round(total_space_x / 2.0);
 
-    for (int i = 0; i <= 10; i++)
+    // The frequency response graph starts at 20Hz and ends at 20kHz.
+
+    std::cout << "total_space_x = " << total_space_x << '\n';
+    std::cout << "decade_width = " << decade_width << '\n';
+
+    auto offset_x = BOX_FRAME_SIZE;
+
+    // 20Hz to 100Hz
+    for (int i = 2; i < 10; i++)
     {
-        auto const x = BOX_FRAME_SIZE + std::round(std::log10(i) * half_space_x);
+        auto const x = offset_x + std::round(std::log10(i / 2.0) * decade_width);
 
         context->move_to(x, BOX_FRAME_SIZE);
         context->line_to(x, xaxis_y_position + 3);
         context->stroke();
 
-        // Draw text below some vertical lines
+        // Draw text below vertical lines
         if (i == 2 || i == 5)
         {
             this->draw_text_box(context, std::to_string(10 * i), x - 4, xaxis_y_position + 5);
         }
+
+        std::cout << "i, x = " << i << ", " << x << '\n';
     }
 
+    offset_x += decade_width * (1.0 - std::log10(2));
+
+    // 200Hz to 1kHz
     for (int i = 1; i <= 10; i++)
     {
-        int x = BOX_FRAME_SIZE + std::round(std::log10(i) * half_space_x);
+        auto const x = offset_x + std::round(std::log10(i) * decade_width);
 
-        context->move_to(half_space_x + x, BOX_FRAME_SIZE);
-        context->line_to(half_space_x + x, xaxis_y_position + 3);
+        context->move_to(x, BOX_FRAME_SIZE);
+        context->line_to(x, xaxis_y_position + 3);
         context->stroke();
 
-        // Special case: draw 1k instead of 1000
-        if (i == 10)
-        {
-            this->draw_text_box(context, "1k", half_space_x + x - 8, xaxis_y_position + 5);
-        }
-        else if (i == 2 || i == 5 || i == 1)
+        if (i == 1 || i == 2 || i == 5 || i == 10)
         {
             this->draw_text_box(context,
-                                std::to_string(100 * i),
-                                half_space_x + x - 8,
+                                // Special case: draw 1k instead of 1000
+                                i != 10 ? std::to_string(100 * i) : "1k",
+                                x - 8,
                                 xaxis_y_position + 5);
         }
+        std::cout << "i, x = " << i << ", " << x << '\n';
     }
 
     // Draw some more vertical lines if upper limit is 20000 Hz
@@ -495,45 +503,43 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
         return;
     }
 
-    for (int i = 1; i <= 10; i++)
-    {
-        auto const x = BOX_FRAME_SIZE + std::round(std::log10(i) * half_space_x);
+    offset_x += decade_width;
 
-        context->move_to(2 * half_space_x + x, BOX_FRAME_SIZE);
-        context->line_to(2 * half_space_x + x, xaxis_y_position + 3);
+    // 2kHz to 10kHz
+    for (int i = 2; i <= 10; i++)
+    {
+        auto const x = offset_x + std::round(std::log10(i) * decade_width);
+
+        context->move_to(x, BOX_FRAME_SIZE);
+        context->line_to(x, xaxis_y_position + 3);
         context->stroke();
 
         // Draw text below some vertical lines
-        if (i == 2 || i == 5)
-        {
-            this->draw_text_box(context,
-                                std::to_string(i) + "k",
-                                2 * half_space_x + x - 8,
-                                xaxis_y_position + 5);
-        }
-    }
-
-    for (int i = 1; i <= 10; i++)
-    {
-        auto const x = BOX_FRAME_SIZE + std::round(std::log10(i) * half_space_x);
-
-        context->move_to(3 * half_space_x + x, BOX_FRAME_SIZE);
-        context->line_to(3 * half_space_x + x, xaxis_y_position + 3);
-        context->stroke();
-
         if (i == 2 || i == 5 || i == 10)
         {
-            this->draw_text_box(context,
-                                std::to_string(10 * i) + "k",
-                                3 * half_space_x + x - 8,
-                                xaxis_y_position + 5);
+            this->draw_text_box(context, std::to_string(i) + "k", x - 8, xaxis_y_position + 5);
         }
+        std::cout << "i, x = " << i << ", " << x << '\n';
+    }
+
+    offset_x += decade_width;
+
+    // Draw the vertical line for 20kHz and we're done
+    {
+        auto const x = offset_x + std::round(std::log10(2) * decade_width);
+        context->move_to(x, BOX_FRAME_SIZE);
+        context->line_to(x, xaxis_y_position + 3);
+        context->stroke();
+
+        this->draw_text_box(context, "20k", x - 8, xaxis_y_position + 5);
     }
     context->set_line_width(1.0);
 }
 
 void plot::draw_linear_grid(Cairo::RefPtr<Cairo::Context> const& context)
 {
+    using spkrd::BOX_FRAME_SIZE;
+
     context->set_line_width(0.5);
     context->set_source_rgb(0.0, 0.0, 0.0);
 
