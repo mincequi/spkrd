@@ -64,7 +64,8 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
     m_points.push_back(plot_points);
 
     int total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
-    int decade_width = std::round(total_space_x / 2);
+    int decade_width = m_upper_x != 20000 ? std::round(total_space_x / 2)
+                                          : std::round(total_space_x / 4);
 
     auto const box_height = allocation.get_height() - 2 * BOX_FRAME_SIZE;
 
@@ -72,51 +73,19 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
 
     for (auto point : plot_points)
     {
-        int x, y;
-
-        if (m_upper_x == 20000)
-        {
-            if (point.get_x() < 100)
-            {
-                // Divide by 10 to only log numbers 0 < number < 10
-                auto const f_mapped = std::log10(point.get_x() / 10.0);
-                // This is the x coordinate
-                x = BOX_FRAME_SIZE + std::round(decade_width / 2 * f_mapped);
-            }
-            else if (point.get_x() >= 100)
-            {
-                // Divide by 100 to only log numbers 0 < number < 10
-                auto const f_mapped = std::log10(point.get_x() / 100.0);
-                // This is the x coordinate
-                x = std::round(BOX_FRAME_SIZE + decade_width / 2
-                               + std::round(decade_width / 2 * f_mapped));
-            }
-        }
-        else
-        {
-            if (point.get_x() < 100)
-            {
-                // Divide by 10 to only log numbers 0 < number < 10
-                auto const f_mapped = std::log10(point.get_x() / 10.0);
-                // This is the x coordinate
-                x = BOX_FRAME_SIZE + std::round(decade_width * f_mapped);
-            }
-            else if (point.get_x() >= 100)
-            {
-                // Divide by 100 to only log numbers 0 < number < 10
-                auto const f_mapped = std::log10(point.get_x() / 100.0);
-                // This is the x coordinate
-                x = BOX_FRAME_SIZE + decade_width + std::round(decade_width * f_mapped);
-            }
-        }
-
         // Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale
         point.set_y(point.get_y() < m_lower_y ? m_lower_y : m_upper_y);
 
+        // Divide by 10 to only log numbers 0 < number < 10
+        auto const f_mapped = std::log10(point.get_x()
+                                         / (point.get_x() < 100 ? 10.0 : 100.0));
+        // This is the x coordinate
+        int const x = BOX_FRAME_SIZE + std::round(decade_width * f_mapped);
+
         // Calculate y-coordinate
-        y = std::round(box_height + BOX_FRAME_SIZE
-                       - (point.get_y() - m_lower_y) * box_height
-                             / static_cast<double>(m_upper_y - m_lower_y));
+        int const y = std::round(box_height + BOX_FRAME_SIZE
+                                 - (point.get_y() - m_lower_y) * box_height
+                                       / static_cast<double>(m_upper_y - m_lower_y));
 
         std::cout << "x, y = " << x << ", " << y << '\n';
 
