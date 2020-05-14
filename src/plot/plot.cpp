@@ -328,96 +328,98 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
     for (std::size_t i = 0; i < n_plots; i++)
     {
-        if (m_visible_plots[i])
+        if (!m_visible_plots[i])
         {
-            std::vector<Gdk::Point> points;
+            continue;
+        }
 
-            for (auto& point : m_points[i])
+        std::vector<Gdk::Point> points;
+
+        for (auto& point : m_points[i])
+        {
+            int x = 0, y = 0;
+
+            if (point.get_x() < 100)
             {
-                int x = 0, y = 0;
-
-                if (point.get_x() < 100)
+                // Divide by 10 to only log numbers 0 < number < 10
+                // This is the x coordinate
+                x = BOX_FRAME_SIZE
+                    + std::round(decade_width * std::log10(point.get_x() / 10.0));
+            }
+            else if (point.get_x() >= 100 && point.get_x() < 1000)
+            {
+                // Divide by 100 to only log numbers 0 < number < 10
+                // This is the x coordinate
+                x = std::round(
+                    BOX_FRAME_SIZE + decade_width
+                    + std::round(decade_width * std::log10(point.get_x() / 100.0)));
+            }
+            else if (m_upper_x == 20000)
+            {
+                if (point.get_x() >= 1000 && point.get_x() < 10000)
                 {
-                    // Divide by 10 to only log numbers 0 < number < 10
+                    // Divide by 1000 to only log numbers 0 < number < 10
                     // This is the x coordinate
-                    x = BOX_FRAME_SIZE
-                        + std::round(decade_width * std::log10(point.get_x() / 10.0));
+                    x = BOX_FRAME_SIZE + 2.0 * decade_width
+                        + std::round(decade_width * std::log10(point.get_x() / 1000.0));
                 }
-                else if (point.get_x() >= 100 && point.get_x() < 1000)
+                else if (point.get_x() >= 10000)
                 {
-                    // Divide by 100 to only log numbers 0 < number < 10
+                    // Divide by 10000 to only log numbers 0 < number < 10
                     // This is the x coordinate
                     x = std::round(
-                        BOX_FRAME_SIZE + decade_width
-                        + std::round(decade_width * std::log10(point.get_x() / 100.0)));
-                }
-                else if (m_upper_x == 20000)
-                {
-                    if (point.get_x() >= 1000 && point.get_x() < 10000)
-                    {
-                        // Divide by 1000 to only log numbers 0 < number < 10
-                        // This is the x coordinate
-                        x = BOX_FRAME_SIZE + 2.0 * decade_width
-                            + std::round(decade_width * std::log10(point.get_x() / 1000.0));
-                    }
-                    else if (point.get_x() >= 10000)
-                    {
-                        // Divide by 10000 to only log numbers 0 < number < 10
-                        // This is the x coordinate
-                        x = std::round(BOX_FRAME_SIZE + 3.0 * decade_width
-                                       + std::round(decade_width
-                                                    * std::log10(point.get_x() / 10000.0)));
-                    }
-                }
-
-                // Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale
-                if (point.get_y() < m_lower_y)
-                {
-                    point.set_y(m_lower_y);
-                }
-                else if (point.get_y() > m_upper_y)
-                {
-                    point.set_y(m_upper_y);
-                }
-
-                // Calculate y-coordinate
-                y = std::round(box_height + BOX_FRAME_SIZE
-                               - (point.get_y() - m_lower_y) * box_height
-                                     / static_cast<double>(m_upper_y - m_lower_y));
-
-                // Don't draw anything if we got zeros
-                if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
-                {
-                    points.emplace_back(x, y);
+                        BOX_FRAME_SIZE + 3.0 * decade_width
+                        + std::round(decade_width * std::log10(point.get_x() / 10000.0)));
                 }
             }
 
-            // Draw only if the vector is not empty
-            if (!points.empty())
+            // Zero-level is on 3/4 of box_size_y, map -60 - 20 dB onto this scale
+            if (point.get_y() < m_lower_y)
             {
-                context->save();
-
-                if (static_cast<int>(i) == m_selected_plot)
-                {
-                    context->set_line_width(m_linesize + 1);
-                }
-
-                auto const& color = m_colors.at(i);
-
-                context->set_source_rgb(color.get_red_p(),
-                                        color.get_green_p(),
-                                        color.get_blue_p());
-
-                context->move_to(points.front().get_x(), points.front().get_y());
-
-                std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
-                    context->line_to(point.get_x(), point.get_y());
-                    context->stroke();
-                    context->move_to(point.get_x(), point.get_y());
-                });
-
-                context->restore();
+                point.set_y(m_lower_y);
             }
+            else if (point.get_y() > m_upper_y)
+            {
+                point.set_y(m_upper_y);
+            }
+
+            // Calculate y-coordinate
+            y = std::round(box_height + BOX_FRAME_SIZE
+                           - (point.get_y() - m_lower_y) * box_height
+                                 / static_cast<double>(m_upper_y - m_lower_y));
+
+            // Don't draw anything if we got zeros
+            if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
+            {
+                points.emplace_back(x, y);
+            }
+        }
+
+        // Draw only if the vector is not empty
+        if (!points.empty())
+        {
+            context->save();
+
+            if (static_cast<int>(i) == m_selected_plot)
+            {
+                context->set_line_width(m_linesize + 1);
+            }
+
+            auto const& color = m_colors.at(i);
+
+            context->set_source_rgb(color.get_red_p(),
+                                    color.get_green_p(),
+                                    color.get_blue_p());
+
+            context->move_to(points.front().get_x(), points.front().get_y());
+
+            std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
+                context->line_to(point.get_x(), point.get_y());
+                context->stroke();
+                context->move_to(point.get_x(), point.get_y());
+            });
+
+            context->restore();
         }
     }
 }
