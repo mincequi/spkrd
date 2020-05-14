@@ -306,7 +306,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 
         for (auto& point : m_points[i])
         {
-            int x = 0, y = 0;
+            int x = 0;
 
             if (point.get_x() < 100)
             {
@@ -353,9 +353,9 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
             }
 
             // Calculate y-coordinate
-            y = std::round(box_height + BOX_FRAME_SIZE
-                           - (point.get_y() - m_lower_y) * box_height
-                                 / static_cast<double>(m_upper_y - m_lower_y));
+            auto const y = std::round(box_height + BOX_FRAME_SIZE
+                                      - (point.get_y() - m_lower_y) * box_height
+                                            / static_cast<double>(m_upper_y - m_lower_y));
 
             // Don't draw anything if we got zeros
             if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
