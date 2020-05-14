@@ -37,7 +37,7 @@ plot::plot(int lower_x,
       m_lower_y{lower_y},
       m_upper_y{upper_y},
       m_y_zero_freq{y_zero_freq},
-      m_enable_sec_scale{static_cast<int>(enable_sec_scale)},
+      m_enable_sec_scale{enable_sec_scale},
       m_logx{logx},
       m_visible{false}
 {
@@ -86,8 +86,6 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
         int const y = std::round(box_height + BOX_FRAME_SIZE
                                  - (point.get_y() - m_lower_y) * box_height
                                        / static_cast<double>(m_upper_y - m_lower_y));
-
-        std::cout << "x, y = " << x << ", " << y << '\n';
 
         // Don't draw anything if we got zeros
         if (point.get_y() > m_lower_y && point.get_y() < m_upper_y)
@@ -264,14 +262,14 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         context->line_to(allocation.get_width() - BOX_FRAME_SIZE + 3, y);
         context->stroke();
 
-        this->draw_text_box(context, int_to_ustring3(i), BOX_FRAME_SIZE - 27, y - 8);
+        this->draw_text_box(context, int_to_ustring3(i), BOX_FRAME_SIZE * 0.1, y - 12);
 
-        if (m_enable_sec_scale != 0)
+        if (m_enable_sec_scale)
         {
             this->draw_text_box(context,
                                 int_to_ustring3(i - m_lower_y),
                                 allocation.get_width() - BOX_FRAME_SIZE + 5,
-                                y - 6);
+                                y - 12);
         }
     }
 
@@ -289,7 +287,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
     }
 
     auto const total_space_x = allocation.get_width() - 2 * BOX_FRAME_SIZE;
-    auto const decade_width = m_upper_x == 20000 ? std::round(total_space_x / 4.0)
+    auto const decade_width = m_upper_x == 20000 ? std::round(total_space_x / 3.0)
                                                  : std::round(total_space_x / 2.0);
 
     // Map points in m_points to screen points
@@ -313,15 +311,14 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 // Divide by 10 to only log numbers 0 < number < 10
                 // This is the x coordinate
                 x = BOX_FRAME_SIZE
-                    + std::round(decade_width * std::log10(point.get_x() / 10.0));
+                    + std::round(decade_width * std::log10(point.get_x() / 10.0 / 2.0));
             }
             else if (point.get_x() >= 100 && point.get_x() < 1000)
             {
                 // Divide by 100 to only log numbers 0 < number < 10
                 // This is the x coordinate
-                x = std::round(
-                    BOX_FRAME_SIZE + decade_width
-                    + std::round(decade_width * std::log10(point.get_x() / 100.0)));
+                x = BOX_FRAME_SIZE + decade_width * (1.0 - std::log10(2))
+                    + std::round(decade_width * std::log10(point.get_x() / 100.0));
             }
             else if (m_upper_x == 20000)
             {
@@ -329,7 +326,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                 {
                     // Divide by 1000 to only log numbers 0 < number < 10
                     // This is the x coordinate
-                    x = BOX_FRAME_SIZE + 2.0 * decade_width
+                    x = BOX_FRAME_SIZE + (2.0 - std::log10(2)) * decade_width
                         + std::round(decade_width * std::log10(point.get_x() / 1000.0));
                 }
                 else if (point.get_x() >= 10000)
@@ -337,7 +334,7 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                     // Divide by 10000 to only log numbers 0 < number < 10
                     // This is the x coordinate
                     x = std::round(
-                        BOX_FRAME_SIZE + 3.0 * decade_width
+                        BOX_FRAME_SIZE + (3.0 - std::log10(2)) * decade_width
                         + std::round(decade_width * std::log10(point.get_x() / 10000.0)));
                 }
             }
@@ -423,9 +420,6 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
 
     // The frequency response graph starts at 20Hz and ends at 20kHz.
 
-    std::cout << "total_space_x = " << total_space_x << '\n';
-    std::cout << "decade_width = " << decade_width << '\n';
-
     auto offset_x = BOX_FRAME_SIZE;
 
     // 20Hz to 100Hz
@@ -440,10 +434,8 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
         // Draw text below vertical lines
         if (i == 2 || i == 5)
         {
-            this->draw_text_box(context, std::to_string(10 * i), x - 4, xaxis_y_position + 5);
+            this->draw_text_box(context, std::to_string(10 * i), x - 8, xaxis_y_position + 5);
         }
-
-        std::cout << "i, x = " << i << ", " << x << '\n';
     }
 
     offset_x += decade_width * (1.0 - std::log10(2));
@@ -462,10 +454,9 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
             this->draw_text_box(context,
                                 // Special case: draw 1k instead of 1000
                                 i != 10 ? std::to_string(100 * i) : "1k",
-                                x - 8,
+                                i != 10 ? x - 16 : x - 8,
                                 xaxis_y_position + 5);
         }
-        std::cout << "i, x = " << i << ", " << x << '\n';
     }
 
     // Draw some more vertical lines if upper limit is 20000 Hz
@@ -490,7 +481,6 @@ void plot::draw_log_grid(Cairo::RefPtr<Cairo::Context> const& context)
         {
             this->draw_text_box(context, std::to_string(i) + "k", x - 8, xaxis_y_position + 5);
         }
-        std::cout << "i, x = " << i << ", " << x << '\n';
     }
 
     offset_x += decade_width;
@@ -550,7 +540,7 @@ void plot::draw_text_box(Cairo::RefPtr<Cairo::Context> const& context,
                          int const rectangle_height)
 {
     Pango::FontDescription font;
-    font.set_family("Monospace");
+    font.set_family("SansSerif");
 
     auto layout = create_pango_layout(text);
 
@@ -576,20 +566,28 @@ void plot::set_y_label(const std::string& text)
     if (m_visible)
     {
         auto const& allocation = get_allocation();
-        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
-        get_window()->invalidate_rect(update_rect, false);
+
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     allocation.get_width(),
+                                                     allocation.get_height()),
+                                      false);
     }
 }
 
-void plot::set_y_label2(const std::string& text)
+void plot::set_y_label2(std::string const& text)
 {
     m_y_label2 = text;
 
     if (m_visible)
     {
         auto const& allocation = get_allocation();
-        Gdk::Rectangle update_rect(0, 0, allocation.get_width(), allocation.get_height());
-        get_window()->invalidate_rect(update_rect, false);
+
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     allocation.get_width(),
+                                                     allocation.get_height()),
+                                      false);
     }
 }
 

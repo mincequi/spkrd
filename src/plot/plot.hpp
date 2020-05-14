@@ -33,7 +33,7 @@
 namespace spkrd
 {
 /// 30 is a nice little space to have between the graph and the window-border
-constexpr auto BOX_FRAME_SIZE = 30;
+constexpr auto BOX_FRAME_SIZE = 50;
 /// Upper frequency limit
 }
 
@@ -115,8 +115,8 @@ private:
     int m_lower_y;
     int m_upper_y;
     int m_y_zero_freq;
-    int m_enable_sec_scale;
 
+    bool m_enable_sec_scale;
     bool m_logx;
     bool m_visible;
     int m_selected_plot;
