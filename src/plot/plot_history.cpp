@@ -38,18 +38,18 @@ plot_history::plot_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 
     add(m_vbox);
 
-    m_vbox.pack_start(m_ScrolledWindow);
+    m_vbox.pack_start(m_scrolled_window);
 
-    m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-    m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+    m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     create_model();
 
     // create tree view
-    m_TreeView.set_model(m_refListStore);
-    m_TreeView.set_rules_hint();
+    m_tree_view.set_model(m_list_store);
+    m_tree_view.set_rules_hint();
 
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
+    auto selection = m_tree_view.get_selection();
     selection->signal_changed().connect(
         sigc::mem_fun(*this, &plot_history::on_selection_changed));
 
@@ -58,7 +58,7 @@ plot_history::plot_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 
     add_columns();
 
-    m_ScrolledWindow.add(m_TreeView);
+    m_scrolled_window.add(m_tree_view);
 
     show_all();
 }
@@ -69,11 +69,11 @@ auto plot_history::on_delete_event(GdkEventAny* event) -> bool { return true; }
 
 void plot_history::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = selection->get_selected())
     {
-        Gtk::TreePath path = m_refListStore->get_path(iter);
+        Gtk::TreePath path = m_list_store->get_path(iter);
 
         if (!path.empty())
         {
@@ -86,16 +86,16 @@ void plot_history::on_selection_changed()
 
 void plot_history::on_remove()
 {
-    Glib::RefPtr<Gtk::TreeSelection> refSelection = m_TreeView.get_selection();
+    auto selection = m_tree_view.get_selection();
 
-    if (const Gtk::TreeIter iter = refSelection->get_selected())
+    if (const Gtk::TreeIter iter = selection->get_selected())
     {
-        Gtk::TreePath path = m_refListStore->get_path(iter);
+        Gtk::TreePath path = m_list_store->get_path(iter);
 
         if (!path.empty())
         {
             // Remove item from ListStore
-            m_refListStore->erase(iter);
+            m_list_store->erase(iter);
             // Signal to the plot that we got the plot index to remove in indices[0]
             signal_remove_box_plot(path[0]);
         }
@@ -110,8 +110,8 @@ void plot_history::on_remove()
     {
         // Select first row
         Gtk::TreePath path(Glib::ustring(std::to_string(m_index > 0 ? m_index - 1 : 0)));
-        Gtk::TreeRow row = *(m_refListStore->get_iter(path));
-        refSelection->select(row);
+        Gtk::TreeRow row = *(m_list_store->get_iter(path));
+        selection->select(row);
     }
 }
 
@@ -132,20 +132,18 @@ void plot_history::on_add_plot(enclosure* b, driver* s, Gdk::Color& color)
 
 void plot_history::on_cell_plot_toggled(const Glib::ustring& path_string)
 {
-#ifndef NDEBUG
     std::puts("plot_history: toggle plot");
-#endif
 
     Gtk::TreePath path(path_string);
 
-    Gtk::TreeRow row = *(m_refListStore->get_iter(path));
+    Gtk::TreeRow row = *(m_list_store->get_iter(path));
 
     bool view_plot = row[m_columns.view_plot];
 
     // do something with the value
     view_plot = !view_plot;
 
-    path = m_refListStore->get_path(row);
+    path = m_list_store->get_path(row);
 
     if (!path.empty())
     {
@@ -155,74 +153,73 @@ void plot_history::on_cell_plot_toggled(const Glib::ustring& path_string)
     row[m_columns.view_plot] = view_plot;
 }
 
-void plot_history::create_model() { m_refListStore = Gtk::ListStore::create(m_columns); }
+void plot_history::create_model() { m_list_store = Gtk::ListStore::create(m_columns); }
 
 void plot_history::add_columns()
 {
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Color"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Colour"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.color);
+        column->add_attribute(renderer->property_text(), m_columns.color);
 
-        pColumn->add_attribute(pRenderer->property_foreground_gdk(), m_columns.color_);
-        pColumn->add_attribute(pRenderer->property_weight(), m_columns.weight_);
+        column->add_attribute(renderer->property_foreground_gdk(), m_columns.color_);
+        column->add_attribute(renderer->property_weight(), m_columns.weight_);
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererToggle());
-        pRenderer->signal_toggled().connect(
+        auto renderer = Gtk::manage(new Gtk::CellRendererToggle());
+        renderer->signal_toggled().connect(
             sigc::mem_fun(*this, &plot_history::on_cell_plot_toggled));
 
-        int cols_count = m_TreeView.append_column(_("Plot"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Plot"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->add_attribute(pRenderer->property_active(), m_columns.view_plot);
+        column->add_attribute(renderer->property_active(), m_columns.view_plot);
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Identifier"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Identifier"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.id_string);
+        column->add_attribute(renderer->property_text(), m_columns.id_string);
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("driver"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Driver"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->add_attribute(pRenderer->property_text(), m_columns.speaker_string);
+        column->add_attribute(renderer->property_text(), m_columns.speaker_string);
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Type"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Type"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this,
-                                                  &plot_history::type_cell_data_func));
+        column->set_cell_data_func(*renderer,
+                                   sigc::mem_fun(*this, &plot_history::type_cell_data_func));
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Vb1"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Vb1"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &plot_history::vb1_cell_data_func));
+        column->set_cell_data_func(*renderer,
+                                   sigc::mem_fun(*this, &plot_history::vb1_cell_data_func));
     }
     {
-        auto pRenderer = Gtk::manage(new Gtk::CellRendererText());
+        auto renderer = Gtk::manage(new Gtk::CellRendererText());
 
-        int cols_count = m_TreeView.append_column(_("Fb1"), *pRenderer);
-        Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count - 1);
+        auto const cols_count = m_tree_view.append_column(_("Fb1"), *renderer);
+        auto* column = m_tree_view.get_column(cols_count - 1);
 
-        pColumn->set_cell_data_func(*pRenderer,
-                                    sigc::mem_fun(*this, &plot_history::fb1_cell_data_func));
+        column->set_cell_data_func(*renderer,
+                                   sigc::mem_fun(*this, &plot_history::fb1_cell_data_func));
     }
 }
 
@@ -270,7 +267,7 @@ void plot_history::add_item(enclosure const& box, driver const& spk, Gdk::Color&
     GString* buffer = g_string_new(str);
     g_string_printf(buffer, "#%.2X%.2X%.2X", r, g, b);
 
-    Gtk::TreeRow row = *(m_refListStore->append());
+    auto row = *(m_list_store->append());
 
     row[m_columns.color] = Glib::ustring(buffer->str);
     row[m_columns.view_plot] = true;

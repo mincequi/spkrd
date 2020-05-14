@@ -34,7 +34,6 @@
 #include <gtkmm/label.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/table.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
@@ -114,10 +113,9 @@ protected:
     };
 
 protected:
-    Gtk::Table m_Table;
-    Gtk::ScrolledWindow m_ScrolledWindow;
-    Gtk::TreeView m_TreeView;
-    Glib::RefPtr<Gtk::ListStore> m_refListStore;
+    Gtk::ScrolledWindow m_scrolled_window;
+    Gtk::TreeView m_tree_view;
+    Glib::RefPtr<Gtk::ListStore> m_list_store;
 
     Gtk::Box m_vbox;
     Gtk::Label m_label;
