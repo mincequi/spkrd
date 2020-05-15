@@ -697,7 +697,7 @@ void filter_link_frame::on_net_updated(filter_network* network)
 
 void filter_link_frame::on_clear_and_plot()
 {
-    my_filter_plot_index = -1;
+    m_filter_plot_index = -1;
     this->on_plot_crossover();
 }
 
@@ -754,7 +754,7 @@ void filter_link_frame::on_plot_crossover()
     // send the spice data to the plot
     signal_add_crossover_plot(m_points,
                               this->plot_line_colour(),
-                              my_filter_plot_index,
+                              m_filter_plot_index,
                               m_network);
 
     if (!m_enable_edit)

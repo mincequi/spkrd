@@ -116,6 +116,6 @@ private:
     std::shared_ptr<driver_list const> m_drivers;
     bool m_enable_edit{false};
 
-    int my_filter_plot_index{-1};
+    int m_filter_plot_index{-1};
     std::vector<gspk::point> m_points;
 };
