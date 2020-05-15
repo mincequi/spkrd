@@ -285,11 +285,11 @@ void crossover_image_view::on_crossover_selected(Crossover* selected_crossover)
 
     if (m_visible)
     {
-        Gdk::Rectangle update_rect(0,
-                                   0,
-                                   get_allocation().get_width(),
-                                   get_allocation().get_height());
-        get_window()->invalidate_rect(update_rect, true);
+        get_window()->invalidate_rect(Gdk::Rectangle(0,
+                                                     0,
+                                                     get_allocation().get_width(),
+                                                     get_allocation().get_height()),
+                                      true);
     }
 }
 
