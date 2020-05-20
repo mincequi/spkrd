@@ -9,6 +9,8 @@
 #include <memory>
 #include <vector>
 
+namespace spkrd
+{
 class enclosure;
 class driver;
 class Crossover;
@@ -38,7 +40,7 @@ extern sigc::signal1<void, enclosure*> signal_box_selected;
 extern sigc::signal1<void, enclosure*> signal_box_modified;
 extern sigc::signal1<void, enclosure*> signal_add_to_boxlist;
 extern sigc::signal3<void, enclosure*, driver*, Gdk::Color&> signal_add_plot;
-extern sigc::signal2<int, std::vector<gspk::point>&, Gdk::Color&> signal_add_box_plot;
+extern sigc::signal2<int, std::vector<point>&, Gdk::Color&> signal_add_box_plot;
 extern sigc::signal1<void, int> signal_remove_box_plot;
 extern sigc::signal1<void, int> signal_hide_box_plot;
 extern sigc::signal1<void, int> signal_select_plot;
@@ -54,6 +56,7 @@ extern sigc::signal1<void, int> signal_new_crossover;
 extern sigc::signal0<void> signal_plot_crossover;
 
 /// Signal a new crossover that can be plotted
-extern sigc::signal4<int, std::vector<gspk::point> const&, Gdk::Color const&, int&, filter_network*>
+extern sigc::signal4<int, std::vector<point> const&, Gdk::Color const&, int&, filter_network*>
     signal_add_crossover_plot;
 extern sigc::signal0<void> signal_save_open_files;
+}

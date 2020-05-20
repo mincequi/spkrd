@@ -27,6 +27,8 @@
 #include <string>
 #include <vector>
 
+namespace spkrd
+{
 /// This is a class that handles a list of boxes
 class enclosure_list
 {
@@ -54,3 +56,4 @@ public:
 protected:
     std::vector<enclosure> m_box_list;
 };
+}

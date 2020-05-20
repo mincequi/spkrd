@@ -27,6 +27,8 @@
 #include <sstream>
 #include <utility>
 
+namespace spkrd
+{
 filter_network::filter_network(int type,
                                int lowpass_order,
                                int highpass_order,
@@ -118,7 +120,7 @@ filter_network::filter_network(int type,
 
 filter_network::filter_network(xmlNodePtr parent)
 {
-    gspk::check_name(parent, "net");
+    check_name(parent, "net");
 
     auto* child = parent->children;
 
@@ -135,27 +137,27 @@ filter_network::filter_network(xmlNodePtr parent)
                               "adv_imp_model",
                               "inv_pol"})
     {
-        gspk::check_name(child, label);
+        check_name(child, label);
         child = child->next;
     }
 
     child = parent->children;
-    m_type = gspk::parse_int(child, "type");
+    m_type = parse_int(child, "type");
 
     child = child->next;
-    m_lowpass_order = gspk::parse_int(child, "lowpass_order");
+    m_lowpass_order = parse_int(child, "lowpass_order");
 
     child = child->next;
-    m_highpass_order = gspk::parse_int(child, "highpass_order");
+    m_highpass_order = parse_int(child, "highpass_order");
 
     child = child->next;
-    m_has_imp_corr = (gspk::parse_int(child, "has_imp_corr") != 0);
+    m_has_imp_corr = (parse_int(child, "has_imp_corr") != 0);
 
     child = child->next;
-    m_has_damp = (gspk::parse_int(child, "has_damp") != 0);
+    m_has_damp = (parse_int(child, "has_damp") != 0);
 
     child = child->next;
-    m_has_res = (gspk::parse_int(child, "has_res") != 0);
+    m_has_res = (parse_int(child, "has_res") != 0);
 
     child = child->next;
     // Parse the parts from the xml file
@@ -197,19 +199,19 @@ filter_network::filter_network(xmlNodePtr parent)
     }
 
     child = child->next;
-    m_lowpass_family = gspk::parse_int(child, "lowpass_family");
+    m_lowpass_family = parse_int(child, "lowpass_family");
 
     child = child->next;
-    m_highpass_family = gspk::parse_int(child, "highpass_family");
+    m_highpass_family = parse_int(child, "highpass_family");
 
     child = child->next;
-    m_speaker = gspk::parse_string(child, "speaker");
+    m_speaker = parse_string(child, "speaker");
 
     child = child->next;
-    m_advanced_impedance_model = gspk::parse_int(child, "adv_imp_model");
+    m_advanced_impedance_model = parse_int(child, "adv_imp_model");
 
     child = child->next;
-    m_invert_polarity = (gspk::parse_int(child, "inv_pol") != 0);
+    m_invert_polarity = (parse_int(child, "inv_pol") != 0);
 }
 
 auto filter_network::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
@@ -280,7 +282,7 @@ auto filter_network::to_SPICE(driver const& s, bool use_gnucap) -> std::string
 #else
                            "/net"
 #endif
-                           + gspk::int_to_ustring(m_id) + ".tmp";
+                           + int_to_ustring(m_id) + ".tmp";
 
     std::ofstream output(tmp_file.c_str());
 
@@ -736,4 +738,5 @@ void filter_network::setup_net_by_order(int new_order, int which_net)
                           iter + m_lowpass_order + m_highpass_order);
         }
     }
+}
 }

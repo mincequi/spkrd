@@ -5,6 +5,8 @@
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
 
+using namespace spkrd;
+
 TEST_CASE("Populate enclosure list from xml")
 {
     SECTION("Empty case") { REQUIRE(driver_list().data().empty()); }

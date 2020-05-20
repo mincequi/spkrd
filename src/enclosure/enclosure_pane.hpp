@@ -31,6 +31,8 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/toolbar.h>
 
+namespace spkrd
+{
 class enclosure_pane : public Gtk::HPaned
 {
 public:
@@ -68,3 +70,4 @@ private:
     int nof_plots{0};
     bool plot_selected{false};
 };
+}

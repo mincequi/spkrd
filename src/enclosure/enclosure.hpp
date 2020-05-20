@@ -27,6 +27,8 @@
 #include <iosfwd>
 #include <string>
 
+namespace spkrd
+{
 constexpr auto BOX_TYPE_SEALED = 1;
 constexpr auto BOX_TYPE_PORTED = 2;
 
@@ -82,3 +84,4 @@ protected:
     double m_fb2;
     std::string m_speaker;
 };
+}

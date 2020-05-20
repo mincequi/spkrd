@@ -24,6 +24,8 @@
 #include <cmath>
 #include <iostream>
 
+namespace spkrd
+{
 plot::plot(int lower_x,
            int upper_x,
            int lower_y,
@@ -51,8 +53,8 @@ auto plot::on_draw(Cairo::RefPtr<Cairo::Context> const& context) -> bool
     return true;
 }
 
-auto plot::add_plot(std::vector<gspk::point> const& plot_points,
-                    Gdk::Color const& line_colour) -> int
+auto plot::add_plot(std::vector<point> const& plot_points, Gdk::Color const& line_colour)
+    -> int
 {
     using spkrd::BOX_FRAME_SIZE;
 
@@ -130,7 +132,7 @@ void plot::draw_lines(Cairo::RefPtr<Cairo::Context> const& context,
 }
 
 void plot::replace_plot(int const plot_index,
-                        std::vector<gspk::point> const& points,
+                        std::vector<point> const& points,
                         Gdk::Color const& line_colour)
 {
     m_points.at(plot_index) = points;
@@ -557,4 +559,5 @@ void plot::invalidate_window()
                                                get_allocation().get_height()),
                                 false);
     }
+}
 }

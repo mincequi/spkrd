@@ -29,6 +29,8 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 
+namespace spkrd
+{
 /// A TreeView that displays the currently selected crossover
 class crossover_tree_view : public Gtk::Frame
 {
@@ -87,3 +89,4 @@ protected:
     bool m_validate_retry;
     Glib::ustring m_invalid_text_for_retry;
 };
+}

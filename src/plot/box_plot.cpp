@@ -23,6 +23,8 @@
 
 #include "box_plot.hpp"
 
+namespace spkrd
+{
 box_plot::box_plot() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL), m_plot(1, 1000)
 {
     set_border_width(2);
@@ -48,4 +50,5 @@ box_plot::box_plot() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL), m_plot
     m_plot.set_y_label(_("Magnitude / dB"));
 
     show_all_children();
+}
 }

@@ -31,6 +31,8 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
+namespace spkrd
+{
 extern sigc::signal1<void, bool> signal_crossover_set_save_state;
 
 /*
@@ -130,3 +132,4 @@ protected:
 
     model_columns m_columns;
 };
+}

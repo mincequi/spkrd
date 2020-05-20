@@ -24,6 +24,8 @@
 #include <iosfwd>
 #include <string>
 
+namespace spkrd
+{
 /* passive_component types */
 constexpr auto PART_TYPE_CAPACITOR = 1;
 constexpr auto PART_TYPE_INDUCTOR = 2;
@@ -74,3 +76,4 @@ protected:
     /// Value unit, for example u (used in SPICE)
     std::string m_unit;
 };
+}

@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace gspk
+namespace spkrd
 {
 namespace sealed
 {

@@ -33,12 +33,14 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 enum NOTEBOOK_PAGE { DRIVERS = 0, ENCLOSURE = 1, FILTER = 2 };
 
 inline auto is_state_modified() -> bool
 {
-    return gspk::driverlist_modified() || gspk::enclosurelist_modified()
-           || gspk::crossoverlist_modified() || gspk::measurementlist_modified();
+    return driverlist_modified() || enclosurelist_modified() || crossoverlist_modified()
+           || measurementlist_modified();
 }
 
 main_window::main_window() : m_main_vbox(Gtk::ORIENTATION_VERTICAL)
@@ -468,3 +470,4 @@ void main_window::on_about()
 }
 
 void main_window::on_edit_settings() { settings_dialog{}.run(); }
+}

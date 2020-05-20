@@ -26,6 +26,8 @@
 #include <ctime>
 #include <iostream>
 
+namespace spkrd
+{
 plot_history::plot_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION_VERTICAL)
 {
     set_border_width(2);
@@ -245,7 +247,7 @@ void plot_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
+    renderer.property_text() = to_ustring((*iter)[m_columns.vb1], 2, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
@@ -253,7 +255,7 @@ void plot_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                       const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";
+    renderer.property_text() = to_ustring((*iter)[m_columns.fb1], 2, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 
@@ -281,4 +283,5 @@ void plot_history::add_item(enclosure const& box, driver const& spk, Gdk::Color&
     row[m_columns.fb2] = box.get_fb2();
     row[m_columns.color_] = color;
     row[m_columns.weight_] = Pango::WEIGHT_HEAVY;
+}
 }

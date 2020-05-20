@@ -27,6 +27,8 @@
 
 #include <vector>
 
+namespace spkrd
+{
 class filter_network;
 class Crossover;
 
@@ -41,7 +43,7 @@ public:
 
     [[deprecated]] void clear();
 
-    auto on_add_plot(std::vector<gspk::point> const& line_points,
+    auto on_add_plot(std::vector<point> const& line_points,
                      Gdk::Color const& line_colour,
                      int& plot_index,
                      filter_network*) noexcept(false) -> std::int32_t;
@@ -53,5 +55,6 @@ private:
     plot m_plot;
     std::vector<std::int32_t> m_networks;
     Gdk::Color m_color;
-    std::vector<std::vector<gspk::point>> m_points;
+    std::vector<std::vector<point>> m_points;
 };
+}

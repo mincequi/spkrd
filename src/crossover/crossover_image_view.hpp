@@ -30,6 +30,8 @@
 #include <string>
 #include <vector>
 
+namespace spkrd
+{
 /// The crossover_image_view is a widget that will display the
 /// current crossover as an image of the component layout
 class crossover_image_view : public Gtk::DrawingArea
@@ -182,3 +184,4 @@ private:
     Crossover* m_crossover{nullptr};
     std::shared_ptr<driver_list const> m_drivers{nullptr};
 };
+}

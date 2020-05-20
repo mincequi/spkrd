@@ -20,6 +20,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+namespace spkrd
+{
 crossover_list::crossover_list(const std::string& filename)
 {
     xmlKeepBlanksDefault(0);
@@ -85,4 +87,5 @@ auto operator<<(std::ostream& output, crossover_list const& crossover_list) -> s
         output << from;
     }
     return output;
+}
 }

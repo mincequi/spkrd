@@ -27,6 +27,8 @@
 #include <ctime>
 #include <iostream>
 
+namespace spkrd
+{
 /* Use this to signal parent when to gray/ungray save-buttons */
 sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
@@ -67,7 +69,7 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     std::cout << "boxlist_found = " << boxlist_found << "\n";
 
     m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                       + gspk::short_filename(m_filename) + "]</b>");
+                       + short_filename(m_filename) + "]</b>");
     set_label_widget(m_label);
 
     create_model();
@@ -114,7 +116,7 @@ void enclosure_history::on_plot_selected(int i) { selected_plot = i; }
 
 void enclosure_history::on_save_open_files()
 {
-    if (gspk::enclosurelist_modified())
+    if (enclosurelist_modified())
     {
         on_save();
     }
@@ -184,7 +186,7 @@ void enclosure_history::open_xml(const std::string& filename)
         signal_enclosure_set_save_state(false);
         static_cast<Gtk::Label*>(get_label_widget())
             ->set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                         + gspk::short_filename(m_filename) + "]</b>");
+                         + short_filename(m_filename) + "]</b>");
         g_settings.setValue("BoxListXml", m_filename);
     }
     catch (std::runtime_error const& error)
@@ -287,7 +289,7 @@ void enclosure_history::on_new()
     Glib::RefPtr<Gtk::TreeSelection> selection = m_TreeView.get_selection();
 
     GtkTreePath* gpath = gtk_tree_path_new_from_string(
-        gspk::int_to_ustring(m_box_list.data().size() - 1).c_str());
+        int_to_ustring(m_box_list.data().size() - 1).c_str());
     Gtk::TreePath path(gpath);
     Gtk::TreeRow row = *(m_refListStore->get_iter(path));
     selection->select(row);
@@ -347,7 +349,7 @@ void enclosure_history::save_as_xml(const std::string& filename)
         m_filename = filename;
 
         m_label.set_markup("<b>" + Glib::ustring(_("Enclosure list ["))
-                           + gspk::short_filename(m_filename) + "]</b>");
+                           + short_filename(m_filename) + "]</b>");
         set_label_widget(m_label);
 
         g_settings.setValue("BoxListXml", m_filename);
@@ -524,7 +526,7 @@ void enclosure_history::vb1_cell_data_func(Gtk::CellRenderer* cell,
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
 
-    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
+    renderer.property_text() = to_ustring((*iter)[m_columns.vb1], 3, 1) + " l";
     renderer.property_xalign() = 1.0;
 }
 
@@ -532,7 +534,7 @@ void enclosure_history::fb1_cell_data_func(Gtk::CellRenderer* cell,
                                            const Gtk::TreeModel::iterator& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
+    renderer.property_text() = to_ustring((*iter)[m_columns.fb1], 3, 1) + " Hz";
     renderer.property_xalign() = 1.0;
 }
 
@@ -546,4 +548,5 @@ void enclosure_history::add_item(enclosure const& box)
     row[m_columns.fb1] = box.get_fb1();
     row[m_columns.vb2] = box.get_vb2();
     row[m_columns.fb2] = box.get_fb2();
+}
 }

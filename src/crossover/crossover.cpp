@@ -20,6 +20,8 @@
 #include <sstream>
 #include <utility>
 
+namespace spkrd
+{
 Crossover::Crossover(int type, std::string id_string)
     : gspkObject(type), m_id_string(std::move(id_string))
 {
@@ -43,21 +45,28 @@ Crossover::Crossover(int type, std::string id_string)
     if (m_type == CROSSOVER_TYPE_THREEWAY)
     {
         m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS,
+                                NET_ORDER_1ST,
+                                NET_ORDER_1ST);
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
     if (m_type == CROSSOVER_TYPE_FOURWAY)
     {
         m_networks.emplace_back(NET_TYPE_LOWPASS, NET_ORDER_1ST, NET_NOT_PRESENT);
-        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
-        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS, NET_ORDER_1ST, NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS,
+                                NET_ORDER_1ST,
+                                NET_ORDER_1ST);
+        m_networks.emplace_back(NET_TYPE_LOWPASS | NET_TYPE_HIGHPASS,
+                                NET_ORDER_1ST,
+                                NET_ORDER_1ST);
         m_networks.emplace_back(NET_TYPE_HIGHPASS, NET_NOT_PRESENT, NET_ORDER_1ST);
     }
 }
 
 Crossover::Crossover(xmlNodePtr parent) : gspkObject()
 {
-    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "crossover")
+    if (parent != nullptr
+        && std::string(reinterpret_cast<char const*>(parent->name)) == "crossover")
     {
         try
         {
@@ -170,4 +179,8 @@ auto operator<<(std::ostream& output, const Crossover& crossover) -> std::ostrea
 
 auto Crossover::get_id_string() const -> std::string const& { return m_id_string; }
 
-void Crossover::set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
+void Crossover::set_id_string(std::string id_string)
+{
+    m_id_string = std::move(id_string);
+}
+}

@@ -24,6 +24,8 @@
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 
+namespace spkrd
+{
 class sidebar_notebook : public Gtk::Box
 {
 public:
@@ -40,3 +42,4 @@ public:
 private:
     Gtk::Notebook m_notebook;
 };
+}

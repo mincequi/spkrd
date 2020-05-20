@@ -24,6 +24,8 @@
 #include <iosfwd>
 #include <string>
 
+namespace spkrd
+{
 /// driver types
 constexpr auto SPEAKER_TYPE_BASS = 1;
 constexpr auto SPEAKER_TYPE_MIDRANGE = 2;
@@ -101,7 +103,10 @@ public:
         m_freq_resp_filename = std::move(filename);
     }
 
-    void set_imp_resp_filename(std::string filename) { m_imp_resp_filename = std::move(filename); }
+    void set_imp_resp_filename(std::string filename)
+    {
+        m_imp_resp_filename = std::move(filename);
+    }
 
     void set_id_string(std::string id_string) { m_id_string = std::move(id_string); }
 
@@ -184,3 +189,4 @@ protected:
 
     std::string m_id_string;
 };
+}

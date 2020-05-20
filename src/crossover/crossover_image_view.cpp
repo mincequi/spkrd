@@ -28,6 +28,8 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 crossover_image_view::crossover_image_view()
 {
     g_settings.defaultValueBool("ScaleCrossoverImageParts", true);
@@ -943,4 +945,5 @@ void crossover_image_view::draw_text(Cairo::RefPtr<Cairo::Context> const& contex
     context->move_to(rectangle_width, rectangle_height);
 
     layout->show_in_cairo_context(context);
+}
 }

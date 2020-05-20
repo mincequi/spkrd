@@ -25,12 +25,15 @@
 
 #include "common.h"
 
+namespace spkrd
+{
 driver_frequency_response_plot::driver_frequency_response_plot()
     : Gtk::Frame(""), m_plot(1, 20000, 50, 110, true, 0, true)
 {
     set_shadow_type(Gtk::SHADOW_NONE);
 
-    m_label.set_markup("<b>" + Glib::ustring(_("Frequency response and impedance")) + "</b>");
+    m_label.set_markup("<b>" + Glib::ustring(_("Frequency response and impedance"))
+                       + "</b>");
     set_label_widget(m_label);
 
     set_border_width(5);
@@ -47,15 +50,16 @@ driver_frequency_response_plot::driver_frequency_response_plot()
     m_plot.set_y_label2(_("Impedance / Ohm"));
 }
 
-void driver_frequency_response_plot::add_plot(std::vector<gspk::point>& points,
+void driver_frequency_response_plot::add_plot(std::vector<point>& points,
                                               Gdk::Color const& color)
 {
     m_plot.add_plot(points, color);
 }
 
 void driver_frequency_response_plot::replace_plot(int i,
-                                                  std::vector<gspk::point>& points,
+                                                  std::vector<point>& points,
                                                   Gdk::Color const& color)
 {
     m_plot.replace_plot(i, points, color);
+}
 }

@@ -27,10 +27,10 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 Settings g_settings;
 
-namespace gspk
-{
 auto to_ustring(double d) -> Glib::ustring { return Glib::ustring(std::to_string(d)); }
 
 auto to_ustring(double d, int format_len, int format_dec) -> Glib::ustring

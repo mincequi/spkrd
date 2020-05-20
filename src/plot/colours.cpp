@@ -19,6 +19,8 @@
 
 #include <algorithm>
 
+namespace spkrd
+{
 colours::colours()
 {
     m_colors.emplace_back("black");   // 0, 0, 0
@@ -82,4 +84,5 @@ auto colours::get_iterator_from_string(const std::string& colour_value)
         return location;
     }
     return m_colors.insert(m_colors.begin() + m_counter, colour_value);
+}
 }

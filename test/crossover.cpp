@@ -6,6 +6,8 @@
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
 
+using namespace spkrd;
+
 TEST_CASE("Populate crossover list from xml")
 {
     SECTION("Empty case") { REQUIRE(crossover_list().data().empty()); }

@@ -29,6 +29,8 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/spinbutton.h>
 
+namespace spkrd
+{
 inline auto is_driver_and_filter_matched(driver const& driver,
                                          filter_network const& network) -> bool
 {
@@ -114,5 +116,6 @@ private:
     bool m_enable_edit{false};
 
     int m_filter_plot_index{-1};
-    std::vector<gspk::point> m_points;
+    std::vector<point> m_points;
 };
+}

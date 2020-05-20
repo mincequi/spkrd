@@ -20,6 +20,8 @@
 #include <string>
 #include <vector>
 
+namespace spkrd
+{
 class colours
 {
 public:
@@ -38,3 +40,4 @@ private:
     std::vector<std::string> m_colors;
     int m_counter = 0;
 };
+}

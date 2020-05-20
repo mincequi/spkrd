@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-namespace gspk
+namespace spkrd
 {
 inline auto constexpr inch_to_cm(double const inches) -> double { return inches * 2.54; }
 

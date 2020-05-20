@@ -22,6 +22,8 @@
 
 #include <libxml/parser.h>
 
+namespace spkrd
+{
 enclosure_list::enclosure_list(const std::string& filename)
 {
     xmlKeepBlanksDefault(0);
@@ -90,4 +92,5 @@ auto operator<<(std::ostream& output, const enclosure_list& data) -> std::ostrea
         output << from;
     }
     return output;
+}
 }

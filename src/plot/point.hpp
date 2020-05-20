@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace gspk
+namespace spkrd
 {
 /// Point class to exchange plot coordinates between classes.
 /// I need a double on the y-axis since decimal values are required
@@ -50,7 +50,7 @@ inline auto lerp(std::vector<point> const& freq_resp_points, double x) -> double
     auto first_i = std::lower_bound(freq_resp_points.begin(),
                                     freq_resp_points.end(),
                                     x,
-                                    gspk::comparison{});
+                                    comparison{});
 
     if (first_i != begin(freq_resp_points))
     {
@@ -60,7 +60,7 @@ inline auto lerp(std::vector<point> const& freq_resp_points, double x) -> double
     auto second_i = std::upper_bound(begin(freq_resp_points),
                                      end(freq_resp_points),
                                      x,
-                                     gspk::comparison{});
+                                     comparison{});
 
     double x0 = first_i->get_x();
     double x1 = second_i->get_x();
@@ -75,5 +75,4 @@ inline auto lerp(std::vector<point> const& freq_resp_points, double x) -> double
 
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
-
 }

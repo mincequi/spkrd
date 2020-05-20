@@ -21,6 +21,8 @@
 
 #include <gtkmm/stock.h>
 
+namespace spkrd
+{
 file_chooser_dialog::file_chooser_dialog(const Glib::ustring& title,
                                          Gtk::FileChooserAction action,
                                          const std::string& default_filename)
@@ -72,4 +74,5 @@ file_chooser_dialog::file_chooser_dialog(const Glib::ustring& title,
                 break;
         }
     }
+}
 }

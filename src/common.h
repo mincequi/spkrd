@@ -37,7 +37,7 @@
 #define gettext_noop(string) string
 #define N_(string) gettext_noop(string)
 
-namespace gspk
+namespace spkrd
 {
 class point;
 
@@ -53,7 +53,6 @@ auto driverlist_modified() -> bool&;
 auto enclosurelist_modified() -> bool&;
 auto crossoverlist_modified() -> bool&;
 auto measurementlist_modified() -> bool&;
-} // namespace gspk
 
 class enclosure;
 class driver;
@@ -62,3 +61,4 @@ class filter_network;
 class driver_list;
 
 extern Settings g_settings;
+}

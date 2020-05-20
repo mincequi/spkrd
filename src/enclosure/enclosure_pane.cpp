@@ -29,6 +29,8 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto MENU_INDEX_DELETE = 8;
 constexpr auto MENU_INDEX_DELETE_BOXPLOT = 13;
@@ -231,7 +233,7 @@ auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
         }
         {
             auto tool_button = Gtk::manage(
-                new Gtk::ToolButton(gspk::image_widget("opt_enclosure_24.png"),
+                new Gtk::ToolButton(image_widget("opt_enclosure_24.png"),
                                     _("Optimize")));
             tool_button->signal_clicked().connect(
                 sigc::mem_fun(m_box_editor, &enclosure_editor::on_optimize_button_clicked));
@@ -239,7 +241,7 @@ auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
         }
         {
             auto tool_button = Gtk::manage(
-                new Gtk::ToolButton(gspk::image_widget("opt_enclosure_24.png"), _("Plot")));
+                new Gtk::ToolButton(image_widget("opt_enclosure_24.png"), _("Plot")));
             tool_button->signal_clicked().connect(
                 sigc::mem_fun(m_box_editor, &enclosure_editor::on_append_to_plot_clicked));
             m_tbar->append(*tool_button);
@@ -282,7 +284,7 @@ void enclosure_pane::set_save_state(bool b)
     if (!m_tbar->get_children().empty())
     {
         //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
-        gspk::enclosurelist_modified() = b;
+        enclosurelist_modified() = b;
     }
 }
 
@@ -318,4 +320,5 @@ void enclosure_pane::on_add_plot(enclosure* b, driver* s, Gdk::Color& c)
     std::puts("EnclsourePaned::on_add_plot");
 #endif
     ++nof_plots;
+}
 }

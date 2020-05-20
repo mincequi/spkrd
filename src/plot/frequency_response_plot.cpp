@@ -30,6 +30,8 @@
 #include <fstream>
 #include <iostream>
 
+namespace spkrd
+{
 frequency_response_plot::frequency_response_plot()
     : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
@@ -52,9 +54,9 @@ frequency_response_plot::frequency_response_plot()
 frequency_response_plot::~frequency_response_plot() = default;
 
 auto frequency_response_plot::parse_frequency_response_file(std::string const& filename)
-    -> std::vector<gspk::point>
+    -> std::vector<point>
 {
-    std::vector<gspk::point> points;
+    std::vector<point> points;
 
     if (filename.empty())
     {
@@ -93,7 +95,7 @@ auto frequency_response_plot::parse_frequency_response_file(std::string const& f
     return points;
 }
 
-auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_points,
+auto frequency_response_plot::on_add_plot(std::vector<point> const& plot_points,
                                           Gdk::Color const& color,
                                           int& output_plot_index,
                                           filter_network* network) -> int
@@ -111,7 +113,7 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
     auto freq_resp_points = this->parse_frequency_response_file(
         current_driver.get_freq_resp_filename());
 
-    std::vector<gspk::point> points;
+    std::vector<point> points;
 
     for (auto const& filter_point : plot_points)
     {
@@ -122,7 +124,7 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
             filter_y = 0.0;
         }
         points.emplace_back(filter_point.get_x(),
-                            gspk::lerp(freq_resp_points, filter_point.get_x()) + filter_y);
+                            lerp(freq_resp_points, filter_point.get_x()) + filter_y);
     }
 
     // Search for plot_index in the graph
@@ -153,7 +155,7 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
         m_plot.add_plot(point, Gdk::Color("red"));
     });
 
-    std::vector<gspk::point> summed_points = m_points.front();
+    std::vector<point> summed_points = m_points.front();
 
     std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& line_points) {
         std::transform(begin(line_points),
@@ -161,11 +163,10 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
                        begin(summed_points),
                        begin(summed_points),
                        [&](auto const& line_point, auto const& summed_point) {
-                           return gspk::point{summed_point.get_x(),
-                                              gspk::magnitude_to_dB(
-                                                  gspk::dB_to_magnitude(summed_point.get_y())
-                                                  + gspk::dB_to_magnitude(
-                                                        line_point.get_y()))};
+                           return point{summed_point.get_x(),
+                                        magnitude_to_dB(
+                                            dB_to_magnitude(summed_point.get_y())
+                                            + dB_to_magnitude(line_point.get_y()))};
                        });
     });
     // Add summed freq resp plot to the plot and select this plot since
@@ -193,4 +194,5 @@ void frequency_response_plot::on_drivers_loaded(
     std::shared_ptr<driver_list const> const& driver_list)
 {
     m_drivers = driver_list;
+}
 }

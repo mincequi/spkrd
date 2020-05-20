@@ -25,6 +25,8 @@
 #include <sstream>
 #include <utility>
 
+namespace spkrd
+{
 passive_component::passive_component(int type, double value, std::string unit)
     : gspkObject(type), m_value{value}, m_unit{std::move(unit)}
 {
@@ -32,25 +34,25 @@ passive_component::passive_component(int type, double value, std::string unit)
 
 passive_component::passive_component(xmlNodePtr parent) : gspkObject()
 {
-    gspk::check_name(parent, "part");
+    check_name(parent, "part");
 
     auto* child = parent->children;
 
     // Check all fields exist
     for (auto const& label : {"type", "value", "unit"})
     {
-        gspk::check_name(child, label);
+        check_name(child, label);
         child = child->next;
     }
 
     child = parent->children;
-    m_type = gspk::parse_int(child, "type");
+    m_type = parse_int(child, "type");
 
     child = child->next;
-    m_value = gspk::parse_double(child, "value");
+    m_value = parse_double(child, "value");
 
     child = child->next;
-    m_unit = gspk::parse_string(child, "unit");
+    m_unit = parse_string(child, "unit");
 }
 
 auto passive_component::to_xml_node(xmlNodePtr parent) -> xmlNodePtr
@@ -108,4 +110,5 @@ auto operator<<(std::ostream& o, const passive_component& part) -> std::ostream&
              << _("Type : ") << part.m_type << "\n"
              << _("Value: ") << part.m_value << "\n"
              << _("Unit : ") << part.m_unit << "\n";
+}
 }

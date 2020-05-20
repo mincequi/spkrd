@@ -15,6 +15,8 @@
 
 auto main(int argc, char* argv[]) -> int
 {
+    using namespace spkrd;
+
     // Initialize gettext
 #if ENABLE_NLS
     setlocale(LC_ALL, "");
@@ -38,15 +40,17 @@ auto main(int argc, char* argv[]) -> int
         std::cout << "Main: " << error.what() << "\n";
 
 #ifdef TARGET_WIN32
-        Gtk::MessageDialog message_dialog(_("No configuration file found!") + Glib::ustring("\n")
-                                              + _("gspeakers2.conf created in current directory"),
+        Gtk::MessageDialog message_dialog(_("No configuration file found!")
+                                              + Glib::ustring("\n")
+                                              + _("gspeakers2.conf created in current "
+                                                  "directory"),
                                           true,
                                           Gtk::MESSAGE_INFO,
                                           Gtk::BUTTONS_OK,
                                           true);
 #else
-        Gtk::MessageDialog message_dialog(_("No configuration file found!") + Glib::ustring("\n\n")
-                                              + Glib::get_home_dir()
+        Gtk::MessageDialog message_dialog(_("No configuration file found!")
+                                              + Glib::ustring("\n\n") + Glib::get_home_dir()
                                               + "/.gspeakers/gspeakers2.conf created",
                                           true,
                                           Gtk::MESSAGE_INFO,

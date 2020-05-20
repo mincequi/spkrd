@@ -21,6 +21,8 @@
 
 #include <gtkmm/filechooserdialog.h>
 
+namespace spkrd
+{
 class file_chooser_dialog
 {
 public:
@@ -28,8 +30,8 @@ public:
 
 public:
     file_chooser_dialog(const Glib::ustring& title,
-                               Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
-                               const std::string& default_filename = "");
+                        Gtk::FileChooserAction action = Gtk::FILE_CHOOSER_ACTION_OPEN,
+                        const std::string& default_filename = "");
 
     auto get_filename() const -> Glib::ustring const& { return m_filename; }
 
@@ -38,3 +40,4 @@ private:
 
     Gtk::FileChooserDialog m_file_chooser;
 };
+}

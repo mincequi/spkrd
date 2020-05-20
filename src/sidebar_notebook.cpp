@@ -22,6 +22,8 @@
 #include "sidebar_notebook.hpp"
 #include "common.h"
 
+namespace spkrd
+{
 sidebar_notebook::sidebar_notebook() : Gtk::Box(Gtk::ORIENTATION_HORIZONTAL)
 {
     pack_start(m_notebook, true, true, 0);
@@ -33,6 +35,13 @@ auto sidebar_notebook::append_page(Widget& child, Widget& tab_label) -> int
     return m_notebook.append_page(child, tab_label);
 }
 
-void sidebar_notebook::set_current_page(int page_num) { m_notebook.set_current_page(page_num); }
+void sidebar_notebook::set_current_page(int page_num)
+{
+    m_notebook.set_current_page(page_num);
+}
 
-auto sidebar_notebook::get_current_page() const -> int { return m_notebook.get_current_page(); }
+auto sidebar_notebook::get_current_page() const -> int
+{
+    return m_notebook.get_current_page();
+}
+}

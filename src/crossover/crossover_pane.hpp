@@ -34,6 +34,8 @@
 #include <gtkmm/hvpaned.h>
 #include <gtkmm/toolbar.h>
 
+namespace spkrd
+{
 class crossover_pane : public Gtk::HPaned
 {
 public:
@@ -73,3 +75,4 @@ private:
     Gtk::MenuItem m_menu_item;
     Gtk::Toolbar* m_toolbar{nullptr};
 };
+}

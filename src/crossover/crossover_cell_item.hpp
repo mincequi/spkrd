@@ -25,6 +25,8 @@
 
 #include <vector>
 
+namespace spkrd
+{
 /// This is a cellitem for a crossover used in the current crossover treeview
 /// crossover_tree_view syncs this class with the underlying data container
 /// (the Crossover class)
@@ -58,3 +60,4 @@ public:
 
     std::vector<crossover_cell_item> m_children;
 };
+}

@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+namespace spkrd
+{
 /// This is a class that pretty much just contains a list of crossovers
 /// and xml output functionality
 class crossover_list
@@ -51,3 +53,4 @@ public:
 protected:
     std::vector<Crossover> m_data;
 };
+}

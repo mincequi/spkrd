@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace gspk
+namespace spkrd
 {
 auto parse_double(xmlNodePtr const node, std::string const& label) noexcept(false)
     -> double;

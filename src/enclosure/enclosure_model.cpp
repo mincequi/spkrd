@@ -7,7 +7,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace gspk
+namespace spkrd
 {
 namespace sealed
 {
@@ -91,5 +91,4 @@ auto minimum_port_diameter_conservative(double const cone_displacement_volume,
 }
 
 }
-
 }

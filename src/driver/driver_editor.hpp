@@ -40,6 +40,8 @@
 
 #include <memory>
 
+namespace spkrd
+{
 class driver_editor : public sigc::trackable
 {
 public:
@@ -246,3 +248,4 @@ protected:
     model_columns m_columns;
     std::string m_filename;
 };
+}

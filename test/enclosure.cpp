@@ -6,7 +6,7 @@
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
 
-using namespace gspk;
+using namespace spkrd;
 
 TEST_CASE("Populate enclosure list from xml")
 {

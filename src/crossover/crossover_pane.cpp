@@ -30,6 +30,8 @@
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 3;
 
+namespace spkrd
+{
 crossover_pane::crossover_pane()
 {
     g_settings.settings_changed.connect(
@@ -244,7 +246,7 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     }
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
     {
-        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(gspk::image_widget(
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(image_widget(
                                                                   "stock_plot_"
                                                                   "crossover_"
                                                                   "24.png"),
@@ -298,6 +300,7 @@ void crossover_pane::set_save_state(bool state)
     }
     if (m_menu_item.has_submenu())
     {
-        gspk::crossoverlist_modified() = state;
+        crossoverlist_modified() = state;
     }
+}
 }

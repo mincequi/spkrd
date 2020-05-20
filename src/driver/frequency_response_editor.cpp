@@ -28,6 +28,8 @@
 #include <fstream>
 #include <utility>
 
+namespace spkrd
+{
 frequency_response_editor::frequency_response_editor(std::string filename)
     : m_table(15, 4, false),
       dbmag_entries(30),
@@ -38,7 +40,8 @@ frequency_response_editor::frequency_response_editor(std::string filename)
 {
     set_modal();
 
-    m_label.set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver")) + "</b>");
+    m_label.set_markup("<b>" + Glib::ustring(_("Frequency response for selected driver"))
+                       + "</b>");
 
     auto frame = Gtk::make_managed<Gtk::Frame>();
     auto frame_vbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_VERTICAL);
@@ -57,7 +60,8 @@ frequency_response_editor::frequency_response_editor(std::string filename)
     frame->add(*frame_vbox);
     frame_vbox->set_border_width(10);
     frame_vbox->pack_start(*Gtk::make_managed<Gtk::Label>(
-        Glib::ustring(_("Enter the freq response dB magnitude, this is not intended to provide an"))
+        Glib::ustring(_("Enter the freq response dB magnitude, this is not intended to "
+                        "provide an"))
         + "\n" + Glib::ustring(_("exact estimation of the total frequency response."))));
     frame_vbox->set_spacing(12);
     frame_vbox->pack_start(m_table);
@@ -109,7 +113,8 @@ frequency_response_editor::frequency_response_editor(std::string filename)
 
     m_saveas_button.signal_clicked().connect(
         sigc::mem_fun(*this, &frequency_response_editor::on_save_as));
-    m_save_button.signal_clicked().connect(sigc::mem_fun(*this, &frequency_response_editor::on_save));
+    m_save_button.signal_clicked().connect(
+        sigc::mem_fun(*this, &frequency_response_editor::on_save));
     m_close_button.signal_clicked().connect(
         sigc::mem_fun(*this, &frequency_response_editor::on_close));
     m_save_button.set_sensitive(false);
@@ -131,9 +136,10 @@ frequency_response_editor::frequency_response_editor(std::string filename)
                 substr_ptr = strtok(nullptr, ",");
                 auto const f2 = g_ascii_strtod(substr_ptr, nullptr);
 
-                dbmag_entries[i]->set_text(gspk::to_ustring(f2, 2, 1));
+                dbmag_entries[i]->set_text(to_ustring(f2, 2, 1));
                 dbmag_entries[i]->signal_changed().connect(
-                    sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive), true));
+                    sigc::bind(sigc::mem_fun(m_save_button, &Gtk::Button::set_sensitive),
+                               true));
             }
         }
     }
@@ -156,12 +162,14 @@ void frequency_response_editor::on_save()
             of << v[2 * j] << ","
                << g_ascii_dtostr(buffer.data(),
                                  8,
-                                 g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(), nullptr))
+                                 g_ascii_strtod(dbmag_entries[2 * j]->get_text().c_str(),
+                                                nullptr))
                << "\n";
             of << v[2 * j + 1] << ","
                << g_ascii_dtostr(buffer.data(),
                                  8,
-                                 g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(), nullptr))
+                                 g_ascii_strtod(dbmag_entries[2 * j + 1]->get_text().c_str(),
+                                                nullptr))
                << "\n";
         }
         of.close();
@@ -221,4 +229,5 @@ auto frequency_response_editor::get_x_vector() -> std::vector<double>
     return {20.0, 25.2, 31.7, 39.9, 50.2, 63.2, 79.6, 100,   126,   159,
             200,  252,  317,  399,  502,  632,  796,  1000,  1260,  1590,
             2000, 2520, 3170, 3990, 5020, 6320, 7960, 10000, 15900, 20000};
+}
 }

@@ -27,9 +27,9 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
 
-namespace gspk
+namespace spkrd
 {
-enum Settings {
+enum settings {
     SAVE_MAIN_WINDOW_SIZE,
     SAVE_MAIN_WINDOW_POSITION,
     TOOLBAR_STYLE,
@@ -42,7 +42,6 @@ enum Settings {
     USE_DRIVER_IMPEDANCE,
     SPICE_TYPE
 };
-}
 
 class settings_dialog : public Gtk::Dialog
 {
@@ -54,7 +53,7 @@ public:
 private:
     void on_close();
     void on_spice_browse();
-    void on_config_option_change(gspk::Settings setting);
+    void on_config_option_change(settings setting);
 
 private:
     void initialise_general_page();
@@ -91,3 +90,4 @@ private:
 
     std::string m_filename;
 };
+}

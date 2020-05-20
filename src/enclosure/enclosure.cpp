@@ -25,8 +25,8 @@
 #include <sstream>
 #include <utility>
 
-using namespace gspk;
-
+namespace spkrd
+{
 enclosure::enclosure(std::string id_string,
                      int type,
                      double vb1,
@@ -46,7 +46,8 @@ enclosure::enclosure(std::string id_string,
 
 enclosure::enclosure(xmlNodePtr parent) : gspkObject()
 {
-    if (parent != nullptr && std::string(reinterpret_cast<char const*>(parent->name)) == "box")
+    if (parent != nullptr
+        && std::string(reinterpret_cast<char const*>(parent->name)) == "box")
     {
         try
         {
@@ -117,4 +118,5 @@ auto operator<<(std::ostream& output, enclosure const& box) -> std::ostream&
            << _("Fb1:       ") << box.m_fb1 << "\n"
            << _("driver:   ") << box.m_speaker << "\n";
     return output;
+}
 }

@@ -28,6 +28,8 @@
 
 #include <vector>
 
+namespace spkrd
+{
 class frequency_response_editor : public Gtk::Dialog
 {
 public:
@@ -58,3 +60,4 @@ private:
 
     std::string m_filename;
 };
+}

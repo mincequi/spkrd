@@ -22,30 +22,12 @@
 #include "common.h"
 #include "gspeakersobject.h"
 #include "passive_component.hpp"
+#include "filter_type.hpp"
 
 #include <vector>
 
-/* filter_network types */
-constexpr auto NET_TYPE_LOWPASS = 1;
-constexpr auto NET_TYPE_HIGHPASS = 2;
-constexpr auto NET_TYPE_BANDPASS = 3;
-constexpr auto NET_NOT_PRESENT = 0;
-
-/* Filter # */
-constexpr auto NET_ORDER_1ST = 1;
-constexpr auto NET_ORDER_2ND = 2;
-constexpr auto NET_ORDER_3RD = 3;
-constexpr auto NET_ORDER_4TH = 4;
-
-/* filter family */
-constexpr auto NET_BESSEL = 1;
-constexpr auto NET_BUTTERWORTH = 2;
-constexpr auto NET_CHEBYCHEV = 3;
-constexpr auto NET_LINKWITZRILEY = 4;
-constexpr auto NET_GAUSSIAN = 5;
-constexpr auto NET_LEGENDRE = 6;
-constexpr auto NET_LINEARPHASE = 7;
-
+namespace spkrd
+{
 /// filter_network is a part of a crossover: one part of the crossover we want to simulate
 /// in SPICE For example: Lowpass filter with impedance correction network or
 ///              highpass filter with damping network.
@@ -195,3 +177,4 @@ private:
     /// which filter: filter link to work on, NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
     void setup_net_by_order(int new_order, int which_net);
 };
+}

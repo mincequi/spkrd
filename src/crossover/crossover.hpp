@@ -27,6 +27,8 @@
 #include <iosfwd>
 #include <vector>
 
+namespace spkrd
+{
 // You should be able to use one or more of the type properties
 constexpr auto CROSSOVER_TYPE_LOWPASS = 1;
 constexpr auto CROSSOVER_TYPE_SUBSONIC = 2;
@@ -72,3 +74,4 @@ protected:
     std::vector<filter_network> m_networks;
     std::string m_id_string;
 };
+}

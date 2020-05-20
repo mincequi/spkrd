@@ -30,6 +30,8 @@
 #include <gtkmm/window.h>
 #include <gtkmm/menubar.h>
 
+namespace spkrd
+{
 class main_window : public Gtk::Window
 {
 public:
@@ -89,3 +91,4 @@ private:
 
     bool m_in_quit_phase{false};
 };
+}

@@ -31,6 +31,8 @@
 constexpr auto MENU_INDEX_SAVE = 6;
 constexpr auto TOOLBAR_INDEX_SAVE = 4;
 
+namespace spkrd
+{
 sigc::signal1<void, bool> signal_crossover_set_save_state;
 
 namespace
@@ -74,7 +76,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     m_evbox = Gtk::make_managed<Gtk::EventBox>();
     m_frame_label = Gtk::make_managed<Gtk::Label>();
     m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers ["))
-                              + gspk::short_filename(m_filename, 20) + "]</b>");
+                              + short_filename(m_filename, 20) + "]</b>");
 
     static_cast<Gtk::Container*>(m_evbox)->add(*m_frame_label);
     set_label_widget(*m_evbox);
@@ -123,7 +125,7 @@ crossover_history::~crossover_history()
 
 void crossover_history::on_save_open_files()
 {
-    if (gspk::crossoverlist_modified())
+    if (crossoverlist_modified())
     {
         on_save();
     }
@@ -201,7 +203,7 @@ void crossover_history::open_xml(const std::string& filename)
         }
         signal_crossover_set_save_state(false);
         m_frame_label->set_markup("<b>" + Glib::ustring(_("Crossovers "))
-                                  + gspk::short_filename(m_filename, 20) + "]</b>");
+                                  + short_filename(m_filename, 20) + "]</b>");
         m_evbox->set_tooltip_text(m_filename);
     }
     catch (std::runtime_error const& error)
@@ -404,7 +406,7 @@ void crossover_history::save_as_xml(const std::string& filename)
         {
             auto crossover_label = Gtk::make_managed<Gtk::Label>();
             crossover_label->set_markup("<b>" + Glib::ustring(_("Crossover list ["))
-                                        + gspk::short_filename(m_filename, 20) + "]</b>");
+                                        + short_filename(m_filename, 20) + "]</b>");
             set_label_widget(*crossover_label);
         }
         signal_crossover_set_save_state(false);
@@ -533,4 +535,5 @@ void crossover_history::add_item(Crossover const& new_crossover)
     row[m_columns.id] = new_crossover.get_id();
     row[m_columns.id_string] = new_crossover.get_id_string();
     row[m_columns.type] = new_crossover.get_type();
+}
 }

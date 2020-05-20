@@ -17,6 +17,8 @@
 
 #include "gspeakersobject.h"
 
+namespace spkrd
+{
 gspkObject::gspkObject() : sigc::trackable()
 {
     static int next_id = 0;
@@ -31,3 +33,4 @@ auto gspkObject::get_id() const -> int { return m_id; }
 void gspkObject::set_type(int type) { m_type = type; }
 
 auto gspkObject::get_type() const -> int { return m_type; }
+}

@@ -35,6 +35,8 @@
 
 #include <sigc++/signal.h>
 
+namespace spkrd
+{
 extern sigc::signal1<void, bool> signal_enclosure_set_save_state;
 
 /*
@@ -124,3 +126,4 @@ protected:
     int index;
     int selected_plot;
 };
+}

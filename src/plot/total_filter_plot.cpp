@@ -27,6 +27,8 @@
 #include <cmath>
 #include <iostream>
 
+namespace spkrd
+{
 total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 {
     add(m_plot);
@@ -40,7 +42,7 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
     show_all();
 }
 
-auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& line_points,
+auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
                                     Gdk::Color const& colour,
                                     int& plot_index,
                                     filter_network*) -> int
@@ -82,18 +84,18 @@ auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& line_points,
     });
 
     // Superimpose the plots to visualise complete frequency response
-    std::vector<gspk::point> summed_points = m_points.front();
+    std::vector<point> summed_points = m_points.front();
 
     std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& points) {
         std::transform(begin(points),
                        end(points),
                        begin(summed_points),
                        begin(summed_points),
-                       [&](auto const& point, auto const& summed_point) {
-                           return gspk::point{summed_point.get_x(),
-                                              gspk::magnitude_to_dB(
-                                                  gspk::dB_to_magnitude(summed_point.get_y())
-                                                  + gspk::dB_to_magnitude(point.get_y()))};
+                       [&](auto const& plot_point, auto const& summed_point) {
+                           return point{summed_point.get_x(),
+                                        magnitude_to_dB(
+                                            dB_to_magnitude(summed_point.get_y())
+                                            + dB_to_magnitude(plot_point.get_y()))};
                        });
     });
 
@@ -117,4 +119,5 @@ void total_filter_plot::on_crossover_selected(Crossover*)
     std::puts("\nCrossover selected in total_filter_plot\n");
 
     this->clear();
+}
 }

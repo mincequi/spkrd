@@ -24,8 +24,8 @@
 
 #include <utility>
 
-using namespace gspk;
-
+namespace spkrd
+{
 driver::driver(std::string id_string,
                int type,
                double qts,
@@ -201,4 +201,5 @@ auto operator<<(std::ostream& output, driver const& speaker) -> std::ostream&
            << _("Vas:  ") << speaker.m_vas << "\n"
            << _("Fs:   ") << speaker.m_fs << "\n";
     return output;
+}
 }

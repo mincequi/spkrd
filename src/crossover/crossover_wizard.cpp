@@ -20,6 +20,8 @@
 #include "signal.hpp"
 #include "common.h"
 
+namespace spkrd
+{
 crossover_wizard::crossover_wizard()
     : Gtk::ScrolledWindow(), m_vbox(Gtk::ORIENTATION_VERTICAL), m_drivers{nullptr}
 {
@@ -92,4 +94,5 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
 void crossover_wizard::on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers)
 {
     m_drivers = drivers;
+}
 }

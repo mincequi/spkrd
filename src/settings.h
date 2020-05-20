@@ -30,6 +30,8 @@
 #include <map>
 #include <string>
 
+namespace spkrd
+{
 class Settings : public sigc::trackable
 {
 public:
@@ -84,3 +86,4 @@ private:
     std::map<std::string, std::string> m_map;
     std::string m_filename;
 };
+}

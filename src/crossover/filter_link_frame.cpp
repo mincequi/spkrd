@@ -19,6 +19,7 @@
 
 #include "filter_link_frame.hpp"
 
+#include "filter_type.hpp"
 #include "common.h"
 #include "plot.hpp"
 #include "signal.hpp"
@@ -31,6 +32,8 @@
 #include <fstream>
 #include <iostream>
 
+namespace spkrd
+{
 filter_link_frame::filter_link_frame(filter_network* network,
                                      std::string const& description,
                                      std::shared_ptr<driver_list const> const& drivers)
@@ -1168,10 +1171,6 @@ auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int 
 
 void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, int family)
 {
-#ifndef NDEBUG
-    std::cout << "filter_link_frame::set_family: order = " << order
-              << ", family = " << family << '\n';
-#endif
     switch (order)
     {
         case NET_ORDER_2ND:
@@ -1232,4 +1231,5 @@ void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, in
             break;
         }
     }
+}
 }

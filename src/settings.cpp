@@ -27,6 +27,8 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace spkrd
+{
 Settings::Settings() { defaultSettings(); }
 
 void Settings::load(const std::string& filename) noexcept(false)
@@ -97,7 +99,8 @@ void Settings::save(const std::string& filename) noexcept(false)
     if (rename(tempfilename.c_str(), filename.c_str()) == -1)
     {
         std::ostringstream ostr;
-        ostr << _("Settings::save: Failed renaming temporary file to replace old file: ") << filename;
+        ostr << _("Settings::save: Failed renaming temporary file to replace old file: ")
+             << filename;
         throw std::runtime_error(ostr.str());
     }
     m_filename = filename;
@@ -396,3 +399,4 @@ void Settings::setValue(const std::string& k, bool v)
 }
 
 auto Settings::exists(const std::string& k) -> bool { return m_map.count(k) != 0; }
+}

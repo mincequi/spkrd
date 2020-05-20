@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
 {
     set_border_width(2);
@@ -408,7 +410,7 @@ void crossover_tree_view::value_cell_data_func(Gtk::CellRenderer* cell,
                                                Gtk::TreeModel::iterator const& iter)
 {
     auto& renderer = dynamic_cast<Gtk::CellRendererText&>(*cell);
-    renderer.property_text() = gspk::to_ustring((*iter)[m_columns.value], 3, 1);
+    renderer.property_text() = to_ustring((*iter)[m_columns.value], 3, 1);
     renderer.property_xalign() = 1.0;
     renderer.property_yalign() = 1.0;
 }
@@ -417,4 +419,5 @@ void crossover_tree_view::on_realize()
 {
     m_tree_view.expand_all();
     Frame::on_realize();
+}
 }

@@ -19,6 +19,8 @@
 
 #include <sigc++/sigc++.h>
 
+namespace spkrd
+{
 /// This is a base object for data-containers in this project
 /// Since every part and every net will have an unique id this
 /// is probably a pretty nice base-class
@@ -34,9 +36,9 @@ public:
     /// parts definitely need a unique id.
     auto get_id() const -> int;
 
-    /// Since both Net, passive_component and crossover will use type constants it's probably pretty
-    /// safe to put logic for it in the base object so that it'll be easier to change if we want to
-    /// do it different in the future.
+    /// Since both Net, passive_component and crossover will use type constants it's
+    /// probably pretty safe to put logic for it in the base object so that it'll be
+    /// easier to change if we want to do it different in the future.
     auto get_type() const -> int;
 
     void set_type(int type);
@@ -45,3 +47,4 @@ protected:
     int m_id;
     int m_type;
 };
+}

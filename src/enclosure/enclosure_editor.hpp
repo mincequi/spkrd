@@ -30,7 +30,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/grid.h>
 
-namespace gspk
+namespace spkrd
 {
 namespace sealed
 {
@@ -45,7 +45,7 @@ enum class RESPONSE : int {
     CHEBYCHEV_12
 };
 }
-}
+
 
 /// This class will contain the control panel where you can adjust
 /// settings for the enclosure you're working with.
@@ -123,3 +123,4 @@ private:
     bool m_disable_signals{false};
     bool speaker_list_is_loaded{false};
 };
+}

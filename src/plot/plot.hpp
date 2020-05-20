@@ -35,7 +35,6 @@ namespace spkrd
 /// 30 is a nice little space to have between the graph and the window-border
 constexpr auto BOX_FRAME_SIZE = 50;
 /// Upper frequency limit
-}
 
 /// This is a class that can draw plots. It has add_plot, remove_plot
 /// and a few other methods you can use. It has logarithmic x-axis and
@@ -58,7 +57,7 @@ public:
          int y_zero_freq = 0,
          bool enable_sec_scale = false);
 
-    auto add_plot(std::vector<gspk::point> const& points, Gdk::Color const& colour) -> int;
+    auto add_plot(std::vector<point> const& points, Gdk::Color const& colour) -> int;
 
     void remove_plot(int n);
 
@@ -73,7 +72,7 @@ public:
     void select_plot(int index);
 
     void replace_plot(int plot_index,
-                      std::vector<gspk::point> const& p,
+                      std::vector<point> const& p,
                       Gdk::Color const& ref_color);
 
     void set_y_label(std::string const& text);
@@ -89,7 +88,7 @@ protected:
 
 protected:
     /// Y axis magnitude points for the plots (dbmag)
-    std::vector<std::vector<gspk::point>> m_points;
+    std::vector<std::vector<point>> m_points;
     /// Plot line colours
     std::vector<Gdk::Color> m_colors;
     /// Visible plots
@@ -128,3 +127,4 @@ private:
 
     Cairo::RefPtr<Cairo::Context> m_context;
 };
+}

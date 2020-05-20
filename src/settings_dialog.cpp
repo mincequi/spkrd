@@ -25,6 +25,8 @@
 
 #include <iostream>
 
+namespace spkrd
+{
 constexpr auto NOF_TABLE_ROWS = 10;
 
 settings_dialog::settings_dialog()
@@ -34,7 +36,8 @@ settings_dialog::settings_dialog()
       m_spice_use_berkley(_("Berkley SPICE3f5")),
       m_spice_use_ngspice(_("NG-SPICE-reworked")),
       m_spice_use_gnucap(_("GNUCAP SPICE implementation")),
-      m_autoupdate_filter_plots(_("Automatically update crossover plots when a parameter has "
+      m_autoupdate_filter_plots(_("Automatically update crossover plots when a parameter "
+                                  "has "
                                   "changed")),
       m_draw_driver_imp_plot(_("Draw driver impedance plot")),
       m_draw_driver_freq_resp_plot(_("Draw driver frequency response plot")),
@@ -42,7 +45,8 @@ settings_dialog::settings_dialog()
       m_save_mainwindow_size(_("Save main window size")),
       m_save_mainwindow_position(_("Save main window position")),
       m_scale_crossover_image_parts(_("Scale components in crossover visual view")),
-      m_use_driver_impedance(_("Use driver impedance instead of rdc when calculating crossover"))
+      m_use_driver_impedance(_("Use driver impedance instead of rdc when calculating "
+                               "crossover"))
 {
     close_button = Gtk::manage(new Gtk::Button(Gtk::Stock::CLOSE));
     get_action_area()->pack_start(*close_button);
@@ -63,44 +67,45 @@ settings_dialog::settings_dialog()
     this->connect_signals();
 }
 
-void settings_dialog::on_config_option_change(gspk::Settings setting)
+void settings_dialog::on_config_option_change(settings setting)
 {
-    std::cout << "settings_dialog::on_config_option_change: " << setting << "\n";
-
     switch (setting)
     {
-        case gspk::SAVE_MAIN_WINDOW_SIZE:
+        case SAVE_MAIN_WINDOW_SIZE:
             g_settings.setValue("SetMainWindowSize", m_save_mainwindow_size.get_active());
             break;
-        case gspk::SAVE_MAIN_WINDOW_POSITION:
-            g_settings.setValue("SetMainWindowPosition", m_save_mainwindow_position.get_active());
+        case SAVE_MAIN_WINDOW_POSITION:
+            g_settings.setValue("SetMainWindowPosition",
+                                m_save_mainwindow_position.get_active());
             break;
-        case gspk::AUTO_UPDATE_CROSSOVER_PLOT:
-            g_settings.setValue("AutoUpdateFilterPlots", m_autoupdate_filter_plots.get_active());
+        case AUTO_UPDATE_CROSSOVER_PLOT:
+            g_settings.setValue("AutoUpdateFilterPlots",
+                                m_autoupdate_filter_plots.get_active());
             break;
-        case gspk::DRAW_DRIVER_IMP_PLOT:
+        case DRAW_DRIVER_IMP_PLOT:
             g_settings.setValue("DrawDriverImpPlot", m_draw_driver_imp_plot.get_active());
             break;
-        case gspk::DRAW_DRIVER_FREQ_RESP_PLOT:
-            g_settings.setValue("DrawDriverFreqRespPlot", m_draw_driver_freq_resp_plot.get_active());
+        case DRAW_DRIVER_FREQ_RESP_PLOT:
+            g_settings.setValue("DrawDriverFreqRespPlot",
+                                m_draw_driver_freq_resp_plot.get_active());
             break;
-        case gspk::DISABLE_FILTER_AMP:
+        case DISABLE_FILTER_AMP:
             g_settings.setValue("DisableFilterAmp", m_disable_filter_amp.get_active());
             break;
-        case gspk::SCALE_FILTER_PARTS:
+        case SCALE_FILTER_PARTS:
             g_settings.setValue("ScaleCrossoverImageParts",
                                 m_scale_crossover_image_parts.get_active());
             break;
-        case gspk::USE_DRIVER_IMPEDANCE:
+        case USE_DRIVER_IMPEDANCE:
             g_settings.setValue("UseDriverImpedance", m_use_driver_impedance.get_active());
             break;
-        case gspk::SPICE_PATH:
+        case SPICE_PATH:
             g_settings.setValue("SPICECmdLine", m_spice_path_entry.get_text());
             break;
-        case gspk::TOOLBAR_STYLE:
+        case TOOLBAR_STYLE:
             g_settings.setValue("ToolbarStyle", m_toolbar_style.get_active_row_number());
             break;
-        case gspk::SPICE_TYPE:
+        case SPICE_TYPE:
             if (m_spice_use_berkley.get_active())
             {
                 g_settings.setValue("SPICEUseNGSPICE", false);
@@ -129,7 +134,8 @@ void settings_dialog::on_config_option_change(gspk::Settings setting)
     }
     catch (std::runtime_error const& error)
     {
-        std::cout << "ERROR: settings_dialog::on_config_option_change: " << error.what() << std::endl;
+        std::cout << "ERROR: settings_dialog::on_config_option_change: " << error.what()
+                  << std::endl;
     }
 }
 
@@ -138,7 +144,7 @@ void settings_dialog::on_close() { hide(); }
 void settings_dialog::on_spice_browse()
 {
     auto fc = std::make_unique<file_chooser_dialog>(_("Select SPICE executable"),
-                                                           Gtk::FILE_CHOOSER_ACTION_OPEN);
+                                                    Gtk::FILE_CHOOSER_ACTION_OPEN);
     std::string const& filename = fc->get_filename();
     if (!filename.empty())
     {
@@ -163,14 +169,18 @@ void settings_dialog::restore_settings()
         m_spice_use_berkley.set_active(true);
     }
 
-    m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlots"));
+    m_autoupdate_filter_plots.set_active(g_settings.getValueBool("AutoUpdateFilterPlot"
+                                                                 "s"));
     m_draw_driver_imp_plot.set_active(g_settings.getValueBool("DrawDriverImpPlot"));
-    m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPlot"));
+    m_draw_driver_freq_resp_plot.set_active(g_settings.getValueBool("DrawDriverFreqRespPl"
+                                                                    "ot"));
     m_toolbar_style.set_active(g_settings.getValueUnsignedInt("ToolbarStyle"));
     m_save_mainwindow_size.set_active(g_settings.getValueBool("SetMainWindowSize"));
-    m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPosition"));
+    m_save_mainwindow_position.set_active(g_settings.getValueBool("SetMainWindowPositio"
+                                                                  "n"));
     m_disable_filter_amp.set_active(g_settings.getValueBool("DisableFilterAmp"));
-    m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImageParts"));
+    m_scale_crossover_image_parts.set_active(g_settings.getValueBool("ScaleCrossoverImage"
+                                                                     "Parts"));
     m_use_driver_impedance.set_active(g_settings.getValueBool("UseDriverImpedance"));
 }
 
@@ -179,46 +189,46 @@ void settings_dialog::connect_signals()
     /* Setup configuration option change handlers */
     m_save_mainwindow_size.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SAVE_MAIN_WINDOW_SIZE));
+                   SAVE_MAIN_WINDOW_SIZE));
     m_save_mainwindow_position.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SAVE_MAIN_WINDOW_SIZE));
+                   SAVE_MAIN_WINDOW_SIZE));
 
     m_autoupdate_filter_plots.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::AUTO_UPDATE_CROSSOVER_PLOT));
+                   AUTO_UPDATE_CROSSOVER_PLOT));
     m_draw_driver_imp_plot.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::DRAW_DRIVER_IMP_PLOT));
+                   DRAW_DRIVER_IMP_PLOT));
     m_draw_driver_freq_resp_plot.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::DRAW_DRIVER_FREQ_RESP_PLOT));
+                   DRAW_DRIVER_FREQ_RESP_PLOT));
     m_disable_filter_amp.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::DISABLE_FILTER_AMP));
+                   DISABLE_FILTER_AMP));
     m_scale_crossover_image_parts.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SCALE_FILTER_PARTS));
+                   SCALE_FILTER_PARTS));
     m_use_driver_impedance.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::USE_DRIVER_IMPEDANCE));
+                   USE_DRIVER_IMPEDANCE));
 
     m_spice_path_entry.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SPICE_PATH));
+                   SPICE_PATH));
     m_spice_use_ngspice.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SPICE_TYPE));
+                   SPICE_TYPE));
     m_spice_use_berkley.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SPICE_TYPE));
+                   SPICE_TYPE));
     m_spice_use_gnucap.signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::SPICE_TYPE));
+                   SPICE_TYPE));
 
     m_toolbar_style.signal_changed().connect(
         sigc::bind(sigc::mem_fun(*this, &settings_dialog::on_config_option_change),
-                   gspk::TOOLBAR_STYLE));
+                   TOOLBAR_STYLE));
 }
 
 void settings_dialog::initialise_general_page()
@@ -234,8 +244,15 @@ void settings_dialog::initialise_general_page()
     general_table->set_border_width(12);
     general_table->set_spacings(5);
 
-    general_table->attach(m_save_mainwindow_size, 0, 3, 0, 1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-    general_table->attach(m_save_mainwindow_position, 0, 3, 1, 2, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+    general_table
+        ->attach(m_save_mainwindow_size, 0, 3, 0, 1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+    general_table->attach(m_save_mainwindow_position,
+                          0,
+                          3,
+                          1,
+                          2,
+                          Gtk::EXPAND | Gtk::FILL,
+                          Gtk::SHRINK);
     general_frame->add(*general_table);
 
     m_main_notebook.append_page(*general_frame, _("General"));
@@ -280,8 +297,8 @@ void settings_dialog::initialise_spice_page()
     Gtk::Table* spice_table = Gtk::manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
     spice_table->set_border_width(12);
     spice_table->set_spacings(5);
-    spice_table->attach(*Gtk::manage(
-                            new Gtk::Label(_("Full path to SPICE executable: "), Gtk::ALIGN_START)),
+    spice_table->attach(*Gtk::manage(new Gtk::Label(_("Full path to SPICE executable: "),
+                                                    Gtk::ALIGN_START)),
                         0,
                         1,
                         0,
@@ -290,7 +307,8 @@ void settings_dialog::initialise_spice_page()
                         Gtk::SHRINK);
     spice_table->attach(m_spice_path_entry, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
     spice_table->attach(m_spice_browse_button, 2, 3, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-    m_spice_browse_button.signal_clicked().connect(mem_fun(*this, &settings_dialog::on_spice_browse));
+    m_spice_browse_button.signal_clicked().connect(
+        mem_fun(*this, &settings_dialog::on_spice_browse));
 
     /* Radio buttons */
     Gtk::RadioButton::Group group = m_spice_use_berkley.get_group();
@@ -318,8 +336,15 @@ void settings_dialog::initialise_driver_page()
     Gtk::Table* driver_table = Gtk::manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
     driver_table->set_border_width(12);
     driver_table->set_spacings(5);
-    driver_table->attach(m_draw_driver_imp_plot, 0, 3, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
-    driver_table->attach(m_draw_driver_freq_resp_plot, 0, 3, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+    driver_table
+        ->attach(m_draw_driver_imp_plot, 0, 3, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+    driver_table->attach(m_draw_driver_freq_resp_plot,
+                         0,
+                         3,
+                         1,
+                         2,
+                         Gtk::FILL | Gtk::EXPAND,
+                         Gtk::SHRINK);
     driver_frame->add(*driver_table);
 
     m_main_notebook.append_page(*driver_frame, _("Drivers"));
@@ -336,13 +361,27 @@ void settings_dialog::initialise_crossover_page()
     Gtk::Table* crossover_table = Gtk::manage(new Gtk::Table(NOF_TABLE_ROWS, 3, false));
     crossover_table->set_border_width(12);
     crossover_table->set_spacings(5);
-    crossover_table->attach(m_autoupdate_filter_plots, 0, 3, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
-    crossover_table->attach(m_disable_filter_amp, 0, 3, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+    crossover_table->attach(m_autoupdate_filter_plots,
+                            0,
+                            3,
+                            0,
+                            1,
+                            Gtk::FILL | Gtk::EXPAND,
+                            Gtk::SHRINK);
     crossover_table
-        ->attach(m_scale_crossover_image_parts, 0, 3, 2, 3, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
-    crossover_table->attach(m_use_driver_impedance, 0, 3, 3, 4, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+        ->attach(m_disable_filter_amp, 0, 3, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+    crossover_table->attach(m_scale_crossover_image_parts,
+                            0,
+                            3,
+                            2,
+                            3,
+                            Gtk::FILL | Gtk::EXPAND,
+                            Gtk::SHRINK);
+    crossover_table
+        ->attach(m_use_driver_impedance, 0, 3, 3, 4, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
 
     crossover_frame->add(*crossover_table);
 
     m_main_notebook.append_page(*crossover_frame, _("Crossovers"));
+}
 }

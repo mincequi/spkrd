@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+namespace spkrd
+{
 /// This is a list to store all speakers in
 class driver_list
 {
@@ -51,3 +53,4 @@ public:
 protected:
     std::vector<driver> m_drivers;
 };
+}

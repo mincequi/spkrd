@@ -37,6 +37,8 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/treeview.h>
 
+namespace spkrd
+{
 /*
  * This class implements a TreeView connected with a ListStore
  * It is pretty much ripped off the liststore example in the
@@ -131,3 +133,4 @@ protected:
     int m_index{0};
     int m_nof_plots{0};
 };
+}

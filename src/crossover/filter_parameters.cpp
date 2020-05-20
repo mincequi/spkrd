@@ -1,5 +1,9 @@
 
-#pragma once
+#include "filter_parameters.hpp"
+
+#include "filter_type.hpp"
+
+#include <stdexcept>
 
 namespace spkrd
 {

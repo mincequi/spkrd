@@ -22,6 +22,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+namespace spkrd
+{
 driver_list::driver_list(const std::string& filename)
 {
     // Allows human readable (formatted) XML documents without receiving
@@ -106,4 +108,5 @@ auto driver_list::get_by_id_string(std::string const& id_string) const -> driver
         return m_drivers.front();
     }
     return driver();
+}
 }

@@ -27,6 +27,8 @@
 #include <gtkmm/label.h>
 #include <gtkmm/scrolledwindow.h>
 
+namespace spkrd
+{
 /// The reason why we have this class is that we want
 /// an extra layer (where we can connect signals and so on)
 /// between the program and the plot widget.
@@ -42,3 +44,4 @@ private:
 
     plot m_plot;
 };
+}

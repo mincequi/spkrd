@@ -23,6 +23,8 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
 
+namespace spkrd
+{
 class crossover_wizard : public Gtk::ScrolledWindow
 {
 public:
@@ -39,3 +41,4 @@ private:
     Gtk::Box m_vbox;
     std::shared_ptr<driver_list const> m_drivers{nullptr};
 };
+}

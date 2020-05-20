@@ -28,6 +28,8 @@
 
 #include <vector>
 
+namespace spkrd
+{
 class driver_list;
 class Crossover;
 class filter_network;
@@ -42,23 +44,21 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<gspk::point> const&,
-                     Gdk::Color const&,
-                     int&,
-                     filter_network*) -> int;
+    auto on_add_plot(std::vector<point> const&, Gdk::Color const&, int&, filter_network*)
+        -> int;
 
 private:
     void on_crossover_selected(Crossover*);
 
     void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
-    auto parse_frequency_response_file(std::string const& filename)
-        -> std::vector<gspk::point>;
+    auto parse_frequency_response_file(std::string const& filename) -> std::vector<point>;
 
 private:
     plot m_plot;
     std::vector<int> m_networks;
     Gdk::Color m_color;
-    std::vector<std::vector<gspk::point>> m_points;
+    std::vector<std::vector<point>> m_points;
     std::shared_ptr<driver_list const> m_drivers;
 };
+}
