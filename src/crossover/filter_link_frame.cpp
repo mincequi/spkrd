@@ -20,6 +20,7 @@
 #include "filter_link_frame.hpp"
 
 #include "filter_type.hpp"
+#include "filter_parameters.hpp"
 #include "common.h"
 #include "plot.hpp"
 #include "signal.hpp"
@@ -376,9 +377,9 @@ void filter_link_frame::on_param_changed()
         switch (m_network->get_lowpass_order())
         {
             case NET_ORDER_1ST:
-                num_params = get_filter_params(NET_BUTTERWORTH,
-                                               NET_ORDER_1ST,
-                                               NET_TYPE_LOWPASS);
+                num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                  NET_ORDER_1ST,
+                                                  NET_TYPE_LOWPASS);
                 m_network->parts()[index].set_value(
                     (speaker.get_rdc() / (num_params[0] * cutoff)) * 1000);
                 m_network->parts()[index++].set_unit("m");
@@ -388,27 +389,27 @@ void filter_link_frame::on_param_changed()
                 switch (m_lower_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BUTTERWORTH);
                         break;
                     case 2: // chebychev
-                        num_params = get_filter_params(NET_CHEBYCHEV,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_CHEBYCHEV,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_CHEBYCHEV);
                         break;
                     case 3: // linkwitz-riley
-                        num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_LINKWITZRILEY,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_LINKWITZRILEY);
                         break;
                 }
@@ -425,15 +426,15 @@ void filter_link_frame::on_param_changed()
                 switch (m_lower_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_3RD,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_3RD,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_3RD,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_3RD,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BUTTERWORTH);
                         break;
                 }
@@ -454,39 +455,39 @@ void filter_link_frame::on_param_changed()
                 switch (m_lower_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_BUTTERWORTH);
                         break;
                     case 2: // gaussian
-                        num_params = get_filter_params(NET_GAUSSIAN,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_GAUSSIAN,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_GAUSSIAN);
                         break;
                     case 3: // legendre
-                        num_params = get_filter_params(NET_LEGENDRE,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_LEGENDRE,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_LEGENDRE);
                         break;
                     case 4: // liner-phase
-                        num_params = get_filter_params(NET_LINEARPHASE,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_LINEARPHASE,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_LINEARPHASE);
                         break;
                     case 5: // linkwitz-riley
-                        num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_LOWPASS);
+                        num_params = filter::coefficients(NET_LINKWITZRILEY,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_LOWPASS);
                         m_network->set_lowpass_family(NET_LINKWITZRILEY);
                         break;
                 }
@@ -518,9 +519,9 @@ void filter_link_frame::on_param_changed()
         switch (m_network->get_highpass_order())
         {
             case NET_ORDER_1ST:
-                num_params = get_filter_params(NET_BUTTERWORTH,
-                                               NET_ORDER_1ST,
-                                               NET_TYPE_HIGHPASS);
+                num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                  NET_ORDER_1ST,
+                                                  NET_TYPE_HIGHPASS);
                 m_network->parts()[index].set_value(
                     num_params[0] / (speaker.get_rdc() * cutoff) * 1000000);
                 m_network->parts()[index++].set_unit("u");
@@ -530,27 +531,27 @@ void filter_link_frame::on_param_changed()
                 switch (m_higher_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BUTTERWORTH);
                         break;
                     case 2: // chebychev
-                        num_params = get_filter_params(NET_CHEBYCHEV,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_CHEBYCHEV,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_CHEBYCHEV);
                         break;
                     case 3: // linkwitz-riley
-                        num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                       NET_ORDER_2ND,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_LINKWITZRILEY,
+                                                          NET_ORDER_2ND,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_LINKWITZRILEY);
                         break;
                 }
@@ -567,15 +568,15 @@ void filter_link_frame::on_param_changed()
                 switch (m_higher_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_3RD,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_3RD,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_3RD,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_3RD,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BUTTERWORTH);
                         break;
                 }
@@ -596,39 +597,39 @@ void filter_link_frame::on_param_changed()
                 switch (m_higher_type_combo->get_active_row_number())
                 {
                     case 0: // bessel
-                        num_params = get_filter_params(NET_BESSEL,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BESSEL,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BESSEL);
                         break;
                     case 1: // butterworth
-                        num_params = get_filter_params(NET_BUTTERWORTH,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_BUTTERWORTH,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_BUTTERWORTH);
                         break;
                     case 2: // gaussian
-                        num_params = get_filter_params(NET_GAUSSIAN,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_GAUSSIAN,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_GAUSSIAN);
                         break;
                     case 3: // legendre
-                        num_params = get_filter_params(NET_LEGENDRE,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_LEGENDRE,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_LEGENDRE);
                         break;
-                    case 4: // liner-phase
-                        num_params = get_filter_params(NET_LINEARPHASE,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                    case 4: // linear-phase
+                        num_params = filter::coefficients(NET_LINEARPHASE,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_LINEARPHASE);
                         break;
                     case 5: // linkwitz-riley
-                        num_params = get_filter_params(NET_LINKWITZRILEY,
-                                                       NET_ORDER_4TH,
-                                                       NET_TYPE_HIGHPASS);
+                        num_params = filter::coefficients(NET_LINKWITZRILEY,
+                                                          NET_ORDER_4TH,
+                                                          NET_TYPE_HIGHPASS);
                         m_network->set_highpass_family(NET_LINKWITZRILEY);
                         break;
                 }
@@ -911,262 +912,6 @@ void filter_link_frame::perform_spice_simulation()
             }
         }
     }
-}
-
-auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int net_type) const
-    -> std::vector<double>
-{
-    std::vector<double> nums;
-    switch (net_order)
-    {
-        case NET_ORDER_1ST:
-        {
-            switch (net_type)
-            {
-                case NET_TYPE_LOWPASS:
-                    nums.push_back(6.28);
-                    break;
-                case NET_TYPE_HIGHPASS:
-                    nums.push_back(0.159);
-                    break;
-            }
-            break;
-        }
-        case NET_ORDER_2ND:
-        {
-            switch (net_name_type)
-            {
-                case NET_BESSEL:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.2756);
-                            nums.push_back(0.0912);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.0912);
-                            nums.push_back(0.2756);
-                            break;
-                    }
-                    break;
-                }
-                case NET_BUTTERWORTH:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.2251);
-                            nums.push_back(0.1125);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.1125);
-                            nums.push_back(0.2251);
-                            break;
-                    }
-                    break;
-                }
-                case NET_CHEBYCHEV:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.1592);
-                            nums.push_back(0.1592);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.1592);
-                            nums.push_back(0.1592);
-                            break;
-                    }
-                    break;
-                }
-                case NET_LINKWITZRILEY:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3183);
-                            nums.push_back(0.0796);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.3183);
-                            nums.push_back(0.0796);
-                            break;
-                    }
-                    break;
-                }
-            }
-            break;
-        }
-        case NET_ORDER_3RD:
-        {
-            switch (net_name_type)
-            {
-                case NET_BESSEL:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3294);
-                            nums.push_back(0.1897);
-                            nums.push_back(0.06592);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.07911);
-                            nums.push_back(0.1317);
-                            nums.push_back(0.3953);
-                            break;
-                    }
-                    break;
-                }
-                case NET_BUTTERWORTH:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.2387);
-                            nums.push_back(0.2122);
-                            nums.push_back(0.0796);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.1061);
-                            nums.push_back(0.1194);
-                            nums.push_back(0.3183);
-                            break;
-                    }
-                    break;
-                }
-            }
-            break;
-        }
-        case NET_ORDER_4TH:
-        {
-            switch (net_name_type)
-            {
-                case NET_BESSEL:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3583);
-                            nums.push_back(0.2336);
-                            nums.push_back(0.1463);
-                            nums.push_back(0.0504);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.0702);
-                            nums.push_back(0.0862);
-                            nums.push_back(0.0719);
-                            nums.push_back(0.4983);
-                            break;
-                    }
-                    break;
-                }
-                case NET_BUTTERWORTH:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.2437);
-                            nums.push_back(0.2509);
-                            nums.push_back(0.1723);
-                            nums.push_back(0.0609);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.1040);
-                            nums.push_back(0.1009);
-                            nums.push_back(0.1470);
-                            nums.push_back(0.4159);
-                            break;
-                    }
-                    break;
-                }
-                case NET_GAUSSIAN:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3253);
-                            nums.push_back(0.2235);
-                            nums.push_back(0.1674);
-                            nums.push_back(0.0768);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.0767);
-                            nums.push_back(0.1116);
-                            nums.push_back(0.1491);
-                            nums.push_back(0.3251);
-                            break;
-                    }
-                    break;
-                }
-                case NET_LEGENDRE:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.2294);
-                            nums.push_back(0.2365);
-                            nums.push_back(0.2034);
-                            nums.push_back(0.0910);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.1104);
-                            nums.push_back(0.1073);
-                            nums.push_back(0.1246);
-                            nums.push_back(0.2783);
-                            break;
-                    }
-                }
-                case NET_LINEARPHASE:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3285);
-                            nums.push_back(0.2255);
-                            nums.push_back(0.1578);
-                            nums.push_back(0.0632);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.0741);
-                            nums.push_back(0.1079);
-                            nums.push_back(0.1524);
-                            nums.push_back(0.3853);
-                            break;
-                    }
-                    break;
-                }
-                case NET_LINKWITZRILEY:
-                {
-                    switch (net_type)
-                    {
-                        case NET_TYPE_LOWPASS:
-                            nums.push_back(0.3000);
-                            nums.push_back(0.2533);
-                            nums.push_back(0.1500);
-                            nums.push_back(0.0563);
-                            break;
-                        case NET_TYPE_HIGHPASS:
-                            nums.push_back(0.0844);
-                            nums.push_back(0.1000);
-                            nums.push_back(0.1688);
-                            nums.push_back(0.4501);
-                            break;
-                    }
-                    break;
-                }
-            }
-            break;
-        }
-    }
-
-    if (nums.empty())
-    {
-        throw std::runtime_error("Filter parameters was not correctly populated");
-    }
-    return nums;
 }
 
 void filter_link_frame::set_family(Gtk::ComboBoxText* option_menu, int order, int family)

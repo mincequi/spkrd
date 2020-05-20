@@ -81,9 +81,6 @@ private:
     auto plot_line_colour() const -> Gdk::Color;
 
 private:
-    auto get_filter_params(int net_name_type, int net_order, int net_type) const
-        -> std::vector<double>;
-
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
 private:
