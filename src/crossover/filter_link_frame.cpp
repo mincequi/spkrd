@@ -332,8 +332,6 @@ void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* order_box,
     type_box->set_active(0);
 
     m_enable_edit = true;
-
-    std::puts("returning from on_order_selected");
 }
 
 void filter_link_frame::on_settings_changed(const std::string& setting)
@@ -670,18 +668,19 @@ void filter_link_frame::on_param_changed()
     if (m_damp_spinbutton.get_value_as_int() != 0)
     {
         // Calculate resistors for damping network
-        auto const r_ser = speaker.get_rdc()
-                           * (std::pow(10, m_damp_spinbutton.get_value() / 20) - 1);
-        auto const r_par = speaker.get_rdc() + std::pow(speaker.get_rdc(), 2) / r_ser;
-        m_network->get_damp_R2().set_value(r_ser);
-        m_network->get_damp_R1().set_value(r_par);
+        auto const r_series = speaker.get_rdc()
+                              * (std::pow(10, m_damp_spinbutton.get_value() / 20.0) - 1);
+        auto const r_parallel = speaker.get_rdc()
+                                + std::pow(speaker.get_rdc(), 2) / r_series;
+        m_network->get_damp_R2().set_value(r_series);
+        m_network->get_damp_R1().set_value(r_parallel);
     }
 
     signal_net_modified_by_wizard();
 
     if (g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
-        on_plot_crossover();
+        this->on_clear_and_plot();
     }
     m_enable_edit = true;
 }
@@ -691,13 +690,14 @@ void filter_link_frame::on_net_updated(filter_network* network)
     if (m_network->get_id() == network->get_id()
         && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
-        this->on_plot_crossover();
+        this->on_clear_and_plot();
     }
 }
 
 void filter_link_frame::on_clear_and_plot()
 {
     m_filter_plot_index = -1;
+    m_points.clear();
     this->on_plot_crossover();
 }
 
@@ -736,7 +736,7 @@ void filter_link_frame::on_drivers_loaded(std::shared_ptr<driver_list const> con
     }
 }
 
-auto filter_link_frame::plot_line_colour() -> Gdk::Color
+auto filter_link_frame::plot_line_colour() const -> Gdk::Color
 {
     return (m_network->get_type() & NET_TYPE_LOWPASS) != 0
                ? Gdk::Color("blue")
@@ -749,20 +749,21 @@ void filter_link_frame::on_plot_crossover()
 {
     std::puts("filter_link_frame::on_plot_crossover: plotting crossover");
 
-    this->perform_spice_simulation();
-
-    // send the spice data to the plot
-    signal_add_crossover_plot(m_points,
-                              this->plot_line_colour(),
-                              m_filter_plot_index,
-                              m_network);
-
     if (!m_enable_edit)
     {
-        return;
+        std::puts("Editing disabled!");
+        // return;
     }
 
+    this->perform_spice_simulation();
+
     m_enable_edit = false;
+
+    // send the spice data to the plot
+    m_filter_plot_index = signal_add_crossover_plot(m_points,
+                                                    this->plot_line_colour(),
+                                                    m_filter_plot_index,
+                                                    m_network);
 
     if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
@@ -783,6 +784,7 @@ void filter_link_frame::on_plot_crossover()
 
         double ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
         int xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
+
         double ytodbdiff = m_points[index].get_y() + 3;
         m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
                                               + m_points[index + 1].get_x());
@@ -803,9 +805,10 @@ void filter_link_frame::on_plot_crossover()
                                   + m_damp_spinbutton.get_value());
         m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
 
-        double ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
-        int xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
+        double const ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
+        auto const xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
         double ytodbdiff = m_points[index].get_y() + 3;
+
         m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
                                                + m_points[index].get_x());
     }
@@ -852,12 +855,7 @@ void filter_link_frame::perform_spice_simulation()
         cmd += " -b -o " + spice_filename + ".out " + spice_filename;
     }
 
-    std::cout << "filter_link_frame::on_plot_crossover: running SPICE with \"" + cmd
-                     + "\"\n";
-
     system(cmd.c_str());
-
-    std::cout << "filter_link_frame::on_plot_crossover: SPICE done\n";
 
     // extract spice output into a vector
     std::string spice_output_file = spice_filename + ".out";
@@ -912,7 +910,7 @@ void filter_link_frame::perform_spice_simulation()
     }
 }
 
-auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int net_type)
+auto filter_link_frame::get_filter_params(int net_name_type, int net_order, int net_type) const
     -> std::vector<double>
 {
     std::vector<double> nums;

@@ -38,6 +38,7 @@ inline auto is_driver_and_filter_matched(driver const& driver,
                && ((network.get_type() & NET_TYPE_LOWPASS) != 0));
 }
 
+/// filter_link_frame holds the information for one driver in the interface
 class filter_link_frame : public Gtk::Frame
 {
 public:
@@ -75,14 +76,10 @@ private:
 
     void perform_spice_simulation();
 
-    auto plot_line_colour() -> Gdk::Color;
+    auto plot_line_colour() const -> Gdk::Color;
 
 private:
-    /// Numerical coefficients for the filter principles
-    /// net_name_type = NET_BESSEL, ...,
-    /// net_order = NET_ORDER_1ST, ...,
-    /// net_type = NET_TYPE_LOWPASS, NET_TYPE_HIGHPASS
-    auto get_filter_params(int net_name_type, int net_order, int net_type)
+    auto get_filter_params(int net_name_type, int net_order, int net_type) const
         -> std::vector<double>;
 
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
