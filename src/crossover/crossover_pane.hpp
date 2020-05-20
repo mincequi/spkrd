@@ -52,8 +52,6 @@ protected:
 
     void on_plot_crossover();
 
-    void on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num);
-
     void on_new_crossover_menu_action(int);
 
     void set_save_state(bool save_state);

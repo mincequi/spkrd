@@ -62,7 +62,7 @@ void crossover_tree_view::on_net_modified_by_wizard()
 {
     std::puts("crossover_tree_view::on_net_modified_by_wizard");
 
-    on_crossover_selected(m_cover);
+    this->on_crossover_selected(m_cover);
 }
 
 void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,

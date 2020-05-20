@@ -24,6 +24,7 @@
 #include "filter_network.hpp"
 #include "signal.hpp"
 #include "driver_list.hpp"
+#include "unit_conversion.hpp"
 
 #include <cmath>
 #include <fstream>
@@ -32,13 +33,9 @@
 frequency_response_plot::frequency_response_plot()
     : m_plot(1, 20000, 50, 110, true, 0), m_color("blue")
 {
-    m_drivers = nullptr;
-
     add(m_plot);
 
     m_plot.set_y_label(_("Magnitude / dB"));
-
-    show_all();
 
     g_settings.defaultValueBool("DisableFilterAmp", false);
 
@@ -48,40 +45,11 @@ frequency_response_plot::frequency_response_plot()
         sigc::mem_fun(*this, &frequency_response_plot::on_add_plot));
     signal_crossover_selected.connect(
         sigc::mem_fun(*this, &frequency_response_plot::on_crossover_selected));
+
+    show_all();
 }
 
 frequency_response_plot::~frequency_response_plot() = default;
-
-auto lerp(std::vector<gspk::point> const& freq_resp_points, double x) -> double
-{
-    auto first_i = std::lower_bound(freq_resp_points.begin(),
-                                    freq_resp_points.end(),
-                                    x,
-                                    gspk::comparison{});
-
-    if (first_i != begin(freq_resp_points))
-    {
-        std::advance(first_i, -1);
-    }
-
-    auto second_i = std::upper_bound(begin(freq_resp_points),
-                                     end(freq_resp_points),
-                                     x,
-                                     gspk::comparison{});
-
-    double x0 = first_i->get_x();
-    double x1 = second_i->get_x();
-
-    if (x0 == x1)
-    {
-        return first_i->get_y();
-    }
-
-    double y0 = first_i->get_y();
-    double y1 = second_i->get_y();
-
-    return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
-}
 
 auto frequency_response_plot::parse_frequency_response_file(std::string const& filename)
     -> std::vector<gspk::point>
@@ -154,50 +122,55 @@ auto frequency_response_plot::on_add_plot(std::vector<gspk::point> const& plot_p
             filter_y = 0.0;
         }
         points.emplace_back(filter_point.get_x(),
-                            lerp(freq_resp_points, filter_point.get_x()) + filter_y);
+                            gspk::lerp(freq_resp_points, filter_point.get_x()) + filter_y);
     }
 
     // Search for plot_index in the graph
     auto const location = std::find(begin(m_networks), end(m_networks), plot_index);
 
-    // If plot_index is in the graph, replace the old point-vector, if plot_index not in
-    // graph insert it at the end of the vector
-    if (location != end(m_networks) && !m_points.empty())
-    {
-        m_points[std::distance(begin(m_networks), location)] = points;
-    }
-    else
-    {
-        m_points.push_back(points);
-        m_networks.push_back(plot_index);
-    }
+    // If plot_index is in the graph, replace the old point-vector
+    // If plot_index not in graph insert it at the end of the vector
+    // if (location != end(m_networks) && !m_points.empty())
+    // {
+    //     m_points[std::distance(begin(m_networks), location)] = points;
+    // }
+    // else
+    // {
+    m_points.push_back(points);
+    m_networks.push_back(plot_index);
+    // }
 
+    std::puts("frequency_response_plot::on_add_plot removing all plots\n");
     m_plot.remove_all_plots();
 
-    std::vector<gspk::point> pnts;
-
-    if (!m_points.empty())
+    if (m_points.empty())
     {
-        pnts = m_points[0];
-
-        Gdk::Color c2("red");
-
-        m_plot.add_plot(m_points[0], c2);
-
-        for (std::size_t j = 1; j < m_points.size(); j++)
-        {
-            for (std::size_t k = 0; k < m_points[j].size(); k++)
-            {
-                pnts[k].set_y(10
-                              * std::log10(std::pow(10, pnts[k].get_y() / 10)
-                                           + std::pow(10, (m_points[j])[k].get_y() / 10)));
-            }
-            m_plot.add_plot(m_points[j], c2);
-        }
+        return 0;
     }
+
+    // Plot individual contributions
+    std::for_each(cbegin(m_points), cend(m_points), [this](auto const& point) {
+        m_plot.add_plot(point, Gdk::Color("red"));
+    });
+
+    std::vector<gspk::point> summed_points = m_points.front();
+
+    std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& line_points) {
+        std::transform(begin(line_points),
+                       end(line_points),
+                       begin(summed_points),
+                       begin(summed_points),
+                       [&](auto const& line_point, auto const& summed_point) {
+                           return gspk::point{summed_point.get_x(),
+                                              gspk::magnitude_to_dB(
+                                                  gspk::dB_to_magnitude(summed_point.get_y())
+                                                  + gspk::dB_to_magnitude(
+                                                        line_point.get_y()))};
+                       });
+    });
     // Add summed freq resp plot to the plot and select this plot since
     // it's the most important plot in this graph
-    m_plot.select_plot(m_plot.add_plot(pnts, m_color));
+    m_plot.select_plot(m_plot.add_plot(summed_points, m_color));
 
     return 0;
 }
@@ -209,7 +182,12 @@ void frequency_response_plot::clear()
     m_plot.remove_all_plots();
 }
 
-void frequency_response_plot::on_crossover_selected(Crossover*) { this->clear(); }
+void frequency_response_plot::on_crossover_selected(Crossover*)
+{
+    std::puts("frequency_response_plot::on_crossover_selected is clearing the data");
+
+    this->clear();
+}
 
 void frequency_response_plot::on_drivers_loaded(
     std::shared_ptr<driver_list const> const& driver_list)

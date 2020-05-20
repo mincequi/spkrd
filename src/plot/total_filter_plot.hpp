@@ -30,33 +30,28 @@
 class filter_network;
 class Crossover;
 
-/// This is a wrapper class for gspkPlot
-/// The reason why we have this class is that we want an extra layer
-// (where we can connect signals etc) between the program and the plot widget.
+/// total_filter_plot is an interface that plots the total frequency response
+/// of the crossover circuit.
 class total_filter_plot : public Gtk::Frame
 {
 public:
     total_filter_plot();
 
-    ~total_filter_plot() override;
+    ~total_filter_plot() override = default;
 
-    void clear();
+    [[deprecated]] void clear();
 
     auto on_add_plot(std::vector<gspk::point> const& line_points,
                      Gdk::Color const& line_colour,
                      int& plot_index,
-                     filter_network*) -> int;
+                     filter_network*) noexcept(false) -> std::int32_t;
 
 private:
-    auto on_delete_event(GdkEventAny* event) -> bool override;
-
     void on_crossover_selected(Crossover*);
-
-    void on_plot_crossover();
 
 private:
     plot m_plot;
-    std::vector<int> m_nets;
+    std::vector<std::int32_t> m_networks;
     Gdk::Color m_color;
     std::vector<std::vector<gspk::point>> m_points;
 };

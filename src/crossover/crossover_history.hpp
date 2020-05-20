@@ -80,6 +80,7 @@ protected:
 
     void save_as_xml(const std::string& filename);
 
+    /// Process tasks when a selection has been made
     void on_selection_changed();
 
     void on_part_modified();
@@ -88,13 +89,10 @@ protected:
 
     void on_net_modified_by_user();
 
-    void on_new_crossover_menu_action(int);
-
-    void on_plot_crossover();
-
     void on_save_open_files();
 
-    void type_cell_data_func(Gtk::CellRenderer* cell, const Gtk::TreeModel::iterator& iter);
+    void type_cell_data_func(Gtk::CellRenderer* cell,
+                             Gtk::TreeModel::iterator const& iter) const;
 
     virtual void create_model();
 

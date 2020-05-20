@@ -44,15 +44,11 @@ crossover_pane::crossover_pane()
     m_crossover_notebook.append_page(m_crossover_treeview, _("Filter"));
     m_crossover_notebook.append_page(m_crossover_history, _("History"));
 
-    m_plot_notebook.append_page(m_total_filter_plot,
-                                _("Total crossover frequency response"));
+    m_plot_notebook.append_page(m_total_filter_plot, _("Crossover frequency response"));
     m_plot_notebook.append_page(m_summed_freq_resp_plot, _("Total frequency response"));
     m_plot_notebook.append_page(m_crossover_image_view, _("Crossover network"));
 
     m_plot_notebook.set_scrollable();
-
-    m_plot_notebook.signal_switch_page().connect(
-        sigc::mem_fun(*this, &crossover_pane::on_plot_notebook_switch_page));
 
     signal_crossover_set_save_state.connect(
         sigc::mem_fun(*this, &crossover_pane::set_save_state));
@@ -213,64 +209,63 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     }
     m_toolbar = Gtk::make_managed<Gtk::Toolbar>();
     {
-        auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::COPY,
-                                                Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        auto t = Gtk::make_managed<Gtk::ToolButton>(*im, _("Copy"));
-        t->signal_clicked().connect(
+        auto image = Gtk::make_managed<Gtk::Image>(Gtk::Stock::COPY,
+                                                   Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(*image, _("Copy"));
+        tool_button->signal_clicked().connect(
             sigc::mem_fun(m_crossover_history, &crossover_history::on_new_copy));
-        m_toolbar->append(*t);
+        m_toolbar->append(*tool_button);
     }
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
     {
-        auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::OPEN,
-                                                Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        auto t = Gtk::make_managed<Gtk::ToolButton>(*im, _("Open"));
-        t->signal_clicked().connect(
+        auto image = Gtk::make_managed<Gtk::Image>(Gtk::Stock::OPEN,
+                                                   Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(*image, _("Open"));
+        tool_button->signal_clicked().connect(
             sigc::mem_fun(m_crossover_history, &crossover_history::on_open_xml));
-        m_toolbar->append(*t);
+        m_toolbar->append(*tool_button);
     }
     {
-        auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::SAVE,
-                                                Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        auto t = Gtk::make_managed<Gtk::ToolButton>(*im, _("Save"));
-        t->signal_clicked().connect(
+        auto image = Gtk::make_managed<Gtk::Image>(Gtk::Stock::SAVE,
+                                                   Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(*image, _("Save"));
+        tool_button->signal_clicked().connect(
             sigc::mem_fun(m_crossover_history, &crossover_history::on_save));
-        m_toolbar->append(*t);
+        m_toolbar->append(*tool_button);
     }
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
     {
-        auto im = Gtk::make_managed<Gtk::Image>(Gtk::Stock::DELETE,
-                                                Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        auto t = Gtk::make_managed<Gtk::ToolButton>(*im, _("Delete"));
-        t->signal_clicked().connect(
+        auto image = Gtk::make_managed<Gtk::Image>(Gtk::Stock::DELETE,
+                                                   Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(*image, _("Delete"));
+        tool_button->signal_clicked().connect(
             sigc::mem_fun(m_crossover_history, &crossover_history::on_remove));
-        m_toolbar->append(*t);
+        m_toolbar->append(*tool_button);
     }
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
     {
-        auto t = Gtk::make_managed<Gtk::ToolButton>(gspk::image_widget("stock_plot_"
-                                                                       "crossover_"
-                                                                       "24.png"),
-                                                    _("Plot"));
-        t->signal_clicked().connect(
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(gspk::image_widget(
+                                                                  "stock_plot_"
+                                                                  "crossover_"
+                                                                  "24.png"),
+                                                              _("Plot"));
+        tool_button->signal_clicked().connect(
             sigc::mem_fun(*this, &crossover_pane::on_plot_crossover));
-        m_toolbar->append(*t);
+        m_toolbar->append(*tool_button);
     }
     m_toolbar->set_toolbar_style(
         static_cast<Gtk::ToolbarStyle>(g_settings.getValueUnsignedInt("ToolbarStyl"
                                                                       "e")));
     m_toolbar->get_nth_item(TOOLBAR_INDEX_SAVE)->set_sensitive(false);
 
-    g_settings.settings_changed.connect(
-        sigc::mem_fun(*this, &crossover_pane::on_settings_changed));
-
     return *m_toolbar;
 }
 
-void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_num) {}
-
 void crossover_pane::on_plot_crossover()
 {
+    m_total_filter_plot.clear();
+    m_summed_freq_resp_plot.clear();
+
     signal_plot_crossover();
 }
 
@@ -286,9 +281,7 @@ void crossover_pane::on_settings_changed(std::string const& setting)
     if (setting == "AutoUpdateFilterPlots"
         && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
-        std::cout << "auto updated filter plots\n";
-
-        on_plot_crossover();
+        this->on_plot_crossover();
     }
 }
 

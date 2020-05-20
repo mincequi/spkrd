@@ -32,10 +32,10 @@ crossover_wizard::crossover_wizard()
     m_vbox.set_valign(Gtk::ALIGN_START);
     add(m_vbox);
 
-    show_all();
-
     signal_drivers_loaded.connect(
         sigc::mem_fun(*this, &crossover_wizard::on_drivers_loaded));
+
+    show_all();
 }
 
 void crossover_wizard::on_crossover_selected(Crossover* crossover)
@@ -56,57 +56,29 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
         // was each subfilter is there for
         if (type == CROSSOVER_TYPE_TWOWAY)
         {
-            if (index == 0)
-            {
-                m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                        _("Woofer/"
-                                                                          "midrange "
-                                                                          "filter"),
-                                                                        m_drivers));
-            }
-            else
-            {
-                m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                        _("Tweeter "
-                                                                          "filter"),
-                                                                        m_drivers));
-            }
+            auto const description = index == 0 ? _("Woofer/midrange filter")
+                                                : _("Tweeter filter");
+
+            m_vbox.pack_start(
+                *Gtk::make_managed<filter_link_frame>(&network, description, m_drivers));
         }
         else if (type == CROSSOVER_TYPE_THREEWAY)
         {
+            auto const description = index == 0 ? _("Woofer filter")
+                                                : index == 1 ? _("Midrange filter")
+                                                             : _("Tweeter filter");
+
             m_vbox.pack_start(
-                *Gtk::make_managed<filter_link_frame>(&network,
-                                                      (index == 0
-                                                           ? _("Woofer filter")
-                                                           : index == 1
-                                                                 ? _("Midrange filter")
-                                                                 : _("Tweeter filter")),
-                                                      m_drivers));
+                *Gtk::make_managed<filter_link_frame>(&network, description, m_drivers));
         }
         else if (type == (CROSSOVER_TYPE_TWOWAY | CROSSOVER_TYPE_LOWPASS))
         {
-            if (index == 0)
-            {
-                m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                        _("Woofer "
-                                                                          "filter"),
-                                                                        m_drivers));
-            }
-            else if (index == 1)
-            {
-                m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                        _("Woofer/"
-                                                                          "midrange "
-                                                                          "filter"),
-                                                                        m_drivers));
-            }
-            else
-            {
-                m_vbox.pack_start(*Gtk::make_managed<filter_link_frame>(&network,
-                                                                        _("Tweeter "
-                                                                          "filter"),
-                                                                        m_drivers));
-            }
+            auto const description = index == 0 ? _("Woofer filter")
+                                                : index == 1 ? _("Woofer/midrange filter")
+                                                             : _("Tweeter filter");
+
+            m_vbox.pack_start(
+                *Gtk::make_managed<filter_link_frame>(&network, description, m_drivers));
         }
         else
         {

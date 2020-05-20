@@ -22,6 +22,7 @@
 
 #include "common.h"
 #include "signal.hpp"
+#include "unit_conversion.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -30,88 +31,90 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 {
     add(m_plot);
 
-    signal_plot_crossover.connect(
-        sigc::mem_fun(*this, &total_filter_plot::on_plot_crossover));
     signal_add_crossover_plot.connect(sigc::mem_fun(*this, &total_filter_plot::on_add_plot));
+    signal_crossover_selected.connect(
+        sigc::mem_fun(*this, &total_filter_plot::on_crossover_selected));
 
     m_plot.set_y_label(_("Magnitude / dB"));
 
     show_all();
 }
 
-total_filter_plot::~total_filter_plot() = default;
-
 auto total_filter_plot::on_add_plot(std::vector<gspk::point> const& line_points,
-                                    Gdk::Color const& line_colour,
+                                    Gdk::Color const& colour,
                                     int& plot_index,
                                     filter_network*) -> int
 {
-    // Search for plot_index in the graph
-    auto const position = std::find(cbegin(m_nets), cend(m_nets), plot_index);
+    std::cout << "plot index = " << plot_index << '\n';
 
-    // If plot_index is in the graph, replace the old point-vector, if ,
-    // plot_index not in graph insert it at the end of the vector */
-    if (position != end(m_nets) && !m_points.empty())
+    // if (m_points.empty())
+    // {
+    m_points.push_back(line_points);
+    m_networks.push_back(plot_index);
+    // }
+    // else
+    // {
+    //     auto const position = std::find(cbegin(m_networks), cend(m_networks), plot_index);
+    //
+    //     if (position != end(m_networks))
+    //     {
+    //         m_points[std::distance(cbegin(m_networks), position)] = line_points;
+    //     }
+    //     else
+    //     {
+    //         throw std::runtime_error("Attempted to add a plot the plot index wasn't in "
+    //                                  "the list");
+    //     }
+    // }
+
+    std::cout << "TOTAL POINTS = " << m_points.size() << '\n';
+    for (auto const& points : m_points)
     {
-        m_points[std::distance(cbegin(m_nets), position)] = line_points;
-    }
-    else
-    {
-        m_points.push_back(line_points);
-        m_nets.push_back(plot_index);
+        std::cout << "point size = " << points.size() << '\n';
     }
 
     m_plot.remove_all_plots();
-
-    if (m_points.empty())
-    {
-        return 0;
-    }
+    m_plot.add_plot(line_points, colour);
 
     // Plot individual contributions
-    std::for_each(cbegin(m_points), cend(m_points), [this](auto const& point) {
-        m_plot.add_plot(point, Gdk::Color("red"));
+    std::for_each(cbegin(m_points), std::prev(cend(m_points)), [&](auto const& point) {
+        m_plot.add_plot(point, Gdk::Color("black"));
     });
 
     // Superimpose the plots to visualise complete frequency response
     std::vector<gspk::point> summed_points = m_points.front();
 
-    auto dB_to_magnitude = [](auto const dB) { return std::pow(10, dB / 10.0); };
-    auto magnitude_to_dB = [](auto const magnitude) {
-        return 10.0 * std::log10(magnitude);
-    };
-
-    std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& line_points) {
-        std::transform(begin(line_points),
-                       end(line_points),
+    std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& points) {
+        std::transform(begin(points),
+                       end(points),
                        begin(summed_points),
                        begin(summed_points),
-                       [&](auto const& line_point, auto const& summed_point) {
+                       [&](auto const& point, auto const& summed_point) {
                            return gspk::point{summed_point.get_x(),
-                                              magnitude_to_dB(
-                                                  dB_to_magnitude(summed_point.get_y())
-                                                  + dB_to_magnitude(line_point.get_y()))};
+                                              gspk::magnitude_to_dB(
+                                                  gspk::dB_to_magnitude(summed_point.get_y())
+                                                  + gspk::dB_to_magnitude(point.get_y()))};
                        });
     });
 
+    // Add and select the superimposed points
     m_plot.select_plot(m_plot.add_plot(summed_points, m_color));
 
-    return 0;
+    return m_points.size();
 }
 
 void total_filter_plot::clear()
 {
+    std::cout << "Deleting all the plots and attempting to clear the screen\n";
+
     m_points.clear();
-    m_nets.clear();
+    m_networks.clear();
     m_plot.remove_all_plots();
 }
 
-void total_filter_plot::on_crossover_selected(Crossover*) { clear(); }
-
-void total_filter_plot::on_plot_crossover() {}
-
-auto total_filter_plot::on_delete_event(GdkEventAny* event) -> bool
+void total_filter_plot::on_crossover_selected(Crossover*)
 {
-    // Don't delete this window
-    return true;
+    std::puts("\nCrossover selected in total_filter_plot\n");
+
+    this->clear();
 }
