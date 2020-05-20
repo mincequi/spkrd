@@ -31,6 +31,8 @@ public:
 private:
     void on_drivers_loaded(std::shared_ptr<driver_list const> const& drivers);
 
+    /// Create new filter_link_frames to match the crossover and render
+    /// this in the GUI
     void on_crossover_selected(Crossover* crossover);
 
 private:
