@@ -69,11 +69,11 @@ auto plot_history::on_delete_event(GdkEventAny* event) -> bool { return true; }
 
 void plot_history::on_selection_changed()
 {
-    Glib::RefPtr<Gtk::TreeSelection> selection = m_tree_view.get_selection();
+    auto const& selection = m_tree_view.get_selection();
 
     if (const Gtk::TreeIter iter = selection->get_selected())
     {
-        Gtk::TreePath path = m_list_store->get_path(iter);
+        auto const& path = m_list_store->get_path(iter);
 
         if (!path.empty())
         {
