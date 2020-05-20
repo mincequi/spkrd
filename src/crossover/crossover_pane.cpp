@@ -44,7 +44,6 @@ crossover_pane::crossover_pane()
     m_crossover_notebook.append_page(m_crossover_treeview, _("Filter"));
     m_crossover_notebook.append_page(m_crossover_history, _("History"));
 
-    m_plot_notebook.append_page(m_filter_plot, _("Crossover frequency response"));
     m_plot_notebook.append_page(m_total_filter_plot,
                                 _("Total crossover frequency response"));
     m_plot_notebook.append_page(m_summed_freq_resp_plot, _("Total frequency response"));
@@ -272,7 +271,6 @@ void crossover_pane::on_plot_notebook_switch_page(Gtk::Widget* page, guint page_
 
 void crossover_pane::on_plot_crossover()
 {
-    m_filter_plot.clear();
     signal_plot_crossover();
 }
 
