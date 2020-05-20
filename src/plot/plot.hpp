@@ -108,6 +108,9 @@ private:
                        int const rectangle_width,
                        int const rectangle_height);
 
+    /// Invalidates the window and marks for redrawing
+    void invalidate_window();
+
 private:
     int m_linesize;
     int m_lower_x;
@@ -118,10 +121,10 @@ private:
 
     bool m_enable_sec_scale;
     bool m_logx;
-    bool m_visible;
     int m_selected_plot;
 
-    std::string m_y_label1, m_y_label2;
+    std::string m_y_label1;
+    std::string m_y_label2;
 
     Cairo::RefPtr<Cairo::Context> m_context;
 };

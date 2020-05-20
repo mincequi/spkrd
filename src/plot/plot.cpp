@@ -38,8 +38,7 @@ plot::plot(int lower_x,
       m_upper_y{upper_y},
       m_y_zero_freq{y_zero_freq},
       m_enable_sec_scale{enable_sec_scale},
-      m_logx{logx},
-      m_visible{false}
+      m_logx{logx}
 {
 }
 
@@ -95,17 +94,13 @@ auto plot::add_plot(std::vector<gspk::point> const& plot_points,
     }
 
     // Don't draw the line until we have it all done
-    if (m_visible)
+    auto const& window = get_window();
+
+    if (window)
     {
         this->draw_lines(m_context, points, line_colour);
-
-        select_plot(m_colors.size() - 1);
-
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     allocation.get_width(),
-                                                     allocation.get_height()),
-                                      false);
+        this->select_plot(m_colors.size() - 1);
+        this->invalidate_window();
     }
 
     // Return index of the new plot so that the owner of
@@ -140,11 +135,13 @@ void plot::replace_plot(int const plot_index,
 {
     m_points.at(plot_index) = points;
     m_colors.at(plot_index) = line_colour;
+
+    this->invalidate_window();
 }
 
 void plot::remove_plot(int const plot_index)
 {
-    if (plot_index > static_cast<int>(m_points.size()))
+    if (plot_index > static_cast<int>(m_points.size()) || plot_index == -1)
     {
         throw std::out_of_range("Plot removed was greater than number of available "
                                 "plots");
@@ -156,66 +153,34 @@ void plot::remove_plot(int const plot_index)
 
     m_selected_plot = -1;
 
-    auto const& window = get_window();
-
-    if (window)
-    {
-        window->invalidate_rect(Gdk::Rectangle(0,
-                                               0,
-                                               get_allocation().get_width(),
-                                               get_allocation().get_height()),
-                                false);
-    }
+    this->invalidate_window();
 }
 
 void plot::remove_all_plots()
 {
-    std::cout << "REMOVING ALL PLOTS" << std::endl;
+    std::puts("REMOVING ALL PLOTS");
+
+    m_selected_plot = -1;
 
     m_points.clear();
     m_colors.clear();
     m_visible_plots.clear();
 
-    auto const& window = get_window();
-
-    if (window)
-    {
-        window->invalidate_rect(Gdk::Rectangle(0,
-                                               0,
-                                               get_allocation().get_width(),
-                                               get_allocation().get_height()),
-                                false);
-    }
+    this->invalidate_window();
 }
 
 void plot::hide_plot(int const plot_index)
 {
-    m_visible_plots[plot_index] = !m_visible_plots[plot_index];
+    m_visible_plots.at(plot_index) = false;
 
-    auto const& window = get_window();
-    if (window)
-    {
-        window->invalidate_rect(Gdk::Rectangle(0,
-                                               0,
-                                               get_allocation().get_width(),
-                                               get_allocation().get_height()),
-                                false);
-    }
+    this->invalidate_window();
 }
 
 void plot::select_plot(int index)
 {
     m_selected_plot = index;
 
-    auto const& window = get_window();
-    if (window)
-    {
-        window->invalidate_rect(Gdk::Rectangle(0,
-                                               0,
-                                               get_allocation().get_width(),
-                                               get_allocation().get_height()),
-                                false);
-    }
+    this->invalidate_window();
 }
 
 void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
@@ -362,31 +327,29 @@ void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
         }
 
         // Draw only if the vector is not empty
-        if (!points.empty())
+        if (points.empty())
         {
-            context->save();
-
-            if (static_cast<int>(i) == m_selected_plot)
-            {
-                context->set_line_width(m_linesize + 1);
-            }
-
-            auto const& color = m_colors.at(i);
-
-            context->set_source_rgb(color.get_red_p(),
-                                    color.get_green_p(),
-                                    color.get_blue_p());
-
-            context->move_to(points.front().get_x(), points.front().get_y());
-
-            std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
-                context->line_to(point.get_x(), point.get_y());
-                context->stroke();
-                context->move_to(point.get_x(), point.get_y());
-            });
-
-            context->restore();
+            continue;
         }
+        context->save();
+
+        if (static_cast<int>(i) == m_selected_plot)
+        {
+            context->set_line_width(m_linesize + 1);
+        }
+
+        auto const& color = m_colors.at(i);
+
+        context->set_source_rgb(color.get_red_p(), color.get_green_p(), color.get_blue_p());
+
+        context->move_to(points.front().get_x(), points.front().get_y());
+
+        std::for_each(std::next(begin(points)), end(points), [&](auto const& point) {
+            context->line_to(point.get_x(), point.get_y());
+            context->stroke();
+            context->move_to(point.get_x(), point.get_y());
+        });
+        context->restore();
     }
 }
 
@@ -563,32 +526,14 @@ void plot::set_y_label(const std::string& text)
 {
     m_y_label1 = text;
 
-    if (m_visible)
-    {
-        auto const& allocation = get_allocation();
-
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     allocation.get_width(),
-                                                     allocation.get_height()),
-                                      false);
-    }
+    this->invalidate_window();
 }
 
 void plot::set_y_label2(std::string const& text)
 {
     m_y_label2 = text;
 
-    if (m_visible)
-    {
-        auto const& allocation = get_allocation();
-
-        get_window()->invalidate_rect(Gdk::Rectangle(0,
-                                                     0,
-                                                     allocation.get_width(),
-                                                     allocation.get_height()),
-                                      false);
-    }
+    this->invalidate_window();
 }
 
 auto plot::int_to_ustring3(int d) -> Glib::ustring
@@ -597,4 +542,19 @@ auto plot::int_to_ustring3(int d) -> Glib::ustring
     GString* buffer = g_string_new(str);
     g_string_printf(buffer, "%3d", d);
     return buffer->str;
+}
+
+void plot::invalidate_window()
+{
+    queue_draw();
+    auto const& window = get_window();
+
+    if (window)
+    {
+        window->invalidate_rect(Gdk::Rectangle(0,
+                                               0,
+                                               get_allocation().get_width(),
+                                               get_allocation().get_height()),
+                                false);
+    }
 }
