@@ -1,4 +1,0 @@
-aclocal -I/mingw/share/aclocal
-autoconf
-automake --add-missing
-autoheader
