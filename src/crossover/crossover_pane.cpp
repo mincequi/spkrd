@@ -246,10 +246,9 @@ auto crossover_pane::get_toolbar() -> Gtk::Toolbar&
     }
     m_toolbar->append(*Gtk::make_managed<Gtk::SeparatorToolItem>());
     {
-        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(image_widget(
-                                                                  "stock_plot_"
-                                                                  "crossover_"
-                                                                  "24.png"),
+        auto const image_name = "stock_plot_crossover_24.png";
+
+        auto tool_button = Gtk::make_managed<Gtk::ToolButton>(image_widget(image_name),
                                                               _("Plot"));
         tool_button->signal_clicked().connect(
             sigc::mem_fun(*this, &crossover_pane::on_plot_crossover));
