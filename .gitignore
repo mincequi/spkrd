@@ -14,3 +14,5 @@ src/gspeakers
 .settings
 *~
 build
+doc/html
+doc/latex
