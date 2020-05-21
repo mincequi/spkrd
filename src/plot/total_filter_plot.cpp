@@ -69,10 +69,10 @@ auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
     //     }
     // }
 
-    std::cout << "TOTAL POINTS = " << m_points.size() << '\n';
+    std::cout << "\tTOTAL POINTS = " << m_points.size() << '\n';
     for (auto const& points : m_points)
     {
-        std::cout << "point size = " << points.size() << '\n';
+        std::cout << "\tnumber of points = " << points.size() << '\n';
     }
 
     m_plot.remove_all_plots();
@@ -116,7 +116,7 @@ void total_filter_plot::clear()
 
 void total_filter_plot::on_crossover_selected(Crossover*)
 {
-    std::puts("\nCrossover selected in total_filter_plot\n");
+    std::puts("\ntotal_filter_plot:: Crossover selected in total_filter_plot\n");
 
     this->clear();
 }
