@@ -80,7 +80,7 @@ protected:
     std::vector<crossover_cell_item> m_items;
 
     // Pointer to currently selected crossover
-    Crossover* m_cover;
+    Crossover* m_current_crossover;
 
     model_columns const m_columns;
 

@@ -64,7 +64,7 @@ void crossover_tree_view::on_net_modified_by_wizard()
 {
     std::puts("crossover_tree_view::on_net_modified_by_wizard");
 
-    this->on_crossover_selected(m_cover);
+    this->on_crossover_selected(m_current_crossover);
 }
 
 void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
@@ -102,7 +102,7 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     // Index is a counter for the extra circuits (impedance correction network,
     // damping network...) we have a number of extra circuits + the crossover
     // is the total number of "base nodes" after filter type nodes
-    filter_network* network = &(m_cover->networks())[path[0]];
+    filter_network* network = &(m_current_crossover->networks())[path[0]];
 
     int ndx = 0;
     bool is_modified = false;
@@ -211,9 +211,9 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
     m_tree_store->clear();
     m_items.clear();
 
-    m_cover = new_crossover;
+    m_current_crossover = new_crossover;
 
-    for (auto network : m_cover->networks())
+    for (auto network : m_current_crossover->networks())
     {
         std::vector<crossover_cell_item> crossover_elements;
         std::vector<crossover_cell_item> filter;
