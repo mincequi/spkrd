@@ -80,6 +80,12 @@ private:
 
     auto plot_line_colour() const -> Gdk::Color;
 
+    /// Update the lowpass network. Note this must be called before
+    /// update_highpass_network
+    auto update_lowpass_network(std::int32_t index, driver& speaker) -> std::int32_t;
+
+    void update_highpass_network(std::int32_t index, driver& speaker);
+
 private:
     void set_family(Gtk::ComboBoxText* option_menu, int order, int family);
 
