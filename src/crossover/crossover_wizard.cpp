@@ -46,6 +46,9 @@ void crossover_wizard::on_crossover_selected(Crossover* crossover)
     for (auto* children : m_vbox.get_children())
     {
         m_vbox.remove(*children);
+        // Delete the memory as this is no longer handled
+        // by the widget
+        delete children;
     }
 
     int index = 0;
