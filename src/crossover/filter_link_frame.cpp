@@ -666,6 +666,7 @@ void filter_link_frame::on_param_changed()
 {
     if (!m_enable_edit)
     {
+        std::puts("\nI want to update parameters but I'm banned\n");
         return;
     }
 
