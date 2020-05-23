@@ -65,6 +65,10 @@ private:
 
     void on_settings_changed(std::string const& s);
 
+    void on_impedance_correction_changed();
+
+    void on_damping_changed();
+
 private:
     void connect_signals();
 

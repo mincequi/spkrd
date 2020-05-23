@@ -694,19 +694,38 @@ void filter_link_frame::on_param_changed()
         this->update_highpass_network(index, speaker);
     }
 
+    this->on_impedance_correction_changed();
+
+    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
+
+    this->on_damping_changed();
+
+    signal_net_modified_by_wizard();
+
+    m_enable_edit = true;
+
+    if (g_settings.getValueBool("AutoUpdateFilterPlots"))
+    {
+        this->on_clear_and_plot();
+    }
+}
+
+void filter_link_frame::on_impedance_correction_changed()
+{
     m_network->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
 
     if (m_imp_corr_checkbutton.get_active())
     {
         // calc imp corr here
-        m_network->get_imp_corr_C().set_value(speaker.get_lvc() / 1000
-                                              / std::pow(speaker.get_rdc(), 2) * 1000000);
+        m_network->get_imp_corr_C().set_value(
+            speaker.get_lvc() / 1000 / std::pow(speaker.get_rdc(), 2) * 1'000'000);
         m_network->get_imp_corr_C().set_unit("u");
         m_network->get_imp_corr_R().set_value(speaker.get_rdc());
     }
+}
 
-    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
-
+void filter_link_frame::on_damping_changed()
+{
     m_network->set_has_damp(m_damp_spinbutton.get_value_as_int() != 0);
 
     if (m_damp_spinbutton.get_value_as_int() != 0)
@@ -719,18 +738,12 @@ void filter_link_frame::on_param_changed()
         m_network->get_damp_R2().set_value(r_series);
         m_network->get_damp_R1().set_value(r_parallel);
     }
-
-    signal_net_modified_by_wizard();
-
-    if (g_settings.getValueBool("AutoUpdateFilterPlots"))
-    {
-        this->on_clear_and_plot();
-    }
-    m_enable_edit = true;
 }
 
 void filter_link_frame::on_net_updated(filter_network* network)
 {
+    std::puts("filter_link_frame::on_net_updated");
+
     if (m_network->get_id() == network->get_id()
         && g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
@@ -791,19 +804,21 @@ auto filter_link_frame::plot_line_colour() const -> Gdk::Color
 
 void filter_link_frame::on_plot_crossover()
 {
-    std::puts("filter_link_frame::on_plot_crossover: plotting crossover");
+    std::puts("\nfilter_link_frame::on_plot_crossover\n");
 
     if (!m_enable_edit)
     {
-        std::puts("Editing disabled!");
+        std::puts("Editing disabled so I'm not going to plot!");
         return;
     }
 
-    this->perform_spice_simulation();
+    std::puts("filter_link_frame::on_plot_crossover");
 
     m_enable_edit = false;
 
-    // send the spice data to the plot
+    this->perform_spice_simulation();
+
+    // Send the spice data to the plot
     m_filter_plot_index = signal_add_crossover_plot(m_points,
                                                     this->plot_line_colour(),
                                                     m_filter_plot_index,
