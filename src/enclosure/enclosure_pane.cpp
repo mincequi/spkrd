@@ -233,8 +233,7 @@ auto enclosure_pane::get_toolbar() -> Gtk::Toolbar&
         }
         {
             auto tool_button = Gtk::manage(
-                new Gtk::ToolButton(image_widget("opt_enclosure_24.png"),
-                                    _("Optimize")));
+                new Gtk::ToolButton(image_widget("opt_enclosure_24.png"), _("Optimize")));
             tool_button->signal_clicked().connect(
                 sigc::mem_fun(m_box_editor, &enclosure_editor::on_optimize_button_clicked));
             m_tbar->append(*tool_button);
@@ -310,7 +309,6 @@ void enclosure_pane::on_remove_boxplot(int)
     if (nof_plots < 1)
     {
         m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(false);
-        // m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(false);
     }
 }
 
