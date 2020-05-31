@@ -45,7 +45,7 @@ public:
 
     auto on_add_plot(std::vector<point> const& line_points,
                      Gdk::Color const& line_colour,
-                     int& plot_index,
+                     std::int32_t& plot_index,
                      filter_network*) noexcept(false) -> std::int32_t;
 
 private:

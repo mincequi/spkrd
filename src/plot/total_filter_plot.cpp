@@ -44,8 +44,8 @@ total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
 
 auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
                                     Gdk::Color const& colour,
-                                    int& plot_index,
-                                    filter_network*) -> int
+                                    std::int32_t& plot_index,
+                                    filter_network*) -> std::int32_t
 {
     std::cout << "plot index = " << plot_index << '\n';
 

@@ -97,7 +97,7 @@ auto frequency_response_plot::parse_frequency_response_file(std::string const& f
 
 auto frequency_response_plot::on_add_plot(std::vector<point> const& plot_points,
                                           Gdk::Color const& color,
-                                          int& output_plot_index,
+                                          std::int32_t& plot_index,
                                           filter_network* network) -> int
 {
     std::puts("frequency_response_plot::on_add_plot");

@@ -44,8 +44,10 @@ public:
 
     void clear();
 
-    auto on_add_plot(std::vector<point> const&, Gdk::Color const&, int&, filter_network*)
-        -> int;
+    auto on_add_plot(std::vector<point> const&,
+                     Gdk::Color const&,
+                     std::int32_t&,
+                     filter_network*) -> std::int32_t;
 
 private:
     void on_crossover_selected(Crossover*);
