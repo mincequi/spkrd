@@ -29,7 +29,7 @@
 
 namespace spkrd
 {
-total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("blue")
+total_filter_plot::total_filter_plot() : m_plot(1, 20000), m_color("black")
 {
     add(m_plot);
 
@@ -49,25 +49,31 @@ auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
 {
     std::cout << "plot index = " << plot_index << '\n';
 
-    // if (m_points.empty())
-    // {
-    m_points.push_back(line_points);
-    m_networks.push_back(plot_index);
-    // }
-    // else
-    // {
-    //     auto const position = std::find(cbegin(m_networks), cend(m_networks), plot_index);
-    //
-    //     if (position != end(m_networks))
-    //     {
-    //         m_points[std::distance(cbegin(m_networks), position)] = line_points;
-    //     }
-    //     else
-    //     {
-    //         throw std::runtime_error("Attempted to add a plot the plot index wasn't in "
-    //                                  "the list");
-    //     }
-    // }
+    if (plot_index == -1)
+    {
+        plot_index = m_networks.empty()
+                         ? 0
+                         : *std::max_element(begin(m_networks), end(m_networks)) + 1;
+
+        std::cout << "set a new plot_index to " << plot_index << "\n\n";
+
+        m_points.push_back(line_points);
+        m_networks.push_back(plot_index);
+    }
+    else
+    {
+        auto const position = std::find(cbegin(m_networks), cend(m_networks), plot_index);
+
+        if (position != end(m_networks))
+        {
+            m_points[std::distance(cbegin(m_networks), position)] = line_points;
+        }
+        else
+        {
+            throw std::runtime_error("Attempted to add a plot the plot index wasn't in "
+                                     "the list");
+        }
+    }
 
     std::cout << "\tTOTAL POINTS = " << m_points.size() << '\n';
     for (auto const& points : m_points)
@@ -76,21 +82,36 @@ auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
     }
 
     m_plot.remove_all_plots();
-    m_plot.add_plot(line_points, colour);
 
     // Plot individual contributions
-    std::for_each(cbegin(m_points), std::prev(cend(m_points)), [&](auto const& point) {
+    std::for_each(cbegin(m_points), cend(m_points), [&](auto const& point) {
         m_plot.add_plot(point, Gdk::Color("black"));
     });
 
-    // Superimpose the plots to visualise complete frequency response
-    std::vector<point> summed_points = m_points.front();
+    this->superimpose_points();
+
+    // Add and select the superimposed points
+    m_plot.select_plot(m_plot.add_plot(m_superimposed_points, Gdk::Color("black")));
+
+    return 0;
+}
+
+void total_filter_plot::clear()
+{
+    m_points.clear();
+    m_networks.clear();
+    m_plot.remove_all_plots();
+}
+
+void total_filter_plot::superimpose_points()
+{
+    m_superimposed_points = m_points.front();
 
     std::for_each(std::next(cbegin(m_points)), cend(m_points), [&](auto const& points) {
         std::transform(begin(points),
                        end(points),
-                       begin(summed_points),
-                       begin(summed_points),
+                       begin(m_superimposed_points),
+                       begin(m_superimposed_points),
                        [&](auto const& plot_point, auto const& summed_point) {
                            return point{summed_point.get_x(),
                                         magnitude_to_dB(
@@ -98,26 +119,7 @@ auto total_filter_plot::on_add_plot(std::vector<point> const& line_points,
                                             + dB_to_magnitude(plot_point.get_y()))};
                        });
     });
-
-    // Add and select the superimposed points
-    m_plot.select_plot(m_plot.add_plot(summed_points, m_color));
-
-    return m_points.size();
 }
 
-void total_filter_plot::clear()
-{
-    std::cout << "Deleting all the plots and attempting to clear the screen\n";
-
-    m_points.clear();
-    m_networks.clear();
-    m_plot.remove_all_plots();
-}
-
-void total_filter_plot::on_crossover_selected(Crossover*)
-{
-    std::puts("\ntotal_filter_plot:: Crossover selected in total_filter_plot\n");
-
-    this->clear();
-}
+void total_filter_plot::on_crossover_selected(Crossover*) { this->clear(); }
 }

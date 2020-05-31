@@ -41,7 +41,7 @@ public:
 
     ~total_filter_plot() override = default;
 
-    [[deprecated]] void clear();
+    void clear();
 
     auto on_add_plot(std::vector<point> const& line_points,
                      Gdk::Color const& line_colour,
@@ -51,10 +51,14 @@ public:
 private:
     void on_crossover_selected(Crossover*);
 
+    /// Superimpose the plots to visualise complete frequency response
+    void superimpose_points();
+
 private:
     plot m_plot;
     std::vector<std::int32_t> m_networks;
     Gdk::Color m_color;
     std::vector<std::vector<point>> m_points;
+    std::vector<point> m_superimposed_points;
 };
 }

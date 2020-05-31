@@ -102,8 +102,6 @@ auto frequency_response_plot::on_add_plot(std::vector<point> const& plot_points,
 {
     std::puts("frequency_response_plot::on_add_plot");
 
-    auto const& plot_index = output_plot_index;
-
     driver current_driver;
     if (m_drivers != nullptr)
     {
@@ -127,20 +125,31 @@ auto frequency_response_plot::on_add_plot(std::vector<point> const& plot_points,
                             lerp(freq_resp_points, filter_point.get_x()) + filter_y);
     }
 
-    // Search for plot_index in the graph
-    auto const location = std::find(begin(m_networks), end(m_networks), plot_index);
+    if (plot_index == -1)
+    {
+        plot_index = m_networks.empty()
+                         ? 0
+                         : *std::max_element(begin(m_networks), end(m_networks)) + 1;
 
-    // If plot_index is in the graph, replace the old point-vector
-    // If plot_index not in graph insert it at the end of the vector
-    // if (location != end(m_networks) && !m_points.empty())
-    // {
-    //     m_points[std::distance(begin(m_networks), location)] = points;
-    // }
-    // else
-    // {
-    m_points.push_back(points);
-    m_networks.push_back(plot_index);
-    // }
+        m_points.push_back(points);
+        m_networks.push_back(plot_index);
+    }
+    else
+    {
+        // Search for plot_index in the graph
+        auto const location = std::find(begin(m_networks), end(m_networks), plot_index);
+
+        // If plot_index is in the graph, replace the old point-vector
+        // If plot_index not in graph insert it at the end of the vector
+        if (location != end(m_networks) && !m_points.empty())
+        {
+            m_points[std::distance(begin(m_networks), location)] = points;
+        }
+        else
+        {
+            // throw std::runtime_error("");
+        }
+    }
 
     std::puts("frequency_response_plot::on_add_plot removing all plots\n");
     m_plot.remove_all_plots();
@@ -173,7 +182,7 @@ auto frequency_response_plot::on_add_plot(std::vector<point> const& plot_points,
     // it's the most important plot in this graph
     m_plot.select_plot(m_plot.add_plot(summed_points, m_color));
 
-    return 0;
+    return plot_index;
 }
 
 void frequency_response_plot::clear()
