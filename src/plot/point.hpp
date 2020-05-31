@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <vector>
 #include <algorithm>
 
@@ -12,7 +13,7 @@ namespace spkrd
 class point
 {
 public:
-    explicit point(int x, double y) : m_x(x), m_y(y) {}
+    explicit point(std::int32_t x, double y) : m_x(x), m_y(y) {}
 
     auto get_x() const -> int { return m_x; }
 
@@ -23,7 +24,7 @@ public:
     void set_y(double y) { m_y = y; }
 
 private:
-    int m_x;
+    std::int32_t m_x;
     double m_y;
 };
 
@@ -45,10 +46,10 @@ struct comparison
     }
 };
 
-inline auto lerp(std::vector<point> const& freq_resp_points, double x) -> double
+inline auto lerp(std::vector<point> const& freq_resp_points, double const x) -> double
 {
-    auto first_i = std::lower_bound(freq_resp_points.begin(),
-                                    freq_resp_points.end(),
+    auto first_i = std::lower_bound(begin(freq_resp_points),
+                                    end(freq_resp_points),
                                     x,
                                     comparison{});
 
@@ -62,16 +63,16 @@ inline auto lerp(std::vector<point> const& freq_resp_points, double x) -> double
                                      x,
                                      comparison{});
 
-    double x0 = first_i->get_x();
-    double x1 = second_i->get_x();
+    auto const x0 = first_i->get_x();
+    auto const x1 = second_i->get_x();
 
     if (x0 == x1)
     {
         return first_i->get_y();
     }
 
-    double y0 = first_i->get_y();
-    double y1 = second_i->get_y();
+    auto const y0 = first_i->get_y();
+    auto const y1 = second_i->get_y();
 
     return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 }
