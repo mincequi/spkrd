@@ -87,16 +87,20 @@ filter_link_frame::filter_link_frame(filter_network* network,
     }
 
     add(m_vbox);
-    show_all();
 
     this->connect_signals();
 
     g_settings.defaultValueString("SPICECmdLine", "gnucap");
 
     m_enable_edit = true;
+
+    show_all();
 }
 
-filter_link_frame::~filter_link_frame() = default;
+filter_link_frame::~filter_link_frame()
+{
+    std::cout << "\nfilter_link_frame destructed!\n";
+}
 
 void filter_link_frame::initialise_damping()
 {
@@ -197,13 +201,13 @@ void filter_link_frame::initialise_highpass_filter()
 
 void filter_link_frame::initialise_lowpass_filter()
 {
-    auto frame = Gtk::manage(new Gtk::Frame(""));
+    auto frame = Gtk::make_managed<Gtk::Frame>("");
     frame->set_border_width(2);
     frame->set_shadow_type(Gtk::SHADOW_NONE);
     m_vbox.pack_start(*frame);
 
     {
-        auto label = Gtk::manage(new Gtk::Label());
+        auto label = Gtk::make_managed<Gtk::Label>();
         label->set_markup("<b>" + Glib::ustring(_("Lowpass")) + "</b>");
         frame->set_label_widget(*label);
     }
@@ -222,22 +226,24 @@ void filter_link_frame::initialise_lowpass_filter()
 
     m_lower_type_combo = Gtk::make_managed<Gtk::ComboBoxText>();
 
-    on_order_selected(m_lower_order_combo, m_lower_type_combo);
+    this->on_order_selected(m_lower_order_combo, m_lower_type_combo);
 
     // menus ready
+    {
+        auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
+        vbox->pack_start(*hbox);
+        hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Order: ")));
+        hbox->pack_start(*m_lower_order_combo);
+        vbox->pack_start(*m_lower_type_combo);
+    }
+
     auto hbox = Gtk::make_managed<Gtk::Box>(Gtk::ORIENTATION_HORIZONTAL);
-    vbox->pack_start(*hbox);
-    hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Order: "))));
-    hbox->pack_start(*m_lower_order_combo);
-    vbox->pack_start(*m_lower_type_combo);
+    hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Cutoff: ")));
 
-    hbox = Gtk::manage(new Gtk::HBox());
-    hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Cutoff: "))));
-
-    m_lower_co_freq_spinbutton = Gtk::manage(new Gtk::SpinButton(m_lower_co_freq_digits));
+    m_lower_co_freq_spinbutton = Gtk::make_managed<Gtk::SpinButton>(m_lower_co_freq_digits);
 
     hbox->pack_start(*m_lower_co_freq_spinbutton);
-    hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Hz"))));
+    hbox->pack_start(*Gtk::make_managed<Gtk::Label>(_("Hz")));
 
     vbox->pack_start(*hbox);
 
@@ -298,8 +304,8 @@ void filter_link_frame::connect_signals()
         sigc::mem_fun(*this, &filter_link_frame::on_settings_changed));
 }
 
-void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* order_box,
-                                          Gtk::ComboBoxText* type_box)
+void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* const order_box,
+                                          Gtk::ComboBoxText* const type_box)
 {
     if (type_box->get_active())
     {
@@ -338,11 +344,11 @@ void filter_link_frame::on_order_selected(Gtk::ComboBoxText const* order_box,
     m_enable_edit = true;
 }
 
-void filter_link_frame::on_settings_changed(const std::string& setting)
+void filter_link_frame::on_settings_changed(std::string const& setting)
 {
     if (setting == "DisableFilterAmp")
     {
-        on_param_changed();
+        this->on_param_changed();
     }
 }
 
@@ -643,7 +649,7 @@ void filter_link_frame::update_highpass_network(std::int32_t index, driver& spea
 
             /* capacitor */
             m_network->parts()[index].set_value(
-                (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+                (num_params[0] / (speaker.get_rdc() * cutoff)) * 1'000'000);
             m_network->parts()[index++].set_unit("u");
             /* inductor */
             m_network->parts()[index].set_value(
@@ -651,7 +657,7 @@ void filter_link_frame::update_highpass_network(std::int32_t index, driver& spea
             m_network->parts()[index++].set_unit("m");
             /* capacitor */
             m_network->parts()[index].set_value(
-                (num_params[2] / (speaker.get_rdc() * cutoff)) * 1000000);
+                (num_params[2] / (speaker.get_rdc() * cutoff)) * 1'000'000);
             m_network->parts()[index++].set_unit("u");
             /* inductor */
             m_network->parts()[index].set_value(
@@ -664,13 +670,15 @@ void filter_link_frame::update_highpass_network(std::int32_t index, driver& spea
 
 void filter_link_frame::on_param_changed()
 {
+    std::puts("filter_link_frame::on_param_changed");
+
     if (!m_enable_edit)
     {
         std::puts("\nI want to update parameters but I'm banned\n");
         return;
     }
 
-    std::puts("filter_link_frame::on_param_changed");
+    std::puts("filter_link_frame::on_param_changed actually updating...");
 
     m_enable_edit = false;
 
@@ -694,11 +702,11 @@ void filter_link_frame::on_param_changed()
         this->update_highpass_network(index, speaker);
     }
 
-    this->on_impedance_correction_changed();
+    this->on_impedance_correction_changed(speaker);
 
     m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
 
-    this->on_damping_changed();
+    this->on_damping_changed(speaker);
 
     signal_net_modified_by_wizard();
 
@@ -710,7 +718,7 @@ void filter_link_frame::on_param_changed()
     }
 }
 
-void filter_link_frame::on_impedance_correction_changed()
+void filter_link_frame::on_impedance_correction_changed(driver const& speaker)
 {
     m_network->set_has_imp_corr(m_imp_corr_checkbutton.get_active());
 
@@ -724,7 +732,7 @@ void filter_link_frame::on_impedance_correction_changed()
     }
 }
 
-void filter_link_frame::on_damping_changed()
+void filter_link_frame::on_damping_changed(driver const& speaker)
 {
     m_network->set_has_damp(m_damp_spinbutton.get_value_as_int() != 0);
 
@@ -753,8 +761,8 @@ void filter_link_frame::on_net_updated(filter_network* network)
 
 void filter_link_frame::on_clear_and_plot()
 {
-    m_filter_plot_index = -1;
-    m_points.clear();
+    std::puts("filter_link_frame::on_clear_and_plot");
+
     this->on_plot_crossover();
 }
 
@@ -819,10 +827,12 @@ void filter_link_frame::on_plot_crossover()
     this->perform_spice_simulation();
 
     // Send the spice data to the plot
-    m_filter_plot_index = signal_add_crossover_plot(m_points,
-                                                    this->plot_line_colour(),
-                                                    m_filter_plot_index,
-                                                    m_network);
+    signal_add_crossover_plot(m_points,
+                              this->plot_line_colour(),
+                              m_filter_plot_index,
+                              m_network);
+
+    std::cout << "\n\nMy new index is " << m_filter_plot_index << "\n\n";
 
     if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
@@ -841,10 +851,10 @@ void filter_link_frame::on_plot_crossover()
                                   + m_damp_spinbutton.get_value());
         m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
 
-        double ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
-        int xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
+        double const ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
+        int const xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
 
-        double ytodbdiff = m_points[index].get_y() + 3;
+        double const ytodbdiff = m_points[index].get_y() + 3;
         m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
                                               + m_points[index + 1].get_x());
     }
@@ -866,7 +876,7 @@ void filter_link_frame::on_plot_crossover()
 
         double const ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
         auto const xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
-        double ytodbdiff = m_points[index].get_y() + 3;
+        double const ytodbdiff = m_points[index].get_y() + 3;
 
         m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
                                                + m_points[index].get_x());

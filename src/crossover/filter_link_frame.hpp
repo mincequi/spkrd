@@ -65,9 +65,9 @@ private:
 
     void on_settings_changed(std::string const& s);
 
-    void on_impedance_correction_changed();
+    void on_impedance_correction_changed(driver const& speaker);
 
-    void on_damping_changed();
+    void on_damping_changed(driver const& speaker);
 
 private:
     void connect_signals();
@@ -122,7 +122,7 @@ private:
     std::shared_ptr<driver_list const> m_drivers;
     bool m_enable_edit{false};
 
-    int m_filter_plot_index{-1};
+    std::int32_t m_filter_plot_index{-1};
     std::vector<point> m_points;
 };
 }
