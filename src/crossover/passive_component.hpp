@@ -49,8 +49,7 @@ public:
     passive_component(xmlNodePtr fields) noexcept(false);
 
     /// Convert data for a part to an xml node, throws std::runtime_error on failure
-    auto to_xml_node(xmlNodePtr parent)
-        -> xmlNodePtr; // Maybe this one should throw an exception
+    auto to_xml_node(xmlNodePtr parent) -> xmlNodePtr;
 
     /// Print part data to stdout
     friend auto operator<<(std::ostream& output, const passive_component& part)
@@ -71,9 +70,9 @@ public:
     void on_part_type_changed(int id, int new_type);
 
 protected:
-    /// passive_component value, for example 4.7 (used in SPICE)
+    /// Component value, for example 4.7 (used in SPICE)
     double m_value;
-    /// Value unit, for example u (used in SPICE)
+    /// Unit, for example u (used in SPICE)
     std::string m_unit;
 };
 }
