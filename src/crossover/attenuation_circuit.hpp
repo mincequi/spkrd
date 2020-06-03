@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <cmath>
+
 namespace spkrd
 {
 /// An L-Pad attenuation circuit
