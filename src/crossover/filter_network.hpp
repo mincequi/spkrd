@@ -60,6 +60,8 @@ public:
 
     auto to_SPICE(driver const& s, bool use_gnucap = false) -> std::string;
 
+    auto write_lowpass_spice();
+
     auto parts() -> std::vector<passive_component>& { return m_parts; }
 
     auto parts() const -> std::vector<passive_component> const& { return m_parts; }
@@ -70,7 +72,7 @@ public:
 
     auto get_has_imp_corr() const -> bool { return m_has_imp_corr; }
 
-    auto get_has_damp() const -> bool { return m_has_damp; }
+    auto get_has_damp() const -> bool { return m_has_attenuation; }
 
     auto get_has_res() const -> bool { return m_has_res; }
 
@@ -124,6 +126,7 @@ public:
 
     void set_imp_corr_C(passive_component p) { m_imp_corr_C = std::move(p); }
 
+    /// Set the value of the R1 resistor in the L-Pad
     void set_damp_R1(passive_component p) { m_damp_R1 = std::move(p); }
 
     void set_damp_R2(passive_component p) { m_damp_R2 = std::move(p); }
@@ -149,7 +152,7 @@ protected:
     int m_lowpass_order;
 
     bool m_has_imp_corr;
-    bool m_has_damp;
+    bool m_has_attenuation;
     bool m_has_res;
 
     passive_component m_imp_corr_R;
