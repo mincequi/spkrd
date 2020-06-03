@@ -21,6 +21,7 @@
 
 #include "filter_type.hpp"
 #include "filter_parameters.hpp"
+#include "attenuation_circuit.hpp"
 #include "common.h"
 #include "plot.hpp"
 #include "signal.hpp"
@@ -738,13 +739,32 @@ void filter_link_frame::on_damping_changed(driver const& speaker)
 
     if (m_damp_spinbutton.get_value_as_int() != 0)
     {
+        if (speaker.get_rdc() <= 0.0)
+        {
+            throw std::runtime_error("Invalid speaker impedance");
+        }
+
+        auto const lpad = attenuation_circuit(-m_damp_spinbutton.get_value(),
+                                              speaker.get_rdc());
+
         // Calculate resistors for damping network
         auto const r_series = speaker.get_rdc()
                               * (std::pow(10, m_damp_spinbutton.get_value() / 20.0) - 1);
         auto const r_parallel = speaker.get_rdc()
                                 + std::pow(speaker.get_rdc(), 2) / r_series;
-        m_network->get_damp_R2().set_value(r_series);
-        m_network->get_damp_R1().set_value(r_parallel);
+
+        if (lpad.parallel_resistance() <= 0.0)
+        {
+            throw std::runtime_error("Invalid parallel resistance in lpad");
+        }
+
+        if (lpad.series_resistance() <= 0.0)
+        {
+            throw std::runtime_error("Invalid series resistance in lpad");
+        }
+
+        m_network->get_damp_R2().set_value(lpad.parallel_resistance());
+        m_network->get_damp_R1().set_value(lpad.series_resistance());
     }
 }
 
@@ -834,22 +854,22 @@ void filter_link_frame::on_plot_crossover()
 
     std::cout << "\n\nMy new index is " << m_filter_plot_index << "\n\n";
 
+    auto const attenuation = m_damp_spinbutton.get_value();
+
     if ((m_network->get_type() & NET_TYPE_LOWPASS) != 0)
     {
         auto const location = std::find_if(rbegin(m_points),
                                            rend(m_points),
                                            [&](auto const& point) {
-                                               return point.get_y()
-                                                      > (-3 - m_damp_spinbutton.get_value());
+                                               return point.get_y() > (-3 - attenuation);
                                            });
 
         auto const index = location == rend(m_points)
                                ? 0ul
                                : std::distance(location, rend(m_points)) - 1;
 
-        m_points[index + 1].set_y(m_points[index + 1].get_y()
-                                  + m_damp_spinbutton.get_value());
-        m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
+        m_points[index + 1].set_y(m_points[index + 1].get_y() + attenuation);
+        m_points[index].set_y(m_points[index].get_y() + attenuation);
 
         double const ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
         int const xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
@@ -863,16 +883,13 @@ void filter_link_frame::on_plot_crossover()
         auto const location = std::find_if(begin(m_points),
                                            end(m_points),
                                            [&](auto const& point) {
-                                               return point.get_y()
-                                                      >= (-3
-                                                          - m_damp_spinbutton.get_value());
+                                               return point.get_y() >= (-3 - attenuation);
                                            });
 
         auto const index = std::distance(begin(m_points), location);
 
-        m_points[index - 1].set_y(m_points[index - 1].get_y()
-                                  + m_damp_spinbutton.get_value());
-        m_points[index].set_y(m_points[index].get_y() + m_damp_spinbutton.get_value());
+        m_points[index - 1].set_y(m_points[index - 1].get_y() + attenuation);
+        m_points[index].set_y(m_points[index].get_y() + attenuation);
 
         double const ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
         auto const xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
