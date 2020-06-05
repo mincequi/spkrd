@@ -84,7 +84,7 @@ public:
 
     auto get_adv_imp_model() const -> int { return m_advanced_impedance_model; }
 
-    auto get_inv_pot() const -> bool { return m_invert_polarity; }
+    auto get_inv_pol() const -> bool { return m_invert_polarity; }
 
     auto get_imp_corr_R() -> passive_component& { return m_imp_corr_R; }
 

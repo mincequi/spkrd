@@ -260,7 +260,8 @@ void crossover_image_view::redraw(Cairo::RefPtr<Cairo::Context> const& context)
                     i * vert_space_per_net,
                     part_width,
                     part_height,
-                    speaker);
+                    speaker,
+                    networks[i].get_inv_pol());
     }
 }
 
@@ -461,21 +462,27 @@ void crossover_image_view::draw_driver(Cairo::RefPtr<Cairo::Context> const& cont
                                        int y,
                                        int part_width,
                                        int part_height,
-                                       driver const& speaker)
+                                       driver const& speaker,
+                                       bool const is_inverted_polarity)
 {
     draw_corner(context, x, y, part_width, part_height, true);
 
     if (speaker.get_type() == SPEAKER_TYPE_MIDRANGE)
     {
-        draw_midrange(context, x, y + part_height, part_width, part_height);
+        draw_midrange(context,
+                      x,
+                      y + part_height,
+                      part_width,
+                      part_height,
+                      !is_inverted_polarity);
     }
     else if (speaker.get_type() == SPEAKER_TYPE_BASS)
     {
-        draw_woofer(context, x, y + part_height, part_width, part_height);
+        draw_woofer(context, x, y + part_height, part_width, part_height, !is_inverted_polarity);
     }
     else
     {
-        draw_tweeter(context, x, y + part_height, part_width, part_height);
+        draw_tweeter(context, x, y + part_height, part_width, part_height, !is_inverted_polarity);
     }
     draw_corner(context, x, y + 2 * part_height, part_width, part_height, false);
 }

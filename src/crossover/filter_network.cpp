@@ -534,21 +534,18 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
     if (m_advanced_impedance_model == 1)
     {
         // Complex model
-        double const cmes = current_driver.get_mmd()
-                            / (current_driver.get_bl() * current_driver.get_bl())
-                            * 1'000'000;
-        double const lces = current_driver.get_bl() * current_driver.get_bl()
-                            * current_driver.get_cms() * 1'000;
-        double const res = current_driver.get_bl() * current_driver.get_bl()
-                           / current_driver.get_rms();
+        auto const cmes = current_driver.get_mmd() / std::pow(current_driver.get_bl(), 2)
+                          * 1'000'000;
+        auto const lces = std::pow(current_driver.get_bl(), 2) * current_driver.get_cms()
+                          * 1'000;
+        auto const res = std::pow(current_driver.get_bl(), 2) / current_driver.get_rms();
 
         // air density kg/m^3
-        constexpr double po = 1.18;
+        constexpr auto po = 1.18;
 
-        double const cmef = 8 * po * current_driver.get_ad() * current_driver.get_ad()
-                            * current_driver.get_ad()
-                            / (3 * current_driver.get_bl() * current_driver.get_bl())
-                            * 1'000'000;
+        auto const cmef = 8 * po * std::pow(current_driver.get_ad(), 2)
+                          * current_driver.get_ad()
+                          / (3 * std::pow(current_driver.get_bl(), 2)) * 1'000'000;
 
         output << "R" << current_driver.get_id() << " " << node_counter << " "
                << node_counter + next_node_cnt_inc << " " << current_driver.get_rdc()
@@ -560,7 +557,7 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
                << node_counter + 1 << " " << current_driver.get_lvc() << "mH"
                << "\n";
 
-        node_counter += 1;
+        ++node_counter;
 
         output << "lces " << node_counter << " " << 0 << " " << std::to_string(lces)
                << "mH\n";
@@ -573,7 +570,9 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
     else
     {
         // simple model, model speaker as resistor
-        output << "R" << current_driver.get_id() << " " << node_counter << " " << 0 << " "
+        output << "R" << current_driver.get_id() << " "
+               << (m_invert_polarity ? 0 : node_counter) << " "
+               << (m_invert_polarity ? node_counter : 0) << " "
                << std::to_string(current_driver.get_rdc()) << "\n";
     }
 

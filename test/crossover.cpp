@@ -32,7 +32,7 @@ TEST_CASE("Populate crossover list from xml")
                 REQUIRE(network.get_has_damp() == false);
                 REQUIRE(network.get_has_res() == false);
                 REQUIRE(network.get_adv_imp_model() == 0);
-                REQUIRE(network.get_inv_pot() == false);
+                REQUIRE(network.get_inv_pol() == false);
                 REQUIRE(network.get_speaker() == "Scan-Speak 15W/8530");
                 REQUIRE(network.get_lowpass_family() == 1);
                 REQUIRE(network.get_highpass_family() == 1);

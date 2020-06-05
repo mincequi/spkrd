@@ -68,6 +68,9 @@ filter_link_frame::filter_link_frame(filter_network* network,
     m_vbox.pack_start(m_adv_imp_model_checkbutton);
     m_adv_imp_model_checkbutton.set_active(m_network->get_adv_imp_model() == 1);
 
+    m_vbox.pack_start(m_inv_pol_checkbutton);
+    m_inv_pol_checkbutton.set_active(m_network->get_inv_pol());
+
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     m_vbox.pack_start(*hbox);
     hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Damping: "))));
@@ -292,6 +295,9 @@ void filter_link_frame::connect_signals()
         sigc::mem_fun(*this, &filter_link_frame::on_attenutation_changed));
 
     m_adv_imp_model_checkbutton.signal_toggled().connect(
+        sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
+
+    m_inv_pol_checkbutton.signal_toggled().connect(
         sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
 
     signal_net_modified_by_user.connect(
@@ -708,6 +714,8 @@ void filter_link_frame::on_param_changed()
     this->on_impedance_correction_changed(speaker);
 
     m_network->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
+
+    m_network->set_inv_pol(m_inv_pol_checkbutton.get_active());
 
     this->on_update_attenutation(speaker);
 

@@ -119,21 +119,21 @@ private:
                      int y,
                      int width,
                      int height,
-                     bool positive_up = true);
+                     bool positive_up);
 
     void draw_midrange(Cairo::RefPtr<Cairo::Context> const& context,
                        int x,
                        int y,
                        int width,
                        int height,
-                       bool positive_up = true);
+                       bool positive_up);
 
     void draw_tweeter(Cairo::RefPtr<Cairo::Context> const& context,
                       int x,
                       int y,
                       int width,
                       int height,
-                      bool positive_up = true);
+                      bool positive_up);
 
     void draw_lowpass_net(Cairo::RefPtr<Cairo::Context> const& context,
                           int x,
@@ -170,7 +170,8 @@ private:
                      int y,
                      int part_width,
                      int part_height,
-                     driver const& speaker);
+                     driver const& speaker,
+                     bool const is_inverted_polarity);
 
     void draw_text(Cairo::RefPtr<Cairo::Context> const& context,
                    std::string const& text,
