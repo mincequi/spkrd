@@ -30,6 +30,16 @@ public:
         m_resistor_series = load_impedance
                             - std::pow(1.0 / m_resistor_parallel + 1.0 / load_impedance,
                                        -1.0);
+
+        if (m_resistor_parallel <= 0.0)
+        {
+            throw std::runtime_error("Invalid parallel resistance in lpad");
+        }
+
+        if (m_resistor_series <= 0.0)
+        {
+            throw std::runtime_error("Invalid series resistance in lpad");
+        }
     }
 
     /// \return The series resistor value (typically denoted as R1)

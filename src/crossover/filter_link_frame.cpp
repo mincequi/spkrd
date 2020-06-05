@@ -289,7 +289,7 @@ void filter_link_frame::connect_signals()
         sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
 
     m_damp_spinbutton.signal_value_changed().connect(
-        sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
+        sigc::mem_fun(*this, &filter_link_frame::on_attenutation_changed));
 
     m_adv_imp_model_checkbutton.signal_toggled().connect(
         sigc::mem_fun(*this, &filter_link_frame::on_param_changed));
@@ -359,7 +359,7 @@ auto filter_link_frame::update_lowpass_network(std::int32_t index, driver& speak
     std::vector<double> num_params;
 
     m_network->set_lowpass_order(m_lower_order_combo->get_active_row_number() + 1);
-    double const cutoff = m_lower_co_freq_spinbutton->get_value();
+    auto const cutoff = m_lower_co_freq_spinbutton->get_value();
 
     switch (m_network->get_lowpass_order())
     {
@@ -550,12 +550,12 @@ void filter_link_frame::update_highpass_network(std::int32_t index, driver& spea
                     break;
             }
             // capacitor
-            m_network->parts()[index].set_value(
-                (num_params[0] / (speaker.get_rdc() * cutoff)) * 1000000);
+            m_network->parts()[index].set_value(num_params[0]
+                                                / (speaker.get_rdc() * cutoff) * 1000000);
             m_network->parts()[index++].set_unit("u");
             // inductor
-            m_network->parts()[index].set_value(
-                (num_params[1] * speaker.get_rdc() / cutoff) * 1000);
+            m_network->parts()[index].set_value(num_params[1] * speaker.get_rdc() / cutoff
+                                                * 1000);
             m_network->parts()[index++].set_unit("m");
             break;
         }
@@ -669,6 +669,8 @@ void filter_link_frame::update_highpass_network(std::int32_t index, driver& spea
     }
 }
 
+void filter_link_frame::on_attenutation_changed() { this->on_param_changed(); }
+
 void filter_link_frame::on_param_changed()
 {
     std::puts("filter_link_frame::on_param_changed");
@@ -705,18 +707,18 @@ void filter_link_frame::on_param_changed()
 
     this->on_impedance_correction_changed(speaker);
 
-    m_network->set_adv_imp_model(static_cast<int>(m_adv_imp_model_checkbutton.get_active()));
+    m_network->set_adv_imp_model(m_adv_imp_model_checkbutton.get_active());
 
-    this->on_damping_changed(speaker);
+    this->on_update_attenutation(speaker);
 
     signal_net_modified_by_wizard();
-
-    m_enable_edit = true;
 
     if (g_settings.getValueBool("AutoUpdateFilterPlots"))
     {
         this->on_clear_and_plot();
     }
+
+    m_enable_edit = true;
 }
 
 void filter_link_frame::on_impedance_correction_changed(driver const& speaker)
@@ -733,39 +735,24 @@ void filter_link_frame::on_impedance_correction_changed(driver const& speaker)
     }
 }
 
-void filter_link_frame::on_damping_changed(driver const& speaker)
+void filter_link_frame::on_update_attenutation(driver const& speaker)
 {
     m_network->set_has_damp(m_damp_spinbutton.get_value_as_int() != 0);
 
-    if (m_damp_spinbutton.get_value_as_int() != 0)
+    if (m_damp_spinbutton.get_value_as_int() == 0)
     {
-        if (speaker.get_rdc() <= 0.0)
-        {
-            throw std::runtime_error("Invalid speaker impedance");
-        }
-
-        auto const lpad = attenuation_circuit(-m_damp_spinbutton.get_value(),
-                                              speaker.get_rdc());
-
-        // Calculate resistors for damping network
-        auto const r_series = speaker.get_rdc()
-                              * (std::pow(10, m_damp_spinbutton.get_value() / 20.0) - 1);
-        auto const r_parallel = speaker.get_rdc()
-                                + std::pow(speaker.get_rdc(), 2) / r_series;
-
-        if (lpad.parallel_resistance() <= 0.0)
-        {
-            throw std::runtime_error("Invalid parallel resistance in lpad");
-        }
-
-        if (lpad.series_resistance() <= 0.0)
-        {
-            throw std::runtime_error("Invalid series resistance in lpad");
-        }
-
-        m_network->get_damp_R2().set_value(lpad.parallel_resistance());
-        m_network->get_damp_R1().set_value(lpad.series_resistance());
+        return;
     }
+    if (speaker.get_rdc() <= 0.0)
+    {
+        throw std::runtime_error("Invalid speaker impedance");
+    }
+
+    auto const lpad = attenuation_circuit(-m_damp_spinbutton.get_value(),
+                                          speaker.get_rdc());
+
+    m_network->get_damp_R2().set_value(lpad.parallel_resistance());
+    m_network->get_damp_R1().set_value(lpad.series_resistance());
 }
 
 void filter_link_frame::on_net_updated(filter_network* network)
@@ -832,18 +819,6 @@ auto filter_link_frame::plot_line_colour() const -> Gdk::Color
 
 void filter_link_frame::on_plot_crossover()
 {
-    std::puts("\nfilter_link_frame::on_plot_crossover\n");
-
-    if (!m_enable_edit)
-    {
-        std::puts("Editing disabled so I'm not going to plot!");
-        return;
-    }
-
-    std::puts("filter_link_frame::on_plot_crossover");
-
-    m_enable_edit = false;
-
     this->perform_spice_simulation();
 
     // Send the spice data to the plot
@@ -852,7 +827,12 @@ void filter_link_frame::on_plot_crossover()
                               m_filter_plot_index,
                               m_network);
 
-    std::cout << "\n\nMy new index is " << m_filter_plot_index << "\n\n";
+    if (!m_enable_edit)
+    {
+        std::puts("Editing disabled so I'm not going to plot!");
+        return;
+    }
+    m_enable_edit = false;
 
     auto const attenuation = m_damp_spinbutton.get_value();
 
@@ -871,11 +851,11 @@ void filter_link_frame::on_plot_crossover()
         m_points[index + 1].set_y(m_points[index + 1].get_y() + attenuation);
         m_points[index].set_y(m_points[index].get_y() + attenuation);
 
-        double const ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
-        int const xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
+        auto const ydiff = m_points[index + 1].get_y() - m_points[index].get_y();
+        auto const xdiff = m_points[index + 1].get_x() - m_points[index].get_x();
+        auto const ytodbdiff = m_points[index].get_y() + 3;
 
-        double const ytodbdiff = m_points[index].get_y() + 3;
-        m_lower_co_freq_spinbutton->set_value((ytodbdiff / ydiff) * xdiff
+        m_lower_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
                                               + m_points[index + 1].get_x());
     }
     if ((m_network->get_type() & NET_TYPE_HIGHPASS) != 0)
@@ -891,9 +871,9 @@ void filter_link_frame::on_plot_crossover()
         m_points[index - 1].set_y(m_points[index - 1].get_y() + attenuation);
         m_points[index].set_y(m_points[index].get_y() + attenuation);
 
-        double const ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
+        auto const ydiff = m_points[index - 1].get_y() - m_points[index].get_y();
         auto const xdiff = m_points[index].get_x() - m_points[index - 1].get_x();
-        double const ytodbdiff = m_points[index].get_y() + 3;
+        auto const ytodbdiff = m_points[index].get_y() + 3;
 
         m_higher_co_freq_spinbutton->set_value(ytodbdiff / ydiff * xdiff
                                                + m_points[index].get_x());

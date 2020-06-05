@@ -53,6 +53,8 @@ public:
 private:
     void on_order_selected(Gtk::ComboBoxText const* order_box, Gtk::ComboBoxText* type_box);
 
+    void on_attenutation_changed();
+
     void on_param_changed();
 
     void on_net_updated(filter_network* net);
@@ -67,7 +69,7 @@ private:
 
     void on_impedance_correction_changed(driver const& speaker);
 
-    void on_damping_changed(driver const& speaker);
+    void on_update_attenutation(driver const& speaker);
 
 private:
     void connect_signals();
