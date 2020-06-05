@@ -751,8 +751,8 @@ void filter_link_frame::on_update_attenutation(driver const& speaker)
     auto const lpad = attenuation_circuit(-m_damp_spinbutton.get_value(),
                                           speaker.get_rdc());
 
-    m_network->get_damp_R2().set_value(lpad.parallel_resistance());
-    m_network->get_damp_R1().set_value(lpad.series_resistance());
+    m_network->get_damp_R1().set_value(lpad.parallel_resistance());
+    m_network->get_damp_R2().set_value(lpad.series_resistance());
 }
 
 void filter_link_frame::on_net_updated(filter_network* network)
