@@ -24,8 +24,6 @@
 
 #include <gtkmm/messagedialog.h>
 
-#include <iostream>
-
 namespace spkrd
 {
 crossover_tree_view::crossover_tree_view() : Gtk::Frame("")
@@ -70,9 +68,6 @@ void crossover_tree_view::on_net_modified_by_wizard()
 void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
                                                Glib::ustring const& new_text)
 {
-    std::cout << "crossover_tree_view::on_cell_edited_value: path string = " << path_string
-              << "network";
-
     Gtk::TreePath path(path_string);
 
     if (path.empty())
@@ -92,9 +87,6 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
     }
 
     row[m_columns.value] = new_value;
-
-    std::cout << "crossover_tree_view::on_cell_edited_value: path[0:1:2:4] = " << path[0]
-              << ":" << path[1] << ":" << path[2] << ":" << path[3] << std::endl;
 
     // Since the stupid signals doesn't seem to work we have to go through the
     // data-containers and update values for the particular part we change.
@@ -186,10 +178,6 @@ void crossover_tree_view::on_cell_edited_value(Glib::ustring const& path_string,
                 row[m_columns.value]);
         }
     }
-
-    std::cout << "crossover_tree_view::on_cell_edited_value: Id = " << row[m_columns.id]
-              << "network";
-
     signal_net_modified_by_user(network);
 }
 
@@ -206,8 +194,6 @@ crossover_tree_view::model_columns::model_columns()
 
 void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
 {
-    std::puts("crossover_tree_view::on_crossover_selected");
-
     m_tree_store->clear();
     m_items.clear();
 
@@ -284,8 +270,6 @@ void crossover_tree_view::on_crossover_selected(Crossover* new_crossover)
                   sigc::mem_fun(*this, &crossover_tree_view::treestore_add_item));
 
     m_tree_view.expand_all();
-
-    std::puts("crossover_tree_view::on_crossover_selected finished");
 }
 
 void crossover_tree_view::create_model()
