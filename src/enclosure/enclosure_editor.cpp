@@ -185,8 +185,6 @@ void enclosure_editor::on_optimize_button_clicked()
         {
             case BOX_TYPE_SEALED:
             {
-                
-
                 m_enclosure->set_fb1(
                     sealed::resonance_frequency(m_system_damping,
                                                 m_current_speaker.get_fs(),
@@ -228,41 +226,39 @@ void enclosure_editor::on_append_to_plot_clicked()
 
     // Calculate the frequency response graph for current enclosure and the current speaker
     std::vector<point> points;
-
-    
+    points.reserve(1800);
 
     switch (m_enclosure->get_type())
     {
         case BOX_TYPE_PORTED:
-            for (int f = 10; f < 1000; f++)
+        {
+            for (int f = 20; f < 2000; f++)
             {
-                auto const A = std::pow(m_enclosure->get_fb1() / m_current_speaker.get_fs(),
-                                        2);
-                auto const B = A / m_current_speaker.get_qts()
-                               + m_enclosure->get_fb1()
-                                     / (7.0 * m_current_speaker.get_fs()
-                                        * m_current_speaker.get_qts());
-                auto const C = 1.0 + A
-                               + m_current_speaker.get_vas() / m_enclosure->get_vb1()
-                               + m_enclosure->get_fb1()
-                                     / (7.0 * m_current_speaker.get_fs()
-                                        * m_current_speaker.get_qts());
-                auto const D = 1.0 / m_current_speaker.get_qts()
-                               + m_enclosure->get_fb1()
-                                     / (7.0 * m_current_speaker.get_fs());
-                auto const fn2 = std::pow(f / m_current_speaker.get_fs(), 2);
-                auto const fn4 = std::pow(fn2, 2);
+                auto const fb1 = m_enclosure->get_fb1();
+                auto const vb1 = m_enclosure->get_vb1();
 
-                auto const y = (10
-                                * std::log10(std::pow(fn4, 2)
-                                             / (std::pow(fn4 - C * fn2 + A, 2)
-                                                + fn2 * std::pow(D * fn2 - B, 2))));
+                auto const fs = m_current_speaker.get_fs();
+                auto const qts = m_current_speaker.get_qts();
+                auto const vas = m_current_speaker.get_vas();
+
+                auto const A = std::pow(fb1 / fs, 2);
+                auto const B = A / qts + fb1 / (7.0 * fs * qts);
+                auto const C = 1.0 + A + vas / vb1 + fb1 / (7.0 * fs * qts);
+                auto const D = 1.0 / qts + fb1 / (7.0 * fs);
+                auto const fn2 = std::pow(f / fs, 2);
+                auto const fn4 = std::pow(f / fs, 4);
+
+                auto const y = 10
+                               * std::log10(std::pow(f / fs, 8)
+                                            / (std::pow(fn4 - C * fn2 + A, 2)
+                                               + fn2 * std::pow(D * fn2 - B, 2)));
                 points.emplace_back(f, y);
             }
             break;
+        }
         case BOX_TYPE_SEALED:
-
-            for (int f = 10; f < 1000; ++f)
+        {
+            for (int f = 20; f < 2000; ++f)
             {
                 points.emplace_back(f,
                                     sealed::frequency_response(m_system_damping,
@@ -270,6 +266,7 @@ void enclosure_editor::on_append_to_plot_clicked()
                                                                m_enclosure->get_fb1()));
             }
             break;
+        }
     }
     signal_add_box_plot(points, color);
     signal_add_plot(m_enclosure, &m_current_speaker, color);
@@ -325,10 +322,9 @@ void enclosure_editor::on_box_selected(enclosure* b)
 
         if (m_enclosure->get_type() == BOX_TYPE_SEALED)
         {
-            m_enclosure->set_fb1(
-                sealed::resonance_frequency(m_system_damping,
-                                                  m_current_speaker.get_fs(),
-                                                  m_current_speaker.get_qts()));
+            m_enclosure->set_fb1(sealed::resonance_frequency(m_system_damping,
+                                                             m_current_speaker.get_fs(),
+                                                             m_current_speaker.get_qts()));
 
             m_fb1_entry.set_text(to_ustring(m_enclosure->get_fb1(), 2, 1));
         }
@@ -482,8 +478,6 @@ void enclosure_editor::on_enclosure_changed()
     {
         case SEALED_SELECTED:
         {
-            
-
             m_enclosure->set_type(BOX_TYPE_SEALED);
             m_fb1_entry.set_sensitive(false);
 
