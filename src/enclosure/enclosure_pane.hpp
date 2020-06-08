@@ -67,7 +67,7 @@ private:
     Gtk::MenuItem m_menu_item;
     Gtk::Toolbar* m_tbar{nullptr};
 
-    int nof_plots{0};
+    std::int32_t m_plot_count{0};
     bool plot_selected{false};
 };
 }

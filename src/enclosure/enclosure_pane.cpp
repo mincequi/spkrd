@@ -282,31 +282,23 @@ void enclosure_pane::set_save_state(bool b)
     }
     if (!m_tbar->get_children().empty())
     {
-        //   m_menu.items()[MENU_INDEX_SAVE].set_sensitive(b);
         enclosurelist_modified() = b;
     }
 }
 
 void enclosure_pane::on_plot_selected(int)
 {
-#ifndef NDEBUG
-    std::puts("EnclsourePaned::on_plot_selected");
-#endif
     plot_selected = true;
     m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(true);
-    // m_menu.items()[MENU_INDEX_DELETE_BOXPLOT].set_sensitive(true);
 }
 
 void enclosure_pane::on_remove_boxplot(int)
 {
-#ifndef NDEBUG
-    std::cout << "EnclsourePaned::on_remove_boxplot: nof_plots = " << nof_plots << "\n";
-#endif
-    if (nof_plots > 0)
+    if (m_plot_count > 0)
     {
-        --nof_plots;
+        --m_plot_count;
     }
-    if (nof_plots < 1)
+    if (m_plot_count < 1)
     {
         m_tbar->get_nth_item(TOOLBAR_INDEX_DELETE_BOXPLOT)->set_sensitive(false);
     }
@@ -314,9 +306,6 @@ void enclosure_pane::on_remove_boxplot(int)
 
 void enclosure_pane::on_add_plot(enclosure* b, driver* s, Gdk::Color& c)
 {
-#ifndef NDEBUG
-    std::puts("EnclsourePaned::on_add_plot");
-#endif
-    ++nof_plots;
+    ++m_plot_count;
 }
 }
