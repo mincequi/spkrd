@@ -187,8 +187,6 @@ void plot::select_plot(int index)
 
 void plot::redraw(Cairo::RefPtr<Cairo::Context> const& context)
 {
-    using spkrd::BOX_FRAME_SIZE;
-
     auto const& allocation = get_allocation();
 
     // Clear to white background color
