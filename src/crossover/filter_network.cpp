@@ -533,39 +533,56 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
     // Insert speaker resistance, TODO: insert speaker impedance table
     if (m_advanced_impedance_model == 1)
     {
-        // Complex model
-        auto const cmes = current_driver.get_mmd() / std::pow(current_driver.get_bl(), 2)
-                          * 1'000'000;
-        auto const lces = std::pow(current_driver.get_bl(), 2) * current_driver.get_cms()
-                          * 1'000;
-        auto const res = std::pow(current_driver.get_bl(), 2) / current_driver.get_rms();
+        auto const positive_node = m_invert_polarity ? 0 : driver_node;
+        auto const negative_node = m_invert_polarity ? driver_node : 0;
 
-        // air density kg/m^3
-        constexpr auto po = 1.18;
+        // + o--- R ----o----L----o-----o------o-----o-----o
+        //        (Voice coil)          |      |     |     |
+        //                              |      |     |     |
+        //                              L      C     R     C
+        //                              |      |     |     |
+        //                              |      |     |     |
+        // - o--------------------------o------o-----o-----o
 
-        auto const cmef = 8 * po * std::pow(current_driver.get_ad(), 2)
-                          * current_driver.get_ad()
-                          / (3 * std::pow(current_driver.get_bl(), 2)) * 1'000'000;
-
-        output << "R" << current_driver.get_id() << " " << node_counter << " "
+        // Voice coil resistance
+        output << "R" << current_driver.get_id() << " " << positive_node << " "
                << node_counter + next_node_cnt_inc << " " << current_driver.get_rdc()
-               << "\n";
+               << '\n';
 
         node_counter += next_node_cnt_inc;
 
+        // Voice coil inductance
         output << "L" << current_driver.get_id() << " " << node_counter << " "
-               << node_counter + 1 << " " << current_driver.get_lvc() << "mH"
-               << "\n";
+               << node_counter + 1 << " " << current_driver.get_lvc() << "mH" << '\n';
 
         ++node_counter;
 
-        output << "lces " << node_counter << " " << 0 << " " << std::to_string(lces)
-               << "mH\n";
-        output << "cmes " << node_counter << " " << 0 << " " << std::to_string(cmes)
-               << "uF\n";
-        output << "res " << node_counter << " " << 0 << " " << std::to_string(res) << "\n";
-        output << "cmef " << node_counter << " " << 0 << " " << std::to_string(cmef)
-               << "uF\n";
+        // Air density at 25 Celsius [kg/m^3]
+        constexpr auto air_density = 1.184;
+
+        auto const force_factor = current_driver.get_bl();
+
+        auto const air_capacitance = 8 * air_density * std::pow(current_driver.get_ad(), 3)
+                                     / (3 * std::pow(force_factor, 2)) * 1'000'000;
+
+        // Moving mass capacitance
+        auto const moving_mass_capacitance = current_driver.get_mmd()
+                                             / std::pow(force_factor, 2) * 1'000'000;
+
+        // Cone suspension
+        auto const suspension_inductance = std::pow(force_factor, 2)
+                                           * current_driver.get_cms() * 1'000;
+        auto const suspension_resistance = std::pow(force_factor, 2)
+                                           / current_driver.get_rms();
+
+        output << "lces " << node_counter << " " << negative_node << " "
+               << std::to_string(suspension_inductance) << "mH\n";
+        output << "cmems " << node_counter << " " << negative_node << " "
+               << std::to_string(moving_mass_capacitance) << "uF\n";
+        output << "res " << node_counter << " " << negative_node << " "
+               << std::to_string(suspension_resistance) << '\n';
+        output << "cmef " << node_counter << " " << negative_node << " "
+               << std::to_string(air_capacitance) << "uF\n";
     }
     else
     {
@@ -573,7 +590,7 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
         output << "R" << current_driver.get_id() << " "
                << (m_invert_polarity ? 0 : node_counter) << " "
                << (m_invert_polarity ? node_counter : 0) << " "
-               << std::to_string(current_driver.get_rdc()) << "\n";
+               << std::to_string(current_driver.get_rdc()) << '\n';
     }
 
     if (use_gnucap)
