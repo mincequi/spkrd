@@ -595,7 +595,8 @@ auto filter_network::to_SPICE(driver const& current_driver, bool use_gnucap) -> 
 
     if (use_gnucap)
     {
-        output << ".print ac vdb(" << driver_node << ")\n";
+        // Output the voltage magnitude in dB and the phase
+        output << ".print ac vdb(" << driver_node << ") vp(" << driver_node << ")\n";
         output << ".ac DEC 100 20 20k\n";
     }
     else
