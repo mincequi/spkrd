@@ -183,8 +183,7 @@ driver_editor::driver_editor()
                                   "resistance "
                                   "to the reflected motional reactance at Fs"));
     m_QesEntry.set_tooltip_text(_("Ratio of the voice coil DC resistance to the "
-                                  "reflected motional "
-                                  "reactance at fs."));
+                                  "reflected motional reactance at fs."));
     m_ImpEntry.set_tooltip_text(_(""));
     m_SensEntry.set_tooltip_text(_(""));
     m_MmdEntry.set_tooltip_text(_(""));
@@ -717,7 +716,6 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
                 cmd = g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file
                       + ".out " + tmp_file;
             }
-            // g_settings.getValueString("SPICECmdLine") + " -b -o " + tmp_file + ".out " + tmp_file;
 #ifndef NDEBUG
             std::cout << "driver_editor::draw_impedance_plot: running SPICE with \"" + cmd
                              + "\"\n";
@@ -773,15 +771,15 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
                                 }
                                 else if (strstr(substr_ptr, "u") != nullptr)
                                 {
-                                    f2 /= 1000000.0;
+                                    f2 /= 1'000'000.0;
                                 }
                                 else if (strstr(substr_ptr, "n") != nullptr)
                                 {
-                                    f2 /= 1000000000.0;
+                                    f2 /= 1'000'000'000.0;
                                 }
                                 else if (strstr(substr_ptr, "p") != nullptr)
                                 {
-                                    f2 /= 1000000000000.0;
+                                    f2 /= 1'000'000'000'000.0;
                                 }
                                 substr_ptr = strtok(nullptr, " ");
                                 float f3 = g_ascii_strtod(substr_ptr, nullptr);
@@ -792,7 +790,7 @@ void driver_editor::draw_impedance_plot(driver const& s, bool update)
                                 }
                                 else if (strstr(substr_ptr, "u") != nullptr)
                                 {
-                                    f3 /= 1000000.0;
+                                    f3 /= 1'000'000.0;
                                 }
                                 else if (strstr(substr_ptr, "n") != nullptr)
                                 {
