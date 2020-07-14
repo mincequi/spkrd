@@ -118,8 +118,7 @@
     <imp>6</imp>
     <sens>91</sens>
     <freq_resp_filename>/usr/local/share/xml/vifad27tg-05-06.frf</freq_resp_filename>
-    <imp_resp_filename>
-    </imp_resp_filename>
+    <imp_resp_filename/>
     <mmd>0.00029</mmd>
     <ad>0.01499</ad>
     <bl>2.70000</bl>
@@ -145,5 +144,25 @@
     <bl>10.5</bl>
     <rms>1.7</rms>
     <cms>0.00119</cms>
+  </speaker>
+  <speaker>
+    <id_string>ScanSpeak D2604/830000</id_string>
+    <type>4</type>
+    <qts>0.79000</qts>
+    <vas>0.01</vas>
+    <fs>630</fs>
+    <rdc>2.79999</rdc>
+    <lvc>0.04000</lvc>
+    <qms>3.46</qms>
+    <qes>1.02</qes>
+    <imp>4</imp>
+    <sens>92.0999</sens>
+    <freq_resp_filename/>
+    <imp_resp_filename/>
+    <mmd>0.41999</mmd>
+    <ad>0.03200</ad>
+    <bl>2.20000</bl>
+    <rms>0.47999</rms>
+    <cms>0.14999</cms>
   </speaker>
 </speakerlist>
