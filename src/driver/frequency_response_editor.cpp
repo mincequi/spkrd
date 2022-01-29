@@ -24,6 +24,7 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 
+#include <array>
 #include <cstdio>
 #include <fstream>
 #include <utility>

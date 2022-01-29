@@ -5,10 +5,13 @@ option(GSPK_ENABLE_PROFILE "Enable profiling flags" OFF)
 
 enable_testing()
 
+set(CMAKE_CXX_STANDARD 11)
+
 find_package(LibXml2 REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0 glibmm-2.4 gtkmm-3.0 gdkmm-3.0)
+link_directories(${GTK3_LIBRARY_DIRS})
 
 find_package(Catch2 2.3)
 

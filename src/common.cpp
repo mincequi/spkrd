@@ -50,7 +50,7 @@ auto image_widget(std::string const& filename) -> Gtk::Widget&
 {
     try
     {
-#ifdef TARGET_WIN32
+#if defined(TARGET_WIN32) || defined(__APPLE__)
         auto pixbuf = Gdk::Pixbuf::create_from_file(filename);
 #else
         auto pixbuf = Gdk::Pixbuf::create_from_file(

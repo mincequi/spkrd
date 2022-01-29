@@ -32,6 +32,7 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/stock.h>
 
+#include <array>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -57,7 +58,7 @@ driver_editor::driver_editor()
       m_inner_treeview_vbox(Gtk::ORIENTATION_VERTICAL),
       m_treeview_frame("")
 {
-#ifdef TARGET_WIN32
+#if defined(TARGET_WIN32) || defined(__APPLE__)
     g_settings.defaultValueString("SpeakerListXml", "vifa.xml");
 #else
     g_settings.defaultValueString("SpeakerListXml",

@@ -20,6 +20,7 @@
 #include "common.h"
 #include "xml_parser.hpp"
 
+#include <array>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>

@@ -43,7 +43,7 @@ enclosure_history::enclosure_history() : Gtk::Frame(""), m_vbox(Gtk::ORIENTATION
     m_ScrolledWindow.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-#ifdef TARGET_WIN32
+#if defined(TARGET_WIN32) || defined(__APPLE__)
     g_settings.defaultValueString("BoxListXml", "box1.xml");
 #else
     g_settings.defaultValueString("BoxListXml",
