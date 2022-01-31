@@ -22,6 +22,7 @@
 
 #include <libxml/parser.h>
 
+#include <array>
 #include <utility>
 
 using namespace gspk;

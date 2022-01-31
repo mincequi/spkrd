@@ -85,7 +85,7 @@ void main_window::set_title_and_icons()
     try
     {
         Glib::RefPtr<Gdk::Pixbuf> main_icon = Gdk::Pixbuf::create_from_file(
-#ifdef TARGET_WIN32
+#if defined(TARGET_WIN32) || defined(__APPLE__)
             "gspeakers.png"
 #else
             std::string(GSPEAKERS_PREFIX) + "/share/pixmaps/gspeakers.png"

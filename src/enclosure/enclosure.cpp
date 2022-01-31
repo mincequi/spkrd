@@ -22,6 +22,7 @@
 #include "common.h"
 #include "xml_parser.hpp"
 
+#include <array>
 #include <sstream>
 #include <utility>
 

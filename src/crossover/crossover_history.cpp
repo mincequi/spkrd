@@ -52,7 +52,7 @@ crossover_history::crossover_history() : Gtk::Frame("")
     m_scrolled_window.set_shadow_type(Gtk::SHADOW_ETCHED_IN);
     m_scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
-#ifdef TARGET_WIN32
+#if defined(TARGET_WIN32) || defined(__APPLE__)
     g_settings.defaultValueString("crossover_listXml", "crossover1.xml");
 #else
     g_settings.defaultValueString("crossover_listXml",
