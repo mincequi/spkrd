@@ -1,9 +1,10 @@
-
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "driver_list.hpp"
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
+
+using namespace Catch;
 
 TEST_CASE("Populate enclosure list from xml")
 {

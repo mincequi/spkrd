@@ -1,5 +1,4 @@
-
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "enclosure_list.hpp"
 #include "enclosure_model.hpp"
@@ -7,6 +6,7 @@
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
 
 using namespace gspk;
+using namespace Catch;
 
 TEST_CASE("Populate enclosure list from xml")
 {

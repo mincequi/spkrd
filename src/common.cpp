@@ -19,6 +19,7 @@
 
 #include "common.h"
 
+#include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 
 #include <gdkmm/pixbuf.h>
@@ -60,6 +61,11 @@ auto image_widget(std::string const& filename) -> Gtk::Widget&
     }
     catch (Gdk::PixbufError const& pe)
     {
+        return *Gtk::manage(new Gtk::Label{});
+    }
+    catch (Glib::FileError const& error)
+    {
+        std::cout << "image_widget: " << error.what() << '\n';
         return *Gtk::manage(new Gtk::Label{});
     }
 }

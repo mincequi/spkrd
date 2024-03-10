@@ -1,10 +1,11 @@
-
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "passive_component.hpp"
 #include "crossover_list.hpp"
 
 std::string const path = GSPK_TEST_FILE_DIRECTORY;
+
+using namespace Catch;
 
 TEST_CASE("Populate crossover list from xml")
 {

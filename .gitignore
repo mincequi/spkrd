@@ -14,3 +14,4 @@ src/gspeakers
 .settings
 *~
 build
+*.user
